@@ -214,7 +214,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE))
 endef
@@ -234,7 +234,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -256,7 +256,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	#	-c $(3) \
 	#	-o $(1) \
 	#	-MMD -MT $(1) \
-	#	-MF $(4) \
+	#	-MP -MF $(4) \
 	#	-I$(dir $(3)) \
 	#	$(INCLUDE))
 endef
