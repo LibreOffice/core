@@ -46,8 +46,8 @@
     #define VCL_RSVG_GOBJECT_LIBNAME    "libgobject-2.0.0.dylib"
     #define VCL_RSVG_LIBRSVG_LIBNAME    "librsvg-2.2.dylib"
 #elif defined UNX
-    #define VCL_RSVG_GOBJECT_LIBNAME    "libgobject-2.0.so"
-    #define VCL_RSVG_LIBRSVG_LIBNAME    "librsvg-2.so"
+    #define VCL_RSVG_GOBJECT_LIBNAME    "libgobject-2.0.so.0"
+    #define VCL_RSVG_LIBRSVG_LIBNAME    "librsvg-2.so.2"
 #elif defined WNT
     #define VCL_RSVG_GOBJECT_LIBNAME    "gobjectlo.dll"
     #define VCL_RSVG_LIBRSVG_LIBNAME    "librsvg-2-2.dll"
