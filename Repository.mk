@@ -164,6 +164,8 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	localedata_others \
 	mcnttype \
 	neon \
+    reg \
+    store \
 	test \
 	textconv_dict \
 	xmlsecurity \
@@ -182,6 +184,7 @@ endif
 
 ifeq ($(OS),IOS)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+    gcc3_uno \
     sal_textenc \
 ))
 endif
@@ -226,6 +229,11 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	writerfilter_debug \
 ))
 
+ifeq ($(OS),IOS)
+$(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
+    bootstrap \
+))
+endif
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
     cppu \
