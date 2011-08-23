@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import com.sun.star.lang.XSingleComponentFactory;
@@ -38,7 +38,7 @@ import com.sun.star.uno.UnoRuntime;
 import java.io.DataInputStream;
 
 public class TestInspector {
-
+    
     public static void main(String args[]) {
         com.sun.star.uno.XComponentContext xContext = null;
         try {
@@ -55,24 +55,24 @@ public class TestInspector {
         try {
             com.sun.star.lang.XMultiComponentFactory xMCF = xContext.getServiceManager();
             // Creating an instance of the instance inspector with arguments
-
+  
             XSingleComponentFactory xFactory = Inspector.__getComponentFactory(Inspector._Inspector.class.getName());
             Object obj= null;
             if (xFactory != null) {
-                obj = xFactory.createInstanceWithContext(xContext);
+                obj = xFactory.createInstanceWithContext(xContext);                 
             }
             org.openoffice.XInstanceInspector xInstInspector = null;
             if (obj != null) {
-                xInstInspector = (org.openoffice.XInstanceInspector)UnoRuntime.queryInterface(org.openoffice.XInstanceInspector.class, obj);
+                xInstInspector = (org.openoffice.XInstanceInspector)UnoRuntime.queryInterface(org.openoffice.XInstanceInspector.class, obj);                 
             }
-
+            
             /* A desktop environment contains tasks with one or more
                frames in which components can be loaded. Desktop is the
                environment for components which can instanciate within
                frames. */
             com.sun.star.frame.XComponentLoader xCmpLoader =  (com.sun.star.frame.XComponentLoader)UnoRuntime.queryInterface( com.sun.star.frame.XComponentLoader.class,
                     xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", xContext));
-
+      
             // Load a new spreadsheet document, which will be automaticly
             // displayed and is used for inspection
             com.sun.star.lang.XComponent xComp = xCmpLoader.loadComponentFromURL("private:factory/scalc", "_blank", 0, new com.sun.star.beans.PropertyValue[0] );

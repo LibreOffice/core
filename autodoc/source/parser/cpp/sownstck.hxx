@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,9 +66,9 @@ struct ContextForAry::S_OwnerStack
                                                 io_rOpenedNamespace );
     void                OpenExternC();
     void                OpenClass(
-                            ary::cpp::Class &   io_rOpenedClass );
+                            ary::cpp::Class &	io_rOpenedClass );
     void                OpenEnum(
-                            ary::cpp::Enum &    io_rOpenedEnum );
+                            ary::cpp::Enum &	io_rOpenedEnum );
     void                CloseBlock();
     void                CloseClass();
     void                CloseEnum();

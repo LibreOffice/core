@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 // __________ Imports __________
@@ -189,7 +189,7 @@ public class FunctionHelper
      *     future prove this old one should be tried too.
      *   - it's possible to pass the native window handle directly to the toolkit.
      *     A special interface method was enabled to accept that.
-     *
+     *     
      *   The right way to create an office window should be then:
      *   - try to use second creation mode (directly using of the window handle)
      *   - if it failed ... use the old way by packing the handle inside an object

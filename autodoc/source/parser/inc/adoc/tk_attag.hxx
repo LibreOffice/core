@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,24 +45,24 @@ class Tok_at_std : public Token
 {
   public:
                         Tok_at_std(
-                            E_AtTagId           i_nId )
+                            E_AtTagId			i_nId )
                                                 : eId(i_nId) {}
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
+    virtual void		Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
     virtual const char *
                         Text() const;
-    E_AtTagId           Id() const              { return eId; }
+    E_AtTagId			Id() const				{ return eId; }
 
   private:
-    E_AtTagId           eId;
+    E_AtTagId			eId;
 };
 
 
 #define DECL_TOKEN_CLASS(name) \
 class Tok_##name : public Token \
 { public: \
-    virtual void        Trigger( \
-                            TokenInterpreter &  io_rInterpreter ) const; \
+    virtual void		Trigger( \
+                            TokenInterpreter &	io_rInterpreter ) const; \
     virtual const char * \
                         Text() const; \
 }

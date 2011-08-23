@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,16 +51,16 @@ namespace uidl
 
 
 PE_Exception::PE_Exception()
-    // :    aWork,
+    // :	aWork,
     //      pStati
 {
     pStati = new S_Stati(*this);
 }
 
 void
-PE_Exception::EstablishContacts( UnoIDL_PE *                io_pParentPE,
-                              ary::Repository &         io_rRepository,
-                              TokenProcessing_Result &  o_rResult )
+PE_Exception::EstablishContacts( UnoIDL_PE *				io_pParentPE,
+                              ary::Repository &			io_rRepository,
+                              TokenProcessing_Result & 	o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
     Work().pPE_Element->EstablishContacts(this,io_rRepository,o_rResult);
@@ -103,7 +103,7 @@ PE_Exception::ReceiveData()
 }
 
 PE_Exception::S_Work::S_Work()
-    :   sData_Name(),
+    :	sData_Name(),
         bIsPreDeclaration(false),
         nCurStruct(0),
         pPE_Element(0),
@@ -146,7 +146,7 @@ PE_Exception::S_Work::Data_Set_Name( const char * i_sName )
 }
 
 PE_Exception::S_Stati::S_Stati(PE_Exception & io_rStruct)
-    :   aNone(io_rStruct),
+    :	aNone(io_rStruct),
         aWaitForName(io_rStruct),
         aGotName(io_rStruct),
         aWaitForBase(io_rStruct),
@@ -159,7 +159,7 @@ PE_Exception::S_Stati::S_Stati(PE_Exception & io_rStruct)
 }
 
 
-//***********************       Stati       ***************************//
+//***********************		Stati		***************************//
 
 
 UnoIDL_PE &
@@ -196,7 +196,7 @@ PE_Exception::State_GotName::Process_Punctuation( const TokPunctuation & i_rToke
                 break;
             default:
                 SetResult(not_done,pop_failure);
-        }   // end switch
+        }	// end switch
     }
     else
     {

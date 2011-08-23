@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,48 +53,48 @@ class Context_AdocStd : public autodoc::TkpDocuContext,
                         private StateMachineContext
 {
   public:
-    //  LIFECYCLE
+    // 	LIFECYCLE
                         Context_AdocStd();
-    virtual void        SetParentContext(
-                            TkpContext &        io_rParentContext,
-                            const char *        i_sMultiLineEndToken );
+    virtual void	  	SetParentContext(
+                            TkpContext &		io_rParentContext,
+                            const char *		i_sMultiLineEndToken );
                         ~Context_AdocStd();
 
-    //  OPERATIONS
-    virtual void        AssignDealer(
-                            TokenDealer &       o_rDealer );
+    //	OPERATIONS
+    virtual void	  	AssignDealer(
+                            TokenDealer &		o_rDealer );
 
-    virtual void        ReadCharChain(
-                            CharacterSource &   io_rText );
-    virtual bool        PassNewToken();
-    virtual void        SetMode_IsMultiLine(
-                            bool                i_bTrue );
-    //  INQUIRY
+    virtual void		ReadCharChain(
+                            CharacterSource &	io_rText );
+    virtual bool		PassNewToken();
+    virtual void	   	SetMode_IsMultiLine(
+                            bool				i_bTrue );
+    //	INQUIRY
     virtual TkpContext &
                         FollowUpContext();
   private:
-    //  SERVICE FUNCTIONS
-    virtual void        PerformStatusFunction(
-                            uintt               i_nStatusSignal,
-                            F_CRTOK             i_fTokenCreateFunction,
-                            CharacterSource &   io_rText );
+    //	SERVICE FUNCTIONS
+    virtual	void		PerformStatusFunction(
+                            uintt				i_nStatusSignal,
+                            F_CRTOK		        i_fTokenCreateFunction,
+                            CharacterSource &	io_rText );
 
-    void                SetupStateMachine();
+    void				SetupStateMachine();
 
-    //  DATA
-    StateMachine        aStateMachine;
-    TokenDealer *       pDealer;
+    //	DATA
+    StateMachine		aStateMachine;
+    TokenDealer *		pDealer;
 
         // Contexts
-    TkpContext *        pParentContext;
-    TkpContext *        pFollowUpContext;
-    Dyn<Cx_LineStart>   pCx_LineStart;
-    Dyn<Cx_CheckStar>   pCx_CheckStar;
+    TkpContext *    	pParentContext;
+    TkpContext *		pFollowUpContext;
+    Dyn<Cx_LineStart>	pCx_LineStart;
+    Dyn<Cx_CheckStar>	pCx_CheckStar;
     Dyn<Cx_AtTagCompletion>
                         pCx_AtTagCompletion;
 
         // Temporary data, used during ReadCharChain()
-    Dyn<TextToken>      pNewToken;
+    Dyn<TextToken>		pNewToken;
     bool                bIsMultiline;
 };
 

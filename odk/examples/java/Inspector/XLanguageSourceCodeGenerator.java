@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,78 +29,78 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 import com.sun.star.uno.TypeClass;
 import java.util.Vector;
 
 public interface XLanguageSourceCodeGenerator {
-
+    
     public static final int nJAVA = 0;
     public static final int nCPLUSPLUS = 1;
     public static final int nBASIC = 2;
-
+    
     public String getHeaderSourceCode(Object _oUnoObject, String _sClassName, TypeClass _aTypeClass);
 
-    public String getFinalHeaderStatements();
+    public String getFinalHeaderStatements();    
 
     public void assignqueryInterfaceHeaderSourceCode();
-
+    
     public String getMainMethodSignatureSourceCode(XUnoNode _oUnoNode, String _soReturnObjectDescription);
-
+    
     public String getMethodTerminationSourceCode();
-
+    
     public String getStatementTerminationCharacter();
 
-    public boolean needsqueryInterface();
-
+    public boolean needsqueryInterface();    
+    
     public String getqueryInterfaceSourceCode(String _sReturnValueDescription, String _sClassName, String _sObjectDescription);
-
+    
     public String getPropertyValueGetterSourceCode(String _sPropertyName, String _sReturnVariableName, String _sIncomingObjectName, TypeClass _aTypeClass, String _sTypeName);
-
+    
     public String getStructSourceCode(String _sReturnVariableDescription, String _sObjectDescription, String _sMember);
-
+            
     public String getObjectTypeDescription(String _sClassName, boolean _bAsHeader);
-
+        
     public String getbooleanTypeDescription();
 
     public String getbyteTypeDescription();
 
     public String getshortTypeDescription();
-
+    
     public String getunsignedshortTypeDescription();
 
     public String getlongTypeDescription();
 
     public String getunsignedlongTypeDescription();
-
+    
     public String gethyperTypeDescription();
 
     public String getunsignedhyperTypeDescription();
 
     public String getfloatTypeDescription();
-
+    
     public String getdoubleTypeDescription();
 
     public String getcharTypeDescription();
-
+    
     public String getstringTypeDescription(boolean _bAsHeaderSourceCode);
-
+    
     public String gettypeTypeDescription(boolean _bAsHeaderSourceCode);
-
+    
     public String getanyTypeDescription(boolean _bAsHeaderSourceCode);
-
+    
     public String getArrayDeclaration(String sVariableDeclaration);
-
+    
     public String getVariableDeclaration(String _sTypeString, String _sVariableName, boolean _bIsArray, TypeClass aTypeClass, boolean _bInitialize);
-
+    
     public String getMethodSeparator();
-
+    
     public String getStringValue(String _sValue);
-
+    
     public String getConvertedSourceCodeValueOfObject(String _sReturnVariableName, String _sObjectDescription, TypeClass _aTypeClass, String _sTypeName);
-
+    
     public String castLiteral(String _sExpression, TypeClass _aTypeClass);
-
+    
     public String getCommentSign();
 }

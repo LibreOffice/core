@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,19 +57,19 @@ class TokenParser_Uidl : public TokenParse2
   public:
     // LIFECYCLE
                         TokenParser_Uidl(
-                            Token_Receiver &    o_rUidlReceiver,
+                            Token_Receiver &	o_rUidlReceiver,
                             DYN TkpDocuContext &
                                                 let_drDocuContext );
-    virtual             ~TokenParser_Uidl();
+    virtual				~TokenParser_Uidl();
 
     // OPERATIONS
   private:
     virtual ::TkpContext &
                         CurrentContext();
 
-    virtual void        SetStartContext();
+    virtual void		SetStartContext();
     virtual void        SetCurrentContext(
-                            TkpContext &        io_rContext );
+                            TkpContext &		io_rContext );
     // DATA
     Dyn<Context_UidlCode>
                         pBaseContext;

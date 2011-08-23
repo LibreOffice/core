@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 #ifndef CONNECTIVITY_SPREPAREDSTATEMENT_HXX
@@ -48,42 +48,42 @@ namespace connectivity
     {
 
         class OBoundParam;
-        typedef ::cppu::ImplHelper5<    ::com::sun::star::sdbc::XPreparedStatement,
+        typedef ::cppu::ImplHelper5<	::com::sun::star::sdbc::XPreparedStatement,
                                         ::com::sun::star::sdbc::XParameters,
                                         ::com::sun::star::sdbc::XPreparedBatchExecution,
                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                         ::com::sun::star::lang::XServiceInfo> OPreparedStatement_BASE;
 
-        class OPreparedStatement :  public  OStatement_BASE2,
+        class OPreparedStatement :	public	OStatement_BASE2,
                                     public  OPreparedStatement_BASE
         {
         protected:
             struct Parameter
             {
-                ::com::sun::star::uno::Any  aValue;
-                sal_Int32                   nDataType;
+                ::com::sun::star::uno::Any	aValue;
+                sal_Int32					nDataType;
 
-                Parameter(const ::com::sun::star::uno::Any& rValue,
-                          sal_Int32                         rDataType) : aValue(rValue),nDataType(rDataType)
+                Parameter(const ::com::sun::star::uno::Any&	rValue,
+                          sal_Int32							rDataType) : aValue(rValue),nDataType(rDataType)
                 {
                 }
 
             };
 
-            ::std::vector< Parameter>       m_aParameters;
+            ::std::vector< Parameter>		m_aParameters;
             //====================================================================
             // Data attributes
             //====================================================================
-            TTypeInfoVector                 m_aTypeInfo;    // Hashtable containing an entry
+            TTypeInfoVector					m_aTypeInfo;	// Hashtable containing an entry
                                                                         //  for each row returned by
                                                                         //  DatabaseMetaData.getTypeInfo.
 
-            sal_Int32                       m_nNumParams;       // Number of parameter markers
+            sal_Int32						m_nNumParams;		// Number of parameter markers
                                                                 //  for the prepared statement
 
-            ::rtl::OUString                                                                 m_sSqlStatement;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
-            sal_Bool                                                                        m_bPrepared;
+            ::rtl::OUString																	m_sSqlStatement;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >	m_xMetaData;
+            sal_Bool																		m_bPrepared;
 
             void checkParameterIndex(sal_Int32 _parameterIndex);
 

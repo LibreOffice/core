@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,14 +52,14 @@ class DocuExplorer
   public:
                         DocuExplorer();
                         ~DocuExplorer();
-    void                StartNewFile(
-                            DocuDealer &        o_rDocuDistributor );
+    void				StartNewFile(
+                            DocuDealer &		o_rDocuDistributor );
 
-    void                Process_Token(
-                            DYN adoc::Token &   let_drToken );
+    void				Process_Token(
+                            DYN adoc::Token &	let_drToken );
   private:
-    DocuDealer *        pDocuDistributor;
-    Dyn<Adoc_PE>        pPE;
+    DocuDealer *		pDocuDistributor;
+    Dyn<Adoc_PE>		pPE;
     bool                bIsPassedFirstDocu;
 };
 

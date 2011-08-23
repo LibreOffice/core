@@ -41,7 +41,7 @@ ListenerMap;
 // these arrays are accessed by a hash_map (with the command string as index)
 struct ListenerItem
 {
-    ListenerMap aContainer;
+    ListenerMap	aContainer;
     ::com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > xDispatch;
     ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame;
 };

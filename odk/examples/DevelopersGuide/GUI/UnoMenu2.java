@@ -12,14 +12,14 @@ import com.sun.star.uno.XComponentContext;
 
 
 public class UnoMenu2 extends UnoMenu implements XMouseListener{
-
+    
 public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
     super(_xContext, _xMCF);
 }
-
+    
     public static void main(String args[]){
         UnoMenu2 oUnoMenu2 = null;
-        try {
+        try {        
         XComponentContext xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
         if(xContext != null )
             System.out.println("Connected to a running office ...");
@@ -34,12 +34,12 @@ public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
             new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Width"},
             new Object[] { new Integer(8), "This code-sample demonstrates the creation of a popup-menu", "HeaderLabel", new Integer(6), new Integer(6), new Integer(200)});
         // add the model to the NameContainer of the dialog model
-        oUnoMenu2.m_xDlgModelNameContainer.insertByName("Headerlabel", oFTHeaderModel);
+        oUnoMenu2.m_xDlgModelNameContainer.insertByName("Headerlabel", oFTHeaderModel);    
         oUnoMenu2.addLabelForPopupMenu();
         oUnoMenu2.executeDialog();
         }catch( Exception ex ) {
             ex.printStackTrace(System.out);
-        }
+        }    
         finally{
         //make sure always to dispose the component and free the memory!
         if (oUnoMenu2 != null) {
@@ -47,7 +47,7 @@ public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
                 oUnoMenu2.m_xComponent.dispose();
             }
         }
-        System.exit( 0 );
+        System.exit( 0 );    
     }}
 
 
@@ -80,7 +80,7 @@ public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         if (mouseEvent.PopupTrigger){
             Rectangle aRectangle = new Rectangle(mouseEvent.X, mouseEvent.Y, 0, 0);
             XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, mouseEvent.Source);
-            getPopupMenu().execute( xControl.getPeer(), aRectangle, com.sun.star.awt.PopupMenuDirection.DEFAULT);
+            getPopupMenu().execute( xControl.getPeer(), aRectangle, com.sun.star.awt.PopupMenuDirection.DEFAULT);    
         }
     }
 

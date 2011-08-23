@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 #include "SDriver.hxx"
@@ -48,7 +48,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
         (
             const Reference< XMultiServiceFactory > & rServiceManager,
-            const OUString & rComponentName,
+            const OUString & rComponentName, 
             ::cppu::ComponentInstantiation pCreateFunction,
             const Sequence< OUString > & rServiceNames,
             rtl_ModuleCount* _pTemp
@@ -62,8 +62,8 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
 
 //---------------------------------------------------------------------------------------
 void REGISTER_PROVIDER(
-        const OUString& aServiceImplName,
-        const Sequence< OUString>& Services,
+        const OUString& aServiceImplName, 
+        const Sequence< OUString>& Services, 
         const Reference< ::com::sun::star::registry::XRegistryKey > & xKey)
 {
     OUString aMainKeyName;
@@ -97,31 +97,31 @@ struct ProviderRequest
 
     inline
     sal_Bool CREATE_PROVIDER(
-                const OUString& Implname,
-                const Sequence< OUString > & Services,
+                const OUString& Implname, 
+                const Sequence< OUString > & Services, 
                 ::cppu::ComponentInstantiation Factory,
                 createFactoryFunc creator
             )
     {
         if (!xRet.is() && (Implname == sImplementationName))
-        try
-        {
-            xRet = creator( xServiceManager, sImplementationName,Factory, Services,0);
+        try																							
+        {																								
+            xRet = creator( xServiceManager, sImplementationName,Factory, Services,0);	
         }
         catch(...)
         {
         }
         return xRet.is();
     }
-
+    
     void* getProvider() const { return xRet.get(); }
 };
 
 //---------------------------------------------------------------------------------------
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
-                const sal_Char  **ppEnvTypeName,
-                uno_Environment **ppEnv
+                const sal_Char	**ppEnvTypeName,
+                uno_Environment	**ppEnv
             )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -133,14 +133,14 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
                 void* pRegistryKey
             )
 {
-    if (pRegistryKey)
-    try
+    if (pRegistryKey) 
+    try 
     {
         Reference< ::com::sun::star::registry::XRegistryKey > xKey(reinterpret_cast< ::com::sun::star::registry::XRegistryKey*>(pRegistryKey));
 
         REGISTER_PROVIDER(
-            SkeletonDriver::getImplementationName_Static(),
-            SkeletonDriver::getSupportedServiceNames_Static(), xKey);
+            SkeletonDriver::getImplementationName_Static(), 
+            SkeletonDriver::getSupportedServiceNames_Static(), xKey);		
 
         return sal_True;
     }
@@ -164,9 +164,9 @@ extern "C" void* SAL_CALL component_getFactory(
         ProviderRequest aReq(pServiceManager,pImplementationName);
 
         aReq.CREATE_PROVIDER(
-            SkeletonDriver::getImplementationName_Static(),
+            SkeletonDriver::getImplementationName_Static(), 
             SkeletonDriver::getSupportedServiceNames_Static(),
-            SkeletonDriver_CreateInstance, ::cppu::createSingleFactory)
+            SkeletonDriver_CreateInstance, ::cppu::createSingleFactory) 
         ;
 
         if(aReq.xRet.is())

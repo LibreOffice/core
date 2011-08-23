@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 #ifndef CONNECTIVITY_SSTATEMENT_HXX
@@ -54,7 +54,7 @@ namespace connectivity
     namespace skeleton
     {
 
-        typedef ::cppu::WeakComponentImplHelper5<   ::com::sun::star::sdbc::XStatement,
+        typedef ::cppu::WeakComponentImplHelper5<	::com::sun::star::sdbc::XStatement,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
                                                     ::com::sun::star::util::XCancellable,
                                                     ::com::sun::star::sdbc::XCloseable,
@@ -64,10 +64,10 @@ namespace connectivity
         //************ Class: OStatement_Base
         // is a base class for the normal statement and for the prepared statement
         //**************************************************************
-        class OStatement_Base       :   public OBase_Mutex,
-                                        public  OStatement_BASE,
-                                        public  ::cppu::OPropertySetHelper,
-                                        public  OPropertyArrayUsageHelper<OStatement_Base>
+        class OStatement_Base		:	public OBase_Mutex,
+                                        public	OStatement_BASE,
+                                        public	::cppu::OPropertySetHelper,
+                                        public	OPropertyArrayUsageHelper<OStatement_Base>
 
         {
         ::com::sun::star::sdbc::SQLWarning                            m_aLastWarning;
@@ -75,9 +75,9 @@ namespace connectivity
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
             //  for this Statement
 
-            ::std::list< ::rtl::OUString>               m_aBatchList;
+            ::std::list< ::rtl::OUString>				m_aBatchList;
 
-            OConnection*                                m_pConnection;  // The owning Connection object
+            OConnection*								m_pConnection;	// The owning Connection object
         protected:
 
             void disposeResultSet();
@@ -94,7 +94,7 @@ namespace connectivity
                                                             throw (::com::sun::star::lang::IllegalArgumentException);
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                                                 sal_Int32 nHandle,
-                                                                const ::com::sun::star::uno::Any& rValue)   throw (::com::sun::star::uno::Exception);
+                                                                const ::com::sun::star::uno::Any& rValue)	throw (::com::sun::star::uno::Exception);
             virtual void SAL_CALL getFastPropertyValue(
                                                                 ::com::sun::star::uno::Any& rValue,
                                                                 sal_Int32 nHandle) const;
@@ -138,7 +138,7 @@ namespace connectivity
             OConnection* getOwnConnection() const { return m_pConnection;}
         };
 
-        class OStatement_BASE2  :public OStatement_Base
+        class OStatement_BASE2	:public OStatement_Base
                                 ,public OSubComponent<OStatement_BASE2, OStatement_BASE>
 
         {
@@ -152,7 +152,7 @@ namespace connectivity
             virtual void SAL_CALL release() throw();
         };
 
-        class OStatement :  public OStatement_BASE2,
+        class OStatement :	public OStatement_BASE2,
                             public ::com::sun::star::sdbc::XBatchExecution,
                             public ::com::sun::star::lang::XServiceInfo
         {

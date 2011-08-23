@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 using csi::dsapi::Tok_AtTag;
 
-lux::EnumValueMap   G_aTokAtTag_EV_TokenId_Values;
+lux::EnumValueMap	G_aTokAtTag_EV_TokenId_Values;
 Tok_AtTag::EV_TokenId ev_none2(Tok_AtTag::e_none,"");
 Tok_AtTag::EV_TokenId ev_author(Tok_AtTag::author,"@author");
 Tok_AtTag::EV_TokenId ev_see(Tok_AtTag::see,"@see");
@@ -58,7 +58,7 @@ Tok_AtTag::EV_TokenId ev_since(Tok_AtTag::since,"@since");
 namespace lux
 {
 template<> EnumValueMap &
-Tok_AtTag::EV_TokenId::Values_()    { return G_aTokAtTag_EV_TokenId_Values; }
+Tok_AtTag::EV_TokenId::Values_()	{ return G_aTokAtTag_EV_TokenId_Values; }
 }
 
 
@@ -68,7 +68,7 @@ namespace dsapi
 {
 
 void
-Tok_AtTag::Trigger( TokenInterpreter &  io_rInterpreter ) const
+Tok_AtTag::Trigger( TokenInterpreter &	io_rInterpreter ) const
 {
     io_rInterpreter.Process_AtTag(*this);
 }

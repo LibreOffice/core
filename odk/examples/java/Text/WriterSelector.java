@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import com.sun.star.uno.UnoRuntime;
@@ -44,7 +44,7 @@ public class WriterSelector {
      */
     public static void main(String args[]) {
         com.sun.star.uno.XComponentContext xContext = null;
-
+        
         try {
 
             // bootstrap UNO and get the remote component context. The context can
@@ -54,14 +54,14 @@ public class WriterSelector {
 
             // get the remote office service manager
             com.sun.star.lang.XMultiComponentFactory xMCF =
-                xContext.getServiceManager();
-
+                xContext.getServiceManager();           
+            
             // get a new instance of the desktop
             com.sun.star.frame.XDesktop xDesktop = (com.sun.star.frame.XDesktop)
                 UnoRuntime.queryInterface(com.sun.star.frame.XDesktop.class,
                     xMCF.createInstanceWithContext("com.sun.star.frame.Desktop",
                                                    xContext ) );
-
+            
             com.sun.star.frame.XComponentLoader xCompLoader =
                 (com.sun.star.frame.XComponentLoader)UnoRuntime.queryInterface(
                     com.sun.star.frame.XComponentLoader.class, xDesktop);
@@ -76,15 +76,15 @@ public class WriterSelector {
             xDoc.getText().setString("Please select something in this text and press then \"return\" in the shell where you have started the example.\n");
 
             // ensure that the document content is optimal visible
-            com.sun.star.frame.XModel xModel =
+            com.sun.star.frame.XModel xModel = 
                 (com.sun.star.frame.XModel)UnoRuntime.queryInterface(
                     com.sun.star.frame.XModel.class, xDoc);
-
+            
             com.sun.star.view.XViewSettingsSupplier xViewSettings =
                 (com.sun.star.view.XViewSettingsSupplier)UnoRuntime.queryInterface(
                     com.sun.star.view.XViewSettingsSupplier.class, xModel.getCurrentController());
             xViewSettings.getViewSettings().setPropertyValue(
-                "ZoomType", new Short((short)0));
+                "ZoomType", new Short((short)0));            
             }
             // test document will be closed later
 
@@ -93,23 +93,23 @@ public class WriterSelector {
             do{
                 c = (char) System.in.read();
             }while ((c != 13) && (c != 10));
-
+            
             // Getting the current frame from the OpenOffice.org Server.
             com.sun.star.frame.XFrame xframe = xDesktop.getCurrentFrame();
-
+            
             // Getting the controller.
             com.sun.star.frame.XController xController = xframe.getController();
-
+            
             com.sun.star.view.XSelectionSupplier xSelSupplier =
                 (com.sun.star.view.XSelectionSupplier)UnoRuntime.queryInterface(
                     com.sun.star.view.XSelectionSupplier.class, xController );
-
+            
             Object oSelection = xSelSupplier.getSelection();
-
+            
             com.sun.star.lang.XServiceInfo xServInfo =
                 (com.sun.star.lang.XServiceInfo)UnoRuntime.queryInterface(
                     com.sun.star.lang.XServiceInfo.class, oSelection );
-
+            
             if ( xServInfo.supportsService("com.sun.star.text.TextRanges") )
             {
                 com.sun.star.container.XIndexAccess xIndexAccess =
@@ -123,17 +123,17 @@ public class WriterSelector {
                         UnoRuntime.queryInterface(
                             com.sun.star.text.XTextRange.class,
                             xIndexAccess.getByIndex(i));
-
+                    
                     System.out.println( "You have selected a text range: \""
                                         + xTextRange.getString() + "\"." );
                 }
             }
-
+            
             if ( xServInfo.supportsService("com.sun.star.text.TextGraphicObject") )
             {
                 System.out.println( "You have selected a graphics." );
             }
-
+            
             if ( xServInfo.supportsService("com.sun.star.text.TextTableCursor") )
             {
                 System.out.println( "You have selected a text table." );
@@ -150,8 +150,8 @@ public class WriterSelector {
             } else
             {
                 xComponent.dispose();
-            }
-
+            }            
+            
             System.exit(0);
         }
         catch( Exception e ) {

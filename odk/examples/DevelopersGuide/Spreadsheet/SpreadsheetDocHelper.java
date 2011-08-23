@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import com.sun.star.comp.servicemanager.ServiceManager;
@@ -371,14 +371,14 @@ public class SpreadsheetDocHelper
                 // First step: get the remote office component context
                 mxRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
                 System.out.println("Connected to a running office ...");
-
+                    
                 mxRemoteServiceManager = mxRemoteContext.getServiceManager();
             }
             catch( Exception e) {
                 System.err.println("ERROR: can't get a component context from a running office ...");
                 e.printStackTrace();
                 System.exit(1);
-            }
+            }            
         }
     }
 

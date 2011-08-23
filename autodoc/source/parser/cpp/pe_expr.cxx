@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,9 +60,9 @@ PE_Expression::Call_Handler( const cpp::Token & i_rTok )
 void
 PE_Expression::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_Expression>::F_Tok  F_Tok;
+    typedef CallFunction<PE_Expression>::F_Tok	F_Tok;
 
-    static F_Tok stateF_std[] =             { &PE_Expression::On_std_SwBracket_Left,
+    static F_Tok stateF_std[] =			    { &PE_Expression::On_std_SwBracket_Left,
                                               &PE_Expression::On_std_SwBracket_Right,
                                               &PE_Expression::On_std_ArrayBracket_Left,
                                               &PE_Expression::On_std_ArrayBracket_Right,
@@ -70,7 +70,7 @@ PE_Expression::Setup_StatusFunctions()
                                               &PE_Expression::On_std_Bracket_Right,
                                               &PE_Expression::On_std_Semicolon,
                                               &PE_Expression::On_std_Comma };
-    static INT16 stateT_std[] =             { Tid_SwBracket_Left,
+    static INT16 stateT_std[] =       	    { Tid_SwBracket_Left,
                                               Tid_SwBracket_Right,
                                               Tid_ArrayBracket_Left,
                                               Tid_ArrayBracket_Right,

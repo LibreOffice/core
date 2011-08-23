@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class HF_IdlTypedef : public HtmlFactory_Idl
                             Xml::Element &      o_rOut );
     virtual             ~HF_IdlTypedef();
 
-    void                Produce_byData(
+    void                Produce_byData(    
                             const client &      ce ) const;
   private:
     void                make_Navibar(

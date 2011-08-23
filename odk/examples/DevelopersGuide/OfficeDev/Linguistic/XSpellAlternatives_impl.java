@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import com.sun.star.lang.Locale;
@@ -43,24 +43,24 @@ public class XSpellAlternatives_impl implements
     String[]    aAlt;           // list of alternatives, may be empty.
     short       nType;          // type of failure
 
-    public XSpellAlternatives_impl(
-            String      aWord,
-            Locale      aLanguage,
-            short       nFailureType,
+    public XSpellAlternatives_impl( 
+            String      aWord, 
+            Locale      aLanguage, 
+            short       nFailureType, 
             String[]    aAlt )
     {
         this.aWord      = aWord;
         this.aLanguage  = aLanguage;
         this.aAlt       = aAlt;
         this.nType      = nFailureType;
-
-        //!! none of these cases should ever occur!
+    
+        //!! none of these cases should ever occur! 
         //!! values provided only for safety
         if (this.aWord == null)
             this.aWord = new String();
         if (this.aLanguage == null)
             this.aLanguage = new Locale();
-
+        
         // having no alternatives is OK though.
         // still for safety an empty existing array has to be provided.
         if (this.aAlt == null)

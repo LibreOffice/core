@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 // __________ Imports __________
@@ -80,20 +80,20 @@ public class FillAndLineStyleDemo
                 "private:factory/sdraw", "_blank", 0, pPropValues );
 
             XDrawPage xPage = PageHelper.getDrawPageByIndex( xDrawDoc, 0 );
-
+            
             XShape xRectangle = ShapeHelper.createShape( xDrawDoc,
                 new Point( 0, 0 ),
                     new Size( 15000, 12000 ),
                         "com.sun.star.drawing.RectangleShape" );
-
+            
             XShapes xShapes = (XShapes)
                     UnoRuntime.queryInterface( XShapes.class, xPage );
             xShapes.add( xRectangle );
 
             XPropertySet xPropSet = (XPropertySet)
                 UnoRuntime.queryInterface( XPropertySet.class, xRectangle );
-
-            /* apply a gradient fill style that goes from top left to bottom
+            
+            /* apply a gradient fill style that goes from top left to bottom 
                right and is changing its color from green to yellow */
             xPropSet.setPropertyValue( "FillStyle",
                                        com.sun.star.drawing.FillStyle.GRADIENT );
@@ -121,7 +121,7 @@ public class FillAndLineStyleDemo
             aLineDash.Distance = 150;
             xPropSet.setPropertyValue( "LineDash", aLineDash );
             xPropSet.setPropertyValue( "LineColor", new Integer( 0x0000ff ) );
-            xPropSet.setPropertyValue( "LineWidth", new Integer( 200 ) );
+            xPropSet.setPropertyValue( "LineWidth", new Integer( 200 ) );			
 
         }
         catch( Exception ex )

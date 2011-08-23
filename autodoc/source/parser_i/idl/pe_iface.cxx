@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,11 +53,11 @@ namespace uidl
 #ifdef DF
 #undef DF
 #endif
-#define DF  &PE_Interface::On_Default
+#define DF 	&PE_Interface::On_Default
 
 PE_Interface::F_TOK
 PE_Interface::aDispatcher[PE_Interface::e_STATES_MAX][PE_Interface::tt_MAX] =
-        {   { DF, DF, DF, DF, DF },  // e_none
+        { 	{ DF, DF, DF, DF, DF },  // e_none
             { &PE_Interface::On_need_uik_MetaType,
                  DF, DF, DF, DF },  // need_uik
             { DF, &PE_Interface::On_uik_Identifier,
@@ -92,14 +92,14 @@ PE_Interface::aDispatcher[PE_Interface::e_STATES_MAX][PE_Interface::tt_MAX] =
 
 
 inline void
-PE_Interface::CallHandler( const char *     i_sTokenText,
-                           E_TokenType      i_eTokenType )
+PE_Interface::CallHandler( const char *		i_sTokenText,
+                           E_TokenType		i_eTokenType )
     { (this->*aDispatcher[eState][i_eTokenType])(i_sTokenText); }
 
 
 
 PE_Interface::PE_Interface()
-    :   eState(e_none),
+    :	eState(e_none),
         sData_Name(),
         bIsPreDeclaration(false),
         pCurInterface(0),
@@ -110,15 +110,15 @@ PE_Interface::PE_Interface()
         nCurParsed_Base(0),
         bOptionalMember(false)
 {
-    pPE_Function    = new PE_Function(nCurInterface);
-    pPE_Type        = new PE_Type(nCurParsed_Base);
+    pPE_Function 	= new PE_Function(nCurInterface);
+    pPE_Type 		= new PE_Type(nCurParsed_Base);
     pPE_Attribute   = new PE_Attribute(nCurInterface);
 }
 
 void
-PE_Interface::EstablishContacts( UnoIDL_PE *                io_pParentPE,
-                                 ary::Repository &      io_rRepository,
-                                 TokenProcessing_Result &   o_rResult )
+PE_Interface::EstablishContacts( UnoIDL_PE *				io_pParentPE,
+                                 ary::Repository &		io_rRepository,
+                                 TokenProcessing_Result & 	o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
     pPE_Function->EstablishContacts(this,io_rRepository,o_rResult);
@@ -138,7 +138,7 @@ PE_Interface::ProcessToken( const Token & i_rToken )
 
 
 void
-PE_Interface::Process_MetaType( const TokMetaType & i_rToken )
+PE_Interface::Process_MetaType( const TokMetaType &	i_rToken )
 {
     CallHandler( i_rToken.Text(), tt_metatype );
 }
@@ -270,7 +270,7 @@ PE_Interface::On_wait_for_base_Punctuation(const char * i_sText)
             default:
                 SetResult(not_done, pop_failure);
                 eState = e_none;
-        }   // end switch
+        }	// end switch
     }
     else
     {
@@ -322,7 +322,7 @@ PE_Interface::On_std_Punctuation(const char * i_sText)
         default:
             SetResult(not_done, pop_failure);
             eState = e_none;
-    }   // end switch
+    }	// end switch
 }
 
 void
@@ -375,7 +375,7 @@ PE_Interface::On_need_finish_Punctuation(const char * i_sText)
         default:
             SetResult(not_done, pop_failure);
             eState = e_none;
-    }   // end switch
+    }	// end switch
 }
 
 void

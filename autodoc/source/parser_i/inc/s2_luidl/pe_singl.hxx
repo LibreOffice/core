@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,25 +61,25 @@ class PE_Singleton : public UnoIDL_PE,
 {
   public:
                         PE_Singleton();
-    virtual             ~PE_Singleton();
+    virtual				~PE_Singleton();
 
-    virtual void        EstablishContacts(
-                            UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+    virtual void	 	EstablishContacts(
+                            UnoIDL_PE *			io_pParentPE,
+                            ary::Repository &	io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
-    virtual void        ProcessToken(
-                            const Token &       i_rToken );
+    virtual void	  	ProcessToken(
+                            const Token &		i_rToken );
 
-    virtual void        Process_MetaType(
-                            const TokMetaType & i_rToken );
-    virtual void        Process_Identifier(
+    virtual void		Process_MetaType(
+                            const TokMetaType &	i_rToken );
+    virtual void		Process_Identifier(
                             const TokIdentifier &
                                                 i_rToken );
-    virtual void        Process_Punctuation(
+    virtual void		Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
-    virtual void        Process_Default();
+    virtual void		Process_Default();
 
   private:
     enum E_State
@@ -94,26 +94,26 @@ class PE_Singleton : public UnoIDL_PE,
         e_STATES_MAX
     };
 
-    void                On_Default();
+    void				On_Default();
 
-    virtual void        InitData();
-    virtual void        TransferData();
-    virtual void        ReceiveData();
-    virtual UnoIDL_PE & MyPE();
+    virtual void		InitData();
+    virtual void		TransferData();
+    virtual void		ReceiveData();
+    virtual UnoIDL_PE &	MyPE();
 
     // DATA
-//  static F_TOK        aDispatcher[e_STATES_MAX][tt_MAX];
+//	static F_TOK		aDispatcher[e_STATES_MAX][tt_MAX];
 
-    E_State             eState;
+    E_State				eState;
     String              sData_Name;
-    bool                bIsPreDeclaration;
+    bool				bIsPreDeclaration;
     ary::idl::Singleton *
                         pCurSingleton;
     ary::idl::SglIfcSingleton *
                         pCurSiSingleton;
 
-    Dyn<PE_Type>        pPE_Type;
-    ary::idl::Type_id   nCurParsed_Type;
+    Dyn<PE_Type>		pPE_Type;
+    ary::idl::Type_id	nCurParsed_Type;
 };
 
 

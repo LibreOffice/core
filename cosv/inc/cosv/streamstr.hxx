@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,9 +89,9 @@ class StreamStr : public bostream
                             size_type           i_nCapacity ); /// Only used if > strlen(i_sInitStr).
                         StreamStr(
                             size_type           i_nGuessedCapacity,
-                            const char *        str1,   // [!= 0]
+                            const char * 		str1,   // [!= 0]
                             const char *        str2,   // [!= 0]
-                            ...                 );      // Has to end with NIL .
+                            ... 				);		// Has to end with NIL .
                         StreamStr(
                             csv::bstream &      i_source );
     /// Copies also insert_mode and current position.
@@ -151,7 +151,7 @@ class StreamStr : public bostream
     char &              operator[](
                             position_type       i_nPosition );
 
-    //  OPERATIONS
+    //	OPERATIONS
     void                resize(
                             size_type           i_nMinimumCapacity );
 
@@ -249,8 +249,8 @@ class StreamStr : public bostream
                             size_type           i_nLength = str::maxsize );
 
     // INQUIRY
-    const char *        c_str() const;
-    const char *        data() const;
+    const char *	    c_str() const;
+    const char *	    data() const;
 
     bool                empty() const;
     size_type           size() const;
@@ -277,8 +277,8 @@ class StreamStr : public bostream
 
    private:
     // Interface bostream
-    virtual UINT32      do_write(
-                            const void *    i_pSrc,
+    virtual UINT32		do_write(
+                            const void *   	i_pSrc,
                             UINT32          i_nNrofBytes);
     // Locals
     void                ProvideAddingSize(

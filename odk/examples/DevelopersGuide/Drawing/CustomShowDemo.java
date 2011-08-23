@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 // __________ Imports __________
@@ -97,7 +97,7 @@ public class CustomShowDemo
                 (XDrawPagesSupplier)UnoRuntime.queryInterface(
                     XDrawPagesSupplier.class, xDrawDoc );
             XDrawPages xDrawPages = xDrawPagesSupplier.getDrawPages();
-
+                        
             // take care that this document has ten pages
             while ( xDrawPages.getCount() < 10 )
                 xDrawPages.insertNewByIndex( 0 );
@@ -107,13 +107,13 @@ public class CustomShowDemo
                                     "page five", "page six", "page seven", "page eight", "page nine" };
             int i;
             for ( i = 0; i < 10; i++ )
-            {
+            {			
                 XDrawPage xDrawPage = (XDrawPage)UnoRuntime.queryInterface(
                     XDrawPage.class, xDrawPages.getByIndex( i ));
                 XNamed xPageName = (XNamed)UnoRuntime.queryInterface(
-                    XNamed.class, xDrawPage );
+                    XNamed.class, xDrawPage );				
                 xPageName.setName( aNameArray[ i ] );
-
+                
                 // now we will create and insert the text object
                 XShape xTextObj = ShapeHelper.createShape( xDrawDoc, new Point( 10000, 9000 ),
                     new Size( 10000, 5000 ),
@@ -135,7 +135,7 @@ public class CustomShowDemo
             XSingleServiceFactory xFactory = (XSingleServiceFactory)
                 UnoRuntime.queryInterface( XSingleServiceFactory.class, xNameContainer );
 
-            Object          xObj;
+            Object			xObj;
             XIndexContainer xContainer;
 
             /* instanciate an IndexContainer that will take

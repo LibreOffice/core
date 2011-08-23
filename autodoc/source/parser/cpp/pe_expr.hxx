@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,19 +53,19 @@ class PE_Expression : public Cpp_PE
         size_of_states
     };
                         PE_Expression(
-                            Cpp_PE *            i_pParent );
+                            Cpp_PE *			i_pParent );
                         ~PE_Expression();
 
     const char *        Result_Text() const;
 
-    virtual void        Call_Handler(
-                            const cpp::Token &  i_rTok );
+    virtual void		Call_Handler(
+                            const cpp::Token &	i_rTok );
 
   private:
-    void                Setup_StatusFunctions();
-    virtual void        InitData();
-    virtual void        TransferData();
-    void                On_std_Default( const char *);
+    void				Setup_StatusFunctions();
+    virtual void		InitData();
+    virtual void		TransferData();
+    void  				On_std_Default( const char *);
 
     void                On_std_SwBracket_Left( const char *);
     void                On_std_SwBracket_Right( const char *);

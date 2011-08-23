@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,37 +59,37 @@ class PE_Namespace : public Cpp_PE
     {
         start,
         gotName,
-        expectSemicolon,        /// after namespace assignment
+        expectSemicolon,		/// after namespace assignment
         size_of_states
     };
                         PE_Namespace(
-                            Cpp_PE *            i_pParent );
+                            Cpp_PE *			i_pParent );
                         ~PE_Namespace();
 
-    virtual void        Call_Handler(
-                            const cpp::Token &  i_rTok );
+    virtual void		Call_Handler(
+                            const cpp::Token &	i_rTok );
 
     ary::cpp::Namespace *
                         Result_OpenedNamespace() const;
   private:
-    void                Setup_StatusFunctions();
+    void				Setup_StatusFunctions();
 
-    virtual void        InitData();
-    virtual void        TransferData();
-    void                Hdl_SyntaxError( const char *);
+    virtual void		InitData();
+    virtual void		TransferData();
+    void  				Hdl_SyntaxError( const char *);
 
-    void                On_start_Identifier(const char * i_sText);
-    void                On_start_SwBracket_Left(const char * i_sText);
-    void                On_gotName_SwBracket_Left(const char * i_sText);
-    void                On_gotName_Assign(const char * i_sText);
-    void                On_expectSemicolon_Semicolon(const char * i_sText);
+    void				On_start_Identifier(const char * i_sText);
+    void				On_start_SwBracket_Left(const char * i_sText);
+    void				On_gotName_SwBracket_Left(const char * i_sText);
+    void				On_gotName_Assign(const char * i_sText);
+    void				On_expectSemicolon_Semicolon(const char * i_sText);
 
     // DATA
     Dyn< PeStatusArray<PE_Namespace> >
                         pStati;
 
     String              sLocalName;
-    bool                bPush;
+    bool				bPush;
 };
 
 

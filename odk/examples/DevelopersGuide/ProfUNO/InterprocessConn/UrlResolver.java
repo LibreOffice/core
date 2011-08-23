@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import com.sun.star.bridge.XUnoUrlResolver;
@@ -53,14 +53,14 @@ class UrlResolver
                                 "                (use \" on unix shells to avoid ;-problems" );
             System.exit( 1 );
         }
-
+        
         // create default local component context
         XComponentContext xLocalContext =
             com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(null);
-
+        
         // initial serviceManager
         XMultiComponentFactory xLocalServiceManager = xLocalContext.getServiceManager();
-
+                
         // create a urlresolver
         Object urlResolver  = xLocalServiceManager.createInstanceWithContext(
             "com.sun.star.bridge.UnoUrlResolver", xLocalContext );

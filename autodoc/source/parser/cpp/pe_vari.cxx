@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ PE_Variable::~PE_Variable()
 }
 
 void
-PE_Variable::Call_Handler( const cpp::Token &   i_rTok )
+PE_Variable::Call_Handler( const cpp::Token &	i_rTok )
 {
     pStati->Cur().Call_Handler(i_rTok.TypeId(), i_rTok.Text());
 }
@@ -70,22 +70,22 @@ PE_Variable::Call_Handler( const cpp::Token &   i_rTok )
 void
 PE_Variable::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_Variable>::F_Tok    F_Tok;
+    typedef CallFunction<PE_Variable>::F_Tok	F_Tok;
 
-    static F_Tok stateF_afterName[] =       { &PE_Variable::On_afterName_ArrayBracket_Left,
+    static F_Tok stateF_afterName[] =		{ &PE_Variable::On_afterName_ArrayBracket_Left,
                                               &PE_Variable::On_afterName_Semicolon,
                                               &PE_Variable::On_afterName_Comma,
                                               &PE_Variable::On_afterName_Assign };
-    static INT16 stateT_afterName[] =       { Tid_ArrayBracket_Left,
+    static INT16 stateT_afterName[] =     	{ Tid_ArrayBracket_Left,
                                               Tid_Semicolon,
                                               Tid_Comma,
                                               Tid_Assign };
-    static F_Tok stateF_afterSize[] =       { &PE_Variable::On_afterSize_ArrayBracket_Right };
-    static INT16 stateT_afterSize[] =       { Tid_ArrayBracket_Right };
-    static F_Tok stateF_expectFinish[] =    { &PE_Variable::On_expectFinish_Bracket_Right,
+    static F_Tok stateF_afterSize[] =		{ &PE_Variable::On_afterSize_ArrayBracket_Right };
+    static INT16 stateT_afterSize[] =		{ Tid_ArrayBracket_Right };
+    static F_Tok stateF_expectFinish[] =	{ &PE_Variable::On_expectFinish_Bracket_Right,
                                               &PE_Variable::On_expectFinish_Semicolon,
                                               &PE_Variable::On_expectFinish_Comma };
-    static INT16 stateT_expectFinish[] =    { Tid_Bracket_Right,
+    static INT16 stateT_expectFinish[] =   	{ Tid_Bracket_Right,
                                               Tid_Semicolon,
                                               Tid_Comma };
 

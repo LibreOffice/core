@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,32 +44,32 @@ class StmArrayStatus : public StmStatus
 
     // LIFECYCLE
                         StmArrayStatus(
-                            intt                i_nStatusSize,
-                            const INT16 *       in_aArrayModel,
-                            F_CRTOK             i_fTokenCreateFunction,
-                            bool                in_bIsDefault );
+                            intt				i_nStatusSize,
+                            const INT16 * 		in_aArrayModel,
+                            F_CRTOK				i_fTokenCreateFunction,
+                            bool				in_bIsDefault );
                         ~StmArrayStatus();
 
     // INQUIRY
-    StmStatus::Branch   NextBy(
-                            intt                in_nFollowersIndex) const;
-    F_CRTOK             TokenCreateFunction() const
+    StmStatus::Branch	NextBy(
+                            intt				in_nFollowersIndex) const;
+    F_CRTOK      		TokenCreateFunction() const
                                                 { return fTokenCreateFunction; }
-    virtual bool        IsADefault() const;
+    virtual bool		IsADefault() const;
 
     // ACCESS
     virtual StmArrayStatus *
                         AsArray();
-    bool                SetBranch(
-                            intt                in_nBranchIx,
-                            StmStatus::Branch   in_nBranch );
-    void                SetTokenCreateFunction(
-                            F_CRTOK             i_fTokenCreateFunction );
+    bool 				SetBranch(
+                            intt				in_nBranchIx,
+                            StmStatus::Branch	in_nBranch );
+    void   				SetTokenCreateFunction(
+                            F_CRTOK				i_fTokenCreateFunction );
   private:
-    StmStatus::Branch * dpBranches;
-    intt                nNrOfBranches;
-    F_CRTOK             fTokenCreateFunction;
-    bool                bIsADefault;
+    StmStatus::Branch *	dpBranches;
+    intt				nNrOfBranches;
+    F_CRTOK				fTokenCreateFunction;
+    bool				bIsADefault;
 };
 
 

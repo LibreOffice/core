@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.DispatchDescriptor;
@@ -66,12 +66,12 @@ public class InspectorAddon {
         "com.sun.star.frame.ProtocolHandler" };
                                                      ;
         private XComponentContext m_xContext = null;
-
+    
     /** Creates a new instance of InspectorAddon */
     public InspectorAddonImpl(XComponentContext _xContext) {
         m_xContext = _xContext;
     }
-
+    
         public XDispatch queryDispatch( /*IN*/com.sun.star.util.URL aURL, /*IN*/String sTargetFrameName, /*IN*/int iSearchFlags ) {
             XDispatch xRet = null;
             if ( aURL.Protocol.compareTo("org.openoffice.Office.addon.Inspector:") == 0 ) {
@@ -86,37 +86,37 @@ public class InspectorAddon {
 
         public XDispatch[] queryDispatches( /*IN*/DispatchDescriptor[] seqDescripts ) {
             int nCount = seqDescripts.length;
-            XDispatch[] lDispatcher = new XDispatch[nCount];
+            XDispatch[] lDispatcher = new XDispatch[nCount];            
             for( int i=0; i<nCount; ++i )
                 lDispatcher[i] = queryDispatch( seqDescripts[i].FeatureURL, seqDescripts[i].FrameName, seqDescripts[i].SearchFlags );
-            return lDispatcher;
+            return lDispatcher;           
         }
 
 
         public void initialize( Object[] object ) throws com.sun.star.uno.Exception {
             if ( object.length > 0 ){
                 m_xFrame = ( XFrame ) UnoRuntime.queryInterface(XFrame.class, object[ 0 ] );
-            }
+            }             
         }
-
+        
         public class Dispatcher implements XDispatch{
             private XFrame m_xFrame = null;
             private XModel xModel = null;
-
+            
             public Dispatcher(XFrame _xFrame){
                 m_xFrame = _xFrame;
                 if (m_xFrame != null){
                     XController xController = m_xFrame.getController();
                     if (xController != null){
                         xModel = xController.getModel();
-                    }
+                    }                
                 }
             }
 
             // XDispatch
             public void dispatch( /*IN*/com.sun.star.util.URL _aURL, /*IN*/com.sun.star.beans.PropertyValue[] aArguments ) {
             try{
-                if ( _aURL.Protocol.compareTo("org.openoffice.Office.addon.Inspector:") == 0 ){
+                if ( _aURL.Protocol.compareTo("org.openoffice.Office.addon.Inspector:") == 0 ){                
                     if ( _aURL.Path.equals("inspect")){
                         Object oUnoInspectObject = xModel;
                         com.sun.star.lang.XMultiComponentFactory xMCF = m_xContext.getServiceManager();
@@ -130,7 +130,7 @@ public class InspectorAddon {
                             oUnoInspectObject = m_xFrame;
                         }
                         XPropertySet xFramePropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, m_xFrame);
-                        String sTitle = (String) xFramePropertySet.getPropertyValue("Title");
+                        String sTitle = (String) xFramePropertySet.getPropertyValue("Title"); 
                         String[] sTitleList = sTitle.split(" - ");
                         if (sTitleList.length > 0){
                             sTitle = sTitleList[0];
@@ -148,15 +148,15 @@ public class InspectorAddon {
 
             public void removeStatusListener( /*IN*/XStatusListener xControl, /*IN*/com.sun.star.util.URL aURL ) {
             }
-
-
+            
+            
         }
-
-
+        
+        
         public static String[] getServiceNames() {
             return m_serviceNames;
         }
-
+        
         // Implement the interface XServiceInfo
         /** Get all supported service names.
          * @return Supported service names.
@@ -164,7 +164,7 @@ public class InspectorAddon {
         public String[] getSupportedServiceNames() {
             return getServiceNames();
         }
-
+        
         // Implement the interface XServiceInfo
         /** Test, if the given service will be supported.
          * @param sService Service name.
@@ -172,15 +172,15 @@ public class InspectorAddon {
          */
         public boolean supportsService( String sServiceName ) {
             int len = m_serviceNames.length;
-
+            
             for( int i=0; i < len; i++) {
                 if ( sServiceName.equals( m_serviceNames[i] ) )
                     return true;
             }
-
+        
             return false;
         }
-
+        
         // Implement the interface XServiceInfo
         /** Get the implementation name of the component.
          * @return Implementation name of the component.
@@ -188,10 +188,10 @@ public class InspectorAddon {
         public String getImplementationName() {
             return InspectorAddonImpl.class.getName();
         }
-
-    }
-
-
+        
+    }    
+    
+    
     /**
      * Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -221,8 +221,8 @@ public class InspectorAddon {
     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
         return Factory.writeRegistryServiceInfo(InspectorAddonImpl.class.getName(), InspectorAddonImpl.getServiceNames(), regKey);
     }
-
+    
 //    __create( XComponentContext ){
 //
-//    }
+//    }    
 }

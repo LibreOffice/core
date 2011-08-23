@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,32 +42,32 @@ class StmArrayStatu2 : public StmStatu2
   public:
     // LIFECYCLE
                         StmArrayStatu2(
-                            intt            i_nStatusSize,
-                            const INT16 *   in_aArrayModel,
-                            uintt           i_nTokenId,
-                            bool            in_bIsDefault );
+                            intt			i_nStatusSize,
+                            const INT16 * 	in_aArrayModel,
+                            uintt			i_nTokenId,
+                            bool			in_bIsDefault );
                         ~StmArrayStatu2();
 
     // INQUIRY
-    StmStatu2::Branch   NextBy(
-                            intt            in_nFollowersIndex) const;
-    UINT16              TokenId() const     { return nTokenId; }
-    virtual bool        IsADefault() const;
+    StmStatu2::Branch	NextBy(
+                            intt			in_nFollowersIndex) const;
+    UINT16      		TokenId() const		{ return nTokenId; }
+    virtual bool		IsADefault() const;
 
     // ACCESS
     virtual StmArrayStatu2 *
                         AsArray();
-    bool                SetBranch(
-                            intt            in_nBranchIx,
+    bool 				SetBranch(
+                            intt			in_nBranchIx,
                             StmStatu2::Branch
                                             in_nBranch );
-    void                SetTokenId(
-                            UINT16          in_nTokenId );
+    void   				SetTokenId(
+                            UINT16			in_nTokenId );
   private:
-    StmStatu2::Branch * dpBranches;
-    intt                nNrOfBranches;
-    UINT16              nTokenId;
-    bool                bIsADefault;
+    StmStatu2::Branch *	dpBranches;
+    intt				nNrOfBranches;
+    UINT16				nTokenId;
+    bool				bIsADefault;
 };
 
 

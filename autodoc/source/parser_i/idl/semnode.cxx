@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,19 +46,19 @@ namespace uidl
 
 
 SemanticNode::SemanticNode()
-    :   pParentPE(0),
+    :	pParentPE(0),
         pAryGate(0),
         pTokenResult(0)
 {
 }
 
 void
-SemanticNode::EstablishContacts( UnoIDL_PE *                io_pParentPE,
+SemanticNode::EstablishContacts( UnoIDL_PE *				io_pParentPE,
                                  ary::idl::Gate &           io_rGate,
-                                 TokenProcessing_Result &   o_rResult )
+                                 TokenProcessing_Result & 	o_rResult )
 {
-    pParentPE       =  io_pParentPE;
-    pAryGate        = &io_rGate;
+    pParentPE 		=  io_pParentPE;
+    pAryGate 		= &io_rGate;
     pTokenResult    = &o_rResult;
 }
 
@@ -67,15 +67,15 @@ SemanticNode::~SemanticNode()
 }
 
 void
-SemanticNode::SetTokenResult( E_TokenDone       i_eDone,
-                              E_EnvStackAction  i_eWhat2DoWithEnvStack,
-                              UnoIDL_PE *       i_pParseEnv2Push )
+SemanticNode::SetTokenResult( E_TokenDone		i_eDone,
+                              E_EnvStackAction	i_eWhat2DoWithEnvStack,
+                              UnoIDL_PE *		i_pParseEnv2Push )
 {
     csv_assert(pTokenResult != 0);
 
-    pTokenResult->eDone         = i_eDone;
-    pTokenResult->eStackAction  = i_eWhat2DoWithEnvStack;
-    pTokenResult->pEnv2Push     = i_pParseEnv2Push;
+    pTokenResult->eDone 		= i_eDone;
+    pTokenResult->eStackAction 	= i_eWhat2DoWithEnvStack;
+    pTokenResult->pEnv2Push 	= i_pParseEnv2Push;
 }
 
 

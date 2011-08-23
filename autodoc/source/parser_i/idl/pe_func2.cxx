@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@ namespace uidl
 {
 
 
-PE_Function::PE_Function( const RParent &       i_rCurInterface )
-    :   eState(e_none),
+PE_Function::PE_Function( const RParent &	    i_rCurInterface )
+    :	eState(e_none),
         sData_Name(),
         nData_ReturnType(0),
         bData_Oneway(false),
@@ -67,13 +67,13 @@ PE_Function::PE_Function( const RParent &       i_rCurInterface )
         sCurParsedParam_Name(),
         bIsForConstructors(false)
 {
-    pPE_Type        = new PE_Type(nCurParsedType);
-    pPE_Variable    = new PE_Variable(nCurParsedParam_Type, sCurParsedParam_Name);
+    pPE_Type 		= new PE_Type(nCurParsedType);
+    pPE_Variable 	= new PE_Variable(nCurParsedParam_Type, sCurParsedParam_Name);
 }
 
-PE_Function::PE_Function( const RParent &     i_rCurService,
+PE_Function::PE_Function( const RParent &	  i_rCurService,
                           E_Constructor        )
-    :   eState(expect_name),
+    :	eState(expect_name),
         sData_Name(),
         nData_ReturnType(0),
         bData_Oneway(false),
@@ -88,13 +88,13 @@ PE_Function::PE_Function( const RParent &     i_rCurService,
         sCurParsedParam_Name(),
         bIsForConstructors(true)
 {
-    pPE_Type        = new PE_Type(nCurParsedType);
-    pPE_Variable    = new PE_Variable(nCurParsedParam_Type, sCurParsedParam_Name);
+    pPE_Type 		= new PE_Type(nCurParsedType);
+    pPE_Variable 	= new PE_Variable(nCurParsedParam_Type, sCurParsedParam_Name);
 }
 
 void
-PE_Function::EstablishContacts( UnoIDL_PE *              io_pParentPE,
-                                ary::Repository &        io_rRepository,
+PE_Function::EstablishContacts( UnoIDL_PE *				 io_pParentPE,
+                                ary::Repository &	     io_rRepository,
                                 TokenProcessing_Result & o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
@@ -125,7 +125,7 @@ PE_Function::Process_Stereotype( const TokStereotype & i_rToken )
                         break;
             default:
                         OnDefault();
-        }   // end switch
+        }	// end switch
     }
     else
         OnDefault();
@@ -286,7 +286,7 @@ PE_Function::Process_BuiltInType( const TokBuiltInType & i_rToken )
                 break;
         default:
             OnDefault();
-    }   // end switch
+    }	// end switch
 }
 
 void
@@ -344,7 +344,7 @@ PE_Function::Process_Default()
                 break;
         default:
             OnDefault();
-    }   // end switch
+    }	// end switch
 }
 
 void

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 
 // USED SERVICES
-    // BASE CLASSES
+    // BASE CLASSES               
     // COMPONENTS
     // PARAMETERS
 #include "hi_ary.hxx"
@@ -61,13 +61,13 @@ class LinkHelper
                         { OutPosition ret1 = rEnv.OutputTree().IndexRoot();
                           return OutPosition( ret1, String(output::IndexFile_A()) ); }
 
-
-    const ary::idl::Module *
+                                        
+    const ary::idl::Module *  
                         Search_CurModule() const;
-    const ary::idl::Module *
+    const ary::idl::Module *  
                         Search_Module(
                             output::Node &      i_node ) const;
-
+                               
     const CE *          Search_CeFromType(
                             ary::idl::Type_id   i_type ) const;
 
@@ -81,27 +81,27 @@ class LinkHelper
                             OutPosition &       i_ownerPos,
                             const String &      i_memberName ) const
                         { Get_Link2Position(o_link, i_ownerPos);
-                          o_link << "#" << i_memberName; }
-    const String &      XrefsSuffix() const;
-
-  private:
+                          o_link << "#" << i_memberName; }     
+    const String &      XrefsSuffix() const;                               
+                          
+  private:                                                     
     // DATA
     mutable HtmlEnvironment_Idl &
                         rEnv;
-};
+};     
 
-inline const ary::idl::CodeEntity *
+inline const ary::idl::CodeEntity *          
 LinkHelper::Search_CeFromType( ary::idl::Type_id i_type ) const
-{
+{ 
     ary::idl::Ce_id nCe = rEnv.Data().CeFromType(i_type);
     if (nCe.IsValid())
         return &rEnv.Data().Find_Ce(nCe);
     return 0;
-}
+}    
 
 
 
-String              nameChainLinker(
+String              nameChainLinker( 
                         const char *        i_levelName );
 
 

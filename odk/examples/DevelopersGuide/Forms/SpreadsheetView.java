@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ import com.sun.star.container.*;
  */
 public class SpreadsheetView extends DocumentViewHelper
 {
-
+    
     /** Creates a new instance of SpreadsheetView */
     public SpreadsheetView( XMultiServiceFactory orb, DocumentHelper document, XController controller )
     {

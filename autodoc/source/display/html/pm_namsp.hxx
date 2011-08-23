@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class PageMaker_Namespace : public SpecializedPageMaker
                         PageMaker_Namespace(
                             PageDisplay &       io_rPage );
 
-    virtual             ~PageMaker_Namespace();
+    virtual				~PageMaker_Namespace();
 
     virtual void        MakePage();
 

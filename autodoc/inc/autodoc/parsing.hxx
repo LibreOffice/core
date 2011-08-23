@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ class FileCollector_Ifc;
 class ParseToolsFactory_Ifc
 {
   public:
-    virtual             ~ParseToolsFactory_Ifc() {}
+    virtual				~ParseToolsFactory_Ifc() {}
     static ParseToolsFactory_Ifc &
                         GetIt_();
 

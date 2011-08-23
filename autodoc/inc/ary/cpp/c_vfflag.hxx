@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@ struct VariableFlags
   public:
     enum E_Flags
     {
-        f_static_local      = 0x0001,
-        f_static_member     = 0x0002,
-        f_extern            = 0x0004,
-        f_mutable           = 0x0008
+        f_static_local 		= 0x0001,
+        f_static_member 	= 0x0002,
+        f_extern 			= 0x0004,
+        f_mutable			= 0x0008
     };
 
                         VariableFlags(
@@ -57,15 +57,15 @@ struct VariableFlags
 
     void                Reset()                 { nFlags = 0; }
 
-    void                SetStaticLocal()        { nFlags |= f_static_local; }
-    void                SetStaticMember()       { nFlags |= f_static_member; }
-    void                SetExtern()             { nFlags |= f_extern; }
-    void                SetMutable()            { nFlags |= f_mutable; }
+    void 				SetStaticLocal()		{ nFlags |= f_static_local; }
+    void 				SetStaticMember()		{ nFlags |= f_static_member; }
+    void 				SetExtern() 	  		{ nFlags |= f_extern; }
+    void 				SetMutable() 			{ nFlags |= f_mutable; }
 
-    bool                IsStaticLocal() const   { return (nFlags & f_static_local) != 0; }
-    bool                IsStaticMember() const  { return (nFlags & f_static_member) != 0; }
-    bool                IsExtern() const        { return (nFlags & f_extern) != 0; }
-    bool                IsMutable() const       { return (nFlags & f_mutable) != 0; }
+    bool 				IsStaticLocal()	const	{ return (nFlags & f_static_local) != 0; }
+    bool 				IsStaticMember() const	{ return (nFlags & f_static_member) != 0; }
+    bool 				IsExtern() const  		{ return (nFlags & f_extern) != 0; }
+    bool 				IsMutable() const		{ return (nFlags & f_mutable) != 0; }
 
   private:
     UINT16              nFlags;
@@ -79,14 +79,14 @@ struct FunctionFlags
   public:
     enum E_Flags
     {
-        f_static_local      = 0x0001,
-        f_static_member     = 0x0002,
-        f_extern            = 0x0004,
-        f_externC           = 0x0008,
-        f_mutable           = 0x0010,
-        f_inline            = 0x0100,
-        f_register          = 0x0200,
-        f_explicit          = 0x0400
+        f_static_local 		= 0x0001,
+        f_static_member 	= 0x0002,
+        f_extern 			= 0x0004,
+        f_externC 			= 0x0008,
+        f_mutable			= 0x0010,
+        f_inline 	        = 0x0100,
+        f_register		 	= 0x0200,
+        f_explicit			= 0x0400
     };
 
                         FunctionFlags(
@@ -104,22 +104,22 @@ struct FunctionFlags
 
     void                Reset()                 { nFlags = 0; }
 
-    void                SetStaticLocal()        { nFlags |= f_static_local; }
-    void                SetStaticMember()       { nFlags |= f_static_member; }
-    void                SetExtern()             { nFlags |= f_extern; }
-    void                SetExternC()            { nFlags |= f_externC; }
-    void                SetMutable()            { nFlags |= f_mutable; }
-    void                SetInline()             { nFlags |= f_inline; }
-    void                SetRegister()           { nFlags |= f_register; }
-    void                SetExplicit()           { nFlags |= f_explicit; }
+    void 				SetStaticLocal()		{ nFlags |= f_static_local; }
+    void 				SetStaticMember()		{ nFlags |= f_static_member; }
+    void 				SetExtern() 	  		{ nFlags |= f_extern; }
+    void 				SetExternC() 	  		{ nFlags |= f_externC; }
+    void 				SetMutable() 			{ nFlags |= f_mutable; }
+    void 				SetInline() 	  	    { nFlags |= f_inline; }
+    void 				SetRegister() 			{ nFlags |= f_register; }
+    void 				SetExplicit() 		    { nFlags |= f_explicit; }
 
-    bool                IsStaticLocal() const   { return (nFlags & f_static_local) != 0; }
-    bool                IsStaticMember() const  { return (nFlags & f_static_member) != 0; }
-    bool                IsExtern() const        { return (nFlags & f_extern) != 0; }
-    bool                IsExternC() const       { return (nFlags & f_externC) != 0; }
-    bool                IsMutable() const       { return (nFlags & f_mutable) != 0; }
-    bool                IsInline() const        { return (nFlags & f_inline) != 0; }
-    bool                IsRegister() const      { return (nFlags & f_register) != 0; }
+    bool 				IsStaticLocal()	const	{ return (nFlags & f_static_local) != 0; }
+    bool 				IsStaticMember() const	{ return (nFlags & f_static_member) != 0; }
+    bool 				IsExtern() const  		{ return (nFlags & f_extern) != 0; }
+    bool 				IsExternC() const  		{ return (nFlags & f_externC) != 0; }
+    bool 				IsMutable() const		{ return (nFlags & f_mutable) != 0; }
+    bool 				IsInline() const  	    { return (nFlags & f_inline) != 0; }
+    bool 				IsRegister() const		{ return (nFlags & f_register) != 0; }
     bool                IsExplicit() const      { return (nFlags & f_explicit) != 0; }
 
   private:

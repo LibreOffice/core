@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,23 +29,23 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import java.io.*;
 
-//  import com.sun.star.comp.helper.RegistryServiceFactory;
-//  import com.sun.star.comp.servicemanager.ServiceManager;
-//  import com.sun.star.lang.XMultiServiceFactory;
-//  import com.sun.star.lang.XServiceInfo;
+//	import com.sun.star.comp.helper.RegistryServiceFactory;
+//	import com.sun.star.comp.servicemanager.ServiceManager;
+//	import com.sun.star.lang.XMultiServiceFactory;
+//	import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XComponent;
-//  import com.sun.star.bridge.XUnoUrlResolver;
+//	import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.*;
 import com.sun.star.util.Date;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbc.*;
-
+    
 public class SalesMan
 {
     private XConnection con;
@@ -83,20 +83,20 @@ public class SalesMan
     public void insertDataIntoSalesMan() throws com.sun.star.uno.Exception
     {
         XStatement stmt = con.createStatement();
-        stmt.executeUpdate("INSERT INTO SALESMAN " +
-                "VALUES (1, 'Joseph', 'Smith','Bond Street','CA',95460,"
+        stmt.executeUpdate("INSERT INTO SALESMAN " + 
+                "VALUES (1, 'Joseph', 'Smith','Bond Street','CA',95460," 
                 + "'1946-07-02')");
         stmt.executeUpdate("INSERT INTO SALESMAN " +
-                "VALUES (2, 'Frank', 'Jones','Lake Silver','CA',95460,"
+                "VALUES (2, 'Frank', 'Jones','Lake Silver','CA',95460," 
                 + "'1963-12-24')");
         stmt.executeUpdate("INSERT INTO SALESMAN " +
-                "VALUES (3, 'Jane', 'Esperansa','23 Hollywood drive','CA',95460,"
+                "VALUES (3, 'Jane', 'Esperansa','23 Hollywood drive','CA',95460," 
                 + "'1972-04-01')");
         stmt.executeUpdate("INSERT INTO SALESMAN " +
-                "VALUES (4, 'George', 'Flint','12 Washington street','CA',95460,"
+                "VALUES (4, 'George', 'Flint','12 Washington street','CA',95460," 
                 + "'1953-02-13')");
         stmt.executeUpdate("INSERT INTO SALESMAN " +
-                "VALUES (5, 'Bob', 'Meyers','2 Moon way','CA',95460,"
+                "VALUES (5, 'Bob', 'Meyers','2 Moon way','CA',95460," 
                 + "'1949-09-07')");
     }
 
@@ -110,19 +110,19 @@ public class SalesMan
         setPara.setInt(2, 1);
         updateStreet.executeUpdate();
 
-        setPara.setString(1, "Marryland");
+        setPara.setString(1, "Marryland"); 
         setPara.setInt(2, 4);
-        updateStreet.executeUpdate();
+        updateStreet.executeUpdate(); 
         // changes STREET column of salesman George to Marryland
         setPara.setString(1, "Michigan road");
-        updateStreet.executeUpdate();
-        // changes again STREET column of salesman George to
-        // Michigan road
+        updateStreet.executeUpdate(); 
+        // changes again STREET column of salesman George to    
+        // Michigan road 
         // parameter 2 stayed 4, and the first parameter was reset
         // to "Michigan road")
 
-        setPara.setString(1, "Bond Street");
-        setPara.setInt(2, 3);
+        setPara.setString(1, "Bond Street"); 
+        setPara.setInt(2, 3); 
         int n = updateStreet.executeUpdate();
         System.out.println("executeUpdate returns: " + n);
         // n = 1 because one row had a change in it
@@ -132,7 +132,7 @@ public class SalesMan
     public void retrieveSalesManData() throws com.sun.star.uno.Exception
     {
         XStatement stmt = con.createStatement();
-        XResultSet rs   = stmt.executeQuery("SELECT FIRSTNAME, LASTNAME, BIRTHDATE FROM SALESMAN");
+        XResultSet rs	= stmt.executeQuery("SELECT FIRSTNAME, LASTNAME, BIRTHDATE FROM SALESMAN");
         XRow row = (XRow)UnoRuntime.queryInterface(XRow.class,rs);
         while ( rs != null && rs.next() ) {
             String fn = row.getString( 1 );

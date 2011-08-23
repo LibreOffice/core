@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.comp.helper.Bootstrap;
@@ -43,13 +43,13 @@ import com.sun.star.container.XSet;
 
 // sample starbasic code, you can execute it after you have connected to the office.
 //  Sub Main
-//      o = createUnoService( "com.sun.star.test.SomethingB" )
-//      msgbox o.methodOne( "from the office !" )
+//  	o = createUnoService( "com.sun.star.test.SomethingB" )
+//  	msgbox o.methodOne( "from the office !" )
 //  End Sub
 
 public class TestJavaComponent
 {
-
+    
     public static void insertIntoServiceManager(
         XMultiComponentFactory serviceManager, Object singleFactory )
         throws com.sun.star.uno.Exception
@@ -64,14 +64,14 @@ public class TestJavaComponent
     {
         XSet set = (XSet ) UnoRuntime.queryInterface( XSet.class, serviceManager );
         set.remove( singleFactory );
-
+        
     }
-
+    
     public static void main(String[] args) throws java.lang.Exception
     {
         try {
             boolean bLocal = false;
-
+        
             XMultiComponentFactory xUsedServiceManager = null;
             XComponentContext xUsedComponentContext = null;
 
@@ -79,22 +79,22 @@ public class TestJavaComponent
             {
                 XComponentContext xLocalComponentContext =
                     Bootstrap.createInitialComponentContext( null );
-
+        
                 // initial serviceManager
                 XMultiComponentFactory xLocalServiceManager =
                     xLocalComponentContext.getServiceManager();
-
+                
                 bLocal = true;
                 xUsedServiceManager = xLocalServiceManager;
                 xUsedComponentContext = xLocalComponentContext;
-
+                
                 System.out.println( "Using local servicemanager" );
-            } else {
+            } else {            
                 // get the remote office component context
                 xUsedComponentContext =
                     com.sun.star.comp.helper.Bootstrap.bootstrap();
                 System.out.println("Connected to a running office ...");
-
+                
                 xUsedServiceManager = xUsedComponentContext.getServiceManager();
                 System.out.println( "Using remote servicemanager" );
             }
@@ -102,7 +102,7 @@ public class TestJavaComponent
             if ( xUsedServiceManager == null )
             {
                 System.out.println( "ERROR: no service manager" );
-                System.exit(0);
+                System.exit(0);            
             }
 
             Object factory = new Object();
@@ -111,23 +111,23 @@ public class TestJavaComponent
                 // retrieve the factory for the component implementation
                 factory = TestServiceProvider.__getServiceFactory(
                     "TestComponentB", null, null);
-
+                
                 // insert the factory into the local servicemanager
                 // From now on, the service can be instantiated !
                 insertIntoServiceManager( xUsedServiceManager, factory );
-            }
-
+            }            
+            
             XSomethingB xSomethingB = SomethingB.create(xUsedComponentContext);
-
+            
             // and call the test method.
             String s= xSomethingB.methodTwo("Hello World!");
             System.out.println(s);
-
+            
             if ( bLocal )
             {
-                // remove it again from the servicemanager,
+                // remove it again from the servicemanager, 
                 removeFromServiceManager( xUsedServiceManager, factory );
-            }
+            }            
 
         }
         catch ( Exception e )
@@ -138,6 +138,6 @@ public class TestJavaComponent
         }
 
         // quit, even when a remote bridge is running
-        System.exit(0);
+        System.exit(0);            
     }
 }

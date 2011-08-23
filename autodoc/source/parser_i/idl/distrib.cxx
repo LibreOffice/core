@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 
 
 
-const uintt C_nNO_TRY = uintt(-1);
+const uintt	C_nNO_TRY = uintt(-1);
 
 
 namespace csi
@@ -52,7 +52,7 @@ namespace uidl
 
 TokenDistributor::TokenDistributor( ary::Repository & io_rRepository,
                                     ParserInfo &      io_rParserInfo )
-    :   pTokenSource(0),
+    :	pTokenSource(0),
         aDocumentation(io_rParserInfo),
         aProcessingData( io_rRepository, aDocumentation, io_rParserInfo )
 {
@@ -75,10 +75,10 @@ TokenDistributor::TradeToken()
 }
 
 TokenDistributor::ProcessingData::ProcessingData(
-                                        ary::Repository &   io_rRepository,
-                                        Documentation &         i_rDocuProcessor,
+                                        ary::Repository & 	io_rRepository,
+                                        Documentation &	        i_rDocuProcessor,
                                         ParserInfo &            io_rParserInfo )
-    :   // aEnvironments
+    :	// aEnvironments
         // aTokenQueue
         // itCurToken
         // aCurResult
@@ -203,10 +203,10 @@ TokenDistributor::ProcessingData::AcknowledgeResult()
                 DecrementTryCount();
                 aEnvironments.pop_back();
                 CurEnv().Enter(pop_failure);
-        }       break;
+        }		break;
         default:
             csv_assert(false);
-    }   // end switch(aCurResult.eStackAction)
+    }	// end switch(aCurResult.eStackAction)
 }
 
 void
@@ -222,7 +222,7 @@ TokenDistributor::ProcessingData::DecrementTryCount()
 
 TokenDistributor::
 Documentation::Documentation(ParserInfo & io_rParserInfo)
-    :   pDocuParseEnv(new csi::dsapi::SapiDocu_PE(io_rParserInfo)),
+    :	pDocuParseEnv(new csi::dsapi::SapiDocu_PE(io_rParserInfo)),
         rParserInfo(io_rParserInfo),
         pMostRecentDocu(0),
         bIsPassedFirstDocu(false)
@@ -246,7 +246,7 @@ Documentation::Receive( DYN csi::dsapi::Token & let_drToken )
         pMostRecentDocu = pDocuParseEnv->ReleaseJustParsedDocu();
         if (NOT bIsPassedFirstDocu)
         {
-            pMostRecentDocu = 0;            // Deletes the most recent docu.
+            pMostRecentDocu = 0;			// Deletes the most recent docu.
             bIsPassedFirstDocu = true;
         }
     }

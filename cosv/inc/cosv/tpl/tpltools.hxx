@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,18 +40,18 @@ namespace csv
 
 
 template <class COLLECTION>
-inline void         erase_container(
-                        COLLECTION &        o_rCollection );
+inline void		    erase_container(
+                        COLLECTION &		o_rCollection );
 
 /// Version for std::map
 template <class COLLECTION>
-void                erase_map_of_heap_ptrs(
-                        COLLECTION &        o_rCollection );
+void		  		erase_map_of_heap_ptrs(
+                        COLLECTION &		o_rCollection );
 
 /// Version for other containers than std::map, with non-pair value_type.
 template <class COLLECTION>
-void                erase_container_of_heap_ptrs(
-                        COLLECTION &        o_rCollection );
+void		  		erase_container_of_heap_ptrs(
+                        COLLECTION &		o_rCollection );
 
 template <class VECTOR_ELEM>
 void                adjust_vector_size(
@@ -62,33 +62,33 @@ void                adjust_vector_size(
 
 
 template <class KEY, class VAL>
-const VAL *         find_in_map(            /// Usable for all kinds of values
+const VAL *	        find_in_map(            /// Usable for all kinds of values
                         const std::map< KEY, VAL > &
                                             i_rMap,
-                        const KEY &         i_rKey );
+                        const KEY &			i_rKey );
 
 
 /** @return the value in the map, if it is in there, else 0.
     @precond VAL has to be convertable to "0".
 */
 template <class KEY, class VAL>
-VAL                 value_from_map(
+VAL					value_from_map(
                         const std::map< KEY, VAL > &
                                             i_rMap,
-                        const KEY &         i_rKey );
+                        const KEY &			i_rKey );
 
 /** @return the value in the map, if it is in there, else i_notFound.
 */
 template <class KEY, class VAL>
-VAL                 value_from_map(
+VAL					value_from_map(
                         const std::map< KEY, VAL > &
                                             i_rMap,
-                        const KEY &         i_rKey,
+                        const KEY &			i_rKey,
                         VAL                 i_notFound );
 
 template <class COLLECTION, class VALUE>
-bool                contains(
-                        const COLLECTION &  i_collection,
+bool		  		contains(
+                        const COLLECTION &	i_collection,
                         const VALUE &       i_value );
 
 // Object oriented for_each:
@@ -164,38 +164,38 @@ adjust_vector_size( std::vector<VECTOR_ELEM> & io_rVector,
 template <class KEY, class VAL>
 const VAL *
 find_in_map( const std::map< KEY, VAL > & i_rMap,
-             const KEY &                  i_rKey )
+             const KEY &			      i_rKey )
 {
     typename std::map< KEY, VAL >::const_iterator
             ret =  i_rMap.find(i_rKey);
     return ret != i_rMap.end()
-                ?   & (*ret).second
-                :   (const VAL*)0;
+                ?	& (*ret).second
+                :	(const VAL*)0;
 }
 
 template <class KEY, class VAL>
 VAL
 value_from_map( const std::map< KEY, VAL > & i_rMap,
-                const KEY &                  i_rKey )
+                const KEY &			         i_rKey )
 {
     typename std::map< KEY, VAL >::const_iterator
             ret =  i_rMap.find(i_rKey);
     return ret != i_rMap.end()
-                ?   (*ret).second
-                :   VAL(0);
+                ?	(*ret).second
+                :	VAL(0);
 }
 
 template <class KEY, class VAL>
 VAL
 value_from_map( const std::map< KEY, VAL > & i_rMap,
-                const KEY &                  i_rKey,
+                const KEY &			         i_rKey,
                 VAL                          i_notFound )
 {
     typename std::map< KEY, VAL >::const_iterator
             ret =  i_rMap.find(i_rKey);
     return ret != i_rMap.end()
-                ?   (*ret).second
-                :   i_notFound;
+                ?	(*ret).second
+                :	i_notFound;
 }
 
 template <class COLLECTION, class VALUE>

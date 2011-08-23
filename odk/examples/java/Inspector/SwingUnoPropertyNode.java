@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,16 +29,16 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 
 public class SwingUnoPropertyNode extends SwingUnoNode implements XUnoPropertyNode{
-
+    
     private UnoPropertyNode m_oUnoPropertyNode = null;
-
-
+    
+    
     public SwingUnoPropertyNode(Property _aProperty, Object _oUnoObject, Object _oUnoReturnObject) {
         super(_oUnoObject);
         m_oUnoPropertyNode = new UnoPropertyNode(_aProperty, _oUnoObject, _oUnoReturnObject);
@@ -46,51 +46,51 @@ public class SwingUnoPropertyNode extends SwingUnoNode implements XUnoPropertyNo
         setFoldable(m_oUnoPropertyNode.isFoldable());
     }
 
-
+    
     public SwingUnoPropertyNode(Property _aProperty){
         super(null);
         m_oUnoPropertyNode = new UnoPropertyNode(_aProperty);
     }
 
-
-    public SwingUnoPropertyNode(PropertyValue _aPropertyValue, Object _oUnoObject, Object _oUnoReturnObject) {
+    
+    public SwingUnoPropertyNode(PropertyValue _aPropertyValue, Object _oUnoObject, Object _oUnoReturnObject) {    
         super(_oUnoObject);
         m_oUnoPropertyNode = new UnoPropertyNode(_aPropertyValue, _oUnoObject, _oUnoReturnObject);
     }
-
+    
     public String getName(){
         return m_oUnoPropertyNode.getName();
     }
-
-
+    
+    
     public Object getUnoReturnObject(){
         return m_oUnoPropertyNode.getUnoReturnObject();
     }
 
-
+    
     public String getClassName(){
         String sClassName = m_oUnoPropertyNode.getClassName();
         if (sClassName.equals("")){
             sClassName = super.getClassName();
-        }
+        }        
         return sClassName;
-    }
-
+    }        
+    
     public String getAnchor(){
         return m_oUnoPropertyNode.getAnchor();
     }
-
+    
     public int getPropertyNodeType(){
         return m_oUnoPropertyNode.getPropertyNodeType();
     }
-
-
+    
+    
     public void setPropertyNodeType(int _nPropertyType){
         m_oUnoPropertyNode.setPropertyNodeType(_nPropertyType);
     }
-
+    
     public Property getProperty(){
         return m_oUnoPropertyNode.getProperty();
     }
-
+    
 }

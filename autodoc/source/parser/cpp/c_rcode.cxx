@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include <x_parse.hxx>
 #include "pe_file.hxx"
 
-const uintt C_nNO_TRY = uintt(-1);
+const uintt	C_nNO_TRY = uintt(-1);
 
 
 namespace cpp {
@@ -124,10 +124,10 @@ CodeExplorer::AcknowledgeResult()
                 {
                     throw X_Parser( X_Parser::x_UnexpectedToken, CurToken().Text(), aGlobalParseContext.CurFileName(), aGlobalParseContext.LineCount() );
                 }
-        }       break;
+        }		break;
         default:
             csv_assert(false);
-    }   // end switch(CurResult().eStackAction)
+    }	// end switch(CurResult().eStackAction)
 }
 
 const Token &
