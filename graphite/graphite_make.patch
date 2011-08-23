@@ -1,6 +1,6 @@
 --- misc/build/graphite2-1.0.2/src/makefile.mk  Fri Mar  4 10:20:30 2011 +0700
 +++ misc/build/graphite2-1.0.2/src/makefile.mk  Fri Mar  4 10:20:30 2011 +0700
-@@ -1,1 +1,34 @@
+@@ -1,1 +1,38 @@
 -dummy
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 +
@@ -16,6 +16,10 @@
 +CFLAGS+=-DDISABLE_TRACING -I../include -DGR2_STATIC
 +.IF "$(debug)" == ""
 +CFLAGS+=-O3 -DNDEBUG
++.ENDIF
++
++.IF "$(WORDS_BIGENDIAN)" == "yes"
++CFLAGS += -DWORDS_BIGENDIAN
 +.ENDIF
 +
 +_NS := GR2
