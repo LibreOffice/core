@@ -365,18 +365,23 @@ ShapeContext::ShapeContext( ContextHandler2Helper& rParent, ShapeBase& rShape, c
 
 ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    // Custom shape in Writer with a textbox are transformed into a frame
-    if ( nElement == ( NMSP_vml + XML_textbox ) )
-        dynamic_cast<SimpleShape&>( mrShape ).setService(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")) );
-
     // Excel specific shape client data
     if( isRootElement() ) switch( nElement )
     {
         case VML_TOKEN( textbox ):
+            // Custom shape in Writer with a textbox are transformed into a frame
+            dynamic_cast<SimpleShape&>( mrShape ).setService(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")));
             return new TextBoxContext( *this, mrShapeModel.createTextBox(), rAttribs );
         case VMLX_TOKEN( ClientData ):
             return new ClientDataContext( *this, mrShapeModel.createClientData(), rAttribs );
+        case VMLPPT_TOKEN( textdata ):
+            // Force RectangleShape, this is ugly :(
+            // and is there because of the lines above which change it to TextFrame
+            dynamic_cast< SimpleShape& >( mrShape ).setService(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape")));
+            mrShapeModel.maLegacyDiagramPath = getFragmentPathFromRelId(rAttribs.getString(XML_id, OUString()));
+            break;
     }
     // handle remaining stuff in base class
     return ShapeTypeContext::onCreateContext( nElement, rAttribs );
@@ -419,10 +424,6 @@ RectangleShapeContext::RectangleShapeContext( ContextHandler2Helper& rParent, co
 
 ContextHandlerRef RectangleShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if ( nElement == ( NMSP_vml + XML_textbox ) )
-        dynamic_cast< SimpleShape &>( mrShape ).setService(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")) );
-
     // The parent class's context is fine
     return ShapeContext::onCreateContext( nElement, rAttribs );
 }

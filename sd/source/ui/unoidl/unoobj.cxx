@@ -56,6 +56,8 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
+#include <filter/msfilter/msdffimp.hxx>
+#include <svl/instrm.hxx>
 #include <editeng/outlobj.hxx>
 #include "CustomAnimationPreset.hxx"
 #include "Outliner.hxx"
@@ -133,19 +135,19 @@ static SdTypesCache gImplTypesCache;
 #define WID_ANIMPATH        16
 #define WID_IMAGEMAP        17
 #define WID_ISANIMATION     18
+#define WID_THAT_NEED_ANIMINFO 19
 
 #define WID_ISEMPTYPRESOBJ  20
 #define WID_ISPRESOBJ       21
 #define WID_MASTERDEPEND    22
 
 #define WID_NAVORDER        23
-
-#define WID_THAT_NEED_ANIMINFO 19
-
 #define WID_PLACEHOLDERTEXT 24
+#define WID_LEGACYFRAGMENT  25
 
 
         #define IMPRESS_MAP_ENTRIES \
+        { MAP_CHAR_LEN(UNO_NAME_OBJ_LEGACYFRAGMENT),WID_LEGACYFRAGMENT,  &ITYPE(drawing::XShape),                                   0, 0},\
         { MAP_CHAR_LEN(UNO_NAME_OBJ_ANIMATIONPATH), WID_ANIMPATH,        &ITYPE(drawing::XShape),                                   0, 0},\
         { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,        &::getCppuType((const OUString*)0),                        0, 0},\
         { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMCOLOR),      WID_DIMCOLOR,        &::getCppuType((const sal_Int32*)0),                       0, 0},\
@@ -632,6 +634,18 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     SetMasterDepend( ::cppu::any2bool(aValue) );
                     break;
 
+                case WID_LEGACYFRAGMENT:
+                    {
+                        uno::Reference< io::XInputStream > xInputStream;
+                        aValue >>= xInputStream;
+                        if( xInputStream.is() )
+                        {
+                            SvInputStream aStream( xInputStream );
+                            SdrObject* pObject = mpShape->GetSdrObject();
+                            SvxMSDffManager::ReadObjText( aStream, pObject );
+                        }
+                    }
+                    break;
 // TODO: WID_ANIMPATH
                 case WID_IMAGEMAP:
                 {
@@ -658,6 +672,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                         }
                     }
                 }
+                break;
             }
         }
     }

@@ -3738,11 +3738,10 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
     return aColor;
 }
 
-bool SvxMSDffManager::ReadDffString(SvStream& rSt, String& rTxt) const
+bool SvxMSDffManager::ReadDffString(SvStream& rSt, String& rTxt, DffRecordHeader aStrHd)
 {
     bool bRet=sal_False;
-    DffRecordHeader aStrHd;
-    if( !ReadCommonRecordHeader(aStrHd, rSt) )
+    if( aStrHd.nRecType == 0x0 && !ReadCommonRecordHeader(aStrHd, rSt) )
         rSt.Seek( aStrHd.nFilePos );
     else if ( aStrHd.nRecType == DFF_PST_TextBytesAtom || aStrHd.nRecType == DFF_PST_TextCharsAtom )
     {
@@ -3829,7 +3828,7 @@ void SvxMSDffManager::ReadObjText( const String& rText, SdrObject* pObj ) const
     }
 }
 
-bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
+bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj)
 {
     bool bRet=sal_False;
     SdrTextObj* pText = PTR_CAST(SdrTextObj, pObj);
@@ -3838,7 +3837,7 @@ bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
         DffRecordHeader aTextHd;
         if( !ReadCommonRecordHeader(aTextHd, rSt) )
             rSt.Seek( aTextHd.nFilePos );
-        else if ( aTextHd.nRecType==DFF_msofbtClientTextbox )
+        else if ( aTextHd.nRecType==DFF_msofbtClientTextbox || aTextHd.nRecType == 0x1022 )
         {
             bRet=sal_True;
             sal_uLong nRecEnd=aTextHd.GetRecEndFilePos();
@@ -3878,15 +3877,14 @@ bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
                 {
                     switch (aHd.nRecType)
                     {
-                        //case TextHeaderAtom
+                        default:
+                            break;
+                        //case DFF_PST_TextHeaderAtom:
                         //case TextSpecInfoAtom
                         case DFF_PST_TextBytesAtom:
                         case DFF_PST_TextCharsAtom:
-                        {
-                            aHd.SeekToBegOfRecord(rSt);
-                            ReadDffString(rSt, aText);
-                        }
-                        break;
+                            ReadDffString(rSt, aText, aHd);
+                            break;
                         case DFF_PST_TextRulerAtom               :
                         {
                             sal_uInt16 nLen = (sal_uInt16)aHd.nRecLen;

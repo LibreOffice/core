@@ -70,6 +70,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::io;
 
 using ::oox::core::XmlFilterBase;
 using ::rtl::OUString;
@@ -423,6 +424,14 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
 {
     Reference< XShape > xShape = mrDrawing.createAndInsertXShape( maService, rxShapes, rShapeRect );
     convertShapeProperties( xShape );
+
+    // Import Legacy Fragments (if any)
+    if( xShape.is() && !maShapeModel.maLegacyDiagramPath.isEmpty() )
+    {
+        Reference< XInputStream > xInStrm( mrDrawing.getFilter().openInputStream( maShapeModel.maLegacyDiagramPath ), UNO_SET_THROW );
+        if( xInStrm.is() )
+            PropertySet( xShape ).setProperty( PROP_LegacyFragment, xInStrm );
+    }
     return xShape;
 }
 

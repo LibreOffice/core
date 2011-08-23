@@ -257,6 +257,7 @@ LeftBorder
 LeftMargin
 LeftPageFooterContent
 LeftPageHeaderContent
+LegacyFragment
 LineColor
 LineCount
 LineDash

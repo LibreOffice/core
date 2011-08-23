@@ -69,6 +69,7 @@
 #define UNO_NAME_OBJ_STYLE              "Style"
 #define UNO_NAME_OBJ_MASTERDEPENDENT    "IsPlaceholderDependent"
 #define UNO_NAME_OBJ_ANIMATIONPATH      "AnimationPath"
+#define UNO_NAME_OBJ_LEGACYFRAGMENT     "LegacyFragment"
 
 #define UNO_NAME_LAYER_LOCKED           "IsLocked"
 #define UNO_NAME_LAYER_PRINTABLE        "IsPrintable"

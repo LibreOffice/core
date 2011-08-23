@@ -179,6 +179,7 @@ struct ShapeModel
     PointVector         maPoints;           /// Points for the polyline shape.
     TextBoxPtr          mxTextBox;          /// Text contents and properties.
     ClientDataPtr       mxClientData;       /// Excel specific client data.
+    ::rtl::OUString     maLegacyDiagramPath;/// Legacy Diagram Fragment Path
 
     explicit            ShapeModel();
                         ~ShapeModel();

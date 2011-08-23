@@ -75,6 +75,7 @@ $(eval $(call gb_Library_add_linked_libs,sd,\
     drawinglayer \
     editeng \
     i18nisolang1 \
+    msfilter \
     oox \
     sal \
     salhelper \
