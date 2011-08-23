@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
     {
         SCROW nLastRow = nRow;
         if (pDoc->RowHidden(nRow, nTab, NULL, &nLastRow))
-        {
+        {    
             nRow = nLastRow;
             continue;
         }
@@ -85,8 +85,8 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
     MapMode aHMMMode( MAP_100TH_MM, Point(), rZoomX, rZoomY );
     Point aPixelLog = pDev->PixelToLogic( Point( nPixelX,nPixelY ), aHMMMode );
 
-    //  Fraction(double) ctor can be used here (and avoid overflows of PixelLog * Zoom)
-    //  because ReduceInaccurate is called later anyway.
+    //	Fraction(double) ctor can be used here (and avoid overflows of PixelLog * Zoom)
+    //	because ReduceInaccurate is called later anyway.
 
     if ( aPixelLog.X() && nTwipsX )
         rScaleX = Fraction( ((double)aPixelLog.X()) *
@@ -106,8 +106,8 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
     else
         rScaleY = Fraction( 1, 1 );
 
-    //  25 bits of accuracy are needed to always hit the right part of
-    //  cells in the last rows (was 17 before 1M rows).
+    //	25 bits of accuracy are needed to always hit the right part of
+    //	cells in the last rows (was 17 before 1M rows).
     rScaleX.ReduceInaccurate( 25 );
     rScaleY.ReduceInaccurate( 25 );
 }

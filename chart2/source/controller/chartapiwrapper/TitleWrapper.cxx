@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -251,7 +251,7 @@ void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
     if(xPropertySet.is())
     {
         awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
-
+        
         chart2::RelativePosition aRelativePosition;
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
         aRelativePosition.Primary = double(aPosition.X)/double(aPageSize.Width);
@@ -328,7 +328,7 @@ void TitleWrapper::getFastCharacterPropertyValue( sal_Int32 nHandle, Any& rValue
 {
     OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
                 nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
-
+    
     Reference< beans::XPropertySet > xProp( getFirstCharacterPropertySet(), uno::UNO_QUERY );
     Reference< beans::XFastPropertySet > xFastProp( xProp, uno::UNO_QUERY );
     if(xProp.is())
@@ -343,7 +343,7 @@ void TitleWrapper::getFastCharacterPropertyValue( sal_Int32 nHandle, Any& rValue
             rValue = xFastProp->getFastPropertyValue( nHandle );
         }
     }
-
+    
 }
 
 void TitleWrapper::setFastCharacterPropertyValue(
@@ -533,14 +533,14 @@ const Sequence< beans::Property >& TitleWrapper::getPropertySequence()
 const std::vector< WrappedProperty* > TitleWrapper::createWrappedProperties()
 {
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
-
+    
     aWrappedProperties.push_back( new WrappedTitleStringProperty( m_spChart2ModelContact->m_xContext ) );
     aWrappedProperties.push_back( new WrappedTextRotationProperty( m_eTitleType==TitleHelper::Y_AXIS_TITLE || m_eTitleType==TitleHelper::X_AXIS_TITLE ) );
     aWrappedProperties.push_back( new WrappedStackedTextProperty() );
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
     WrappedAutomaticPositionProperties::addWrappedProperties( aWrappedProperties );
     WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
-
+    
     return aWrappedProperties;
 }
 

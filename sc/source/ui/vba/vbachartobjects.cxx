@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,12 @@ using namespace ::ooo::vba;
 class ChartObjectEnumerationImpl : public EnumerationHelperImpl
 {
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier;
-
+    
 public:
 
     ChartObjectEnumerationImpl( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, const uno::Reference< drawing::XDrawPageSupplier >& _xDrawPageSupplier, const uno::Reference< XHelperInterface >& _xParent ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( _xParent, xContext, xEnumeration ), xDrawPageSupplier( _xDrawPageSupplier ) {}
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-    {
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException) 
+    { 
         uno::Reference< table::XTableChart > xTableChart( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         // parent Object is sheet
         return uno::makeAny(  uno::Reference< excel::XChartObject > ( new ScVbaChartObject(  m_xParent, m_xContext, xTableChart, xDrawPageSupplier ) ) );
@@ -84,10 +84,10 @@ ScVbaChartObjects::getChartObjectNames() throw( css::script::BasicErrorException
         ScDocShell* pDocShell = NULL;
         if ( !pUno )
             throw uno::RuntimeException( rtl::OUString::createFromAscii("Failed to obtain the impl class from the drawpage"), uno::Reference< uno::XInterface >() );
-        pDocShell = pUno->GetDocShell();
+        pDocShell = pUno->GetDocShell();	
         if ( !pDocShell )
             throw uno::RuntimeException( rtl::OUString::createFromAscii("Failed to obtain the docshell implclass"), uno::Reference< uno::XInterface >() );
-
+            
         uno::Reference< sheet::XSpreadsheetDocument > xSpreadsheetDocument( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
         uno::Reference< sheet::XSpreadsheets > xSpreadsheets = xSpreadsheetDocument->getSheets();
         std::vector< rtl::OUString > aChartNamesVector;
@@ -107,8 +107,8 @@ ScVbaChartObjects::getChartObjectNames() throw( css::script::BasicErrorException
         std::vector< rtl::OUString > ::const_iterator it_end = aChartNamesVector.end();
         for ( sal_Int32 index = 0 ; it != it_end; ++it, ++index )
             sChartNames[index] = *it;
-    }
-    catch (uno::Exception& )
+    } 
+    catch (uno::Exception& ) 
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -116,25 +116,25 @@ ScVbaChartObjects::getChartObjectNames() throw( css::script::BasicErrorException
 }
 
 // XChartObjects
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight ) throw (script::BasicErrorException)
 {
-    try
+    try 
     {
         uno::Sequence< table::CellRangeAddress > aCellRangeAddress( 1 );
         awt::Rectangle aRectangle;
         aRectangle.X =  Millimeter::getInHundredthsOfOneMillimeter(_nX);
         aRectangle.Y = Millimeter::getInHundredthsOfOneMillimeter(_nY);
         aRectangle.Width = Millimeter::getInHundredthsOfOneMillimeter(_nWidth);
-        aRectangle.Height = Millimeter::getInHundredthsOfOneMillimeter(_nHeight);
+        aRectangle.Height = Millimeter::getInHundredthsOfOneMillimeter(_nHeight); 
         // Note the space at the end of the stem ("Chart "). In ChartSheets only "Chart" is the stem
         rtl::OUString sPersistChartName = ContainerUtilities::getUniqueName( getChartObjectNames(), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Chart " ) ) , rtl::OUString(), 1);
         xTableCharts->addNewByName(sPersistChartName, aRectangle, aCellRangeAddress, true, false );
-        uno::Reference< excel::XChartObject > xChartObject( getItemByStringIndex( sPersistChartName ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XChartObject > xChartObject( getItemByStringIndex( sPersistChartName ), uno::UNO_QUERY_THROW ); 
         xChartObject->getChart()->setChartType(excel::XlChartType::xlColumnClustered);
         return uno::makeAny( xChartObject );
-    }
-    catch ( uno::Exception& ex)
+    } 
+    catch ( uno::Exception& ex) 
     {
         OSL_TRACE("AddItem caught exception ->%s", rtl::OUStringToOString( ex.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
@@ -159,7 +159,7 @@ ScVbaChartObjects::createEnumeration() throw (uno::RuntimeException)
 
 // XElementAccess
 
-uno::Type
+uno::Type 
 ScVbaChartObjects::getElementType() throw (uno::RuntimeException)
 {
     return excel::XChartObject::static_type(0);
@@ -168,20 +168,20 @@ ScVbaChartObjects::getElementType() throw (uno::RuntimeException)
 // ScVbaCollectionBaseImpl
 uno::Any
 ScVbaChartObjects::createCollectionObject( const css::uno::Any& aSource )
-{
+{	
     uno::Reference< table::XTableChart > xTableChart( aSource, uno::UNO_QUERY_THROW );
     // correct parent object is sheet
     return uno::makeAny( uno::Reference< excel::XChartObject > ( new ScVbaChartObject( getParent(), mxContext, xTableChart, xDrawPageSupplier ) ) );
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaChartObjects::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaChartObjects") );
     return sImplName;
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<rtl::OUString> 
 ScVbaChartObjects::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > sNames;

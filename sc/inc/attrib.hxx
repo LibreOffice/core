@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 #define SC_MF_BUTTON            0x0008  /// field button for datapilot
 #define SC_MF_SCENARIO          0x0010
 #define SC_MF_BUTTON_POPUP      0x0020  /// dp button with popup arrow
-#define SC_MF_HIDDEN_MEMBER     0x0040  /// dp field button with presence of hidden member
+#define SC_MF_HIDDEN_MEMBER     0x0040  /// dp field button with presence of hidden member 
 #define SC_MF_DP_TABLE          0x0080  /// dp table output
 
 #define SC_MF_ALL               0x00FF
@@ -70,7 +70,7 @@ public:
                 ScMergeAttr( const ScMergeAttr& );
                 ~ScMergeAttr();
 
-    virtual String              GetValueText() const;
+    virtual String          	GetValueText() const;
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -79,7 +79,7 @@ public:
             SCsCOL          GetColMerge() const {return nColMerge; }
             SCsROW          GetRowMerge() const {return nRowMerge; }
 
-            BOOL            IsMerged() const { return nColMerge>1 || nRowMerge>1; }
+            BOOL			IsMerged() const { return nColMerge>1 || nRowMerge>1; }
 
     inline  ScMergeAttr& operator=(const ScMergeAttr& rMerge)
             {
@@ -98,15 +98,15 @@ public:
             ScMergeFlagAttr(INT16 nFlags);
             ~ScMergeFlagAttr();
 
-    BOOL    IsHorOverlapped() const     { return ( GetValue() & SC_MF_HOR ) != 0;  }
-    BOOL    IsVerOverlapped() const     { return ( GetValue() & SC_MF_VER ) != 0;  }
-    BOOL    IsOverlapped() const        { return ( GetValue() & ( SC_MF_HOR | SC_MF_VER ) ) != 0; }
+    BOOL	IsHorOverlapped() const		{ return ( GetValue() & SC_MF_HOR ) != 0;  }
+    BOOL	IsVerOverlapped() const		{ return ( GetValue() & SC_MF_VER ) != 0;  }
+    BOOL	IsOverlapped() const		{ return ( GetValue() & ( SC_MF_HOR | SC_MF_VER ) ) != 0; }
 
-    BOOL    HasAutoFilter() const       { return ( GetValue() & SC_MF_AUTO ) != 0; }
-    BOOL    HasButton() const           { return ( GetValue() & SC_MF_BUTTON ) != 0; }
+    BOOL	HasAutoFilter() const		{ return ( GetValue() & SC_MF_AUTO ) != 0; }
+    BOOL	HasButton() const			{ return ( GetValue() & SC_MF_BUTTON ) != 0; }
     bool    HasDPTable() const          { return ( GetValue() & SC_MF_DP_TABLE ) != 0; }
 
-    BOOL    IsScenario() const          { return ( GetValue() & SC_MF_SCENARIO ) != 0; }
+    BOOL	IsScenario() const			{ return ( GetValue() & SC_MF_SCENARIO ) != 0; }
 };
 
 //------------------------------------------------------------------------
@@ -126,7 +126,7 @@ public:
                             ScProtectionAttr( const ScProtectionAttr& );
                             ~ScProtectionAttr();
 
-    virtual String              GetValueText() const;
+    virtual String          	GetValueText() const;
     virtual SfxItemPresentation GetPresentation(
                                     SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -138,8 +138,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream& rStream, USHORT nVer ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
             BOOL            GetProtection() const { return bProtection; }
             BOOL            SetProtection( BOOL bProtect);
@@ -163,41 +163,41 @@ public:
 //----------------------------------------------------------------------------
 // ScRangeItem: verwaltet einen Tabellenbereich
 
-#define SCR_INVALID     0x01
-#define SCR_ALLTABS     0x02
-#define SCR_TONEWTAB    0x04
+#define SCR_INVALID		0x01
+#define SCR_ALLTABS		0x02
+#define SCR_TONEWTAB	0x04
 
 class ScRangeItem : public SfxPoolItem
 {
 public:
             TYPEINFO();
 
-            inline  ScRangeItem( const USHORT nWhich );
-            inline  ScRangeItem( const USHORT   nWhich,
+            inline	ScRangeItem( const USHORT nWhich );
+            inline	ScRangeItem( const USHORT   nWhich,
                                  const ScRange& rRange,
-                                 const USHORT   nNewFlags = 0 );
-            inline  ScRangeItem( const ScRangeItem& rCpy );
+                                 const USHORT 	nNewFlags = 0 );
+            inline	ScRangeItem( const ScRangeItem& rCpy );
 
     inline ScRangeItem& operator=( const ScRangeItem &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int                 operator==( const SfxPoolItem& ) const;
+    virtual int 				operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
                                                  String &rText,
                                                  const IntlWrapper* pIntl = 0 ) const;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*		Clone( SfxItemPool *pPool = 0 ) const;
 
-    const ScRange&  GetRange() const                { return aRange;  }
-    void            SetRange( const ScRange& rNew ) { aRange = rNew; }
+    const ScRange&	GetRange() const 				{ return aRange;  }
+    void			SetRange( const ScRange& rNew )	{ aRange = rNew; }
 
-    USHORT          GetFlags() const                { return nFlags;  }
-    void            SetFlags( USHORT nNew )         { nFlags = nNew; }
+    USHORT			GetFlags() const 				{ return nFlags;  }
+    void			SetFlags( USHORT nNew )	 		{ nFlags = nNew; }
 
 private:
     ScRange aRange;
-    USHORT  nFlags;
+    USHORT	nFlags;
 };
 
 inline ScRangeItem::ScRangeItem( const USHORT nWhichP )
@@ -207,7 +207,7 @@ inline ScRangeItem::ScRangeItem( const USHORT nWhichP )
 
 inline ScRangeItem::ScRangeItem( const USHORT   nWhichP,
                                  const ScRange& rRange,
-                                 const USHORT   nNew )
+                                 const USHORT	nNew )
     : SfxPoolItem( nWhichP ), aRange( rRange ), nFlags( nNew )
 {
 }
@@ -230,20 +230,20 @@ class ScTableListItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    inline  ScTableListItem( const USHORT nWhich );
+    inline	ScTableListItem( const USHORT nWhich );
             ScTableListItem( const ScTableListItem& rCpy );
             ~ScTableListItem();
 
     ScTableListItem& operator=( const ScTableListItem &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int                 operator==( const SfxPoolItem& ) const;
+    virtual int 				operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
                                                  String &rText,
                                                  const IntlWrapper* pIntl = 0 ) const;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*		Clone( SfxItemPool *pPool = 0 ) const;
 
 public:
     USHORT  nCount;
@@ -279,12 +279,12 @@ public:
 
     virtual SfxPoolItem*    Create( SvStream& rStream, USHORT nVer ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-    const EditTextObject* GetLeftArea() const       { return pLeftArea; }
-    const EditTextObject* GetCenterArea() const     { return pCenterArea; }
-    const EditTextObject* GetRightArea() const      { return pRightArea; }
+    const EditTextObject* GetLeftArea() const		{ return pLeftArea; }
+    const EditTextObject* GetCenterArea() const		{ return pCenterArea; }
+    const EditTextObject* GetRightArea() const		{ return pRightArea; }
 
     void SetLeftArea( const EditTextObject& rNew );
     void SetCenterArea( const EditTextObject& rNew );
@@ -307,11 +307,11 @@ public:
                 ScViewObjectModeItem( USHORT nWhich, ScVObjMode eMode );
                 ~ScViewObjectModeItem();
 
-    virtual USHORT              GetValueCount() const;
-    virtual String              GetValueText( USHORT nVal ) const;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*        Create(SvStream &, USHORT) const;
-    virtual USHORT              GetVersion( USHORT nFileVersion ) const;
+    virtual USHORT				GetValueCount() const;
+    virtual String				GetValueText( USHORT nVal ) const;
+    virtual SfxPoolItem*		Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*		Create(SvStream &, USHORT) const;
+    virtual USHORT				GetVersion( USHORT nFileVersion ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
@@ -336,12 +336,12 @@ public:
 
     virtual SfxPoolItem*    Create( SvStream& rStream, USHORT nVer ) const;
 
-    double GetValue() const     { return nValue; }
+    double GetValue() const		{ return nValue; }
 
     void SetValue( const double nVal ) { nValue = nVal;}
 
 private:
-    double  nValue;
+    double	nValue;
 };
 
 

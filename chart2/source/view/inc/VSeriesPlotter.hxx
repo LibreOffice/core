@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -164,7 +164,7 @@ public:
     */
     virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const;
     virtual bool keepAspectRatio() const;
-
+    
     /** this enables you to handle series on the same x axis with different y axis
     the property AttachedAxisIndex at a dataseries indicates which value scale is to use
     (0==AttachedAxisIndex or a not set AttachedAxisIndex property indicates that this series should be scaled at the main y-axis;
@@ -174,11 +174,11 @@ public:
     nAxisIndex must be greater than 0. nAxisIndex==1 referres to the first secondary axis.
     )
     */
-
-    virtual void SAL_CALL addSecondaryValueScale( const
+    
+    virtual void SAL_CALL addSecondaryValueScale( const 
             ::com::sun::star::chart2::ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
                 throw (::com::sun::star::uno::RuntimeException);
-
+    
     //-------------------------------------------------------------------------
     // MinimumAndMaximumSupplier
     //-------------------------------------------------------------------------
@@ -231,7 +231,7 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > createLegendSymbolForPoint(
                   const VDataSeries& rSeries
-                , sal_Int32 nPointIndex
+                , sal_Int32 nPointIndex 
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory );
 
@@ -278,15 +278,15 @@ public:
                         ::com::sun::star::chart2::XColorScheme >& xColorScheme );
 
     void setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider );
-
+    
     //get series names for the z axis labels
     ::com::sun::star::uno::Sequence< rtl::OUString > getSeriesNames() const;
 
     void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );
     //better performance for big data
     void setCoordinateSystemResolution( const ::com::sun::star::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
-    bool PointsWereSkipped() const;
-
+    bool PointsWereSkipped() const; 
+    
     //return the depth for a logic 1
     double  getTransformedDepth() const;
 
@@ -425,7 +425,7 @@ protected: //member
 
     ::std::vector< ::std::vector< VDataSeriesGroup > >  m_aZSlots;
 
-    bool                                m_bCategoryXAxis;//true->xvalues are indices (this would not be necessary if series for category chart wouldn't have x-values)
+    bool								m_bCategoryXAxis;//true->xvalues are indices (this would not be necessary if series for category chart wouldn't have x-values)
 
     ::std::auto_ptr< NumberFormatterWrapper > m_apNumberFormatterWrapper;
     AxesNumberFormats                         m_aAxesNumberFormats;//direct numberformats on axes, if empty ask the data series instead

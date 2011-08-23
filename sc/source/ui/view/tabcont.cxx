@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -155,8 +155,8 @@ void ScTabControl::MouseButtonDown( const MouseEvent& rMEvt )
     ScModule* pScMod = SC_MOD();
     if ( !pScMod->IsModalMode() && !pScMod->IsFormulaMode() && !IsInEditMode() )
     {
-        //  View aktivieren
-        pViewData->GetViewShell()->SetActive();         // Appear und SetViewFrame
+        //	View aktivieren
+        pViewData->GetViewShell()->SetActive();			// Appear und SetViewFrame
         pViewData->GetView()->ActiveGrabFocus();
     }
 
@@ -226,9 +226,9 @@ void ScTabControl::Select()
     SCTAB nCount = pDoc->GetTableCount();
     SCTAB i;
 
-    if ( pScMod->IsTableLocked() )      // darf jetzt nicht umgeschaltet werden ?
+    if ( pScMod->IsTableLocked() )		// darf jetzt nicht umgeschaltet werden ?
     {
-        //  den alten Zustand des TabControls wiederherstellen:
+        //	den alten Zustand des TabControls wiederherstellen:
 
         for (i=0; i<nCount; i++)
             SelectPage( static_cast<sal_uInt16>(i)+1, rMark.GetTableSelect(i) );
@@ -239,14 +239,14 @@ void ScTabControl::Select()
     }
 
     USHORT nCurId = GetCurPageId();
-    if (!nCurId) return;            // kann vorkommen, wenn bei Excel-Import alles versteckt ist
+    if (!nCurId) return;			// kann vorkommen, wenn bei Excel-Import alles versteckt ist
     USHORT nPage = nCurId - 1;
 
     // OLE-inplace deaktivieren
     if ( nPage != static_cast<sal_uInt16>(pViewData->GetTabNo()) )
         pViewData->GetView()->DrawMarkListHasChanged();
 
-    //  InputEnterHandler nur wenn nicht Referenzeingabe
+    //	InputEnterHandler nur wenn nicht Referenzeingabe
 
     BOOL bRefMode = pScMod->IsFormulaMode();
     if (!bRefMode)
@@ -255,7 +255,7 @@ void ScTabControl::Select()
     for (i=0; i<nCount; i++)
         rMark.SelectTable( i, IsPageSelected(static_cast<sal_uInt16>(i)+1) );
 
-/*      Markierungen werden per Default nicht pro Tabelle gehalten
+/*		Markierungen werden per Default nicht pro Tabelle gehalten
     USHORT nSelCnt = GetSelectPageCount();
     if (nSelCnt>1)
         pDoc->ExtendMarksFromTable( nPage );
@@ -266,7 +266,7 @@ void ScTabControl::Select()
         pViewData->GetView()->SetTabNo( static_cast<SCTAB>(nPage) );
     else
     {
-        //  Tabelle fuer Basic ist 1-basiert
+        //	Tabelle fuer Basic ist 1-basiert
         SfxUInt16Item aItem( SID_CURRENTTAB, nPage + 1 );
         rDisp.Execute( SID_CURRENTTAB, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                                 &aItem, (void*) NULL );
@@ -285,9 +285,9 @@ void ScTabControl::Select()
     rBind.Invalidate( FID_TABLE_HIDE );
     rBind.Invalidate( FID_TAB_SET_TAB_BG_COLOR );
 
-        //  SetReference nur wenn der Konsolidieren-Dialog offen ist
-        //  (fuer Referenzen ueber mehrere Tabellen)
-        //  bei anderen gibt das nur unnoetiges Gezappel
+        //	SetReference nur wenn der Konsolidieren-Dialog offen ist
+        //	(fuer Referenzen ueber mehrere Tabellen)
+        //	bei anderen gibt das nur unnoetiges Gezappel
 
     if ( bRefMode && pViewData->GetRefType() == SC_REFTYPE_REF )
         if ( pViewData->GetViewShell()->GetViewFrame()->HasChildWindow(SID_OPENDLG_CONSOLIDATE) )
@@ -296,7 +296,7 @@ void ScTabControl::Select()
                     pViewData->GetRefStartX(), pViewData->GetRefStartY(), pViewData->GetRefStartZ(),
                     pViewData->GetRefEndX(), pViewData->GetRefEndY(), pViewData->GetRefEndZ() );
             pScMod->SetReference( aRange, pDoc, &rMark );
-            pScMod->EndReference();                     // wegen Auto-Hide
+            pScMod->EndReference();						// wegen Auto-Hide
         }
 }
 
@@ -323,7 +323,7 @@ void ScTabControl::UpdateStatus()
     SCTAB nMaxCnt = Max( nCount, static_cast<SCTAB>(GetMaxId()) );
     Color aTabBgColor;
 
-    BOOL bModified = FALSE;                                     // Tabellen-Namen
+    BOOL bModified = FALSE;										// Tabellen-Namen
     for (i=0; i<nMaxCnt && !bModified; i++)
     {
         if (pDoc->IsVisible(i))
@@ -366,7 +366,7 @@ void ScTabControl::UpdateStatus()
 
     if (bActive)
     {
-        bModified = FALSE;                                          // Selektion
+        bModified = FALSE;											// Selektion
         for (i=0; i<nMaxCnt && !bModified; i++)
             if ( rMark.GetTableSelect(i) != IsPageSelected(static_cast<sal_uInt16>(i)+1) )
                 bModified = TRUE;
@@ -384,14 +384,14 @@ void ScTabControl::UpdateStatus()
 
 void ScTabControl::ActivateView(BOOL bActivate)
 {
-//  ScDocument* pDoc = pViewData->GetDocument();
+//	ScDocument* pDoc = pViewData->GetDocument();
     ScMarkData& rMark = pViewData->GetMarkData();
 
-//  ResetMark direkt in TabView
-//  pDoc->ResetMark();
+//	ResetMark direkt in TabView
+//	pDoc->ResetMark();
 
     USHORT nCurId = GetCurPageId();
-    if (!nCurId) return;            // kann vorkommen, wenn bei Excel-Import alles versteckt ist
+    if (!nCurId) return;			// kann vorkommen, wenn bei Excel-Import alles versteckt ist
     USHORT nPage = nCurId - 1;
 //    USHORT nCount = GetMaxId();
 
@@ -421,9 +421,9 @@ void ScTabControl::SetSheetLayoutRTL( BOOL bSheetRTL )
 
 void ScTabControl::Command( const CommandEvent& rCEvt )
 {
-    ScModule*       pScMod   = SC_MOD();
+    ScModule*		pScMod	 = SC_MOD();
     ScTabViewShell* pViewSh  = pViewData->GetViewShell();
-    BOOL            bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
+    BOOL 			bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
 
     // ViewFrame erstmal aktivieren (Bug 19493):
     pViewSh->SetActive();
@@ -457,8 +457,8 @@ void ScTabControl::Command( const CommandEvent& rCEvt )
             // #i52073# OLE inplace editing has to be stopped before showing the sheet tab context menu
             pViewSh->DeactivateOle();
 
-            //  Popup-Menu:
-            //  get Dispatcher from ViewData (ViewFrame) instead of Shell (Frame), so it can't be null
+            //	Popup-Menu:
+            //	get Dispatcher from ViewData (ViewFrame) instead of Shell (Frame), so it can't be null
             pViewData->GetDispatcher().ExecutePopup( ScResId(RID_POPUP_TAB) );
         }
     }
@@ -472,7 +472,7 @@ void ScTabControl::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
     if (!bDisable)
     {
         Region aRegion( Rectangle(0,0,0,0) );
-        CommandEvent aCEvt( rPosPixel, COMMAND_STARTDRAG, TRUE );   // needed for StartDrag
+        CommandEvent aCEvt( rPosPixel, COMMAND_STARTDRAG, TRUE );	// needed for StartDrag
         if (TabBar::StartDrag( aCEvt, aRegion ))
             DoDrag( aRegion );
     }
@@ -485,7 +485,7 @@ void ScTabControl::DoDrag( const Region& /* rRegion */ )
 
     SCTAB nTab = pViewData->GetTabNo();
     ScMarkData aTabMark = pViewData->GetMarkData();
-    aTabMark.ResetMark();   // doesn't change marked table information
+    aTabMark.ResetMark();	// doesn't change marked table information
     aTabMark.SetMarkArea( ScRange(0,0,nTab,MAXCOL,MAXROW,nTab) );
 
     ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
@@ -505,7 +505,7 @@ void ScTabControl::DoDrag( const Region& /* rRegion */ )
     pTransferObj->SetDragSource( pDocSh, aTabMark );
 
     Window* pWindow = pViewData->GetActiveWin();
-    SC_MOD()->SetDragObject( pTransferObj, NULL );      // for internal D&D
+    SC_MOD()->SetDragObject( pTransferObj, NULL );		// for internal D&D
     pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
 }
 
@@ -586,10 +586,10 @@ sal_Int8 ScTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
             return rEvt.mnAction;
         }
     }
-    else                    // switch sheets for all formats
+    else 					// switch sheets for all formats
     {
-        SwitchPage( rEvt.maPosPixel );      // switch sheet after timeout
-        return 0;                           // nothing can be dropped here
+        SwitchPage( rEvt.maPosPixel );		// switch sheet after timeout
+        return 0;							// nothing can be dropped here
     }
 
     return 0;
@@ -619,16 +619,16 @@ long ScTabControl::AllowRenaming()
             nRet = TABBAR_RENAMING_YES;
         else if ( bErrorShown )
         {
-            //  if the error message from this TabControl is currently visible,
-            //  don't end edit mode now, to avoid problems when returning to
-            //  the other call (showing the error) - this should not happen
+            //	if the error message from this TabControl is currently visible,
+            //	don't end edit mode now, to avoid problems when returning to
+            //	the other call (showing the error) - this should not happen
             DBG_ERROR("ScTabControl::AllowRenaming: nested calls");
             nRet = TABBAR_RENAMING_NO;
         }
         else if ( Application::IsInModalMode() )
         {
-            //  #73472# don't show error message above any modal dialog
-            //  instead cancel renaming without error message
+            //	#73472# don't show error message above any modal dialog
+            //	instead cancel renaming without error message
             nRet = TABBAR_RENAMING_CANCEL;
         }
         else

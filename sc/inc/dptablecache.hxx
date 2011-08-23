@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright IBM Corporation 2009.
  * Copyright 2009 by Sun Microsystems, Inc.
  *
@@ -50,32 +50,32 @@ struct ScQueryParam;
 
 // --------------------------------------------------------------------
 //
-//  base class ScDPTableData to allow implementation with tabular data
-//  by deriving only of this
+//	base class ScDPTableData to allow implementation with tabular data
+//	by deriving only of this
 //
 
 class SC_DLLPUBLIC ScDPTableDataCache
 {
-    long    mnID;
+    long	mnID;
     ScDocument* mpDoc;
 
-    long                         mnColumnCount;     // Column count
+    long						 mnColumnCount;		// Column count
 
-    std::vector<ScDPItemData*>*      mpTableDataValues; //Data Pilot Table's index - value map
-    std::vector<SCROW>*          mpSourceData;      //Data Pilot Table's Source data
-    std::vector<SCROW>*          mpGlobalOrder;     //Sorted members index
-    std::vector<SCROW>*          mpIndexOrder;      //Index the sorted number
-    std::vector<ScDPItemData*>   mrLabelNames;      //Source Label data
-    std::vector<BOOL>            mbEmptyRow;        //If empty row?
-    mutable ScDPItemDataPool                 maAdditionalDatas;
+    std::vector<ScDPItemData*>* 	 mpTableDataValues; //Data Pilot Table's index - value map
+    std::vector<SCROW>*			 mpSourceData;		//Data Pilot Table's Source data
+    std::vector<SCROW>*			 mpGlobalOrder;		//Sorted members index	
+    std::vector<SCROW>*			 mpIndexOrder;		//Index the sorted number
+    std::vector<ScDPItemData*>	 mrLabelNames;		//Source Label data
+    std::vector<BOOL>			 mbEmptyRow;		//If empty row?	
+    mutable ScDPItemDataPool	  			 maAdditionalDatas;
 public:
     SCROW GetOrder( long nDim, SCROW nIndex ) const;
     SCROW GetIdByItemData( long nDim,  String sItemData  ) const;
     SCROW GetIdByItemData( long nDim, const ScDPItemData& rData ) const;
-
+    
     SCROW GetAdditionalItemID ( String sItemData );
-    SCROW GetAdditionalItemID( const ScDPItemData& rData );
-
+    SCROW GetAdditionalItemID( const ScDPItemData& rData ); 
+        
     SCCOL GetDimensionIndex( String sName) const;
     const ScDPItemData* GetSortedItemData( SCCOL nDim, SCROW nOrder ) const;
     ULONG GetNumType ( ULONG nFormat ) const;
@@ -86,22 +86,22 @@ public:
 
     SCROW GetSortedItemDataId( SCCOL nDim, SCROW nOrder ) const;
     const std::vector<ScDPItemData*>& GetDimMemberValues( SCCOL nDim )const;
-    void    SetId( long nId ){ mnID = nId;}
-    void    AddRow( ScDPItemData* pRow, USHORT nCount );
-    bool    InitFromDoc(  ScDocument* pDoc, const ScRange& rRange );
+    void	SetId( long nId ){ mnID = nId;}
+    void	AddRow( ScDPItemData* pRow, USHORT nCount );
+    bool	InitFromDoc(  ScDocument* pDoc, const ScRange& rRange );
     bool InitFromDataBase (const  ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xRowSet, const Date& rNullDate);
 
-    SCROW   GetRowCount() const;
-    SCROW   GetItemDataId( USHORT nDim, SCROW nRow, BOOL bRepeatIfEmpty ) const;
-    String  GetDimensionName( USHORT nColumn ) const;
-    bool    IsEmptyMember( SCROW nRow, USHORT nColumn ) const;
-    bool    IsRowEmpty( SCROW nRow ) const;
-    bool    IsValid() const;
-    bool    ValidQuery( SCROW nRow, const ScQueryParam& rQueryParam, BOOL* pSpecial );
+    SCROW	GetRowCount() const;
+    SCROW	GetItemDataId( USHORT nDim, SCROW nRow, BOOL bRepeatIfEmpty ) const;
+    String	GetDimensionName( USHORT nColumn ) const;
+    bool	IsEmptyMember( SCROW nRow, USHORT nColumn ) const;
+    bool	IsRowEmpty( SCROW nRow ) const;
+    bool	IsValid() const;
+    bool	ValidQuery( SCROW nRow, const ScQueryParam& rQueryParam, BOOL* pSpecial );
 
     ScDocument* GetDoc() const;//ms-cache-core
     long GetColumnCount() const;
-    long    GetId() const;
+    long	GetId() const;
 
     const ScDPItemData* GetItemDataById( long nDim, SCROW nId ) const;
 
@@ -114,8 +114,8 @@ public:
 
 protected:
 private:
-    void        AddLabel( ScDPItemData* pData);
-    BOOL    AddData( long nDim, ScDPItemData* itemData );
+    void		AddLabel( ScDPItemData* pData);
+    BOOL	AddData( long nDim, ScDPItemData* itemData );
 };
 
 #endif //DPTABLECACHE_HXX

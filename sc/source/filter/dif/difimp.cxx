@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,21 +64,21 @@ const sal_Unicode pKey1_0[]     = { '1', ',', '0', 0 };
 FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                         const CharSet eVon, UINT32 nDifOption )
 {
-    DifParser   aDifParser( rIn, nDifOption, *pDoc, eVon );
+    DifParser	aDifParser( rIn, nDifOption, *pDoc, eVon );
 
-    const BOOL  bPlain = aDifParser.IsPlain();
+    const BOOL	bPlain = aDifParser.IsPlain();
 
-    SCTAB       nBaseTab = rInsPos.Tab();
+    SCTAB		nBaseTab = rInsPos.Tab();
 
-    TOPIC       eTopic = T_UNKNOWN;
-    BOOL        bSyntErrWarn = FALSE;
-    BOOL        bOverflowWarn = FALSE;
+    TOPIC		eTopic = T_UNKNOWN;
+    BOOL		bSyntErrWarn = FALSE;
+    BOOL		bOverflowWarn = FALSE;
 
-    String&     rData = aDifParser.aData;
-    BOOL        bData = FALSE;
+    String&	    rData = aDifParser.aData;
+    BOOL		bData = FALSE;
 
-    SCCOL       nNumCols = 0;
-    SCROW       nNumRows = 0;
+    SCCOL		nNumCols = 0;
+    SCROW		nNumRows = 0;
 
     rIn.Seek( 0 );
 
@@ -148,14 +148,14 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 
 
     if( eTopic == T_DATA )
-    {   // Ab hier kommen die Daten
-        SCCOL               nBaseCol = rInsPos.Col();
+    {	// Ab hier kommen die Daten
+        SCCOL				nBaseCol = rInsPos.Col();
 
-        SCCOL               nColCnt = SCCOL_MAX;
-        SCROW               nRowCnt = rInsPos.Row();
-        DifAttrCache        aAttrCache( bPlain );
+        SCCOL				nColCnt = SCCOL_MAX;
+        SCROW				nRowCnt = rInsPos.Row();
+        DifAttrCache		aAttrCache( bPlain );
 
-        DATASET             eAkt = D_UNKNOWN;
+        DATASET				eAkt = D_UNKNOWN;
 
         while( eAkt != D_EOD )
             {
@@ -172,13 +172,13 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                     break;
                 case D_EOD:
                     break;
-                case D_NUMERIC:                 // Numbercell
+                case D_NUMERIC:					// Numbercell
                     if( nColCnt == SCCOL_MAX )
                         nColCnt = nBaseCol;
 
                     if( ValidCol(nColCnt) && ValidRow(nRowCnt) )
                     {
-                        ScBaseCell*     pCell;
+                        ScBaseCell*		pCell;
                         if( DifParser::IsV( rData.GetBuffer() ) )
                         {
                             pCell = new ScValueCell( aDifParser.fVal );
@@ -212,7 +212,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 
                     nColCnt++;
                     break;
-                case D_STRING:                  // Textcell
+                case D_STRING:					// Textcell
                     if( nColCnt == SCCOL_MAX )
                         nColCnt = nBaseCol;
 
@@ -291,9 +291,9 @@ TOPIC DifParser::GetNextTopic( void )
     static const sal_Unicode pKeyDISPLAYUNITS[] = { 'D', 'I', 'S', 'P', 'L', 'A', 'Y', 'U', 'N', 'I', 'T', 'S', 0 };
     static const sal_Unicode pKeyUNKNOWN[]      = { 0 };
 
-    static const sal_Unicode*   ppKeys[] =
+    static const sal_Unicode*	ppKeys[] =
     {
-        pKeyTABLE,              // 0
+        pKeyTABLE,				// 0
         pKeyVECTORS,
         pKeyTUPLES,
         pKeyDATA,
@@ -306,29 +306,29 @@ TOPIC DifParser::GetNextTopic( void )
         pKeyTRUELENGTH,         // 10
         pKeyUINITS,
         pKeyDISPLAYUNITS,
-        pKeyUNKNOWN             // 13
+        pKeyUNKNOWN				// 13
     };
 
-    static const TOPIC      pTopics[] =
+    static const TOPIC		pTopics[] =
     {
-        T_TABLE,                // 0
+        T_TABLE,				// 0
         T_VECTORS,
         T_TUPLES,
         T_DATA,
         T_LABEL,
-        T_COMMENT,              // 5
+        T_COMMENT,				// 5
         T_SIZE,
         T_PERIODICITY,
         T_MAJORSTART,
         T_MINORSTART,
-        T_TRUELENGTH,           // 10
+        T_TRUELENGTH,			// 10
         T_UINITS,
         T_DISPLAYUNITS,
-        T_UNKNOWN               // 13
+        T_UNKNOWN				// 13
     };
 
-    STATE                   eS = S_START;
-    String                  aLine;
+    STATE					eS = S_START;
+    String				    aLine;
 
     nVector = 0;
     nVal = 0;
@@ -346,9 +346,9 @@ TOPIC DifParser::GetNextTopic( void )
         {
             case S_START:
             {
-                const sal_Unicode*  pRef;
-                UINT16          nCnt = 0;
-                BOOL            bSearch = TRUE;
+                const sal_Unicode*	pRef;
+                UINT16			nCnt = 0;
+                BOOL			bSearch = TRUE;
 
                 pRef = ppKeys[ nCnt ];
 
@@ -376,7 +376,7 @@ TOPIC DifParser::GetNextTopic( void )
                 break;
             case S_VectorVal:
             {
-                const sal_Unicode*      pCur = aLine.GetBuffer();
+                const sal_Unicode*		pCur = aLine.GetBuffer();
 
                 pCur = ScanIntVal( pCur, nVector );
 
@@ -405,7 +405,7 @@ TOPIC DifParser::GetNextTopic( void )
             case S_UNKNOWN:
                 // 2 Zeilen ueberlesen
                 ReadNextLine( aLine );
-            case S_ERROR_L2:                // Fehler in Line 2 aufgetreten
+            case S_ERROR_L2:				// Fehler in Line 2 aufgetreten
                 // eine Zeile ueberlesen
                 ReadNextLine( aLine );
                 eS = S_END;
@@ -421,10 +421,10 @@ TOPIC DifParser::GetNextTopic( void )
 
 static void lcl_DeEscapeQuotesDif( String& rString )
 {
-    //  Special handling for DIF import: Escaped (duplicated) quotes are resolved.
-    //  Single quote characters are left in place because older versions didn't
-    //  escape quotes in strings (and Excel doesn't when using the clipboard).
-    //  The quotes around the string are removed before this function is called.
+    //	Special handling for DIF import: Escaped (duplicated) quotes are resolved.
+    //	Single quote characters are left in place because older versions didn't
+    //	escape quotes in strings (and Excel doesn't when using the clipboard).
+    //	The quotes around the string are removed before this function is called.
 
     static const sal_Unicode aDQ[] = { '"', '"', 0 };
     xub_StrLen nPos = 0;
@@ -478,7 +478,7 @@ bool DifParser::ReadNextLine( String& rStr )
     }
 }
 
-// Look ahead in the stream to determine if the next line is the first line of
+// Look ahead in the stream to determine if the next line is the first line of 
 // a valid data record structure
 bool DifParser::LookAhead()
 {
@@ -518,11 +518,11 @@ bool DifParser::LookAhead()
     return bValidStructure;
 }
 
-DATASET DifParser::GetNextDataset( void )
+DATASET	DifParser::GetNextDataset( void )
 {
-    DATASET             eRet = D_UNKNOWN;
-    String              aLine;
-    const sal_Unicode*      pAktBuffer;
+    DATASET				eRet = D_UNKNOWN;
+    String			    aLine;
+    const sal_Unicode*		pAktBuffer;
 
     ReadNextLine( aLine );
 
@@ -530,7 +530,7 @@ DATASET DifParser::GetNextDataset( void )
 
     switch( *pAktBuffer )
     {
-        case '-':                   // Special Datatype
+        case '-':					// Special Datatype
             pAktBuffer++;
 
             if( Is1_0( pAktBuffer ) )
@@ -542,8 +542,8 @@ DATASET DifParser::GetNextDataset( void )
                     eRet = D_EOD;
             }
             break;
-        case '0':                   // Numeric Data
-            pAktBuffer++;           // Wert in fVal, 2. Zeile in aData
+        case '0':					// Numeric Data
+            pAktBuffer++;			// Wert in fVal, 2. Zeile in aData
             if( *pAktBuffer == ',' )
             {
                 pAktBuffer++;
@@ -561,7 +561,7 @@ DATASET DifParser::GetNextDataset( void )
                 }
             }
             break;
-        case '1':                   // String Data
+        case '1':					// String Data
             if( Is1_0( aLine.GetBuffer() ) )
             {
                 ReadNextLine( aLine );
@@ -571,7 +571,7 @@ DATASET DifParser::GetNextDataset( void )
                 if( nLineLength >= 1 && *pLine == '"' )
                 {
                     // Quotes are not always escaped (duplicated), see lcl_DeEscapeQuotesDif
-                    // A look ahead into the next line is needed in order to deal with
+                    // A look ahead into the next line is needed in order to deal with 
                     // multiline strings containing quotes
                     if( LookAhead() )
                     {
@@ -634,7 +634,7 @@ const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, UINT32& rRe
     while (*pStart == ' ' || *pStart == '\t')
         ++pStart;
 
-    sal_Unicode     cAkt = *pStart;
+    sal_Unicode		cAkt = *pStart;
 
     if( IsNumber( cAkt ) )
         rRet = ( UINT32 ) ( cAkt - '0' );
@@ -659,20 +659,20 @@ const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, UINT32& rRe
 
 BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
     {
-    double                  fNewVal = 0.0;
-    BOOL                    bNeg = FALSE;
+    double					fNewVal = 0.0;
+    BOOL					bNeg = FALSE;
     double                  fFracPos = 1.0;
-    INT32                   nExp = 0;
-    BOOL                    bExpNeg = FALSE;
-    BOOL                    bExpOverflow = FALSE;
-    static const UINT16     nExpLimit = 4096;   // ACHTUNG: muss genauer ermittelt werden!
+    INT32					nExp = 0;
+    BOOL					bExpNeg = FALSE;
+    BOOL					bExpOverflow = FALSE;
+    static const UINT16		nExpLimit = 4096;	// ACHTUNG: muss genauer ermittelt werden!
 
-    sal_Unicode             cAkt;
-    BOOL                    bRet = FALSE;
+    sal_Unicode				cAkt;
+    BOOL					bRet = FALSE;
 
     enum STATE { S_FIRST, S_PRE, S_POST, S_EXP_FIRST, S_EXP, S_END, S_FINDEND };
 
-    STATE   eS = S_FIRST;
+    STATE	eS = S_FIRST;
 
     fNewVal = 0.0;
 
@@ -700,7 +700,7 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
                             bNeg = !bNeg;
                             break;
                         case '.':
-                        case ',':                   //!
+                        case ',':					//!
                             eS = S_POST;
                             fFracPos = 0.1;
                             break;
@@ -720,7 +720,7 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
                     switch( cAkt )
                     {
                         case '.':
-                        case ',':                   //!
+                        case ',':					//!
                             eS = S_POST;
                             fFracPos = 0.1;
                             break;
@@ -728,9 +728,9 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
                         case 'E':
                             eS = S_EXP;
                             break;
-                        case 0x00:              // IsNumberEnding( cAkt )
-                            bRet = TRUE;        // no
-                        default:                // break!
+                        case 0x00:				// IsNumberEnding( cAkt )
+                            bRet = TRUE;		// no
+                        default:				// break!
                             eS = S_END;
                     }
                 }
@@ -749,9 +749,9 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
                         case 'E':
                             eS = S_EXP_FIRST;
                             break;
-                        case 0x00:              // IsNumberEnding( cAkt )
-                            bRet = TRUE;        // no
-                        default:                // break!
+                        case 0x00:				// IsNumberEnding( cAkt )
+                            bRet = TRUE;		// no
+                        default:				// break!
                             eS = S_END;
                     }
                 }
@@ -803,7 +803,7 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
             case S_FINDEND:
                 if( IsNumberEnding( cAkt ) )
                 {
-                    bRet = TRUE;        // damit sinnvoll weitergeparst werden kann
+                    bRet = TRUE;		// damit sinnvoll weitergeparst werden kann
                     eS = S_END;
                 }
                 break;
@@ -819,7 +819,7 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
     if( bRet )
     {
         if( bExpOverflow )
-            return sal_False;       // ACHTUNG: hier muss noch differenziert werden
+            return sal_False;		// ACHTUNG: hier muss noch differenziert werden
 
         if( bNeg )
             fNewVal *= 1.0;
@@ -920,8 +920,8 @@ void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab, con
 
 void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
 {
-    ScPatternAttr   aAttr( rDoc.GetPool() );
-    SfxItemSet&     rItemSet = aAttr.GetItemSet();
+    ScPatternAttr	aAttr( rDoc.GetPool() );
+    SfxItemSet&		rItemSet = aAttr.GetItemSet();
 
     ENTRY*          pEntry = ( ENTRY* ) List::First();
 
@@ -975,7 +975,7 @@ void DifAttrCache::Apply( ScDocument& rDoc, SCTAB nTab )
 {
     if( bPlain )
     {
-        ScPatternAttr*  pPatt = NULL;
+        ScPatternAttr*	pPatt = NULL;
 
         for( SCCOL nCol = 0 ; nCol <= MAXCOL ; nCol++ )
         {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ void ScViewFunc::DetectiveAddPred()
     if (!bDone)
         Sound::Beep();
 
-    RecalcPPT();    //! use broadcast in DocFunc instead?
+    RecalcPPT();	//! use broadcast in DocFunc instead?
 }
 
 void ScViewFunc::DetectiveDelPred()
@@ -315,7 +315,7 @@ void ScViewFunc::ShowNote( bool bShow )
 
 void ScViewFunc::EditNote()
 {
-    //  zum Editieren einblenden und aktivieren
+    //	zum Editieren einblenden und aktivieren
 
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -351,7 +351,7 @@ void ScViewFunc::EditNote()
             GetViewData()->GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
             // jetzt den erzeugten FuText holen und in den EditModus setzen
             FuPoor* pPoor = GetDrawFuncPtr();
-            if ( pPoor && (pPoor->GetSlotID() == SID_DRAW_NOTEEDIT) )    // hat keine RTTI
+            if ( pPoor && (pPoor->GetSlotID() == SID_DRAW_NOTEEDIT) )	 //	hat keine RTTI
             {
                 ScrollToObject( pCaption );         // Objekt komplett sichtbar machen
                 static_cast< FuText* >( pPoor )->SetInEditMode( pCaption );

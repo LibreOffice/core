@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,27 +53,27 @@ class SvxBrushItem;
 class SvxShadowItem;
 class FmFormView;
 
-#define RANGENO_NORANGE             USHRT_MAX
+#define RANGENO_NORANGE				USHRT_MAX
 
-#define PRINT_HEADER_WIDTH          (1.0 * TWIPS_PER_CM)
-#define PRINT_HEADER_HEIGHT         (12.8 * TWIPS_PER_POINT)
-#define PRINT_HEADER_FONTHEIGHT     200
+#define PRINT_HEADER_WIDTH			(1.0 * TWIPS_PER_CM)
+#define PRINT_HEADER_HEIGHT 		(12.8 * TWIPS_PER_POINT)
+#define PRINT_HEADER_FONTHEIGHT 	200
 
 
-                                            //  Einstellungen fuer Kopf-/Fusszeilen
+                                            //	Einstellungen fuer Kopf-/Fusszeilen
 struct ScPrintHFParam
 {
-    BOOL                bEnable;
-    BOOL                bDynamic;
-    BOOL                bShared;
-    long                nHeight;            //  insgesamt (Hoehe+Abstand+Rahmen)
-    long                nManHeight;         //  eingestellte Groesse (Min. bei dynamisch)
-    USHORT              nDistance;
-    USHORT              nLeft;              //  Raender
-    USHORT              nRight;
+    BOOL				bEnable;
+    BOOL				bDynamic;
+    BOOL				bShared;
+    long				nHeight;			//	insgesamt (Hoehe+Abstand+Rahmen)
+    long				nManHeight;			//	eingestellte Groesse (Min. bei dynamisch)
+    USHORT				nDistance;
+    USHORT				nLeft;				//	Raender
+    USHORT				nRight;
     const ScPageHFItem* pLeft;
     const ScPageHFItem* pRight;
-    const SvxBoxItem*   pBorder;
+    const SvxBoxItem*	pBorder;
     const SvxBrushItem* pBack;
     const SvxShadowItem* pShadow;
 };
@@ -86,147 +86,147 @@ class ScJobSetup
 public:
     ScJobSetup( SfxPrinter* pPrinter );
 
-    Size        aUserSize;
-    MapMode     aUserMapMode;
-    Paper   ePaper;
+    Size		aUserSize;
+    MapMode		aUserMapMode;
+    Paper	ePaper;
     Orientation eOrientation;
-    USHORT      nPaperBin;
+    USHORT		nPaperBin;
 };
 
-struct ScPrintState                         //  Variablen aus ScPrintFunc retten
+struct ScPrintState							//	Variablen aus ScPrintFunc retten
 {
-    SCTAB   nPrintTab;
-    SCCOL   nStartCol;
-    SCROW   nStartRow;
-    SCCOL   nEndCol;
-    SCROW   nEndRow;
-    USHORT  nZoom;
-    size_t  nPagesX;
-    size_t  nPagesY;
-    long    nTabPages;
-    long    nTotalPages;
-    long    nPageStart;
-    long    nDocPages;
+    SCTAB	nPrintTab;
+    SCCOL	nStartCol;
+    SCROW	nStartRow;
+    SCCOL	nEndCol;
+    SCROW	nEndRow;
+    USHORT	nZoom;
+    size_t	nPagesX;
+    size_t	nPagesY;
+    long	nTabPages;
+    long	nTotalPages;
+    long	nPageStart;
+    long	nDocPages;
 };
 
 class ScPageRowEntry
 {
 private:
-    SCROW   nStartRow;
-    SCROW   nEndRow;
-    size_t  nPagesX;
-    BOOL*   pHidden;
-    //!     Anzahl wirklich sichtbarer cachen???
+    SCROW	nStartRow;
+    SCROW	nEndRow;
+    size_t	nPagesX;
+    BOOL*	pHidden;
+    //!		Anzahl wirklich sichtbarer cachen???
 
 public:
-            ScPageRowEntry()    { nStartRow = nEndRow = 0; nPagesX = 0; pHidden = NULL; }
-            ~ScPageRowEntry()   { delete[] pHidden; }
+            ScPageRowEntry()	{ nStartRow = nEndRow = 0; nPagesX = 0; pHidden = NULL; }
+            ~ScPageRowEntry()	{ delete[] pHidden; }
 
             ScPageRowEntry(const ScPageRowEntry& r);
     const ScPageRowEntry& operator=(const ScPageRowEntry& r);
 
-    SCROW   GetStartRow() const     { return nStartRow; }
-    SCROW   GetEndRow() const       { return nEndRow; }
-    size_t  GetPagesX() const       { return nPagesX; }
-    void    SetStartRow(SCROW n)    { nStartRow = n; }
-    void    SetEndRow(SCROW n)      { nEndRow = n; }
+    SCROW	GetStartRow() const		{ return nStartRow; }
+    SCROW	GetEndRow() const		{ return nEndRow; }
+    size_t	GetPagesX() const		{ return nPagesX; }
+    void	SetStartRow(SCROW n)	{ nStartRow = n; }
+    void	SetEndRow(SCROW n)		{ nEndRow = n; }
 
-    void    SetPagesX(size_t nNew);
-    void    SetHidden(size_t nX);
-    BOOL    IsHidden(size_t nX) const;
+    void	SetPagesX(size_t nNew);
+    void	SetHidden(size_t nX);
+    BOOL	IsHidden(size_t nX) const;
 
-    size_t  CountVisible() const;
+    size_t	CountVisible() const;
 };
 
 class ScPrintFunc
 {
 private:
-    ScDocShell*         pDocShell;
-    ScDocument*         pDoc;
-    SfxPrinter*         pPrinter;
-    OutputDevice*       pDev;
-    FmFormView*         pDrawView;
+    ScDocShell* 		pDocShell;
+    ScDocument* 		pDoc;
+    SfxPrinter* 		pPrinter;
+    OutputDevice*		pDev;
+    FmFormView*			pDrawView;
 
-    MapMode             aOldPrinterMode;    //  MapMode vor dem Aufruf
+    MapMode				aOldPrinterMode;	//	MapMode vor dem Aufruf
 
-    Point               aSrcOffset;         //  Papier-1/100 mm
-    Point               aOffset;            //  mit Faktor aus Seitenformat skaliert
-    USHORT              nManualZoom;        //  Zoom in Preview (Prozent)
-    BOOL                bClearWin;          //  Ausgabe vorher loeschen
-    BOOL                bUseStyleColor;
-    BOOL                bIsRender;
+    Point				aSrcOffset;			//	Papier-1/100 mm
+    Point				aOffset;			//	mit Faktor aus Seitenformat skaliert
+    USHORT				nManualZoom;		//	Zoom in Preview (Prozent)
+    BOOL				bClearWin;			//	Ausgabe vorher loeschen
+    BOOL				bUseStyleColor;
+    BOOL				bIsRender;
 
-    SCTAB               nPrintTab;
-    long                nPageStart;         //  Offset fuer erste Seite
-    long                nDocPages;          //  Seiten im Dokument
+    SCTAB				nPrintTab;
+    long				nPageStart;			//	Offset fuer erste Seite
+    long				nDocPages;			//	Seiten im Dokument
 
-    const ScRange*      pUserArea;          //  Selektion, wenn im Dialog eingestellt
+    const ScRange*		pUserArea;			//	Selektion, wenn im Dialog eingestellt
 
-    const SfxItemSet*   pParamSet;          //  eingestellte Vorlage
-    BOOL                bState;             //  aus State-struct erzeugt
+    const SfxItemSet*	pParamSet;			//	eingestellte Vorlage
+    BOOL				bState;				//	aus State-struct erzeugt
 
-                                            //  Parameter aus Vorlage:
-    USHORT              nLeftMargin;
-    USHORT              nTopMargin;
-    USHORT              nRightMargin;
-    USHORT              nBottomMargin;
-    BOOL                bCenterHor;
-    BOOL                bCenterVer;
-    BOOL                bLandscape;
-    BOOL                bSourceRangeValid;
+                                            //	Parameter aus Vorlage:
+    USHORT				nLeftMargin;
+    USHORT				nTopMargin;
+    USHORT				nRightMargin;
+    USHORT				nBottomMargin;
+    BOOL				bCenterHor;
+    BOOL				bCenterVer;
+    BOOL				bLandscape;
+    BOOL				bSourceRangeValid;
 
-    USHORT              nPageUsage;
-    Size                aPageSize;          //  Drucker-Twips
-    const SvxBoxItem*   pBorderItem;
+    USHORT				nPageUsage;
+    Size				aPageSize;			//	Drucker-Twips
+    const SvxBoxItem*	pBorderItem;
     const SvxBrushItem* pBackgroundItem;
     const SvxShadowItem* pShadowItem;
 
-    ScRange             aLastSourceRange;
-    ScPrintHFParam      aHdr;
-    ScPrintHFParam      aFtr;
-    ScPageTableParam    aTableParam;
-    ScPageAreaParam     aAreaParam;
+    ScRange				aLastSourceRange;
+    ScPrintHFParam		aHdr;
+    ScPrintHFParam		aFtr;
+    ScPageTableParam	aTableParam;
+    ScPageAreaParam 	aAreaParam;
 
-                                            //  berechnete Werte:
-    USHORT              nZoom;
-    BOOL                bPrintCurrentTable;
-    BOOL                bMultiArea;
-    long                nTabPages;
-    long                nTotalPages;
+                                            //	berechnete Werte:
+    USHORT				nZoom;
+    BOOL				bPrintCurrentTable;
+    BOOL				bMultiArea;
+    long				nTabPages;
+    long				nTotalPages;
 
-    Rectangle           aPageRect;          //  Dokument-Twips
+    Rectangle			aPageRect;			//	Dokument-Twips
 
-    MapMode             aLogicMode;         //  in DoPrint gesetzt
-    MapMode             aOffsetMode;
-    MapMode             aTwipMode;
-    double              nScaleX;
-    double              nScaleY;
+    MapMode 			aLogicMode; 		//	in DoPrint gesetzt
+    MapMode 			aOffsetMode;
+    MapMode 			aTwipMode;
+    double				nScaleX;
+    double				nScaleY;
 
-    SCCOL               nRepeatStartCol;
-    SCCOL               nRepeatEndCol;
-    SCROW               nRepeatStartRow;
-    SCROW               nRepeatEndRow;
+    SCCOL				nRepeatStartCol;
+    SCCOL				nRepeatEndCol;
+    SCROW				nRepeatStartRow;
+    SCROW				nRepeatEndRow;
 
-    SCCOL               nStartCol;
-    SCROW               nStartRow;
-    SCCOL               nEndCol;
-    SCROW               nEndRow;
+    SCCOL				nStartCol;
+    SCROW				nStartRow;
+    SCCOL				nEndCol;
+    SCROW				nEndRow;
 
-    SCCOL*              pPageEndX;          // Seitenaufteilung
+    SCCOL*              pPageEndX;			// Seitenaufteilung
     SCROW*              pPageEndY;
-    ScPageRowEntry*     pPageRows;
-    size_t              nPagesX;
-    size_t              nPagesY;
-    size_t              nTotalY;
+    ScPageRowEntry*		pPageRows;
+    size_t				nPagesX;
+    size_t				nPagesY;
+    size_t				nTotalY;
 
-    ScHeaderEditEngine* pEditEngine;
-    SfxItemSet*         pEditDefaults;
+    ScHeaderEditEngine*	pEditEngine;
+    SfxItemSet* 		pEditDefaults;
 
-    ScHeaderFieldData   aFieldData;
+    ScHeaderFieldData	aFieldData;
 
-    List                aNotePosList;       //  Reihenfolge der Notizen
+    List				aNotePosList;		//	Reihenfolge der Notizen
 
-    ScPageBreakData*    pPageData;          // zum Eintragen der Umbrueche etc.
+    ScPageBreakData*	pPageData;			// zum Eintragen der Umbrueche etc.
 
 public:
                     ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTab,
@@ -256,48 +256,48 @@ public:
                                  const ScPrintOptions* pOptions );
                     ~ScPrintFunc();
 
-    static void     DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrintFactor,
+    static void 	DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrintFactor,
                                 const Rectangle& rBound, ScViewData* pViewData, BOOL bMetaFile );
 
-    void            SetDrawView( FmFormView* pNew );
+    void			SetDrawView( FmFormView* pNew );
 
-    void            SetOffset( const Point& rOfs );
-    void            SetManualZoom( USHORT nNewZoom );
-    void            SetDateTime( const Date& rDate, const Time& rTime );
+    void			SetOffset( const Point& rOfs );
+    void			SetManualZoom( USHORT nNewZoom );
+    void			SetDateTime( const Date& rDate, const Time& rTime );
 
-    void            SetClearFlag( BOOL bFlag );
-    void            SetUseStyleColor( BOOL bFlag );
-    void            SetRenderFlag( BOOL bFlag );
+    void			SetClearFlag( BOOL bFlag );
+    void			SetUseStyleColor( BOOL bFlag );
+    void			SetRenderFlag( BOOL bFlag );
 
     void            SetExclusivelyDrawOleAndDrawObjects();//for printing selected objects without surrounding cell contents
 
-    BOOL            UpdatePages();
+    BOOL			UpdatePages();
 
-    void            ApplyPrintSettings();       // aus DoPrint() schon gerufen
-    long            DoPrint( const MultiSelection& rPageRanges,
+    void			ApplyPrintSettings();		// aus DoPrint() schon gerufen
+    long			DoPrint( const MultiSelection& rPageRanges,
                                 /*long nStartPage, long nDisplayStart, BOOL bDoPrint,
                                 SfxProgress* pProgress, ScPreviewLocationData* pLocationData );*/
                                 long nStartPage, long nDisplayStart, BOOL bDoPrint = TRUE,
                                 SfxProgress* pProgress = NULL, ScPreviewLocationData* pLocationData = NULL);
 
-                    //  Werte abfragen - sofort
+                    //	Werte abfragen - sofort
 
-    Size            GetPageSize() const { return aPageSize; }
-    Size            GetDataSize() const;
-    void            GetScaleData( Size& rPhysSize, long& rDocHdr, long& rDocFtr );
-    long            GetFirstPageNo() const  { return aTableParam.nFirstPageNo; }
+    Size			GetPageSize() const { return aPageSize; }
+    Size			GetDataSize() const;
+    void			GetScaleData( Size& rPhysSize, long& rDocHdr, long& rDocFtr );
+    long			GetFirstPageNo() const	{ return aTableParam.nFirstPageNo; }
 
-                    //  letzte Werte abfragen - nach DoPrint !!!
+                    //	letzte Werte abfragen - nach DoPrint !!!
 
-    double          GetScaleX() const { return nScaleX; }
-    double          GetScaleY() const { return nScaleY; }
-    long            GetTotalPages() const { return nTotalPages; }
-    USHORT          GetZoom() const { return nZoom; }
+    double			GetScaleX() const { return nScaleX; }
+    double			GetScaleY() const { return nScaleY; }
+    long			GetTotalPages() const { return nTotalPages; }
+    USHORT			GetZoom() const { return nZoom; }
 
-    void            ResetBreaks( SCTAB nTab );
+    void			ResetBreaks( SCTAB nTab );
 
-    void            GetPrintState( ScPrintState& rState );
-    BOOL            GetLastSourceRange( ScRange& rRange ) const;
+    void			GetPrintState( ScPrintState& rState );
+    BOOL			GetLastSourceRange( ScRange& rRange ) const;
     USHORT          GetLeftMargin() const{return nLeftMargin;}
     USHORT          GetRightMargin() const{return nRightMargin;}
     USHORT          GetTopMargin() const{return nTopMargin;}
@@ -310,55 +310,55 @@ public:
     ScPrintHFParam  GetFooter(){return aFtr;}
 
 private:
-    void            Construct( const ScPrintOptions* pOptions );
-    void            InitParam( const ScPrintOptions* pOptions );
-    void            CalcZoom( USHORT nRangeNo );
-    void            CalcPages();
-    long            CountPages();
-    long            CountNotePages();
+    void			Construct( const ScPrintOptions* pOptions );
+    void			InitParam( const ScPrintOptions* pOptions );
+    void			CalcZoom( USHORT nRangeNo );
+    void			CalcPages();
+    long			CountPages();
+    long			CountNotePages();
 
-    BOOL            AdjustPrintArea( BOOL bNew );
+    BOOL			AdjustPrintArea( BOOL bNew );
 
-    Size            GetDocPageSize();
+    Size			GetDocPageSize();
 
-    long            TextHeight( const EditTextObject* pObject );
-    void            MakeEditEngine();
-    void            UpdateHFHeight( ScPrintHFParam& rParam );
+    long			TextHeight( const EditTextObject* pObject );
+    void			MakeEditEngine();
+    void			UpdateHFHeight( ScPrintHFParam& rParam );
 
-    void            InitModes();
+    void			InitModes();
 
-    BOOL            IsLeft( long nPageNo );
-    BOOL            IsMirror( long nPageNo );
-    void            ReplaceFields( long nPageNo );      // aendert Text in pEditEngine
-    void            MakeTableString();                  // setzt aTableStr
+    BOOL			IsLeft( long nPageNo );
+    BOOL			IsMirror( long nPageNo );
+    void			ReplaceFields( long nPageNo );		// aendert Text in pEditEngine
+    void			MakeTableString();				 	// setzt aTableStr
 
-    void            PrintPage( long nPageNo,
+    void			PrintPage( long nPageNo,
                                     SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     BOOL bDoPrint, ScPreviewLocationData* pLocationData );
-    void            PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
+    void			PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     long nScrX, long nScrY,
                                     BOOL bShLeft, BOOL bShTop, BOOL bShRight, BOOL bShBottom );
-    void            LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
+    void			LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     long nScrX, long nScrY, BOOL bRepCol, BOOL bRepRow,
                                     ScPreviewLocationData& rLocationData );
-    void            PrintColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY );
-    void            PrintRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY );
-    void            LocateColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY,
+    void			PrintColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY );
+    void			PrintRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY );
+    void			LocateColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY,
                                 BOOL bRepCol, ScPreviewLocationData& rLocationData );
-    void            LocateRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY,
+    void			LocateRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY,
                                 BOOL bRepRow, ScPreviewLocationData& rLocationData );
-    void            PrintHF( long nPageNo, BOOL bHeader, long nStartY,
+    void			PrintHF( long nPageNo, BOOL bHeader, long nStartY,
                                     BOOL bDoPrint, ScPreviewLocationData* pLocationData );
 
-    long            PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPreviewLocationData* pLocationData );
-    long            DoNotes( long nNoteStart, BOOL bDoPrint, ScPreviewLocationData* pLocationData );
+    long			PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPreviewLocationData* pLocationData );
+    long			DoNotes( long nNoteStart, BOOL bDoPrint, ScPreviewLocationData* pLocationData );
 
-    void            DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
+    void			DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
                                     const SvxBoxItem* pBorderData,
                                     const SvxBrushItem* pBackground,
                                     const SvxShadowItem* pShadow );
 
-    void            FillPageData();
+    void			FillPageData();
 };
 
 

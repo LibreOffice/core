@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,9 +90,9 @@ sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupStart(const sal_Int32 nField)
         sal_Int32 nItrField = aItr->nField;
         if ( nItrField < nField )
         {
-            //  #103327# when used to find repeated rows at the beginning of a group,
-            //  aTableStart may contain entries before nField. They must be skipped here
-            //  (they will be used for OpenGroups later in the right order).
+            //	#103327# when used to find repeated rows at the beginning of a group,
+            //	aTableStart may contain entries before nField. They must be skipped here
+            //	(they will be used for OpenGroups later in the right order).
 
             ScMyColumnRowGroupVec::iterator aEnd(aTableStart.end());
             while ( aItr != aEnd && nItrField < nField )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,12 @@ class ScDocument;
 class ScRefFinder
 {
 private:
-    String      aFormula;
+    String		aFormula;
     formula::FormulaGrammar::AddressConvention eConv;
-    ScDocument* pDoc;
-    xub_StrLen  nFound;
-    xub_StrLen  nSelStart;
-    xub_StrLen  nSelEnd;
+    ScDocument*	pDoc;
+    xub_StrLen	nFound;
+    xub_StrLen	nSelStart;
+    xub_StrLen	nSelEnd;
 
 public:
     static const sal_Unicode __FAR_DATA pDelimiters[];
@@ -54,12 +54,12 @@ public:
              formula::FormulaGrammar::AddressConvention eConvP = formula::FormulaGrammar::CONV_OOO );
     ~ScRefFinder();
 
-    const String&   GetText() const     { return aFormula; }
-    xub_StrLen      GetFound() const    { return nFound; }
-    xub_StrLen      GetSelStart() const { return nSelStart; }
-    xub_StrLen      GetSelEnd() const   { return nSelEnd; }
+    const String&	GetText() const		{ return aFormula; }
+    xub_StrLen		GetFound() const	{ return nFound; }
+    xub_StrLen		GetSelStart() const	{ return nSelStart; }
+    xub_StrLen		GetSelEnd() const	{ return nSelEnd; }
 
-    void            ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos );
+    void			ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos );
 };
 
 

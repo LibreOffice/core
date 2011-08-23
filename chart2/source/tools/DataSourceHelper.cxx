@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -253,7 +253,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
         DataSeriesHelper::getDataSequenceByRole( xSeriesSource, C2U("values-x") ) );
     if( xXValues.is() )
         aResultVector.push_back( xXValues );
-
+    
     //add all other sequences now without x-values
     for( sal_Int32 nN=0; nN<aDataSeqences.getLength(); nN++ )
     {

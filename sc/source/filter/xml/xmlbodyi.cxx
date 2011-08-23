@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -157,18 +157,18 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
 //    sal_Bool bHeading = sal_False;
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
-//  case XML_TOK_TEXT_H:
-//      bHeading = TRUE;
-//  case XML_TOK_TEXT_P:
-//      pContext = new SwXMLParaContext( GetSwImport(),nPrefix, rLocalName,
-//                                       xAttrList, bHeading );
-//      break;
-//  case XML_TOK_TEXT_ORDERED_LIST:
-//      bOrdered = TRUE;
-//  case XML_TOK_TEXT_UNORDERED_LIST:
-//      pContext = new SwXMLListBlockContext( GetSwImport(),nPrefix, rLocalName,
-//                                            xAttrList, bOrdered );
-//      break;
+//	case XML_TOK_TEXT_H:
+//		bHeading = TRUE;
+//	case XML_TOK_TEXT_P:
+//		pContext = new SwXMLParaContext( GetSwImport(),nPrefix, rLocalName,
+//										 xAttrList, bHeading );
+//		break;
+//	case XML_TOK_TEXT_ORDERED_LIST:
+//		bOrdered = TRUE;
+//	case XML_TOK_TEXT_UNORDERED_LIST:
+//		pContext = new SwXMLListBlockContext( GetSwImport(),nPrefix, rLocalName,
+//											  xAttrList, bOrdered );
+//		break;
     case XML_TOK_BODY_TRACKED_CHANGES :
     {
         pChangeTrackingImportHelper = GetScImport().GetChangeTrackingImportHelper();
@@ -269,9 +269,9 @@ void ScXMLBodyContext::EndElement()
         pContext->EndElement();
     }
     GetScImport().LockSolarMutex();
-    ScMyImpDetectiveOpArray*    pDetOpArray = GetScImport().GetDetectiveOpArray();
-    ScDocument*                 pDoc        = GetScImport().GetDocument();
-    ScMyImpDetectiveOp          aDetOp;
+    ScMyImpDetectiveOpArray*	pDetOpArray	= GetScImport().GetDetectiveOpArray();
+    ScDocument*					pDoc		= GetScImport().GetDocument();
+    ScMyImpDetectiveOp			aDetOp;
 
     if (pDoc && GetScImport().GetModel().is())
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@
 #include <svl/cjkoptions.hxx>
 
 #include "styledlg.hxx"
-#include "tabpages.hxx"     // Zellvorlagen
-#include "tphf.hxx"         // Seitenvorlage: Kopf-/Fusszeilen
-#include "tptable.hxx"      // Seitenvorlage: Tabelle
+#include "tabpages.hxx"		// Zellvorlagen
+#include "tphf.hxx"			// Seitenvorlage: Kopf-/Fusszeilen
+#include "tptable.hxx"		// Seitenvorlage: Tabelle
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "styledlg.hrc"
@@ -57,21 +57,21 @@
 #include <svx/flagsdef.hxx>
 //==================================================================
 
-ScStyleDlg::ScStyleDlg( Window*             pParent,
-                        SfxStyleSheetBase&  rStyleBase,
-                        USHORT              nRscId )
+ScStyleDlg::ScStyleDlg( Window*				pParent,
+                        SfxStyleSheetBase&	rStyleBase,
+                        USHORT				nRscId )
 
-    :   SfxStyleDialog  ( pParent,
+    :	SfxStyleDialog	( pParent,
                           ScResId( nRscId ),
                           rStyleBase,
                           FALSE ),
-        nDlgRsc         ( nRscId )
+        nDlgRsc			( nRscId )
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");
     switch ( nRscId )
     {
-        case RID_SCDLG_STYLES_PAR:  // Zellformatvorlagen
+        case RID_SCDLG_STYLES_PAR:	// Zellformatvorlagen
             {
                 SvtCJKOptions aCJKOptions;
                 DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), "GetTabPageCreatorFunc fail!");
@@ -90,7 +90,7 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
                 {
                     DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
                     DBG_ASSERT(pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageRangesFunc fail!");
-                    AddTabPage( TP_ASIAN,   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
+                    AddTabPage( TP_ASIAN,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
                 }
                 else
                     RemoveTabPage( TP_ASIAN );
@@ -100,11 +100,11 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
                 DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
                 DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
                 AddTabPage( TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
-                AddTabPage( TP_PROTECTION, &ScTabPageProtection::Create,    &ScTabPageProtection::GetRanges );
+                AddTabPage( TP_PROTECTION, &ScTabPageProtection::Create,	&ScTabPageProtection::GetRanges );
             }
             break;
 
-        case RID_SCDLG_STYLES_PAGE: // Seitenvorlagen
+        case RID_SCDLG_STYLES_PAGE:	// Seitenvorlagen
             {
                 DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), "GetTabPageCreatorFunc fail!");
                 DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ), "GetTabPageRangesFunc fail!");
@@ -115,9 +115,9 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
                 DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
                 DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
                 AddTabPage( TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
-                AddTabPage( TP_PAGE_HEADER, &ScHeaderPage::Create,      &ScHeaderPage::GetRanges );
-                AddTabPage( TP_PAGE_FOOTER, &ScFooterPage::Create,      &ScFooterPage::GetRanges );
-                AddTabPage( TP_TABLE, &ScTablePage::Create,     &ScTablePage::GetRanges );
+                AddTabPage( TP_PAGE_HEADER, &ScHeaderPage::Create,	  	&ScHeaderPage::GetRanges );
+                AddTabPage( TP_PAGE_FOOTER, &ScFooterPage::Create,	 	&ScFooterPage::GetRanges );
+                AddTabPage( TP_TABLE, &ScTablePage::Create,		&ScTablePage::GetRanges );
             }
             break;
 

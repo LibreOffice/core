@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -471,9 +471,9 @@ private:
     MetricField m_aMF_SplineOrder;
 
     FixedLine       m_aFL_DialogButtons;
-    OKButton        m_aBP_OK;
-    CancelButton    m_aBP_Cancel;
-    HelpButton      m_aBP_Help;
+    OKButton		m_aBP_OK;
+    CancelButton	m_aBP_Cancel;
+    HelpButton		m_aBP_Help;
 };
 
 SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
@@ -506,7 +506,7 @@ void SplinePropertiesDialog::StateChanged( StateChangedType nType )
 {
     Dialog::StateChanged( nType );
 
-    if( nType == STATE_CHANGE_INITSHOW )
+    if( nType == STATE_CHANGE_INITSHOW )  
     {
         adjustControlPositions();
         adjustSize();

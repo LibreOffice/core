@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,40 +49,40 @@ public:
                     ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent );
                     ~ScPrintAreasDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual void    AddRefEntry();
+    virtual void	SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void	AddRefEntry();
 
-    virtual BOOL    IsTableLocked() const;
+    virtual BOOL	IsTableLocked() const;
 
-    virtual void    SetActive();
-    virtual void    Deactivate();
-    virtual BOOL    Close();
+    virtual void	SetActive();
+    virtual void	Deactivate();
+    virtual BOOL	Close();
 
 private:
-    ListBox         aLbPrintArea;
+    ListBox			aLbPrintArea;
     FixedLine       aFlPrintArea;
-    formula::RefEdit        aEdPrintArea;
-    formula::RefButton      aRbPrintArea;
+    formula::RefEdit		aEdPrintArea;
+    formula::RefButton		aRbPrintArea;
 
-    ListBox         aLbRepeatRow;
+    ListBox			aLbRepeatRow;
     FixedLine       aFlRepeatRow;
-    formula::RefEdit        aEdRepeatRow;
-    formula::RefButton      aRbRepeatRow;
+    formula::RefEdit		aEdRepeatRow;
+    formula::RefButton		aRbRepeatRow;
 
-    ListBox         aLbRepeatCol;
+    ListBox			aLbRepeatCol;
     FixedLine       aFlRepeatCol;
-    formula::RefEdit        aEdRepeatCol;
-    formula::RefButton      aRbRepeatCol;
+    formula::RefEdit		aEdRepeatCol;
+    formula::RefButton		aRbRepeatCol;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 
-    BOOL            bDlgLostFocus;
-    formula::RefEdit*       pRefInputEdit;
-    ScDocument*     pDoc;
-    ScViewData*     pViewData;
-    SCTAB           nCurTab;
+    BOOL			bDlgLostFocus;
+    formula::RefEdit*		pRefInputEdit;
+    ScDocument*		pDoc;
+    ScViewData*		pViewData;
+    SCTAB			nCurTab;
 
 #ifdef _AREASDLG_CXX
 private:
@@ -92,10 +92,10 @@ private:
     BOOL Impl_GetItem( Edit* pEd, SfxStringItem& rItem );
 
     // Handler:
-    DECL_LINK( Impl_SelectHdl,      ListBox*    );
-    DECL_LINK( Impl_ModifyHdl,      formula::RefEdit*  );
-    DECL_LINK( Impl_BtnHdl,         PushButton* );
-    DECL_LINK( Impl_GetFocusHdl,    Control*    );
+    DECL_LINK( Impl_SelectHdl,		ListBox*    );
+    DECL_LINK( Impl_ModifyHdl,		formula::RefEdit*  );
+    DECL_LINK( Impl_BtnHdl,    		PushButton* );
+    DECL_LINK( Impl_GetFocusHdl,	Control*	);
 #endif
 };
 

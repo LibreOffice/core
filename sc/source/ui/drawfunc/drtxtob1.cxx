@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,13 +128,13 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
     SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( pViewData->GetDialogParent() );
 
     pDlg->Insert( SOT_FORMAT_STRING, EMPTY_STRING );
-    pDlg->Insert( SOT_FORMAT_RTF,    EMPTY_STRING );
+    pDlg->Insert( SOT_FORMAT_RTF,	 EMPTY_STRING );
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
     ULONG nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
 
-    //! test if outliner view is still valid
+    //!	test if outliner view is still valid
 
     if (nFormat > 0)
     {

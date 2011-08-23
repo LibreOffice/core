@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ void lcl_GetFieldData( ScHeaderFieldData& rData )
 //========================================================================
 
 ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLocation eLoc )
-    :   Control( pParent, rResId ),
+    :	Control( pParent, rResId ),
     eLocation(eLoc),
     pAcc(NULL)
 {
@@ -114,10 +114,10 @@ ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLo
     ScHeaderFieldData aData;
     lcl_GetFieldData( aData );
 
-        //  Feldbefehle:
+        //	Feldbefehle:
     pEdEngine->SetData( aData );
     pEdEngine->SetControlWord( pEdEngine->GetControlWord() | EE_CNTRL_MARKFIELDS );
-    mbRTL = ScGlobal::IsSystemRTL();
+    mbRTL = ScGlobal::IsSystemRTL(); 
     if (mbRTL)
         pEdEngine->SetDefaultHorizontalTextDirection(EE_HTEXTDIR_R2L);
 
@@ -155,8 +155,8 @@ void ScEditWindow::SetNumType(SvxNumType eNumType)
 
 EditTextObject* __EXPORT ScEditWindow::CreateTextObject()
 {
-    //  wegen #38841# die Absatzattribute zuruecksetzen
-    //  (GetAttribs beim Format-Dialog-Aufruf gibt immer gesetzte Items zurueck)
+    //	wegen #38841# die Absatzattribute zuruecksetzen
+    //	(GetAttribs beim Format-Dialog-Aufruf gibt immer gesetzte Items zurueck)
 
     const SfxItemSet& rEmpty = pEdEngine->GetEmptyItemSet();
     USHORT nParCnt = pEdEngine->GetParagraphCount();
@@ -170,15 +170,15 @@ EditTextObject* __EXPORT ScEditWindow::CreateTextObject()
 
 void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
 {
-    SfxItemSet* pSet = new SfxItemSet( pEdEngine->GetEmptyItemSet() );
+    SfxItemSet*	pSet = new SfxItemSet( pEdEngine->GetEmptyItemSet() );
     rPattern.FillEditItemSet( pSet );
-    //  FillEditItemSet adjusts font height to 1/100th mm,
-    //  but for header/footer twips is needed, as in the PatternAttr:
+    //	FillEditItemSet adjusts font height to 1/100th mm,
+    //	but for header/footer twips is needed, as in the PatternAttr:
     pSet->Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
     pSet->Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
     pSet->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
     if (mbRTL)
-        pSet->Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+        pSet->Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );	
     pEdEngine->SetDefaults( pSet );
 }
 
@@ -200,11 +200,11 @@ void ScEditWindow::InsertField( const SvxFieldItem& rFld )
 
 void ScEditWindow::SetCharAttriutes()
 {
-    SfxObjectShell* pDocSh  = SfxObjectShell::Current();
+    SfxObjectShell*	pDocSh	= SfxObjectShell::Current();
 
-    SfxViewShell*       pViewSh = SfxViewShell::Current();
+    SfxViewShell*		pViewSh = SfxViewShell::Current();
 
-    ScTabViewShell* pTabViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    ScTabViewShell*	pTabViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
 
 
     DBG_ASSERT( pDocSh,  "Current DocShell not found" );
@@ -246,7 +246,7 @@ void __EXPORT ScEditWindow::Paint( const Rectangle& rRec )
 
     SetBackground( aBgColor );
 
-    Control::Paint( rRec );
+    Control::Paint(	rRec );
 
     pEdView->Paint( rRec );
 }
@@ -364,27 +364,27 @@ class ScExtIButton : public ImageButton
 {
 private:
 
-    Timer           aTimer;
-    ScPopupMenu*    pPopupMenu;
+    Timer			aTimer;
+    ScPopupMenu*	pPopupMenu;
 
     DECL_LINK( TimerHdl, Timer*);
 
-    void            DrawArrow();
+    void			DrawArrow();
 
 protected:
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt);
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt);
 
-    virtual void    StartPopup();
+    virtual void	StartPopup();
 
 public:
 
     ScExtIButton(Window* pParent, const ResId& rResId );
 
-    void            SetPopupMenu(ScPopupMenu* pPopUp);
+    void			SetPopupMenu(ScPopupMenu* pPopUp);
 
-    USHORT          GetSelected();
+    USHORT			GetSelected();
 
     void            SetMenuHdl( const Link& rLink ) { aFxLink = rLink; }
     const Link&     GetMenuHdl() const { return aFxLink; }
@@ -392,14 +392,14 @@ public:
 }
 */
 ScExtIButton::ScExtIButton(Window* pParent, const ResId& rResId )
-:   ImageButton(pParent,rResId),
+:	ImageButton(pParent,rResId),
     pPopupMenu(NULL)
 {
     nSelected=0;
     aTimer.SetTimeout(600);
     SetDropDown( TRUE);
 
-//  DrawArrow();
+//	DrawArrow();
 }
 
 void ScExtIButton::SetPopupMenu(ScPopupMenu* pPopUp)
@@ -478,8 +478,8 @@ IMPL_LINK( ScExtIButton, TimerHdl, Timer*, EMPTYARG )
 static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack,
                                BOOL bLeft = FALSE, BOOL bTop = FALSE )
 {
-    Color           aOldFillColor = pBox->GetFillColor();
-    WindowAlign     eAlign = pBox->meAlign;
+    Color			aOldFillColor = pBox->GetFillColor();
+    WindowAlign 	eAlign = pBox->meAlign;
     if ( bLeft )
         eAlign = WINDOWALIGN_RIGHT;
     else if ( bTop )

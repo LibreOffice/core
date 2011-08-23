@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,8 @@
 #ifndef SC_CELLSUNO_HXX
 #define SC_CELLSUNO_HXX
 
-#include "global.hxx"           // ScRange, ScAddress
-#include "rangelst.hxx"         // ScRangeList
+#include "global.hxx"			// ScRange, ScAddress
+#include "rangelst.hxx"			// ScRangeList
 
 #include "formula/grammar.hxx"
 #include <svl/lstner.hxx>
@@ -115,11 +115,11 @@ class SvxItemPropertySet;
 
 class ScLinkListener : public SvtListener
 {
-    Link    aLink;
+    Link	aLink;
 public:
                     ScLinkListener(const Link& rL) : aLink(rL) {}
-    virtual         ~ScLinkListener();
-    virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
+    virtual			~ScLinkListener();
+    virtual void	Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
 };
 
 typedef ::com::sun::star::uno::Reference<
@@ -131,10 +131,10 @@ typedef ScNamedEntry* ScNamedEntryPtr;
 SV_DECL_PTRARR_DEL( ScNamedEntryArr_Impl, ScNamedEntryPtr, 4, 4 )
 
 
-//  ScCellRangesBase - Basisklasse fuer ScCellRangesObj (mit Index-Access)
-//                                  und ScCellRangeObj (ohne Index-Access)
+//	ScCellRangesBase - Basisklasse fuer ScCellRangesObj (mit Index-Access)
+//									und ScCellRangeObj (ohne Index-Access)
 
-//  XServiceInfo ist in den Ableitungen implementiert
+//	XServiceInfo ist in den Ableitungen implementiert
 
 class ScHelperFunctions
 {
@@ -174,41 +174,41 @@ class SC_DLLPUBLIC ScCellRangesBase : public com::sun::star::beans::XPropertySet
                          public cppu::OWeakObject,
                          public SfxListener
 {
-    friend class ScTabViewObj;      // fuer select()
-    friend class ScTableSheetObj;   // fuer createCursorByRange()
+    friend class ScTabViewObj;		// fuer select()
+    friend class ScTableSheetObj;	// fuer createCursorByRange()
      friend class ooo::vba::excel::ScVbaCellRangeAccess;
 
 private:
     const SfxItemPropertySet* pPropSet;
-    ScDocShell*             pDocShell;
-    ScLinkListener*         pValueListener;
-    ScPatternAttr*          pCurrentFlat;
-    ScPatternAttr*          pCurrentDeep;
-    SfxItemSet*             pCurrentDataSet;
-    SfxItemSet*             pNoDfltCurrentDataSet;
-    ScMarkData*             pMarkData;
-    ScRangeList             aRanges;
+    ScDocShell*				pDocShell;
+    ScLinkListener*			pValueListener;
+    ScPatternAttr*			pCurrentFlat;
+    ScPatternAttr*			pCurrentDeep;
+    SfxItemSet*				pCurrentDataSet;
+    SfxItemSet*				pNoDfltCurrentDataSet;
+    ScMarkData*				pMarkData;
+    ScRangeList				aRanges;
     sal_Int64               nObjectId;
-    BOOL                    bChartColAsHdr;
-    BOOL                    bChartRowAsHdr;
-    BOOL                    bCursorOnly;
-    BOOL                    bGotDataChangedHint;
+    BOOL					bChartColAsHdr;
+    BOOL					bChartRowAsHdr;
+    BOOL					bCursorOnly;
+    BOOL					bGotDataChangedHint;
     XModifyListenerArr_Impl aValueListeners;
 
     DECL_LINK( ValueListenerHdl, SfxHint* );
 
 private:
-    void            PaintRanges_Impl( USHORT nPart );
-    ScRangeListRef  GetLimitedChartRanges_Impl( long nDataColumns, long nDataRows ) const;
-    void            ForceChartListener_Impl();
+    void			PaintRanges_Impl( USHORT nPart );
+    ScRangeListRef	GetLimitedChartRanges_Impl( long nDataColumns, long nDataRows ) const;
+    void			ForceChartListener_Impl();
     ScMemChart*     CreateMemChart_Impl() const;
 
-    const ScPatternAttr*    GetCurrentAttrsFlat();
-    const ScPatternAttr*    GetCurrentAttrsDeep();
-    SfxItemSet*             GetCurrentDataSet(bool bNoDflt = false);
-    const ScMarkData*       GetMarkData();
+    const ScPatternAttr*	GetCurrentAttrsFlat();
+    const ScPatternAttr*	GetCurrentAttrsDeep();
+    SfxItemSet*				GetCurrentDataSet(bool bNoDflt = false);
+    const ScMarkData*		GetMarkData();
     void                    ForgetMarkData();
-    void                    ForgetCurrentAttrs();
+    void					ForgetCurrentAttrs();
 
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges>
                             QueryDifferences_Impl(const com::sun::star::table::CellAddress& aCompare,
@@ -232,47 +232,47 @@ protected:
                                         ::com::sun::star::uno::RuntimeException);
 
 public:
-                            ScCellRangesBase();     // fuer SMART_REFLECTION Krempel
+                            ScCellRangesBase();		// fuer SMART_REFLECTION Krempel
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR);
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR);
-    virtual                 ~ScCellRangesBase();
+    virtual					~ScCellRangesBase();
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   acquire() throw();
-    virtual void SAL_CALL   release() throw();
+    virtual void SAL_CALL	acquire() throw();
+    virtual void SAL_CALL	release() throw();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    virtual void            RefChanged();
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			RefChanged();
 
                             // aus Ableitungen, aber auch per getImplementation
-    ScDocShell*             GetDocShell() const     { return pDocShell; }
-    ScDocument*             GetDocument() const;
-    const ScRangeList&      GetRangeList() const    { return aRanges; }
-    void                    AddRange(const ScRange& rRange, const sal_Bool bMergeRanges);
+    ScDocShell*				GetDocShell() const		{ return pDocShell; }
+    ScDocument*				GetDocument() const;
+    const ScRangeList&		GetRangeList() const	{ return aRanges; }
+    void					AddRange(const ScRange& rRange, const sal_Bool bMergeRanges);
 
                             // per Service erzeugtes Objekt zum Leben erwecken:
-    void                    InitInsertRange(ScDocShell* pDocSh, const ScRange& rR);
+    void					InitInsertRange(ScDocShell* pDocSh, const ScRange& rR);
 
-    void                    SetNewRange(const ScRange& rNew);   // fuer Cursor
-    void                    SetNewRanges(const ScRangeList& rNew);
+    void					SetNewRange(const ScRange& rNew);	// fuer Cursor
+    void					SetNewRanges(const ScRangeList& rNew);
 
-    void                    SetCursorOnly(BOOL bSet);
-    BOOL                    IsCursorOnly() const            { return bCursorOnly; }
+    void					SetCursorOnly(BOOL bSet);
+    BOOL					IsCursorOnly() const			{ return bCursorOnly; }
 
                             // XSheetOperation
-    virtual double SAL_CALL computeFunction( ::com::sun::star::sheet::GeneralFunction nFunction )
+    virtual double SAL_CALL	computeFunction( ::com::sun::star::sheet::GeneralFunction nFunction )
                                 throw(::com::sun::star::uno::Exception,
                                         ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   clearContents( sal_Int32 nContentFlags )
+    virtual void SAL_CALL	clearContents( sal_Int32 nContentFlags )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -284,25 +284,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
@@ -310,7 +310,7 @@ public:
                                     ::com::sun::star::uno::RuntimeException);
 
                             // XMultiPropertySet
-    virtual void SAL_CALL   setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
+    virtual void SAL_CALL	setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues )
                                 throw (::com::sun::star::beans::PropertyVetoException,
                                     ::com::sun::star::lang::IllegalArgumentException,
@@ -350,7 +350,7 @@ public:
                                         ::rtl::OUString >& aPropertyName )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyToDefault( const ::rtl::OUString& PropertyName )
+    virtual void SAL_CALL	setPropertyToDefault( const ::rtl::OUString& PropertyName )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault(
@@ -360,25 +360,25 @@ public:
                                     ::com::sun::star::uno::RuntimeException);
 
                             // XIndent
-    virtual void SAL_CALL   decrementIndent() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   incrementIndent() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	decrementIndent() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	incrementIndent() throw(::com::sun::star::uno::RuntimeException);
 
                             // XChartData
-    virtual void SAL_CALL   addChartDataChangeEventListener(
+    virtual void SAL_CALL	addChartDataChangeEventListener(
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::chart::XChartDataChangeEventListener >& aListener )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeChartDataChangeEventListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	removeChartDataChangeEventListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::chart::XChartDataChangeEventListener >& aListener )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual double SAL_CALL getNotANumber() throw(::com::sun::star::uno::RuntimeException);
+    virtual double SAL_CALL	getNotANumber() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isNotANumber( double nNumber )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XChartDataArray
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > > SAL_CALL
                             getData() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setData( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	setData( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::uno::Sequence< double > >& aData )
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getRowDescriptions()
@@ -388,7 +388,7 @@ public:
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getColumnDescriptions()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setColumnDescriptions( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	setColumnDescriptions( const ::com::sun::star::uno::Sequence<
                                 ::rtl::OUString >& aColumnDescriptions )
                                     throw(::com::sun::star::uno::RuntimeException);
 
@@ -451,10 +451,10 @@ public:
                                     throw(::com::sun::star::uno::RuntimeException);
 
                             // XModifyBroadcaster
-    virtual void SAL_CALL   addModifyListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	addModifyListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XModifyListener >& aListener )
                                 throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeModifyListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	removeModifyListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XModifyListener >& aListener )
                                 throw (::com::sun::star::uno::RuntimeException);
 
@@ -489,21 +489,21 @@ class SC_DLLPUBLIC ScCellRangesObj : public ScCellRangesBase,
                         public com::sun::star::container::XEnumerationAccess
 {
 private:
-    ScNamedEntryArr_Impl    aNamedEntries;
+    ScNamedEntryArr_Impl	aNamedEntries;
 
     ScCellRangeObj*         GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
 public:
                             ScCellRangesObj(ScDocShell* pDocSh, const ScRangeList& rR);
-    virtual                 ~ScCellRangesObj();
+    virtual					~ScCellRangesObj();
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   acquire() throw();
-    virtual void SAL_CALL   release() throw();
+    virtual void SAL_CALL	acquire() throw();
+    virtual void SAL_CALL	release() throw();
 
-    virtual void            RefChanged();
+    virtual void			RefChanged();
 
                             // XSheetCellRanges
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess > SAL_CALL
@@ -514,35 +514,35 @@ public:
                             getRangeAddresses() throw(::com::sun::star::uno::RuntimeException);
 
                             // XSheetCellRangeContainer
-    virtual void SAL_CALL   addRangeAddress( const ::com::sun::star::table::CellRangeAddress& rRange,
+    virtual void SAL_CALL	addRangeAddress( const ::com::sun::star::table::CellRangeAddress& rRange,
                                         sal_Bool bMergeRanges )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeRangeAddress( const ::com::sun::star::table::CellRangeAddress& rRange )
+    virtual void SAL_CALL	removeRangeAddress( const ::com::sun::star::table::CellRangeAddress& rRange )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addRangeAddresses( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	addRangeAddresses( const ::com::sun::star::uno::Sequence<
                                         ::com::sun::star::table::CellRangeAddress >& rRanges,
                                         sal_Bool bMergeRanges )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeRangeAddresses( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	removeRangeAddresses( const ::com::sun::star::uno::Sequence<
                                         ::com::sun::star::table::CellRangeAddress >& rRanges )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::uno::RuntimeException);
 
                             // XNameContainer
-    virtual void SAL_CALL   insertByName( const ::rtl::OUString& aName,
+    virtual void SAL_CALL	insertByName( const ::rtl::OUString& aName,
                                 const ::com::sun::star::uno::Any& aElement )
                                     throw(::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::container::ElementExistException,
                                         ::com::sun::star::lang::WrappedTargetException,
                                         ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeByName( const ::rtl::OUString& Name )
+    virtual void SAL_CALL	removeByName( const ::rtl::OUString& Name )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
                             // XNameReplace
-    virtual void SAL_CALL   replaceByName( const ::rtl::OUString& aName,
+    virtual void SAL_CALL	replaceByName( const ::rtl::OUString& aName,
                                 const ::com::sun::star::uno::Any& aElement )
                                     throw(::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::container::NoSuchElementException,
@@ -611,11 +611,11 @@ class SC_DLLPUBLIC ScCellRangeObj : public ScCellRangesBase,
                        public com::sun::star::table::XColumnRowRange
 {
 private:
-    const SfxItemPropertySet*       pRangePropSet;
-    ScRange                 aRange;
+    const SfxItemPropertySet*		pRangePropSet;
+    ScRange					aRange;
 
 protected:
-    const ScRange&          GetRange() const    { return aRange; }
+    const ScRange&			GetRange() const	{ return aRange; }
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
     virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
@@ -637,7 +637,7 @@ protected:
 
 public:
                             ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR);
-    virtual                 ~ScCellRangeObj();
+    virtual					~ScCellRangeObj();
 
                             // uses ObjectShell from document, if set (returns NULL otherwise)
     static com::sun::star::uno::Reference<com::sun::star::table::XCellRange>
@@ -646,10 +646,10 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   acquire() throw();
-    virtual void SAL_CALL   release() throw();
+    virtual void SAL_CALL	acquire() throw();
+    virtual void SAL_CALL	release() throw();
 
-    virtual void            RefChanged();
+    virtual void			RefChanged();
 
                             // via getImplementation()
     virtual void            SetArrayFormulaWithGrammar( const ::rtl::OUString& rFormula,
@@ -658,7 +658,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 
     // XCellRange ist Basisklasse von XSheetCellRange und XSheetOperation
-//  operator XCellRangeRef() const  { return (XSheetCellRange*)this; }
+//	operator XCellRangeRef() const	{ return (XSheetCellRange*)this; }
 
                             // XCellRangeAddressable
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getRangeAddress()
@@ -670,7 +670,7 @@ public:
 
                             // XArrayFormulaRange
     virtual ::rtl::OUString SAL_CALL getArrayFormula() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setArrayFormula( const ::rtl::OUString& aFormula )
+    virtual void SAL_CALL 	setArrayFormula( const ::rtl::OUString& aFormula )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XArrayFormulaTokens
@@ -684,7 +684,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence<
                             ::com::sun::star::uno::Any > > SAL_CALL getDataArray()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setDataArray( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	setDataArray( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::uno::Any > >& aArray )
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -693,12 +693,12 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence<
                             ::rtl::OUString > > SAL_CALL getFormulaArray()
                                 throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setFormulaArray( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	setFormulaArray( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aArray )
                                 throw (::com::sun::star::uno::RuntimeException);
 
                             // XMultipleOperation
-    virtual void SAL_CALL   setTableOperation(
+    virtual void SAL_CALL	setTableOperation(
                                 const ::com::sun::star::table::CellRangeAddress& aFormulaRange,
                                 ::com::sun::star::sheet::TableOperationMode nMode,
                                 const ::com::sun::star::table::CellAddress& aColumnCell,
@@ -706,28 +706,28 @@ public:
                                     throw(::com::sun::star::uno::RuntimeException);
 
                             // XMergeable
-    virtual void SAL_CALL   merge( sal_Bool bMerge ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	merge( sal_Bool bMerge ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getIsMerged() throw(::com::sun::star::uno::RuntimeException);
 
                             // XCellSeries
-    virtual void SAL_CALL   fillSeries( ::com::sun::star::sheet::FillDirection nFillDirection,
+    virtual void SAL_CALL	fillSeries( ::com::sun::star::sheet::FillDirection nFillDirection,
                                 ::com::sun::star::sheet::FillMode nFillMode,
                                 ::com::sun::star::sheet::FillDateMode nFillDateMode,
                                 double fStep, double fEndValue )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   fillAuto( ::com::sun::star::sheet::FillDirection nFillDirection,
+    virtual void SAL_CALL	fillAuto( ::com::sun::star::sheet::FillDirection nFillDirection,
                                 sal_Int32 nSourceCount )
                                     throw(::com::sun::star::uno::RuntimeException);
 
                             // XAutoFormattable
-    virtual void SAL_CALL   autoFormat( const ::rtl::OUString& aName )
+    virtual void SAL_CALL	autoFormat( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
                                     ::com::sun::star::uno::RuntimeException);
 
                             // XSortable
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
                             createSortDescriptor() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   sort( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	sort( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::beans::PropertyValue >& xDescriptor )
                                     throw(::com::sun::star::uno::RuntimeException);
 
@@ -741,7 +741,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetFilterDescriptor > SAL_CALL
                             createFilterDescriptor( sal_Bool bEmpty )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   filter( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	filter( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XSheetFilterDescriptor >& xDescriptor )
                                     throw(::com::sun::star::uno::RuntimeException);
 
@@ -749,16 +749,16 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSubTotalDescriptor > SAL_CALL
                             createSubTotalDescriptor( sal_Bool bEmpty )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   applySubTotals( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	applySubTotals( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XSubTotalDescriptor >& xDescriptor,
                                 sal_Bool bReplace ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeSubTotals() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	removeSubTotals() throw(::com::sun::star::uno::RuntimeException);
 
                             // XImportable
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
                             createImportDescriptor( sal_Bool bEmpty )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   doImport( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	doImport( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::beans::PropertyValue >& aDescriptor )
                                     throw(::com::sun::star::uno::RuntimeException);
 
@@ -814,7 +814,7 @@ public:
 };
 
 
-//! really derive cell from range?
+//!	really derive cell from range?
 
 class ScCellObj : public ScCellRangeObj,
                   public com::sun::star::text::XText,
@@ -827,17 +827,17 @@ class ScCellObj : public ScCellRangeObj,
                     public com::sun::star::document::XActionLockable
 {
 private:
-    SvxUnoText*             pUnoText;
-    const SfxItemPropertySet*   pCellPropSet;
-    ScAddress               aCellPos;
-    sal_Int16               nActionLockCount;
+    SvxUnoText*				pUnoText;
+    const SfxItemPropertySet*	pCellPropSet;
+    ScAddress				aCellPos;
+    sal_Int16				nActionLockCount;
 
 private:
-    String      GetInputString_Impl(BOOL bEnglish) const;
-    String      GetOutputString_Impl() const;
-    void        SetString_Impl(const String& rString, BOOL bInterpret, BOOL bEnglish);
-    double      GetValue_Impl() const;
-    void        SetValue_Impl(double fValue);
+    String		GetInputString_Impl(BOOL bEnglish) const;
+    String		GetOutputString_Impl() const;
+    void		SetString_Impl(const String& rString, BOOL bInterpret, BOOL bEnglish);
+    double		GetValue_Impl() const;
+    void		SetValue_Impl(double fValue);
     com::sun::star::table::CellContentType GetResultType_Impl();
 
 protected:
@@ -855,35 +855,35 @@ public:
     static const SfxItemPropertyMap* GetCellPropertyMap();
 
                             ScCellObj(ScDocShell* pDocSh, const ScAddress& rP);
-    virtual                 ~ScCellObj();
+    virtual					~ScCellObj();
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   acquire() throw();
-    virtual void SAL_CALL   release() throw();
+    virtual void SAL_CALL	acquire() throw();
+    virtual void SAL_CALL	release() throw();
 
-    virtual void            RefChanged();
+    virtual void			RefChanged();
 
-    SvxUnoText&             GetUnoText();
+    SvxUnoText&				GetUnoText();
 
                             // XML import needs to set results at formula cells,
                             // not meant for any other purpose.
-    void                    SetFormulaResultString( const ::rtl::OUString& rResult );
-    void                    SetFormulaResultDouble( double fResult );
+    void					SetFormulaResultString( const ::rtl::OUString& rResult );
+    void					SetFormulaResultDouble( double fResult );
     void                    SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
                                 const ::rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar );
-    const ScAddress&        GetPosition() const { return aCellPos; }
+    const ScAddress&		GetPosition() const { return aCellPos; }
 
                             // XText
-    virtual void SAL_CALL   insertTextContent( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	insertTextContent( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::text::XTextRange >& xRange,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::text::XTextContent >& xContent,
                                 sal_Bool bAbsorb )
                                     throw(::com::sun::star::lang::IllegalArgumentException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeTextContent( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	removeTextContent( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::text::XTextContent >& xContent )
                                     throw(::com::sun::star::container::NoSuchElementException,
                                             ::com::sun::star::uno::RuntimeException);
@@ -895,11 +895,11 @@ public:
                             createTextCursorByRange( const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::text::XTextRange >& aTextPosition )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   insertString( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	insertString( const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::text::XTextRange >& xRange,
                                         const ::rtl::OUString& aString, sal_Bool bAbsorb )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   insertControlCharacter( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	insertControlCharacter( const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::text::XTextRange >& xRange,
                                         sal_Int16 nControlCharacter, sal_Bool bAbsorb )
                                     throw(::com::sun::star::lang::IllegalArgumentException,
@@ -913,7 +913,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
                             getEnd() throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getString() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setString( const ::rtl::OUString& aString )
+    virtual void SAL_CALL	setString( const ::rtl::OUString& aString )
                                     throw(::com::sun::star::uno::RuntimeException);
 
                             // XEnumerationAccess
@@ -927,10 +927,10 @@ public:
 
                             // XCell
     virtual ::rtl::OUString SAL_CALL getFormula() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setFormula( const ::rtl::OUString& aFormula )
+    virtual void SAL_CALL	setFormula( const ::rtl::OUString& aFormula )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual double SAL_CALL getValue() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setValue( double nValue ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	setValue( double nValue ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::table::CellContentType SAL_CALL getType()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getError() throw(::com::sun::star::uno::RuntimeException);
@@ -977,13 +977,13 @@ public:
 
                             // XActionLockable
     virtual sal_Bool SAL_CALL isActionLocked() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addActionLock() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeActionLock() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setActionLocks( sal_Int16 nLock )
+    virtual void SAL_CALL	addActionLock() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	removeActionLock() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	setActionLocks( sal_Int16 nLock )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL resetActionLocks() throw(::com::sun::star::uno::RuntimeException);
 
-    static String       GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aPos);
+    static String		GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aPos);
 };
 
 
@@ -1007,13 +1007,13 @@ class ScTableSheetObj : public ScCellRangeObj,
                         public com::sun::star::sheet::XExternalSheetName,
                         public com::sun::star::document::XEventsSupplier
 {
-    friend class ScTableSheetsObj;      // fuer insertByName()
+    friend class ScTableSheetsObj;		// fuer insertByName()
 
 private:
-    const SfxItemPropertySet*       pSheetPropSet;
+    const SfxItemPropertySet*		pSheetPropSet;
 
-    SCTAB                   GetTab_Impl() const;
-    void                    PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges );
+    SCTAB					GetTab_Impl() const;
+    void					PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges );
 
 protected:
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
@@ -1027,15 +1027,15 @@ protected:
 
 public:
                             ScTableSheetObj(ScDocShell* pDocSh, SCTAB nTab);
-    virtual                 ~ScTableSheetObj();
+    virtual					~ScTableSheetObj();
 
-    void                    InitInsertSheet(ScDocShell* pDocSh, SCTAB nTab);
+    void					InitInsertSheet(ScDocShell* pDocSh, SCTAB nTab);
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   acquire() throw();
-    virtual void SAL_CALL   release() throw();
+    virtual void SAL_CALL	acquire() throw();
+    virtual void SAL_CALL	release() throw();
 
                             // XSpreadsheet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellCursor >
@@ -1066,7 +1066,7 @@ public:
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL	setName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XSheetPageBreak
@@ -1074,19 +1074,19 @@ public:
                             getColumnPageBreaks() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::TablePageBreakData > SAL_CALL
                             getRowPageBreaks() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeAllManualPageBreaks() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	removeAllManualPageBreaks() throw(::com::sun::star::uno::RuntimeException);
 
                             // XCellRangeMovement
-    virtual void SAL_CALL   insertCells( const ::com::sun::star::table::CellRangeAddress& aRange,
+    virtual void SAL_CALL	insertCells( const ::com::sun::star::table::CellRangeAddress& aRange,
                                 ::com::sun::star::sheet::CellInsertMode nMode )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeRange( const ::com::sun::star::table::CellRangeAddress& aRange,
+    virtual void SAL_CALL	removeRange( const ::com::sun::star::table::CellRangeAddress& aRange,
                                 ::com::sun::star::sheet::CellDeleteMode nMode )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   moveRange( const ::com::sun::star::table::CellAddress& aDestination,
+    virtual void SAL_CALL	moveRange( const ::com::sun::star::table::CellAddress& aDestination,
                                 const ::com::sun::star::table::CellRangeAddress& aSource )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   copyRange( const ::com::sun::star::table::CellAddress& aDestination,
+    virtual void SAL_CALL	copyRange( const ::com::sun::star::table::CellAddress& aDestination,
                                 const ::com::sun::star::table::CellRangeAddress& aSource )
                                     throw(::com::sun::star::uno::RuntimeException);
 
@@ -1117,34 +1117,34 @@ public:
                                 ::com::sun::star::table::CellRangeAddress >& aPrintAreas )
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getPrintTitleColumns() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPrintTitleColumns( sal_Bool bPrintTitleColumns )
+    virtual void SAL_CALL	setPrintTitleColumns( sal_Bool bPrintTitleColumns )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getTitleColumns()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setTitleColumns(
+    virtual void SAL_CALL	setTitleColumns(
                                 const ::com::sun::star::table::CellRangeAddress& aTitleColumns )
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getPrintTitleRows() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPrintTitleRows( sal_Bool bPrintTitleRows )
+    virtual void SAL_CALL	setPrintTitleRows( sal_Bool bPrintTitleRows )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getTitleRows()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setTitleRows(
+    virtual void SAL_CALL	setTitleRows(
                                 const ::com::sun::star::table::CellRangeAddress& aTitleRows )
                                     throw(::com::sun::star::uno::RuntimeException);
 
                             // XSheetLinkable
     virtual ::com::sun::star::sheet::SheetLinkMode SAL_CALL getLinkMode()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setLinkMode( ::com::sun::star::sheet::SheetLinkMode nLinkMode )
+    virtual void SAL_CALL	setLinkMode( ::com::sun::star::sheet::SheetLinkMode nLinkMode )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getLinkUrl() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setLinkUrl( const ::rtl::OUString& aLinkUrl )
+    virtual void SAL_CALL	setLinkUrl( const ::rtl::OUString& aLinkUrl )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getLinkSheetName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setLinkSheetName( const ::rtl::OUString& aLinkSheetName )
+    virtual void SAL_CALL	setLinkSheetName( const ::rtl::OUString& aLinkSheetName )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   link( const ::rtl::OUString& aUrl,
+    virtual void SAL_CALL	link( const ::rtl::OUString& aUrl,
                                 const ::rtl::OUString& aSheetName,
                                 const ::rtl::OUString& aFilterName,
                                 const ::rtl::OUString& aFilterOptions,
@@ -1163,30 +1163,30 @@ public:
     virtual sal_Bool SAL_CALL showErrors( const ::com::sun::star::table::CellAddress& aPosition )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL showInvalid() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   clearArrows() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	clearArrows() throw(::com::sun::star::uno::RuntimeException);
 
                             // XSheetOutline
-    virtual void SAL_CALL   group( const ::com::sun::star::table::CellRangeAddress& aRange,
+    virtual void SAL_CALL	group( const ::com::sun::star::table::CellRangeAddress& aRange,
                                 ::com::sun::star::table::TableOrientation nOrientation )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   ungroup( const ::com::sun::star::table::CellRangeAddress& aRange,
+    virtual void SAL_CALL	ungroup( const ::com::sun::star::table::CellRangeAddress& aRange,
                                 ::com::sun::star::table::TableOrientation nOrientation )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   autoOutline( const ::com::sun::star::table::CellRangeAddress& aRange )
+    virtual void SAL_CALL	autoOutline( const ::com::sun::star::table::CellRangeAddress& aRange )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   clearOutline() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   hideDetail( const ::com::sun::star::table::CellRangeAddress& aRange )
+    virtual void SAL_CALL	clearOutline() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	hideDetail( const ::com::sun::star::table::CellRangeAddress& aRange )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   showDetail( const ::com::sun::star::table::CellRangeAddress& aRange )
+    virtual void SAL_CALL	showDetail( const ::com::sun::star::table::CellRangeAddress& aRange )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   showLevel( sal_Int16 nLevel,
+    virtual void SAL_CALL	showLevel( sal_Int16 nLevel,
                                 ::com::sun::star::table::TableOrientation nOrientation )
                                     throw(::com::sun::star::uno::RuntimeException);
 
                             // XProtectable
-    virtual void SAL_CALL   protect( const ::rtl::OUString& aPassword )
+    virtual void SAL_CALL	protect( const ::rtl::OUString& aPassword )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   unprotect( const ::rtl::OUString& aPassword )
+    virtual void SAL_CALL	unprotect( const ::rtl::OUString& aPassword )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
                                     ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isProtected() throw(::com::sun::star::uno::RuntimeException);
@@ -1194,12 +1194,12 @@ public:
                             // XScenario
     virtual sal_Bool SAL_CALL getIsScenario() throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getScenarioComment() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setScenarioComment( const ::rtl::OUString& aScenarioComment )
+    virtual void SAL_CALL	setScenarioComment( const ::rtl::OUString& aScenarioComment )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addRanges( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	addRanges( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::table::CellRangeAddress >& aRanges )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   apply() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	apply() throw(::com::sun::star::uno::RuntimeException);
                             // XScenarioEnhanced
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress > SAL_CALL
                             getRanges(  )
@@ -1248,7 +1248,7 @@ class ScTableColumnObj : public ScCellRangeObj,
                          public com::sun::star::container::XNamed
 {
 private:
-    const SfxItemPropertySet*       pColPropSet;
+    const SfxItemPropertySet*		pColPropSet;
 
 protected:
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
@@ -1262,17 +1262,17 @@ protected:
 
 public:
                             ScTableColumnObj(ScDocShell* pDocSh, SCCOL nCol, SCTAB nTab);
-    virtual                 ~ScTableColumnObj();
+    virtual					~ScTableColumnObj();
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   acquire() throw();
-    virtual void SAL_CALL   release() throw();
+    virtual void SAL_CALL	acquire() throw();
+    virtual void SAL_CALL	release() throw();
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL	setName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XPropertySet ueberladen wegen Spalten-Properties
@@ -1299,7 +1299,7 @@ public:
 class ScTableRowObj : public ScCellRangeObj
 {
 private:
-    const SfxItemPropertySet*       pRowPropSet;
+    const SfxItemPropertySet*		pRowPropSet;
 
 protected:
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
@@ -1313,7 +1313,7 @@ protected:
 
 public:
                             ScTableRowObj(ScDocShell* pDocSh, SCROW nRow, SCTAB nTab);
-    virtual                 ~ScTableRowObj();
+    virtual					~ScTableRowObj();
 
                             // XPropertySet ueberladen wegen Zeilen-Properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
@@ -1336,14 +1336,14 @@ class ScCellsObj : public cppu::WeakImplHelper2<
                         public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
-    ScRangeList             aRanges;
+    ScDocShell*				pDocShell;
+    ScRangeList				aRanges;
 
 public:
                             ScCellsObj(ScDocShell* pDocSh, const ScRangeList& rR);
-    virtual                 ~ScCellsObj();
+    virtual					~ScCellsObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
@@ -1370,21 +1370,21 @@ class ScCellsEnumeration : public cppu::WeakImplHelper2<
                             public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
-    ScRangeList             aRanges;
-    ScAddress               aPos;
-    ScMarkData*             pMark;
-    BOOL                    bAtEnd;
+    ScDocShell*				pDocShell;
+    ScRangeList				aRanges;
+    ScAddress				aPos;
+    ScMarkData*				pMark;
+    BOOL					bAtEnd;
 
 private:
-    void                    Advance_Impl();
-    void                    CheckPos_Impl();
+    void					Advance_Impl();
+    void					CheckPos_Impl();
 
 public:
                             ScCellsEnumeration(ScDocShell* pDocSh, const ScRangeList& rR);
-    virtual                 ~ScCellsEnumeration();
+    virtual					~ScCellsEnumeration();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements() throw(::com::sun::star::uno::RuntimeException);
@@ -1409,17 +1409,17 @@ class ScCellFormatsObj : public cppu::WeakImplHelper3<
                         public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
-    ScRange                 aTotalRange;
+    ScDocShell*				pDocShell;
+    ScRange					aTotalRange;
 
 private:
-    ScCellRangeObj*         GetObjectByIndex_Impl(long nIndex) const;
+    ScCellRangeObj*			GetObjectByIndex_Impl(long nIndex) const;
 
 public:
                             ScCellFormatsObj(ScDocShell* pDocSh, const ScRange& rR);
-    virtual                 ~ScCellFormatsObj();
+    virtual					~ScCellFormatsObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
@@ -1453,22 +1453,22 @@ class ScCellFormatsEnumeration : public cppu::WeakImplHelper2<
                                  public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
-    SCTAB                   nTab;
-    ScAttrRectIterator*     pIter;
-    ScRange                 aNext;
-    BOOL                    bAtEnd;
-    BOOL                    bDirty;
+    ScDocShell*				pDocShell;
+    SCTAB					nTab;
+    ScAttrRectIterator*		pIter;
+    ScRange					aNext;
+    BOOL					bAtEnd;
+    BOOL					bDirty;
 
 private:
-    void                    Advance_Impl();
-    ScCellRangeObj*         NextObject_Impl();
+    void					Advance_Impl();
+    ScCellRangeObj*			NextObject_Impl();
 
 public:
                             ScCellFormatsEnumeration(ScDocShell* pDocSh, const ScRange& rR);
-    virtual                 ~ScCellFormatsEnumeration();
+    virtual					~ScCellFormatsEnumeration();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements() throw(::com::sun::star::uno::RuntimeException);
@@ -1495,18 +1495,18 @@ class ScUniqueCellFormatsObj : public cppu::WeakImplHelper3<
                         public SfxListener
 {
 private:
-    ScDocShell*                     pDocShell;
-    ScRange                         aTotalRange;
-    ScMyRangeLists                  aRangeLists;
+    ScDocShell*						pDocShell;
+    ScRange							aTotalRange;
+    ScMyRangeLists					aRangeLists;
 
 private:
-    void                            GetObjects_Impl();
+    void							GetObjects_Impl();
 
 public:
                             ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange& rR);
-    virtual                 ~ScUniqueCellFormatsObj();
+    virtual					~ScUniqueCellFormatsObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
@@ -1539,15 +1539,15 @@ class ScUniqueCellFormatsEnumeration : public cppu::WeakImplHelper2<
                                  public SfxListener
 {
 private:
-    ScMyRangeLists                  aRangeLists;
-    ScDocShell*                     pDocShell;
-    sal_Int32                       nCurrentPosition;
+    ScMyRangeLists					aRangeLists;
+    ScDocShell*						pDocShell;
+    sal_Int32						nCurrentPosition;
 
 public:
                             ScUniqueCellFormatsEnumeration(ScDocShell* pDocShell, const ScMyRangeLists& rRangeLists);
-    virtual                 ~ScUniqueCellFormatsEnumeration();
+    virtual					~ScUniqueCellFormatsEnumeration();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements() throw(::com::sun::star::uno::RuntimeException);

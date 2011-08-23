@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@
 class ScTabViewShell;
 class ScAccessibleDocument;
 
-/** @descr
+/**	@descr
         This base class provides an implementation of the
         <code>AccessibleCell</code> service.
 */
 class ScAccessibleCell
-    :   public  ScAccessibleCellBase,
+    :	public	ScAccessibleCellBase,
         public  accessibility::AccessibleStaticTextBase
 {
 public:
@@ -90,31 +90,31 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    /// Return the object's current bounding box relative to the desktop.
+    ///	Return the object's current bounding box relative to the desktop.
     virtual Rectangle GetBoundingBoxOnScreen(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the object's current bounding box relative to the parent object.
+    ///	Return the object's current bounding box relative to the parent object.
     virtual Rectangle GetBoundingBox(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
 public:
     ///=====  XAccessibleContext  ==============================================
 
-    /// Return the number of currently visible children.
+    ///	Return the number of currently visible children.
     // is overloaded to calculate this on demand
     virtual sal_Int32 SAL_CALL
         getAccessibleChildCount(void)
                     throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the specified child or NULL if index is invalid.
+    ///	Return the specified child or NULL if index is invalid.
     // is overloaded to calculate this on demand
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
-    /// Return the set of current states.
+    ///	Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
@@ -127,7 +127,7 @@ public:
 
     ///=====  XServiceInfo  ====================================================
 
-    /** Returns an identifier for the implementation of this object.
+    /**	Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName(void)

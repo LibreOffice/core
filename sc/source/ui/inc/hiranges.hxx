@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@
 
 struct ScHighlightEntry
 {
-    ScRange     aRef;
-    Color       aColor;
+    ScRange		aRef;
+    Color		aColor;
 
     ScHighlightEntry( const ScRange& rR, const Color& rC ) :
         aRef(rR), aColor(rC) {}
@@ -46,14 +46,14 @@ struct ScHighlightEntry
 
 class ScHighlightRanges
 {
-    List        aEntries;
+    List		aEntries;
 
 public:
             ScHighlightRanges();
             ~ScHighlightRanges();
 
-    ULONG   Count() const                       { return aEntries.Count(); }
-    void    Insert( ScHighlightEntry* pNew )    { aEntries.Insert(pNew, LIST_APPEND); }
+    ULONG	Count() const						{ return aEntries.Count(); }
+    void	Insert( ScHighlightEntry* pNew )	{ aEntries.Insert(pNew, LIST_APPEND); }
     ScHighlightEntry* GetObject( ULONG nIndex ) const
                         { return (ScHighlightEntry*)aEntries.GetObject(nIndex); }
 };

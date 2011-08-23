@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,42 +89,42 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
         bool            mbVisible;
         GrandTotalItem();
     };
-    ScDocument*     pDoc;
-    ScDPObject*     pDPObject;
-    ScDPSaveData*   pDPSave;
+    ScDocument*		pDoc;
+    ScDPObject*		pDPObject;
+    ScDPSaveData*	pDPSave;
     ScDPDimensionSaveData* pDPDimSaveData;
     GrandTotalItem  maRowGrandTotal;
     GrandTotalItem  maColGrandTotal;
-    rtl::OUString   sDataPilotTableName;
-    rtl::OUString   sApplicationData;
-    rtl::OUString   sGrandTotal;
-    rtl::OUString   sDatabaseName;
-    rtl::OUString   sSourceObject;
-    rtl::OUString   sServiceName;
-    rtl::OUString   sServiceSourceName;
-    rtl::OUString   sServiceSourceObject;
-    rtl::OUString   sServiceUsername;
-    rtl::OUString   sServicePassword;
-    rtl::OUString   sButtons;
-    ScRange         aSourceCellRangeAddress;
-    ScRange         aTargetRangeAddress;
-    ScRange         aFilterSourceRange;
-    ScAddress       aFilterOutputPosition;
-    ScQueryParam    aSourceQueryParam;
-    ScMySourceType  nSourceType;
+    rtl::OUString	sDataPilotTableName;
+    rtl::OUString	sApplicationData;
+    rtl::OUString	sGrandTotal;
+    rtl::OUString	sDatabaseName;
+    rtl::OUString	sSourceObject;
+    rtl::OUString	sServiceName;
+    rtl::OUString	sServiceSourceName;
+    rtl::OUString	sServiceSourceObject;
+    rtl::OUString	sServiceUsername;
+    rtl::OUString	sServicePassword;
+    rtl::OUString	sButtons;
+    ScRange			aSourceCellRangeAddress;
+    ScRange			aTargetRangeAddress;
+    ScRange			aFilterSourceRange;
+    ScAddress		aFilterOutputPosition;
+    ScQueryParam	aSourceQueryParam;
+    ScMySourceType	nSourceType;
     sal_uInt32      mnRowFieldCount;
     sal_uInt32      mnColFieldCount;
     sal_uInt32      mnPageFieldCount;
     sal_uInt32      mnDataFieldCount;
-    sal_Bool        bIsNative;
-    sal_Bool        bIgnoreEmptyRows;
-    sal_Bool        bIdentifyCategories;
-    sal_Bool        bUseRegularExpression;
-    sal_Bool        bIsCaseSensitive;
-    sal_Bool        bSkipDuplicates;
-    sal_Bool        bFilterCopyOutputData;
-    sal_Bool        bTargetRangeAddress;
-    sal_Bool        bSourceCellRange;
+    sal_Bool		bIsNative;
+    sal_Bool		bIgnoreEmptyRows;
+    sal_Bool		bIdentifyCategories;
+    sal_Bool		bUseRegularExpression;
+    sal_Bool		bIsCaseSensitive;
+    sal_Bool		bSkipDuplicates;
+    sal_Bool		bFilterCopyOutputData;
+    sal_Bool		bTargetRangeAddress;
+    sal_Bool		bSourceCellRange;
     sal_Bool        bShowFilter;
     sal_Bool        bDrillDown;
     sal_Bool        bHeaderGridLayout;
@@ -159,12 +159,12 @@ public:
     void SetServicePassword(const rtl::OUString& sValue) { sServicePassword = sValue; }
     void SetSourceCellRangeAddress(const ScRange& aValue) { aSourceCellRangeAddress = aValue; bSourceCellRange = sal_True; }
     void SetSourceQueryParam(const ScQueryParam& aValue) { aSourceQueryParam = aValue; }
-//  void SetFilterUseRegularExpressions(const sal_Bool bValue) { aSourceQueryParam.bRegExp = bValue; }
+//	void SetFilterUseRegularExpressions(const sal_Bool bValue) { aSourceQueryParam.bRegExp = bValue; }
     void SetFilterOutputPosition(const ScAddress& aValue) { aFilterOutputPosition = aValue; }
     void SetFilterCopyOutputData(const sal_Bool bValue) { bFilterCopyOutputData = bValue; }
     void SetFilterSourceRange(const ScRange& aValue) { aFilterSourceRange = aValue; }
-//  void SetFilterIsCaseSensitive(const sal_Bool bValue) { aSourceQueryParam.bCaseSens = bValue; }
-//  void SetFilterSkipDuplicates(const sal_Bool bValue) { aSourceQueryParam.bDuplicate = !bValue; }
+//	void SetFilterIsCaseSensitive(const sal_Bool bValue) { aSourceQueryParam.bCaseSens = bValue; }
+//	void SetFilterSkipDuplicates(const sal_Bool bValue) { aSourceQueryParam.bDuplicate = !bValue; }
     void AddDimension(ScDPSaveDimension* pDim, bool bHasHiddenMember);
     void AddGroupDim(const ScDPSaveNumGroupDimension& aNumGroupDim);
     void AddGroupDim(const ScDPSaveGroupDimension& aGroupDim);
@@ -173,7 +173,7 @@ public:
 
 class ScXMLDPSourceSQLContext : public SvXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
+    ScXMLDataPilotTableContext*	pDataPilotTable;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -198,7 +198,7 @@ public:
 
 class ScXMLDPSourceTableContext : public SvXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
+    ScXMLDataPilotTableContext*	pDataPilotTable;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -223,7 +223,7 @@ public:
 
 class ScXMLDPSourceQueryContext : public SvXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
+    ScXMLDataPilotTableContext*	pDataPilotTable;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -248,7 +248,7 @@ public:
 
 class ScXMLSourceServiceContext : public SvXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
+    ScXMLDataPilotTableContext*	pDataPilotTable;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -281,11 +281,11 @@ class ScXMLDataPilotGrandTotalContext : public SvXMLImportContext
     ::rtl::OUString             maDisplayName;
     Orientation                 meOrientation;
     bool                        mbVisible;
-
+    
 public:
-    ScXMLDataPilotGrandTotalContext(
+    ScXMLDataPilotGrandTotalContext( 
         ScXMLImport& rImport, USHORT nPrefix, const ::rtl::OUString& rLName,
-        const ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
         ScXMLDataPilotTableContext* pTableContext );
 
@@ -301,7 +301,7 @@ public:
 
 class ScXMLSourceCellRangeContext : public SvXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
+    ScXMLDataPilotTableContext*	pDataPilotTable;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -332,8 +332,8 @@ struct ScXMLDataPilotGroup
 
 class ScXMLDataPilotFieldContext : public SvXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
-    ScDPSaveDimension*          pDim;
+    ScXMLDataPilotTableContext*	pDataPilotTable;
+    ScDPSaveDimension*			pDim;
 
     ::std::vector<ScXMLDataPilotGroup> aGroups;
     rtl::OUString               sGroupSource;
@@ -342,11 +342,11 @@ class ScXMLDataPilotFieldContext : public SvXMLImportContext
     double                      fStart;
     double                      fEnd;
     double                      fStep;
-    sal_Int32                   nUsedHierarchy;
+    sal_Int32					nUsedHierarchy;
     sal_Int32                   nGroupPart;
-    sal_Int16                   nFunction;
-    sal_Int16                   nOrientation;
-    sal_Bool                    bShowEmpty:1;
+    sal_Int16					nFunction;
+    sal_Int16					nOrientation;
+    sal_Bool					bShowEmpty:1;
     sal_Bool                    bSelectedPage:1;
     sal_Bool                    bIsGroupField:1;
     sal_Bool                    bDateValue:1;
@@ -382,7 +382,7 @@ public:
     void SetAutoShowInfo(const com::sun::star::sheet::DataPilotFieldAutoShowInfo& aInfo) { if (pDim) pDim->SetAutoShowInfo(&aInfo); }
     void SetSortInfo(const com::sun::star::sheet::DataPilotFieldSortInfo& aInfo) { if (pDim) pDim->SetSortInfo(&aInfo); }
     void SetLayoutInfo(const com::sun::star::sheet::DataPilotFieldLayoutInfo& aInfo) { if (pDim) pDim->SetLayoutInfo(&aInfo); }
-    void SetGrouping(const rtl::OUString& rGroupSource, const double& rStart, const double& rEnd, const double& rStep,
+    void SetGrouping(const rtl::OUString& rGroupSource, const double& rStart, const double& rEnd, const double& rStep, 
         sal_Int32 nPart, sal_Bool bDate, sal_Bool bAutoSt, sal_Bool bAutoE)
     {
         bIsGroupField = sal_True;
@@ -418,7 +418,7 @@ public:
 
 class ScXMLDataPilotLevelContext : public SvXMLImportContext
 {
-    ScXMLDataPilotFieldContext* pDataPilotField;
+    ScXMLDataPilotFieldContext*	pDataPilotField;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -499,8 +499,8 @@ class ScXMLDataPilotSubTotalsContext : public SvXMLImportContext
 {
     ScXMLDataPilotFieldContext* pDataPilotField;
 
-    sal_Int16   nFunctionCount;
-    sal_uInt16* pFunctions;
+    sal_Int16	nFunctionCount;
+    sal_uInt16*	pFunctions;
     ::rtl::OUString maDisplayName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -530,7 +530,7 @@ public:
 
 class ScXMLDataPilotSubTotalContext : public SvXMLImportContext
 {
-    ScXMLDataPilotSubTotalsContext* pDataPilotSubTotals;
+    ScXMLDataPilotSubTotalsContext*	pDataPilotSubTotals;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -580,12 +580,12 @@ public:
 
 class ScXMLDataPilotMemberContext : public SvXMLImportContext
 {
-    ScXMLDataPilotFieldContext* pDataPilotField;
+    ScXMLDataPilotFieldContext*	pDataPilotField;
 
     rtl::OUString sName;
     rtl::OUString maDisplayName;
-    sal_Bool    bDisplay;
-    sal_Bool    bDisplayDetails;
+    sal_Bool	bDisplay;
+    sal_Bool	bDisplayDetails;
     sal_Bool    bHasName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -611,7 +611,7 @@ public:
 
 class ScXMLDataPilotGroupsContext : public SvXMLImportContext
 {
-    ScXMLDataPilotFieldContext* pDataPilotField;
+    ScXMLDataPilotFieldContext*	pDataPilotField;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -636,7 +636,7 @@ public:
 
 class ScXMLDataPilotGroupContext : public SvXMLImportContext
 {
-    ScXMLDataPilotFieldContext* pDataPilotField;
+    ScXMLDataPilotFieldContext*	pDataPilotField;
 
     rtl::OUString sName;
     ::std::vector<rtl::OUString> aMembers;
@@ -666,7 +666,7 @@ public:
 
 class ScXMLDataPilotGroupMemberContext : public SvXMLImportContext
 {
-    ScXMLDataPilotGroupContext* pDataPilotGroup;
+    ScXMLDataPilotGroupContext*	pDataPilotGroup;
 
     rtl::OUString sName;
 

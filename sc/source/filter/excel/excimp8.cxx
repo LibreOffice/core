@@ -131,7 +131,7 @@ ImportExcel8::~ImportExcel8()
 
 void ImportExcel8::Calccount( void )
 {
-    ScDocOptions    aOpt = pD->GetDocOptions();
+    ScDocOptions	aOpt = pD->GetDocOptions();
     aOpt.SetIterCount( aIn.ReaduInt16() );
     pD->SetDocOptions( aOpt );
 }
@@ -147,7 +147,7 @@ void ImportExcel8::Precision( void )
 
 void ImportExcel8::Delta( void )
 {
-    ScDocOptions    aOpt = pD->GetDocOptions();
+    ScDocOptions	aOpt = pD->GetDocOptions();
     aOpt.SetIterEps( aIn.ReadDouble() );
     pD->SetDocOptions( aOpt );
 }
@@ -155,7 +155,7 @@ void ImportExcel8::Delta( void )
 
 void ImportExcel8::Iteration( void )
 {
-    ScDocOptions    aOpt = pD->GetDocOptions();
+    ScDocOptions	aOpt = pD->GetDocOptions();
     aOpt.SetIter( aIn.ReaduInt16() == 1 );
     pD->SetDocOptions( aOpt );
 }
@@ -163,8 +163,8 @@ void ImportExcel8::Iteration( void )
 
 void ImportExcel8::Boundsheet( void )
 {
-    UINT8           nLen;
-    UINT16          nGrbit;
+    UINT8			nLen;
+    UINT16			nGrbit;
 
     aIn.DisableDecryption();
     maSheetOffsets.push_back( aIn.ReaduInt32() );
@@ -196,7 +196,7 @@ void ImportExcel8::Boundsheet( void )
 
 void ImportExcel8::Scenman( void )
 {
-    UINT16              nLastDispl;
+    UINT16				nLastDispl;
 
     aIn.Ignore( 4 );
     aIn >> nLastDispl;
@@ -302,7 +302,7 @@ void ImportExcel8::PostDocLoad( void )
     // Scenarien bemachen! ACHTUNG: Hier wird Tabellen-Anzahl im Dokument erhoeht!!
     if( !pD->IsClipboard() && aScenList.Count() )
     {
-        pD->UpdateChartListenerCollection();    // references in charts must be updated
+        pD->UpdateChartListenerCollection();	// references in charts must be updated
 
         aScenList.Apply( GetRoot() );
     }
@@ -415,8 +415,8 @@ void XclImpAutoFilterData::InsertQueryParam()
 {
     if( pCurrDBData && !bHasConflict )
     {
-        ScRange aAdvRange;
-        BOOL    bHasAdv = pCurrDBData->GetAdvancedQuerySource( aAdvRange );
+        ScRange	aAdvRange;
+        BOOL	bHasAdv = pCurrDBData->GetAdvancedQuerySource( aAdvRange );
         if( bHasAdv )
             pExcRoot->pIR->GetDoc().CreateQueryParam( aAdvRange.aStart.Col(),
                 aAdvRange.aStart.Row(), aAdvRange.aEnd.Col(), aAdvRange.aEnd.Row(),
@@ -474,8 +474,8 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
     BOOL            bTop10      = ::get_flag( nFlags, EXC_AFFLAG_TOP10 );
     BOOL            bTopOfTop10 = ::get_flag( nFlags, EXC_AFFLAG_TOP10TOP );
     BOOL            bPercent    = ::get_flag( nFlags, EXC_AFFLAG_TOP10PERC );
-    UINT16          nCntOfTop10 = nFlags >> 7;
-    SCSIZE          nCount      = aParam.GetEntryCount();
+    UINT16			nCntOfTop10	= nFlags >> 7;
+    SCSIZE			nCount		= aParam.GetEntryCount();
 
     if( bTop10 )
     {
@@ -496,12 +496,12 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
     }
     else
     {
-        UINT8   nE, nType, nOper, nBoolErr, nVal;
+        UINT8	nE, nType, nOper, nBoolErr, nVal;
         INT32   nRK;
-        double  fVal;
-        BOOL    bIgnore;
+        double	fVal;
+        BOOL	bIgnore;
 
-        UINT8   nStrLen[ 2 ]    = { 0, 0 };
+        UINT8	nStrLen[ 2 ]	= { 0, 0 };
         ScQueryEntry *pQueryEntries[ 2 ] = { NULL, NULL };
 
         for( nE = 0; nE < 2; nE++ )
@@ -658,7 +658,7 @@ void XclImpAutoFilterData::CreateScDBData( const BOOL bUseUnNamed )
     if( bActive || bCriteria)
     {
         ScDBCollection& rColl = pExcRoot->pIR->GetDatabaseRanges();
-        pCurrDBData = rColl.GetDBAtArea( Tab(), StartCol(), StartRow(), EndCol(), EndRow() );
+        pCurrDBData	= rColl.GetDBAtArea( Tab(), StartCol(), StartRow(), EndCol(), EndRow() );
         if( !pCurrDBData )
         {
             AmendAFName(bUseUnNamed);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,84 +46,84 @@ class LifeTimeManager
 {
 friend class LifeTimeGuard;
 protected:
-    mutable ::osl::Mutex                    m_aAccessMutex;
+    mutable ::osl::Mutex					m_aAccessMutex;
 public:
-OOO_DLLPUBLIC_CHARTTOOLS    LifeTimeManager( ::com::sun::star::lang::XComponent* pComponent, sal_Bool bLongLastingCallsCancelable = sal_False );
-OOO_DLLPUBLIC_CHARTTOOLS    virtual ~LifeTimeManager();
+OOO_DLLPUBLIC_CHARTTOOLS	LifeTimeManager( ::com::sun::star::lang::XComponent* pComponent, sal_Bool bLongLastingCallsCancelable = sal_False );
+OOO_DLLPUBLIC_CHARTTOOLS	virtual ~LifeTimeManager();
 
-OOO_DLLPUBLIC_CHARTTOOLS    bool        impl_isDisposed( bool bAssert=true );
-OOO_DLLPUBLIC_CHARTTOOLS    sal_Bool    dispose() throw(::com::sun::star::uno::RuntimeException);
+OOO_DLLPUBLIC_CHARTTOOLS	bool    	impl_isDisposed( bool bAssert=true );
+OOO_DLLPUBLIC_CHARTTOOLS	sal_Bool	dispose() throw(::com::sun::star::uno::RuntimeException);
 
 public:
-    ::cppu::OMultiTypeInterfaceContainerHelper      m_aListenerContainer;
+    ::cppu::OMultiTypeInterfaceContainerHelper		m_aListenerContainer;
 
 protected:
-    virtual sal_Bool    impl_canStartApiCall();
-    virtual void        impl_apiCallCountReachedNull(){}
+    virtual sal_Bool	impl_canStartApiCall();
+    virtual void		impl_apiCallCountReachedNull(){}
 
-    void        impl_registerApiCall(sal_Bool bLongLastingCall);
-    void        impl_unregisterApiCall(sal_Bool bLongLastingCall);
+    void		impl_registerApiCall(sal_Bool bLongLastingCall);
+    void		impl_unregisterApiCall(sal_Bool bLongLastingCall);
 
-    void        impl_init();
+    void		impl_init();
 
 protected:
-    ::com::sun::star::lang::XComponent*     m_pComponent;
+    ::com::sun::star::lang::XComponent*		m_pComponent;
 
-    ::osl::Condition        m_aNoAccessCountCondition;
-    sal_Int32 volatile      m_nAccessCount;
+    ::osl::Condition		m_aNoAccessCountCondition;
+    sal_Int32 volatile		m_nAccessCount;
 
-    sal_Bool volatile       m_bDisposed;
-    sal_Bool volatile       m_bInDispose;
+    sal_Bool volatile		m_bDisposed;
+    sal_Bool volatile		m_bInDispose;
 
     //
-    sal_Bool                m_bLongLastingCallsCancelable;
-    ::osl::Condition        m_aNoLongLastingCallCountCondition;
-    sal_Int32 volatile      m_nLongLastingCallCount;
+    sal_Bool				m_bLongLastingCallsCancelable;
+    ::osl::Condition		m_aNoLongLastingCallCountCondition;
+    sal_Int32 volatile		m_nLongLastingCallCount;
 };
 
 class CloseableLifeTimeManager : public LifeTimeManager
 {
 protected:
-    ::com::sun::star::util::XCloseable*         m_pCloseable;
+    ::com::sun::star::util::XCloseable*			m_pCloseable;
 
-    ::osl::Condition        m_aEndTryClosingCondition;
-    sal_Bool volatile       m_bClosed;
-    sal_Bool volatile       m_bInTryClose;
+    ::osl::Condition		m_aEndTryClosingCondition;
+    sal_Bool volatile		m_bClosed;
+    sal_Bool volatile		m_bInTryClose;
     //the ownership between model and controller is not clear at first
     //each controller might consider him as owner of the model first
     //at start the model is not considered as owner of itself
-    sal_Bool volatile       m_bOwnership;
+    sal_Bool volatile		m_bOwnership;
     //with a XCloseable::close call and during XCloseListener::queryClosing
     //the ownership can be regulated more explicit,
     //if so the ownership is considered to be well known
-    sal_Bool volatile       m_bOwnershipIsWellKnown;
+    sal_Bool volatile		m_bOwnershipIsWellKnown;
 
 public:
-OOO_DLLPUBLIC_CHARTTOOLS    CloseableLifeTimeManager( ::com::sun::star::util::XCloseable* pCloseable
+OOO_DLLPUBLIC_CHARTTOOLS	CloseableLifeTimeManager( ::com::sun::star::util::XCloseable* pCloseable
         , ::com::sun::star::lang::XComponent* pComponent
         , sal_Bool bLongLastingCallsCancelable = sal_False );
-OOO_DLLPUBLIC_CHARTTOOLS    virtual ~CloseableLifeTimeManager();
+OOO_DLLPUBLIC_CHARTTOOLS	virtual ~CloseableLifeTimeManager();
 
-OOO_DLLPUBLIC_CHARTTOOLS    bool        impl_isDisposedOrClosed( bool bAssert=true );
-OOO_DLLPUBLIC_CHARTTOOLS    sal_Bool    g_close_startTryClose(sal_Bool bDeliverOwnership)
+OOO_DLLPUBLIC_CHARTTOOLS	bool    	impl_isDisposedOrClosed( bool bAssert=true );
+OOO_DLLPUBLIC_CHARTTOOLS	sal_Bool	g_close_startTryClose(sal_Bool bDeliverOwnership)
                     throw ( ::com::sun::star::uno::Exception );
-OOO_DLLPUBLIC_CHARTTOOLS    sal_Bool    g_close_isNeedToCancelLongLastingCalls( sal_Bool bDeliverOwnership, ::com::sun::star::util::CloseVetoException& ex )
+OOO_DLLPUBLIC_CHARTTOOLS	sal_Bool	g_close_isNeedToCancelLongLastingCalls( sal_Bool bDeliverOwnership, ::com::sun::star::util::CloseVetoException& ex )
                     throw ( ::com::sun::star::util::CloseVetoException );
-OOO_DLLPUBLIC_CHARTTOOLS    void        g_close_endTryClose(sal_Bool bDeliverOwnership, sal_Bool bMyVeto );
-OOO_DLLPUBLIC_CHARTTOOLS    void        g_close_endTryClose_doClose();
-OOO_DLLPUBLIC_CHARTTOOLS    sal_Bool    g_addCloseListener( const ::com::sun::star::uno::Reference<
+OOO_DLLPUBLIC_CHARTTOOLS	void		g_close_endTryClose(sal_Bool bDeliverOwnership, sal_Bool bMyVeto );
+OOO_DLLPUBLIC_CHARTTOOLS	void		g_close_endTryClose_doClose();
+OOO_DLLPUBLIC_CHARTTOOLS	sal_Bool	g_addCloseListener( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::util::XCloseListener > & xListener )
                     throw(::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual sal_Bool    impl_canStartApiCall();
-    virtual void        impl_apiCallCountReachedNull();
+    virtual sal_Bool	impl_canStartApiCall();
+    virtual void		impl_apiCallCountReachedNull();
 
-    void        impl_setOwnership( sal_Bool bDeliverOwnership, sal_Bool bMyVeto );
-    sal_Bool    impl_shouldCloseAtNextChance();
-    void        impl_doClose();
+    void		impl_setOwnership( sal_Bool bDeliverOwnership, sal_Bool bMyVeto );
+    sal_Bool	impl_shouldCloseAtNextChance();
+    void		impl_doClose();
 
-    void        impl_init()
+    void		impl_init()
     {
         m_bClosed = sal_False;
         m_bInTryClose = sal_False;
@@ -215,9 +215,9 @@ public:
 
 private:
     osl::ClearableMutexGuard m_guard;
-    LifeTimeManager&    m_rManager;
-    sal_Bool            m_bCallRegistered;
-    sal_Bool            m_bLongLastingCallRegistered;
+    LifeTimeManager&	m_rManager;
+    sal_Bool			m_bCallRegistered;
+    sal_Bool			m_bLongLastingCallRegistered;
 
 private:
     // these make no sense

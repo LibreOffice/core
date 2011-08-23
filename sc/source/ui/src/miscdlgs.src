@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -662,7 +662,7 @@ ModalDialog RID_SCDLG_MTRINPUT
     };
     MetricField ED_VALUE
     {
-         // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
+         //	HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         HelpId = HID_SC_MTRIN_VAL ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 6 ) ;
@@ -673,7 +673,7 @@ ModalDialog RID_SCDLG_MTRINPUT
     };
     CheckBox BTN_DEFVAL
     {
-         // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
+         //	HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 70 , 24 ) ;
         Size = MAP_APPFONT ( 58 , 10 ) ;
@@ -728,7 +728,7 @@ ModalDialog RID_SCDLG_COL_MAN
     };
     CheckBox BTN_DEFVAL
     {
-         // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
+         //	HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 70 , 24 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
@@ -773,7 +773,7 @@ ModalDialog RID_SCDLG_COL_OPT
     };
     MetricField ED_VALUE
     {
-         // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
+         //	HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 6 ) ;
         Size = MAP_APPFONT ( 70 , 12 ) ;
@@ -783,7 +783,7 @@ ModalDialog RID_SCDLG_COL_OPT
     };
     CheckBox BTN_DEFVAL
     {
-         // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
+         //	HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 70 , 24 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
@@ -828,7 +828,7 @@ ModalDialog RID_SCDLG_ROW_MAN
     };
     MetricField ED_VALUE
     {
-         // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
+         //	HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 6 ) ;
         Size = MAP_APPFONT ( 70 , 12 ) ;
@@ -838,7 +838,7 @@ ModalDialog RID_SCDLG_ROW_MAN
     };
     CheckBox BTN_DEFVAL
     {
-         // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
+         //	HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 70 , 24 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
@@ -892,7 +892,7 @@ ModalDialog RID_SCDLG_ROW_OPT
     };
     CheckBox BTN_DEFVAL
     {
-         // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
+         //	HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 70 , 24 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
@@ -901,8 +901,8 @@ ModalDialog RID_SCDLG_ROW_OPT
 };
 
 
- // RID_SCDLG_SELENTRY als Basis fuer RID_SCDLG_SELECTDB und RID_SCDLG_SHOW_TAB
- // gibt es nicht mehr, weil die beiden jetzt unterschiedlich sind
+ //	RID_SCDLG_SELENTRY als Basis fuer RID_SCDLG_SELECTDB und RID_SCDLG_SHOW_TAB
+ //	gibt es nicht mehr, weil die beiden jetzt unterschiedlich sind
 
 ModalDialog RID_SCDLG_SELECTDB
 {
@@ -934,7 +934,7 @@ ModalDialog RID_SCDLG_SELECTDB
     };
     ListBox LB_ENTRYLIST
     {
-         // HelpID aus Zeiten, als noch abgeleitet wurde
+         //	HelpID aus Zeiten, als noch abgeleitet wurde
         HelpId = HID_SC_SELENTRY_LIST ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
@@ -1216,7 +1216,7 @@ ModalDialog RID_SCDLG_GROUP
     };
     RadioButton BTN_GROUP_ROWS
     {
-         // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
+         //	HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         HelpId = HID_SC_GROUP_ROWS ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 71 , 10 ) ;
@@ -1225,7 +1225,7 @@ ModalDialog RID_SCDLG_GROUP
     };
     RadioButton BTN_GROUP_COLS
     {
-         // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
+         //	HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         HelpId = HID_SC_GROUP_COLS ;
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 71 , 10 ) ;
@@ -1249,11 +1249,11 @@ ModalDialog RID_SCDLG_GROUP
     Text [ en-US ] = "Group" ;
 };
 
- // Ableitungen
+ //	Ableitungen
 ModalDialog RID_SCDLG_GRP_MAKE < RID_SCDLG_GROUP { HelpId = SID_OUTLINE_MAKE ; };
 ModalDialog RID_SCDLG_GRP_KILL < RID_SCDLG_GROUP { HelpId = SID_OUTLINE_REMOVE ; };
 
- // RID_SCDLG_COLORROW wird nur in der Optionen-Sortierlisten-Seite benutzt
+ //	RID_SCDLG_COLORROW wird nur in der Optionen-Sortierlisten-Seite benutzt
 
 ModalDialog RID_SCDLG_COLORROW
 {

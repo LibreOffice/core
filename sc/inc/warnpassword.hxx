@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,13 +31,13 @@
 
 
 
-class SfxMedium;
+class SfxMedium; 
 /** Static API helper functions. */
-class ScWarnPassword
+class ScWarnPassword 
 {
 public:
-    /** Opens a query warning dialog.
-     @descr Pop up Query on export  with a choice of yes/no if a
+    /** Opens a query warning dialog. 
+     @descr Pop up Query on export  with a choice of yes/no if a 
      an encrypted password is imported.
      @return true if yes and false if no. default to true.
    */

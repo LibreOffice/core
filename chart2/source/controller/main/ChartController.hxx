@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -140,16 +140,16 @@ class DrawViewWrapper;
 class ViewElementListProvider;
 class ReferenceSizeProvider;
 
-class ChartController   : public ::cppu::WeakImplHelper12 <
-         ::com::sun::star::frame::XController   //comprehends XComponent (required interface)
-        ,::com::sun::star::frame::XDispatchProvider     //(required interface)
-        ,::com::sun::star::view::XSelectionSupplier     //(optional interface)
-        ,::com::sun::star::ui::XContextMenuInterception //(optional interface)
-        ,::com::sun::star::util::XCloseListener         //(needed for communication with XModel)
+class ChartController	: public ::cppu::WeakImplHelper12 <
+         ::com::sun::star::frame::XController	//comprehends XComponent (required interface)
+        ,::com::sun::star::frame::XDispatchProvider		//(required interface)
+        ,::com::sun::star::view::XSelectionSupplier		//(optional interface)
+        ,::com::sun::star::ui::XContextMenuInterception	//(optional interface)
+        ,::com::sun::star::util::XCloseListener			//(needed for communication with XModel)
         ,::com::sun::star::lang::XServiceInfo
-    //  ,public ::com::sun::star::uno::XWeak            // implemented by WeakImplHelper(optional interface)
-    //  ,public ::com::sun::star::uno::XInterface       // implemented by WeakImplHelper(optional interface)
-    //  ,public ::com::sun::star::lang::XTypeProvider   // implemented by WeakImplHelper
+    //	,public ::com::sun::star::uno::XWeak			// implemented by WeakImplHelper(optional interface)
+    //	,public ::com::sun::star::uno::XInterface		// implemented by WeakImplHelper(optional interface)
+    //	,public ::com::sun::star::lang::XTypeProvider	// implemented by WeakImplHelper
         ,::com::sun::star::frame::XDispatch
         ,::com::sun::star::awt::XWindow //this is the Window Controller part of this Controller, that will be given to a Frame via setComponent
         ,::com::sun::star::lang::XMultiServiceFactory
@@ -189,13 +189,13 @@ public:
                             throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SAL_CALL
-        getFrame()          throw (::com::sun::star::uno::RuntimeException);
+        getFrame()			throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SAL_CALL
-        getModel()          throw (::com::sun::star::uno::RuntimeException);
+        getModel()			throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Any SAL_CALL
-        getViewData()       throw (::com::sun::star::uno::RuntimeException);
+        getViewData()		throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
         restoreViewData( const ::com::sun::star::uno::Any& rValue )
@@ -209,7 +209,7 @@ public:
     // ::com::sun::star::lang::XComponent (base of XController)
     //-----------------------------------------------------------------
     virtual void SAL_CALL
-        dispose()           throw (::com::sun::star::uno::RuntimeException);
+        dispose()			throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
         addEventListener( const ::com::sun::star::uno::Reference<
@@ -245,7 +245,7 @@ public:
         select( const ::com::sun::star::uno::Any& rSelection )
                             throw ( com::sun::star::lang::IllegalArgumentException );
 
-    virtual ::com::sun::star::uno::Any  SAL_CALL
+    virtual ::com::sun::star::uno::Any	SAL_CALL
         getSelection() throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
@@ -339,7 +339,7 @@ public:
                     throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
-        setFocus()  throw (::com::sun::star::uno::RuntimeException);
+        setFocus()	throw (::com::sun::star::uno::RuntimeException);
 
     //----------------
     virtual void SAL_CALL
@@ -504,7 +504,7 @@ private:
             void acquire();
             void release();
         private:
-            sal_Int32 volatile      m_nRefCount;
+            sal_Int32 volatile		m_nRefCount;
     };
     class TheModel : public RefCountable
     {
@@ -514,24 +514,24 @@ private:
 
             virtual ~TheModel();
 
-            void        SetOwnerShip( sal_Bool bGetsOwnership );
-            void        addListener( ChartController* pController );
-            void        removeListener(  ChartController* pController );
-            void        tryTermination();
+            void		SetOwnerShip( sal_Bool bGetsOwnership );
+            void		addListener( ChartController* pController );
+            void		removeListener(  ChartController* pController );
+            void		tryTermination();
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                         getModel() { return m_xModel;}
 
         private:
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >     m_xModel;
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >  m_xCloseable;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >		m_xModel;
+            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >	m_xCloseable;
 
             //the ownership between model and controller is not clear at first
             //each controller might consider himself as owner of the model first
-            sal_Bool volatile       m_bOwnership;
+            sal_Bool volatile		m_bOwnership;
             //with a XCloseable::close call and during XCloseListener::queryClosing
             //the ownership can be regulated more explicit,
             //if so the ownership is considered to be well known
-            sal_Bool volatile       m_bOwnershipIsWellKnown;
+            sal_Bool volatile		m_bOwnershipIsWellKnown;
     };
     class TheModelRef
     {
@@ -544,31 +544,31 @@ private:
             sal_Bool is() const;
                 TheModel* operator->() const { return m_pTheModel; }
         private:
-            TheModel*               m_pTheModel;
-            mutable ::osl::Mutex&   m_rModelMutex;
+            TheModel*				m_pTheModel;
+            mutable ::osl::Mutex&	m_rModelMutex;
     };
 
 private:
-    mutable ::apphelper::LifeTimeManager    m_aLifeTimeManager;
+    mutable ::apphelper::LifeTimeManager	m_aLifeTimeManager;
 
-    mutable ::osl::Mutex    m_aControllerMutex;
-    sal_Bool volatile       m_bSuspended;
-    sal_Bool volatile       m_bCanClose;
+    mutable ::osl::Mutex	m_aControllerMutex;
+    sal_Bool volatile		m_bSuspended;
+    sal_Bool volatile		m_bCanClose;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>        m_xCC;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>		   m_xCC;
 
     //model
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >     m_xFrame;
-    mutable ::osl::Mutex    m_aModelMutex;
-    TheModelRef             m_aModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >		m_xFrame;
+    mutable ::osl::Mutex	m_aModelMutex;
+    TheModelRef				m_aModel;
 
     //view
     ChartWindow*        m_pChartWindow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xViewWindow;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >		m_xViewWindow;
     ::com::sun::star::uno::Reference<
                        ::com::sun::star::uno::XInterface >                  m_xChartView;
     ::boost::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
-    DrawViewWrapper*    m_pDrawViewWrapper;
+    DrawViewWrapper*	m_pDrawViewWrapper;
 
     Selection           m_aSelection;
     SdrDragMode         m_eDragMode;
@@ -597,7 +597,7 @@ private:
 private:
     //private methods
 
-    sal_Bool            impl_isDisposedOrSuspended() const;
+    sal_Bool	        impl_isDisposedOrSuspended() const;
     ::std::auto_ptr< ReferenceSizeProvider > impl_createReferenceSizeProvider();
     void                impl_adaptDataSeriesAutoResize();
 
@@ -709,7 +709,7 @@ private:
     ::std::set< ::rtl::OUString > impl_getAvailableCommands();
 
     /** Creates a helper accesibility class that must be initialized via XInitialization.  For
-        parameters see
+        parameters see 
 
         The returned object should not be used directly.  Instead a proxy object
         should use this helper to retrieve its children and add them to its own

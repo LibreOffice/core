@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,19 +42,19 @@ class ScDataPilotSourceTypeDlg : public ModalDialog
 {
 private:
     FixedLine       aFlFrame;
-    RadioButton     aBtnSelection;
-    RadioButton     aBtnDatabase;
-    RadioButton     aBtnExternal;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    RadioButton		aBtnSelection;
+    RadioButton		aBtnDatabase;
+    RadioButton		aBtnExternal;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 
 public:
             ScDataPilotSourceTypeDlg( Window* pParent, BOOL bEnableExternal );
             ~ScDataPilotSourceTypeDlg();
 
-    BOOL    IsDatabase() const;
-    BOOL    IsExternal() const;
+    BOOL	IsDatabase() const;
+    BOOL	IsExternal() const;
 };
 
 
@@ -62,30 +62,30 @@ class ScDataPilotServiceDlg : public ModalDialog
 {
 private:
     FixedLine       aFlFrame;
-    FixedText       aFtService;
-    ListBox         aLbService;
-    FixedText       aFtSource;
-    Edit            aEdSource;
-    FixedText       aFtName;
-    Edit            aEdName;
-    FixedText       aFtUser;
-    Edit            aEdUser;
-    FixedText       aFtPasswd;
-    Edit            aEdPasswd;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    FixedText		aFtService;
+    ListBox			aLbService;
+    FixedText		aFtSource;
+    Edit			aEdSource;
+    FixedText		aFtName;
+    Edit			aEdName;
+    FixedText		aFtUser;
+    Edit			aEdUser;
+    FixedText		aFtPasswd;
+    Edit			aEdPasswd;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 
 public:
             ScDataPilotServiceDlg( Window* pParent,
                     const com::sun::star::uno::Sequence<rtl::OUString>& rServices );
             ~ScDataPilotServiceDlg();
 
-    String  GetServiceName() const;
-    String  GetParSource() const;
-    String  GetParName() const;
-    String  GetParUser() const;
-    String  GetParPass() const;
+    String	GetServiceName() const;
+    String	GetParSource() const;
+    String	GetParName() const;
+    String	GetParUser() const;
+    String	GetParPass() const;
 };
 
 

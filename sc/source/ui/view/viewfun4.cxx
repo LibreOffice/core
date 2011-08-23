@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -207,7 +207,7 @@ void ScViewFunc::DoRefConversion( BOOL bRecord )
         aMarkRange = ScRange( GetViewData()->GetCurX(),
             GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     }
-    ScEditableTester aTester( pDoc, aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
+    ScEditableTester aTester( pDoc, aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), 
                             aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(),rMark );
     if (!aTester.IsEditable())
     {
@@ -226,7 +226,7 @@ void ScViewFunc::DoRefConversion( BOOL bRecord )
         pUndoDoc->InitUndo( pDoc, nTab, nTab );
 
         if ( rMark.GetSelectCount() > 1 )
-        {
+        {           
             for (SCTAB i=0; i<nTabCount; i++)
                 if ( rMark.GetTableSelect(i) && i != nTab )
                     pUndoDoc->AddUndoTab( i, i );
@@ -264,8 +264,8 @@ void ScViewFunc::DoRefConversion( BOOL bRecord )
                         if (aFinder.GetFound())
                         {
                             ScAddress aPos = ((ScFormulaCell*)pCell)->aPos;
-                            String aNew = aFinder.GetText();
-                            ScCompiler aComp( pDoc, aPos);
+                            String aNew = aFinder.GetText(); 
+                            ScCompiler aComp( pDoc, aPos);           
                             aComp.SetGrammar(pDoc->GetGrammar());
                             ScTokenArray* pArr = aComp.CompileString( aNew );
                             ScFormulaCell* pNewCell = new ScFormulaCell( pDoc, aPos,
@@ -286,7 +286,7 @@ void ScViewFunc::DoRefConversion( BOOL bRecord )
         pRedoDoc->InitUndo( pDoc, nTab, nTab );
 
         if ( rMark.GetSelectCount() > 1 )
-        {
+        {           
             for (SCTAB i=0; i<nTabCount; i++)
                 if ( rMark.GetTableSelect(i) && i != nTab )
                     pRedoDoc->AddUndoTab( i, i );
@@ -309,7 +309,7 @@ void ScViewFunc::DoRefConversion( BOOL bRecord )
     if (!bOk)
         ErrorMessage(STR_ERR_NOREF);
 }
-//  Thesaurus - Undo ok
+//	Thesaurus - Undo ok
 void ScViewFunc::DoThesaurus( BOOL bRecord )
 {
     SCCOL nCol;
@@ -331,12 +331,12 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
     BOOL bIsEditMode = GetViewData()->HasEditView(eWhich);
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
-    if (bIsEditMode)                                            // Edit-Mode aktiv
+    if (bIsEditMode)											// Edit-Mode aktiv
     {
         GetViewData()->GetEditView(eWhich, pEditView, nCol, nRow);
         pEditSel = new ESelection(pEditView->GetSelection());
         SC_MOD()->InputEnterHandler();
-        GetViewData()->GetBindings().Update();          // sonst kommt der Sfx durcheinander...
+        GetViewData()->GetBindings().Update();			// sonst kommt der Sfx durcheinander...
     }
     else
     {
@@ -361,12 +361,12 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
 
     com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1>
                                         xSpeller = LinguMgr::GetSpellChecker();
-    //! if (...)  // thesaurus not available
-    //! {
-    //!     ErrorMessage(STR_EXPORT_ASCII_WARNING);
-    //!     delete pEditSel;
-    //!     return;
-    //! }
+    //!	if (...)  // thesaurus not available
+    //!	{
+    //!		ErrorMessage(STR_EXPORT_ASCII_WARNING);
+    //!		delete pEditSel;
+    //!		return;
+    //!	}
 
     pThesaurusEngine = new ScEditEngineDefaulter( pDoc->GetEnginePool() );
     pThesaurusEngine->SetEditTextObjectPool( pDoc->GetEditPool() );
@@ -374,7 +374,7 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
     pThesaurusEngine->SetSpeller(xSpeller);
     MakeEditView(pThesaurusEngine, nCol, nRow );
     const ScPatternAttr* pPattern = NULL;
-    SfxItemSet* pEditDefaults = new SfxItemSet(pThesaurusEngine->GetEmptyItemSet());
+    SfxItemSet*	pEditDefaults = new SfxItemSet(pThesaurusEngine->GetEmptyItemSet());
     pPattern = pDoc->GetPattern(nCol, nRow, nTab);
     if (pPattern )
     {
@@ -410,12 +410,12 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
 
     pThesaurusEngine->ClearModifyFlag();
 
-    //  language is now in EditEngine attributes -> no longer passed to StartThesaurus
+    //	language is now in EditEngine attributes -> no longer passed to StartThesaurus
 
     eState = pEditView->StartThesaurus();
     DBG_ASSERT(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
 
-    if (eState == EE_SPELL_ERRORFOUND)              // sollte spaeter durch Wrapper geschehen!
+    if (eState == EE_SPELL_ERRORFOUND)				// sollte spaeter durch Wrapper geschehen!
     {
         LanguageType eLnge = ScViewUtil::GetEffLanguage( pDoc, ScAddress( nCol, nRow, nTab ) );
         SvtLanguageTable aLangTab;
@@ -440,7 +440,7 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
             pDoc->SetString(nCol, nRow, nTab, sNewString);
         }
 // erack! it's broadcasted
-//      pDoc->SetDirty();
+//		pDoc->SetDirty();
         pDocSh->SetDocumentModified();
         if (bRecord)
         {
@@ -604,7 +604,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bR
 }
 
 // Pasten von FORMAT_FILE-Items
-//  wird nicht direkt aus Drop aufgerufen, sondern asynchron -> Dialoge sind erlaubt
+//	wird nicht direkt aus Drop aufgerufen, sondern asynchron -> Dialoge sind erlaubt
 
 BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
 {
@@ -621,7 +621,7 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
                                 &aMediaURLItem, 0L ) );
     }
 
-    if (!bLink)     // bei bLink nur Grafik oder URL
+    if (!bLink)		// bei bLink nur Grafik oder URL
     {
         // 1. Kann ich die Datei oeffnen?
         const SfxFilter* pFlt = NULL;
@@ -657,7 +657,7 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
     Graphic aGraphic;
     GraphicFilter* pGraphicFilter = GraphicFilter::GetGraphicFilter();
 
-//      GraphicProgress aGraphicProgress(&aGraphicFilter);
+//		GraphicProgress aGraphicProgress(&aGraphicFilter);
 
     if (!pGraphicFilter->ImportGraphic(aGraphic, aURL,
             GRFILTER_FORMAT_DONTKNOW, &nFilterFormat ))
@@ -674,7 +674,7 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
         }
     }
 
-    if (bLink)                      // bei bLink alles, was nicht Grafik ist, als URL
+    if (bLink)						// bei bLink alles, was nicht Grafik ist, als URL
     {
         Rectangle aRect( rPos, Size(0,0) );
         ScRange aRange = GetViewData()->GetDocument()->
@@ -733,7 +733,7 @@ void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
             nPosX >= pViewData->GetEditStartCol() && nPosX <= pViewData->GetEditEndCol() &&
             nPosY >= pViewData->GetEditStartRow() && nPosY <= pViewData->GetEditEndRow() )
     {
-        //  in die gerade editierte Zelle einfuegen
+        //	in die gerade editierte Zelle einfuegen
 
         String aTargetFrame;
         if (pTarget)
@@ -742,7 +742,7 @@ void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
         return;
     }
 
-    //  in nicht editierte Zelle einfuegen
+    //	in nicht editierte Zelle einfuegen
 
     ScDocument* pDoc = GetViewData()->GetDocument();
     SCTAB nTab = GetViewData()->GetTabNo();
@@ -774,10 +774,10 @@ void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
 
     if ( bTryReplace && HasBookmarkAtCursor( NULL ) )
     {
-        //  if called from hyperlink slot and cell contains only a URL,
-        //  replace old URL with new one
+        //	if called from hyperlink slot and cell contains only a URL,
+        //	replace old URL with new one
 
-        aInsSel = ESelection( 0, 0, 0, 1 );     // replace first character (field)
+        aInsSel = ESelection( 0, 0, 0, 1 );		// replace first character (field)
     }
 
     SvxURLField aField( rURL, rDescription, SVXURLFORMAT_APPDEFAULT );

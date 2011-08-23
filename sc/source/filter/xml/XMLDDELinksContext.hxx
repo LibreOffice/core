@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,15 +67,15 @@ typedef std::list<ScDDELinkCell> ScDDELinkCells;
 
 class ScXMLDDELinkContext : public SvXMLImportContext
 {
-    ScDDELinkCells  aDDELinkTable;
-    ScDDELinkCells  aDDELinkRow;
-    rtl::OUString   sApplication;
-    rtl::OUString   sTopic;
-    rtl::OUString   sItem;
-    sal_Int32       nPosition;
-    sal_Int32       nColumns;
-    sal_Int32       nRows;
-    sal_uInt8       nMode;
+    ScDDELinkCells	aDDELinkTable;
+    ScDDELinkCells	aDDELinkRow;
+    rtl::OUString	sApplication;
+    rtl::OUString	sTopic;
+    rtl::OUString	sItem;
+    sal_Int32		nPosition;
+    sal_Int32		nColumns;
+    sal_Int32		nRows;
+    sal_uInt8		nMode;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -176,8 +176,8 @@ public:
 
 class ScXMLDDERowContext : public SvXMLImportContext
 {
-    ScXMLDDELinkContext*    pDDELink;
-    sal_Int32               nRows;
+    ScXMLDDELinkContext*	pDDELink;
+    sal_Int32 				nRows;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -200,12 +200,12 @@ public:
 
 class ScXMLDDECellContext : public SvXMLImportContext
 {
-    rtl::OUString   sValue;
-    double          fValue;
-    sal_Int32       nCells;
-    sal_Bool        bString;
-    sal_Bool        bString2;
-    sal_Bool        bEmpty;
+    rtl::OUString	sValue;
+    double			fValue;
+    sal_Int32		nCells;
+    sal_Bool		bString;
+    sal_Bool		bString2;
+    sal_Bool		bEmpty;
 
     ScXMLDDELinkContext* pDDELink;
 

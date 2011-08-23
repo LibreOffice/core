@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,34 +57,34 @@ const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
 {
     static SfxItemPropertyMapEntry aDocDefaultsMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),  ATTR_FONT,          &getCppuType((sal_Int16*)0),        0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),        0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),        0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),        0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),        0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),        0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),    0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),    0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),    0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),        0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),        0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),        0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),    0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),    0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),    0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),   ATTR_FONT_LANGUAGE, &getCppuType((lang::Locale*)0),     0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),   ATTR_CJK_FONT_LANGUAGE, &getCppuType((lang::Locale*)0), 0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),   ATTR_CTL_FONT_LANGUAGE, &getCppuType((lang::Locale*)0), 0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),              0,      &getCppuType((sal_Int16*)0),        0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_TABSTOPDIS),               0,      &getCppuType((sal_Int32*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),	ATTR_FONT,			&getCppuType((sal_Int16*)0),		0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),		0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),		0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),	ATTR_FONT,			&getCppuType((sal_Int16*)0),		0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),		0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),		0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),	ATTR_FONT,			&getCppuType((rtl::OUString*)0),	0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),	ATTR_CJK_FONT,		&getCppuType((rtl::OUString*)0),	0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),	ATTR_CTL_FONT,		&getCppuType((rtl::OUString*)0),	0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),	ATTR_FONT,			&getCppuType((sal_Int16*)0),		0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),		0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),		0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),	ATTR_FONT,			&getCppuType((rtl::OUString*)0),	0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),	ATTR_CJK_FONT,		&getCppuType((rtl::OUString*)0),	0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),	ATTR_CTL_FONT,		&getCppuType((rtl::OUString*)0),	0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),	ATTR_FONT_LANGUAGE,	&getCppuType((lang::Locale*)0),		0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),	ATTR_CJK_FONT_LANGUAGE,	&getCppuType((lang::Locale*)0),	0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),	ATTR_CTL_FONT_LANGUAGE,	&getCppuType((lang::Locale*)0),	0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),				0,      &getCppuType((sal_Int16*)0),		0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_TABSTOPDIS),				0,		&getCppuType((sal_Int32*)0),		0, 0 },
         {0,0,0,0,0,0}
     };
     return aDocDefaultsMap_Impl;
 }
 
-inline long TwipsToHMM(long nTwips) { return (nTwips * 127 + 36) / 72; }
-inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
-inline long TwipsToEvenHMM(long nTwips) { return ( (nTwips * 127 + 72) / 144 ) * 2; }
+inline long TwipsToHMM(long nTwips)	{ return (nTwips * 127 + 36) / 72; }
+inline long HMMToTwips(long nHMM)	{ return (nHMM * 72 + 63) / 127; }
+inline long TwipsToEvenHMM(long nTwips)	{ return ( (nTwips * 127 + 72) / 144 ) * 2; }
 
 //------------------------------------------------------------------------
 
@@ -110,7 +110,7 @@ void ScDocDefaultsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // document gone
+        pDocShell = NULL;		// document gone
     }
 }
 
@@ -118,7 +118,7 @@ void ScDocDefaultsObj::ItemsChanged()
 {
     if (pDocShell)
     {
-        //! if not in XML import, adjust row heights
+        //!	if not in XML import, adjust row heights
 
         pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
     }
@@ -188,8 +188,8 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
               pEntry->nWID == ATTR_CJK_FONT_LANGUAGE ||
               pEntry->nWID == ATTR_CTL_FONT_LANGUAGE )
     {
-        //  for getPropertyValue the PoolDefaults are sufficient,
-        //  but setPropertyValue has to be handled differently
+        //	for getPropertyValue the PoolDefaults are sufficient,
+        //	but setPropertyValue has to be handled differently
 
         lang::Locale aLocale;
         if ( aValue >>= aLocale )
@@ -223,7 +223,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
             throw lang::IllegalArgumentException();
 
         pPool->SetPoolDefaultItem( *pNewItem );
-        delete pNewItem;    // copied in SetPoolDefaultItem
+        delete pNewItem;	// copied in SetPoolDefaultItem
 
         ItemsChanged();
     }
@@ -233,7 +233,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const rtl::OUString& aProp
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    //  use pool default if set
+    //	use pool default if set
 
     SolarMutexGuard aGuard;
 
@@ -306,14 +306,14 @@ beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const rtl::OUS
     USHORT nWID = pEntry->nWID;
     if ( nWID == ATTR_FONT || nWID == ATTR_CJK_FONT || nWID == ATTR_CTL_FONT || !nWID )
     {
-        //  static default for font is system-dependent,
-        //  so font default is always treated as "direct value".
+        //	static default for font is system-dependent,
+        //	so font default is always treated as "direct value".
 
         eRet = beans::PropertyState_DIRECT_VALUE;
     }
     else
     {
-        //  check if pool default is set
+        //	check if pool default is set
 
         ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
         if ( pPool->GetPoolDefaultItem( nWID ) != NULL )
@@ -327,7 +327,7 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScDocDefaultsObj::getPropertyStates
                             const uno::Sequence<rtl::OUString>& aPropertyNames )
                     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    //  the simple way: call getPropertyState
+    //	the simple way: call getPropertyState
 
     SolarMutexGuard aGuard;
     const rtl::OUString* pNames = aPropertyNames.getConstArray();
@@ -363,7 +363,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const rtl::OUString& aPr
                             throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                                     uno::RuntimeException)
 {
-    //  always use static default
+    //	always use static default
 
     SolarMutexGuard aGuard;
 

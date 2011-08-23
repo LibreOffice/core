@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ const USHORT nMemPoolNoteCell = (0x1000 - 64) / sizeof(ScNoteCell);
 IMPL_FIXEDMEMPOOL_NEWDEL( ScValueCell,   nMemPoolValueCell, nMemPoolValueCell )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScFormulaCell, nMemPoolFormulaCell, nMemPoolFormulaCell )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScStringCell,  nMemPoolStringCell, nMemPoolStringCell )
-IMPL_FIXEDMEMPOOL_NEWDEL( ScNoteCell,    nMemPoolNoteCell, nMemPoolNoteCell )
+IMPL_FIXEDMEMPOOL_NEWDEL( ScNoteCell,	 nMemPoolNoteCell, nMemPoolNoteCell )
 #endif
 
 // ============================================================================
@@ -242,7 +242,7 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc )
             && !((ScFormulaCell*)this)->IsInChangeTrack()
         )
     {
-        pDoc->SetDetectiveDirty(TRUE);  // es hat sich was geaendert...
+        pDoc->SetDetectiveDirty(TRUE);	// es hat sich was geaendert...
 
         ScFormulaCell* pFormCell = (ScFormulaCell*)this;
         ScTokenArray* pArr = pFormCell->GetCode();
@@ -275,9 +275,9 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc )
                         if ( rRef1.Valid() && rRef2.Valid() )
                         {
                             if ( t->GetOpCode() == ocColRowNameAuto )
-                            {   // automagically
+                            {	// automagically
                                 if ( rRef1.IsColRel() )
-                                {   // ColName
+                                {	// ColName
                                     pDoc->StartListeningArea( ScRange (
                                         rRef1.nCol,
                                         rRef1.nRow,
@@ -287,7 +287,7 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc )
                                         rRef2.nTab ), pFormCell );
                                 }
                                 else
-                                {   // RowName
+                                {	// RowName
                                     pDoc->StartListeningArea( ScRange (
                                         rRef1.nCol,
                                         rRef1.nRow,
@@ -318,7 +318,7 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc )
     }
 }
 
-//  pArr gesetzt -> Referenzen von anderer Zelle nehmen
+//	pArr gesetzt -> Referenzen von anderer Zelle nehmen
 // dann muss auch aPos uebergeben werden!
 
 void ScBaseCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
@@ -328,7 +328,7 @@ void ScBaseCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
             && !((ScFormulaCell*)this)->IsInChangeTrack()
         )
     {
-        pDoc->SetDetectiveDirty(TRUE);  // es hat sich was geaendert...
+        pDoc->SetDetectiveDirty(TRUE);	// es hat sich was geaendert...
 
         ScFormulaCell* pFormCell = (ScFormulaCell*)this;
         if( pFormCell->GetCode()->IsRecalcModeAlways() )
@@ -365,9 +365,9 @@ void ScBaseCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
                         if ( rRef1.Valid() && rRef2.Valid() )
                         {
                             if ( t->GetOpCode() == ocColRowNameAuto )
-                            {   // automagically
+                            {	// automagically
                                 if ( rRef1.IsColRel() )
-                                {   // ColName
+                                {	// ColName
                                     pDoc->EndListeningArea( ScRange (
                                         rRef1.nCol,
                                         rRef1.nRow,
@@ -377,7 +377,7 @@ void ScBaseCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
                                         rRef2.nTab ), pFormCell );
                                 }
                                 else
-                                {   // RowName
+                                {	// RowName
                                     pDoc->EndListeningArea( ScRange (
                                         rRef1.nCol,
                                         rRef1.nRow,
@@ -474,13 +474,13 @@ String ScBaseCell::GetStringData() const
             ((const ScEditCell*)this)->GetString( aStr );
             break;
         case CELLTYPE_FORMULA:
-            ((ScFormulaCell*)this)->GetString( aStr );      // an der Formelzelle nicht-const
+            ((ScFormulaCell*)this)->GetString( aStr );		// an der Formelzelle nicht-const
             break;
     }
     return aStr;
 }
 
-//  static
+//	static
 BOOL ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
 {
     CellType eType1 = CELLTYPE_NONE;
@@ -504,14 +504,14 @@ BOOL ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
     if ( eType1 != eType2 )
         return FALSE;
 
-    switch ( eType1 )               // beide Typen gleich
+    switch ( eType1 )				// beide Typen gleich
     {
-        case CELLTYPE_NONE:         // beide leer
+        case CELLTYPE_NONE:			// beide leer
             return TRUE;
-        case CELLTYPE_VALUE:        // wirklich Value-Zellen
+        case CELLTYPE_VALUE:		// wirklich Value-Zellen
             return ( ((const ScValueCell*)pCell1)->GetValue() ==
                      ((const ScValueCell*)pCell2)->GetValue() );
-        case CELLTYPE_STRING:       // String oder Edit
+        case CELLTYPE_STRING:		// String oder Edit
             {
                 String aText1;
                 if ( pCell1->GetCellType() == CELLTYPE_STRING )
@@ -527,14 +527,14 @@ BOOL ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
             }
         case CELLTYPE_FORMULA:
             {
-                //! eingefuegte Zeilen / Spalten beruecksichtigen !!!!!
-                //! Vergleichsfunktion an der Formelzelle ???
-                //! Abfrage mit ScColumn::SwapRow zusammenfassen!
+                //!	eingefuegte Zeilen / Spalten beruecksichtigen !!!!!
+                //!	Vergleichsfunktion an der Formelzelle ???
+                //!	Abfrage mit ScColumn::SwapRow zusammenfassen!
 
                 ScTokenArray* pCode1 = ((ScFormulaCell*)pCell1)->GetCode();
                 ScTokenArray* pCode2 = ((ScFormulaCell*)pCell2)->GetCode();
 
-                if (pCode1->GetLen() == pCode2->GetLen())       // nicht-UPN
+                if (pCode1->GetLen() == pCode2->GetLen())		// nicht-UPN
                 {
                     BOOL bEqual = TRUE;
                     USHORT nLen = pCode1->GetLen();
@@ -551,7 +551,7 @@ BOOL ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
                         return TRUE;
                 }
 
-                return FALSE;       // unterschiedlich lang oder unterschiedliche Tokens
+                return FALSE;		// unterschiedlich lang oder unterschiedliche Tokens
             }
         default:
             DBG_ERROR("huch, was fuer Zellen???");
@@ -625,7 +625,7 @@ ScStringCell::~ScStringCell()
 // ============================================================================
 
 //
-//      ScFormulaCell
+//		ScFormulaCell
 //
 
 ScFormulaCell::ScFormulaCell() :
@@ -762,8 +762,8 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
         pCode->ReadjustRelative3DReferences( rCell.aPos, aPos );
 
     // evtl. Fehler zuruecksetzen und neu kompilieren
-    //  nicht im Clipboard - da muss das Fehlerflag erhalten bleiben
-    //  Spezialfall Laenge=0: als Fehlerzelle erzeugt, dann auch Fehler behalten
+    //	nicht im Clipboard - da muss das Fehlerflag erhalten bleiben
+    //	Spezialfall Laenge=0: als Fehlerzelle erzeugt, dann auch Fehler behalten
     if ( pCode->GetCodeError() && !pDocument->IsClipboard() && pCode->GetLen() )
     {
         pCode->SetCodeError( 0 );
@@ -942,7 +942,7 @@ void ScFormulaCell::Compile( const String& rFormula, BOOL bNoListening,
     if( !pCode->GetCodeError() )
     {
         if ( !pCode->GetLen() && aResult.GetHybridFormula().Len() && rFormula == aResult.GetHybridFormula() )
-        {   // #65994# nicht rekursiv CompileTokenArray/Compile/CompileTokenArray
+        {	// #65994# nicht rekursiv CompileTokenArray/Compile/CompileTokenArray
             if ( rFormula.GetChar(0) == '=' )
                 pCode->AddBad( rFormula.GetBuffer() + 1 );
             else
@@ -1005,7 +1005,7 @@ void ScFormulaCell::CompileTokenArray( BOOL bNoListening )
 void ScFormulaCell::CompileXML( ScProgress& rProgress )
 {
     if ( cMatrixFlag == MM_REFERENCE )
-    {   // is already token code via ScDocFunc::EnterMatrix, ScDocument::InsertMatrixFormula
+    {	// is already token code via ScDocFunc::EnterMatrix, ScDocument::InsertMatrixFormula
         // just establish listeners
         StartListeningTo( pDocument );
         return ;
@@ -1052,8 +1052,8 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
         SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
     }
 
-    //  Same as in Load: after loading, it must be known if ocMacro is in any formula
-    //  (for macro warning, CompileXML is called at the end of loading XML file)
+    //	Same as in Load: after loading, it must be known if ocMacro is in any formula
+    //	(for macro warning, CompileXML is called at the end of loading XML file)
     if ( !pDocument->GetHasMacroFunc() && pCode->HasOpCodeRPN( ocMacro ) )
         pDocument->SetHasMacroFunc( TRUE );
 }
@@ -1115,7 +1115,7 @@ void ScFormulaCell::CalcAfterLoad()
             bDirty = TRUE;
     }
     if ( pCode->IsRecalcModeAlways() )
-    {   // zufall(), heute(), jetzt() bleiben immer im FormulaTree, damit sie
+    {	// zufall(), heute(), jetzt() bleiben immer im FormulaTree, damit sie
         // auch bei jedem F9 berechnet werden.
         bDirty = TRUE;
     }
@@ -1228,9 +1228,9 @@ void ScFormulaCell::Interpret()
     if (!IsDirtyOrInTableOpDirty() || pDocument->GetRecursionHelper().IsInReturn())
         return;     // no double/triple processing
 
-    //! HACK:
-    //  Wenn der Aufruf aus einem Reschedule im DdeLink-Update kommt, dirty stehenlassen
-    //  Besser: Dde-Link Update ohne Reschedule oder ganz asynchron !!!
+    //!	HACK:
+    //	Wenn der Aufruf aus einem Reschedule im DdeLink-Update kommt, dirty stehenlassen
+    //	Besser: Dde-Link Update ohne Reschedule oder ganz asynchron !!!
 
     if ( pDocument->IsInDdeLinkUpdate() )
         return;
@@ -1831,9 +1831,9 @@ ULONG ScFormulaCell::GetStandardFormat( SvNumberFormatter& rFormatter, ULONG nFo
         return nFormatIndex;
     //! not ScFormulaCell::IsValue(), that could reinterpret the formula again.
     if ( aResult.IsValue() )
-        return ScGlobal::GetStandardFormat( aResult.GetDouble(), rFormatter, nFormat, nFormatType );
+        return ScGlobal::GetStandardFormat(	aResult.GetDouble(), rFormatter, nFormat, nFormatType );
     else
-        return ScGlobal::GetStandardFormat( rFormatter, nFormat, nFormatType );
+        return ScGlobal::GetStandardFormat(	rFormatter, nFormat, nFormatType );
 }
 
 
@@ -1961,7 +1961,7 @@ void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
     if ( (nBits & RECALCMODE_EMASK) != RECALCMODE_NORMAL )
         bDirty = TRUE;
     if ( nBits & RECALCMODE_ONLOAD_ONCE )
-    {   // OnLoadOnce nur zum Dirty setzen nach Filter-Import
+    {	// OnLoadOnce nur zum Dirty setzen nach Filter-Import
         nBits = (nBits & ~RECALCMODE_EMASK) | RECALCMODE_NORMAL;
     }
     pCode->AddRecalcMode( nBits );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -185,14 +185,14 @@ DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAt
     aCBSize.setWidth(nCBXWidth);
     m_aCBNumber.SetSizePixel( aCBSize );
     m_aCBPercent.SetSizePixel( aCBSize );
-
+    
     //place and align separator and label placement listboxes
     Size aSize( m_aFT_LabelPlacement.GetSizePixel() );
     aSize.setWidth( m_aFT_LabelPlacement.CalcMinimumSize().getWidth() );
     m_aFT_LabelPlacement.SetSizePixel(aSize);
 
     long nWantedMinLeftBorder = m_aFT_LabelPlacement.GetPosPixel().X() + aSize.getWidth () + aControlDistance.Width();
-
+    
     m_aSeparatorResources.PositionBelowControl(m_aCBSymbol);
     m_aSeparatorResources.AlignListBoxWidthAndXPos( nWantedMinLeftBorder, -1, m_aLB_LabelPlacement.CalcMinimumSize().getWidth() );
     m_aSeparatorResources.Show(true);

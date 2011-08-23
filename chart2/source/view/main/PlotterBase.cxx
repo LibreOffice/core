@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ bool PlotterBase::isValidPosition( const drawing::Position3D& rPos )
         return false;
     if( ::rtl::math::isInf(rPos.PositionZ) )
         return false;
-    return true;
+    return true;    
 }
 
 //.............................................................................

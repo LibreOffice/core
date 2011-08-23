@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -150,7 +150,7 @@ TickmarkProperties AxisProperties::makeTickmarkPropertiesForComplexCategories(
     sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis, sal_Int32 /*nTextLevel*/ ) const
 {
     sal_Int32 nTickmarkStyle = (m_fLabelDirectionSign==m_fInnerDirectionSign) ? 2/*outside*/ : 1/*inside*/;
-
+    
     TickmarkProperties aTickmarkProperties;
     aTickmarkProperties.Length = nTickLength;// + nTextLevel*( lcl_calcTickLengthForDepth(0,nTickmarkStyle) );
     aTickmarkProperties.RelativePos = static_cast<sal_Int32>(lcl_getTickOffset(aTickmarkProperties.Length+nTickStartDistanceToAxis,nTickmarkStyle));
@@ -325,7 +325,7 @@ void AxisProperties::init( bool bCartesian )
             m_fInnerDirectionSign = m_bCrossingAxisHasReverseDirection ? 1 : -1;
         else
             m_fInnerDirectionSign = m_bCrossingAxisHasReverseDirection ? -1 : 1;
-
+        
         if( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS == m_eLabelPos )
             m_fLabelDirectionSign = m_fInnerDirectionSign;
         else if( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE == m_eLabelPos )
@@ -334,7 +334,7 @@ void AxisProperties::init( bool bCartesian )
             m_fLabelDirectionSign = m_bCrossingAxisHasReverseDirection ? -1 : 1;
         else if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END == m_eLabelPos )
             m_fLabelDirectionSign = m_bCrossingAxisHasReverseDirection ? 1 : -1;
-
+        
         if( m_nDimensionIndex==2 )
             m_aLabelAlignment = lcl_getLabelAlignmentForZAxis(*this);
         else
@@ -359,13 +359,13 @@ void AxisProperties::init( bool bCartesian )
         //init LineProperties
         m_aLineProperties.initFromPropertySet( xProp );
 
-        //init display labels
+        //init display labels    
         xProp->getPropertyValue( C2U( "DisplayLabels" ) ) >>= m_bDisplayLabels;
 
         //init categories
         ScaleData aScaleData = m_xAxisModel->getScaleData();
         m_nAxisType = aScaleData.AxisType;
-
+                
         //init TickmarkProperties
         xProp->getPropertyValue( C2U( "MajorTickmarks" ) ) >>= m_nMajorTickmarks;
         xProp->getPropertyValue( C2U( "MinorTickmarks" ) ) >>= m_nMinorTickmarks;

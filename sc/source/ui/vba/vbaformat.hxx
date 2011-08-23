@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,10 +29,10 @@
 #define SC_VBA_FORMAT_HXX
 #include <ooo/vba/excel/XFormat.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp> 
 #include <com/sun/star/util/XNumberFormats.hpp>
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/util/XNumberFormatTypes.hpp> 
+#include <com/sun/star/frame/XModel.hpp> 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -69,7 +69,7 @@ protected:
 public:
     ScVbaFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, const css::uno::Reference< css::frame::XModel >& xModel, bool bCheckAmbiguoity ) throw ( css::script::BasicErrorException );
     virtual ~ScVbaFormat() {}
-    virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() = 0;
+    virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() = 0; 
     css::uno::Reference< css::lang::XServiceInfo > getXServiceInfo() { return mxServiceInfo; }
      void SAL_CALL setAddIndent( const css::uno::Any& _BAddIndent) throw( css::uno::RuntimeException ) { _BAddIndent >>= mbAddIndent; }
      css::uno::Any SAL_CALL getAddIndent() throw( css::uno::RuntimeException ) { return css::uno::makeAny( mbAddIndent ); }
@@ -98,7 +98,7 @@ public:
     virtual void SAL_CALL setFormulaHidden( const css::uno::Any& FormulaHidden ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getFormulaHidden(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL setMergeCells( const css::uno::Any& MergeCells ) throw (css::script::BasicErrorException, css::uno::RuntimeException) = 0;
-    virtual css::uno::Any SAL_CALL getMergeCells(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) = 0;
+    virtual css::uno::Any SAL_CALL getMergeCells(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) = 0; 
     virtual void SAL_CALL setReadingOrder( const css::uno::Any& ReadingOrder ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getReadingOrder(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     // XHelperInterface
@@ -106,6 +106,6 @@ public:
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

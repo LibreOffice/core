@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,19 +41,19 @@ class XMLCodeNameProvider : public ::cppu::WeakImplHelper1< ::com::sun::star::co
     ::rtl::OUString msDocName;
     ::rtl::OUString msCodeNameProp;
 
-    static sal_Bool _getCodeName( const ::com::sun::star::uno::Any& aAny,
+    static sal_Bool _getCodeName( const ::com::sun::star::uno::Any& aAny, 
                            String& rCodeName );
 
 public:
     XMLCodeNameProvider( ScDocument* pDoc );
     virtual ~XMLCodeNameProvider();
 
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) 
         throw (::com::sun::star::uno::RuntimeException );
 
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::lang::WrappedTargetException,
+        throw (::com::sun::star::container::NoSuchElementException, 
+               ::com::sun::star::lang::WrappedTargetException, 
                ::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  )

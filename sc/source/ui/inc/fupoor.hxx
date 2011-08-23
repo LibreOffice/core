@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,10 @@ class Dialog;
 // #98185# Create default drawing objects via keyboard
 class SdrObject;
 
-//  Return-Werte fuer Command
-#define SC_CMD_NONE     0
-#define SC_CMD_USED     1
-#define SC_CMD_IGNORE   2
+//	Return-Werte fuer Command
+#define SC_CMD_NONE		0
+#define SC_CMD_USED		1
+#define SC_CMD_IGNORE	2
 
 /*************************************************************************
 |*
@@ -56,28 +56,28 @@ class SdrObject;
 class FuPoor
 {
 protected:
-    ScDrawView*     pView;
-    ScTabViewShell* pViewShell;
-    Window*         pWindow;
-    SdrModel*       pDrDoc;
+    ScDrawView*		pView;
+    ScTabViewShell*	pViewShell;
+    Window*			pWindow;
+    SdrModel* 		pDrDoc;
 
-    SfxRequest      aSfxRequest;
-    Dialog*         pDialog;
+    SfxRequest		aSfxRequest;
+    Dialog* 		pDialog;
 
-    Timer           aScrollTimer;           // fuer Autoscrolling
+    Timer			aScrollTimer;			// fuer Autoscrolling
     DECL_LINK( ScrollHdl, Timer * );
     void ForceScroll(const Point& aPixPos);
 
-    Timer           aDragTimer;             // fuer Drag&Drop
+    Timer			aDragTimer; 			// fuer Drag&Drop
     DECL_LINK( DragTimerHdl, Timer * );
     DECL_LINK( DragHdl, void * );
-    BOOL            bIsInDragMode;
-    Point           aMDPos;                 // Position von MouseButtonDown
+    BOOL			bIsInDragMode;
+    Point			aMDPos; 				// Position von MouseButtonDown
 
     // #95491# member to hold state of the mouse buttons for creation
     // of own MouseEvents (like in ScrollHdl)
 private:
-    sal_uInt16      mnCode;
+    sal_uInt16		mnCode;
 
 public:
     FuPoor(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
@@ -106,19 +106,19 @@ public:
 
     virtual BYTE Command(const CommandEvent& rCEvt);
 
-    virtual void Activate();        // Function aktivieren
-    virtual void Deactivate();      // Function deaktivieren
+    virtual void Activate();		// Function aktivieren
+    virtual void Deactivate();		// Function deaktivieren
 
-    virtual void ScrollStart() {}   // diese Funktionen werden von
-    virtual void ScrollEnd() {}     // ForceScroll aufgerufen
+    virtual void ScrollStart() {}	// diese Funktionen werden von
+    virtual void ScrollEnd() {} 	// ForceScroll aufgerufen
 
     void SetWindow(Window* pWin) { pWindow = pWin; }
 
     USHORT GetSlotID() const { return( aSfxRequest.GetSlot() ); }
 
-    BOOL    IsDetectiveHit( const Point& rLogicPos );
+    BOOL	IsDetectiveHit( const Point& rLogicPos );
 
-    void    StopDragTimer();
+    void	StopDragTimer();
 
     // #98185# Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
@@ -133,6 +133,6 @@ public:
 
 
 
-#endif      // _SD_FUPOOR_HXX
+#endif		// _SD_FUPOOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

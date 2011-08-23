@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ void VPolarGrid::setIncrements( const uno::Sequence< ExplicitIncrementData >& rI
 
 void VPolarGrid::getAllTickInfos( sal_Int32 nDimensionIndex, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
 {
-    TickmarkHelper aTickmarkHelper(
+    TickmarkHelper aTickmarkHelper( 
             m_pPosHelper->getScales()[nDimensionIndex], m_aIncrements[nDimensionIndex] );
     aTickmarkHelper.getAllTicks( rAllTickInfos );
 }
@@ -167,7 +167,7 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
             aPoints[0][1].Y = static_cast<sal_Int32>(aScenePositionEnd.PositionY);
             appendPointSequence( aAllPoints, aPoints );
         }
-
+        
         Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
                 xMainTarget, aAllPoints, &rLinePropertiesList[nDepth] );
         //because of this name this line will be used for marking
@@ -231,14 +231,14 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
             if(aPoints[0].getLength())
                 appendPointSequence( aAllPoints, aPoints );
         }
-
+        
         Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
                 xTarget, aAllPoints, &rLinePropertiesList[nDepth] );
         //because of this name this line will be used for marking
         m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
     }
 }
-
+    
 void SAL_CALL VPolarGrid::createShapes()
 {
     DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");

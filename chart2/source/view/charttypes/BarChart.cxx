@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,7 +116,7 @@ drawing::Direction3D BarChart::getPreferredDiagramAspectRatio() const
             double fXSlotCount = 1.0;
             if(!m_aZSlots.empty())
                 fXSlotCount = m_aZSlots.begin()->size();
-
+            
             aRet.DirectionZ = aScale.DirectionZ/(aScale.DirectionX + aScale.DirectionX*(fXSlotCount-1.0)*pPosHelper->getSlotWidth());
         }
         else
@@ -179,7 +179,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
     bool bReverse = !pPosHelper->isMathematicalOrientationY();
     bool bNormalOutside = (!bReverse == !!(fBaseValue < fScaledUpperYValue));
     double fDepth = fScaledUpperBarDepth;
-
+    
     switch(nLabelPlacement)
     {
     case ::com::sun::star::chart::DataLabelPlacement::TOP:
@@ -291,7 +291,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
         break;
     default:
         DBG_ERROR("this label alignment is not implemented yet");
-
+        
         break;
     }
     if(3==m_nDimension)
@@ -478,7 +478,7 @@ void BarChart::createShapes()
     bool bOnlyConnectionLinesForThisPoint = false;
 
     adaptOverlapAndGapwidthForGroupBarsPerAxis();
-
+    
     //better performance for big data
     std::map< VDataSeries*, FormerBarPoint > aSeriesFormerPointMap;
     m_bPointsWereSkipped = false;
@@ -502,7 +502,7 @@ void BarChart::createShapes()
         {
             ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
             const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-
+            
             for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; aXSlotIter++ )
             {
                 sal_Int32 nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
@@ -663,9 +663,9 @@ void BarChart::createShapes()
                     //@todo ... start an iteration over the different breaks of the axis
                     //each subsystem may add an additional shape to form the whole point
                     //create a group shape for this point and add to the series shape:
-    //              uno::Reference< drawing::XShapes > xPointGroupShape_Shapes( createGroupShape(xSeriesGroupShape_Shapes) );
-    //              uno::Reference<drawing::XShape> xPointGroupShape_Shape =
-    //                      uno::Reference<drawing::XShape>( xPointGroupShape_Shapes, uno::UNO_QUERY );
+    //		        uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(	createGroupShape(xSeriesGroupShape_Shapes) );
+    //		        uno::Reference<drawing::XShape> xPointGroupShape_Shape =
+    //				        uno::Reference<drawing::XShape>( xPointGroupShape_Shapes, uno::UNO_QUERY );
                     //as long as we do not iterate we do not need to create an additional group for each point
                     uno::Reference< drawing::XShapes > xPointGroupShape_Shapes = xSeriesGroupShape_Shapes;
                     uno::Reference< beans::XPropertySet > xDataPointProperties( (*aSeriesIter)->getPropertiesOfPoint( nCatIndex ) );
@@ -731,7 +731,7 @@ void BarChart::createShapes()
                                     fLogicBarDepth*=-1.0;
                             }
                         }
-
+                        
                         //better performance for big data
                         FormerBarPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
                         pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
@@ -848,7 +848,7 @@ void BarChart::createShapes()
 
                             LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
                             sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nCatIndex, m_xChartTypeModel, m_nDimension, pPosHelper->isSwapXAndY() );
-
+                            
                             double fLowerBarDepth = fLogicBarDepth;
                             double fUpperBarDepth = fLogicBarDepth;
                             {

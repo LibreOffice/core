@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,19 +40,19 @@
 class ScColOrRowDlg : public ModalDialog
 {
 public:
-            ScColOrRowDlg( Window*          pParent,
-                           const String&    rStrTitle,
-                           const String&    rStrLabel,
-                           BOOL             bColDefault = TRUE );
+            ScColOrRowDlg( Window*			pParent,
+                           const String&	rStrTitle,
+                           const String&	rStrLabel,
+                           BOOL				bColDefault = TRUE );
             ~ScColOrRowDlg();
 
 private:
     FixedLine       aFlFrame;
-    RadioButton     aBtnRows;
-    RadioButton     aBtnCols;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    RadioButton		aBtnRows;
+    RadioButton		aBtnCols;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 
     DECL_LINK( OkHdl, OKButton * );
 };
