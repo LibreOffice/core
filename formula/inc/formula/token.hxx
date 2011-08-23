@@ -150,6 +150,8 @@ public:
     virtual const String&       GetString() const;
     virtual sal_uInt16          GetIndex() const;
     virtual void                SetIndex( sal_uInt16 n );
+    virtual bool                IsGlobal() const;
+    virtual void                SetGlobal( bool b );
     virtual short*              GetJump() const;
     virtual const String&       GetExternal() const;
     virtual FormulaToken*       GetFAPOrigToken() const;
@@ -311,8 +313,9 @@ public:
 
     virtual FormulaToken*       Clone() const { return new FormulaIndexToken(*this); }
     virtual sal_uInt16          GetIndex() const;
-    virtual sal_uInt8           GetByte() const;
     virtual void                SetIndex( sal_uInt16 n );
+    virtual bool                IsGlobal() const;
+    virtual void                SetGlobal( bool b );
     virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 

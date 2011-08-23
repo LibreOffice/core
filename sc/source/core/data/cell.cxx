@@ -133,7 +133,7 @@ ScBaseCell* lclCloneCell( const ScBaseCell& rSrcCell, ScDocument& rDestDoc, cons
 
 void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc, const ScAddress& aNewPos, const ScAddress& aOldPos)
 {
-    bool bOldGlobal = static_cast<bool>(pToken->GetByte());
+    bool bOldGlobal = pToken->IsGlobal();
     SCTAB aOldTab = aOldPos.Tab();
     rtl::OUString aRangeName;
     int nOldIndex = pToken->GetIndex();
@@ -183,7 +183,7 @@ void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOl
     }
     sal_Int32 nIndex = pRangeData->GetIndex();
     pToken->SetIndex(nIndex);
-    pToken->SetByte(bNewGlobal);
+    pToken->SetGlobal(bNewGlobal);
 }
 
 void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc)

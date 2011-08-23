@@ -212,6 +212,17 @@ void FormulaToken::SetIndex( sal_uInt16 )
     DBG_ERRORFILE( "FormulaToken::SetIndex: virtual dummy called" );
 }
 
+bool FormulaToken::IsGlobal() const
+{
+    DBG_ERRORFILE( "FormulaToken::IsGlobal: virtual dummy called" );
+    return true;
+}
+
+void FormulaToken::SetGlobal( bool )
+{
+    DBG_ERRORFILE( "FormulaToken::SetGlobal: virtual dummy called" );
+}
+
 short* FormulaToken::GetJump() const
 {
     DBG_ERRORFILE( "FormulaToken::GetJump: virtual dummy called" );
@@ -1346,12 +1357,14 @@ bool FormulaStringOpToken::operator==( const FormulaToken& r ) const
     return FormulaByteToken::operator==( r ) && aString == r.GetString();
 }
 
-sal_uInt16  FormulaIndexToken::GetIndex() const                  { return nIndex; }
-sal_uInt8   FormulaIndexToken::GetByte() const    {return static_cast<sal_uInt8>(mbGlobal); }
-void    FormulaIndexToken::SetIndex( sal_uInt16 n )              { nIndex = n; }
+sal_uInt16  FormulaIndexToken::GetIndex() const             { return nIndex; }
+void        FormulaIndexToken::SetIndex( sal_uInt16 n )     { nIndex = n; }
+bool        FormulaIndexToken::IsGlobal() const             { return mbGlobal; }
+void        FormulaIndexToken::SetGlobal( bool b )          { mbGlobal = b; }
 bool FormulaIndexToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaToken::operator==( r ) && nIndex == r.GetIndex();
+    return FormulaToken::operator==( r ) && nIndex == r.GetIndex() &&
+        mbGlobal == r.IsGlobal();
 }
 const String&   FormulaExternalToken::GetExternal() const    { return aExternal; }
 sal_uInt8            FormulaExternalToken::GetByte() const        { return nByte; }

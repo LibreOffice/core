@@ -3979,7 +3979,7 @@ bool ScCompiler::HandleRange()
 {
     ScRangeData* pRangeData = NULL;
 
-    bool bGlobal = pToken->GetByte();
+    bool bGlobal = pToken->IsGlobal();
     if (bGlobal)
         // global named range.
         pRangeData = pDoc->GetRangeName()->findByIndex( pToken->GetIndex() );
@@ -5157,7 +5157,7 @@ void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken
     {
         case ocName:
         {
-            bool bGlobal = _pTokenP->GetByte();
+            bool bGlobal = _pTokenP->IsGlobal();
             ScRangeData* pData = NULL;
             if (bGlobal)
                 // global named range.
