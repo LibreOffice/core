@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 
 
 //============================================================================
-//  class ScConditionalFormat
+//	class ScConditionalFormat
 
 //----------------------------------------------------------------------------
 // Konstruktor
@@ -58,53 +58,53 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
             SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
             ScDocument* pCurDoc,
             const ScConditionalFormat* pCurrentFormat )
-    :   ScAnyRefDlg         ( pB, pCW, pParent, RID_SCDLG_CONDFORMAT ),
+    :	ScAnyRefDlg			( pB, pCW, pParent, RID_SCDLG_CONDFORMAT ),
 
-        aCbxCond1           ( this, ScResId( CBX_COND1 ) ),
-        aLbCond11           ( this, ScResId( LB_COND1_1 ) ),
-        aLbCond12           ( this, ScResId( LB_COND1_2 ) ),
+        aCbxCond1			( this, ScResId( CBX_COND1 ) ),
+        aLbCond11			( this, ScResId( LB_COND1_1 ) ),
+        aLbCond12			( this, ScResId( LB_COND1_2 ) ),
         aEdtCond11          ( this, this, ScResId( EDT_COND1_1 ) ),
-        aRbCond11           ( this, ScResId( RB_COND1_1 ), &aEdtCond11,this ),
-        aFtCond1And         ( this, ScResId( FT_COND1_AND ) ),
+        aRbCond11			( this, ScResId( RB_COND1_1 ), &aEdtCond11,this ),
+        aFtCond1And			( this, ScResId( FT_COND1_AND ) ),
         aEdtCond12          ( this, this, ScResId( EDT_COND1_2 ) ),
-        aRbCond12           ( this, ScResId( RB_COND1_2 ), &aEdtCond12,this ),
-        aFtCond1Template    ( this, ScResId( FT_COND1_TEMPLATE ) ),
-        aLbCond1Template    ( this, ScResId( LB_COND1_TEMPLATE ) ),
+        aRbCond12			( this, ScResId( RB_COND1_2 ), &aEdtCond12,this ),
+        aFtCond1Template	( this, ScResId( FT_COND1_TEMPLATE ) ),
+        aLbCond1Template	( this, ScResId( LB_COND1_TEMPLATE ) ),
         aBtnNew1            ( this, ScResId( BTN_COND1_NEW ) ),
         aFlSep1             ( this, ScResId( FL_SEP1 ) ),
 
-        aCbxCond2           ( this, ScResId( CBX_COND2 ) ),
-        aLbCond21           ( this, ScResId( LB_COND2_1 ) ),
-        aLbCond22           ( this, ScResId( LB_COND2_2 ) ),
+        aCbxCond2			( this, ScResId( CBX_COND2 ) ),
+        aLbCond21			( this, ScResId( LB_COND2_1 ) ),
+        aLbCond22			( this, ScResId( LB_COND2_2 ) ),
         aEdtCond21          ( this, this, ScResId( EDT_COND2_1 ) ),
-        aRbCond21           ( this, ScResId( RB_COND2_1 ), &aEdtCond21,this ),
-        aFtCond2And         ( this, ScResId( FT_COND2_AND ) ),
+        aRbCond21			( this, ScResId( RB_COND2_1 ), &aEdtCond21,this ),
+        aFtCond2And			( this, ScResId( FT_COND2_AND ) ),
         aEdtCond22          ( this, this, ScResId( EDT_COND2_2 ) ),
-        aRbCond22           ( this, ScResId( RB_COND2_2 ), &aEdtCond22,this ),
-        aFtCond2Template    ( this, ScResId( FT_COND2_TEMPLATE ) ),
-        aLbCond2Template    ( this, ScResId( LB_COND2_TEMPLATE ) ),
+        aRbCond22			( this, ScResId( RB_COND2_2 ), &aEdtCond22,this ),
+        aFtCond2Template	( this, ScResId( FT_COND2_TEMPLATE ) ),
+        aLbCond2Template	( this, ScResId( LB_COND2_TEMPLATE ) ),
         aBtnNew2            ( this, ScResId( BTN_COND2_NEW ) ),
         aFlSep2             ( this, ScResId( FL_SEP2 ) ),
 
-        aCbxCond3           ( this, ScResId( CBX_COND3 ) ),
-        aLbCond31           ( this, ScResId( LB_COND3_1 ) ),
-        aLbCond32           ( this, ScResId( LB_COND3_2 ) ),
+        aCbxCond3			( this, ScResId( CBX_COND3 ) ),
+        aLbCond31			( this, ScResId( LB_COND3_1 ) ),
+        aLbCond32			( this, ScResId( LB_COND3_2 ) ),
         aEdtCond31          ( this, this, ScResId( EDT_COND3_1 ) ),
-        aRbCond31           ( this, ScResId( RB_COND3_1 ), &aEdtCond31,this ),
-        aFtCond3And         ( this, ScResId( FT_COND3_AND ) ),
+        aRbCond31			( this, ScResId( RB_COND3_1 ), &aEdtCond31,this ),
+        aFtCond3And			( this, ScResId( FT_COND3_AND ) ),
         aEdtCond32          ( this, this, ScResId( EDT_COND3_2 ) ),
-        aRbCond32           ( this, ScResId( RB_COND3_2 ), &aEdtCond32,this ),
-        aFtCond3Template    ( this, ScResId( FT_COND3_TEMPLATE ) ),
-        aLbCond3Template    ( this, ScResId( LB_COND3_TEMPLATE ) ),
+        aRbCond32			( this, ScResId( RB_COND3_2 ), &aEdtCond32,this ),
+        aFtCond3Template	( this, ScResId( FT_COND3_TEMPLATE ) ),
+        aLbCond3Template	( this, ScResId( LB_COND3_TEMPLATE ) ),
         aBtnNew3            ( this, ScResId( BTN_COND3_NEW ) ),
 
-        aBtnOk              ( this, ScResId( BTN_OK ) ),
-        aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp            ( this, ScResId( BTN_HELP ) ),
-        pEdActive           ( NULL ),
+        aBtnOk				( this, ScResId( BTN_OK ) ),
+        aBtnCancel			( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp			( this, ScResId( BTN_HELP ) ),
+        pEdActive			( NULL ),
         bDlgLostFocus       ( FALSE ),
 
-        pDoc                ( pCurDoc )
+        pDoc				( pCurDoc )
 {
     Point aPos;
     String aName;
@@ -126,7 +126,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
     aLbCond32.SetSelectHdl( LINK( this, ScConditionalFormatDlg, ChangeCond32Hdl ) );
 
     aBtnOk.SetClickHdl    ( LINK( this, ScConditionalFormatDlg, BtnHdl ) );
-//? aBtnCancel.SetClickHdl( LINK( this, ScConditionalFormatDlg, BtnHdl ) );
+//?	aBtnCancel.SetClickHdl( LINK( this, ScConditionalFormatDlg, BtnHdl ) );
 
     Link aLink = LINK( this, ScConditionalFormatDlg, NewBtnHdl );
     aBtnNew1.SetClickHdl( aLink );
@@ -162,12 +162,12 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
     aRbCond32.SetLoseFocusHdl( aLink );
 
     // Condition 1
-    aCond1Pos1 = aLbCond12.GetPosPixel();       // Position Edit ohne Listbox
-    aCond1Pos2 = aEdtCond11.GetPosPixel();      // Position Edit mit Listbox
+    aCond1Pos1 = aLbCond12.GetPosPixel();		// Position Edit ohne Listbox
+    aCond1Pos2 = aEdtCond11.GetPosPixel();		// Position Edit mit Listbox
     aRBtn1Pos1 = aRbCond11.GetPosPixel();
     aRBtn1Pos2 = aRbCond12.GetPosPixel();
     aPos = aEdtCond12.GetPosPixel();
-    aPos.X() += aEdtCond12.GetSizePixel().Width();  // rechter Rand
+    aPos.X() += aEdtCond12.GetSizePixel().Width();	// rechter Rand
     aCond1Size3 = aEdtCond11.GetSizePixel();
     aCond1Size2 = Size( aPos.X() - aCond1Pos2.X(), aCond1Size3.Height() );
     aCond1Size1 = Size( aPos.X() - aCond1Pos1.X(), aCond1Size3.Height() );
@@ -177,12 +177,12 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
     aLbCond12.SelectEntryPos( 0 );
 
     // Condition 2
-    aCond2Pos1  = aLbCond22.GetPosPixel();      // Position Edit ohne Listbox
-    aCond2Pos2  = aEdtCond21.GetPosPixel();     // Position Edit mit Listbox
+    aCond2Pos1  = aLbCond22.GetPosPixel();		// Position Edit ohne Listbox
+    aCond2Pos2  = aEdtCond21.GetPosPixel();		// Position Edit mit Listbox
     aRBtn2Pos1 = aRbCond21.GetPosPixel();
     aRBtn2Pos2 = aRbCond22.GetPosPixel();
     aPos = aEdtCond22.GetPosPixel();
-    aPos.X() += aEdtCond22.GetSizePixel().Width();  // rechter Rand
+    aPos.X() += aEdtCond22.GetSizePixel().Width();	// rechter Rand
     aCond2Size3 = aEdtCond21.GetSizePixel();
     aCond2Size2 = Size( aPos.X() - aCond2Pos2.X(), aCond2Size3.Height() );
     aCond2Size1 = Size( aPos.X() - aCond2Pos1.X(), aCond2Size3.Height() );
@@ -192,12 +192,12 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
     aLbCond22.SelectEntryPos( 0 );
 
     // Condition 3
-    aCond3Pos1  = aLbCond32.GetPosPixel();      // Position Edit ohne Listbox
-    aCond3Pos2  = aEdtCond31.GetPosPixel();     // Position Edit mit Listbox
+    aCond3Pos1  = aLbCond32.GetPosPixel();		// Position Edit ohne Listbox
+    aCond3Pos2  = aEdtCond31.GetPosPixel();		// Position Edit mit Listbox
     aRBtn3Pos1 = aRbCond31.GetPosPixel();
     aRBtn3Pos2 = aRbCond32.GetPosPixel();
     aPos = aEdtCond32.GetPosPixel();
-    aPos.X() += aEdtCond32.GetSizePixel().Width();  // rechter Rand
+    aPos.X() += aEdtCond32.GetSizePixel().Width();	// rechter Rand
     aCond3Size3 = aEdtCond31.GetSizePixel();
     aCond3Size2 = Size( aPos.X() - aCond3Pos2.X(), aCond3Size3.Height() );
     aCond3Size1 = Size( aPos.X() - aCond3Pos1.X(), aCond3Size3.Height() );
@@ -217,8 +217,8 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
     }
 
     // Vorlagen eintragen
-//! pStyle = pDoc->GetSelectionStyle( /* ??? const ScMarkData& rMark ??? */ );
-    pStyle = NULL;  //!
+//!	pStyle = pDoc->GetSelectionStyle( /* ??? const ScMarkData& rMark ??? */ );
+    pStyle = NULL;	//!
     if (pStyle)
         aName = pStyle->GetName();
     else
@@ -245,15 +245,15 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
             aEdtCond11.SetText( pEntry->GetExpression( aCurPos, 0 ) );
             aLbCond1Template.SelectEntry( pEntry->GetStyle() );
 
-            ScConditionMode eMode = pEntry->GetOperation();
-            if ( eMode == SC_COND_DIRECT )          // via Formel
+            ScConditionMode	eMode = pEntry->GetOperation();
+            if ( eMode == SC_COND_DIRECT )			// via Formel
             {
                 aLbCond11.SelectEntryPos( 1 );
                 ChangeCond11Hdl( NULL );
             }
-            else if ( eMode == SC_COND_NONE )       // ???
+            else if ( eMode == SC_COND_NONE )		// ???
                 ;
-            else                                    // via Werte
+            else									// via Werte
             {
                 aLbCond12.SelectEntryPos( sal::static_int_cast<USHORT>( eMode ) );
                 if ( ( eMode == SC_COND_BETWEEN ) || ( eMode == SC_COND_NOTBETWEEN ) )
@@ -269,15 +269,15 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
             aEdtCond21.SetText( pEntry->GetExpression( aCurPos, 0 ) );
             aLbCond2Template.SelectEntry( pEntry->GetStyle() );
 
-            ScConditionMode eMode = pEntry->GetOperation();
-            if ( eMode == SC_COND_DIRECT )          // via Formel
+            ScConditionMode	eMode = pEntry->GetOperation();
+            if ( eMode == SC_COND_DIRECT )			// via Formel
             {
                 aLbCond21.SelectEntryPos( 1 );
                 ChangeCond21Hdl( NULL );
             }
-            else if ( eMode == SC_COND_NONE )       // ???
+            else if ( eMode == SC_COND_NONE )		// ???
                 ;
-            else                                    // via Werte
+            else									// via Werte
             {
                 aLbCond22.SelectEntryPos( sal::static_int_cast<USHORT>( eMode ) );
                 if ( ( eMode == SC_COND_BETWEEN ) || ( eMode == SC_COND_NOTBETWEEN ) )
@@ -292,15 +292,15 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
             aEdtCond31.SetText( pEntry->GetExpression( aCurPos, 0 ) );
             aLbCond3Template.SelectEntry( pEntry->GetStyle() );
 
-            ScConditionMode eMode = pEntry->GetOperation();
-            if ( eMode == SC_COND_DIRECT )          // via Formel
+            ScConditionMode	eMode = pEntry->GetOperation();
+            if ( eMode == SC_COND_DIRECT )			// via Formel
             {
                 aLbCond31.SelectEntryPos( 1 );
                 ChangeCond31Hdl( NULL );
             }
-            else if ( eMode == SC_COND_NONE )       // ???
+            else if ( eMode == SC_COND_NONE )		// ???
                 ;
-            else                                    // via Werte
+            else									// via Werte
             {
                 aLbCond32.SelectEntryPos( sal::static_int_cast<USHORT>( eMode ) );
                 if ( ( eMode == SC_COND_BETWEEN ) || ( eMode == SC_COND_NOTBETWEEN ) )
@@ -320,8 +320,8 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
     aEdtCond11.GrabFocus();
     pEdActive = &aEdtCond11;
     //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Enable();      // Ref-Feld hat Focus
-//  SFX_APPWINDOW->Disable();
+    //SFX_APPWINDOW->Enable();		// Ref-Feld hat Focus
+//	SFX_APPWINDOW->Disable();
 }
 
 
@@ -352,7 +352,7 @@ void ScConditionalFormatDlg::SetReference( const ScRange& rRef, ScDocument* pDoc
         Selection aNewSel( aSel.Min(), aSel.Min()+aStr.Len() );
         pEdActive->SetRefString( aVal );
         pEdActive->SetSelection( aNewSel );
-//      pEdActive->SetModifyFlag();
+//		pEdActive->SetModifyFlag();
     }
 }
 
@@ -368,7 +368,7 @@ void ScConditionalFormatDlg::AddRefEntry()
 
         xub_StrLen nLen = aVal.Len();
         pEdActive->SetSelection( Selection( nLen, nLen ) );
-//      pEdActive->SetModifyFlag();
+//		pEdActive->SetModifyFlag();
     }
 }
 
@@ -417,7 +417,7 @@ void ScConditionalFormatDlg::GetConditionalFormat( ScConditionalFormat& rCndFmt 
 
     if ( aCbxCond1.IsChecked() )
     {
-        if ( aLbCond11.GetSelectEntryPos() == 1 )   // via Formel
+        if ( aLbCond11.GetSelectEntryPos() == 1 )	// via Formel
             eOper = SC_COND_DIRECT;
         else
             eOper = (ScConditionMode)aLbCond12.GetSelectEntryPos();
@@ -430,7 +430,7 @@ void ScConditionalFormatDlg::GetConditionalFormat( ScConditionalFormat& rCndFmt 
 
     if ( aCbxCond2.IsChecked() )
     {
-        if ( aLbCond21.GetSelectEntryPos() == 1 )   // via Formel???
+        if ( aLbCond21.GetSelectEntryPos() == 1 )	// via Formel???
             eOper = SC_COND_DIRECT;
         else
             eOper = (ScConditionMode)aLbCond22.GetSelectEntryPos();
@@ -443,7 +443,7 @@ void ScConditionalFormatDlg::GetConditionalFormat( ScConditionalFormat& rCndFmt 
 
     if ( aCbxCond3.IsChecked() )
     {
-        if ( aLbCond31.GetSelectEntryPos() == 1 )   // via Formel???
+        if ( aLbCond31.GetSelectEntryPos() == 1 )	// via Formel???
             eOper = SC_COND_DIRECT;
         else
             eOper = (ScConditionMode)aLbCond32.GetSelectEntryPos();
@@ -747,7 +747,7 @@ IMPL_LINK( ScConditionalFormatDlg, LoseFocusHdl, Control*, EMPTYARG )
 
 
 //----------------------------------------------------------------------------
-//  [OK], [Cancel]
+//	[OK], [Cancel]
 
 IMPL_LINK( ScConditionalFormatDlg, BtnHdl, PushButton*, pBtn )
 {

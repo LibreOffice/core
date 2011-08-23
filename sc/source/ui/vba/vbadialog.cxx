@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,12 +55,12 @@ static const rtl::OUString aStringList[]=
     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DefineLabelRange" ) ),
     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DataFilterAutoFilter" ) ),
     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DataFilterSpecialFilter" ) ),
-    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AutoFormat" ) )
+    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AutoFormat" ) )	
 };
 
 const sal_Int32 nDialogSize = sizeof( aStringList ) / sizeof( aStringList[ 0 ] );
 
-rtl::OUString
+rtl::OUString 
 ScVbaDialog::mapIndexToName( sal_Int32 nIndex )
 {
     if( nIndex < nDialogSize )
@@ -68,14 +68,14 @@ ScVbaDialog::mapIndexToName( sal_Int32 nIndex )
     return rtl::OUString();
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaDialog::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaDialog") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 ScVbaDialog::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

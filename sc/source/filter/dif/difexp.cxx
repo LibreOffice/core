@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,11 +49,11 @@
 FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
     const ScAddress& rOutPos, const CharSet eNach, UINT32 nDifOption )
 {
-    SCCOL       nEndCol;
-    SCROW       nEndRow;
+    SCCOL		nEndCol;
+    SCROW		nEndRow;
     pDoc->GetTableArea( rOutPos.Tab(), nEndCol, nEndRow );
-    ScAddress   aEnd( nEndCol, nEndRow, rOutPos.Tab() );
-    ScAddress   aStart( rOutPos );
+    ScAddress	aEnd( nEndCol, nEndRow, rOutPos.Tab() );
+    ScAddress	aStart( rOutPos );
 
     aStart.PutInOrder( aEnd );
 
@@ -98,25 +98,25 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
             bContextOrNotAsciiEncoding = FALSE;
     }
 
-    const sal_Char*     p2DoubleQuotes_LF = "\"\"\n";
-    const sal_Char*     pSpecDataType_LF = "-1,0\n";
-    const sal_Char*     pEmptyData = "1,0\n\"\"\n";
-    const sal_Char*     pStringData = "1,0\n";
-    const sal_Char*     pNumData = "0,";
-    const sal_Char*     pNumDataERROR = "0,0\nERROR\n";
+    const sal_Char*		p2DoubleQuotes_LF = "\"\"\n";
+    const sal_Char*		pSpecDataType_LF = "-1,0\n";
+    const sal_Char*		pEmptyData = "1,0\n\"\"\n";
+    const sal_Char*		pStringData = "1,0\n";
+    const sal_Char*		pNumData = "0,";
+    const sal_Char*		pNumDataERROR = "0,0\nERROR\n";
 
-    FltError            eRet = eERR_OK;
-    String              aOS;
-    String              aString;
-    SCCOL               nEndCol = rRange.aEnd.Col();
-    SCROW               nEndRow = rRange.aEnd.Row();
-    SCCOL               nNumCols = nEndCol - rRange.aStart.Col() + 1;
-    SCROW               nNumRows = nEndRow - rRange.aStart.Row() + 1;
-    SCTAB               nTab = rRange.aStart.Tab();
+    FltError			eRet = eERR_OK;
+    String			    aOS;
+    String				aString;
+    SCCOL				nEndCol = rRange.aEnd.Col();
+    SCROW				nEndRow = rRange.aEnd.Row();
+    SCCOL				nNumCols = nEndCol - rRange.aStart.Col() + 1;
+    SCROW				nNumRows = nEndRow - rRange.aStart.Row() + 1;
+    SCTAB				nTab = rRange.aStart.Tab();
 
-    double              fVal;
+    double				fVal;
 
-    const BOOL          bPlain = ( nDifOption == SC_DIFOPT_PLAIN );
+    const BOOL			bPlain = ( nDifOption == SC_DIFOPT_PLAIN );
 
     ScProgress          aPrgrsBar( pDoc->GetDocumentShell(), ScGlobal::GetRscString( STR_LOAD_DOC ), nNumRows );
 
@@ -155,9 +155,9 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     aOS.AppendAscii( p2DoubleQuotes_LF );
     rOut.WriteUnicodeOrByteText( aOS );
 
-    SCCOL               nColCnt;
-    SCROW               nRowCnt;
-    ScBaseCell*         pAkt;
+    SCCOL				nColCnt;
+    SCROW				nRowCnt;
+    ScBaseCell*			pAkt;
 
     for( nRowCnt = rRange.aStart.Row() ; nRowCnt <= nEndRow ; nRowCnt++ )
     {

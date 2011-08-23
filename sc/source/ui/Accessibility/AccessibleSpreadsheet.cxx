@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@
 
 #include <algorithm>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -276,7 +276,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 mbDelIns = sal_False;
         }
         // no longer needed, because the document calls the VisAreaChanged method
-/*      else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+/*		else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
@@ -285,7 +285,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             CommitChange(aEvent);*/
         // commented out, because to use a ModelChangeEvent is not the right way
         // at the moment there is no way, but the Java/Gnome Api should be extended sometime
-/*          if (mpViewShell)
+/*			if (mpViewShell)
             {
                 Rectangle aNewVisCells(GetVisCells(GetVisArea(mpViewShell, meSplitPos)));
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -297,7 +297,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
             ObjectIdentifier::getSeriesParticleFromCID(m_aSelection.getSelectedCID()), aChildParticle );
 
         bool bSuccess = ChartController::executeDlg_ObjectProperties_withoutUndoGuard( aObjectCID, true );
-        if( bSuccess )
+        if( bSuccess ) 
             aUndoGuard.commitAction();
         return;
     }
@@ -706,7 +706,7 @@ void ChartController::executeDispatch_InsertDataLabels()
 
 void ChartController::executeDispatch_InsertDataLabel()
 {
-    UndoGuard aUndoGuard = UndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::INSERT,
+    UndoGuard aUndoGuard = UndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::INSERT, 
         ::rtl::OUString( String( SchResId( STR_OBJECT_LABEL )))),
         m_xUndoManager, getModel() );
     DataSeriesHelper::insertDataLabelToPoint( ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getModel() ) );
@@ -756,7 +756,7 @@ void ChartController::executeDispatch_ResetDataPoint()
     {
         sal_Int32 nPointIndex = ObjectIdentifier::getIndexFromParticleOrCID( m_aSelection.getSelectedCID() );
         xSeries->resetDataPoint( nPointIndex );
-    }
+    }    
     aUndoGuard.commitAction();
 }
 

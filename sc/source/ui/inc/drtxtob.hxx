@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 #include "shellids.hxx"
 
-USHORT ScGetFontWorkId();       // statt SvxFontWorkChildWindow::GetChildWindowId()
+USHORT ScGetFontWorkId();		// statt SvxFontWorkChildWindow::GetChildWindowId()
 
 class ScViewData;
 class TransferableDataHelper;
@@ -45,9 +45,9 @@ class TransferableClipboardListener;
 
 class ScDrawTextObjectBar : public SfxShell
 {
-    ScViewData*         pViewData;
+    ScViewData*			pViewData;
     TransferableClipboardListener* pClipEvtLstnr;
-    BOOL                bPastePossible;
+    BOOL				bPastePossible;
 
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
 
@@ -73,11 +73,11 @@ public:
     BOOL ExecuteParaDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet );
 
     void ExecuteExtra( SfxRequest &rReq );
-    void ExecFormText(SfxRequest& rReq);        // StarFontWork
+    void ExecFormText(SfxRequest& rReq);		// StarFontWork
     void GetFormTextState(SfxItemSet& rSet);
 
 private:
-    void ExecuteGlobal( SfxRequest &rReq );         // von Execute gerufen fuer ganze Objekte
+    void ExecuteGlobal( SfxRequest &rReq );			// von Execute gerufen fuer ganze Objekte
     void GetGlobalClipState( SfxItemSet& rSet );
     void ExecutePasteContents( SfxRequest &rReq );
     BOOL IsNoteEdit();

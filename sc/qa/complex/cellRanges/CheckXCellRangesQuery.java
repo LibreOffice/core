@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ import java.io.PrintWriter;
 import util.SOfficeFactory;
 
 /**
- * Check the XCellRangesQuery interface on the SheetCell service. test was
+ * Check the XCellRangesQuery interface on the SheetCell service. test was 
  * created for bug i20044.
  */
 public class CheckXCellRangesQuery extends ComplexTestCase {
@@ -65,7 +65,7 @@ public class CheckXCellRangesQuery extends ComplexTestCase {
     }
 
     /**
-    * Creates Spreadsheet document and the test object,
+    * Creates Spreadsheet document and the test object, 
     * before the actual test starts.
     */
     public void before() {

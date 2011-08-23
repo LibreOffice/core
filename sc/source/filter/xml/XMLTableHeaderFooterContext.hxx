@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,19 +48,19 @@ class XMLTableHeaderFooterContext: public SvXMLImportContext
     ::com::sun::star::uno::Reference <
         ::com::sun::star::sheet::XHeaderFooterContent > xHeaderFooterContent;
 
-    const ::rtl::OUString   sOn;
-    const ::rtl::OUString   sShareContent;
-    const ::rtl::OUString   sContent;
-    const ::rtl::OUString   sContentLeft;
-    const ::rtl::OUString   sEmpty;
-    rtl::OUString           sCont;
+    const ::rtl::OUString	sOn;
+    const ::rtl::OUString	sShareContent;
+    const ::rtl::OUString	sContent;
+    const ::rtl::OUString	sContentLeft;
+    const ::rtl::OUString	sEmpty;
+    rtl::OUString			sCont;
 
-    sal_Bool    bDisplay;
-    sal_Bool    bInsertContent;
-    sal_Bool    bLeft;
-    sal_Bool    bContainsLeft;
-    sal_Bool    bContainsRight;
-    sal_Bool    bContainsCenter;
+    sal_Bool	bDisplay;
+    sal_Bool	bInsertContent;
+    sal_Bool 	bLeft;
+    sal_Bool	bContainsLeft;
+    sal_Bool	bContainsRight;
+    sal_Bool	bContainsCenter;
 
 public:
     TYPEINFO();

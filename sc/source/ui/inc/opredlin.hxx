@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,16 +58,16 @@
 
 class ScRedlineOptionsTabPage : public SfxTabPage
 {
-    FixedText           aContentFT;
-    ColorListBox        aContentColorLB;
-    FixedText           aRemoveFT;
-    ColorListBox        aRemoveColorLB;
-    FixedText           aInsertFT;
-    ColorListBox        aInsertColorLB;
-    FixedText           aMoveFT;
-    ColorListBox        aMoveColorLB;
+    FixedText			aContentFT;
+    ColorListBox		aContentColorLB;
+    FixedText			aRemoveFT;
+    ColorListBox		aRemoveColorLB;
+    FixedText			aInsertFT;
+    ColorListBox		aInsertColorLB;
+    FixedText			aMoveFT;
+    ColorListBox		aMoveColorLB;
     FixedLine           aChangedGB;
-    String              aAuthorStr;
+    String				aAuthorStr;
     DECL_LINK( ColorHdl, ColorListBox *pColorLB );
 
 
@@ -76,10 +76,10 @@ public:
     ScRedlineOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
     ~ScRedlineOptionsTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 #endif
 

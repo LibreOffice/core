@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,44 +51,44 @@
 //----------------------------------------------------------------------------
 
 ScFilterOptionsMgr::ScFilterOptionsMgr(
-                                Dialog*             ptrDlg,
-                                ScViewData*         ptrViewData,
-                                const ScQueryParam& refQueryData,
-                                MoreButton&         refBtnMore,
-                                CheckBox&           refBtnCase,
-                                CheckBox&           refBtnRegExp,
-                                CheckBox&           refBtnHeader,
-                                CheckBox&           refBtnUnique,
-                                CheckBox&           refBtnCopyResult,
-                                CheckBox&           refBtnDestPers,
-                                ListBox&            refLbCopyArea,
-                                Edit&               refEdCopyArea,
-                                formula::RefButton&     refRbCopyArea,
-                                FixedText&          refFtDbAreaLabel,
-                                FixedInfo&          refFtDbArea,
+                                Dialog*				ptrDlg,
+                                ScViewData*			ptrViewData,
+                                const ScQueryParam&	refQueryData,
+                                MoreButton&			refBtnMore,
+                                CheckBox&			refBtnCase,
+                                CheckBox&			refBtnRegExp,
+                                CheckBox&			refBtnHeader,
+                                CheckBox&			refBtnUnique,
+                                CheckBox&			refBtnCopyResult,
+                                CheckBox&			refBtnDestPers,
+                                ListBox&			refLbCopyArea,
+                                Edit&				refEdCopyArea,
+                                formula::RefButton&		refRbCopyArea,
+                                FixedText&			refFtDbAreaLabel,
+                                FixedInfo&			refFtDbArea,
                                 FixedLine&          refFlOptions,
-                                const String&       refStrNoName,
-                                const String&       refStrUndefined )
+                                const String&		refStrNoName,
+                                const String&		refStrUndefined )
 
-    :   pDlg            ( ptrDlg ),
-        pViewData       ( ptrViewData ),
-        pDoc            ( ptrViewData ? ptrViewData->GetDocument() : NULL ),
-        rBtnMore        ( refBtnMore ),
-        rBtnCase        ( refBtnCase ),
-        rBtnRegExp      ( refBtnRegExp ),
-        rBtnHeader      ( refBtnHeader ),
-        rBtnUnique      ( refBtnUnique ),
-        rBtnCopyResult  ( refBtnCopyResult ),
-        rBtnDestPers    ( refBtnDestPers ),
-        rLbCopyPos      ( refLbCopyArea ),
-        rEdCopyPos      ( refEdCopyArea ),
-        rRbCopyPos      ( refRbCopyArea ),
-        rFtDbAreaLabel  ( refFtDbAreaLabel ),
-        rFtDbArea       ( refFtDbArea ),
+    :	pDlg			( ptrDlg ),
+        pViewData		( ptrViewData ),
+        pDoc			( ptrViewData ? ptrViewData->GetDocument() : NULL ),
+        rBtnMore		( refBtnMore ),
+        rBtnCase		( refBtnCase ),
+        rBtnRegExp		( refBtnRegExp ),
+        rBtnHeader		( refBtnHeader ),
+        rBtnUnique		( refBtnUnique ),
+        rBtnCopyResult	( refBtnCopyResult ),
+        rBtnDestPers	( refBtnDestPers ),
+        rLbCopyPos		( refLbCopyArea ),
+        rEdCopyPos		( refEdCopyArea ),
+        rRbCopyPos		( refRbCopyArea ),
+        rFtDbAreaLabel	( refFtDbAreaLabel ),
+        rFtDbArea		( refFtDbArea ),
         rFlOptions      ( refFlOptions ),
-        rStrNoName      ( refStrNoName ),
-        rStrUndefined   ( refStrUndefined ),
-        rQueryData      ( refQueryData )
+        rStrNoName		( refStrNoName ),
+        rStrUndefined	( refStrUndefined ),
+        rQueryData		( refQueryData )
 {
     Init();
 }
@@ -112,8 +112,8 @@ void ScFilterOptionsMgr::Init()
 {
     DBG_ASSERT( pViewData && pDoc, "Init failed :-/" );
 
-    rLbCopyPos.SetSelectHdl  ( LINK( this, ScFilterOptionsMgr, LbPosSelHdl ) );
-    rEdCopyPos.SetModifyHdl  ( LINK( this, ScFilterOptionsMgr, EdPosModifyHdl ) );
+    rLbCopyPos.SetSelectHdl	 ( LINK( this, ScFilterOptionsMgr, LbPosSelHdl ) );
+    rEdCopyPos.SetModifyHdl	 ( LINK( this, ScFilterOptionsMgr, EdPosModifyHdl ) );
     rBtnCopyResult.SetClickHdl( LINK( this, ScFilterOptionsMgr, BtnCopyResultHdl ) );
 
     rBtnMore.AddWindow( &rBtnCase );
@@ -129,23 +129,23 @@ void ScFilterOptionsMgr::Init()
     rBtnMore.AddWindow( &rFtDbArea );
     rBtnMore.AddWindow( &rFlOptions );
 
-    rBtnCase    .Check( rQueryData.bCaseSens );
-    rBtnHeader  .Check( rQueryData.bHasHeader );
-    rBtnRegExp  .Check( rQueryData.bRegExp );
-    rBtnUnique  .Check( !rQueryData.bDuplicate );
+    rBtnCase	.Check( rQueryData.bCaseSens );
+    rBtnHeader	.Check( rQueryData.bHasHeader );
+    rBtnRegExp	.Check( rQueryData.bRegExp );
+    rBtnUnique	.Check( !rQueryData.bDuplicate );
 
     if ( pViewData && pDoc )
     {
-        String          theAreaStr;
-        ScRange         theCurArea ( ScAddress( rQueryData.nCol1,
+        String			theAreaStr;
+        ScRange			theCurArea ( ScAddress( rQueryData.nCol1,
                                                 rQueryData.nRow1,
                                                 pViewData->GetTabNo() ),
                                      ScAddress( rQueryData.nCol2,
                                                 rQueryData.nRow2,
                                                 pViewData->GetTabNo() ) );
-        ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        String          theDbArea;
-        String          theDbName   = rStrNoName;
+        ScDBCollection*	pDBColl		= pDoc->GetDBCollection();
+        String			theDbArea;
+        String			theDbName	= rStrNoName;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         theCurArea.Format( theAreaStr, SCR_ABS_3D, pDoc, eConv );
@@ -167,7 +167,7 @@ void ScFilterOptionsMgr::Init()
             rLbCopyPos.SetEntryData( nInsert, new String( aRefStr ) );
         }
 
-        rBtnDestPers.Check( TRUE );         // beim Aufruf immer an
+        rBtnDestPers.Check( TRUE );			// beim Aufruf immer an
         rLbCopyPos.SelectEntryPos( 0 );
         rEdCopyPos.SetText( EMPTY_STRING );
 
@@ -180,9 +180,9 @@ void ScFilterOptionsMgr::Init()
 
         if ( pDBColl )
         {
-            ScAddress&  rStart  = theCurArea.aStart;
-            ScAddress&  rEnd    = theCurArea.aEnd;
-            ScDBData*   pDBData = pDBColl->GetDBAtArea( rStart.Tab(),
+            ScAddress&	rStart	= theCurArea.aStart;
+            ScAddress&	rEnd	= theCurArea.aEnd;
+            ScDBData*	pDBData = pDBColl->GetDBAtArea(	rStart.Tab(),
                                                         rStart.Col(), rStart.Row(),
                                                         rEnd.Col(),   rEnd.Row() );
             if ( pDBData )
@@ -281,15 +281,15 @@ IMPL_LINK( ScFilterOptionsMgr, EdPosModifyHdl, Edit*, pEd )
 {
     if ( pEd == &rEdCopyPos )
     {
-        String  theCurPosStr = pEd->GetText();
-        USHORT  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
+        String	theCurPosStr = pEd->GetText();
+        USHORT	nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
 
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
-            String* pStr    = NULL;
-            BOOL    bFound  = FALSE;
-            USHORT  i       = 0;
-            USHORT  nCount  = rLbCopyPos.GetEntryCount();
+            String*	pStr	= NULL;
+            BOOL	bFound	= FALSE;
+            USHORT	i		= 0;
+            USHORT	nCount	= rLbCopyPos.GetEntryCount();
 
             for ( i=2; i<nCount && !bFound; i++ )
             {

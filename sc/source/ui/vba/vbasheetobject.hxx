@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -169,7 +169,7 @@ public:
 
 protected:
     sal_Int32 getModelIndexInForm() const throw (css::uno::RuntimeException);
-
+    
 protected:
     css::uno::Reference< css::container::XIndexContainer > mxFormIC;
     css::uno::Reference< css::beans::XPropertySet > mxControlProps;
@@ -206,7 +206,7 @@ public:
     // XButton methods
     css::uno::Reference< ov::excel::XCharacters > SAL_CALL Characters(
         const css::uno::Any& rStart, const css::uno::Any& rLength ) throw (css::uno::RuntimeException);
-
+        
     // XHelperInterface
     VBAHELPER_DECL_XHELPERINTERFACE
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,20 +35,20 @@ class ScDocShell;
 
 class ScSizeDeviceProvider
 {
-    OutputDevice*   pDevice;
-    BOOL            bOwner;
-    double          nPPTX;
-    double          nPPTY;
-    MapMode         aOldMapMode;
+    OutputDevice*	pDevice;
+    BOOL			bOwner;
+    double			nPPTX;
+    double			nPPTY;
+    MapMode			aOldMapMode;
 
 public:
                 ScSizeDeviceProvider( ScDocShell* pDocSh );
                 ~ScSizeDeviceProvider();
 
-    OutputDevice*   GetDevice() const   { return pDevice; }
-    double          GetPPTX() const     { return nPPTX; }
-    double          GetPPTY() const     { return nPPTY; }
-    BOOL            IsPrinter() const   { return !bOwner; }
+    OutputDevice* 	GetDevice() const	{ return pDevice; }
+    double			GetPPTX() const		{ return nPPTX; }
+    double			GetPPTY() const		{ return nPPTY; }
+    BOOL			IsPrinter() const	{ return !bOwner; }
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,10 @@
 #include "formula/errorcodes.hxx"
 #include "formula/token.hxx"
 #include "brdcst.hxx"
-#include "docoptio.hxx"         // GetStdPrecision fuer GetMaxNumberStringLen
+#include "docoptio.hxx"			// GetStdPrecision fuer GetMaxNumberStringLen
 #include "subtotal.hxx"
 #include "markdata.hxx"
-#include "detfunc.hxx"          // fuer Notizen bei DeleteRange
+#include "detfunc.hxx"			// fuer Notizen bei DeleteRange
 #include "postit.hxx"
 #include "stringutil.hxx"
 
@@ -60,11 +60,11 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
 // Err527 Workaround
-extern const ScFormulaCell* pLastFormulaTreeTop;    // in cellform.cxx
+extern const ScFormulaCell* pLastFormulaTreeTop;	// in cellform.cxx
 using namespace formula;
 // STATIC DATA -----------------------------------------------------------
 
-BOOL ScColumn::bDoubleAlloc = FALSE;    // fuer Import: Groesse beim Allozieren verdoppeln
+BOOL ScColumn::bDoubleAlloc = FALSE;	// fuer Import: Groesse beim Allozieren verdoppeln
 
 
 void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
@@ -80,7 +80,7 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
     }
     if ( !bIsAppended )
     {
-        SCSIZE  nIndex;
+        SCSIZE	nIndex;
         if (Search(nRow, nIndex))
         {
             ScBaseCell* pOldCell = pItems[nIndex].pCell;
@@ -203,13 +203,13 @@ void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
 
 void ScColumn::Delete( SCROW nRow )
 {
-    SCSIZE  nIndex;
+    SCSIZE	nIndex;
 
     if (Search(nRow, nIndex))
     {
         ScBaseCell* pCell = pItems[nIndex].pCell;
         ScNoteCell* pNoteCell = new ScNoteCell;
-        pItems[nIndex].pCell = pNoteCell;       // Dummy fuer Interpret
+        pItems[nIndex].pCell = pNoteCell;		// Dummy fuer Interpret
         pDocument->Broadcast( ScHint( SC_HINT_DYING,
             ScAddress( nCol, nRow, nTab ), pCell ) );
         if ( SvtBroadcaster* pBC = pCell->ReleaseBroadcaster() )
@@ -223,7 +223,7 @@ void ScColumn::Delete( SCROW nRow )
             memmove( &pItems[nIndex], &pItems[nIndex + 1], (nCount - nIndex) * sizeof(ColEntry) );
             pItems[nCount].nRow = 0;
             pItems[nCount].pCell = NULL;
-            //  Soll man hier den Speicher freigeben (delta)? Wird dann langsamer!
+            //	Soll man hier den Speicher freigeben (delta)? Wird dann langsamer!
         }
         pCell->EndListeningTo( pDocument );
         pCell->Delete();
@@ -235,7 +235,7 @@ void ScColumn::DeleteAtIndex( SCSIZE nIndex )
 {
     ScBaseCell* pCell = pItems[nIndex].pCell;
     ScNoteCell* pNoteCell = new ScNoteCell;
-    pItems[nIndex].pCell = pNoteCell;       // Dummy fuer Interpret
+    pItems[nIndex].pCell = pNoteCell;		// Dummy fuer Interpret
     pDocument->Broadcast( ScHint( SC_HINT_DYING,
         ScAddress( nCol, pItems[nIndex].nRow, nTab ), pCell ) );
     delete pNoteCell;
@@ -275,7 +275,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
         return ;
 
     BOOL bOldAutoCalc = pDocument->GetAutoCalc();
-    pDocument->SetAutoCalc( FALSE );    // Mehrfachberechnungen vermeiden
+    pDocument->SetAutoCalc( FALSE );	// Mehrfachberechnungen vermeiden
 
     BOOL bFound=FALSE;
     SCROW nEndRow = nStartRow + nSize - 1;
@@ -297,9 +297,9 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
         if (pBC)
         {
 // gibt jetzt invalid reference, kein Aufruecken der direkten Referenzen
-//          MoveListeners( *pBC, nRow+nSize );
+//			MoveListeners( *pBC, nRow+nSize );
             pCell->DeleteBroadcaster();
-            //  in DeleteRange werden leere Broadcaster geloescht
+            //	in DeleteRange werden leere Broadcaster geloescht
         }
     }
     if (bFound)
@@ -549,10 +549,10 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, USHORT nDelFla
 
 void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, USHORT nDelFlag)
 {
-    //  FreeAll darf hier nicht gerufen werden wegen Broadcastern
+    //	FreeAll darf hier nicht gerufen werden wegen Broadcastern
 
-    //  Attribute erst am Ende, damit vorher noch zwischen Zahlen und Datum
-    //  unterschieden werden kann (#47901#)
+    //	Attribute erst am Ende, damit vorher noch zwischen Zahlen und Datum
+    //	unterschieden werden kann (#47901#)
 
     USHORT nContMask = IDF_CONTENTS;
     //  IDF_NOCAPTIONS needs to be passed too, if IDF_NOTE is set
@@ -590,7 +590,7 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, USHORT nDelFlag)
         RemoveEditAttribs( nStartRow, nEndRow );
     }
 
-    //  Attribute erst hier
+    //	Attribute erst hier
     if ((nDelFlag & IDF_ATTRIB) == IDF_ATTRIB) pAttrArray->DeleteArea( nStartRow, nEndRow );
     else if ((nDelFlag & IDF_ATTRIB) != 0) pAttrArray->DeleteHardAttr( nStartRow, nEndRow );
 }
@@ -603,8 +603,8 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
     if (!nContFlags)
         return NULL;
 
-    //  Testen, ob Zelle kopiert werden soll
-    //  auch bei IDF_CONTENTS komplett, wegen Notes / Broadcastern
+    //	Testen, ob Zelle kopiert werden soll
+    //	auch bei IDF_CONTENTS komplett, wegen Notes / Broadcastern
 
     BOOL bMatch = FALSE;
     ScBaseCell* pCell = pItems[nIndex].pCell;
@@ -630,8 +630,8 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
             }
             break;
         case CELLTYPE_STRING:
-        case CELLTYPE_EDIT:     bMatch = ((nFlags & IDF_STRING) != 0); break;
-        case CELLTYPE_FORMULA:  bMatch = ((nFlags & IDF_FORMULA) != 0); break;
+        case CELLTYPE_EDIT:		bMatch = ((nFlags & IDF_STRING) != 0); break;
+        case CELLTYPE_FORMULA:	bMatch = ((nFlags & IDF_FORMULA) != 0); break;
         default:
         {
             // added to avoid warnings
@@ -641,16 +641,16 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
         return NULL;
 
 
-    //  Referenz einsetzen
+    //	Referenz einsetzen
     ScSingleRefData aRef;
     aRef.nCol = nCol;
     aRef.nRow = pItems[nIndex].nRow;
     aRef.nTab = nTab;
-    aRef.InitFlags();                           // -> alles absolut
+    aRef.InitFlags();							// -> alles absolut
     aRef.SetFlag3D(TRUE);
 
-    //! 3D(FALSE) und TabRel(TRUE), wenn die endgueltige Position auf der selben Tabelle ist?
-    //! (bei TransposeClip ist die Zielposition noch nicht bekannt)
+    //!	3D(FALSE) und TabRel(TRUE), wenn die endgueltige Position auf der selben Tabelle ist?
+    //!	(bei TransposeClip ist die Zielposition noch nicht bekannt)
 
     aRef.CalcRelFromAbs( rDestPos );
 
@@ -661,8 +661,8 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
 }
 
 
-//  rColumn = Quelle
-//  nRow1, nRow2 = Zielposition
+//	rColumn = Quelle
+//	nRow1, nRow2 = Zielposition
 
 void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
                                 USHORT nInsFlag, BOOL bAsLink, BOOL bSkipAttrForEmpty,
@@ -672,8 +672,8 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
     {
         if ( bSkipAttrForEmpty )
         {
-            //  copy only attributes for non-empty cells
-            //  (notes are not counted as non-empty here, to match the content behavior)
+            //	copy only attributes for non-empty cells
+            //	(notes are not counted as non-empty here, to match the content behavior)
 
             SCSIZE nStartIndex;
             rColumn.Search( nRow1-nDy, nStartIndex );
@@ -685,7 +685,7 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
                     SCROW nStartRow = rColumn.pItems[nStartIndex].nRow;
                     SCROW nEndRow = nStartRow;
 
-                    //  find consecutive non-empty cells
+                    //	find consecutive non-empty cells
 
                     while ( nEndRow < nRow2-nDy &&
                             nEndIndex+1 < rColumn.nCount &&
@@ -709,25 +709,25 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
 
     if ( bAsLink && nInsFlag == IDF_ALL )
     {
-        //  bei "alles" werden auch leere Zellen referenziert
-        //! IDF_ALL muss immer mehr Flags enthalten, als bei "Inhalte Einfuegen"
-        //! einzeln ausgewaehlt werden koennen!
+        //	bei "alles" werden auch leere Zellen referenziert
+        //!	IDF_ALL muss immer mehr Flags enthalten, als bei "Inhalte Einfuegen"
+        //!	einzeln ausgewaehlt werden koennen!
 
         Resize( nCount + static_cast<SCSIZE>(nRow2-nRow1+1) );
 
-        ScAddress aDestPos( nCol, 0, nTab );        // Row wird angepasst
+        ScAddress aDestPos( nCol, 0, nTab );		// Row wird angepasst
 
-        //  Referenz erzeugen (Quell-Position)
+        //	Referenz erzeugen (Quell-Position)
         ScSingleRefData aRef;
         aRef.nCol = rColumn.nCol;
-        //  nRow wird angepasst
+        //	nRow wird angepasst
         aRef.nTab = rColumn.nTab;
-        aRef.InitFlags();                           // -> alles absolut
+        aRef.InitFlags();							// -> alles absolut
         aRef.SetFlag3D(TRUE);
 
         for (SCROW nDestRow = nRow1; nDestRow <= nRow2; nDestRow++)
         {
-            aRef.nRow = nDestRow - nDy;             // Quell-Zeile
+            aRef.nRow = nDestRow - nDy;				// Quell-Zeile
             aDestPos.SetRow( nDestRow );
 
             aRef.CalcRelFromAbs( aDestPos );
@@ -763,8 +763,8 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
             bAtEnd = TRUE;
         else if ( nDestRow >= (SCsROW) nRow1 )
         {
-            //  rows at the beginning may be skipped if filtered rows are left out,
-            //  nDestRow may be negative then
+            //	rows at the beginning may be skipped if filtered rows are left out,
+            //	nDestRow may be negative then
 
             ScAddress aDestPos( nCol, (SCROW)nDestRow, nTab );
 
@@ -939,7 +939,7 @@ void ScColumn::MixMarked( const ScMarkData& rMark, USHORT nFunction,
 }
 
 
-//  Ergebnis in rVal1
+//	Ergebnis in rVal1
 
 BOOL lcl_DoFunction( double& rVal1, double nVal2, USHORT nFunction )
 {
@@ -950,7 +950,7 @@ BOOL lcl_DoFunction( double& rVal1, double nVal2, USHORT nFunction )
             bOk = SubTotal::SafePlus( rVal1, nVal2 );
             break;
         case PASTE_SUB:
-            nVal2 = -nVal2;     //! geht das immer ohne Fehler?
+            nVal2 = -nVal2;		//! geht das immer ohne Fehler?
             bOk = SubTotal::SafePlus( rVal1, nVal2 );
             break;
         case PASTE_MUL:
@@ -992,9 +992,9 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
     SCSIZE nIndex;
     Search( nRow1, nIndex );
 
-//  SCSIZE nSrcIndex = 0;
+//	SCSIZE nSrcIndex = 0;
     SCSIZE nSrcIndex;
-    rSrcCol.Search( nRow1, nSrcIndex );         //! Testen, ob Daten ganz vorne
+    rSrcCol.Search( nRow1, nSrcIndex );			//! Testen, ob Daten ganz vorne
 
     SCROW nNextThis = MAXROW+1;
     if ( nIndex < nCount )
@@ -1026,14 +1026,14 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
         BOOL bSrcEmpty = ( eSrcType == CELLTYPE_NONE || eSrcType == CELLTYPE_NOTE );
         BOOL bDestEmpty = ( eDestType == CELLTYPE_NONE || eDestType == CELLTYPE_NOTE );
 
-        if ( bSkipEmpty && bDestEmpty )     // Originalzelle wiederherstellen
+        if ( bSkipEmpty && bDestEmpty )		// Originalzelle wiederherstellen
         {
-            if ( pSrc )                     // war da eine Zelle?
+            if ( pSrc )						// war da eine Zelle?
             {
                 pNew = pSrc->CloneWithoutNote( *pDocument );
             }
         }
-        else if ( nFunction )               // wirklich Rechenfunktion angegeben
+        else if ( nFunction )				// wirklich Rechenfunktion angegeben
         {
             double nVal1;
             double nVal2;
@@ -1046,7 +1046,7 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
             else
                 nVal2 = 0.0;
 
-            //  leere Zellen werden als Werte behandelt
+            //	leere Zellen werden als Werte behandelt
 
             BOOL bSrcVal  = ( bSrcEmpty || eSrcType == CELLTYPE_VALUE );
             BOOL bDestVal  = ( bDestEmpty || eDestType == CELLTYPE_VALUE );
@@ -1056,15 +1056,15 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
             BOOL bDestText = ( eDestType == CELLTYPE_STRING ||
                                 eDestType == CELLTYPE_EDIT );
 
-            //  sonst bleibt nur Formel...
+            //	sonst bleibt nur Formel...
 
             if ( bSrcEmpty && bDestEmpty )
             {
-                //  beide leer -> nix
+                //	beide leer -> nix
             }
             else if ( bSrcVal && bDestVal )
             {
-                //  neuen Wert eintragen, oder Fehler bei Ueberlauf
+                //	neuen Wert eintragen, oder Fehler bei Ueberlauf
 
                 BOOL bOk = lcl_DoFunction( nVal1, nVal2, nFunction );
 
@@ -1075,15 +1075,15 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
                     ScFormulaCell* pFC = new ScFormulaCell( pDocument,
                                                 ScAddress( nCol, nRow, nTab ) );
                     pFC->SetErrCode( errNoValue );
-                    //! oder NOVALUE, dann auch in consoli,
-                    //! sonst in Interpreter::GetCellValue die Abfrage auf errNoValue raus
-                    //! (dann geht Stringzelle+Wertzelle nicht mehr)
+                    //!	oder NOVALUE, dann auch in consoli,
+                    //!	sonst in Interpreter::GetCellValue die Abfrage auf errNoValue raus
+                    //!	(dann geht Stringzelle+Wertzelle nicht mehr)
                     pNew = pFC;
                 }
             }
             else if ( bSrcText || bDestText )
             {
-                //  mit Texten wird nicht gerechnet - immer "alte" Zelle, also pSrc
+                //	mit Texten wird nicht gerechnet - immer "alte" Zelle, also pSrc
 
                 if (pSrc)
                     pNew = pSrc->CloneWithoutNote( *pDocument );
@@ -1092,28 +1092,28 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
             }
             else
             {
-                //  Kombination aus Wert und mindestens einer Formel -> Formel erzeugen
+                //	Kombination aus Wert und mindestens einer Formel -> Formel erzeugen
 
                 ScTokenArray aArr;
 
-                //  erste Zelle
+                //	erste Zelle
                 if ( eSrcType == CELLTYPE_FORMULA )
                     lcl_AddCode( aArr, (ScFormulaCell*)pSrc );
                 else
                     aArr.AddDouble( nVal1 );
 
-                //  Operator
+                //	Operator
                 OpCode eOp = ocAdd;
                 switch ( nFunction )
                 {
-                    case PASTE_ADD: eOp = ocAdd; break;
-                    case PASTE_SUB: eOp = ocSub; break;
-                    case PASTE_MUL: eOp = ocMul; break;
-                    case PASTE_DIV: eOp = ocDiv; break;
+                    case PASTE_ADD:	eOp = ocAdd; break;
+                    case PASTE_SUB:	eOp = ocSub; break;
+                    case PASTE_MUL:	eOp = ocMul; break;
+                    case PASTE_DIV:	eOp = ocDiv; break;
                 }
-                aArr.AddOpCode(eOp);                // Funktion
+                aArr.AddOpCode(eOp);				// Funktion
 
-                //  zweite Zelle
+                //	zweite Zelle
                 if ( eDestType == CELLTYPE_FORMULA )
                     lcl_AddCode( aArr, (ScFormulaCell*)pDest );
                 else
@@ -1124,21 +1124,21 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
         }
 
 
-        if ( pNew || bDelete )          // neues Ergebnis ?
+        if ( pNew || bDelete )			// neues Ergebnis ?
         {
-            if (pDest && !pNew)                     // alte Zelle da ?
+            if (pDest && !pNew)						// alte Zelle da ?
             {
                 if ( pDest->GetBroadcaster() )
-                    pNew = new ScNoteCell;          // Broadcaster uebernehmen
+                    pNew = new ScNoteCell;			// Broadcaster uebernehmen
                 else
-                    Delete(nRow);                   // -> loeschen
+                    Delete(nRow);					// -> loeschen
             }
             if (pNew)
-                Insert(nRow, pNew);     // neue einfuegen
+                Insert(nRow, pNew);		// neue einfuegen
 
-            Search( nRow, nIndex );     // alles kann sich verschoben haben
+            Search( nRow, nIndex );		// alles kann sich verschoben haben
             if (pNew)
-                nNextThis = nRow;       // nIndex zeigt jetzt genau auf nRow
+                nNextThis = nRow;		// nIndex zeigt jetzt genau auf nRow
             else
                 nNextThis = ( nIndex < nCount ) ? pItems[nIndex].nRow : MAXROW+1;
         }
@@ -1176,7 +1176,7 @@ void ScColumn::StartAllListeners()
                 SCROW nRow = pItems[i].nRow;
                 ((ScFormulaCell*)pCell)->StartListeningTo( pDocument );
                 if ( nRow != pItems[i].nRow )
-                    Search( nRow, i );      // Listener eingefuegt?
+                    Search( nRow, i );		// Listener eingefuegt?
             }
         }
 }
@@ -1197,7 +1197,7 @@ void ScColumn::StartNeededListeners()
                     SCROW nRow = pItems[i].nRow;
                     pFCell->StartListeningTo( pDocument );
                     if ( nRow != pItems[i].nRow )
-                        Search( nRow, i );      // Listener eingefuegt?
+                        Search( nRow, i );		// Listener eingefuegt?
                 }
             }
         }
@@ -1239,14 +1239,14 @@ void ScColumn::StartListeningInArea( SCROW nRow1, SCROW nRow2 )
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                 ((ScFormulaCell*)pCell)->StartListeningTo( pDocument );
             if ( nRow != pItems[nIndex].nRow )
-                Search( nRow, nIndex );     // durch Listening eingefuegt
+                Search( nRow, nIndex );		// durch Listening eingefuegt
             nIndex++;
         }
     }
 }
 
 
-//  TRUE = Zahlformat gesetzt
+//	TRUE = Zahlformat gesetzt
 BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                           formula::FormulaGrammar::AddressConvention eConv,
                           SvNumberFormatter* pLangFormatter, bool bDetectNumberFormat )
@@ -1277,24 +1277,24 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                         && pFormatter->GetType(nIndex) != NUMBERFORMAT_TEXT )
                     cFirstChar = rString.GetChar(0);
                 else
-                    cFirstChar = 0;                             // Text
+                    cFirstChar = 0;								// Text
             }
             else
-            {   // waehrend ConvertFrom Import gibt es keine gesetzten Formate
+            {	// waehrend ConvertFrom Import gibt es keine gesetzten Formate
                 cFirstChar = rString.GetChar(0);
             }
 
             if ( cFirstChar == '=' )
             {
-                if ( rString.Len() == 1 )                       // = Text
+                if ( rString.Len() == 1 )						// = Text
                     pNewCell = new ScStringCell( rString );
-                else                                            // =Formel
+                else											// =Formel
                     pNewCell = new ScFormulaCell( pDocument,
                         ScAddress( nCol, nRow, nTabP ), rString,
                         formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_DEFAULT,
                             eConv), MM_NONE );
             }
-            else if ( cFirstChar == '\'')                       // 'Text
+            else if ( cFirstChar == '\'')						// 'Text
                 pNewCell = new ScStringCell( rString.Copy(1) );
             else
             {
@@ -1319,7 +1319,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                                     if ( rString == aStr )
                                         bIsText = TRUE;
                                 break;
-                                case CELLTYPE_NOTE :    // durch =Formel referenziert
+                                case CELLTYPE_NOTE :	// durch =Formel referenziert
                                 break;
                                 default:
                                     if ( i == nCount - 1 )
@@ -1399,7 +1399,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                         const LocaleDataWrapper* pLocale = pLocaleSource->GetLocaleData();
                         if (!pLocale)
                             break;
-
+                        
                         LocaleDataItem aLocaleItem = pLocale->getLocaleItem();
                         const OUString& rDecSep = aLocaleItem.decimalSeparator;
                         const OUString& rGroupSep = aLocaleItem.thousandSeparator;
@@ -1423,7 +1423,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
         }
 
         if ( bIsLoading && (!nCount || nRow > pItems[nCount-1].nRow) )
-        {   // Search einsparen und ohne Umweg ueber Insert, Listener aufbauen
+        {	// Search einsparen und ohne Umweg ueber Insert, Listener aufbauen
             // und Broadcast kommt eh erst nach dem Laden
             if ( pNewCell )
                 Append( nRow, pNewCell );
@@ -1445,7 +1445,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                     if (pBC)
                     {
                         pNewCell->TakeBroadcaster(pBC);
-                        pLastFormulaTreeTop = 0;    // Err527 Workaround
+                        pLastFormulaTreeTop = 0;	// Err527 Workaround
                     }
 
                     if ( pOldCell->GetCellType() == CELLTYPE_FORMULA )
@@ -1456,7 +1456,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                             Search(nRow, i);
                     }
                     pOldCell->Delete();
-                    pItems[i].pCell = pNewCell;         // ersetzen
+                    pItems[i].pCell = pNewCell;			// ersetzen
                     if ( pNewCell->GetCellType() == CELLTYPE_FORMULA )
                     {
                         pNewCell->StartListeningTo( pDocument );
@@ -1468,17 +1468,17 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                 }
                 else
                 {
-                    DeleteAtIndex(i);                   // loeschen und Broadcast
+                    DeleteAtIndex(i);					// loeschen und Broadcast
                 }
             }
             else if (pNewCell)
             {
-                Insert(nRow, pNewCell);                 // neu eintragen und Broadcast
+                Insert(nRow, pNewCell);					// neu eintragen und Broadcast
             }
         }
 
-        //  hier keine Formate mehr fuer Formeln setzen!
-        //  (werden bei der Ausgabe abgefragt)
+        //	hier keine Formate mehr fuer Formeln setzen!
+        //	(werden bei der Ausgabe abgefragt)
 
     }
     return bNumFmtSet;
@@ -1497,9 +1497,9 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
 
     while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEndRow) : FALSE )
     {
-        ScBaseCell*          pCell    = pItems[nIndex].pCell;
-        TypedStrData*        pData;
-        ULONG                nFormat  = GetNumberFormat( nRow );
+        ScBaseCell*			 pCell	  = pItems[nIndex].pCell;
+        TypedStrData*		 pData;
+        ULONG				 nFormat  = GetNumberFormat( nRow );
 
         ScCellFormat::GetInputString( pCell, nFormat, aString, *pFormatter );
 
@@ -1527,7 +1527,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
             {
                 short nType = pFormatter->GetType(nFormat);
                 if ((nType & NUMBERFORMAT_DATE) && !(nType & NUMBERFORMAT_TIME))
-                {
+                {    
                     // special case for date values.  Disregard the time
                     // element if the number format is of date type.
                     nValue = ::rtl::math::approxFloor(nValue);
@@ -1549,7 +1549,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
 #endif
 
         if ( !rStrings.Insert( pData ) )
-            delete pData;                               // doppelt
+            delete pData;								// doppelt
 
         ++nIndex;
     }
@@ -1558,13 +1558,13 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
 }
 
 //
-//  GetDataEntries - Strings aus zusammenhaengendem Bereich um nRow
+//	GetDataEntries - Strings aus zusammenhaengendem Bereich um nRow
 //
 
-//  DATENT_MAX      - max. Anzahl Eintrage in Liste fuer Auto-Eingabe
-//  DATENT_SEARCH   - max. Anzahl Zellen, die durchsucht werden - neu: nur Strings zaehlen
-#define DATENT_MAX      200
-#define DATENT_SEARCH   2000
+//	DATENT_MAX		- max. Anzahl Eintrage in Liste fuer Auto-Eingabe
+//	DATENT_SEARCH	- max. Anzahl Zellen, die durchsucht werden - neu: nur Strings zaehlen
+#define DATENT_MAX		200
+#define DATENT_SEARCH	2000
 
 
 BOOL ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, BOOL bLimit)
@@ -1575,23 +1575,23 @@ BOOL ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, B
     String aString;
     USHORT nCells = 0;
 
-    //  Die Beschraenkung auf angrenzende Zellen (ohne Luecken) ist nicht mehr gewollt
-    //  (Featurekommission zur 5.1), stattdessen abwechselnd nach oben und unten suchen,
-    //  damit naheliegende Zellen wenigstens zuerst gefunden werden.
-    //! Abstaende der Zeilennummern vergleichen? (Performance??)
+    //	Die Beschraenkung auf angrenzende Zellen (ohne Luecken) ist nicht mehr gewollt
+    //	(Featurekommission zur 5.1), stattdessen abwechselnd nach oben und unten suchen,
+    //	damit naheliegende Zellen wenigstens zuerst gefunden werden.
+    //!	Abstaende der Zeilennummern vergleichen? (Performance??)
 
-    SCSIZE nUpIndex = nThisIndex;       // zeigt hinter die Zelle
-    SCSIZE nDownIndex = nThisIndex;     // zeigt auf die Zelle
+    SCSIZE nUpIndex = nThisIndex;		// zeigt hinter die Zelle
+    SCSIZE nDownIndex = nThisIndex;		// zeigt auf die Zelle
     if (bThisUsed)
-        ++nDownIndex;                   // Startzelle ueberspringen
+        ++nDownIndex;					// Startzelle ueberspringen
 
     while ( nUpIndex || nDownIndex < nCount )
     {
-        if ( nUpIndex )                 // nach oben
+        if ( nUpIndex )					// nach oben
         {
             ScBaseCell* pCell = pItems[nUpIndex-1].pCell;
             CellType eType = pCell->GetCellType();
-            if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)     // nur Strings interessieren
+            if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)		// nur Strings interessieren
             {
                 if (eType == CELLTYPE_STRING)
                     ((ScStringCell*)pCell)->GetString(aString);
@@ -1600,23 +1600,23 @@ BOOL ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, B
 
                 TypedStrData* pData = new TypedStrData(aString);
                 if ( !rStrings.Insert( pData ) )
-                    delete pData;                                           // doppelt
+                    delete pData;											// doppelt
                 else if ( bLimit && rStrings.GetCount() >= DATENT_MAX )
-                    break;                                                  // Maximum erreicht
+                    break;													// Maximum erreicht
                 bFound = TRUE;
 
                 if ( bLimit )
                     if (++nCells >= DATENT_SEARCH)
-                        break;                                  // genug gesucht
+                        break;									// genug gesucht
             }
             --nUpIndex;
         }
 
-        if ( nDownIndex < nCount )      // nach unten
+        if ( nDownIndex < nCount )		// nach unten
         {
             ScBaseCell* pCell = pItems[nDownIndex].pCell;
             CellType eType = pCell->GetCellType();
-            if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)     // nur Strings interessieren
+            if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)		// nur Strings interessieren
             {
                 if (eType == CELLTYPE_STRING)
                     ((ScStringCell*)pCell)->GetString(aString);
@@ -1625,14 +1625,14 @@ BOOL ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, B
 
                 TypedStrData* pData = new TypedStrData(aString);
                 if ( !rStrings.Insert( pData ) )
-                    delete pData;                                           // doppelt
+                    delete pData;											// doppelt
                 else if ( bLimit && rStrings.GetCount() >= DATENT_MAX )
-                    break;                                                  // Maximum erreicht
+                    break;													// Maximum erreicht
                 bFound = TRUE;
 
                 if ( bLimit )
                     if (++nCells >= DATENT_SEARCH)
-                        break;                                  // genug gesucht
+                        break;									// genug gesucht
             }
             ++nDownIndex;
         }
@@ -1711,7 +1711,7 @@ void ScColumn::SetValue( SCROW nRow, const double& rVal)
 
 void ScColumn::GetString( SCROW nRow, String& rString ) const
 {
-    SCSIZE  nIndex;
+    SCSIZE	nIndex;
     Color* pColor;
     if (Search(nRow, nIndex))
     {
@@ -1731,7 +1731,7 @@ void ScColumn::GetString( SCROW nRow, String& rString ) const
 
 void ScColumn::GetInputString( SCROW nRow, String& rString ) const
 {
-    SCSIZE  nIndex;
+    SCSIZE	nIndex;
     if (Search(nRow, nIndex))
     {
         ScBaseCell* pCell = pItems[nIndex].pCell;
@@ -1750,7 +1750,7 @@ void ScColumn::GetInputString( SCROW nRow, String& rString ) const
 
 double ScColumn::GetValue( SCROW nRow ) const
 {
-    SCSIZE  nIndex;
+    SCSIZE	nIndex;
     if (Search(nRow, nIndex))
     {
         ScBaseCell* pCell = pItems[nIndex].pCell;
@@ -1778,7 +1778,7 @@ double ScColumn::GetValue( SCROW nRow ) const
 
 void ScColumn::GetFormula( SCROW nRow, String& rFormula, BOOL ) const
 {
-    SCSIZE  nIndex;
+    SCSIZE	nIndex;
     if (Search(nRow, nIndex))
     {
         ScBaseCell* pCell = pItems[nIndex].pCell;
@@ -1794,7 +1794,7 @@ void ScColumn::GetFormula( SCROW nRow, String& rFormula, BOOL ) const
 
 CellType ScColumn::GetCellType( SCROW nRow ) const
 {
-    SCSIZE  nIndex;
+    SCSIZE	nIndex;
     if (Search(nRow, nIndex))
         return pItems[nIndex].pCell->GetCellType();
     return CELLTYPE_NONE;
@@ -1803,7 +1803,7 @@ CellType ScColumn::GetCellType( SCROW nRow ) const
 
 USHORT ScColumn::GetErrCode( SCROW nRow ) const
 {
-    SCSIZE  nIndex;
+    SCSIZE	nIndex;
     if (Search(nRow, nIndex))
     {
         ScBaseCell* pCell = pItems[nIndex].pCell;
@@ -1816,7 +1816,7 @@ USHORT ScColumn::GetErrCode( SCROW nRow ) const
 
 BOOL ScColumn::HasStringData( SCROW nRow ) const
 {
-    SCSIZE  nIndex;
+    SCSIZE	nIndex;
     if (Search(nRow, nIndex))
         return (pItems[nIndex].pCell)->HasStringData();
     return FALSE;
@@ -1825,7 +1825,7 @@ BOOL ScColumn::HasStringData( SCROW nRow ) const
 
 BOOL ScColumn::HasValueData( SCROW nRow ) const
 {
-    SCSIZE  nIndex;
+    SCSIZE	nIndex;
     if (Search(nRow, nIndex))
         return (pItems[nIndex].pCell)->HasValueData();
     return FALSE;
@@ -1833,7 +1833,7 @@ BOOL ScColumn::HasValueData( SCROW nRow ) const
 
 BOOL ScColumn::HasStringCells( SCROW nStartRow, SCROW nEndRow ) const
 {
-    //  TRUE, wenn String- oder Editzellen im Bereich
+    //	TRUE, wenn String- oder Editzellen im Bereich
 
     if ( pItems )
     {
@@ -1938,7 +1938,7 @@ sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCh
 }
 
 
-xub_StrLen ScColumn::GetMaxNumberStringLen(
+xub_StrLen ScColumn::GetMaxNumberStringLen( 
     sal_uInt16& nPrecision, SCROW nRowStart, SCROW nRowEnd ) const
 {
     xub_StrLen nStringLen = 0;

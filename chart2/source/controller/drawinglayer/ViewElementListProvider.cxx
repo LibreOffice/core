@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -176,7 +176,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     if( nStandardSymbol >= static_cast<sal_Int32>(pSymbolList->GetObjCount()) )
         nStandardSymbol %= pSymbolList->GetObjCount();
     SdrObject* pObj = pSymbolList->GetObj(nStandardSymbol);
-
+    
     VirtualDevice aVDev;
     aVDev.SetMapMode(MapMode(MAP_100TH_MM));
     SdrModel* pModel = new SdrModel();
@@ -221,7 +221,7 @@ FontList* ViewElementListProvider::getFontList() const
     if(!m_pFontList)
     {
         OutputDevice* pRefDev    = m_pDrawModelWrapper ? m_pDrawModelWrapper->getReferenceDevice() : NULL;
-        OutputDevice* pDefaultOut = Application::GetDefaultDevice();    // #67730#
+        OutputDevice* pDefaultOut = Application::GetDefaultDevice();	// #67730#
         m_pFontList = new FontList( pRefDev ? pRefDev    : pDefaultOut
                                 , pRefDev ? pDefaultOut : NULL
                                 , FALSE );

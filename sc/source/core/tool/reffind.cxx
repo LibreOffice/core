@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-//  incl. Doppelpunkt -> Doppelte Referenzen werden einzeln behandelt
+//	incl. Doppelpunkt -> Doppelte Referenzen werden einzeln behandelt
 const sal_Unicode __FAR_DATA ScRefFinder::pDelimiters[] = {
     '=','(',')',';','+','-','*','/','^','&',' ','{','}','<','>',':', 0
 };
@@ -80,11 +80,11 @@ ScRefFinder::~ScRefFinder()
 
 USHORT lcl_NextFlags( USHORT nOld )
 {
-    USHORT nNew = nOld & 7;                 // die drei Abs-Flags
-    nNew = ( nNew - 1 ) & 7;                // weiterzaehlen
+    USHORT nNew = nOld & 7;					// die drei Abs-Flags
+    nNew = ( nNew - 1 ) & 7;				// weiterzaehlen
 
     if (!(nOld & SCA_TAB_3D))
-        nNew &= ~SCA_TAB_ABSOLUTE;          // nicht 3D -> nie absolut!
+        nNew &= ~SCA_TAB_ABSOLUTE;			// nicht 3D -> nie absolut!
 
     return ( nOld & 0xfff8 ) | nNew;
 }
@@ -94,9 +94,9 @@ void ScRefFinder::ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos )
     xub_StrLen nLen = aFormula.Len();
     if (!nLen)
         return;
-    const sal_Unicode* pSource = aFormula.GetBuffer();      // fuer schnellen Zugriff
+    const sal_Unicode* pSource = aFormula.GetBuffer();		// fuer schnellen Zugriff
 
-    //  Selektion erweitern, und statt Selektion Start- und Endindex
+    //	Selektion erweitern, und statt Selektion Start- und Endindex
 
     if ( nEndPos < nStartPos )
     {
@@ -118,7 +118,7 @@ void ScRefFinder::ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos )
     xub_StrLen nLoopStart = nStartPos;
     while ( nLoopStart <= nEndPos )
     {
-        //  Formel zerlegen
+        //	Formel zerlegen
 
         xub_StrLen nEStart = nLoopStart;
         while ( nEStart <= nEndPos && !IsText(pSource[nEStart]) )
@@ -132,7 +132,7 @@ void ScRefFinder::ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos )
         aSep  = aFormula.Copy( nLoopStart, nEStart-nLoopStart );
         aExpr = aFormula.Copy( nEStart, nEEnd-nEStart );
 
-        //  Test, ob aExpr eine Referenz ist
+        //	Test, ob aExpr eine Referenz ist
 
         USHORT nResult = aAddr.Parse( aExpr, pDoc, pDoc->GetAddressConvention() );
         if ( nResult & SCA_VALID )
@@ -142,13 +142,13 @@ void ScRefFinder::ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos )
 
             xub_StrLen nAbsStart = nStartPos+aResult.Len()+aSep.Len();
 
-            if (!nFound)                            // erste Referenz ?
+            if (!nFound)							// erste Referenz ?
                 nSelStart = nAbsStart;
-            nSelEnd = nAbsStart+aExpr.Len();        // Selektion, keine Indizes
+            nSelEnd = nAbsStart+aExpr.Len();		// Selektion, keine Indizes
             ++nFound;
         }
 
-        //  zusammenbauen
+        //	zusammenbauen
 
         aResult += aSep;
         aResult += aExpr;

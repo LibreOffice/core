@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ class ArrayVisitor
 {
 public:
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const css::uno::Reference< css::table::XCell >& xCell ) = 0;
-    virtual ~ArrayVisitor(){}
+    virtual	~ArrayVisitor(){}
 };
 
 class ValueSetter : public ArrayVisitor
@@ -82,7 +82,7 @@ public:
 
 class ValueGetter : public ArrayVisitor
 {
-
+    
 public:
     virtual void processValue( sal_Int32 x, sal_Int32 y, const css::uno::Any& aValue ) = 0;
     virtual const css::uno::Any& getValue() const = 0;
@@ -105,7 +105,7 @@ class ScVbaRange : public ScVbaRange_BASE
 
     css::uno::Reference< ov::excel::XRange > getEntireColumnOrRow( bool bColumn = true ) throw( css::uno::RuntimeException );
 
-    void fillSeries(  css::sheet::FillDirection nFillDirection, css::sheet::FillMode nFillMode, css::sheet::FillDateMode nFillDateMode, double fStep, double fEndValue ) throw( css::uno::RuntimeException );
+    void fillSeries(  css::sheet::FillDirection nFillDirection, css::sheet::FillMode nFillMode, css::sheet::FillDateMode nFillDateMode, double fStep, double fEndValue ) throw( css::uno::RuntimeException );	 
 
     void ClearContents( sal_Int32 nFlags ) throw (css::uno::RuntimeException);
     virtual void   setValue( const css::uno::Any& aValue, ValueSetter& setter) throw ( css::uno::RuntimeException);
@@ -142,7 +142,7 @@ public:
 
     virtual ~ScVbaRange();
      virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() { return this; }
-    bool isSingleCellRange();
+    bool isSingleCellRange(); 
 
     static css::uno::Reference< ov::excel::XRange > getRangeObjectForName(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
@@ -182,14 +182,14 @@ public:
     virtual css::uno::Any SAL_CALL getHeight() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getTop() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getLeft() throw (css::uno::RuntimeException);
-
+    
     virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getWorksheet() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getPageBreak() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPageBreak( const css::uno::Any& _pagebreak ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XValidation > SAL_CALL getValidation() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getPrefixCharacter() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getShowDetail() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setShowDetail(const css::uno::Any& aShowDetail) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setShowDetail(const css::uno::Any& aShowDetail) throw (css::uno::RuntimeException);	
     // Methods
     sal_Bool IsRows() { return mbIsRows; }
     sal_Bool IsColumns() { return mbIsColumns; }
@@ -203,16 +203,16 @@ public:
     virtual void SAL_CALL FillRight() throw (css::uno::RuntimeException);
     virtual void SAL_CALL FillUp() throw (css::uno::RuntimeException);
     virtual void SAL_CALL FillDown() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Offset( const css::uno::Any &nRowOffset, const css::uno::Any &nColOffset )
+    virtual	css::uno::Reference< ov::excel::XRange > SAL_CALL Offset( const css::uno::Any &nRowOffset, const css::uno::Any &nColOffset )
                                                            throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL CurrentRegion() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL CurrentArray() throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL Characters( const css::uno::Any& nIndex, const css::uno::Any& nCount )
+    virtual ::rtl::OUString SAL_CALL Characters( const css::uno::Any& nIndex, const css::uno::Any& nCount ) 
                                                  throw (css::uno::RuntimeException);
 
     virtual ::rtl::OUString SAL_CALL Address( const css::uno::Any& RowAbsolute, const css::uno::Any& ColumnAbsolute, const css::uno::Any& ReferenceStyle, const css::uno::Any& External, const css::uno::Any& RelativeTo ) throw (css::uno::RuntimeException);
 
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Cells( const css::uno::Any &nRow, const css::uno::Any &nCol )
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Cells( const css::uno::Any &nRow, const css::uno::Any &nCol ) 
                                                           throw (css::uno::RuntimeException);
     virtual void SAL_CALL Select() throw (css::uno::RuntimeException);
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);
@@ -220,7 +220,7 @@ public:
     virtual css::uno::Reference< ov::excel::XRange >  SAL_CALL Columns( const css::uno::Any &nIndex ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Copy( const css::uno::Any& Destination ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Cut( const css::uno::Any& Destination ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Resize( const css::uno::Any& RowSize, const css::uno::Any& ColumnSize )
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Resize( const css::uno::Any& RowSize, const css::uno::Any& ColumnSize ) 
                                                            throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XFont > SAL_CALL Font() throw ( css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XInterior > SAL_CALL Interior(  ) throw ( css::script::BasicErrorException, css::uno::RuntimeException) ;
@@ -237,10 +237,10 @@ public:
     virtual void SAL_CALL Delete( const css::uno::Any& Shift ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Areas( const css::uno::Any& ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Borders( const css::uno::Any& ) throw ( css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL BorderAround( const css::uno::Any& LineStyle,
+    virtual css::uno::Any SAL_CALL BorderAround( const css::uno::Any& LineStyle, 
                 const css::uno::Any& Weight, const css::uno::Any& ColorIndex, const css::uno::Any& Color ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL TextToColumns( const css::uno::Any& Destination, const css::uno::Any& DataType, const css::uno::Any& TextQualifier,
-                const css::uno::Any& ConsecutinveDelimiter, const css::uno::Any& Tab, const css::uno::Any& Semicolon, const css::uno::Any& Comma,
+                const css::uno::Any& ConsecutinveDelimiter, const css::uno::Any& Tab, const css::uno::Any& Semicolon, const css::uno::Any& Comma, 
                 const css::uno::Any& Space, const css::uno::Any& Other, const css::uno::Any& OtherChar, const css::uno::Any& FieldInfo,
                 const css::uno::Any& DecimalSeparator, const css::uno::Any& ThousandsSeparator, const css::uno::Any& TrailingMinusNumbers ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Hyperlinks( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
@@ -250,7 +250,7 @@ public:
     virtual void SAL_CALL Autofit() throw (css::uno::RuntimeException);
     virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL AutoFill( const css::uno::Reference< ov::excel::XRange >& Destination, const css::uno::Any& Type ) throw (css::uno::RuntimeException) ;
-     void SAL_CALL Calculate(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+     void SAL_CALL Calculate(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException); 
     virtual void SAL_CALL AutoOutline(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Item( const ::css::uno::Any& row, const css::uno::Any& column ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL ClearOutline(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
@@ -282,14 +282,14 @@ public:
 
 // #TODO completely rewrite ScVbaRange, its become a hackfest
 // it needs to be closer to ScCellRangeBase in that the underlying
-// object model should probably be a ScRangelst.
+// object model should probably be a ScRangelst. 
 //     * would be nice to be able to construct a range from an addres only
 //     * or a list of address ( multi-area )
 //     * object should be a lightweight as possible
 //     * we shouldn't need hacks like this below
     static css::uno::Reference< ov::excel::XRange > ApplicationRange( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Any &Cell1, const css::uno::Any &Cell2 ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL GoalSeek( const css::uno::Any& Goal, const css::uno::Reference< ov::excel::XRange >& ChangingCell ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL SpecialCells( const css::uno::Any& _oType, const css::uno::Any& _oValue) throw ( css::script::BasicErrorException );
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL SpecialCells( const css::uno::Any& _oType, const css::uno::Any& _oValue) throw ( css::script::BasicErrorException );  
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

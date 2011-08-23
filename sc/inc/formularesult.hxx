@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -159,7 +159,7 @@ public:
         details instead. */
     inline  bool                IsValue() const;
 
-    /** Determines whether or not the result is a string containing more than
+    /** Determines whether or not the result is a string containing more than 
         one paragraph */
     inline  bool                IsMultiline() const;
 
@@ -319,7 +319,7 @@ inline void ScFormulaResult::SetToken( const formula::FormulaToken* p )
              dynamic_cast<const ScMatrixCellResultToken*>(p) : NULL);
         if (pMatResult)
         {
-            const ScMatrixFormulaCellToken* pNewMatFormula =
+            const ScMatrixFormulaCellToken* pNewMatFormula = 
                 dynamic_cast<const ScMatrixFormulaCellToken*>(pMatResult);
             if (pNewMatFormula)
             {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,25 +57,25 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     ::boost::optional< FormulaWithNamespace > pOUFormula;
     rtl::OUString* pContentValidationName;
     ::std::auto_ptr< ScXMLAnnotationData > mxAnnotationData;
-    ScMyImpDetectiveObjVec* pDetectiveObjVec;
-    ScMyImpCellRangeSource* pCellRangeSource;
-    double      fValue;
-    sal_Int32   nMergedRows, nMergedCols;
-    sal_Int32   nMatrixRows, nMatrixCols;
-    sal_Int32   nRepeatedRows;
-    sal_Int32   nCellsRepeated;
+    ScMyImpDetectiveObjVec*	pDetectiveObjVec;
+    ScMyImpCellRangeSource*	pCellRangeSource;
+    double		fValue;
+    sal_Int32	nMergedRows, nMergedCols;
+    sal_Int32	nMatrixRows, nMatrixCols;
+    sal_Int32	nRepeatedRows;
+    sal_Int32	nCellsRepeated;
     ScXMLImport& rXMLImport;
     formula::FormulaGrammar::Grammar  eGrammar;
-    sal_Int16   nCellType;
-    sal_Bool    bIsMerged;
-    sal_Bool    bIsMatrix;
-    sal_Bool    bHasSubTable;
-    sal_Bool    bIsCovered;
-    sal_Bool    bIsEmpty;
-    sal_Bool    bHasTextImport;
-    sal_Bool    bIsFirstTextImport;
-    sal_Bool    bSolarMutexLocked;
-    sal_Bool    bFormulaTextResult;
+    sal_Int16	nCellType;
+    sal_Bool	bIsMerged;
+    sal_Bool	bIsMatrix;
+    sal_Bool	bHasSubTable;
+    sal_Bool	bIsCovered;
+    sal_Bool	bIsEmpty;
+    sal_Bool	bHasTextImport;
+    sal_Bool	bIsFirstTextImport;
+    sal_Bool	bSolarMutexLocked;
+    sal_Bool	bFormulaTextResult;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

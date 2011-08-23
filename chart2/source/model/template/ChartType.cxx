@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -210,7 +210,7 @@ void SAL_CALL ChartType::setDataSeries( const Sequence< Reference< chart2::XData
         for( sal_Int32 nN=0; nN<aOldSeries.getLength(); ++nN )
             ModifyListenerHelper::removeListener( aOldSeries[nN], m_xModifyEventForwarder );
         m_aDataSeries.clear();
-
+        
         for( sal_Int32 i=0; i<aDataSeries.getLength(); ++i )
             impl_addDataSeriesWithoutNotification( aDataSeries[i] );
     }

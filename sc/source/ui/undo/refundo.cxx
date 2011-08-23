@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,14 +58,14 @@ ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
     ScDBCollection* pOldDBColl = pDoc->GetDBCollection();
     pDBCollection = pOldDBColl ? new ScDBCollection(*pOldDBColl) : NULL;
 
-    ScRangeName* pOldRanges = ((ScDocument*)pDoc)->GetRangeName();          //! const
+    ScRangeName* pOldRanges = ((ScDocument*)pDoc)->GetRangeName();			//! const
     pRangeName = pOldRanges ? new ScRangeName(*pOldRanges) : NULL;
 
-    pPrintRanges = pDoc->CreatePrintRangeSaver();       // neu erzeugt
+    pPrintRanges = pDoc->CreatePrintRangeSaver();		// neu erzeugt
 
-    //! bei Pivot nur Bereiche merken ???
+    //!	bei Pivot nur Bereiche merken ???
 
-    ScDPCollection* pOldDP = ((ScDocument*)pDoc)->GetDPCollection();        //! const
+    ScDPCollection* pOldDP = ((ScDocument*)pDoc)->GetDPCollection();		//! const
     pDPCollection = pOldDP ? new ScDPCollection(*pOldDP) : NULL;
 
     ScConditionalFormatList* pOldCond = pDoc->GetCondFormList();
@@ -79,7 +79,7 @@ ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
     pChartListenerCollection = pOldChartListenerCollection ?
         new ScChartListenerCollection( *pOldChartListenerCollection ) : NULL;
 
-    pAreaLinks = ScAreaLinkSaveCollection::CreateFromDoc(pDoc);     // returns NULL if empty
+    pAreaLinks = ScAreaLinkSaveCollection::CreateFromDoc(pDoc);		// returns NULL if empty
 
     const_cast<ScDocument*>(pDoc)->BeginUnoRefUndo();
 }
@@ -107,7 +107,7 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
     }
     if (pRangeName)
     {
-        ScRangeName* pNewRanges = ((ScDocument*)pDoc)->GetRangeName();      //! const
+        ScRangeName* pNewRanges = ((ScDocument*)pDoc)->GetRangeName();		//! const
         if ( pNewRanges && *pRangeName == *pNewRanges )
             DELETEZ(pRangeName);
     }
@@ -122,7 +122,7 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
 
     if (pDPCollection)
     {
-        ScDPCollection* pNewDP = ((ScDocument*)pDoc)->GetDPCollection();    //! const
+        ScDPCollection* pNewDP = ((ScDocument*)pDoc)->GetDPCollection();	//! const
         if ( pNewDP && pDPCollection->RefsEqual(*pNewDP) )
             DELETEZ(pDPCollection);
     }
@@ -196,7 +196,7 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, BOOL bUndoRefFirst )
     if (pDBCollection || pRangeName)
     {
         BOOL bOldAutoCalc = pDoc->GetAutoCalc();
-        pDoc->SetAutoCalc( FALSE ); // Mehrfachberechnungen vermeiden
+        pDoc->SetAutoCalc( FALSE );	// Mehrfachberechnungen vermeiden
         pDoc->CompileAll();
         pDoc->SetDirty();
         pDoc->SetAutoCalc( bOldAutoCalc );

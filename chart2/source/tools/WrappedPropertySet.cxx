@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -464,7 +464,7 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
 
             for( std::vector< WrappedProperty* >::const_iterator aIt = aPropList.begin(); aIt!=aPropList.end(); ++aIt )
             {
-                WrappedProperty* pProperty = *aIt;
+                WrappedProperty* pProperty = *aIt; 
                 if(pProperty)
                 {
                     sal_Int32 nHandle = getInfoHelper().getHandleByName( pProperty->getOuterName() );

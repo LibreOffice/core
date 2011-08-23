@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,11 @@
 //CHINA001 #include "tphfedit.hxx"
 #include "scresid.hxx"
 #include "hfedtdlg.hrc"
-#include "scuitphfedit.hxx" //CHINA001
+#include "scuitphfedit.hxx" //CHINA001 
 //------------------------------------------------------------------
 
-//  macros from docsh4.cxx
-//! use SIDs?
+//	macros from docsh4.cxx
+//!	use SIDs?
 
 #define IS_SHARE_HEADER(set) \
     ((SfxBoolItem&) \
@@ -62,9 +62,9 @@
 //==================================================================
 
 ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
-                          Window*           pParent,
+                          Window*			pParent,
                           const SfxItemSet& rCoreSet,
-                          const String&     rPageStyle,
+                          const String&		rPageStyle,
                           USHORT            nResIdP )
     :   SfxTabDialog( pFrameP, pParent, ScResId( nResIdP ), &rCoreSet )
 {
@@ -131,7 +131,7 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
         default:
         case RID_SCDLG_HFEDIT:
             {
-                const SvxPageItem&  rPageItem = (const SvxPageItem&)
+                const SvxPageItem&	rPageItem = (const SvxPageItem&)
                             rCoreSet.Get(
                                 rCoreSet.GetPool()->GetWhich(SID_ATTR_PAGE) );
 
@@ -145,7 +145,7 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
                 }
                 else
                 {
-                    //  #69193a# respect "shared" setting
+                    //	#69193a# respect "shared" setting
 
                     BOOL bShareHeader = IS_SHARE_HEADER(rCoreSet);
                     if ( bShareHeader )

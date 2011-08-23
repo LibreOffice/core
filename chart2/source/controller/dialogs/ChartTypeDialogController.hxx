@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ class ChartTypeParameter
 public:
     ChartTypeParameter( sal_Int32 nSubTypeIndex, bool bXAxisWithValues=false
                     ,  bool b3DLook=false,  GlobalStackMode eStackMode=GlobalStackMode_NONE
-                    ,  bool _bSymbols = true, bool _bLines = true
+                    ,  bool _bSymbols = true, bool _bLines = true 
                     , ::com::sun::star::chart2::CurveStyle eCurveStyle = ::com::sun::star::chart2::CurveStyle_LINES );
     ChartTypeParameter();
     virtual ~ChartTypeParameter();
@@ -82,7 +82,7 @@ public:
     bool            b3DLook;
     bool            bSymbols;
     bool            bLines;
-
+    
     GlobalStackMode eStackMode;
     ::com::sun::star::chart2::CurveStyle      eCurveStyle;
 
@@ -102,7 +102,7 @@ class ChartTypeDialogController : public ChangingResource
 public:
     ChartTypeDialogController();
     virtual ~ChartTypeDialogController();
-
+    
     virtual String  getName()=0;
     virtual Image   getImage( bool bIsHighContrast );
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const = 0;
@@ -122,7 +122,7 @@ public:
                                      , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartModel
                                      , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps=::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >() ) const;
     virtual void    setTemplateProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps ) const throw (::com::sun::star::uno::RuntimeException);
-
+    
     virtual bool                isSubType( const rtl::OUString& rServiceName );
     virtual ChartTypeParameter  getChartTypeParameterForService( const rtl::OUString& rServiceName, const ::com::sun::star::uno::Reference<
                                                                 ::com::sun::star::beans::XPropertySet >& xTemplateProps );
@@ -146,10 +146,10 @@ class ColumnOrBarChartDialogController_Base : public ChartTypeDialogController
 public:
     ColumnOrBarChartDialogController_Base();
     virtual ~ColumnOrBarChartDialogController_Base();
-
+    
     virtual bool    shouldShow_3DLookControl() const;
     virtual bool    shouldShow_GeometryControl() const;
-
+    
     virtual void    adjustSubTypeAndEnableControls( ChartTypeParameter& rParameter );
 };
 
@@ -158,7 +158,7 @@ class ColumnChartDialogController : public ColumnOrBarChartDialogController_Base
 public:
     ColumnChartDialogController();
     virtual ~ColumnChartDialogController();
-
+    
     virtual String  getName();
     virtual Image   getImage( bool bIsHighContrast );
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
@@ -170,7 +170,7 @@ class BarChartDialogController : public ColumnOrBarChartDialogController_Base
 public:
     BarChartDialogController();
     virtual ~BarChartDialogController();
-
+    
     virtual String  getName();
     virtual Image   getImage( bool bIsHighContrast );
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
@@ -182,7 +182,7 @@ class PieChartDialogController : public ChartTypeDialogController
 public:
     PieChartDialogController();
     virtual ~PieChartDialogController();
-
+    
     virtual String  getName();
     virtual Image   getImage( bool bIsHighContrast );
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
@@ -197,14 +197,14 @@ class LineChartDialogController : public ChartTypeDialogController
 public:
     LineChartDialogController();
     virtual ~LineChartDialogController();
-
+    
     virtual String  getName();
     virtual Image   getImage( bool bIsHighContrast );
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
     virtual void adjustParameterToMainType( ChartTypeParameter& rParameter );
-
+    
     virtual bool    shouldShow_StackingControl() const;
     virtual bool    shouldShow_DeepStackingControl() const;
     virtual bool    shouldShow_SplineControl() const;
@@ -215,13 +215,13 @@ class XYChartDialogController : public ChartTypeDialogController
 public:
     XYChartDialogController();
     virtual ~XYChartDialogController();
-
+    
     virtual String  getName();
     virtual Image   getImage( bool bIsHighContrast );
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
-
+    
     virtual bool    shouldShow_SplineControl() const;
     virtual bool    shouldShow_SortByXValuesResourceGroup() const;
 };
@@ -231,14 +231,14 @@ class AreaChartDialogController : public ChartTypeDialogController
 public:
     AreaChartDialogController();
     virtual ~AreaChartDialogController();
-
+    
     virtual String  getName();
     virtual Image   getImage( bool bIsHighContrast );
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
     virtual void adjustParameterToMainType( ChartTypeParameter& rParameter );
-
+    
     virtual bool    shouldShow_3DLookControl() const;
 };
 
@@ -247,13 +247,13 @@ class NetChartDialogController : public ChartTypeDialogController
 public:
     NetChartDialogController();
     virtual ~NetChartDialogController();
-
+    
     virtual String  getName();
     virtual Image   getImage( bool bIsHighContrast );
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
-
+    
     virtual bool    shouldShow_StackingControl() const;
 };
 
@@ -262,7 +262,7 @@ class StockChartDialogController : public ChartTypeDialogController
 public:
     StockChartDialogController();
     virtual ~StockChartDialogController();
-
+    
     virtual String  getName();
     virtual Image   getImage( bool bIsHighContrast );
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
@@ -275,7 +275,7 @@ class CombiColumnLineChartDialogController : public ChartTypeDialogController
 public:
     CombiColumnLineChartDialogController();
     virtual ~CombiColumnLineChartDialogController();
-
+    
     virtual String  getName();
     virtual Image   getImage( bool bIsHighContrast );
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
@@ -287,10 +287,10 @@ public:
     virtual void    fillExtraControls( const ChartTypeParameter& rParameter
                                      , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartModel
                                      , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps=::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >() ) const;
-
+    
     virtual void    setTemplateProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps ) const throw (::com::sun::star::uno::RuntimeException);
 
-private:
+private:            
     DECL_LINK( ChangeLineCountHdl, void* );
 
 private:
@@ -303,7 +303,7 @@ class BubbleChartDialogController : public ChartTypeDialogController
 public:
     BubbleChartDialogController();
     virtual ~BubbleChartDialogController();
-
+    
     virtual String  getName();
     virtual Image   getImage( bool bIsHighContrast );
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;

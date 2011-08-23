@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,25 +36,25 @@
 class ScOptionsUtil
 {
 public:
-    static BOOL     IsMetricSystem();
+    static BOOL		IsMetricSystem();
 };
 
 
-//  ConfigItem for classes that use items from several sub trees
+//	ConfigItem for classes that use items from several sub trees
 
 class SC_DLLPUBLIC ScLinkConfigItem : public utl::ConfigItem
 {
-    Link    aCommitLink;
+    Link	aCommitLink;
 
 public:
             ScLinkConfigItem( const rtl::OUString& rSubTree );
             ScLinkConfigItem( const rtl::OUString& rSubTree, sal_Int16 nMode );
-    void    SetCommitLink( const Link& rLink );
+    void	SetCommitLink( const Link& rLink );
 
-    virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
-    virtual void    Commit();
+    virtual void	Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+    virtual void	Commit();
 
-    void    SetModified()   { ConfigItem::SetModified(); }
+    void 	SetModified()	{ ConfigItem::SetModified(); }
     com::sun::star::uno::Sequence< com::sun::star::uno::Any>
             GetProperties(const com::sun::star::uno::Sequence< rtl::OUString >& rNames)
                             { return ConfigItem::GetProperties( rNames ); }
@@ -65,11 +65,11 @@ public:
     using ConfigItem::EnableNotification;
     using ConfigItem::GetNodeNames;
 
-//  sal_Bool EnableNotification(com::sun::star::uno::Sequence< rtl::OUString >& rNames)
-//                          { return ConfigItem::EnableNotification( rNames ); }
+//	sal_Bool EnableNotification(com::sun::star::uno::Sequence< rtl::OUString >& rNames)
+//							{ return ConfigItem::EnableNotification( rNames ); }
 
-//  com::sun::star::uno::Sequence< rtl::OUString > GetNodeNames(rtl::OUString& rNode)
-//                          { return ConfigItem::GetNodeNames( rNode ); }
+//	com::sun::star::uno::Sequence< rtl::OUString > GetNodeNames(rtl::OUString& rNode)
+//							{ return ConfigItem::GetNodeNames( rNode ); }
 };
 
 #endif

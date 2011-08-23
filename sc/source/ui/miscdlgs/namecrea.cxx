@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,18 +44,18 @@
 ScNameCreateDlg::ScNameCreateDlg( Window * pParent, USHORT nFlags )
     : ModalDialog( pParent, ScResId(RID_SCDLG_NAMES_CREATE) ),
     aFixedLine      ( this, ScResId( FL_FRAME ) ),
-    aTopBox         ( this, ScResId( BTN_TOP ) ),
-    aLeftBox        ( this, ScResId( BTN_LEFT ) ),
-    aBottomBox      ( this, ScResId( BTN_BOTTOM ) ),
-    aRightBox       ( this, ScResId( BTN_RIGHT ) ),
-    aOKButton       ( this, ScResId( BTN_OK ) ),
-    aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
-    aHelpButton     ( this, ScResId( BTN_HELP ) )
+    aTopBox			( this, ScResId( BTN_TOP ) ),
+    aLeftBox		( this, ScResId( BTN_LEFT ) ),
+    aBottomBox		( this, ScResId( BTN_BOTTOM ) ),
+    aRightBox		( this, ScResId( BTN_RIGHT ) ),
+    aOKButton		( this, ScResId( BTN_OK ) ),
+    aCancelButton	( this, ScResId( BTN_CANCEL ) ),
+    aHelpButton		( this, ScResId( BTN_HELP ) )
 {
-    aTopBox.Check   ( (nFlags & NAME_TOP)   ? TRUE : FALSE );
-    aLeftBox.Check  ( (nFlags & NAME_LEFT)  ? TRUE : FALSE );
+    aTopBox.Check	( (nFlags & NAME_TOP) 	? TRUE : FALSE );
+    aLeftBox.Check	( (nFlags & NAME_LEFT) 	? TRUE : FALSE );
     aBottomBox.Check( (nFlags & NAME_BOTTOM)? TRUE : FALSE );
-    aRightBox.Check ( (nFlags & NAME_RIGHT) ? TRUE : FALSE );
+    aRightBox.Check	( (nFlags & NAME_RIGHT) ? TRUE : FALSE );
 
     FreeResource();
 }
@@ -64,12 +64,12 @@ ScNameCreateDlg::ScNameCreateDlg( Window * pParent, USHORT nFlags )
 
 USHORT ScNameCreateDlg::GetFlags() const
 {
-    USHORT  nResult = 0;
+    USHORT	nResult = 0;
 
-    nResult |= aTopBox.IsChecked()      ? NAME_TOP:     0 ;
-    nResult |= aLeftBox.IsChecked()     ? NAME_LEFT:    0 ;
-    nResult |= aBottomBox.IsChecked()   ? NAME_BOTTOM:  0 ;
-    nResult |= aRightBox.IsChecked()    ? NAME_RIGHT:   0 ;
+    nResult |= aTopBox.IsChecked()		? NAME_TOP: 	0 ;
+    nResult |= aLeftBox.IsChecked() 	? NAME_LEFT: 	0 ;
+    nResult |= aBottomBox.IsChecked()	? NAME_BOTTOM: 	0 ;
+    nResult |= aRightBox.IsChecked()	? NAME_RIGHT: 	0 ;
 
     return nResult;
 }

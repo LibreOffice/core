@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,9 +59,9 @@
 BOOL ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet )
 {
-//CHINA001  ScCharDlg* pDlg = new ScCharDlg( pViewData->GetDialogParent(),
-//CHINA001  &rArgs,
-//CHINA001  pViewData->GetSfxDocShell() );
+//CHINA001	ScCharDlg* pDlg = new ScCharDlg( pViewData->GetDialogParent(),
+//CHINA001	&rArgs,
+//CHINA001	pViewData->GetSfxDocShell() );
 //CHINA001
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
@@ -106,8 +106,8 @@ BOOL ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     aNewAttr.Put( SvxWidowsItem( 0, SID_ATTR_PARA_WIDOWS) );
     aNewAttr.Put( SvxOrphansItem( 0, SID_ATTR_PARA_ORPHANS) );
 
-//CHINA001  ScParagraphDlg* pDlg = new ScParagraphDlg( pViewData->GetDialogParent(),
-//CHINA001  &aNewAttr );
+//CHINA001	ScParagraphDlg* pDlg = new ScParagraphDlg( pViewData->GetDialogParent(),
+//CHINA001	&aNewAttr );
 //CHINA001
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
@@ -135,13 +135,13 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
     SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( pViewData->GetDialogParent() );
 
     pDlg->Insert( SOT_FORMAT_STRING, EMPTY_STRING );
-    pDlg->Insert( SOT_FORMAT_RTF,    EMPTY_STRING );
+    pDlg->Insert( SOT_FORMAT_RTF,	 EMPTY_STRING );
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
     ULONG nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
 
-    //! test if outliner view is still valid
+    //!	test if outliner view is still valid
 
     if (nFormat > 0)
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ public:
 
     virtual void SAL_CALL createShapes();
     virtual void rearrangeLabelToAvoidOverlapIfRequested( const ::com::sun::star::awt::Size& rPageSize );
-
+    
     virtual void SAL_CALL setScales(
           const ::com::sun::star::uno::Sequence<
             ::com::sun::star::chart2::ExplicitScaleData >& rScales

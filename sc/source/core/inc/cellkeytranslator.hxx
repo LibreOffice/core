@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,18 +51,18 @@ struct ScCellKeyword
 typedef ::std::hash_map< String, ::std::list<ScCellKeyword>, ScStringHashCode, ::std::equal_to<String> > ScCellKeywordHashMap;
 
 /** Translate cell function keywords.
-
+    
     This class provides a convenient way to translate a string keyword used as
     a cell function argument.  Since Calc's built-in cell functions don't
     localize string keywords, this class is used mainly to deal with an Excel
     document where string names may be localized.
-
+    
     To use, simply call the
-
+    
        ScCellKeywordTranslator::transKeyword(...)
-
+    
     function.
-
+    
     Note that when the locale and/or the opcode is specified, the function
     tries to find a string with matching locale and/or opcode. But when it
     fails to find one that satisfies the specified locale and/or opcode, it
@@ -78,8 +78,8 @@ private:
     ScCellKeywordTranslator();
 
     void init();
-    void addToMap(const String& rKey, const sal_Char* pName,
-                  const ::com::sun::star::lang::Locale& rLocale,
+    void addToMap(const String& rKey, const sal_Char* pName, 
+                  const ::com::sun::star::lang::Locale& rLocale, 
                   OpCode eOpCode = ocNone);
     void addToMap(const TransItem* pItems, const ::com::sun::star::lang::Locale& rLocale);
 

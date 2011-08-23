@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,7 +104,7 @@ void lcl_TraceDataSeriesSeq( const Sequence< Reference< XDataSeries > > & aSerie
     {
         Reference< beans::XPropertySet > xProp( aSeries[j], uno::UNO_QUERY );
         OUString aId;
-
+        
         OSL_TRACE( "%*cindex %ld", nIndent, lcl_aSpace, j );
 
         StackingDirection aStDir;

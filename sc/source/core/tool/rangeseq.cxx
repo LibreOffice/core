@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ long lcl_DoubleToLong( double fVal )
     if ( fInt >= LONG_MIN && fInt <= LONG_MAX )
         return (long)fInt;
     else
-        return 0;       // out of range
+        return 0;		// out of range
 }
 
 BOOL ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
@@ -78,7 +78,7 @@ BOOL ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, const S
     }
 
     rAny <<= aRowSeq;
-    return TRUE;        //! check for errors
+    return TRUE;		//!	check for errors
 }
 
 
@@ -134,7 +134,7 @@ BOOL ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument* pDoc, const
     }
 
     rAny <<= aRowSeq;
-    return TRUE;        //! check for errors
+    return TRUE;		//!	check for errors
 }
 
 
@@ -193,7 +193,7 @@ BOOL ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, const
     }
 
     rAny <<= aRowSeq;
-    return TRUE;        //! check for errors
+    return TRUE;		//!	check for errors
 }
 
 
@@ -241,13 +241,13 @@ BOOL ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMatrix
 
 double lcl_GetValueFromCell( ScBaseCell& rCell )
 {
-    //! ScBaseCell member function?
+    //!	ScBaseCell member function?
 
     CellType eType = rCell.GetCellType();
     if ( eType == CELLTYPE_VALUE )
         return ((ScValueCell&)rCell).GetValue();
     else if ( eType == CELLTYPE_FORMULA )
-        return ((ScFormulaCell&)rCell).GetValue();      // called only if result is value
+        return ((ScFormulaCell&)rCell).GetValue();		// called only if result is value
 
     DBG_ERROR( "GetValueFromCell: wrong type" );
     return 0;
@@ -291,7 +291,7 @@ BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const 
                     rElement <<= rtl::OUString( pCell->GetStringData() );
             }
             else
-                rElement <<= rtl::OUString();       // empty: empty string
+                rElement <<= rtl::OUString();		// empty: empty string
         }
         pRowAry[nRow] = aColSeq;
     }

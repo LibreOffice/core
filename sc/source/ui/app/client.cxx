@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,8 +122,8 @@ void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
         Size aSize = pPage->GetSize();
         if ( aSize.Width() < 0 )
         {
-            aPos.X() = aSize.Width() + 1;       // negative
-            aSize.Width() = -aSize.Width();     // positive
+            aPos.X() = aSize.Width() + 1;		// negative
+            aSize.Width() = -aSize.Width();		// positive
         }
         Rectangle aPageRect( aPos, aSize );
 
@@ -165,7 +165,7 @@ void __EXPORT ScClient::ObjectAreaChanged()
         return;
     }
 
-    //  Position und Groesse ins Dokument uebernehmen
+    //	Position und Groesse ins Dokument uebernehmen
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
@@ -208,7 +208,7 @@ void __EXPORT ScClient::ViewChanged()
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( GetAspect() ) );
     Size aVisSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aMapUnit, MAP_100TH_MM );
 
-    //  Groesse ins Dokument uebernehmen
+    //	Groesse ins Dokument uebernehmen
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
@@ -235,7 +235,7 @@ void __EXPORT ScClient::ViewChanged()
                 aLogicRect.SetSize( aVisSize );
                 pDrawObj->SetLogicRect( aLogicRect );
 
-                //  set document modified (SdrModel::SetChanged is not used)
+                //	set document modified (SdrModel::SetChanged is not used)
                 pViewSh->GetViewData()->GetDocShell()->SetDrawModified();
             }
         }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@ class ScXMLImport;
 class ScXMLLabelRangesContext : public SvXMLImportContext
 {
 private:
-    const ScXMLImport&          GetScImport() const     { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport&                GetScImport()           { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport&			GetScImport() const		{ return (const ScXMLImport&)GetImport(); }
+    ScXMLImport&				GetScImport()			{ return (ScXMLImport&)GetImport(); }
 
 public:
                                 ScXMLLabelRangesContext(
@@ -47,14 +47,14 @@ public:
                                     const ::rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList
                                     );
-    virtual                     ~ScXMLLabelRangesContext();
+    virtual						~ScXMLLabelRangesContext();
 
-    virtual SvXMLImportContext* CreateChildContext(
+    virtual SvXMLImportContext*	CreateChildContext(
                                     USHORT nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList
                                     );
-    virtual void                EndElement();
+    virtual void				EndElement();
 };
 
 
@@ -63,12 +63,12 @@ public:
 class ScXMLLabelRangeContext : public SvXMLImportContext
 {
 private:
-    ::rtl::OUString             sLabelRangeStr;
-    ::rtl::OUString             sDataRangeStr;
-    sal_Bool                    bColumnOrientation;
+    ::rtl::OUString				sLabelRangeStr;
+    ::rtl::OUString				sDataRangeStr;
+    sal_Bool					bColumnOrientation;
 
-    const ScXMLImport&          GetScImport() const     { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport&                GetScImport()           { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport&			GetScImport() const		{ return (const ScXMLImport&)GetImport(); }
+    ScXMLImport&				GetScImport()			{ return (ScXMLImport&)GetImport(); }
 
 public:
                                 ScXMLLabelRangeContext(
@@ -77,14 +77,14 @@ public:
                                     const ::rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList
                                     );
-    virtual                     ~ScXMLLabelRangeContext();
+    virtual						~ScXMLLabelRangeContext();
 
-    virtual SvXMLImportContext* CreateChildContext(
+    virtual SvXMLImportContext*	CreateChildContext(
                                     USHORT nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList
                                     );
-    virtual void                EndElement();
+    virtual void				EndElement();
 };
 
 #endif

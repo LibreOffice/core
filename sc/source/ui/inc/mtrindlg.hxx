@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,29 +39,29 @@
 class ScMetricInputDlg : public ModalDialog
 {
 public:
-            ScMetricInputDlg( Window*       pParent,
-                              USHORT        nResId,     // Ableitung fuer jeden Dialog!
-                              long          nCurrent,
-                              long          nDefault,
-                              FieldUnit     eFUnit    = FUNIT_MM,
-                              USHORT        nDecimals = 2,
-                              long          nMaximum  = 1000,
-                              long          nMinimum  = 0,
-                              long          nFirst    = 1,
+            ScMetricInputDlg( Window*		pParent,
+                              USHORT		nResId,		// Ableitung fuer jeden Dialog!
+                              long			nCurrent,
+                              long			nDefault,
+                              FieldUnit		eFUnit	  = FUNIT_MM,
+                              USHORT		nDecimals = 2,
+                              long			nMaximum  = 1000,
+                              long			nMinimum  = 0,
+                              long			nFirst	  = 1,
                               long          nLast     = 100 );
             ~ScMetricInputDlg();
 
     long GetInputValue( FieldUnit eUnit = FUNIT_TWIP ) const;
 
 private:
-    FixedText       aFtEditTitle;
-    MetricField     aEdValue;
-    CheckBox        aBtnDefVal;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    long            nDefaultValue;
-    long            nCurrentValue;
+    FixedText		aFtEditTitle;
+    MetricField		aEdValue;
+    CheckBox		aBtnDefVal;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
+    long			nDefaultValue;
+    long			nCurrentValue;
 
     void CalcPositions();
     DECL_LINK( SetDefValHdl, CheckBox * );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,10 +68,10 @@ class FuDraw : public FuPoor
     BOOL IsSizingOrMovingNote( const MouseEvent& rMEvt ) const;
 
  private:
-    void    DoModifiers(const MouseEvent& rMEvt);
-    void    ResetModifiers();
+    void	DoModifiers(const MouseEvent& rMEvt);
+    void	ResetModifiers();
 };
 
 
 
-#endif      // _SD_FUDRAW_HXX
+#endif		// _SD_FUDRAW_HXX

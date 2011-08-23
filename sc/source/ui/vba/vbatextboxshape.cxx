@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,19 +39,19 @@ ScVbaTextBoxShape::ScVbaTextBoxShape( const uno::Reference< uno::XComponentConte
     m_xModel.set( xModel );
 }
 
-rtl::OUString SAL_CALL
+rtl::OUString SAL_CALL 
 ScVbaTextBoxShape::getText() throw (css::uno::RuntimeException)
 {
     return m_xTextRange->getString();
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaTextBoxShape::setText( const rtl::OUString& _text ) throw (css::uno::RuntimeException)
 {
     m_xTextRange->setString( _text );
 }
 
-uno::Reference< excel::XCharacters > SAL_CALL
+uno::Reference< excel::XCharacters > SAL_CALL 
 ScVbaTextBoxShape::characters( const uno::Any& Start, const uno::Any& Length ) throw (uno::RuntimeException)
 {
     ScDocShell* pDocShell = excel::getDocShell( m_xModel );

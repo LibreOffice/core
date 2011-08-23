@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -526,7 +526,7 @@ public:
 
     /** Returns true, if this is a standard field build directly from source data. */
     bool                IsStandardField() const;
-
+  
 //UNUSED2008-05  /** Returns true, if the items of the field are calculated from a formula. */
 //UNUSED2008-05  bool                IsCalculatedField() const;
 

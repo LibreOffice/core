@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -651,7 +651,7 @@ void XclExpBooleanCell::WriteContents( XclExpStream& rStrm )
 // ----------------------------------------------------------------------------
 
 //UNUSED2009-05 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpErrorCell, 256, 256 )
-//UNUSED2009-05
+//UNUSED2009-05 
 //UNUSED2009-05 XclExpErrorCell::XclExpErrorCell(
 //UNUSED2009-05         const XclExpRoot rRoot, const XclAddress& rXclPos,
 //UNUSED2009-05         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_uInt8 nErrCode ) :
@@ -660,7 +660,7 @@ void XclExpBooleanCell::WriteContents( XclExpStream& rStrm )
 //UNUSED2009-05     mnErrCode( nErrCode )
 //UNUSED2009-05 {
 //UNUSED2009-05 }
-//UNUSED2009-05
+//UNUSED2009-05 
 //UNUSED2009-05 void XclExpErrorCell::SaveXml( XclExpXmlStream& rStrm )
 //UNUSED2009-05 {
 //UNUSED2009-05     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
@@ -675,7 +675,7 @@ void XclExpBooleanCell::WriteContents( XclExpStream& rStrm )
 //UNUSED2009-05     rWorksheet->endElement( XML_v );
 //UNUSED2009-05     rWorksheet->endElement( XML_c );
 //UNUSED2009-05 }
-//UNUSED2009-05
+//UNUSED2009-05 
 //UNUSED2009-05 void XclExpErrorCell::WriteContents( XclExpStream& rStrm )
 //UNUSED2009-05 {
 //UNUSED2009-05     rStrm << mnErrCode << EXC_BOOLERR_ERROR;
@@ -928,7 +928,7 @@ static const char* lcl_GetErrorString( USHORT nScErrCode )
         case EXC_ERR_REF:   return "#REF!";
         case EXC_ERR_NAME:  return "#NAME?";
         case EXC_ERR_NUM:   return "#NUM!";
-        case EXC_ERR_NA:
+        case EXC_ERR_NA:    
         default:            return "#N/A";
     }
 }
@@ -1207,9 +1207,9 @@ void XclExpMultiCellBase::SaveXml( XclExpXmlStream& rStrm )
                 for( sal_uInt16 nIdx = 0; nIdx < aIt->mnCount; ++nIdx )
                 {
                     WriteXmlContents(
-                            rStrm,
-                            XclAddress( static_cast<sal_uInt16>(nBegXclCol + nRelCol), GetXclRow() ),
-                            aIt->mnXFIndex,
+                            rStrm, 
+                            XclAddress( static_cast<sal_uInt16>(nBegXclCol + nRelCol), GetXclRow() ), 
+                            aIt->mnXFIndex, 
                             nRelColIdx );
                     ++nRelCol;
                     ++nRelColIdx;
@@ -1662,7 +1662,7 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
             XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_HIDDEN ) ),
             XML_max,            OString::valueOf( (sal_Int32) (nLastXclCol+1) ).getStr(),
             XML_min,            OString::valueOf( (sal_Int32) (mnFirstXclCol+1) ).getStr(),
-            // OOXTODO: XML_outlineLevel,
+            // OOXTODO: XML_outlineLevel, 
             // OOXTODO: XML_phonetic,
             XML_style,          lcl_GetStyleId( rStrm, maXFId.mnXFIndex ).getStr(),
             XML_width,          OString::valueOf( (double) (mnWidth / 255.0) ).getStr(),
@@ -2276,7 +2276,7 @@ void XclExpRowBuffer::SaveXml( XclExpXmlStream& rStrm )
     }
 }
 
-XclExpDimensions* XclExpRowBuffer::GetDimensions()
+XclExpDimensions* XclExpRowBuffer::GetDimensions() 
 {
     return &maDimensions;
 }
@@ -2544,7 +2544,7 @@ void XclExpCellTable::Finalize()
     mxDefrowheight->SetDefaultData( aDefRowData );
 }
 
-XclExpRecordRef XclExpCellTable::CreateRecord( sal_uInt16 nRecId ) const
+XclExpRecordRef XclExpCellTable::CreateRecord( sal_uInt16 nRecId ) const 
 {
     XclExpRecordRef xRec;
     switch( nRecId )

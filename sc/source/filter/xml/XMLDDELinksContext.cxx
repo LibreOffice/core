@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -162,10 +162,10 @@ void ScXMLDDELinkContext::EndElement()
     {
         bool bSizeMatch = (static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size());
         DBG_ASSERT( bSizeMatch, "ScXMLDDELinkContext::EndElement: matrix dimension doesn't match cells count");
-        // Excel writes bad ODF in that it does not write the
+        // Excel writes bad ODF in that it does not write the 
         // table:number-columns-repeated attribute of the
-        // <table:table-column> element, but apparently uses the number of
-        // <table:table-cell> elements within a <table:table-row> element to
+        // <table:table-column> element, but apparently uses the number of 
+        // <table:table-cell> elements within a <table:table-row> element to 
         // determine the column count instead. Be lenient ...
         if (!bSizeMatch && nColumns == 1)
         {
@@ -217,14 +217,14 @@ ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
 {
     if( !xAttrList.is() ) return;
 
-    sal_Int16               nAttrCount      = xAttrList->getLength();
+    sal_Int16				nAttrCount		= xAttrList->getLength();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
+        const rtl::OUString& sAttrName	(xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue		(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix		= GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if (nPrefix == XML_NAMESPACE_OFFICE)
         {
@@ -319,14 +319,14 @@ ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
     if( !xAttrList.is() ) return;
     sal_Int32 nCols(1);
 
-    sal_Int16               nAttrCount      = xAttrList->getLength();
+    sal_Int16				nAttrCount		= xAttrList->getLength();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
+        const rtl::OUString& sAttrName	(xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue		(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix		= GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if (nPrefix == XML_NAMESPACE_TABLE)
             if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
@@ -365,14 +365,14 @@ ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
 {
     if( !xAttrList.is() ) return;
 
-    sal_Int16               nAttrCount      = xAttrList->getLength();
+    sal_Int16				nAttrCount		= xAttrList->getLength();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
+        const rtl::OUString& sAttrName	(xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue		(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix		= GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if (nPrefix == XML_NAMESPACE_TABLE)
             if (IsXMLToken(aLocalName, XML_NUMBER_ROWS_REPEATED))
@@ -424,14 +424,14 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
 {
     if( !xAttrList.is() ) return;
 
-    sal_Int16               nAttrCount      = xAttrList->getLength();
+    sal_Int16				nAttrCount		= xAttrList->getLength();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sTempValue (xAttrList->getValueByIndex( nIndex ));
+        const rtl::OUString& sAttrName	(xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sTempValue	(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix		= GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if (nPrefix == XML_NAMESPACE_OFFICE)
         {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ public:
         ParameterFlags() : bOptional(false), bSuppress(false) {}
     };
 
-
+    
     ScFuncDesc();
     virtual ~ScFuncDesc();
 
@@ -83,8 +83,8 @@ public:
     String  GetParamList        () const;
     /** Returns the full function signature: "FUNCTIONNAME( parameter list )". */
     String  GetSignature        () const;
-
-
+    
+    
 
     /** Returns the number of non-suppressed arguments. In case there are
         variable arguments the number of fixed non-suppressed arguments plus
@@ -169,7 +169,7 @@ public:
     virtual const formula::IFunctionCategory*       getCategory(sal_uInt32 nPos) const;
     virtual void                                    fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const;
     virtual const formula::IFunctionDescription*    getFunctionByName(const ::rtl::OUString& _sFunctionName) const;
-    virtual sal_Unicode                             getSingleToken(const formula::IFunctionManager::EToken _eToken) const;
+    virtual sal_Unicode                       		getSingleToken(const formula::IFunctionManager::EToken _eToken) const;
 private:
     ScFunctionList* pFuncList;
     List*           aCatLists[MAX_FUNCCAT];

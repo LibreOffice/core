@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-//      ohne precompiled Headers uebersetzen !!!
+//		ohne precompiled Headers uebersetzen !!!
 
 
 
@@ -55,9 +55,9 @@
 
 ScCharDlg::ScCharDlg( Window* pParent, const SfxItemSet* pAttr,
                     const SfxObjectShell* pDocShell ) :
-        SfxTabDialog        ( pParent, ScResId( RID_SCDLG_CHAR ), pAttr ),
-        rOutAttrs           ( *pAttr ),
-        rDocShell           ( *pDocShell )
+        SfxTabDialog		( pParent, ScResId( RID_SCDLG_CHAR ), pAttr ),
+        rOutAttrs			( *pAttr ),
+        rDocShell			( *pDocShell )
 {
     FreeResource();
 
@@ -99,8 +99,8 @@ void __EXPORT ScCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 // -----------------------------------------------------------------------
 
 ScParagraphDlg::ScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ) :
-        SfxTabDialog        ( pParent, ScResId( RID_SCDLG_PARAGRAPH ), pAttr ),
-        rOutAttrs           ( *pAttr )
+        SfxTabDialog		( pParent, ScResId( RID_SCDLG_PARAGRAPH ), pAttr ),
+        rOutAttrs			( *pAttr )
 {
     FreeResource();
 
@@ -125,8 +125,8 @@ void __EXPORT ScParagraphDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         case RID_SVXPAGE_TABULATOR:
             {
             //CHINA001 ( (SvxTabulatorTabPage&) rPage ).
-            //CHINA001      DisableControls( TABTYPE_ALL &~TABTYPE_LEFT |
-            //CHINA001                       TABFILL_ALL &~TABFILL_NONE );
+            //CHINA001 		DisableControls( TABTYPE_ALL &~TABTYPE_LEFT |
+            //CHINA001 						 TABFILL_ALL &~TABFILL_NONE );
             SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));//add CHINA001
             aSet.Put(SfxUInt16Item(SID_SVXTABULATORTABPAGE_CONTROLFLAGS,(TABTYPE_ALL &~TABTYPE_LEFT) |
                                 (TABFILL_ALL &~TABFILL_NONE) ));

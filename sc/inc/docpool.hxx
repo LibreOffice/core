@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,17 +37,17 @@ class ScStyleSheet;
 
 class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
 {
-    SfxPoolItem**   ppPoolDefaults;
-    SfxItemPool*    pSecondary;
-    static USHORT*  pVersionMap1;
-    static USHORT*  pVersionMap2;
-    static USHORT*  pVersionMap3;
-    static USHORT*  pVersionMap4;
-    static USHORT*  pVersionMap5;
-    static USHORT*  pVersionMap6;
-    static USHORT*  pVersionMap7;
-    static USHORT*  pVersionMap8;
-    static USHORT*  pVersionMap9;
+    SfxPoolItem**	ppPoolDefaults;
+    SfxItemPool*	pSecondary;
+    static USHORT*	pVersionMap1;
+    static USHORT*	pVersionMap2;
+    static USHORT*	pVersionMap3;
+    static USHORT*	pVersionMap4;
+    static USHORT*	pVersionMap5;
+    static USHORT*	pVersionMap6;
+    static USHORT*	pVersionMap7;
+    static USHORT*	pVersionMap8;
+    static USHORT*	pVersionMap9;
     static USHORT*  pVersionMap10;
     static USHORT*  pVersionMap11;
 
@@ -57,24 +57,24 @@ protected:
             virtual ~ScDocumentPool();
 public:
 
-    virtual SfxItemPool*        Clone() const;
-    virtual SfxMapUnit          GetMetric( USHORT nWhich ) const;
+    virtual SfxItemPool*		Clone() const;
+    virtual SfxMapUnit 			GetMetric( USHORT nWhich ) const;
 
-    virtual const SfxPoolItem&  Put( const SfxPoolItem&, USHORT nWhich = 0 );
-    virtual void                Remove( const SfxPoolItem& );
-    static void                 CheckRef( const SfxPoolItem& );
+    virtual const SfxPoolItem&	Put( const SfxPoolItem&, USHORT nWhich = 0 );
+    virtual void				Remove( const SfxPoolItem& );
+    static void					CheckRef( const SfxPoolItem& );
 
-    void StyleDeleted( ScStyleSheet* pStyle );      // Loeschen von Vorlagen im Organizer
+    void StyleDeleted( ScStyleSheet* pStyle );		// Loeschen von Vorlagen im Organizer
     void CellStyleCreated( const String& rName );
-    virtual SfxItemPresentation     GetPresentation(
-                                        const SfxPoolItem&  rItem,
+    virtual SfxItemPresentation		GetPresentation(
+                                        const SfxPoolItem&	rItem,
                                         SfxItemPresentation ePresentation,
-                                        SfxMapUnit          ePresentationMetric,
-                                        String&             rText,
+                                        SfxMapUnit			ePresentationMetric,
+                                        String&				rText,
                                         const IntlWrapper* pIntl = 0 ) const;
 
-    static void InitVersionMaps();
-    static void DeleteVersionMaps();
+    static void	InitVersionMaps();
+    static void	DeleteVersionMaps();
 };
 
 

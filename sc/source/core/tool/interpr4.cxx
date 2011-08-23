@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -198,11 +198,11 @@ double ScInterpreter::GetValueCellValue( const ScAddress& rPos, const ScValueCel
 
 
 /** Convert string content to numeric value.
-
-    Converted are only integer numbers including exponent, and ISO 8601 dates
-    and times in their extended formats with separators. Anything else,
-    especially fractional numeric values with decimal separators or dates other
-    than ISO 8601 would be locale dependent and is a no-no. Leading and
+    
+    Converted are only integer numbers including exponent, and ISO 8601 dates 
+    and times in their extended formats with separators. Anything else, 
+    especially fractional numeric values with decimal separators or dates other 
+    than ISO 8601 would be locale dependent and is a no-no. Leading and 
     trailing blanks are ignored.
 
     The following ISO 8601 formats are converted:
@@ -217,13 +217,13 @@ double ScInterpreter::GetValueCellValue( const ScAddress& rPos, const ScValueCel
     hh:mm:ss,s
     hh:mm:ss.s
 
-    The century CC may not be omitted and the two-digit year setting is not
-    taken into account. Instead of the T date and time separator exactly one
+    The century CC may not be omitted and the two-digit year setting is not 
+    taken into account. Instead of the T date and time separator exactly one 
     blank may be used.
 
-    If a date is given, it must be a valid Gregorian calendar date. In this
+    If a date is given, it must be a valid Gregorian calendar date. In this 
     case the optional time must be in the range 00:00 to 23:59:59.99999...
-    If only time is given, it may have any value for hours, taking elapsed time
+    If only time is given, it may have any value for hours, taking elapsed time 
     into account; minutes and seconds are limited to the value 59 as well.
  */
 
@@ -231,16 +231,22 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ConvertStringToValue" );
     double fValue = 0.0;
+    if (mnStringNoValueError == errCellNoValue)
+    {
+        // Requested that all strings result in 0, error handled by caller.
+        SetError( mnStringNoValueError);
+        return fValue;
+    }
     ::rtl::OUString aStr( rStr);
     rtl_math_ConversionStatus eStatus;
     sal_Int32 nParseEnd;
-    // Decimal and group separator 0 => only integer and possibly exponent,
+    // Decimal and group separator 0 => only integer and possibly exponent, 
     // stops at first non-digit non-sign.
     fValue = ::rtl::math::stringToDouble( aStr, 0, 0, &eStatus, &nParseEnd);
     sal_Int32 nLen;
     if (eStatus == rtl_math_ConversionStatus_Ok && nParseEnd < (nLen = aStr.getLength()))
     {
-        // Not at string end, check for trailing blanks or switch to date or
+        // Not at string end, check for trailing blanks or switch to date or 
         // time parsing or bail out.
         const sal_Unicode* const pStart = aStr.getStr();
         const sal_Unicode* p = pStart + nParseEnd;
@@ -264,8 +270,8 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                     nCurFmtType = (bDate ? NUMBERFORMAT_DATE : NUMBERFORMAT_TIME);
                     nUnit[eState-1] = aStr.copy( 0, nParseEnd).toInt32();
                     const sal_Unicode* pLastStart = p;
-                    // Ensure there's no preceding sign. Negative dates
-                    // currently aren't handled correctly. Also discard
+                    // Ensure there's no preceding sign. Negative dates 
+                    // currently aren't handled correctly. Also discard 
                     // +CCYY-MM-DD
                     p = pStart;
                     while (p < pStop && *p == ' ')
@@ -293,12 +299,12 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                                     SetError( mnStringNoValueError);
                             }
                             pLastStart = p + 1;     // hypothetical next start
-                            // Delimiters must match, a trailing delimiter
+                            // Delimiters must match, a trailing delimiter 
                             // yields an invalid date/time.
                             switch (eState)
                             {
                                 case month:
-                                    // Month must be followed by separator and
+                                    // Month must be followed by separator and 
                                     // day, no trailing blanks.
                                     if (*p != '-' || (p+1 == pStop))
                                         SetError( mnStringNoValueError);
@@ -306,11 +312,11 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                                 case day:
                                     if ((*p != 'T' || (p+1 == pStop)) && *p != ' ')
                                         SetError( mnStringNoValueError);
-                                    // Take one blank as a valid delimiter
+                                    // Take one blank as a valid delimiter 
                                     // between date and time.
                                     break;
                                 case hour:
-                                    // Hour must be followed by separator and
+                                    // Hour must be followed by separator and 
                                     // minute, no trailing blanks.
                                     if (*p != ':' || (p+1 == pStop))
                                         SetError( mnStringNoValueError);
@@ -372,13 +378,13 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                         {
                             if (bDate && nUnit[day] == 0)
                                 nUnit[day] = 1;
-                            double fFraction = (nUnit[fraction] <= 0 ? 0.0 :
+                            double fFraction = (nUnit[fraction] <= 0 ? 0.0 : 
                                     ::rtl::math::pow10Exp( nUnit[fraction],
                                         static_cast<int>( -ceil( log10( static_cast<double>( nUnit[fraction]))))));
-                            fValue = (bDate ? GetDateSerial(
-                                        sal::static_int_cast<INT16>(nUnit[year]),
-                                        sal::static_int_cast<INT16>(nUnit[month]),
-                                        sal::static_int_cast<INT16>(nUnit[day]),
+                            fValue = (bDate ? GetDateSerial( 
+                                        sal::static_int_cast<INT16>(nUnit[year]), 
+                                        sal::static_int_cast<INT16>(nUnit[month]), 
+                                        sal::static_int_cast<INT16>(nUnit[day]), 
                                         true) : 0.0);
                             fValue += ((nUnit[hour] * 3600) + (nUnit[minute] * 60) + nUnit[second] + fFraction) / 86400.0;
                         }
@@ -454,7 +460,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
             case  CELLTYPE_STRING:
             case  CELLTYPE_EDIT:
             {
-                // SUM(A1:A2) differs from A1+A2. No good. But people insist on
+                // SUM(A1:A2) differs from A1+A2. No good. But people insist on 
                 // it ... #i5658#
                 String aStr;
                 if ( eType == CELLTYPE_STRING )
@@ -1230,7 +1236,7 @@ void ScInterpreter::DoubleRefToVars( const ScToken* p,
 ScDBRangeBase* ScInterpreter::PopDoubleRef()
 {
     if (!sp)
-    {
+    {    
         SetError(errUnknownStackVariable);
         return NULL;
     }
@@ -1247,9 +1253,9 @@ ScDBRangeBase* ScInterpreter::PopDoubleRef()
             SCCOL nCol1, nCol2;
             SCROW nRow1, nRow2;
             SCTAB nTab1, nTab2;
-            DoubleRefToVars(static_cast<ScToken*>(p),
+            DoubleRefToVars(static_cast<ScToken*>(p), 
                             nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, false);
-
+            
             return new ScDBInternalRange(pDok,
                 ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
         }
@@ -3720,8 +3726,8 @@ StackVar ScInterpreter::Interpret()
                 default : PushError( errUnknownOpCode);                 break;
             }
 
-            // If the function signalled that it pushed a subroutine on the
-            // instruction code stack instead of a result, continue with
+            // If the function signalled that it pushed a subroutine on the 
+            // instruction code stack instead of a result, continue with  
             // execution of the subroutine.
             if (sp > nStackBase && pStack[sp-1]->GetOpCode() == ocCall)
             {
@@ -3964,5 +3970,10 @@ StackVar ScInterpreter::Interpret()
     while( maxsp-- )
         (*p++)->DecRef();
 
-    return xResult->GetType();
+    StackVar eType = xResult->GetType();
+    if (eType == svMatrix)
+        // Results are immutable in case they would be reused as input for new 
+        // interpreters.
+        static_cast<ScToken*>(xResult.operator->())->GetMatrix()->SetImmutable( true);
+    return eType;
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,8 +105,8 @@ protected:
 
     /** fills the oasis flag only when a filtername was set
     *
-    * \param _rMediaDescriptor
-    * \param _rOutOASIS
+    * \param _rMediaDescriptor 
+    * \param _rOutOASIS 
     */
     virtual void isOasisFormat(const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor, bool & _rOutOASIS );
@@ -176,18 +176,18 @@ public:
                             :XMLFilter(_xContext)
     {}
     /// establish methods for factory instatiation
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL   create(
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext) throw(::com::sun::star::uno::Exception)
-    {
-        return (::cppu::OWeakObject *)new XMLReportFilterHelper( xContext );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL	create( 
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext) throw(::com::sun::star::uno::Exception)									
+    {																			
+        return (::cppu::OWeakObject *)new XMLReportFilterHelper( xContext );					
     }
     static ::rtl::OUString getImplementationName_Static()
     {
         return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.report.XMLFilter" ));
     }
 protected:
-    virtual ::rtl::OUString SAL_CALL
-        getImplementationName()
+    virtual ::rtl::OUString SAL_CALL							
+        getImplementationName()                                 
             throw( ::com::sun::star::uno::RuntimeException )
     {
         return getImplementationName_Static();

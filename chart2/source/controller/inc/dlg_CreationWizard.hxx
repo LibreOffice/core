@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,12 +49,12 @@ class DataSourceTabPage;
 class ChartTypeTemplateProvider;
 class DialogModel;
 
-class CreationWizard : public
+class CreationWizard : public 
     svt::RoadmapWizard
     , public TabPageNotifiable
 {
 public:
-    CreationWizard( Window* pParent,
+    CreationWizard( Window* pParent, 
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XModel >& xChartModel
         , const ::com::sun::star::uno::Reference<
@@ -69,9 +69,9 @@ public:
     virtual void setValidPage( TabPage * pTabPage );
 
 protected:
-    virtual sal_Bool        leaveState( WizardState _nState );
-    virtual WizardState     determineNextState(WizardState nCurrentState) const;
-    virtual void            enterState(WizardState nState);
+    virtual	sal_Bool		leaveState( WizardState _nState );
+    virtual WizardState		determineNextState(WizardState nCurrentState) const;
+    virtual	void			enterState(WizardState nState);
 
     virtual String  getStateDisplayName( WizardState nState ) const;
 

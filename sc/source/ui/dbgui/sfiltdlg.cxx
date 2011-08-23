@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,19 +61,19 @@
 
 
 //============================================================================
-//  class ScSpecialFilterDialog
+//	class ScSpecialFilterDialog
 
 //----------------------------------------------------------------------------
 
 ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                                        const SfxItemSet&   rArgSet )
+                                        const SfxItemSet&	rArgSet )
 
-    :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_SPEC_FILTER ),
+    :	ScAnyRefDlg	( pB, pCW, pParent, RID_SCDLG_SPEC_FILTER ),
         //
-        aLbFilterArea   ( this, ScResId( LB_CRITERIA_AREA ) ),
-        aFtFilterArea   ( this, ScResId( FT_CRITERIA_AREA ) ),
+        aLbFilterArea	( this, ScResId( LB_CRITERIA_AREA ) ),
+        aFtFilterArea	( this, ScResId( FT_CRITERIA_AREA ) ),
         aEdFilterArea   ( this, this, ScResId( ED_CRITERIA_AREA ) ),
-        aRbFilterArea   ( this, ScResId( RB_CRITERIA_AREA ), &aEdFilterArea, this ),
+        aRbFilterArea	( this, ScResId( RB_CRITERIA_AREA ), &aEdFilterArea, this ),
         //
         aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
         _INIT_COMMON_FILTER_RSCOBJS
@@ -82,16 +82,16 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         aBtnMore        ( this, ScResId( BTN_MORE ) ),
         //
-        pOptionsMgr     ( NULL ),
-        nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
-        theQueryData    ( ((const ScQueryItem&)
+        pOptionsMgr		( NULL ),
+        nWhichQuery		( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
+        theQueryData	( ((const ScQueryItem&)
                            rArgSet.Get( nWhichQuery )).GetQueryData() ),
-        pOutItem        ( NULL ),
-        pViewData       ( NULL ),
-        pDoc            ( NULL ),
-        pRefInputEdit   ( NULL ),
-        bRefInputMode   ( FALSE ),
-        pTimer          ( NULL )
+        pOutItem		( NULL ),
+        pViewData		( NULL ),
+        pDoc			( NULL ),
+        pRefInputEdit	( NULL ),
+        bRefInputMode	( FALSE ),
+        pTimer			( NULL )
 {
     Init( rArgSet );
     aEdFilterArea.GrabFocus();
@@ -134,22 +134,22 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
     const ScQueryItem& rQueryItem = (const ScQueryItem&)
                                     rArgSet.Get( nWhichQuery );
 
-    aBtnOk.SetClickHdl          ( LINK( this, ScSpecialFilterDlg, EndDlgHdl ) );
-    aBtnCancel.SetClickHdl      ( LINK( this, ScSpecialFilterDlg, EndDlgHdl ) );
-    aLbFilterArea.SetSelectHdl  ( LINK( this, ScSpecialFilterDlg, FilterAreaSelHdl ) );
-    aEdFilterArea.SetModifyHdl  ( LINK( this, ScSpecialFilterDlg, FilterAreaModHdl ) );
+    aBtnOk.SetClickHdl			( LINK( this, ScSpecialFilterDlg, EndDlgHdl ) );
+    aBtnCancel.SetClickHdl		( LINK( this, ScSpecialFilterDlg, EndDlgHdl ) );
+    aLbFilterArea.SetSelectHdl	( LINK( this, ScSpecialFilterDlg, FilterAreaSelHdl ) );
+    aEdFilterArea.SetModifyHdl	( LINK( this, ScSpecialFilterDlg, FilterAreaModHdl ) );
 
-    pViewData   = rQueryItem.GetViewData();
-    pDoc        = pViewData ? pViewData->GetDocument()  : NULL;
+    pViewData 	= rQueryItem.GetViewData();
+    pDoc	  	= pViewData ? pViewData->GetDocument()  : NULL;
 
-    aEdFilterArea.SetText( EMPTY_STRING );      // may be overwritten below
+    aEdFilterArea.SetText( EMPTY_STRING );		// may be overwritten below
 
     if ( pViewData && pDoc )
     {
         if(pDoc->GetChangeTrack()!=NULL) aBtnCopyResult.Disable();
 
-        ScRangeName*    pRangeNames = pDoc->GetRangeName();
-        const USHORT    nCount      = pRangeNames ? pRangeNames->GetCount() : 0;
+        ScRangeName*	pRangeNames	= pDoc->GetRangeName();
+        const USHORT	nCount 		= pRangeNames ? pRangeNames->GetCount() : 0;
 
         /*
          * Aus den RangeNames des Dokumentes werden nun die
@@ -161,9 +161,9 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
         if ( nCount > 0 )
         {
-            String       aString;
+            String		 aString;
             ScRangeData* pData = NULL;
-            USHORT       nInsert = 0;
+            USHORT		 nInsert = 0;
 
             for ( USHORT i=0; i<nCount; i++ )
             {
@@ -182,7 +182,7 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
             }
         }
 
-        //  is there a stored source range?
+        //	is there a stored source range?
 
         ScRange aAdvSource;
         if (rQueryItem.GetAdvancedQuerySource(aAdvSource))
@@ -197,7 +197,7 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
     // Optionen initialisieren lassen:
 
-    pOptionsMgr  = new ScFilterOptionsMgr(
+    pOptionsMgr	 = new ScFilterOptionsMgr(
                             this,
                             pViewData,
                             theQueryData,
@@ -217,14 +217,14 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
                             aStrNoName,
                             aStrUndefined );
 
-    //  #35206# Spezialfilter braucht immer Spaltenkoepfe
+    //	#35206# Spezialfilter braucht immer Spaltenkoepfe
     aBtnHeader.Check(TRUE);
     aBtnHeader.Disable();
 
     // Modal-Modus einschalten
-//  SetDispatcherLock( TRUE );
+//	SetDispatcherLock( TRUE );
     //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
+    //SFX_APPWINDOW->Disable(FALSE);		//! allgemeine Methode im ScAnyRefDlg
 }
 
 
@@ -245,7 +245,7 @@ BOOL __EXPORT ScSpecialFilterDlg::Close()
 
 void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( bRefInputMode && pRefInputEdit )       // Nur moeglich, wenn im Referenz-Editmodus
+    if ( bRefInputMode && pRefInputEdit )		// Nur moeglich, wenn im Referenz-Editmodus
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( pRefInputEdit );
@@ -319,13 +319,13 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 
     if ( (pBtn == &aBtnOk) && pDoc && pViewData )
     {
-        String          theCopyStr( aEdCopyArea.GetText() );
-        String          theAreaStr( aEdFilterArea.GetText() );
-        ScQueryParam    theOutParam( theQueryData );
-        ScAddress       theAdrCopy;
-        BOOL            bEditInputOk    = TRUE;
-        BOOL            bQueryOk        = FALSE;
-        ScRange         theFilterArea;
+        String			theCopyStr( aEdCopyArea.GetText() );
+        String			theAreaStr( aEdFilterArea.GetText() );
+        ScQueryParam	theOutParam( theQueryData );
+        ScAddress		theAdrCopy;
+        BOOL			bEditInputOk	= TRUE;
+        BOOL			bQueryOk		= FALSE;
+        ScRange			theFilterArea;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         if ( aBtnCopyResult.IsChecked() )
@@ -368,7 +368,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
              * ein ScQueryParam zu erzeugen:
              */
 
-            USHORT  nResult = theFilterArea.Parse( theAreaStr, pDoc, eConv );
+            USHORT	nResult = theFilterArea.Parse( theAreaStr, pDoc, eConv );
 
             if ( SCA_VALID == (nResult & SCA_VALID) )
             {
@@ -377,23 +377,23 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 
                 if ( aBtnCopyResult.IsChecked() )
                 {
-                    theOutParam.bInplace    = FALSE;
-                    theOutParam.nDestTab    = theAdrCopy.Tab();
-                    theOutParam.nDestCol    = theAdrCopy.Col();
-                    theOutParam.nDestRow    = theAdrCopy.Row();
+                    theOutParam.bInplace	= FALSE;
+                    theOutParam.nDestTab	= theAdrCopy.Tab();
+                    theOutParam.nDestCol	= theAdrCopy.Col();
+                    theOutParam.nDestRow	= theAdrCopy.Row();
                 }
                 else
                 {
-                    theOutParam.bInplace    = TRUE;
-                    theOutParam.nDestTab    = 0;
-                    theOutParam.nDestCol    = 0;
-                    theOutParam.nDestRow    = 0;
+                    theOutParam.bInplace	= TRUE;
+                    theOutParam.nDestTab	= 0;
+                    theOutParam.nDestCol	= 0;
+                    theOutParam.nDestRow	= 0;
                 }
 
                 theOutParam.bHasHeader = aBtnHeader.IsChecked();
-                theOutParam.bByRow     = TRUE;
+                theOutParam.bByRow	   = TRUE;
                 theOutParam.bCaseSens  = aBtnCase.IsChecked();
-                theOutParam.bRegExp    = aBtnRegExp.IsChecked();
+                theOutParam.bRegExp	   = aBtnRegExp.IsChecked();
                 theOutParam.bDuplicate = !aBtnUnique.IsChecked();
                 theOutParam.bDestPers  = aBtnDestPers.IsChecked();
 
@@ -405,14 +405,14 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
                                             rStart.Tab(),
                                             theOutParam );
 
-                //  an der DB-Collection koennen nur MAXQUERY Filter-Eintraege
-                //  gespeichert werden
+                //	an der DB-Collection koennen nur MAXQUERY Filter-Eintraege
+                //	gespeichert werden
 
                 if ( bQueryOk && theOutParam.GetEntryCount() > MAXQUERY &&
                      theOutParam.GetEntry(MAXQUERY).bDoQuery )
                 {
-                    bQueryOk = FALSE;       // zu viele
-                                            //! andere Fehlermeldung ??
+                    bQueryOk = FALSE;		// zu viele
+                                            //!	andere Fehlermeldung ??
                 }
             }
         }
@@ -436,7 +436,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
     {
         Close();
     }
-    return 0;
+    return 0;	
 }
 
 
@@ -477,8 +477,8 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
 {
     if ( pLb == &aLbFilterArea )
     {
-        String  aString;
-        USHORT  nSelPos = aLbFilterArea.GetSelectEntryPos();
+        String	aString;
+        USHORT	nSelPos = aLbFilterArea.GetSelectEntryPos();
 
         if ( nSelPos > 0 )
             aString = *(String*)aLbFilterArea.GetEntryData( nSelPos );
@@ -498,15 +498,15 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )
     {
         if ( pDoc && pViewData )
         {
-            String  theCurAreaStr = pEd->GetText();
-            USHORT  nResult = ScRange().Parse( theCurAreaStr, pDoc );
+            String	theCurAreaStr = pEd->GetText();
+            USHORT	nResult	= ScRange().Parse( theCurAreaStr, pDoc );
 
             if ( SCA_VALID == (nResult & SCA_VALID) )
             {
-                String* pStr    = NULL;
-                BOOL    bFound  = FALSE;
-                USHORT  i       = 0;
-                USHORT  nCount  = aLbFilterArea.GetEntryCount();
+                String*	pStr	= NULL;
+                BOOL	bFound	= FALSE;
+                USHORT	i		= 0;
+                USHORT	nCount	= aLbFilterArea.GetEntryCount();
 
                 for ( i=1; i<nCount && !bFound; i++ )
                 {

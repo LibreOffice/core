@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,14 +77,14 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
 
     Reference< data::XLabeledDataSequence > xCategories;
     bool bHasCategories = HasCategories( aArguments, aData );
-
+    
     bool bHasXValues = false;
     sal_Int32 nDataSeqCount = aData.getLength();
 
     bHasXValues = bHasCategories ? ( (nDataSeqCount-1) > 2 && (nDataSeqCount-1) % 2 != 0 )
                                  :( nDataSeqCount > 2 && nDataSeqCount % 2 != 0 );
 
-    bool bCategoriesUsed = false;
+    bool bCategoriesUsed = false;  
     bool bNextIsYValues = bHasCategories ? nDataSeqCount>2 : nDataSeqCount>1;
     for( sal_Int32 nDataIdx = 0; nDataIdx < aData.getLength(); ++nDataIdx )
     {

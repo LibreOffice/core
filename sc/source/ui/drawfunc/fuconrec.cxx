@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,13 +131,13 @@ BOOL __EXPORT FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 
         if (aSfxRequest.GetSlot() == SID_DRAW_CAPTION_VERTICAL)
         {
-            //  set vertical flag for caption object
+            //	set vertical flag for caption object
 
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if (rMarkList.GetMark(0))
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                //  create OutlinerParaObject now so it can be set to vertical
+                //	create OutlinerParaObject now so it can be set to vertical
                 if ( pObj->ISA(SdrTextObj) )
                     ((SdrTextObj*)pObj)->ForceOutlinerParaObject();
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
@@ -271,7 +271,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                     sal_Bool bIsVertical(SID_DRAW_CAPTION_VERTICAL == nID);
 
                     ((SdrTextObj*)pObj)->SetVerticalWriting(bIsVertical);
-
+                        
                     if(bIsVertical)
                     {
                         SfxItemSet aSet(pObj->GetMergedItemSet());

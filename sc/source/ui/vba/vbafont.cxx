@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ ScVbaFont::ScVbaFont(
 {
 }
 
-SfxItemSet*
+SfxItemSet*  
 ScVbaFont::GetDataSet()
 {
     return mpRangeObj ? excel::ScVbaCellRangeAccess::GetDataSet( mpRangeObj ) : 0;
@@ -77,7 +77,7 @@ uno::Reference< beans::XPropertySet > lcl_TextProperties( uno::Reference< table:
 void SAL_CALL
 ScVbaFont::setSuperscript( const uno::Any& aValue ) throw ( uno::RuntimeException )
 {
-    // #FIXEME create some sort of generic get/set code where
+    // #FIXEME create some sort of generic get/set code where 
     // you can pass a functor
     // get/set - Super/sub script code is exactly the same
     // except for the call applied at each cell position
@@ -316,7 +316,7 @@ ScVbaFont::setFontStyle( const uno::Any& aValue ) throw( uno::RuntimeException )
         rtl::OUString aToken = aStyles.getToken( 0, ' ', nIndex );
         aTokens.push_back( aToken );
     }while( nIndex >= 0 );
-
+    
     std::vector< rtl::OUString >::iterator it;
     for( it = aTokens.begin(); it != aTokens.end(); ++it )
     {
@@ -340,7 +340,7 @@ ScVbaFont::getFontStyle() throw ( uno::RuntimeException )
     getBold() >>= bValue;
     if( bValue )
         aStyles.appendAscii("Bold");
-
+    
     getItalic() >>= bValue;
     if( bValue )
     {

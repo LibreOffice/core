@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,14 +55,14 @@ class ExcelToSc;
 class ImportTyp
 {
 protected:
-    CharSet             eQuellChar;     // Quell-Zeichensatz
-    ScDocument*         pD;             // Dokument
+    CharSet				eQuellChar;		// Quell-Zeichensatz
+    ScDocument*			pD;				// Dokument
 
 public:
                         ImportTyp( ScDocument*, CharSet eSrc );
-    virtual             ~ImportTyp();
+    virtual				~ImportTyp();
 
-    virtual FltError    Read( void );
+    virtual FltError	Read( void );
 };
 
 class XclImpOutlineDataBuffer : protected XclImpRoot
@@ -89,7 +89,7 @@ private:
 class ImportExcel : public ImportTyp, protected XclImpRoot
 {
 protected:
-    static const double     fExcToTwips;        // Umrechnung 1/256 Zeichen -> Twips
+    static const double		fExcToTwips;		// Umrechnung 1/256 Zeichen -> Twips
 
     RootData*               pExcRoot;
 
@@ -100,7 +100,7 @@ protected:
     ScRange                 maScOleSize;        /// Visible range if embedded.
 
     NameBuffer*             pExtNameBuff;       // ... externe Namen (Ind.-Basis=1)
-    ExcelToSc*              pFormConv;          // Formel-Konverter
+    ExcelToSc*				pFormConv;			// Formel-Konverter
 
     XclImpOutlineBuffer*    pColOutlineBuff;
     XclImpOutlineBuffer*    pRowOutlineBuff;
@@ -110,13 +110,13 @@ protected:
     XclImpOutlineListBuffer* pOutlineListBuffer;
 
     sal_Int16               mnLastRefIdx;
-    UINT16                  nIxfeIndex;         // merkt sich Angabe im IXFE-Record
-    UINT16                  nLastXF;            // letzter XF in Formula-Record
-    SCTAB                   nBdshtTab;          // Counter fuer Boundsheet
-    ScFormulaCell*          pLastFormCell;      // fuer String-Records
+    UINT16					nIxfeIndex;			// merkt sich Angabe im IXFE-Record
+    UINT16					nLastXF;			// letzter XF in Formula-Record
+    SCTAB					nBdshtTab;			// Counter fuer Boundsheet
+    ScFormulaCell*			pLastFormCell;		// fuer String-Records
 
-    BOOL                    bTabTruncated;      // wenn Bereichsueberschreitung zum
-                                                //  Abschneiden von Zellen fuehrt
+    BOOL					bTabTruncated;		// wenn Bereichsueberschreitung zum
+                                                //	Abschneiden von Zellen fuehrt
 
     // Record-Funktionen
     void                    ReadFileSharing();
@@ -132,62 +132,62 @@ protected:
     void                    ReadRk();
 
     void                    Window1();
-    void                    Formula25( void );              // 0x06     -> excform.cxx
-    void                    Row25( void );                  // 0x08
-    void                    Bof2( void );                   // 0x09
-    void                    Eof( void );                    // 0x0A
-    void                    DocProtect( void );             // 0x12
+    void					Formula25( void );				// 0x06		-> excform.cxx
+    void					Row25( void );					// 0x08
+    void					Bof2( void );					// 0x09
+    void					Eof( void );					// 0x0A
+    void					DocProtect( void );             // 0x12
     void                    SheetProtect( void );           // 0x12 Sheet Protection
     void                    DocPasssword( void );           // 0x13 document password
     void                    SheetPassword( void );               // 0x13 sheet password
-    void                    Externsheet( void );            // 0x17
+    void					Externsheet( void );			// 0x17
     void                    WinProtection( void );          // 0x19
-    void                    Columndefault( void );          // 0x20
-    void                    Array25( void );                // 0x21
-    void                    Rec1904( void );                // 0x22
-    void                    Externname25( void );           // 0x23
-    void                    Colwidth( void );               // 0x24
-    void                    Defrowheight2( void );          // 0x25
-//      void                Window1( void );                // 0x3D
-    void                    Codepage( void );               // 0x42
-    void                    Ixfe( void );                   // 0x44
-    void                    DefColWidth( void );            // 0x55
-    void                    Builtinfmtcnt( void );          // 0x56
-    void                    Colinfo( void );                // 0x7D
-    void                    Wsbool( void );                 // 0x81
-    void                    Boundsheet( void );             // 0x85
-    void                    Country( void );                // 0x8C
-    void                    Hideobj( void );                // 0x8D
-    void                    Bundleheader( void );           // 0x8F
-    void                    Standardwidth( void );          // 0x99
-    void                    Shrfmla( void );                // 0xBC
-    void                    Mulrk( void );                  // 0xBD
-    void                    Mulblank( void );               // 0xBE
-    void                    Rstring( void );                // 0xD6
+    void					Columndefault( void );			// 0x20
+    void					Array25( void );				// 0x21
+    void					Rec1904( void );				// 0x22
+    void					Externname25( void );			// 0x23
+    void					Colwidth( void );				// 0x24
+    void					Defrowheight2( void );			// 0x25
+//		void				Window1( void );				// 0x3D
+    void					Codepage( void );				// 0x42
+    void					Ixfe( void );					// 0x44
+    void					DefColWidth( void );			// 0x55
+    void					Builtinfmtcnt( void );			// 0x56
+    void					Colinfo( void );				// 0x7D
+    void					Wsbool( void );					// 0x81
+    void					Boundsheet( void );				// 0x85
+    void					Country( void );				// 0x8C
+    void					Hideobj( void );				// 0x8D
+    void					Bundleheader( void );			// 0x8F
+    void					Standardwidth( void );			// 0x99
+    void					Shrfmla( void );				// 0xBC
+    void					Mulrk( void );					// 0xBD
+    void					Mulblank( void );				// 0xBE
+    void					Rstring( void );				// 0xD6
     void                    Cellmerging( void );            // 0xE5
     void                    Olesize( void );                // 0xDE
     void                    ReadUsesElfs();                 // 0x0160
-    void                    Formula3( void );               // 0x0206       -> excform.cxx
+    void					Formula3( void );				// 0x0206		-> excform.cxx
                                                             // 0x0207 -> 0x07
-    void                    Row34( void );                  // 0x0208
-    void                    Bof3( void );                   // 0x0209
-    void                    Array34( void );                // 0x0221
-    void                    Externname34( void );           // 0x0223
-    void                    Defrowheight345( void );        // 0x0225
-    void                    TableOp( void );                // 0x0236
-    //void                  Rk( void );                     // 0x027E -> 0x7E
-    void                    Formula4( void );               // 0x0406       -> excform.cxx
-    void                    Bof4( void );                   // 0x0409
-    void                    Bof5( void );                   // 0x0809
+    void					Row34( void );					// 0x0208
+    void					Bof3( void );					// 0x0209
+    void					Array34( void );				// 0x0221
+    void					Externname34( void );			// 0x0223
+    void					Defrowheight345( void );		// 0x0225
+    void					TableOp( void );				// 0x0236
+    //void					Rk( void );						// 0x027E -> 0x7E
+    void					Formula4( void );				// 0x0406		-> excform.cxx
+    void					Bof4( void );					// 0x0409
+    void					Bof5( void );					// 0x0809
 
     // ---------------------------------------------------------------
     void                    Formula( const XclAddress& rXclPos,
                                 UINT16 nXF, UINT16 nFormLen, double &rCurVal, BOOL bShrFmla );
-                                            //      -> excform.cxx
+                                            // 		-> excform.cxx
 
     virtual void            EndSheet( void );
-    void                    NeueTabelle( void );
-    const ScTokenArray*     ErrorToFormula( BYTE bErrOrVal, BYTE nError,
+    void					NeueTabelle( void );
+    const ScTokenArray*		ErrorToFormula( BYTE bErrOrVal, BYTE nError,
                                 double& rVal );
 
     virtual void            AdjustRowHeight();
@@ -196,9 +196,9 @@ protected:
 public:
                             ImportExcel( XclImpRootData& rImpData, SvStream& rStrm );
 
-    virtual                 ~ImportExcel( void );
+    virtual					~ImportExcel( void );
 
-    virtual FltError        Read( void );
+    virtual FltError		Read( void );
 };
 
 #endif

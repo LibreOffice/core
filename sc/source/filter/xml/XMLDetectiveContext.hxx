@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ class ScXMLImport;
 
 struct ScMyImpDetectiveObj
 {
-    ScRange                     aSourceRange;
-    ScDetectiveObjType          eObjType;
-    sal_Bool                    bHasError;
+    ScRange						aSourceRange;
+    ScDetectiveObjType			eObjType;
+    sal_Bool					bHasError;
 
                                 ScMyImpDetectiveObj();
 };
@@ -56,12 +56,12 @@ typedef ::std::vector< ScMyImpDetectiveObj > ScMyImpDetectiveObjVec;
 
 struct ScMyImpDetectiveOp
 {
-    ScAddress                   aPosition;
-    ScDetOpType                 eOpType;
-    sal_Int32                   nIndex;
+    ScAddress					aPosition;
+    ScDetOpType					eOpType;
+    sal_Int32					nIndex;
 
-    inline                      ScMyImpDetectiveOp() : nIndex( -1 ) {}
-    sal_Bool                    operator<(const ScMyImpDetectiveOp& rDetOp) const;
+    inline						ScMyImpDetectiveOp() : nIndex( -1 )	{}
+    sal_Bool					operator<(const ScMyImpDetectiveOp& rDetOp) const;
 };
 
 typedef ::std::list< ScMyImpDetectiveOp > ScMyImpDetectiveOpList;
@@ -69,17 +69,17 @@ typedef ::std::list< ScMyImpDetectiveOp > ScMyImpDetectiveOpList;
 class ScMyImpDetectiveOpArray
 {
 private:
-    ScMyImpDetectiveOpList      aDetectiveOpList;
+    ScMyImpDetectiveOpList		aDetectiveOpList;
 
 public:
-    inline                      ScMyImpDetectiveOpArray() :
-                                    aDetectiveOpList()  {}
+    inline						ScMyImpDetectiveOpArray() :
+                                    aDetectiveOpList()	{}
 
-    inline void                 AddDetectiveOp( const ScMyImpDetectiveOp& rDetOp )
+    inline void					AddDetectiveOp( const ScMyImpDetectiveOp& rDetOp )
                                     { aDetectiveOpList.push_back( rDetOp ); }
 
-    void                        Sort();
-    sal_Bool                    GetFirstOp( ScMyImpDetectiveOp& rDetOp );
+    void						Sort();
+    sal_Bool					GetFirstOp( ScMyImpDetectiveOp& rDetOp );
 };
 
 
@@ -88,10 +88,10 @@ public:
 class ScXMLDetectiveContext : public SvXMLImportContext
 {
 private:
-    ScMyImpDetectiveObjVec*     pDetectiveObjVec;
+    ScMyImpDetectiveObjVec*		pDetectiveObjVec;
 
-    const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport&			GetScImport() const	{ return (const ScXMLImport&)GetImport(); }
+    ScXMLImport&				GetScImport()		{ return (ScXMLImport&)GetImport(); }
 
 public:
                                 ScXMLDetectiveContext(
@@ -100,14 +100,14 @@ public:
                                     const ::rtl::OUString& rLName,
                                     ScMyImpDetectiveObjVec* pNewDetectiveObjVec
                                     );
-    virtual                     ~ScXMLDetectiveContext();
+    virtual						~ScXMLDetectiveContext();
 
-    virtual SvXMLImportContext* CreateChildContext(
+    virtual SvXMLImportContext*	CreateChildContext(
                                     USHORT nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
                                     );
-    virtual void                EndElement();
+    virtual void				EndElement();
 };
 
 
@@ -116,12 +116,12 @@ public:
 class ScXMLDetectiveHighlightedContext : public SvXMLImportContext
 {
 private:
-    ScMyImpDetectiveObjVec*     pDetectiveObjVec;
-    ScMyImpDetectiveObj         aDetectiveObj;
-    sal_Bool                    bValid;
+    ScMyImpDetectiveObjVec*		pDetectiveObjVec;
+    ScMyImpDetectiveObj			aDetectiveObj;
+    sal_Bool					bValid;
 
-    const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport&			GetScImport() const	{ return (const ScXMLImport&)GetImport(); }
+    ScXMLImport&				GetScImport()		{ return (ScXMLImport&)GetImport(); }
 
 public:
                                 ScXMLDetectiveHighlightedContext(
@@ -131,14 +131,14 @@ public:
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                     ScMyImpDetectiveObjVec* pNewDetectiveObjVec
                                     );
-    virtual                     ~ScXMLDetectiveHighlightedContext();
+    virtual						~ScXMLDetectiveHighlightedContext();
 
-    virtual SvXMLImportContext* CreateChildContext(
+    virtual SvXMLImportContext*	CreateChildContext(
                                     USHORT nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
                                     );
-    virtual void                EndElement();
+    virtual void				EndElement();
 };
 
 
@@ -147,11 +147,11 @@ public:
 class ScXMLDetectiveOperationContext : public SvXMLImportContext
 {
 private:
-    ScMyImpDetectiveOp          aDetectiveOp;
-    sal_Bool                    bHasType;
+    ScMyImpDetectiveOp			aDetectiveOp;
+    sal_Bool					bHasType;
 
-    const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport&			GetScImport() const	{ return (const ScXMLImport&)GetImport(); }
+    ScXMLImport&				GetScImport()		{ return (ScXMLImport&)GetImport(); }
 
 public:
                                 ScXMLDetectiveOperationContext(
@@ -160,14 +160,14 @@ public:
                                     const ::rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
                                     );
-    virtual                     ~ScXMLDetectiveOperationContext();
+    virtual						~ScXMLDetectiveOperationContext();
 
-    virtual SvXMLImportContext* CreateChildContext(
+    virtual SvXMLImportContext*	CreateChildContext(
                                     USHORT nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
                                     );
-    virtual void                EndElement();
+    virtual void				EndElement();
 };
 
 

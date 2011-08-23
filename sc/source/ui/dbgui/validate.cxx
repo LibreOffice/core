@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 #include "compiler.hxx"
 #include "formula/opcode.hxx" //CHINA001
 //<!--Added by PengYunQuan for Validity Cell Range Picker
-#include "tabvwsh.hxx"
+#include "tabvwsh.hxx" 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/childwin.hxx>
 #include "reffact.hxx"
@@ -61,7 +61,7 @@
 
 static USHORT pValueRanges[] =
 {
-    FID_VALID_MODE, FID_VALID_ERRTEXT,
+    FID_VALID_MODE,	FID_VALID_ERRTEXT,
     FID_VALID_LISTTYPE, FID_VALID_LISTTYPE,
     0
 };
@@ -72,7 +72,7 @@ static USHORT pValueRanges[] =
 //<!--Modified by PengYunQuan for Validity Cell Range Picker
 //ScValidationDlg::ScValidationDlg( Window* pParent, const SfxItemSet* pArgSet ) :
 //    SfxTabDialog( pParent, ScResId( TAB_DLG_VALIDATION ), pArgSet )
-ScValidationDlg::ScValidationDlg( Window*           pParent,
+ScValidationDlg::ScValidationDlg( Window*			pParent,
                                  const SfxItemSet* pArgSet,
                                  ScTabViewShell *pTabViewSh,
                                  SfxBindings *pB /*= NULL*/
@@ -94,12 +94,12 @@ void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument* pD
 {
     if ( rRange.aStart != rRange.aEnd )
         if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
-            if( m_pRefEdit )
+            if( m_pRefEdit ) 
                 pValidationDlg/*->GetRefHandler()*/->RefInputStart( m_pRefEdit );
 
     if ( m_pRefEdit )
     {
-        String  aStr;
+        String	aStr;
         rRange.Format( aStr, SCR_ABS_3D, pDoc );
         m_pRefEdit->SetRefString( aStr );
         //m_pRefEdit->SetRefString( rRange.aStart != rRange.aEnd ? aStr : String::CreateFromAscii("=").Append( aStr ) );
@@ -109,15 +109,15 @@ void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument* pD
 void ScTPValidationValue:: SetActiveHdl()
 {
     if ( m_pRefEdit ) m_pRefEdit->GrabFocus();
-
+    
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
-        if( m_pRefEdit )
+        if( m_pRefEdit ) 
         {
             pValidationDlg/*->GetRefHandler()*/->RefInputDone();
         }
 }
 
-void            ScTPValidationValue::RefInputStartPreHdl( ScRefEdit* pEdit, ScRefButton* pButton )
+void			ScTPValidationValue::RefInputStartPreHdl( ScRefEdit* pEdit, ScRefButton* pButton )
 {
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
     {
@@ -136,9 +136,9 @@ void            ScTPValidationValue::RefInputStartPreHdl( ScRefEdit* pEdit, ScRe
     }
 }
 
-void            ScTPValidationValue::RefInputDonePreHdl()
+void			ScTPValidationValue::RefInputDonePreHdl()
 {
-
+    
     if( m_pRefEdit && m_pRefEdit->GetParent()!= this )
     {
         if( Window *pPreWnd = m_pRefEdit==&maEdMax?&maFtMax:(m_pRefEdit==&maEdMin?&maFtMin:NULL) )
@@ -150,22 +150,22 @@ void            ScTPValidationValue::RefInputDonePreHdl()
         m_pRefEdit->SetParent( this );
 
         m_btnRef.SetParent( m_pRefEdit ); //if Edit SetParent but button not, the tab order will be incorrect, need button to setparent to anthor window and restore parent later in order to restore the tab order
-//      aExample1.SetParent( m_pRefEdit ); // the aExample1's child order will affect acc key
+//		aExample1.SetParent( m_pRefEdit ); // the aExample1's child order will affect acc key
     }
-
+    
     if( m_btnRef.GetParent()!=this ) m_btnRef.SetParent( this );
-//  if( aExample1.GetParent()!=this ) aExample1.SetParent( this );
+//	if( aExample1.GetParent()!=this ) aExample1.SetParent( this );
 }
 
-void            ScTPValidationValue::RefInputDonePostHdl()
+void			ScTPValidationValue::RefInputDonePostHdl()
 {
-
-
+    
+    
     if( m_pRefEdit && !m_pRefEdit->HasFocus() )
         m_pRefEdit->GrabFocus();
 
 }
-
+    
 
 BOOL ScValidationDlg::Close()
 {
@@ -352,7 +352,7 @@ ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rAr
 
     // list separator in formulas
     //CHINA001 const String& rListSep = ScCompiler::pSymbolTableNative[ ocSep ];
-    String aListSep = ::GetScCompilerNativeSymbol( ocSep ); //CHINA001
+    String aListSep = ::GetScCompilerNativeSymbol( ocSep ); //CHINA001 
     DBG_ASSERT( aListSep.Len() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
     mcFmlaSep = aListSep.Len() ? aListSep.GetChar( 0 ) : ';';
     //<!--Added by PengYunQuan for Validity Cell Range Picker
@@ -499,7 +499,7 @@ ScValidationDlg * ScTPValidationValue::GetValidationDlg()
     if( Window *pParent = GetParent() )
         do{
             if ( dynamic_cast<ScValidationDlg*>( pParent ) )
-                return static_cast< ScValidationDlg * >( pParent );
+                return static_cast<	ScValidationDlg * >( pParent );
         }while ( NULL != ( pParent = pParent->GetParent() ) );
     return NULL;
 }
@@ -581,7 +581,7 @@ void ScTPValidationValue::TidyListBoxes()
 
         pWnd = GetChild(0);
 
-        while( std::find( alstOrder.begin(), alstOrder.end(), pWnd ) != alstOrder.end() && NULL != ( pWnd = pWnd->GetWindow( WINDOW_NEXT) ) ) ;
+        while( std::find( alstOrder.begin(), alstOrder.end(), pWnd ) != alstOrder.end() && NULL != ( pWnd = pWnd->GetWindow( WINDOW_NEXT) ) ) ; 
 
         if ( pWnd )
         {
@@ -598,7 +598,7 @@ void ScTPValidationValue::TidyListBoxes()
 IMPL_LINK( ScTPValidationValue, EditSetFocusHdl, Edit *, /*pEdit*/ )
 {
     USHORT  nPos=maLbAllow.GetSelectEntryPos();
-
+    
     if ( nPos == SC_VALIDDLG_ALLOW_RANGE )
     {
         SetupRefDlg();
@@ -609,7 +609,7 @@ IMPL_LINK( ScTPValidationValue, EditSetFocusHdl, Edit *, /*pEdit*/ )
 
 IMPL_LINK( ScTPValidationValue, KillFocusHdl, Window *, pWnd )
 {
-    if( pWnd == m_pRefEdit || pWnd == &m_btnRef )
+    if(	pWnd == m_pRefEdit || pWnd == &m_btnRef )
         if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
             if ( (pValidationDlg->IsActive() || pValidationDlg->IsChildFocus() ) && !pValidationDlg->IsRefInputting() )
                 if( ( !m_pRefEdit || !m_pRefEdit->HasFocus()) && !m_btnRef.HasFocus() )
@@ -690,18 +690,18 @@ IMPL_LINK( ScTPValidationValue, CheckHdl, CheckBox*, EMPTYARG )
 //========================================================================
 // Input Help Page
 
-ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
+ScTPValidationHelp::ScTPValidationHelp( Window*			pParent,
                                           const SfxItemSet& rArgSet )
 
-    :   SfxTabPage      ( pParent,
+    :	SfxTabPage		( pParent,
                           ScResId( TP_VALIDATION_INPUTHELP ),
                           rArgSet ),
-        aTsbHelp        ( this, ScResId( TSB_HELP ) ),
+        aTsbHelp		( this, ScResId( TSB_HELP ) ),
         aFlContent      ( this, ScResId( FL_CONTENT ) ),
-        aFtTitle        ( this, ScResId( FT_TITLE ) ),
-        aEdtTitle       ( this, ScResId( EDT_TITLE ) ),
-        aFtInputHelp    ( this, ScResId( FT_INPUTHELP ) ),
-        aEdInputHelp    ( this, ScResId( EDT_INPUTHELP ) ),
+        aFtTitle		( this, ScResId( FT_TITLE ) ),
+        aEdtTitle		( this, ScResId( EDT_TITLE ) ),
+        aFtInputHelp	( this, ScResId( FT_INPUTHELP ) ),
+        aEdInputHelp	( this, ScResId( EDT_INPUTHELP ) ),
 
         mrArgSet            ( rArgSet )
 {
@@ -733,8 +733,8 @@ USHORT* __EXPORT ScTPValidationHelp::GetRanges()
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTPValidationHelp::Create( Window*    pParent,
-                                         const SfxItemSet&  rArgSet )
+SfxTabPage* __EXPORT ScTPValidationHelp::Create( Window*	pParent,
+                                         const SfxItemSet&	rArgSet )
 {
     return ( new ScTPValidationHelp( pParent, rArgSet ) );
 }
@@ -776,21 +776,21 @@ BOOL __EXPORT ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
 //========================================================================
 // Error Alert Page
 
-ScTPValidationError::ScTPValidationError( Window*           pParent,
+ScTPValidationError::ScTPValidationError( Window*			pParent,
                                           const SfxItemSet& rArgSet )
 
-    :   SfxTabPage      ( pParent,
+    :	SfxTabPage		( pParent,
                           ScResId( TP_VALIDATION_ERROR ),
                           rArgSet ),
-        aTsbShow        ( this, ScResId( TSB_SHOW ) ),
+        aTsbShow		( this, ScResId( TSB_SHOW ) ),
         aFlContent      ( this, ScResId( FL_CONTENT ) ),
-        aFtAction       ( this, ScResId( FT_ACTION ) ),
-        aLbAction       ( this, ScResId( LB_ACTION ) ),
-        aBtnSearch      ( this, ScResId( BTN_SEARCH ) ),
-        aFtTitle        ( this, ScResId( FT_TITLE ) ),
-        aEdtTitle       ( this, ScResId( EDT_TITLE ) ),
-        aFtError        ( this, ScResId( FT_ERROR ) ),
-        aEdError        ( this, ScResId( EDT_ERROR ) ),
+        aFtAction		( this, ScResId( FT_ACTION ) ),
+        aLbAction		( this, ScResId( LB_ACTION ) ),
+        aBtnSearch		( this, ScResId( BTN_SEARCH ) ),
+        aFtTitle		( this, ScResId( FT_TITLE ) ),
+        aEdtTitle		( this, ScResId( EDT_TITLE ) ),
+        aFtError		( this, ScResId( FT_ERROR ) ),
+        aEdError		( this, ScResId( EDT_ERROR ) ),
 
         mrArgSet            ( rArgSet )
 {
@@ -826,8 +826,8 @@ USHORT* __EXPORT ScTPValidationError::GetRanges()
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTPValidationError::Create( Window*   pParent,
-                                         const SfxItemSet&  rArgSet )
+SfxTabPage* __EXPORT ScTPValidationError::Create( Window*	pParent,
+                                         const SfxItemSet&	rArgSet )
 {
     return ( new ScTPValidationError( pParent, rArgSet ) );
 }
@@ -970,12 +970,12 @@ bool ScValidationDlg::RemoveRefDlg( BOOL bRestoreModal /* = TRUE */ )
     }
 
     if ( !m_bOwnRefHdlr ) return false;
-    if( LeaveRefStatus() && LeaveRefMode() )
+    if( LeaveRefStatus() && LeaveRefMode() ) 
     {
         m_bOwnRefHdlr = false;
 
         if( bRestoreModal )
-            SetModal( TRUE );
+            SetModal( TRUE );		
     }
 
     if ( SfxChildWindow* pWnd = pTabVwSh->GetViewFrame()->GetChildWindow( SID_VALIDITY_REFERENCE ) )
@@ -993,7 +993,7 @@ void ScTPValidationValue::ScRefButtonEx::Click()
 {
     if( ScTPValidationValue *pParent = dynamic_cast< ScTPValidationValue*>( GetParent() ) )
         pParent->OnClick( this );
-
+        
     ScRefButton::Click();
 }
 
@@ -1014,7 +1014,7 @@ BOOL ScValidationDlg::IsChildFocus()
 }
 
 
-bool    ScValidationDlg::IsAlive()
+bool	ScValidationDlg::IsAlive()
 {
     return SC_MOD()->IsAliveRefDlg( SLOTID, this );
 }

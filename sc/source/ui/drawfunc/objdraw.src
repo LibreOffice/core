@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "submenu.hrc"
 #include <svx/globlmn.hrc>
  //
- // Defines -------------------------------------------------------------------------------
+ //	Defines -------------------------------------------------------------------------------
  //
 #define MN_RESET\
     MenuItem\
@@ -40,8 +40,8 @@
         Text [ x-comment ] = " ";\
     };
 
- // Font (SID_ATTR_CHAR_FONT) und Groesse (SID_ATTR_CHAR_FONTHEIGHT) duerfen nicht im
- // Formatmenue auftauchen, weil die Controller im ExeEnv sonst im Container angelegt werden
+ //	Font (SID_ATTR_CHAR_FONT) und Groesse (SID_ATTR_CHAR_FONTHEIGHT) duerfen nicht im
+ //	Formatmenue auftauchen, weil die Controller im ExeEnv sonst im Container angelegt werden
 #define MN_TEXT_ATTR\
     MenuItem\
     {\
@@ -118,7 +118,7 @@
                     HelpID = SID_ATTR_PARA_ADJUST_LEFT ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "~Left" ;\
-                    Text [ x-comment ] = " ";   \
+                    Text [ x-comment ] = " ";	\
                 };\
                 MenuItem\
                 {\
@@ -358,7 +358,7 @@
         Text [ x-comment ] = " ";\
     };
 
-#define MN_ALIGNSUB \
+#define MN_ALIGNSUB	\
     MenuItem\
     {\
         Identifier = SID_OBJECT_ALIGN ; \
@@ -402,10 +402,10 @@
     };
 
  //
- // ------------------------------------------------------------------------------
+ //	------------------------------------------------------------------------------
  //
  //
- //     Objekt-Leisten
+ //		Objekt-Leisten
  //
 String RID_DRAW_OBJECTBAR
 {
@@ -437,7 +437,7 @@ ToolBox RID_DRAW_OBJECTBAR
          //---------------------------------------------
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
          //---------------------------------------------
-         // Linien
+         //	Linien
         ToolBoxItem
         {
             Identifier = SID_ATTRIBUTES_LINE ;
@@ -485,7 +485,7 @@ ToolBox RID_DRAW_OBJECTBAR
          //---------------------------------------------
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
          //---------------------------------------------
-         // Rest
+         //	Rest
         ToolBoxItem
         {
             Identifier = SID_OBJECT_ROTATE ;
@@ -557,7 +557,7 @@ ToolBox RID_DRAW_OBJECTBAR
     Scroll = TRUE ;
 };
  //
- // Text-Toolbox
+ //	Text-Toolbox
  //
 String RID_TEXT_TOOLBOX
 {
@@ -1063,7 +1063,7 @@ ToolBox RID_TEXT_TOOLBOX
     };
 };
  //
- // Graphics toolbox
+ //	Graphics toolbox
  //
 String RID_GRAPHIC_OBJECTBAR
 {
@@ -1246,7 +1246,7 @@ ToolBox RID_GRAPHIC_OBJECTBAR
     };
 };
  //
- // Popup-Menues ---------------------------------------------------------------------
+ //	Popup-Menues ---------------------------------------------------------------------
  //
 String RID_POPUP_DRAW
 {
@@ -1255,7 +1255,7 @@ String RID_POPUP_DRAW
     Text [ x-comment ] = " ";
 };
  //
- //     Popup-Menue fuer (allgemeine) Zeichenobjekte
+ //		Popup-Menue fuer (allgemeine) Zeichenobjekte
  //
 Menu RID_POPUP_DRAW
 {
@@ -1309,7 +1309,7 @@ Menu RID_POPUP_DRAW
 };
 
  //
- //     Popup-Menue fuer (Uno-) Controls
+ //		Popup-Menue fuer (Uno-) Controls
  //
 
 Menu RID_POPUP_CONTROL
@@ -1343,7 +1343,7 @@ Menu RID_POPUP_CONTROL
 };
 
  //
- //     Grafik
+ //		Grafik
  //
 
 Menu RID_POPUP_GRAPHIC
@@ -1386,7 +1386,7 @@ Menu RID_POPUP_GRAPHIC
 };
 
  //
- //     Media
+ //		Media
  //
 
 Menu RID_POPUP_MEDIA
@@ -1446,7 +1446,7 @@ ToolBox RID_MEDIA_OBJECTBAR
 };
 
  //
- //     Ole-Objekt
+ //		Ole-Objekt
  //
 
 Menu RID_POPUP_OLE
@@ -1476,7 +1476,7 @@ Menu RID_POPUP_OLE
 };
 
  //
- //     Charts
+ //		Charts
  //
 
 Menu RID_POPUP_CHART

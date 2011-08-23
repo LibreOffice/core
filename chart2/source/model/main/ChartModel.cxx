@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -156,7 +156,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
     Reference< beans::XPropertySet > xNewPageBackground = CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xPageBackground );
     Reference< chart2::XChartTypeManager > xChartTypeManager = CreateRefClone< Reference< chart2::XChartTypeManager > >()( rOther.m_xChartTypeManager );
     Reference< container::XNameAccess > xXMLNamespaceMap = CreateRefClone< Reference< container::XNameAccess > >()( rOther.m_xXMLNamespaceMap );
-
+    
     {
         MutexGuard aGuard( m_aModelMutex );
         xListener = this;
@@ -166,12 +166,12 @@ ChartModel::ChartModel( const ChartModel & rOther )
         m_xChartTypeManager = xChartTypeManager;
         m_xXMLNamespaceMap = xXMLNamespaceMap;
     }
-
+    
     ModifyListenerHelper::addListener( xNewTitle, xListener );
     ModifyListenerHelper::addListener( xNewDiagram, xListener );
     ModifyListenerHelper::addListener( xNewPageBackground, xListener );
     xListener.clear();
-
+    
     osl_decrementInterlockedCount(&m_refCount);
 }
 
@@ -384,11 +384,11 @@ void SAL_CALL ChartModel::disconnectController( const uno::Reference< frame::XCo
     //case: current controller is disconnected:
     if( m_xCurrentController == xController )
         m_xCurrentController.clear();
-
+    
     DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
 }
 
-void SAL_CALL ChartModel::lockControllers() throw(uno::RuntimeException)
+void SAL_CALL ChartModel::lockControllers()	throw(uno::RuntimeException)
 {
     /*
     suspends some notifications to the controllers which are used for display updates.
@@ -576,7 +576,7 @@ void SAL_CALL ChartModel::removeEventListener( const uno::Reference< lang::XEven
 //-----------------------------------------------------------------
 // util::XCloseBroadcaster (base of XCloseable)
 //-----------------------------------------------------------------
-void SAL_CALL ChartModel::addCloseListener( const uno::Reference<   util::XCloseListener > & xListener )
+void SAL_CALL ChartModel::addCloseListener( const uno::Reference<	util::XCloseListener > & xListener )
         throw(uno::RuntimeException)
 {
     m_aLifeTimeManager.g_addCloseListener( xListener );
@@ -1043,6 +1043,7 @@ void SAL_CALL ChartModel::setVisualAreaSize( ::sal_Int64 nAspect, const awt::Siz
 {
     if( nAspect == embed::Aspects::MSOLE_CONTENT )
     {
+        ControllerLockGuard aLockGuard( this );
         bool bChanged =
             (m_aVisualAreaSize.Width != aSize.Width ||
              m_aVisualAreaSize.Height != aSize.Height);
@@ -1170,7 +1171,7 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
 
 //     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMEType,
 //         C2U( "GDIMetaFile" ),
-//      ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+// 		::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
         C2U( "GDIMetaFile" ),
         ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
@@ -1367,7 +1368,7 @@ Reference< chart2::XUndoManager > SAL_CALL ChartModel::getUndoManager()
 uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartModel::getDataSequences()
     throw (uno::RuntimeException)
 {
-    Reference< chart2::data::XDataSource > xSource(
+    Reference< chart2::data::XDataSource > xSource( 
         DataSourceHelper::getUsedData( uno::Reference< frame::XModel >(this) ) );
     if( xSource.is())
         return xSource->getDataSequences();

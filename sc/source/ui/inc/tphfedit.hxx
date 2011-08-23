@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ class SvxFieldItem;
 class ScAccessibleEditObject;
 class ScEditWindow;
 
-SC_DLLPUBLIC ScEditWindow* GetScEditWindow (); //CHINA001
+SC_DLLPUBLIC ScEditWindow* GetScEditWindow (); //CHINA001 
 
 enum ScEditWindowLocation
 {
@@ -69,32 +69,32 @@ public:
             ~ScEditWindow();
 
     using Control::SetFont;
-    void            SetFont( const ScPatternAttr& rPattern );
+    void 			SetFont( const ScPatternAttr& rPattern );
     using Control::SetText;
-    void            SetText( const EditTextObject& rTextObject );
-    EditTextObject* CreateTextObject();
-    void            SetCharAttriutes();
+    void 			SetText( const EditTextObject& rTextObject );
+    EditTextObject*	CreateTextObject();
+    void			SetCharAttriutes();
 
-    void            InsertField( const SvxFieldItem& rFld );
+    void			InsertField( const SvxFieldItem& rFld );
 
-    void            SetNumType(SvxNumType eNumType);
+    void			SetNumType(SvxNumType eNumType);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     inline ScHeaderEditEngine*  GetEditEngine() const {return pEdEngine;}
 protected:
-    virtual void    Paint( const Rectangle& rRec );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    GetFocus();
+    virtual void	Paint( const Rectangle& rRec );
+    virtual void	MouseMove( const MouseEvent& rMEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void	KeyInput( const KeyEvent& rKEvt );
+    virtual void	Command( const CommandEvent& rCEvt );
+    virtual void	GetFocus();
     virtual void    LoseFocus();
 
 private:
-    ScHeaderEditEngine* pEdEngine;
-    EditView*           pEdView;
+    ScHeaderEditEngine*	pEdEngine;
+    EditView*			pEdView;
     ScEditWindowLocation eLocation;
     bool mbRTL;
 
@@ -107,76 +107,76 @@ class SC_DLLPUBLIC ScExtIButton : public ImageButton
 {
 private:
 
-    Timer           aTimer;
-    ScPopupMenu*    pPopupMenu;
-    Link            aMLink;
-    USHORT          nSelected;
+    Timer			aTimer;
+    ScPopupMenu*	pPopupMenu;
+    Link			aMLink;
+    USHORT			nSelected;
 
     SC_DLLPRIVATE  DECL_LINK( TimerHdl, Timer*);
 
-//  void            DrawArrow();
+//	void			DrawArrow();
 
 protected:
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt);
-    virtual void    Click();
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt);
+    virtual void	Click();
 
-    virtual void    StartPopup();
+    virtual void	StartPopup();
 
 public:
 
     ScExtIButton(Window* pParent, const ResId& rResId );
 
-    void            SetPopupMenu(ScPopupMenu* pPopUp);
+    void			SetPopupMenu(ScPopupMenu* pPopUp);
 
-    USHORT          GetSelected();
+    USHORT			GetSelected();
 
     void            SetMenuHdl( const Link& rLink ) { aMLink = rLink; }
     const Link&     GetMenuHdl() const { return aMLink; }
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual long	PreNotify( NotifyEvent& rNEvt );
 };
 
 
 //===================================================================
-//CHINA001
+//CHINA001 
 //CHINA001 class ScHFEditPage : public SfxTabPage
 //CHINA001 {
 //CHINA001 public:
-//CHINA001 virtual  BOOL    FillItemSet ( SfxItemSet& rCoreSet );
-//CHINA001 virtual  void    Reset       ( const SfxItemSet& rCoreSet );
-//CHINA001
-//CHINA001 void         SetNumType(SvxNumType eNumType);
-//CHINA001
+//CHINA001 virtual	BOOL	FillItemSet	( SfxItemSet& rCoreSet );
+//CHINA001 virtual	void	Reset		( const SfxItemSet& rCoreSet );
+//CHINA001 
+//CHINA001 void			SetNumType(SvxNumType eNumType);
+//CHINA001 
 //CHINA001 protected:
-//CHINA001 ScHFEditPage( Window*            pParent,
-//CHINA001 USHORT           nResId,
-//CHINA001 const SfxItemSet&    rCoreSet,
-//CHINA001 USHORT           nWhich );
-//CHINA001 virtual      ~ScHFEditPage();
-//CHINA001
+//CHINA001 ScHFEditPage( Window*			pParent,
+//CHINA001 USHORT			nResId,
+//CHINA001 const SfxItemSet&	rCoreSet,
+//CHINA001 USHORT			nWhich );
+//CHINA001 virtual		~ScHFEditPage();
+//CHINA001 
 //CHINA001 private:
-//CHINA001 FixedText        aFtLeft;
-//CHINA001 ScEditWindow aWndLeft;
-//CHINA001 FixedText        aFtCenter;
-//CHINA001 ScEditWindow aWndCenter;
-//CHINA001 FixedText        aFtRight;
-//CHINA001 ScEditWindow aWndRight;
-//CHINA001 ImageButton      aBtnText;
-//CHINA001 ScExtIButton aBtnFile;
-//CHINA001 ImageButton      aBtnTable;
-//CHINA001 ImageButton      aBtnPage;
-//CHINA001 ImageButton      aBtnLastPage;
-//CHINA001 ImageButton      aBtnDate;
-//CHINA001 ImageButton      aBtnTime;
-//CHINA001 FixedLine        aFlInfo;
-//CHINA001 FixedInfo        aFtInfo;
-//CHINA001 ScPopupMenu      aPopUpFile;
-//CHINA001
-//CHINA001 USHORT           nWhich;
-//CHINA001 String           aCmdArr[6];
-//CHINA001
+//CHINA001 FixedText		aFtLeft;
+//CHINA001 ScEditWindow	aWndLeft;
+//CHINA001 FixedText		aFtCenter;
+//CHINA001 ScEditWindow	aWndCenter;
+//CHINA001 FixedText		aFtRight;
+//CHINA001 ScEditWindow	aWndRight;
+//CHINA001 ImageButton		aBtnText;
+//CHINA001 ScExtIButton	aBtnFile;
+//CHINA001 ImageButton		aBtnTable;
+//CHINA001 ImageButton		aBtnPage;
+//CHINA001 ImageButton		aBtnLastPage;
+//CHINA001 ImageButton		aBtnDate;
+//CHINA001 ImageButton		aBtnTime;
+//CHINA001 FixedLine		aFlInfo;
+//CHINA001 FixedInfo		aFtInfo;
+//CHINA001 ScPopupMenu		aPopUpFile;
+//CHINA001 
+//CHINA001 USHORT			nWhich;
+//CHINA001 String			aCmdArr[6];
+//CHINA001 
 //CHINA001 private:
 //CHINA001 #ifdef _TPHFEDIT_CXX
 //CHINA001 void FillCmdArr();
@@ -184,51 +184,51 @@ public:
 //CHINA001 DECL_LINK( MenuHdl, ScExtIButton* );
 //CHINA001 #endif
 //CHINA001 };
-//CHINA001
+//CHINA001 
 //CHINA001 //===================================================================
-//CHINA001
+//CHINA001 
 //CHINA001 class ScRightHeaderEditPage : public ScHFEditPage
 //CHINA001 {
 //CHINA001 public:
-//CHINA001 static SfxTabPage*   Create( Window* pParent, const SfxItemSet& rCoreSet );
-//CHINA001 static USHORT*       GetRanges();
-//CHINA001
+//CHINA001 static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rCoreSet );
+//CHINA001 static USHORT*		GetRanges();
+//CHINA001 
 //CHINA001 private:
 //CHINA001 ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
 //CHINA001 };
-//CHINA001
+//CHINA001 
 //CHINA001 //===================================================================
-//CHINA001
+//CHINA001 
 //CHINA001 class ScLeftHeaderEditPage : public ScHFEditPage
 //CHINA001 {
 //CHINA001 public:
-//CHINA001 static SfxTabPage*   Create( Window* pParent, const SfxItemSet& rCoreSet );
-//CHINA001 static USHORT*       GetRanges();
-//CHINA001
+//CHINA001 static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rCoreSet );
+//CHINA001 static USHORT*		GetRanges();
+//CHINA001 
 //CHINA001 private:
 //CHINA001 ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
 //CHINA001 };
-//CHINA001
+//CHINA001 
 //CHINA001 //===================================================================
-//CHINA001
+//CHINA001 
 //CHINA001 class ScRightFooterEditPage : public ScHFEditPage
 //CHINA001 {
 //CHINA001 public:
-//CHINA001 static SfxTabPage*   Create( Window* pParent, const SfxItemSet& rCoreSet );
-//CHINA001 static USHORT*       GetRanges();
-//CHINA001
+//CHINA001 static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rCoreSet );
+//CHINA001 static USHORT*		GetRanges();
+//CHINA001 
 //CHINA001 private:
 //CHINA001 ScRightFooterEditPage( Window* pParent, const SfxItemSet& rSet );
 //CHINA001 };
-//CHINA001
+//CHINA001 
 //CHINA001 //===================================================================
-//CHINA001
+//CHINA001 
 //CHINA001 class ScLeftFooterEditPage : public ScHFEditPage
 //CHINA001 {
 //CHINA001 public:
-//CHINA001 static SfxTabPage*   Create( Window* pParent, const SfxItemSet& rCoreSet );
-//CHINA001 static USHORT*       GetRanges();
-//CHINA001
+//CHINA001 static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rCoreSet );
+//CHINA001 static USHORT*		GetRanges();
+//CHINA001 
 //CHINA001 private:
 //CHINA001 ScLeftFooterEditPage( Window* pParent, const SfxItemSet& rSet );
 //CHINA001 };

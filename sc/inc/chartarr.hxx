@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@ public:
     ScMemChart(short nCols, short nRows);
     ~ScMemChart();
 
-    short GetColCount() const { return nColCnt; }
-    short GetRowCount() const { return nRowCnt; }
+    short GetColCount() const { return nColCnt;	}
+    short GetRowCount() const {	return nRowCnt;	}
     const String& GetColText(short nCol) const { return pColText[nCol]; }
     const String& GetRowText(short nRow) const { return pRowText[nRow]; }
     double GetData(short nCol, short nRow) const { return pData[nCol * nRowCnt + nRow]; }
@@ -68,12 +68,12 @@ public:
 };
 
 
-class SC_DLLPUBLIC ScChartArray : public ScDataObject               // nur noch Parameter-Struct
+class SC_DLLPUBLIC ScChartArray : public ScDataObject				// nur noch Parameter-Struct
 {
-    String      aName;
-    ScDocument* pDocument;
+    String		aName;
+    ScDocument*	pDocument;
     ScChartPositioner aPositioner;
-    BOOL        bValid;             // fuer Erzeugung aus SchMemChart
+    BOOL		bValid;				// fuer Erzeugung aus SchMemChart
 
 private:
     ScMemChart* CreateMemChartSingle();
@@ -87,22 +87,22 @@ public:
                     const String& rChartName );
     ScChartArray( const ScChartArray& rArr );
 
-    virtual ~ScChartArray();
-    virtual ScDataObject* Clone() const;
+    virtual	~ScChartArray();
+    virtual	ScDataObject* Clone() const;
 
-    const ScRangeListRef&   GetRangeList() const { return aPositioner.GetRangeList(); }
-    void    SetRangeList( const ScRangeListRef& rNew ) { aPositioner.SetRangeList(rNew); }
-    void    SetRangeList( const ScRange& rNew ) { aPositioner.SetRangeList(rNew); }
+    const ScRangeListRef&	GetRangeList() const { return aPositioner.GetRangeList(); }
+    void	SetRangeList( const ScRangeListRef& rNew ) { aPositioner.SetRangeList(rNew); }
+    void	SetRangeList( const ScRange& rNew ) { aPositioner.SetRangeList(rNew); }
     const   ScChartPositionMap* GetPositionMap() { return aPositioner.GetPositionMap(); }
 
-    void    SetHeaders(BOOL bCol, BOOL bRow) { aPositioner.SetHeaders(bCol, bRow); }
-    BOOL    HasColHeaders() const            { return aPositioner.HasColHeaders(); }
-    BOOL    HasRowHeaders() const            { return aPositioner.HasRowHeaders(); }
-    BOOL    IsValid() const                  { return bValid; }
-    void    SetName(const String& rNew)      { aName = rNew; }
-    const String& GetName() const            { return aName; }
+    void	SetHeaders(BOOL bCol, BOOL bRow) { aPositioner.SetHeaders(bCol, bRow); }
+    BOOL	HasColHeaders() const			 { return aPositioner.HasColHeaders(); }
+    BOOL	HasRowHeaders() const			 { return aPositioner.HasRowHeaders(); }
+    BOOL	IsValid() const					 { return bValid; }
+    void	SetName(const String& rNew)		 { aName = rNew; }
+    const String& GetName() const			 { return aName; }
 
-    BOOL    operator==(const ScChartArray& rCmp) const;
+    BOOL	operator==(const ScChartArray& rCmp) const;
 
     ScMemChart* CreateMemChart();
 };
@@ -114,11 +114,11 @@ public:
     ScChartCollection( const ScChartCollection& rColl ):
             ScCollection( rColl ) {}
 
-    virtual ScDataObject*   Clone() const;
-    ScChartArray*       operator[](USHORT nIndex) const
+    virtual	ScDataObject*	Clone() const;
+    ScChartArray*		operator[](USHORT nIndex) const
                         { return (ScChartArray*)At(nIndex); }
 
-    BOOL    operator==(const ScChartCollection& rCmp) const;
+    BOOL	operator==(const ScChartCollection& rCmp) const;
 };
 
 

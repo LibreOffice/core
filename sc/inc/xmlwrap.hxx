@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@ namespace com { namespace sun { namespace star {
 
 class ScXMLImportWrapper
 {
-    ScDocument&     rDoc;
-    SfxMedium*      pMedium;
+    ScDocument&		rDoc;
+    SfxMedium*		pMedium;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > xStorage;
 
 //UNUSED2008-05  com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator> GetStatusIndicator(
@@ -71,7 +71,7 @@ class ScXMLImportWrapper
         com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
         com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xWriter,
         com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aDescriptor,
-        const rtl::OUString& sName, const rtl::OUString& sMediaType, const rtl::OUString& sComponentName,
+        const rtl::OUString& sName,	const rtl::OUString& sMediaType, const rtl::OUString& sComponentName,
         const sal_Bool bPlainText, com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,
         ScMySharedData*& pSharedData);
 

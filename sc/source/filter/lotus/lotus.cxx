@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,23 +47,23 @@ FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocum
         ScFilterOptions aFilterOpt;
     BOOL bWithWK3 = aFilterOpt.GetWK3Flag();
 
-    SvStream*           pStream = rMedium.GetInStream();
+    SvStream*			pStream = rMedium.GetInStream();
 
     if( !pStream )
         return eERR_OPEN;
 
-    FltError            eRet;
+    FltError			eRet;
 
     pStream->Seek( 0UL );
 
     pStream->SetBufferSize( 32768 );
 
-    ImportLotus         aLotusImport( *pStream, pDocument, eSrc );
+    ImportLotus			aLotusImport( *pStream, pDocument, eSrc );
 
     if( bWithWK3 )
         eRet = aLotusImport.Read();
     else
-        eRet = 0xFFFFFFFF;  // WK1 /WKS erzwingen
+        eRet = 0xFFFFFFFF;	// WK1 /WKS erzwingen
 
     // ACHTUNG: QUICK-HACK fuer WK1 / WKS  <->  WK3 / WK4
     if( eRet == 0xFFFFFFFF )

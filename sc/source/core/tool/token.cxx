@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ namespace
         rRef.SetFlag3D(     ( rAPI.Flags & sheet::ReferenceFlags::SHEET_3D        ) != 0 );
         rRef.SetRelName(    ( rAPI.Flags & sheet::ReferenceFlags::RELATIVE_NAME   ) != 0 );
     }
-
+    
     void lcl_ExternalRefToCalc( ScSingleRefData& rRef, const sheet::SingleReference& rAPI )
     {
         rRef.InitFlags();
@@ -108,7 +108,7 @@ namespace
     }
 //
 } // namespace
-//
+// 
 // ImpTokenIterator wird je Interpreter angelegt, mehrfache auch durch
 // SubCode via FormulaTokenIterator Push/Pop moeglich
 IMPL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator, 32, 16 )
@@ -245,7 +245,7 @@ void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabNam
     nRefCnt = 0;
 
     extref.nFileId = nFileId;
-    extref.aRef.Ref1 =
+    extref.aRef.Ref1 = 
     extref.aRef.Ref2 = rRef;
 
     xub_StrLen n = rTabName.Len();
@@ -286,7 +286,7 @@ void ScRawToken::SetExternalName( sal_uInt16 nFileId, const String& rName )
 //UNUSED2008-05      eType = svDouble;
 //UNUSED2008-05      nValue = (double)rVal;
 //UNUSED2008-05      nRefCnt = 0;
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  }
 //UNUSED2008-05  void ScRawToken::SetMatrix( ScMatrix* p )
 //UNUSED2008-05  {
@@ -295,13 +295,13 @@ void ScRawToken::SetExternalName( sal_uInt16 nFileId, const String& rName )
 //UNUSED2008-05      pMat  = p;
 //UNUSED2008-05      nRefCnt = 0;
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  ScComplexRefData& ScRawToken::GetReference()
 //UNUSED2008-05  {
 //UNUSED2008-05      DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "GetReference: no Ref" );
 //UNUSED2008-05      return aRef;
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  void ScRawToken::SetReference( ScComplexRefData& rRef )
 //UNUSED2008-05  {
 //UNUSED2008-05      DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "SetReference: no Ref" );
@@ -573,7 +573,7 @@ BOOL ScToken::Is3DRef() const
 FormulaTokenRef ScToken::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2,
         const ScAddress & rPos, bool bReuseDoubleRef )
 {
-
+    
     StackVar sv1, sv2;
     // Doing a RangeOp with RefList is probably utter nonsense, but Xcl
     // supports it, so do we.
@@ -849,7 +849,7 @@ ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const St
 }
 
 ScExternalSingleRefToken::ScExternalSingleRefToken( const ScExternalSingleRefToken& r ) :
-    ScToken(r),
+    ScToken(r), 
     mnFileId(r.mnFileId),
     maTabName(r.maTabName),
     maSingleRef(r.maSingleRef)
@@ -915,7 +915,7 @@ ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const St
 }
 
 ScExternalDoubleRefToken::ScExternalDoubleRefToken( const ScExternalDoubleRefToken& r ) :
-    ScToken(r),
+    ScToken(r), 
     mnFileId(r.mnFileId),
     maTabName(r.maTabName),
     maDoubleRef(r.maDoubleRef)
@@ -1054,10 +1054,10 @@ ScJumpMatrixToken::~ScJumpMatrixToken()
 }
 
 double          ScEmptyCellToken::GetDouble() const     { return 0.0; }
-const String &  ScEmptyCellToken::GetString() const
-{
+const String &  ScEmptyCellToken::GetString() const     
+{ 
     static  String              aDummyString;
-    return aDummyString;
+    return aDummyString; 
 }
 BOOL ScEmptyCellToken::operator==( const FormulaToken& r ) const
 {
@@ -1310,7 +1310,7 @@ BOOL ScTokenArray::IsValidReference( ScRange& rRange ) const
 
 ////////////////////////////////////////////////////////////////////////////
 
-ScTokenArray::ScTokenArray()
+ScTokenArray::ScTokenArray() 
 {
 }
 

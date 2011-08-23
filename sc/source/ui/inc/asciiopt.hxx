@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,17 +59,17 @@
 class ScAsciiOptions
 {
 private:
-    BOOL        bFixedLen;
-    String      aFieldSeps;
-    BOOL        bMergeFieldSeps;
+    BOOL		bFixedLen;
+    String		aFieldSeps;
+    BOOL		bMergeFieldSeps;
     bool        bQuotedFieldAsText;
     bool        bDetectSpecialNumber;
-    sal_Unicode cTextSep;
-    CharSet     eCharSet;
+    sal_Unicode	cTextSep;
+    CharSet		eCharSet;
     LanguageType eLang;
-    BOOL        bCharSetSystem;
-    long        nStartRow;
-    USHORT      nInfoCount;
+    BOOL		bCharSetSystem;
+    long		nStartRow;
+    USHORT		nInfoCount;
     xub_StrLen* pColStart;  //! TODO replace with vector
     BYTE*       pColFormat; //! TODO replace with vector
 
@@ -80,47 +80,47 @@ public:
 
     static const sal_Unicode cDefaultTextSep = '"';
 
-    ScAsciiOptions& operator=( const ScAsciiOptions& rCpy );
+    ScAsciiOptions&	operator=( const ScAsciiOptions& rCpy );
 
-    BOOL            operator==( const ScAsciiOptions& rCmp ) const;
+    BOOL			operator==( const ScAsciiOptions& rCmp ) const;
 
-    void            ReadFromString( const String& rString );
-    String          WriteToString() const;
+    void			ReadFromString( const String& rString );
+    String			WriteToString() const;
 
-    void            InterpretColumnList( const String& rString );
+    void			InterpretColumnList( const String& rString );
 
-    CharSet             GetCharSet() const      { return eCharSet; }
-    BOOL                GetCharSetSystem() const    { return bCharSetSystem; }
-    const String&       GetFieldSeps() const    { return aFieldSeps; }
-    BOOL                IsMergeSeps() const     { return bMergeFieldSeps; }
+    CharSet				GetCharSet() const		{ return eCharSet; }
+    BOOL				GetCharSetSystem() const	{ return bCharSetSystem; }
+    const String&		GetFieldSeps() const	{ return aFieldSeps; }
+    BOOL				IsMergeSeps() const		{ return bMergeFieldSeps; }
     bool                IsQuotedAsText() const  { return bQuotedFieldAsText; }
     bool                IsDetectSpecialNumber() const { return bDetectSpecialNumber; }
-    sal_Unicode         GetTextSep() const      { return cTextSep; }
-    BOOL                IsFixedLen() const      { return bFixedLen; }
-    USHORT              GetInfoCount() const    { return nInfoCount; }
-    const xub_StrLen*   GetColStart() const     { return pColStart; }
-    const BYTE*         GetColFormat() const    { return pColFormat; }
-    long                GetStartRow() const     { return nStartRow; }
+    sal_Unicode			GetTextSep() const		{ return cTextSep; }
+    BOOL				IsFixedLen() const		{ return bFixedLen; }
+    USHORT				GetInfoCount() const	{ return nInfoCount; }
+    const xub_StrLen*	GetColStart() const		{ return pColStart; }
+    const BYTE*			GetColFormat() const	{ return pColFormat; }
+    long				GetStartRow() const		{ return nStartRow; }
     LanguageType        GetLanguage() const     { return eLang; }
 
-    void    SetCharSet( CharSet eNew )          { eCharSet = eNew; }
-    void    SetCharSetSystem( BOOL bSet )       { bCharSetSystem = bSet; }
-    void    SetFixedLen( BOOL bSet )            { bFixedLen = bSet; }
-    void    SetFieldSeps( const String& rStr )  { aFieldSeps = rStr; }
-    void    SetMergeSeps( BOOL bSet )           { bMergeFieldSeps = bSet; }
+    void	SetCharSet( CharSet eNew )			{ eCharSet = eNew; }
+    void	SetCharSetSystem( BOOL bSet )		{ bCharSetSystem = bSet; }
+    void	SetFixedLen( BOOL bSet )			{ bFixedLen = bSet; }
+    void	SetFieldSeps( const String& rStr )	{ aFieldSeps = rStr; }
+    void	SetMergeSeps( BOOL bSet )			{ bMergeFieldSeps = bSet; }
     void    SetQuotedAsText(bool bSet)          { bQuotedFieldAsText = bSet; }
     void    SetDetectSpecialNumber(bool bSet)   { bDetectSpecialNumber = bSet; }
-    void    SetTextSep( sal_Unicode c )         { cTextSep = c; }
-    void    SetStartRow( long nRow)             { nStartRow= nRow; }
+    void	SetTextSep( sal_Unicode c )			{ cTextSep = c; }
+    void	SetStartRow( long nRow)				{ nStartRow= nRow; }
     void    SetLanguage(LanguageType e)         { eLang = e; }
 
-    void    SetColInfo( USHORT nCount, const xub_StrLen* pStart, const BYTE* pFormat );
+    void	SetColInfo( USHORT nCount, const xub_StrLen* pStart, const BYTE* pFormat );
     void    SetColumnInfo( const ScCsvExpDataVec& rDataVec );
 };
 
 
 //CHINA001 // ============================================================================
-//CHINA001
+//CHINA001 
 //CHINA001 class ScImportAsciiDlg : public ModalDialog
 //CHINA001 {
 //CHINA001 SvStream*                   pDatStream;
@@ -131,18 +131,18 @@ public:
 //CHINA001 ULONG                       nStreamPos;
 //CHINA001 ULONG                       nStreamPosUnicode;
 //CHINA001 BOOL                        bVFlag;
-//CHINA001
+//CHINA001 
 //CHINA001 FixedLine                   aFlFieldOpt;
 //CHINA001 FixedText                   aFtCharSet;
 //CHINA001 SvxTextEncodingBox          aLbCharSet;
-//CHINA001
+//CHINA001 
 //CHINA001 FixedText                   aFtRow;
 //CHINA001 NumericField                aNfRow;
-//CHINA001
+//CHINA001 
 //CHINA001 FixedLine                   aFlSepOpt;
 //CHINA001 RadioButton                 aRbFixed;
 //CHINA001 RadioButton                 aRbSeparated;
-//CHINA001
+//CHINA001 
 //CHINA001 CheckBox                    aCkbTab;
 //CHINA001 CheckBox                    aCkbSemicolon;
 //CHINA001 CheckBox                    aCkbComma;
@@ -152,49 +152,49 @@ public:
 //CHINA001 CheckBox                    aCkbAsOnce;
 //CHINA001 FixedText                   aFtTextSep;
 //CHINA001 ComboBox                    aCbTextSep;
-//CHINA001
+//CHINA001 
 //CHINA001 FixedLine                   aFlWidth;
 //CHINA001 FixedText                   aFtType;
 //CHINA001 ListBox                     aLbType;
-//CHINA001
+//CHINA001 
 //CHINA001 ScCsvTableBox               maTableBox;
-//CHINA001
+//CHINA001 
 //CHINA001 OKButton                    aBtnOk;
 //CHINA001 CancelButton                aBtnCancel;
 //CHINA001 HelpButton                  aBtnHelp;
-//CHINA001
+//CHINA001 
 //CHINA001 String                      aCharSetUser;
 //CHINA001 String                      aColumnUser;
 //CHINA001 String                      aFldSepList;
 //CHINA001 String                      aTextSepList;
-//CHINA001
+//CHINA001 
 //CHINA001 // aPreviewLine contains the byte string as read from the file
 //CHINA001 ByteString                  aPreviewLine[ CSV_PREVIEW_LINES ];
 //CHINA001 // same for Unicode
 //CHINA001 String                      aPreviewLineUnicode[ CSV_PREVIEW_LINES ];
-//CHINA001
+//CHINA001 
 //CHINA001 CharSet                     meCharSet;          /// Selected char set.
 //CHINA001 bool                        mbCharSetSystem;    /// Is System char set selected?
-//CHINA001
+//CHINA001 
 //CHINA001 public:
 //CHINA001 ScImportAsciiDlg(
 //CHINA001 Window* pParent, String aDatName,
 //CHINA001 SvStream* pInStream, sal_Unicode cSep = '\t' );
 //CHINA001 ~ScImportAsciiDlg();
-//CHINA001
+//CHINA001 
 //CHINA001 void                        GetOptions( ScAsciiOptions& rOpt );
-//CHINA001
+//CHINA001 
 //CHINA001 private:
 //CHINA001 /** Sets the selected char set data to meCharSet and mbCharSetSystem. */
 //CHINA001 void                        SetSelectedCharSet();
 //CHINA001 /** Returns all separator characters in a string. */
 //CHINA001 String                      GetSeparators() const;
-//CHINA001
+//CHINA001 
 //CHINA001 /** Enables or disables all separator checkboxes and edit fields. */
 //CHINA001 void                        SetupSeparatorCtrls();
-//CHINA001
+//CHINA001 
 //CHINA001 void                        UpdateVertical( bool bSwitchToFromUnicode = false );
-//CHINA001
+//CHINA001 
 //CHINA001 DECL_LINK( CharSetHdl, SvxTextEncodingBox* );
 //CHINA001 DECL_LINK( FirstRowHdl, NumericField* );
 //CHINA001 DECL_LINK( RbSepFixHdl, RadioButton* );
@@ -203,8 +203,8 @@ public:
 //CHINA001 DECL_LINK( UpdateTextHdl, ScCsvTableBox* );
 //CHINA001 DECL_LINK( ColTypeHdl, ScCsvTableBox* );
 //CHINA001 };
-//CHINA001
-//CHINA001
+//CHINA001 
+//CHINA001 
 // ============================================================================
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -263,7 +263,7 @@ void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, Plotting
         drawing::DoubleSequence* pOuterSourceX = &rPolyPoly.SequenceX.getArray()[nPolygonIndex];
         drawing::DoubleSequence* pOuterSourceY = &rPolyPoly.SequenceY.getArray()[nPolygonIndex];
         drawing::DoubleSequence* pOuterSourceZ = &rPolyPoly.SequenceZ.getArray()[nPolygonIndex];
-
+        
         drawing::DoubleSequence* pOuterTargetX = &aTmp.SequenceX.getArray()[nPolygonIndex];
         drawing::DoubleSequence* pOuterTargetY = &aTmp.SequenceY.getArray()[nPolygonIndex];
         drawing::DoubleSequence* pOuterTargetZ = &aTmp.SequenceZ.getArray()[nPolygonIndex];
@@ -279,11 +279,11 @@ void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, Plotting
         double* pSourceX = pOuterSourceX->getArray();
         double* pSourceY = pOuterSourceY->getArray();
         double* pSourceZ = pOuterSourceZ->getArray();
-
+        
         double* pTargetX = pOuterTargetX->getArray();
         double* pTargetY = pOuterTargetY->getArray();
         double* pTargetZ = pOuterTargetZ->getArray();
-
+        
         //copy first point
         *pTargetX=*pSourceX++;
         *pTargetY=*pSourceY++;
@@ -303,7 +303,7 @@ void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, Plotting
             }
             pSourceX++; pSourceY++; pSourceZ++;
         }
-
+        
         //free unused space
         if( nTargetPointCount<nPointCount )
         {
@@ -800,7 +800,7 @@ void AreaChart::createShapes()
                     //transformation 3) -> 4)
                     drawing::Position3D aScenePosition( pPosHelper->transformLogicToScene( fLogicX,fLogicY,fLogicZ, false ) );
 
-                    //better performance for big data
+                    //better performance for big data   
                     FormerPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
                     pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
                     if( !pSeries->isAttributedDataPoint(nIndex)
@@ -914,7 +914,7 @@ void AreaChart::createShapes()
                                         , aScenePosition.PositionZ+this->getTransformedDepth() );
 
                             sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nIndex, m_xChartTypeModel, m_nDimension, pPosHelper->isSwapXAndY() );
-
+                            
                             switch(nLabelPlacement)
                             {
                             case ::com::sun::star::chart::DataLabelPlacement::TOP:

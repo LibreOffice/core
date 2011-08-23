@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ private: //members
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes >                    m_xFinalTarget;
     ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory>           m_xShapeFactory;
+                    ::com::sun::star::lang::XMultiServiceFactory>	        m_xShapeFactory;
     ShapeFactory*                                                           m_pShapeFactory;
 
     // this is the surrounding shape which contains floor, wall and coordinate

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,8 +58,8 @@ public:
                 ::com::sun::star::uno::XComponentContext >& xContext );
     virtual ~TitlesAndObjectsTabPage();
 
-    virtual void        initializePage();
-    virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason eReason );
+    virtual void		initializePage();
+    virtual sal_Bool	commitPage( ::svt::WizardTypes::CommitPageReason eReason );
     virtual bool        canAdvance() const;
 
 protected:
@@ -69,7 +69,7 @@ protected:
 protected:
     FixedText           m_aFT_TitleDescription;
     FixedLine           m_aFL_Vertical;
-
+    
     ::std::auto_ptr< TitleResources >            m_apTitleResources;
     ::std::auto_ptr< LegendPositionResources >   m_apLegendPositionResources;
 

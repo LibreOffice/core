@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -283,7 +283,7 @@ sal_Bool ScAccessiblePreviewCell::IsOpaque(
     const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
     // test whether there is a background color
-    //! could be moved to ScAccessibleCellBase
+    //!	could be moved to ScAccessibleCellBase
 
     sal_Bool bOpaque(sal_True);
     if (mpDoc)

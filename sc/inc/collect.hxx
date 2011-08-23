@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@
 #endif
 #include "scdllapi.h"
 
-#define MAXCOLLECTIONSIZE       16384
-#define MAXDELTA                1024
-#define SCPOS_INVALID           USHRT_MAX
+#define MAXCOLLECTIONSIZE 		16384
+#define MAXDELTA				1024
+#define SCPOS_INVALID			USHRT_MAX
 
-#define SC_STRTYPE_VALUE        0
-#define SC_STRTYPE_STANDARD     1
+#define SC_STRTYPE_VALUE		0
+#define SC_STRTYPE_STANDARD		1
 
 class ScDocument;
 
@@ -57,10 +57,10 @@ public:
 class SC_DLLPUBLIC ScCollection : public ScDataObject
 {
 protected:
-    USHORT          nCount;
-    USHORT          nLimit;
-    USHORT          nDelta;
-    ScDataObject**  pItems;
+    USHORT 			nCount;
+    USHORT 			nLimit;
+    USHORT			nDelta;
+    ScDataObject** 	pItems;
 public:
     ScCollection(USHORT nLim = 4, USHORT nDel = 4);
     ScCollection(const ScCollection& rCollection);
@@ -87,11 +87,11 @@ public:
 class SC_DLLPUBLIC  ScSortedCollection : public ScCollection
 {
 private:
-    BOOL    bDuplicates;
+    BOOL	bDuplicates;
 protected:
                         // fuer ScStrCollection Load/Store
-            void        SetDups( BOOL bVal ) { bDuplicates = bVal; }
-            BOOL        IsDups() const { return bDuplicates; }
+            void		SetDups( BOOL bVal ) { bDuplicates = bVal; }
+            BOOL		IsDups() const { return bDuplicates; }
 public:
     ScSortedCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE);
     ScSortedCollection(const ScSortedCollection& rScSortedCollection) :
@@ -118,11 +118,11 @@ friend class ScStrCollection;
 public:
                         StrData(const String& rStr) : aStr(rStr) {}
                         StrData(const StrData& rData) : ScDataObject(), aStr(rData.aStr) {}
-    virtual ScDataObject*   Clone() const;
-    const String&       GetString() const { return aStr; }
+    virtual	ScDataObject*	Clone() const;
+    const String&		GetString() const { return aStr; }
     // SetString nur, wenn StrData nicht in ScStrCollection ist! !!!
     // z.B. fuer Searcher
-    void                SetString( const String& rNew ) { aStr = rNew; }
+    void				SetString( const String& rNew ) { aStr = rNew; }
 };
 
 //------------------------------------------------------------------------
@@ -133,23 +133,23 @@ class SC_DLLPUBLIC ScStrCollection : public ScSortedCollection
 {
 public:
     ScStrCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) :
-                        ScSortedCollection  ( nLim, nDel, bDup ) {}
+                        ScSortedCollection	( nLim, nDel, bDup ) {}
     ScStrCollection(const ScStrCollection& rScStrCollection) :
-                        ScSortedCollection  ( rScStrCollection ) {}
+                        ScSortedCollection	( rScStrCollection ) {}
 
-    virtual ScDataObject*   Clone() const;
-            StrData*    operator[]( const USHORT nIndex) const {return (StrData*)At(nIndex);}
-    virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
+    virtual	ScDataObject*	Clone() const;
+            StrData*	operator[]( const USHORT nIndex) const {return (StrData*)At(nIndex);}
+    virtual	short		Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
 };
 
 //------------------------------------------------------------------------
 // TypedScStrCollection: wie ScStrCollection, nur, dass Zahlen vor Strings
-//                     sortiert werden
+// 					   sortiert werden
 
 class TypedStrData : public ScDataObject
 {
 public:
-            TypedStrData( const String& rStr, double nVal = 0.0,
+            TypedStrData( const String&	rStr, double nVal = 0.0,
                           USHORT nType = SC_STRTYPE_STANDARD )
                 : aStrValue(rStr),
                   nValue(nVal),
@@ -164,24 +164,24 @@ public:
                   nValue(rCpy.nValue),
                   nStrType(rCpy.nStrType) {}
 
-    virtual ScDataObject*   Clone() const;
+    virtual	ScDataObject*	Clone() const;
 
-    BOOL                IsStrData() const { return nStrType != 0; }
-    const String&       GetString() const { return aStrValue; }
-    double              GetValue () const { return nValue; }
+    BOOL				IsStrData() const { return nStrType != 0; }
+    const String&		GetString() const { return aStrValue; }
+    double				GetValue () const { return nValue; }
 
 private:
     friend class TypedScStrCollection;
 
-    String  aStrValue;
-    double  nValue;
-    USHORT  nStrType;           // 0 = Value
+    String	aStrValue;
+    double	nValue;
+    USHORT	nStrType;			// 0 = Value
 };
 
 class SC_DLLPUBLIC TypedScStrCollection : public ScSortedCollection
 {
 private:
-    BOOL    bCaseSensitive;
+    BOOL	bCaseSensitive;
 
 public:
     TypedScStrCollection( USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE );
@@ -193,9 +193,9 @@ public:
     virtual ScDataObject*       Clone() const;
     virtual short           Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const;
 
-    TypedStrData*   operator[]( const USHORT nIndex) const;
+    TypedStrData*	operator[]( const USHORT nIndex) const;
 
-    void    SetCaseSensitive( BOOL bSet );
+    void	SetCaseSensitive( BOOL bSet );
 
     BOOL    FindText( const String& rStart, String& rResult, USHORT& rPos, BOOL bBack ) const;
     BOOL    GetExactMatch( String& rString ) const;

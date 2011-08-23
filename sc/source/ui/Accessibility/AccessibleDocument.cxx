@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,8 +77,8 @@
 #include <list>
 #include <algorithm>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::accessibility;
 using ::std::for_each;
 
     //=====  internal  ========================================================
@@ -91,7 +91,7 @@ struct ScAccessibleShapeData
     mutable ScAddress*          pRelationCell; // if it is NULL this shape is anchored on the table
 //    SdrObject*                  pShape;
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape;
-    mutable sal_Bool            bSelected;
+    mutable sal_Bool			bSelected;
     sal_Bool                    bSelectable;
 };
 
@@ -247,7 +247,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
         const long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (::com::sun::star::uno::RuntimeException);
+    )	throw (::com::sun::star::uno::RuntimeException);
 
     ///=====  Internal  ========================================================
     void SetDrawBroadcaster();
@@ -432,7 +432,7 @@ sal_Bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurr
         ::accessibility::AccessibleShapeInfo ( _rxShape, pCurrentChild->getAccessibleParent(), this, _nIndex ),
         _rShapeTreeInfo
     );
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xNewChild( pReplacement ); // keep this alive (do this before calling Init!)
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xNewChild( pReplacement );	// keep this alive (do this before calling Init!)
     if ( pReplacement )
         pReplacement->Init();
 
@@ -1012,8 +1012,8 @@ ScAddress* ScChildrenShapes::GetAnchor(const uno::Reference<drawing::XShape>& xS
                         pAddress = new ScAddress(aRange.aStart);
                     }
                 }
-//              else
-//                  do nothing, because it is always a NULL Pointer
+//			    else
+//				    do nothing, because it is always a NULL Pointer
             }
         }
     }
@@ -1568,7 +1568,7 @@ void SAL_CALL ScAccessibleDocument::grabFocus(  )
 
     //=====  XAccessibleContext  ==============================================
 
-    /// Return the number of currently visible children.
+    ///	Return the number of currently visible children.
 sal_Int32 SAL_CALL
     ScAccessibleDocument::getAccessibleChildCount(void)
     throw (uno::RuntimeException)
@@ -1585,7 +1585,7 @@ sal_Int32 SAL_CALL
     return nCount;
 }
 
-    /// Return the specified child or NULL if index is invalid.
+    ///	Return the specified child or NULL if index is invalid.
 uno::Reference<XAccessible> SAL_CALL
     ScAccessibleDocument::getAccessibleChild(sal_Int32 nIndex)
     throw (uno::RuntimeException,
@@ -1617,7 +1617,7 @@ uno::Reference<XAccessible> SAL_CALL
     return xAccessible;
 }
 
-    /// Return the set of current states.
+    ///	Return the set of current states.
 uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleDocument::getAccessibleStateSet(void)
     throw (uno::RuntimeException)

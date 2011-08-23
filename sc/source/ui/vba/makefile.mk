@@ -47,63 +47,63 @@ INCPRE=$(INCCOM)$/$(TARGET)
 # ------------------------------------------------------------------
 
 SLOFILES= \
-        $(SLO)$/vbaglobals.obj \
-        $(SLO)$/vbaworkbook.obj \
-        $(SLO)$/vbaworksheets.obj \
+        $(SLO)$/excelvbahelper.obj \
+        $(SLO)$/service.obj \
         $(SLO)$/vbaapplication.obj \
-        $(SLO)$/vbarange.obj \
-        $(SLO)$/vbaname.obj \
-        $(SLO)$/vbanames.obj \
-        $(SLO)$/vbacomment.obj \
-        $(SLO)$/vbacomments.obj \
-        $(SLO)$/vbaworkbooks.obj \
-        $(SLO)$/vbaworksheet.obj \
-        $(SLO)$/vbaoutline.obj \
-        $(SLO)$/vbafont.obj\
-        $(SLO)$/excelvbahelper.obj\
-        $(SLO)$/vbainterior.obj\
-        $(SLO)$/vbawsfunction.obj\
-        $(SLO)$/vbawindow.obj\
-        $(SLO)$/vbachart.obj\
-        $(SLO)$/vbachartobject.obj\
-        $(SLO)$/vbachartobjects.obj\
-        $(SLO)$/vbaseriescollection.obj\
-        $(SLO)$/vbadialogs.obj \
-        $(SLO)$/vbadialog.obj	\
-        $(SLO)$/vbapivottable.obj \
-        $(SLO)$/vbapivotcache.obj \
-        $(SLO)$/vbapivottables.obj \
-        $(SLO)$/vbawindows.obj \
-        $(SLO)$/vbapalette.obj \
-        $(SLO)$/vbaborders.obj \
-        $(SLO)$/vbacharacters.obj \
-        $(SLO)$/vbavalidation.obj \
-        $(SLO)$/vbasheetobject.obj \
-        $(SLO)$/vbasheetobjects.obj \
-        $(SLO)$/vbaoleobject.obj \
-        $(SLO)$/vbaoleobjects.obj \
-        $(SLO)$/vbatextboxshape.obj \
-        $(SLO)$/vbapane.obj \
-        $(SLO)$/vbatextframe.obj \
-        $(SLO)$/vbacharttitle.obj \
-        $(SLO)$/vbacharts.obj \
-        $(SLO)$/vbaaxistitle.obj \
+        $(SLO)$/vbaassistant.obj \
         $(SLO)$/vbaaxes.obj \
         $(SLO)$/vbaaxis.obj \
-        $(SLO)$/vbaformat.obj \
+        $(SLO)$/vbaaxistitle.obj \
+        $(SLO)$/vbaborders.obj \
+        $(SLO)$/vbacharacters.obj \
+        $(SLO)$/vbachart.obj \
+        $(SLO)$/vbachartobject.obj \
+        $(SLO)$/vbachartobjects.obj \
+        $(SLO)$/vbacharts.obj \
+        $(SLO)$/vbacharttitle.obj \
+        $(SLO)$/vbacomment.obj \
+        $(SLO)$/vbacomments.obj \
         $(SLO)$/vbacondition.obj \
+        $(SLO)$/vbadialog.obj \
+        $(SLO)$/vbadialogs.obj \
+        $(SLO)$/vbaeventshelper.obj \
+        $(SLO)$/vbafont.obj \
+        $(SLO)$/vbaformat.obj \
         $(SLO)$/vbaformatcondition.obj \
         $(SLO)$/vbaformatconditions.obj \
-        $(SLO)$/vbastyle.obj \
-        $(SLO)$/vbastyles.obj \
-        $(SLO)$/vbaassistant.obj \
+        $(SLO)$/vbaglobals.obj \
         $(SLO)$/vbahyperlink.obj \
         $(SLO)$/vbahyperlinks.obj \
-        $(SLO)$/vbapagesetup.obj \
+        $(SLO)$/vbainterior.obj \
+        $(SLO)$/vbaname.obj \
+        $(SLO)$/vbanames.obj \
+        $(SLO)$/vbaoleobject.obj \
+        $(SLO)$/vbaoleobjects.obj \
+        $(SLO)$/vbaoutline.obj \
         $(SLO)$/vbapagebreak.obj \
         $(SLO)$/vbapagebreaks.obj \
-        $(SLO)$/vbaeventshelper.obj \
-        $(SLO)$/service.obj
+        $(SLO)$/vbapagesetup.obj \
+        $(SLO)$/vbapalette.obj \
+        $(SLO)$/vbapane.obj \
+        $(SLO)$/vbapivotcache.obj \
+        $(SLO)$/vbapivottable.obj \
+        $(SLO)$/vbapivottables.obj \
+        $(SLO)$/vbarange.obj \
+        $(SLO)$/vbaseriescollection.obj \
+        $(SLO)$/vbasheetobject.obj \
+        $(SLO)$/vbasheetobjects.obj \
+        $(SLO)$/vbastyle.obj \
+        $(SLO)$/vbastyles.obj \
+        $(SLO)$/vbatextboxshape.obj \
+        $(SLO)$/vbatextframe.obj \
+        $(SLO)$/vbavalidation.obj \
+        $(SLO)$/vbawindow.obj \
+        $(SLO)$/vbawindows.obj \
+        $(SLO)$/vbaworkbook.obj \
+        $(SLO)$/vbaworkbooks.obj \
+        $(SLO)$/vbaworksheet.obj \
+        $(SLO)$/vbaworksheets.obj \
+        $(SLO)$/vbawsfunction.obj
 
 .ENDIF
 # --- Targets ------------------------------------------------------

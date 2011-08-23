@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,15 +73,15 @@ void ScMediaShell::GetMediaState( SfxItemSet& rSet )
 
     if( pView )
     {
-        SfxWhichIter    aIter( rSet );
-        USHORT          nWhich = aIter.FirstWhich();
+        SfxWhichIter	aIter( rSet );
+        USHORT			nWhich = aIter.FirstWhich();
 
         while( nWhich )
         {
             if( SID_AVMEDIA_TOOLBOX == nWhich )
             {
-                SdrMarkList*    pMarkList = new SdrMarkList( pView->GetMarkedObjectList() );
-                bool            bDisable = true;
+                SdrMarkList*	pMarkList = new SdrMarkList( pView->GetMarkedObjectList() );
+                bool			bDisable = true;
 
                 if( 1 == pMarkList->GetMarkCount() )
                 {
@@ -114,8 +114,8 @@ void ScMediaShell::ExecuteMedia( SfxRequest& rReq )
 
     if( pView && SID_AVMEDIA_TOOLBOX == rReq.GetSlot() )
     {
-        const SfxItemSet*   pArgs = rReq.GetArgs();
-        const SfxPoolItem*  pItem;
+        const SfxItemSet*	pArgs = rReq.GetArgs();
+        const SfxPoolItem*	pItem;
 
         if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, FALSE, &pItem ) ) )
             pItem = NULL;

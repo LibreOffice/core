@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 #include "transobj.hxx"
 #include "drwtrans.hxx"
 #include "scmod.hxx"
-#include "dbfunc.hxx"   // for CopyToClip
+#include "dbfunc.hxx"	// for CopyToClip
 #include "docsh.hxx"
 #include "drawview.hxx"
 #include "drwlayer.hxx"
@@ -96,7 +96,7 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
         SdrView* pSdrView = pView->GetSdrView();
         if ( pSdrView )
         {
-            //  handle selection on drawing layer
+            //	handle selection on drawing layer
             const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
             ULONG nMarkCount = rMarkList.GetMarkCount();
             if ( nMarkCount )
@@ -120,23 +120,23 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
                 }
 
                 if ( eMode == SC_SELTRANS_INVALID )
-                    eMode = SC_SELTRANS_DRAW_OTHER;     // something selected but no special selection
+                    eMode = SC_SELTRANS_DRAW_OTHER;		// something selected but no special selection
             }
         }
-        if ( eMode == SC_SELTRANS_INVALID )             // no drawing object selected
+        if ( eMode == SC_SELTRANS_INVALID )				// no drawing object selected
         {
             ScRange aRange;
             ScViewData* pViewData = pView->GetViewData();
             const ScMarkData& rMark = pViewData->GetMarkData();
-            //  allow MultiMarked because GetSimpleArea may be able to merge into a simple range
-            //  (GetSimpleArea modifies a local copy of MarkData)
+            //	allow MultiMarked because GetSimpleArea may be able to merge into a simple range
+            //	(GetSimpleArea modifies a local copy of MarkData)
             // Also allow simple filtered area.
             ScMarkType eMarkType;
             if ( ( rMark.IsMarked() || rMark.IsMultiMarked() ) &&
                     (((eMarkType = pViewData->GetSimpleArea( aRange )) == SC_MARK_SIMPLE) ||
                      (eMarkType == SC_MARK_SIMPLE_FILTERED)) )
             {
-                //  only for "real" selection, cursor alone isn't used
+                //	only for "real" selection, cursor alone isn't used
                 if ( aRange.aStart == aRange.aEnd )
                     eMode = SC_SELTRANS_CELL;
                 else
@@ -158,7 +158,7 @@ ScSelectionTransferObj::ScSelectionTransferObj( ScTabView* pSource, ScSelectionT
     pCellData( NULL ),
     pDrawData( NULL )
 {
-    //! store range for StillValid
+    //!	store range for StillValid
 }
 
 ScSelectionTransferObj::~ScSelectionTransferObj()
@@ -166,8 +166,8 @@ ScSelectionTransferObj::~ScSelectionTransferObj()
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetSelectionTransfer() == this )
     {
-        //  this is reached when the object wasn't really copied to the selection
-        //  (CopyToSelection has no effect under Windows)
+        //	this is reached when the object wasn't really copied to the selection
+        //	(CopyToSelection has no effect under Windows)
 
         ForgetView();
         pScMod->SetSelectionTransfer( NULL );
@@ -178,8 +178,8 @@ ScSelectionTransferObj::~ScSelectionTransferObj()
 
 BOOL ScSelectionTransferObj::StillValid()
 {
-    //! check if view still has same cell selection
-    //! (but return FALSE if data has changed inbetween)
+    //!	check if view still has same cell selection
+    //!	(but return FALSE if data has changed inbetween)
     return FALSE;
 }
 
@@ -202,14 +202,14 @@ void ScSelectionTransferObj::ForgetView()
 
 void ScSelectionTransferObj::AddSupportedFormats()
 {
-    //  AddSupportedFormats must work without actually creating the
-    //  "real" transfer object
+    //	AddSupportedFormats must work without actually creating the
+    //	"real" transfer object
 
     switch (eMode)
     {
         case SC_SELTRANS_CELL:
         case SC_SELTRANS_CELLS:
-            //  same formats as in ScTransferObj::AddSupportedFormats
+            //	same formats as in ScTransferObj::AddSupportedFormats
             AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
             AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
             AddFormat( SOT_FORMAT_GDIMETAFILE );
@@ -256,7 +256,7 @@ void ScSelectionTransferObj::AddSupportedFormats()
             break;
 
         case SC_SELTRANS_DRAW_OTHER:
-            //  other drawing objects
+            //	other drawing objects
             AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
             AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
             AddFormat( SOT_FORMATSTR_ID_DRAWING );
@@ -277,10 +277,10 @@ void ScSelectionTransferObj::CreateCellData()
     if ( pView )
     {
         ScViewData* pViewData = pView->GetViewData();
-        ScMarkData aNewMark( pViewData->GetMarkData() );    // use local copy for MarkToSimple
+        ScMarkData aNewMark( pViewData->GetMarkData() );	// use local copy for MarkToSimple
         aNewMark.MarkToSimple();
 
-        //  similar to ScViewFunctionSet::BeginDrag
+        //	similar to ScViewFunctionSet::BeginDrag
         if ( aNewMark.IsMarked() && !aNewMark.IsMultiMarked() )
         {
             ScDocShell* pDocSh = pViewData->GetDocShell();
@@ -290,7 +290,7 @@ void ScSelectionTransferObj::CreateCellData()
             ScDocShellRef aDragShellRef;
             if ( pDocSh->GetDocument()->HasOLEObjectsInArea( aSelRange, &aNewMark ) )
             {
-                aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
+                aDragShellRef = new ScDocShell;		// DocShell needs a Ref immediately
                 aDragShellRef->DoInitNew(NULL);
             }
             ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
@@ -317,12 +317,12 @@ void ScSelectionTransferObj::CreateCellData()
                 //? pTransferObj->SetVisibleTab( nTab );
 
                 SfxObjectShellRef aPersistRef( aDragShellRef );
-                pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
+                pTransferObj->SetDrawPersist( aPersistRef );	// keep persist for ole objects alive
 
                 pTransferObj->SetDragSource( pDocSh, aNewMark );
 
                 pCellData = pTransferObj;
-                pCellData->acquire();       // keep ref count up - released in ForgetView
+                pCellData->acquire();		// keep ref count up - released in ForgetView
             }
             else
                 delete pClipDoc;
@@ -331,7 +331,7 @@ void ScSelectionTransferObj::CreateCellData()
     DBG_ASSERT( pCellData, "can't create CellData" );
 }
 
-//! make static member of ScDrawView
+//!	make static member of ScDrawView
 extern void lcl_CheckOle( const SdrMarkList& rMarkList, BOOL& rAnyOle, BOOL& rOneOle );
 
 void ScSelectionTransferObj::CreateDrawData()
@@ -339,7 +339,7 @@ void ScSelectionTransferObj::CreateDrawData()
     DBG_ASSERT( !pDrawData, "CreateDrawData twice" );
     if ( pView )
     {
-        //  similar to ScDrawView::BeginDrag
+        //	similar to ScDrawView::BeginDrag
 
         ScDrawView* pDrawView = pView->GetScDrawView();
         if ( pDrawView )
@@ -352,7 +352,7 @@ void ScSelectionTransferObj::CreateDrawData()
             ScDocShellRef aDragShellRef;
             if (bAnyOle)
             {
-                aDragShellRef = new ScDocShell;     // ohne Ref lebt die DocShell nicht !!!
+                aDragShellRef = new ScDocShell;		// ohne Ref lebt die DocShell nicht !!!
                 aDragShellRef->DoInitNew(NULL);
             }
             //---------------------------------------------------------
@@ -373,11 +373,11 @@ void ScSelectionTransferObj::CreateDrawData()
             uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
             SfxObjectShellRef aPersistRef( aDragShellRef );
-            pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
-            pTransferObj->SetDragSource( pDrawView );       // copies selection
+            pTransferObj->SetDrawPersist( aPersistRef );	// keep persist for ole objects alive
+            pTransferObj->SetDragSource( pDrawView );		// copies selection
 
             pDrawData = pTransferObj;
-            pDrawData->acquire();       // keep ref count up - released in ForgetView
+            pDrawData->acquire();		// keep ref count up - released in ForgetView
         }
     }
     DBG_ASSERT( pDrawData, "can't create DrawData" );
@@ -435,7 +435,7 @@ sal_Bool ScSelectionTransferObj::GetData( const ::com::sun::star::datatransfer::
 
 void ScSelectionTransferObj::ObjectReleased()
 {
-    //  called when another selection is set from outside
+    //	called when another selection is set from outside
 
     ForgetView();
 

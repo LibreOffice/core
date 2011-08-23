@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class ScFormatShell: public SfxShell
 
 protected:
 
-    ScViewData*         GetViewData(){return pViewData;}
+    ScViewData*			GetViewData(){return pViewData;}
     const ScViewData*   GetViewData() const {return pViewData;}
 
 public:
@@ -50,24 +50,24 @@ public:
     SFX_DECL_INTERFACE(SCID_FORMAT_SHELL)
 
                 ScFormatShell(ScViewData* pData);
-    virtual     ~ScFormatShell();
+    virtual		~ScFormatShell();
 
-    void        ExecuteNumFormat( SfxRequest& rReq );
-    void        GetNumFormatState( SfxItemSet& rSet );
+    void		ExecuteNumFormat( SfxRequest& rReq );
+    void		GetNumFormatState( SfxItemSet& rSet );
 
-    void        ExecuteAttr( SfxRequest& rReq );
-    void        GetAttrState( SfxItemSet& rSet );
+    void		ExecuteAttr( SfxRequest& rReq );
+    void		GetAttrState( SfxItemSet& rSet );
 
-    void        ExecuteAlignment( SfxRequest& rReq );
+    void		ExecuteAlignment( SfxRequest& rReq );
 
-    void        ExecuteTextAttr( SfxRequest& rReq );
-    void        GetTextAttrState( SfxItemSet& rSet );
+    void		ExecuteTextAttr( SfxRequest& rReq );
+    void		GetTextAttrState( SfxItemSet& rSet );
 
-    void        GetAlignState( SfxItemSet& rSet );
-    void        GetBorderState( SfxItemSet& rSet );
+    void		GetAlignState( SfxItemSet& rSet );
+    void		GetBorderState( SfxItemSet& rSet );
 
-    void        ExecuteStyle( SfxRequest& rReq );
-    void        GetStyleState( SfxItemSet& rSet );
+    void		ExecuteStyle( SfxRequest& rReq );
+    void		GetStyleState( SfxItemSet& rSet );
 
     void        ExecuteTextDirection( SfxRequest& rReq );
     void        GetTextDirectionState( SfxItemSet& rSet );

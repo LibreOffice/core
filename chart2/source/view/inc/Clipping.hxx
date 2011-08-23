@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,12 +49,12 @@ class Clipping
     */
 
 public:
-    /** @descr  The intersection between an open polygon and a rectangle is
+    /**	@descr	The intersection between an open polygon and a rectangle is
             calculated and the resulting lines are placed into the poly-polygon aResult.
-        @param  rPolygon    The polygon is required to be open, ie. it's start and end point
+        @param	rPolygon	The polygon is required to be open, ie. it's start and end point
             have different coordinates and that it is continuous, ie. has no holes.
-        @param  rRectangle  The clipping area.
-        @param  aResult The resulting lines that are the parts of the given polygon lying inside
+        @param	rRectangle	The clipping area.
+        @param	aResult	The resulting lines that are the parts of the given polygon lying inside
             the clipping area are stored into aResult whose prior content is deleted first.
      */
     static void clipPolygonAtRectangle(

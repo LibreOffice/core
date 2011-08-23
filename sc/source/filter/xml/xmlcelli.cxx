@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@
 #include <i18npool/lang.h>
 #include <comphelper/extract.hxx>
 
-#define SC_CURRENCYSYMBOL   "CurrencySymbol"
+#define SC_CURRENCYSYMBOL	"CurrencySymbol"
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -709,7 +709,7 @@ void ScXMLTableRowCellContext::SetDetectiveObj( const table::CellAddress& rPosit
     if( CellExists(rPosition) && pDetectiveObjVec && pDetectiveObjVec->size() )
     {
         LockSolarMutex();
-        ScDetectiveFunc aDetFunc( rXMLImport.GetDocument(), rPosition.Sheet );
+        ScDetectiveFunc	aDetFunc( rXMLImport.GetDocument(), rPosition.Sheet );
         uno::Reference<container::XIndexAccess> xShapesIndex (rXMLImport.GetTables().GetCurrentXShapes(), uno::UNO_QUERY); // make draw page
         ScMyImpDetectiveObjVec::iterator aItr(pDetectiveObjVec->begin());
         ScMyImpDetectiveObjVec::iterator aEndItr(pDetectiveObjVec->end());
@@ -824,7 +824,7 @@ void ScXMLTableRowCellContext::EndElement()
                             bIsEmpty = sal_True;
                 }
                 sal_Bool bWasEmpty = bIsEmpty;
-//              uno::Reference <table::XCell> xCell;
+//				uno::Reference <table::XCell> xCell;
                 table::CellAddress aCurrentPos( aCellPos );
                 if ((pContentValidationName && pContentValidationName->getLength()) ||
                     mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource)
@@ -855,7 +855,7 @@ void ScXMLTableRowCellContext::EndElement()
                                 // {
                                 //     try
                                 //     {
-                                //      xCell.set(xCellRange->getCellByPosition(aCurrentPos.Column, aCurrentPos.Row));
+                                // 	    xCell.set(xCellRange->getCellByPosition(aCurrentPos.Column, aCurrentPos.Row));
                                 //     }
                                 //     catch (lang::IndexOutOfBoundsException&)
                                 //     {

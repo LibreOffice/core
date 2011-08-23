@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ public:
     virtual bool hasPasswordHash(ScPasswordHash eHash) const = 0;
     virtual void setPassword(const String& aPassText) = 0;
     virtual ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(ScPasswordHash eHash) const = 0;
-    virtual void setPasswordHash(const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
+    virtual void setPasswordHash(const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword, 
                                  ScPasswordHash eHash = PASSHASH_OOO) = 0;
     virtual bool verifyPassword(const String& aPassText) const = 0;
 };
@@ -100,15 +100,15 @@ public:
     virtual bool isProtected() const;
     virtual bool isProtectedWithPass() const;
     virtual void setProtected(bool bProtected);
-
+            
     virtual bool isPasswordEmpty() const;
     virtual bool hasPasswordHash(ScPasswordHash eHash) const;
     virtual void setPassword(const String& aPassText);
     virtual ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(ScPasswordHash eHash) const;
-    virtual void setPasswordHash(const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
+    virtual void setPasswordHash(const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword, 
                                  ScPasswordHash eHash = PASSHASH_OOO);
     virtual bool verifyPassword(const String& aPassText) const;
-
+    
     bool isOptionEnabled(Option eOption) const;
     void setOption(Option eOption, bool bEnabled);
 
@@ -119,7 +119,7 @@ private:
 // ============================================================================
 
 /** sheet protection state container
-
+    
     This class stores sheet's protection state: 1) whether the protection
     is on, 2) password and/or password hash, and 3) any associated
     protection options.  This class is also used as a protection state
@@ -157,15 +157,15 @@ public:
     virtual bool isProtected() const;
     virtual bool isProtectedWithPass() const;
     virtual void setProtected(bool bProtected);
-
+            
     virtual bool isPasswordEmpty() const;
     virtual bool hasPasswordHash(ScPasswordHash eHash) const;
     virtual void setPassword(const String& aPassText);
     virtual ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(ScPasswordHash eHash) const;
-    virtual void setPasswordHash(const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
+    virtual void setPasswordHash(const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword, 
                                  ScPasswordHash eHash = PASSHASH_OOO);
     virtual bool verifyPassword(const String& aPassText) const;
-
+    
     bool isOptionEnabled(Option eOption) const;
     void setOption(Option eOption, bool bEnabled);
 

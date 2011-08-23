@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@ static const INT32 nInt32Max = 0x7fffffff;
 
 class ScBigAddress
 {
-    INT32   nRow;
-    INT32   nCol;
-    INT32   nTab;
+    INT32	nRow;
+    INT32	nCol;
+    INT32	nTab;
 
 public:
             ScBigAddress() : nRow(0), nCol(0), nTab(0) {}
@@ -52,33 +52,33 @@ public:
             ScBigAddress( const ScAddress& r )
                 : nRow( r.Row() ), nCol( r.Col() ), nTab( r.Tab() ) {}
 
-    INT32   Col() const { return nCol; }
-    INT32   Row() const { return nRow; }
-    INT32   Tab() const { return nTab; }
+    INT32	Col() const { return nCol; }
+    INT32	Row() const { return nRow; }
+    INT32	Tab() const { return nTab; }
 
-    void    Set( INT32 nColP, INT32 nRowP, INT32 nTabP )
+    void	Set( INT32 nColP, INT32 nRowP, INT32 nTabP )
                 { nCol = nColP; nRow = nRowP; nTab = nTabP; }
-    void    SetCol( INT32 nColP ) { nCol = nColP; }
-    void    SetRow( INT32 nRowP ) { nRow = nRowP; }
-    void    SetTab( INT32 nTabP ) { nTab = nTabP; }
-    void    IncCol( INT32 n = 1 ) { nCol += n; }
-    void    IncRow( INT32 n = 1 ) { nRow += n; }
-    void    IncTab( INT32 n = 1 ) { nTab += n; }
+    void	SetCol( INT32 nColP ) { nCol = nColP; }
+    void	SetRow( INT32 nRowP ) { nRow = nRowP; }
+    void	SetTab( INT32 nTabP ) { nTab = nTabP; }
+    void	IncCol( INT32 n = 1 ) { nCol += n; }
+    void	IncRow( INT32 n = 1 ) { nRow += n; }
+    void	IncTab( INT32 n = 1 ) { nTab += n; }
 
-    void    GetVars( INT32& nColP, INT32& nRowP, INT32& nTabP ) const
+    void	GetVars( INT32& nColP, INT32& nRowP, INT32& nTabP ) const
                 { nColP = nCol; nRowP = nRow; nTabP = nTab; }
 
-    inline void     PutInOrder( ScBigAddress& r );
-    inline BOOL     IsValid( const ScDocument* ) const;
-    inline ScAddress    MakeAddress() const;
+    inline void		PutInOrder( ScBigAddress& r );
+    inline BOOL		IsValid( const ScDocument* ) const;
+    inline ScAddress	MakeAddress() const;
 
-    ScBigAddress&   operator=( const ScBigAddress& r )
+    ScBigAddress&	operator=( const ScBigAddress& r )
                     { nCol = r.nCol; nRow = r.nRow; nTab = r.nTab; return *this; }
-    ScBigAddress&   operator=( const ScAddress& r )
+    ScBigAddress&	operator=( const ScAddress& r )
                     { nCol = r.Col(); nRow = r.Row(); nTab = r.Tab(); return *this; }
-    int             operator==( const ScBigAddress& r ) const
+    int				operator==( const ScBigAddress& r ) const
                     { return nCol == r.nCol && nRow == r.nRow && nTab == r.nTab; }
-    int             operator!=( const ScBigAddress& r ) const
+    int				operator!=( const ScBigAddress& r ) const
                     { return !operator==( r ); }
 
     friend inline SvStream& operator<< ( SvStream& rStream, const ScBigAddress& rAdr );
@@ -111,7 +111,7 @@ inline void ScBigAddress::PutInOrder( ScBigAddress& r )
 
 
 inline BOOL ScBigAddress::IsValid( const ScDocument* pDoc ) const
-{   //! Min/Max sind ok, kennzeichnen ganze Col/Row/Tab
+{	//! Min/Max sind ok, kennzeichnen ganze Col/Row/Tab
     return
         ((0 <= nCol && nCol <= MAXCOL)
             || nCol == nInt32Min || nCol == nInt32Max) &&
@@ -172,8 +172,8 @@ class ScBigRange
 {
 public:
 
-    ScBigAddress    aStart;
-    ScBigAddress    aEnd;
+    ScBigAddress	aStart;
+    ScBigAddress	aEnd;
 
                     ScBigRange() : aStart(), aEnd() {}
                     ScBigRange( const ScBigAddress& s, const ScBigAddress& e )
@@ -193,31 +193,31 @@ public:
                         : aStart( nCol1, nRow1, nTab1 ),
                         aEnd( nCol2, nRow2, nTab2 ) {}
 
-    void    Set( INT32 nCol1, INT32 nRow1, INT32 nTab1,
+    void	Set( INT32 nCol1, INT32 nRow1, INT32 nTab1,
                      INT32 nCol2, INT32 nRow2, INT32 nTab2 )
                 { aStart.Set( nCol1, nRow1, nTab1 );
                     aEnd.Set( nCol2, nRow2, nTab2 ); }
 
-    void    GetVars( INT32& nCol1, INT32& nRow1, INT32& nTab1,
+    void	GetVars( INT32& nCol1, INT32& nRow1, INT32& nTab1,
                      INT32& nCol2, INT32& nRow2, INT32& nTab2 ) const
                 { aStart.GetVars( nCol1, nRow1, nTab1 );
                     aEnd.GetVars( nCol2, nRow2, nTab2 ); }
 
-    BOOL    IsValid( const ScDocument* pDoc ) const
+    BOOL 	IsValid( const ScDocument* pDoc ) const
                 { return aStart.IsValid( pDoc ) && aEnd.IsValid( pDoc ); }
-    inline ScRange  MakeRange() const
+    inline ScRange	MakeRange() const
                     { return ScRange( aStart.MakeAddress(),
                         aEnd.MakeAddress() ); }
 
-    inline BOOL In( const ScBigAddress& ) const;    // ist Address& in Range?
-    inline BOOL In( const ScBigRange& ) const;      // ist Range& in Range?
-    inline BOOL Intersects( const ScBigRange& ) const;  // ueberschneiden sich zwei Ranges?
+    inline BOOL In( const ScBigAddress& ) const;	// ist Address& in Range?
+    inline BOOL In( const ScBigRange& ) const;		// ist Range& in Range?
+    inline BOOL Intersects( const ScBigRange& ) const;	// ueberschneiden sich zwei Ranges?
 
-    ScBigRange&     operator=( const ScBigRange& r )
+    ScBigRange&		operator=( const ScBigRange& r )
                         { aStart = r.aStart; aEnd = r.aEnd; return *this; }
-    int             operator==( const ScBigRange& r ) const
+    int				operator==( const ScBigRange& r ) const
                         { return (aStart == r.aStart) && (aEnd == r.aEnd); }
-    int             operator!=( const ScBigRange& r ) const
+    int				operator!=( const ScBigRange& r ) const
                         { return !operator==( r ); }
 
     friend inline SvStream& operator<< ( SvStream& rStream, const ScBigRange& rRange );

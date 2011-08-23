@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ public:
             , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries
             , sal_Int32 nPointIndex /*-1 for whole series*/
             , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram );
-
+    
     static sal_Int32 getExplicitPercentageNumberFormatKeyForDataLabel(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesOrPointProp
             , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,8 +100,8 @@ SvXMLImportContext *ScXMLDetectiveContext::CreateChildContext(
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext*     pContext    = NULL;
-    const SvXMLTokenMap&    rTokenMap   = GetScImport().GetDetectiveElemTokenMap();
+    SvXMLImportContext*		pContext	= NULL;
+    const SvXMLTokenMap&	rTokenMap	= GetScImport().GetDetectiveElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
@@ -138,15 +138,15 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
 {
     if( !xAttrList.is() ) return;
 
-    sal_Int16               nAttrCount      = xAttrList->getLength();
-    const SvXMLTokenMap&    rAttrTokenMap   = GetScImport().GetDetectiveHighlightedAttrTokenMap();
+    sal_Int16				nAttrCount		= xAttrList->getLength();
+    const SvXMLTokenMap&	rAttrTokenMap	= GetScImport().GetDetectiveHighlightedAttrTokenMap();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
+        const rtl::OUString& sAttrName	(xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue		(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix		= GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -218,15 +218,15 @@ ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
 {
     if( !xAttrList.is() ) return;
 
-    sal_Int16               nAttrCount      = xAttrList->getLength();
-    const SvXMLTokenMap&    rAttrTokenMap   = GetScImport().GetDetectiveOperationAttrTokenMap();
+    sal_Int16				nAttrCount		= xAttrList->getLength();
+    const SvXMLTokenMap&	rAttrTokenMap	= GetScImport().GetDetectiveOperationAttrTokenMap();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
+        const rtl::OUString& sAttrName	(xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue		(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix		= GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {

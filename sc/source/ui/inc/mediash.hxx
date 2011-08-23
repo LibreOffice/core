@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@ public:
     SFX_DECL_INTERFACE(SCID_MEDIA_SHELL)
 
                 ScMediaShell(ScViewData* pData);
-    virtual     ~ScMediaShell();
+    virtual		~ScMediaShell();
 
-    void    ExecuteMedia(SfxRequest& rReq);
-    void    GetMediaState(SfxItemSet &rSet);
+    void	ExecuteMedia(SfxRequest& rReq);
+    void	GetMediaState(SfxItemSet &rSet);
 };
 
 #endif

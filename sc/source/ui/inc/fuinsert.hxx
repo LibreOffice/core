@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@ class FuInsertGraphic : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertGraphic();
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 };
 
 /************************************************************************/
@@ -51,8 +51,8 @@ class FuInsertOLE : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertOLE();
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 };
 
 /************************************************************************/
@@ -64,8 +64,8 @@ class FuInsertChart : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertChart();
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 };
 
 /************************************************************************/
@@ -77,9 +77,9 @@ class FuInsertMedia : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertMedia();
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 };
 
-#endif      // _SD_FUINSERT_HXX
+#endif		// _SD_FUINSERT_HXX
 

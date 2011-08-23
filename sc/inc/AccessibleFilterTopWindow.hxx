@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ public:
         LISTBOX, TOGGLE_ALL, SINGLE_ON_BTN, SINGLE_OFF_BTN, OK_BTN, CANCEL_BTN
     };
     void setAccessibleChild(
-        const ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::accessibility::XAccessible >& rAccessible,
         ChildControlType eType);
 

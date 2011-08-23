@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 #include "hfedtdlg.hxx"
 #include "styledlg.hxx"
 #include "scresid.hxx"
-#include "scuitphfedit.hxx" //CHINA001
+#include "scuitphfedit.hxx" //CHINA001 
 #undef _TPHF_CXX
 
 
@@ -63,19 +63,19 @@
 ScHFPage::ScHFPage( Window* pParent, USHORT nResId,
                     const SfxItemSet& rSet, USHORT nSetId )
 
-    :   SvxHFPage   ( pParent, nResId, rSet, nSetId ),
-        aBtnEdit    ( this, ScResId( RID_SCBTN_HFEDIT ) ),
-        aDataSet    ( *rSet.GetPool(),
+    :	SvxHFPage	( pParent, nResId, rSet, nSetId ),
+        aBtnEdit	( this, ScResId( RID_SCBTN_HFEDIT ) ),
+        aDataSet 	( *rSet.GetPool(),
                        ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERRIGHT,
                        ATTR_PAGE, ATTR_PAGE, 0 ),
-        nPageUsage  ( (USHORT)SVX_PAGE_ALL ),
-        pStyleDlg   ( NULL )
+        nPageUsage	( (USHORT)SVX_PAGE_ALL ),
+        pStyleDlg	( NULL )
 {
     SetExchangeSupport();
 
-    SfxViewShell*   pSh = SfxViewShell::Current();
+    SfxViewShell*	pSh = SfxViewShell::Current();
     ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,pSh);
-    Point           aPos( aBackgroundBtn.GetPosPixel() );
+    Point			aPos( aBackgroundBtn.GetPosPixel() );
 
     // aBackgroundBtn position not changed anymore
 
@@ -89,13 +89,13 @@ ScHFPage::ScHFPage( Window* pParent, USHORT nResId,
     if ( pViewSh )
     {
         ScViewData* pViewData = pViewSh->GetViewData();
-        ScDocument* pDoc      = pViewData->GetDocument();
+        ScDocument* pDoc	  = pViewData->GetDocument();
 
         aStrPageStyle = pDoc->GetPageStyle( pViewData->GetTabNo() );
     }
 
-    aBtnEdit.SetClickHdl    ( LINK( this, ScHFPage, BtnHdl ) );
-    aTurnOnBox.SetClickHdl  ( LINK( this, ScHFPage, TurnOnHdl ) );
+    aBtnEdit.SetClickHdl 	( LINK( this, ScHFPage, BtnHdl ) );
+    aTurnOnBox.SetClickHdl	( LINK( this, ScHFPage, TurnOnHdl ) );
 
     if ( nId == SID_ATTR_PAGE_HEADERSET )
         aBtnEdit.SetHelpId( HID_SC_HEADER_EDIT );
@@ -141,8 +141,8 @@ BOOL __EXPORT ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 
 void __EXPORT ScHFPage::ActivatePage( const SfxItemSet& rSet )
 {
-    USHORT              nPageWhich = GetWhich( SID_ATTR_PAGE );
-    const SvxPageItem&  rPageItem  = (const SvxPageItem&)
+    USHORT				nPageWhich = GetWhich( SID_ATTR_PAGE );
+    const SvxPageItem&	rPageItem  = (const SvxPageItem&)
                                      rSet.Get(nPageWhich);
 
     nPageUsage = rPageItem.GetPageUsage();
@@ -197,10 +197,10 @@ IMPL_LINK( ScHFPage, TurnOnHdl, CheckBox*, EMPTYARG )
 
 IMPL_LINK( ScHFPage, BtnHdl, PushButton*, EMPTYARG )
 {
-    //  Wenn der Bearbeiten-Dialog direkt aus dem Click-Handler des Buttons
-    //  aufgerufen wird, funktioniert im Bearbeiten-Dialog unter OS/2 das
-    //  GrabFocus nicht (Bug #41805#).
-    //  Mit dem neuen StarView sollte dieser Workaround wieder raus koennen!
+    //	Wenn der Bearbeiten-Dialog direkt aus dem Click-Handler des Buttons
+    //	aufgerufen wird, funktioniert im Bearbeiten-Dialog unter OS/2 das
+    //	GrabFocus nicht (Bug #41805#).
+    //	Mit dem neuen StarView sollte dieser Workaround wieder raus koennen!
 
     Application::PostUserEvent( LINK( this, ScHFPage, HFEditHdl ) );
     return 0;
@@ -208,7 +208,7 @@ IMPL_LINK( ScHFPage, BtnHdl, PushButton*, EMPTYARG )
 
 IMPL_LINK( ScHFPage, HFEditHdl, void*, EMPTYARG )
 {
-    SfxViewShell*   pViewSh = SfxViewShell::Current();
+    SfxViewShell*	pViewSh = SfxViewShell::Current();
 
     if ( !pViewSh )
     {
@@ -236,7 +236,7 @@ IMPL_LINK( ScHFPage, HFEditHdl, void*, EMPTYARG )
     }
     else
     {
-        String              aText;
+        String				aText;
         SfxSingleTabDialog* pDlg = new SfxSingleTabDialog( this, aDataSet, 42 );
         BOOL bRightPage =   aCntSharedBox.IsChecked()
                          || ( SVX_PAGE_LEFT != SvxPageUsage(nPageUsage) );

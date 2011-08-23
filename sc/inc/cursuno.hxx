@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,35 +40,35 @@ class ScCellCursorObj : public ScCellRangeObj,
 {
 public:
                             ScCellCursorObj(ScDocShell* pDocSh, const ScRange& rR);
-    virtual                 ~ScCellCursorObj();
+    virtual					~ScCellCursorObj();
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   acquire() throw();
-    virtual void SAL_CALL   release() throw();
+    virtual void SAL_CALL	acquire() throw();
+    virtual void SAL_CALL	release() throw();
 
                             // XSheetCellCursor
-    virtual void SAL_CALL   collapseToCurrentRegion() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   collapseToCurrentArray() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   collapseToMergedArea() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   expandToEntireColumns() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   expandToEntireRows() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   collapseToSize( sal_Int32 nColumns, sal_Int32 nRows )
+    virtual void SAL_CALL	collapseToCurrentRegion() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	collapseToCurrentArray() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	collapseToMergedArea() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	expandToEntireColumns() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	expandToEntireRows() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	collapseToSize( sal_Int32 nColumns, sal_Int32 nRows )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XUsedAreaCursor
-    virtual void SAL_CALL   gotoStartOfUsedArea( sal_Bool bExpand )
+    virtual void SAL_CALL	gotoStartOfUsedArea( sal_Bool bExpand )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   gotoEndOfUsedArea( sal_Bool bExpand )
+    virtual void SAL_CALL	gotoEndOfUsedArea( sal_Bool bExpand )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XCellCursor
-    virtual void SAL_CALL   gotoStart() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   gotoEnd() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   gotoNext() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   gotoPrevious() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nRowOffset )
+    virtual void SAL_CALL	gotoStart() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	gotoEnd() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	gotoNext() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	gotoPrevious() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nRowOffset )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XSheetCellRange

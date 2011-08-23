@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,11 +33,11 @@
 #include "dbfunc.hxx"
 
 #define DECL_WRAPPER(Class) \
-    class Class : public SfxChildWindow                                         \
-    {                                                                           \
-    public:                                                                     \
-        Class( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );               \
-        SFX_DECL_CHILDWINDOW(Class);                                            \
+    class Class : public SfxChildWindow											\
+    {																			\
+    public:																		\
+        Class( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );				\
+        SFX_DECL_CHILDWINDOW(Class);											\
     };
 
 
@@ -67,7 +67,7 @@ DECL_WRAPPER(ScArgumentDlgWrapper)
 class ScAcceptChgDlgWrapper: public SfxChildWindow
 {
     public:
-        ScAcceptChgDlgWrapper(  Window*,
+        ScAcceptChgDlgWrapper(	Window*,
                                 USHORT,
                                 SfxBindings*,
                                 SfxChildWinInfo* );
@@ -80,38 +80,38 @@ class ScAcceptChgDlgWrapper: public SfxChildWindow
 class ScSimpleRefDlgWrapper: public SfxChildWindow
 {
     public:
-        ScSimpleRefDlgWrapper(  Window*,
+        ScSimpleRefDlgWrapper(	Window*,
                                 USHORT,
                                 SfxBindings*,
                                 SfxChildWinInfo* );
 
         SFX_DECL_CHILDWINDOW(Class);
 
-        static void     SetDefaultPosSize(Point aPos, Size aSize, BOOL bSet=TRUE);
-        virtual String  GetRefString();
-        virtual void    SetRefString(const String& rStr);
-        void            SetCloseHdl( const Link& rLink );
-        void            SetUnoLinks( const Link& rDone, const Link& rAbort,
+        static void		SetDefaultPosSize(Point aPos, Size aSize, BOOL bSet=TRUE);
+        virtual String	GetRefString();
+        virtual void	SetRefString(const String& rStr);
+        void			SetCloseHdl( const Link& rLink );
+        void			SetUnoLinks( const Link& rDone, const Link& rAbort,
                                         const Link& rChange );
         void            SetFlags( BOOL bCloseOnButtonUp, BOOL bSingleCell, BOOL bMultiSelection );
-        static void     SetAutoReOpen(BOOL bFlag);
+        static void		SetAutoReOpen(BOOL bFlag);
 
-        void            StartRefInput();
+        void			StartRefInput();
 };
 
 //<!--Added by PengYunQuan for Validity Cell Range Picker
 class SC_DLLPUBLIC ScValidityRefChildWin : public SfxChildWindow
 {
-    bool    m_bVisibleLock:1;
-    bool    m_bFreeWindowLock:1;
+    bool	m_bVisibleLock:1;
+    bool	m_bFreeWindowLock:1;
     Window * m_pSavedWndParent;
-public:
+public:	
     ScValidityRefChildWin( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );
-    SFX_DECL_CHILDWINDOW(ScValidityRefChildWin);
+    SFX_DECL_CHILDWINDOW(ScValidityRefChildWin);									
     ~ScValidityRefChildWin();
-    bool    LockVisible( bool bLock ){ bool bVis = m_bVisibleLock; m_bVisibleLock = bLock; return bVis; }
-    bool    LockFreeWindow( bool bLock ){ bool bFreeWindow = m_bFreeWindowLock; m_bFreeWindowLock = bLock; return bFreeWindow; }
-    void                Hide(){ if( !m_bVisibleLock) SfxChildWindow::Hide(); }
+    bool	LockVisible( bool bLock ){ bool bVis = m_bVisibleLock; m_bVisibleLock = bLock; return bVis; }
+    bool	LockFreeWindow( bool bLock ){ bool bFreeWindow = m_bFreeWindowLock; m_bFreeWindowLock = bLock; return bFreeWindow; }
+    void				Hide(){ if( !m_bVisibleLock) SfxChildWindow::Hide(); }
     void                Show( USHORT nFlags ){ if( !m_bVisibleLock ) SfxChildWindow::Show( nFlags ); }
 };
 //-->Added by PengYunQuan for Validity Cell Range Picker

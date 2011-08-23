@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,12 @@
 
 // defines -------------------------------------------------------------------
 
-#define ABS_SREF          SCA_VALID \
+#define ABS_SREF		  SCA_VALID \
                         | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
-#define ABS_DREF          ABS_SREF \
+#define ABS_DREF		  ABS_SREF \
                         | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
-#define ABS_SREF3D      ABS_SREF | SCA_TAB_3D
-#define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
+#define ABS_SREF3D		ABS_SREF | SCA_TAB_3D
+#define ABS_DREF3D		ABS_DREF | SCA_TAB_3D
 
 
 
@@ -68,27 +68,27 @@ inline void EnableDisable( Window& rWin, BOOL bEnable )
 }
 
 //============================================================================
-//  class ScHighlightChgDlg
+//	class ScHighlightChgDlg
 
 //----------------------------------------------------------------------------
 ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                      ScViewData*       ptrViewData)
+                      ScViewData*		ptrViewData)
 
-    :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_HIGHLIGHT_CHANGES ),
+    :	ScAnyRefDlg	( pB, pCW, pParent, RID_SCDLG_HIGHLIGHT_CHANGES ),
         //
-        aHighlightBox   ( this, ScResId( CB_HIGHLIGHT)),
+        aHighlightBox	( this, ScResId( CB_HIGHLIGHT)),
         aFlFilter       ( this, ScResId( FL_FILTER)),
-        aFilterCtr      ( this),
-        aCbAccept       ( this, ScResId( CB_HIGHLIGHT_ACCEPT)),
-        aCbReject       ( this, ScResId( CB_HIGHLIGHT_REJECT)),
-        aOkButton       ( this, ScResId( BTN_OK ) ),
-        aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
-        aHelpButton     ( this, ScResId( BTN_HELP ) ),
+        aFilterCtr		( this),
+        aCbAccept		( this, ScResId( CB_HIGHLIGHT_ACCEPT)),
+        aCbReject		( this, ScResId( CB_HIGHLIGHT_REJECT)),
+        aOkButton		( this, ScResId( BTN_OK ) ),
+        aCancelButton	( this, ScResId( BTN_CANCEL ) ),
+        aHelpButton		( this, ScResId( BTN_HELP ) ),
         aEdAssign       ( this, this, ScResId( ED_ASSIGN ) ),
-        aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign, this ),
+        aRbAssign		( this, ScResId( RB_ASSIGN ), &aEdAssign, this ),
         //
-        pViewData       ( ptrViewData ),
-        pDoc            ( ptrViewData->GetDocument() ),
+        pViewData		( ptrViewData ),
+        pDoc			( ptrViewData->GetDocument() ),
         aLocalRangeName ( *(pDoc->GetRangeName()) )
 {
     FreeResource();
@@ -118,7 +118,7 @@ ScHighlightChgDlg::~ScHighlightChgDlg()
 
 void __EXPORT ScHighlightChgDlg::Init()
 {
-    String  aAreaStr;
+    String	aAreaStr;
     ScRange aRange;
 
     DBG_ASSERT( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
@@ -129,7 +129,7 @@ void __EXPORT ScHighlightChgDlg::Init()
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
         aFilterCtr.ClearAuthors();
         ScStrCollection aUserColl=pChanges->GetUserCollection();
-        for(USHORT  i=0;i<aUserColl.GetCount();i++)
+        for(USHORT	i=0;i<aUserColl.GetCount();i++)
             aFilterCtr.InsertAuthor(aUserColl[i]->GetString());
     }
 

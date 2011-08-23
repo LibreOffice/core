@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ TYPEINIT1(ScUndoRangeNames, ScSimpleUndo);
 
 // -----------------------------------------------------------------------
 //
-//      Attribute auf Cursor anwenden
+//		Attribute auf Cursor anwenden
 //
 
 ScUndoCursorAttr::ScUndoCursorAttr( ScDocShell* pNewDocShell,
@@ -100,9 +100,9 @@ __EXPORT ScUndoCursorAttr::~ScUndoCursorAttr()
 
 String __EXPORT ScUndoCursorAttr::GetComment() const
 {
-    //! eigener Text fuer automatische Attributierung
+    //!	eigener Text fuer automatische Attributierung
 
-    USHORT nId = STR_UNDO_CURSORATTR;        // "Attribute"
+    USHORT nId = STR_UNDO_CURSORATTR;		 // "Attribute"
     return ScGlobal::GetRscString( nId );
 }
 
@@ -138,8 +138,8 @@ void __EXPORT ScUndoCursorAttr::Undo()
 
     if ( bIsAutomatic )
     {
-        //  wenn automatische Formatierung rueckgaengig gemacht wird,
-        //  soll auch nicht weiter automatisch formatiert werden:
+        //	wenn automatische Formatierung rueckgaengig gemacht wird,
+        //	soll auch nicht weiter automatisch formatiert werden:
 
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
         if (pViewShell)
@@ -170,7 +170,7 @@ BOOL __EXPORT ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
 
 // -----------------------------------------------------------------------
 //
-//      Daten eingeben
+//		Daten eingeben
 //
 
 ScUndoEnterData::ScUndoEnterData( ScDocShell* pNewDocShell,
@@ -214,8 +214,8 @@ String __EXPORT ScUndoEnterData::GetComment() const
 
 void ScUndoEnterData::DoChange() const
 {
-    //  Zeilenhoehe anpassen
-    //! nur wenn noetig (alte oder neue EditZelle, oder Attribute) ??
+    //	Zeilenhoehe anpassen
+    //!	nur wenn noetig (alte oder neue EditZelle, oder Attribute) ??
     for (USHORT i=0; i<nCount; i++)
         pDocShell->AdjustRowHeight( nRow, nRow, pTabs[i] );
 
@@ -248,7 +248,7 @@ void ScUndoEnterData::SetChangeTrack()
             pChangeTrack->AppendContent( aPos, ppOldCells[i], nFormat );
         }
         if ( nEndChangeAction > pChangeTrack->GetActionMax() )
-            nEndChangeAction = 0;       // nichts appended
+            nEndChangeAction = 0;		// nichts appended
     }
     else
         nEndChangeAction = 0;
@@ -349,16 +349,16 @@ BOOL __EXPORT ScUndoEnterData::CanRepeat(SfxRepeatTarget& rTarget) const
 
 // -----------------------------------------------------------------------
 //
-//      Wert aendern
+//		Wert aendern
 //
 
 ScUndoEnterValue::ScUndoEnterValue( ScDocShell* pNewDocShell, const ScAddress& rNewPos,
                                     ScBaseCell* pUndoCell, double nVal, BOOL bHeight ) :
     ScSimpleUndo( pNewDocShell ),
-    aPos        ( rNewPos ),
-    pOldCell    ( pUndoCell ),
-    nValue      ( nVal ),
-    bNeedHeight ( bHeight )
+    aPos		( rNewPos ),
+    pOldCell	( pUndoCell ),
+    nValue		( nVal ),
+    bNeedHeight	( bHeight )
 {
     SetChangeTrack();
 }
@@ -383,7 +383,7 @@ void ScUndoEnterValue::SetChangeTrack()
         nEndChangeAction = pChangeTrack->GetActionMax() + 1;
         pChangeTrack->AppendContent( aPos, pOldCell );
         if ( nEndChangeAction > pChangeTrack->GetActionMax() )
-            nEndChangeAction = 0;       // nichts appended
+            nEndChangeAction = 0;		// nichts appended
     }
     else
         nEndChangeAction = 0;
@@ -422,7 +422,7 @@ void __EXPORT ScUndoEnterValue::Redo()
 
 void __EXPORT ScUndoEnterValue::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //  gippsnich
+    //	gippsnich
 }
 
 BOOL __EXPORT ScUndoEnterValue::CanRepeat(SfxRepeatTarget& /* rTarget */) const
@@ -433,16 +433,16 @@ BOOL __EXPORT ScUndoEnterValue::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 // -----------------------------------------------------------------------
 //
-//      Beliebige Zelle eingeben
+//		Beliebige Zelle eingeben
 //
 
 ScUndoPutCell::ScUndoPutCell( ScDocShell* pNewDocShell, const ScAddress& rNewPos,
                             ScBaseCell* pUndoCell, ScBaseCell* pRedoCell, BOOL bHeight ) :
     ScSimpleUndo( pNewDocShell ),
-    aPos        ( rNewPos ),
-    pOldCell    ( pUndoCell ),
+    aPos		( rNewPos ),
+    pOldCell	( pUndoCell ),
     pEnteredCell( pRedoCell ),
-    bNeedHeight ( bHeight )
+    bNeedHeight	( bHeight )
 {
     SetChangeTrack();
 }
@@ -469,7 +469,7 @@ void ScUndoPutCell::SetChangeTrack()
         nEndChangeAction = pChangeTrack->GetActionMax() + 1;
         pChangeTrack->AppendContent( aPos, pOldCell );
         if ( nEndChangeAction > pChangeTrack->GetActionMax() )
-            nEndChangeAction = 0;       // nichts appended
+            nEndChangeAction = 0;		// nichts appended
     }
     else
         nEndChangeAction = 0;
@@ -511,7 +511,7 @@ void __EXPORT ScUndoPutCell::Redo()
 
 void __EXPORT ScUndoPutCell::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //  gippsnich
+    //	gippsnich
 }
 
 BOOL __EXPORT ScUndoPutCell::CanRepeat(SfxRepeatTarget& /* rTarget */) const
@@ -522,7 +522,7 @@ BOOL __EXPORT ScUndoPutCell::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 // -----------------------------------------------------------------------
 //
-//      Seitenumbrueche
+//		Seitenumbrueche
 //
 
 ScUndoPageBreak::ScUndoPageBreak( ScDocShell* pNewDocShell,
@@ -607,7 +607,7 @@ BOOL __EXPORT ScUndoPageBreak::CanRepeat(SfxRepeatTarget& rTarget) const
 
 // -----------------------------------------------------------------------
 //
-//      Druck-Skalierung
+//		Druck-Skalierung
 //
 
 ScUndoPrintZoom::ScUndoPrintZoom( ScDocShell* pNewDocShell,
@@ -683,7 +683,7 @@ BOOL __EXPORT ScUndoPrintZoom::CanRepeat(SfxRepeatTarget& rTarget) const
 
 // -----------------------------------------------------------------------
 //
-//      Thesaurus
+//		Thesaurus
 //
 
 ScUndoThesaurus::ScUndoThesaurus( ScDocShell* pNewDocShell,
@@ -717,7 +717,7 @@ __EXPORT ScUndoThesaurus::~ScUndoThesaurus()
 
 String __EXPORT ScUndoThesaurus::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_THESAURUS );    // "Thesaurus"
+    return ScGlobal::GetRscString( STR_UNDO_THESAURUS );	// "Thesaurus"
 }
 
 void ScUndoThesaurus::SetChangeTrack( ScBaseCell* pOldCell )
@@ -728,7 +728,7 @@ void ScUndoThesaurus::SetChangeTrack( ScBaseCell* pOldCell )
         nEndChangeAction = pChangeTrack->GetActionMax() + 1;
         pChangeTrack->AppendContent( ScAddress( nCol, nRow, nTab ), pOldCell );
         if ( nEndChangeAction > pChangeTrack->GetActionMax() )
-            nEndChangeAction = 0;       // nichts appended
+            nEndChangeAction = 0;		// nichts appended
     }
     else
         nEndChangeAction = 0;
@@ -952,16 +952,16 @@ String ScUndoShowHideNote::GetComment() const
 
 // -----------------------------------------------------------------------
 //
-//      Detektiv
+//		Detektiv
 //
 
 ScUndoDetective::ScUndoDetective( ScDocShell* pNewDocShell,
                                     SdrUndoAction* pDraw, const ScDetOpData* pOperation,
                                     ScDetOpList* pUndoList ) :
     ScSimpleUndo( pNewDocShell ),
-    pOldList    ( pUndoList ),
-    nAction     ( 0 ),
-    pDrawUndo   ( pDraw )
+    pOldList	( pUndoList ),
+    nAction		( 0 ),
+    pDrawUndo	( pDraw )
 {
     bIsDelete = ( pOperation == NULL );
     if (!bIsDelete)
@@ -983,11 +983,11 @@ String __EXPORT ScUndoDetective::GetComment() const
     if ( !bIsDelete )
         switch ( (ScDetOpType) nAction )
         {
-            case SCDETOP_ADDSUCC:   nId = STR_UNDO_DETADDSUCC;  break;
-            case SCDETOP_DELSUCC:   nId = STR_UNDO_DETDELSUCC;  break;
-            case SCDETOP_ADDPRED:   nId = STR_UNDO_DETADDPRED;  break;
-            case SCDETOP_DELPRED:   nId = STR_UNDO_DETDELPRED;  break;
-            case SCDETOP_ADDERROR:  nId = STR_UNDO_DETADDERROR; break;
+            case SCDETOP_ADDSUCC:	nId = STR_UNDO_DETADDSUCC;	break;
+            case SCDETOP_DELSUCC:	nId = STR_UNDO_DETDELSUCC;	break;
+            case SCDETOP_ADDPRED:	nId = STR_UNDO_DETADDPRED;	break;
+            case SCDETOP_DELPRED:	nId = STR_UNDO_DETDELPRED;	break;
+            case SCDETOP_ADDERROR:	nId = STR_UNDO_DETADDERROR;	break;
         }
 
     return ScGlobal::GetRscString( nId );
@@ -1008,7 +1008,7 @@ void __EXPORT ScUndoDetective::Undo()
     }
     else
     {
-        //  Eintrag aus der Liste loeschen
+        //	Eintrag aus der Liste loeschen
 
         ScDetOpList* pList = pDoc->GetDetOpList();
         if (pList && pList->Count())
@@ -1026,7 +1026,7 @@ void __EXPORT ScUndoDetective::Undo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->RecalcPPT();    //! use broadcast instead?
+        pViewShell->RecalcPPT();	//! use broadcast instead?
 
     EndUndo();
 }
@@ -1046,14 +1046,14 @@ void __EXPORT ScUndoDetective::Redo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->RecalcPPT();    //! use broadcast instead?
+        pViewShell->RecalcPPT();	//! use broadcast instead?
 
     EndRedo();
 }
 
 void __EXPORT ScUndoDetective::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //  hammanich
+    //	hammanich
 }
 
 BOOL __EXPORT ScUndoDetective::CanRepeat(SfxRepeatTarget& /* rTarget */) const
@@ -1063,14 +1063,14 @@ BOOL __EXPORT ScUndoDetective::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 // -----------------------------------------------------------------------
 //
-//      Benannte Bereiche
+//		Benannte Bereiche
 //
 
 ScUndoRangeNames::ScUndoRangeNames( ScDocShell* pNewDocShell,
                                     ScRangeName* pOld, ScRangeName* pNew ) :
     ScSimpleUndo( pNewDocShell ),
-    pOldRanges  ( pOld ),
-    pNewRanges  ( pNew )
+    pOldRanges	( pOld ),
+    pNewRanges	( pNew )
 {
 }
 
@@ -1088,14 +1088,14 @@ String __EXPORT ScUndoRangeNames::GetComment() const
 void ScUndoRangeNames::DoChange( BOOL bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->CompileNameFormula( TRUE );   // CreateFormulaString
+    pDoc->CompileNameFormula( TRUE );	// CreateFormulaString
 
     if ( bUndo )
         pDoc->SetRangeName( new ScRangeName( *pOldRanges ) );
     else
         pDoc->SetRangeName( new ScRangeName( *pNewRanges ) );
 
-    pDoc->CompileNameFormula( FALSE );  // CompileFormulaString
+    pDoc->CompileNameFormula( FALSE );	// CompileFormulaString
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
 }
@@ -1116,7 +1116,7 @@ void __EXPORT ScUndoRangeNames::Redo()
 
 void __EXPORT ScUndoRangeNames::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //  hammanich
+    //	hammanich
 }
 
 BOOL __EXPORT ScUndoRangeNames::CanRepeat(SfxRepeatTarget& /* rTarget */) const

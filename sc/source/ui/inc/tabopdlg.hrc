@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,24 +27,24 @@
 
 #include "sc.hrc" // ->RID_SCDLG_TABOP
 
-#define ED_FORMULARANGE         1
-#define ED_ROWCELL              2
-#define ED_COLCELL              3
-#define FT_FORMULARANGE         1
-#define FT_ROWCELL              2
-#define FT_COLCELL              3
-#define RB_FORMULARANGE         1
-#define RB_ROWCELL              2
-#define RB_COLCELL              3
+#define ED_FORMULARANGE			1
+#define ED_ROWCELL				2
+#define ED_COLCELL			    3
+#define FT_FORMULARANGE			1
+#define FT_ROWCELL				2
+#define FT_COLCELL			    3
+#define RB_FORMULARANGE			1
+#define RB_ROWCELL				2
+#define RB_COLCELL			    3
 #define FL_VARIABLES            1
-#define BTN_OK                  1
-#define BTN_CANCEL              2
-#define BTN_HELP                1
-#define STR_NOFORMULA           1
-#define STR_NOCOLROW            2
-#define STR_WRONGFORMULA        3
-#define STR_WRONGROWCOL         4
-#define STR_NOCOLFORMULA        5
-#define STR_NOROWFORMULA        6
+#define BTN_OK					1
+#define BTN_CANCEL				2
+#define BTN_HELP				1
+#define STR_NOFORMULA			1
+#define STR_NOCOLROW			2
+#define STR_WRONGFORMULA		3
+#define STR_WRONGROWCOL			4
+#define STR_NOCOLFORMULA		5
+#define STR_NOROWFORMULA		6
 
 

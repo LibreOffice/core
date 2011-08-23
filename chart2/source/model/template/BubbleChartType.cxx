@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ namespace chart
 {
 
 BubbleChartType::BubbleChartType(
-    const uno::Reference< uno::XComponentContext > & xContext )
+    const uno::Reference< uno::XComponentContext > & xContext ) 
     : ChartType( xContext )
 {
 }
@@ -137,7 +137,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
             aScaleData.AxisType = chart2::AxisType::SERIES;
         else
             aScaleData.AxisType = chart2::AxisType::REALNUMBER;
-
+           
         xAxis->setScaleData( aScaleData );
     }
 

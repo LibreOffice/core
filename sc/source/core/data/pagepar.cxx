@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,8 +60,8 @@ void ScPageTableParam::Reset()
     bCellContent = TRUE;
     bNotes=bGrid=bHeaders=bDrawings=
     bLeftRight=bScaleAll=bScaleTo=bScalePageNum=
-    bFormulas=bNullVals=bSkipEmpty          = FALSE;
-    bTopDown=bScaleNone=bCharts=bObjects    = TRUE;
+    bFormulas=bNullVals=bSkipEmpty			= FALSE;
+    bTopDown=bScaleNone=bCharts=bObjects	= TRUE;
     nScaleAll = 100;
     nScalePageNum = nScaleWidth = nScaleHeight = 0;
     nFirstPageNo = 1;
@@ -104,19 +104,19 @@ void ScPageAreaParam::Reset()
 BOOL ScPageAreaParam::operator==( const ScPageAreaParam& r ) const
 {
     BOOL bEqual =
-            bPrintArea  == r.bPrintArea
-        &&  bRepeatRow  == r.bRepeatRow
-        &&  bRepeatCol  == r.bRepeatCol;
+            bPrintArea 	== r.bPrintArea
+        &&	bRepeatRow 	== r.bRepeatRow
+        &&	bRepeatCol 	== r.bRepeatCol;
 
     if ( bEqual )
         if ( bPrintArea )
-            bEqual = bEqual && ( aPrintArea == r.aPrintArea );
+            bEqual = bEqual && ( aPrintArea	== r.aPrintArea );
     if ( bEqual )
         if ( bRepeatRow )
-            bEqual = bEqual && ( aRepeatRow == r.aRepeatRow );
+            bEqual = bEqual && ( aRepeatRow	== r.aRepeatRow );
     if ( bEqual )
         if ( bRepeatCol )
-            bEqual = bEqual && ( aRepeatCol == r.aRepeatCol );
+            bEqual = bEqual && ( aRepeatCol	== r.aRepeatCol );
 
     return bEqual;
 }

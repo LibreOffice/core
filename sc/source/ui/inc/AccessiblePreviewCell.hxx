@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                             getAccessibleAtPoint( const ::com::sun::star::awt::Point& aPoint )
                                 throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   grabFocus() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	grabFocus() throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleContext  ==============================================
 
@@ -88,7 +88,7 @@ public:
 
     ///=====  XTypeProvider  ===================================================
 
-    /** Returns a implementation id.
+    /**	Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(void)

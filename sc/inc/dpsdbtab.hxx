@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,19 +40,19 @@ class ScDocument;
 
 // --------------------------------------------------------------------
 //
-//  implementation of ScDPTableData with database data
+//	implementation of ScDPTableData with database data
 //
 
 struct ScImportSourceDesc
 {
-    String  aDBName;
-    String  aObject;
-    USHORT  nType;          // enum DataImportMode
-    BOOL    bNative;
+    String	aDBName;
+    String	aObject;
+    USHORT	nType;			// enum DataImportMode
+    BOOL	bNative;
 
     ScImportSourceDesc() : nType(0), bNative(FALSE) {}
 
-    BOOL operator== ( const ScImportSourceDesc& rOther ) const
+    BOOL operator==	( const ScImportSourceDesc& rOther ) const
         { return aDBName == rOther.aDBName &&
                  aObject == rOther.aObject &&
                  nType   == rOther.nType &&
@@ -63,7 +63,7 @@ struct ScImportSourceDesc
     ScDPTableDataCache* GetExistDPObjectCache( ScDocument* pDoc ) const;
     ScDPTableDataCache* CreateCache(  ScDocument* pDoc , long nID  ) const;
     ScDPTableDataCache* GetCache( ScDocument* pDoc, long nID ) const;
-    long    GetCacheId( ScDocument* pDoc, long nID ) const;
+    long	GetCacheId( ScDocument* pDoc, long nID ) const;
         // End Comments
 };
 
@@ -73,14 +73,14 @@ private:
      ScDPCacheTable      aCacheTable;
 public:
                     ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport, long nCacheId = -1);
-    virtual         ~ScDatabaseDPData();
+    virtual			~ScDatabaseDPData();
 
-    virtual long                    GetColumnCount();
-    virtual String                  getDimensionName(long nColumn);
-    virtual BOOL                    getIsDataLayoutDimension(long nColumn);
-    virtual BOOL                    IsDateDimension(long nDim);
-    virtual void                    DisposeData();
-    virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
+    virtual long					GetColumnCount();
+    virtual String					getDimensionName(long nColumn);
+    virtual BOOL					getIsDataLayoutDimension(long nColumn);
+    virtual BOOL					IsDateDimension(long nDim);
+    virtual void					DisposeData();
+    virtual void					SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
 
     virtual void                    CreateCacheTable();
     virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rDataDims);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,9 +51,9 @@
 #include <tools/color.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 
-using namespace ::rtl;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::rtl;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -103,7 +103,7 @@ void ScAccessibleContextBase::Init()
 void SAL_CALL ScAccessibleContextBase::disposing()
 {
     ScUnoGuard aGuard;
-//  CommitDefunc(); not necessary and should not be send, because it cost a lot of time
+//	CommitDefunc(); not necessary and should not be send, because it cost a lot of time
 
     // hold reference to make sure that the destructor is not called
     uno::Reference< XAccessibleContext > xOwnContext(this);
@@ -295,12 +295,12 @@ sal_Int32 SAL_CALL
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    //  Use a simple but slow solution for now.  Optimize later.
-   //   Return -1 to indicate that this object's parent does not know about the
-   //   object.
+    //	Use a simple but slow solution for now.  Optimize later.
+   //	Return -1 to indicate that this object's parent does not know about the
+   //	object.
     sal_Int32 nIndex(-1);
 
-    //  Iterate over all the parent's children and search for this object.
+    //	Iterate over all the parent's children and search for this object.
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xParentContext (
@@ -339,7 +339,7 @@ sal_Int16 SAL_CALL
     if (!msDescription.getLength())
     {
         OUString sDescription(createAccessibleDescription());
-//      DBG_ASSERT(sDescription.getLength(), "We should give always a descripition.");
+//		DBG_ASSERT(sDescription.getLength(), "We should give always a descripition.");
 
         if (msDescription != sDescription)
         {
@@ -413,8 +413,8 @@ lang::Locale SAL_CALL
             return xParentContext->getLocale ();
     }
 
-    //  No locale and no parent.  Therefore throw exception to indicate this
-    //  cluelessness.
+    //	No locale and no parent.  Therefore throw exception to indicate this
+    //	cluelessness.
     throw IllegalAccessibleComponentStateException ();
 }
 

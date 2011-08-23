@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright IBM Corporation 2009.
  * Copyright 2009 by Sun Microsystems, Inc.
  *
@@ -30,7 +30,7 @@
  ************************************************************************/
 // Wang Xu Ming - DataPilot migration
 // Buffer&&Performance
-//
+// 
 #ifndef _SC_DPGLOBAL_HXX
 #define _SC_DPGLOBAL_HXX
 
@@ -64,38 +64,38 @@
 
 #define MAX_PAGEFIELDS 10   // maximum count of fields for page area
 
-#define     PIVOT_MAXFUNC           11
-#define     PIVOT_FUNC_NONE         0x0000
-#define     PIVOT_FUNC_SUM          0x0001
-#define     PIVOT_FUNC_COUNT        0x0002
-#define     PIVOT_FUNC_AVERAGE      0x0004
-#define     PIVOT_FUNC_MAX          0x0008
-#define     PIVOT_FUNC_MIN          0x0010
-#define     PIVOT_FUNC_PRODUCT      0x0020
-#define     PIVOT_FUNC_COUNT_NUM    0x0040
-#define     PIVOT_FUNC_STD_DEV      0x0080
-#define     PIVOT_FUNC_STD_DEVP     0x0100
-#define     PIVOT_FUNC_STD_VAR      0x0200
-#define     PIVOT_FUNC_STD_VARP     0x0400
-#define     PIVOT_FUNC_AUTO         0x1000
+#define		PIVOT_MAXFUNC			11
+#define		PIVOT_FUNC_NONE			0x0000
+#define     PIVOT_FUNC_SUM			0x0001
+#define		PIVOT_FUNC_COUNT		0x0002
+#define		PIVOT_FUNC_AVERAGE		0x0004
+#define		PIVOT_FUNC_MAX			0x0008
+#define		PIVOT_FUNC_MIN			0x0010
+#define		PIVOT_FUNC_PRODUCT		0x0020
+#define		PIVOT_FUNC_COUNT_NUM	0x0040
+#define		PIVOT_FUNC_STD_DEV		0x0080
+#define		PIVOT_FUNC_STD_DEVP		0x0100
+#define		PIVOT_FUNC_STD_VAR		0x0200
+#define		PIVOT_FUNC_STD_VARP		0x0400
+#define		PIVOT_FUNC_AUTO			0x1000
 
-#define DATA_RENAME_SEPARATOR       "_"
+#define DATA_RENAME_SEPARATOR		"_"
 #define __MAX_NUM_LEN 64
-#define __DECIMALPLACE  18
+#define __DECIMALPLACE	18
 
-#define DP_PROP_COLUMNGRAND         "ColumnGrand"
-#define DP_PROP_FUNCTION            "Function"
-#define DP_PROP_IGNOREEMPTY         "IgnoreEmptyRows"
-#define DP_PROP_ISDATALAYOUT        "IsDataLayoutDimension"
-#define DP_PROP_ISVISIBLE           "IsVisible"
-#define DP_PROP_ORIENTATION         "Orientation"
-#define DP_PROP_REPEATIFEMPTY       "RepeatIfEmpty"
-#define DP_PROP_ROWGRAND            "RowGrand"
-#define DP_PROP_SHOWDETAILS         "ShowDetails"
-#define DP_PROP_SHOWEMPTY           "ShowEmpty"
-#define DP_PROP_SUBTOTALS           "SubTotals"
-#define DP_PROP_USEDHIERARCHY       "UsedHierarchy"
-#define DP_PROP_FILTER              "Filter"
+#define DP_PROP_COLUMNGRAND			"ColumnGrand"
+#define DP_PROP_FUNCTION			"Function"
+#define DP_PROP_IGNOREEMPTY			"IgnoreEmptyRows"
+#define DP_PROP_ISDATALAYOUT		"IsDataLayoutDimension"
+#define DP_PROP_ISVISIBLE			"IsVisible"
+#define DP_PROP_ORIENTATION			"Orientation"
+#define DP_PROP_REPEATIFEMPTY		"RepeatIfEmpty"
+#define DP_PROP_ROWGRAND			"RowGrand"
+#define DP_PROP_SHOWDETAILS			"ShowDetails"
+#define DP_PROP_SHOWEMPTY			"ShowEmpty"
+#define DP_PROP_SUBTOTALS			"SubTotals"
+#define DP_PROP_USEDHIERARCHY		"UsedHierarchy"
+#define DP_PROP_FILTER				"Filter"
 #define DP_PROP_POSITION            "Position"
 
 #define DBG_TRACESTR( x )  \
@@ -114,53 +114,53 @@ public:
 private:
     union
     {
-        ULONG   nNumFormat;
+        ULONG	nNumFormat;
         sal_Int32 mnDatePart;
     };
 
-    String  aString;
-    double  fValue;
-    BYTE    mbFlag;
-    //BOOL  bHasValue: 1 ;
-    //BOOL  bHasData: 1;
-    //BOOL  bErr: 1;
+    String	aString;
+    double	fValue;
+    BYTE	mbFlag;
+    //BOOL	bHasValue: 1 ;
+    //BOOL	bHasData: 1;
+    //BOOL	bErr: 1;
 
     friend class ScDPTableDataCache;
 public:
     ScDPItemData() : nNumFormat( 0 ), fValue(0.0), mbFlag( 0 ){}
     ScDPItemData( ULONG nNF, const String & rS, double fV, BYTE bF ):nNumFormat(nNF), aString(rS), fValue(fV), mbFlag( bF ){}
-    ScDPItemData( const String& rS, double fV = 0.0, BOOL bHV = FALSE, const ULONG nNumFormat = 0 , BOOL bData = TRUE) ;
+    ScDPItemData( const String& rS, double fV = 0.0, BOOL bHV = FALSE, const ULONG nNumFormat = 0 , BOOL bData = TRUE) ;				
     ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nDocTab );
 
-    void        SetString( const String& rS ) { aString = rS; mbFlag &= ~(MK_VAL|MK_DATE); nNumFormat = 0; mbFlag |= MK_DATA; }
-//  void        SetValue ( double value , ULONG nNumFormat = 0 ) { bHasValue = TRUE; nNumFormat = 0;bHasData = TRUE; bDate = FALSE; fValue = value ;}
-    BOOL        IsCaseInsEqual( const ScDPItemData& r ) const;
+    void		SetString( const String& rS ) { aString = rS; mbFlag &= ~(MK_VAL|MK_DATE); nNumFormat = 0; mbFlag |= MK_DATA; }
+//	void		SetValue ( double value , ULONG nNumFormat = 0 ) { bHasValue = TRUE; nNumFormat = 0;bHasData = TRUE; bDate = FALSE; fValue = value ;}
+    BOOL		IsCaseInsEqual( const ScDPItemData& r ) const;
 
-    size_t      Hash() const;
-
+    size_t		Hash() const;
+    
     // exact equality
-    BOOL        operator==( const ScDPItemData& r ) const;
+    BOOL		operator==( const ScDPItemData& r ) const;
     // case insensitive equality
-    static sal_Int32    Compare( const ScDPItemData& rA, const ScDPItemData& rB );
+    static sal_Int32	Compare( const ScDPItemData& rA, const ScDPItemData& rB );
 
 #ifdef DEBUG
-    void    dump() const;
+    void	dump() const;
 #endif
 
 public:
     BOOL IsHasData() const ;
     BOOL IsHasErr() const ;
     BOOL IsValue() const;
-    String  GetString() const ;
-    double  GetValue() const ;
+    String	GetString() const ;
+    double	GetValue() const ;
     ULONG    GetNumFormat() const ;
     BOOL HasStringData() const ;
     BOOL IsDate() const;
     BOOL HasDatePart() const;
     void SetDate( BOOL b ) ;
-
+    
     TypedStrData*  CreateTypeString( );
-    sal_uInt8    GetType() const;
+    sal_uInt8	 GetType() const;
     BYTE & GetFlag() throw() { return mbFlag; }
     const BYTE & GetFlag() const throw() { return const_cast<ScDPItemData*>(this)->GetFlag(); }
 };
@@ -171,7 +171,7 @@ public:
     // construct
     ScDPItemDataPool(void);
     ScDPItemDataPool(const ScDPItemDataPool& r);
-
+    
     virtual ~ScDPItemDataPool(void);
     virtual const ScDPItemData* getData( sal_Int32 nId  );
     virtual sal_Int32 getDataId( const ScDPItemData& aData );
@@ -194,16 +194,16 @@ class ScTabViewShell;
 namespace ScDPGlobal
 {
 // used for core data
-    String GetFieldFuncString( const String& rSourceName, USHORT &rFuncMask, BOOL bIsValue );
+    String GetFieldFuncString( const String& rSourceName, USHORT &rFuncMask, BOOL bIsValue );	
     String GetFuncString( const String &rString, const USHORT nIndex );
     com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> DP_GetMembers( const com::sun::star::uno::Reference<
                                                                                       com::sun::star::sheet::XDimensionsSupplier>&rSrc, long nField );
 // common operation
     String operator + ( const String & rL, const String &rR );
     Rectangle operator *( const Rectangle &rLeft, const std::pair<double,double> & rRight );
-// used for  DataPilot Panel
+// used for  DataPilot Panel 
     ScDPInfoWnd* GetDPInfoWnd( ScTabViewShell *pViewShell );
    bool ChkDPTableOverlap( ScDocument *pDestDoc, std::list<ScDPObject> & rClipboard, SCCOL nClipStartCol, SCROW nClipStartRow, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab, USHORT nEndTab, BOOL bExcludeClip = FALSE );
 
 }
-#endif
+#endif 

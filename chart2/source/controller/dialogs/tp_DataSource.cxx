@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,7 +144,7 @@ OUString lcl_GetSequenceNameForLabel( ::chart::SeriesEntry * pEntry )
 }
 
 static long lcl_pRoleListBoxTabs[] =
-    {   3,        // Number of Tabs
+    {	3,        // Number of Tabs
         0, 0, 75
     };
 
@@ -331,7 +331,7 @@ DataSourceTabPage::DataSourceTabPage(
     m_aEDT_CATEGORIES.SetModifyHdl( LINK( this, DataSourceTabPage, RangeModifiedHdl ));
     m_aEDT_RANGE.SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
     m_aEDT_CATEGORIES.SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
-
+    
     // #i75179# enable setting the background to a different color
     m_aEDT_RANGE.SetStyle( m_aEDT_RANGE.GetStyle() | WB_FORCECTRLBACKGROUND );
     m_aEDT_CATEGORIES.SetStyle( m_aEDT_CATEGORIES.GetStyle() | WB_FORCECTRLBACKGROUND );

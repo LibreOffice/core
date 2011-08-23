@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,12 +97,12 @@ SvXMLImportContext* ScXMLExternalRefTabSourceContext::CreateChildContext(
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 }
 
-/**
- * Make sure the URL is a valid relative URL, mainly to avoid storing
- * absolute URL as relative URL by accident.  For now, we only check the first
- * three characters which are assumed to be always '../', because the relative
- * URL for an external document is always in reference to the content.xml
- * fragment of the original document.
+/** 
+ * Make sure the URL is a valid relative URL, mainly to avoid storing 
+ * absolute URL as relative URL by accident.  For now, we only check the first 
+ * three characters which are assumed to be always '../', because the relative 
+ * URL for an external document is always in reference to the content.xml 
+ * fragment of the original document. 
  */
 static bool lcl_isValidRelativeURL(const OUString& rUrl)
 {
@@ -231,7 +231,7 @@ void ScXMLExternalRefRowContext::EndElement()
 
     for (sal_Int32 i = 1; i < mnRepeatRowCount; ++i)
     {
-        // Performance: duplicates of a non-existent row will still not exist.
+        // Performance: duplicates of a non-existent row will still not exist. 
         // Don't find that out for every cell.
         // External references often are a sparse matrix.
         if (i == 1 && !pTab->hasRow( mrExternalRefInfo.mnRow))

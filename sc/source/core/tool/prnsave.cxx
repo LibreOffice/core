@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 //------------------------------------------------------------------
 
 //
-//      Daten pro Tabelle
+//		Daten pro Tabelle
 //
 
 ScPrintSaverTab::ScPrintSaverTab() :
@@ -88,7 +88,7 @@ BOOL ScPrintSaverTab::operator==( const ScPrintSaverTab& rCmp ) const
 }
 
 //
-//      Daten fuer das ganze Dokument
+//		Daten fuer das ganze Dokument
 //
 
 ScPrintRangeSaver::ScPrintRangeSaver( SCTAB nCount ) :

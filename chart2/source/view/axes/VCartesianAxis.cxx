@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ Reference< drawing::XShape > createSingleLabel(
           , const tNameSequence& rPropNames
           , const tAnySequence& rPropValues
           )
-{
+{   
     if(!rLabel.getLength())
         return 0;
 
@@ -104,7 +104,7 @@ Reference< drawing::XShape > createSingleLabel(
     const double fRotationAnglePi(rAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
     uno::Any aATransformation = ShapeFactory::makeTransformation( rAnchorScreenPosition2D, fRotationAnglePi );
     rtl::OUString aLabel = ShapeFactory::getStackedString( rLabel, rAxisLabelProperties.bStackCharacters );
-
+    
     Reference< drawing::XShape > xShape2DText = ShapeFactory(xShapeFactory)
                     .createText( xTarget, aLabel, rPropNames, rPropValues, aATransformation );
 
@@ -375,7 +375,7 @@ TickInfo* MaxLabelEquidistantTickIter::nextInfo()
                 gotoIndex( nMaxIndex-1 );
         }
     }
-
+    
     return EquidistantTickIter::nextInfo();
 }
 
@@ -584,7 +584,7 @@ bool VCartesianAxis::createTextShapes(
         nLimitedSpaceForText = nScreenDistanceBetweenTicks;
         if( bIsStaggered )
             nLimitedSpaceForText *= 2;
-
+        
         if( nLimitedSpaceForText > 0 )
         { //reduce space for a small amount to have a visible distance between the labels:
             sal_Int32 nReduce = (nLimitedSpaceForText*5)/100;
@@ -602,7 +602,7 @@ bool VCartesianAxis::createTextShapes(
     TickInfo* pPreviousVisibleTickInfo = NULL;
     TickInfo* pPREPreviousVisibleTickInfo = NULL;
     TickInfo* pLastVisibleNeighbourTickInfo = NULL;
-
+    
     //------------------------------------------------
     //prepare properties for multipropertyset-interface of shape
     tNameSequence aPropNames;
@@ -952,12 +952,12 @@ void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, doub
 
                 double fDeltaX = rEnd.getX() - rStart.getX();
                 double fDeltaY = rEnd.getY() - rStart.getY();
-
+                
                 //only those points are candidates which are lying on exactly one wall as these are outer edges
                 tScreenPosAndLogicPosList aPosList;
                 aPosList.push_back( getScreenPosAndLogicPos( fMinX, fYOnYPlane, fZOther ) );
                 aPosList.push_back( getScreenPosAndLogicPos( fMinX, fYOther, fZOnZPlane ) );
-
+                
                 if( fabs(fDeltaY) > fabs(fDeltaX)  )
                 {
                     m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_LEFT;
@@ -1006,12 +1006,12 @@ void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, doub
 
                 double fDeltaX = rEnd.getX() - rStart.getX();
                 double fDeltaY = rEnd.getY() - rStart.getY();
-
+                
                 //only those points are candidates which are lying on exactly one wall as these are outer edges
                 tScreenPosAndLogicPosList aPosList;
                 aPosList.push_back( getScreenPosAndLogicPos( fXOnXPlane, fMinY, fZOther ) );
                 aPosList.push_back( getScreenPosAndLogicPos( fXOther, fMinY, fZOnZPlane ) );
-
+                
                 if( fabs(fDeltaY) > fabs(fDeltaX)  )
                 {
                     m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_LEFT;
@@ -1085,7 +1085,7 @@ void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, doub
                 rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
 
                 double fDeltaX = rEnd.getX() - rStart.getX();
-
+                            
                 //only those points are candidates which are lying on exactly one wall as these are outer edges
                 tScreenPosAndLogicPosList aPosList;
                 aPosList.push_back( getScreenPosAndLogicPos( fXOther, fYOnYPlane, fMinZ ) );
@@ -1140,13 +1140,13 @@ void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, doub
                 m_aAxisProperties.m_fInnerDirectionSign *= -1.0;
             }
 
-            m_aAxisProperties.m_aLabelAlignment =
+            m_aAxisProperties.m_aLabelAlignment = 
                 ( m_aAxisProperties.m_fLabelDirectionSign<0 ) ?
                     LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
 
             if( ( fDeltaY<0 && m_aScale.Orientation == AxisOrientation_REVERSE ) ||
                 ( fDeltaY>0 && m_aScale.Orientation == AxisOrientation_MATHEMATICAL ) )
-                m_aAxisProperties.m_aLabelAlignment =
+                m_aAxisProperties.m_aLabelAlignment = 
                     ( m_aAxisProperties.m_aLabelAlignment==LABEL_ALIGN_RIGHT ) ?
                         LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
         }
@@ -1158,13 +1158,13 @@ void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, doub
                 m_aAxisProperties.m_fInnerDirectionSign *= -1.0;
             }
 
-            m_aAxisProperties.m_aLabelAlignment =
+            m_aAxisProperties.m_aLabelAlignment = 
                 ( m_aAxisProperties.m_fLabelDirectionSign<0 ) ?
                     LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
 
             if( ( fDeltaY<0 && m_aScale.Orientation == AxisOrientation_REVERSE ) ||
                 ( fDeltaY>0 && m_aScale.Orientation == AxisOrientation_MATHEMATICAL ) )
-                m_aAxisProperties.m_aLabelAlignment =
+                m_aAxisProperties.m_aLabelAlignment = 
                     ( m_aAxisProperties.m_aLabelAlignment==LABEL_ALIGN_RIGHT ) ?
                         LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
         }
@@ -1176,13 +1176,13 @@ void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, doub
                 m_aAxisProperties.m_fInnerDirectionSign *= -1.0;
             }
 
-            m_aAxisProperties.m_aLabelAlignment =
+            m_aAxisProperties.m_aLabelAlignment = 
                 ( m_aAxisProperties.m_fLabelDirectionSign<0 ) ?
                     LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
 
             if( ( fDeltaX>0 && m_aScale.Orientation == AxisOrientation_REVERSE ) ||
                 ( fDeltaX<0 && m_aScale.Orientation == AxisOrientation_MATHEMATICAL ) )
-                m_aAxisProperties.m_aLabelAlignment =
+                m_aAxisProperties.m_aLabelAlignment = 
                     ( m_aAxisProperties.m_aLabelAlignment==LABEL_ALIGN_TOP ) ?
                         LABEL_ALIGN_BOTTOM : LABEL_ALIGN_TOP;
         }
@@ -1201,7 +1201,7 @@ TickmarkHelper_2D* VCartesianAxis::createTickmarkHelper2D()
 
     B2DVector aLabelLineStart, aLabelLineEnd;
     this->get2DAxisMainLine( aLabelLineStart, aLabelLineEnd, this->getLogicValueWhereLabelLineCrossesOtherAxis() );
-
+    
     return new TickmarkHelper_2D( m_aScale, m_aIncrement, aStart, aEnd, aLabelLineStart-aStart );
 }
 
@@ -1326,7 +1326,7 @@ void SAL_CALL VCartesianAxis::createLabels()
         //-----------------------------------------
         //'hide' tickmarks with identical screen values in aAllTickInfos
         hideIdenticalScreenValues( m_aAllTickInfos );
-
+        
         removeTextShapesFromTicks();
 
         //create tick mark text shapes
@@ -1363,7 +1363,7 @@ void SAL_CALL VCartesianAxis::createMaximumLabels()
 
     if( !prepareShapeCreation() )
         return;
-
+    
     //-----------------------------------------
     //create labels
     if( m_aAxisProperties.m_bDisplayLabels )
@@ -1455,7 +1455,7 @@ void SAL_CALL VCartesianAxis::updatePositions()
                     //correctPositionForRotation
                     LabelPositionHelper::correctPositionForRotation( xShape2DText
                         , m_aAxisProperties.m_aLabelAlignment, m_aAxisLabelProperties.fRotationAngleDegree, false );
-                }
+                }                
             }
         }
 
@@ -1498,7 +1498,7 @@ void SAL_CALL VCartesianAxis::createShapes()
 {
     if( !prepareShapeCreation() )
         return;
-
+    
     std::auto_ptr< TickmarkHelper_2D > apTickmarkHelper2D( this->createTickmarkHelper2D() );
     TickmarkHelper_2D* pTickmarkHelper2D = apTickmarkHelper2D.get();
     if( !pTickmarkHelper2D )
@@ -1559,7 +1559,7 @@ void SAL_CALL VCartesianAxis::createShapes()
             const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = rAllTickInfos.end();
             if(aDepthIter == aDepthEnd)//no tickmarks at all
                 return;
-
+        
             sal_Int32 nTickmarkPropertiesCount = m_aAxisProperties.m_aTickmarkPropertiesList.size();
             for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount; aDepthIter++, nDepth++ )
                 createTickMarkLineShapes( *aDepthIter, m_aAxisProperties.m_aTickmarkPropertiesList[nDepth], *pTickmarkHelper2D, false /*bOnlyAtLabels*/ );

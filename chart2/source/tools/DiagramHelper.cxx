@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -379,7 +379,7 @@ StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram, b
             eGlobalStackMode = eLocalStackMode;
         }
     }
-
+    
     return eGlobalStackMode;
 }
 
@@ -445,7 +445,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
                         sal_Int32 nAxisIndex = 0;
                         if( nSeriesCount )
                             nAxisIndex = DataSeriesHelper::getAttachedAxisIndex(aSeries[0]);
-
+                        
                         Reference< chart2::XAxis > xAxis(
                             xCorrespondingCoordinateSystem->getAxisByDimension( 1,nAxisIndex ));
                         if( xAxis.is())
@@ -1031,7 +1031,7 @@ Sequence< rtl::OUString > DiagramHelper::getExplicitSimpleCategories(
     if(xChartModel.is())
     {
         uno::Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
-        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, xChartModel );
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, xChartModel ); 
         aRet = aExplicitCategoriesProvider.getSimpleCategories();
     }
     return aRet;
@@ -1174,7 +1174,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                 else
                                     nNewSeriesIndex++;
 
-
+                                
                                 if( nNewSeriesIndex >= 0 && nNewSeriesIndex < aSeriesList.getLength() )
                                 {
                                     //move series in the same charttype
@@ -1317,7 +1317,7 @@ bool DiagramHelper::isPieOrDonutChart( const ::com::sun::star::uno::Reference<
 {
     uno::Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex(
         xDiagram, 0 ) );
-
+    
     if( xChartType .is() )
     {
         rtl::OUString aChartType = xChartType->getChartType();
@@ -1414,7 +1414,7 @@ sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
         nResult = aAvailableMissingValueTreatments[0];
         return nResult;
     }
-
+    
     return nResult;
 }
 
@@ -1471,7 +1471,7 @@ bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >
     aNewPos.Anchor = drawing::Alignment_TOP_LEFT;
     aNewPos.Primary = double(rPosRect.X)/double(aPageSize.Width);
     aNewPos.Secondary = double(rPosRect.Y)/double(aPageSize.Height);
-
+    
     chart2::RelativeSize aNewSize;
     aNewSize.Primary = double(rPosRect.Width)/double(aPageSize.Width);
     aNewSize.Secondary = double(rPosRect.Height)/double(aPageSize.Height);
@@ -1484,7 +1484,7 @@ bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >
         aNewPos.Primary = 1.0 - aNewSize.Primary;
     if( (aNewPos.Secondary + aNewSize.Secondary) > 1.0 )
         aNewPos.Secondary = 1.0 - aNewSize.Secondary;
-
+    
     xDiaProps->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aNewPos) );
     xDiaProps->setPropertyValue( C2U( "RelativeSize" ), uno::makeAny(aNewSize) );
 
@@ -1515,7 +1515,7 @@ awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference
     awt::Size aAbsSize(
         aRelSize.Primary * aPageSize.Width,
         aRelSize.Secondary * aPageSize.Height );
-
+    
     awt::Point aAbsPos(
         static_cast< sal_Int32 >( aRelPos.Primary * aPageSize.Width ),
         static_cast< sal_Int32 >( aRelPos.Secondary * aPageSize.Height ));
@@ -1523,7 +1523,7 @@ awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference
     awt::Point aAbsPosLeftTop = RelativePositionHelper::getUpperLeftCornerOfAnchoredObject( aAbsPos, aAbsSize, aRelPos.Anchor );
 
     aRet = awt::Rectangle(aAbsPosLeftTop.X, aAbsPosLeftTop.Y, aAbsSize.Width, aAbsSize.Height );
-
+    
     return aRet;
 }
 

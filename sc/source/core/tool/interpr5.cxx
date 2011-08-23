@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,35 +67,35 @@ const double fInvEpsilon = 1.0E-7;
 // -----------------------------------------------------------------------
     struct MatrixAdd : public ::std::binary_function<double,double,double>
     {
-        inline double operator() (const double& lhs, const double& rhs) const
+        inline double operator() (const double& lhs, const double& rhs) const 
         {
             return ::rtl::math::approxAdd( lhs,rhs);
         }
     };
     struct MatrixSub : public ::std::binary_function<double,double,double>
     {
-        inline double operator() (const double& lhs, const double& rhs) const
+        inline double operator() (const double& lhs, const double& rhs) const 
         {
             return ::rtl::math::approxSub( lhs,rhs);
         }
     };
     struct MatrixMul : public ::std::binary_function<double,double,double>
     {
-        inline double operator() (const double& lhs, const double& rhs) const
+        inline double operator() (const double& lhs, const double& rhs) const 
         {
             return lhs * rhs;
         }
     };
     struct MatrixDiv : public ::std::binary_function<double,double,double>
     {
-        inline double operator() (const double& lhs, const double& rhs) const
+        inline double operator() (const double& lhs, const double& rhs) const 
         {
             return ScInterpreter::div( lhs,rhs);
         }
     };
     struct MatrixPow : public ::std::binary_function<double,double,double>
     {
-        inline double operator() (const double& lhs, const double& rhs) const
+        inline double operator() (const double& lhs, const double& rhs) const 
         {
             return ::pow( lhs,rhs);
         }
@@ -310,6 +310,9 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR)
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetNewMat" );
     ScMatrix* pMat = new ScMatrix( nC, nR);
     pMat->SetErrorInterpreter( this);
+    // A temporary matrix is mutable and ScMatrix::CloneIfConst() returns the 
+    // very matrix.
+    pMat->SetImmutable( false);
     SCSIZE nCols, nRows;
     pMat->GetDimensions( nCols, nRows);
     if ( nCols != nC || nRows != nR )
@@ -2054,7 +2057,7 @@ void ScInterpreter::ScRGP()
     CalulateRGPRKP(FALSE);
 }
 bool ScInterpreter::CheckMatrix(BOOL _bLOG,BOOL _bTrendGrowth,BYTE& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX,SCSIZE& nRY,SCSIZE& M,SCSIZE& N,ScMatrixRef& pMatX,ScMatrixRef& pMatY)
-{
+{    
     nCX = 0;
     nCY = 0;
     nRX = 0;
@@ -2069,23 +2072,25 @@ bool ScInterpreter::CheckMatrix(BOOL _bLOG,BOOL _bTrendGrowth,BYTE& nCase,SCSIZE
         {
             PushIllegalArgument();
             return false;
-        } // if (!pMatY->IsValue(i))
-    } // for ( SCSIZE i = 0; i < nCountY; i++ )
+        }
+    }
+
     if ( _bLOG )
     {
+        ScMatrixRef pNewY = pMatY->CloneIfConst();
         for (SCSIZE nElem = 0; nElem < nCountY; nElem++)
         {
-            const double fVal = pMatY->GetDouble(nElem);
+            const double fVal = pNewY->GetDouble(nElem);
             if (fVal <= 0.0)
             {
                 PushIllegalArgument();
                 return false;
             }
             else
-                pMatY->PutDouble(log(fVal), nElem);
-        } // for (nElem = 0; nElem < nCountY; nElem++)
-    } // if ( _bRKP )
-
+                pNewY->PutDouble(log(fVal), nElem);
+        }
+        pMatY = pNewY;
+    }
 
     if (pMatX)
     {
@@ -2182,7 +2187,7 @@ void ScInterpreter::CalulateRGPRKP(BOOL _bRKP)
     SCSIZE M = 0, N = 0;
     if ( !CheckMatrix(_bRKP,FALSE,nCase,nCX,nCY,nRX,nRY,M,N,pMatX,pMatY) )
         return;
-
+    
     ScMatrixRef pResMat;
     if (nCase == 1)
     {
@@ -2341,7 +2346,7 @@ void ScInterpreter::CalulateRGPRKP(BOOL _bRKP)
         }
         if ( !Calculate4(_bRKP,pResMat,pQ,bConstant,N,M) )
             return;
-
+        
         if (bStats)
             Calculate(pResMat,pE,pQ,pV,pMatX,bConstant,N,M,nCase);
     }
@@ -2397,7 +2402,7 @@ bool ScInterpreter::Calculate4(BOOL _bExp,ScMatrixRef& pResMat,ScMatrixRef& pQ,B
     {
         if ( !Calculate3(M,pQ) )
             return false;
-
+        
     }
     for (SCSIZE i = 0; i < M+1; i++)
     {
@@ -2585,8 +2590,8 @@ void ScInterpreter::CalculateTrendGrowth(BOOL _bGrowth)
     SCSIZE M = 0, N = 0;
     if ( !CheckMatrix(_bGrowth,TRUE,nCase,nCX,nCY,nRX,nRY,M,N,pMatX,pMatY) )
         return;
-
-
+    
+    
     SCSIZE nCXN, nRXN;
     SCSIZE nCountXN;
     if (!pMatNewX)

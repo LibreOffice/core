@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #ifndef SC_PRIVSPLT_HXX
-#define SC_PRIVSPLT_HXX
+#define	SC_PRIVSPLT_HXX
 
 #include <vcl/ctrl.hxx>
 
@@ -36,47 +36,47 @@ class ScPrivatSplit : public Control
 {
     private:
 
-        Link                aCtrModifiedLink;
-        BOOL                aMovingFlag;
-        Pointer             aWinPointer;
-        SC_SPLIT_DIRECTION  eScSplit;
-        short               nOldX;
-        short               nOldY;
-        short               nNewX;
-        short               nNewY;
-        short               nMinPos;
-        short               nMaxPos;
-        Range               aXMovingRange;
-        Range               aYMovingRange;
-        short               nDeltaX;
-        short               nDeltaY;
+        Link				aCtrModifiedLink;
+        BOOL				aMovingFlag;
+        Pointer				aWinPointer;
+        SC_SPLIT_DIRECTION	eScSplit;
+        short				nOldX;
+        short				nOldY;
+        short				nNewX;
+        short				nNewY;
+        short				nMinPos;
+        short				nMaxPos;
+        Range				aXMovingRange;
+        Range				aYMovingRange;
+        short				nDeltaX;
+        short				nDeltaY;
 
         using Control::ImplInitSettings;
-        void                ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+        void				ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
 
 
 
     protected:
-        virtual void        MouseMove( const MouseEvent& rMEvt );
-        virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void        MouseButtonUp( const MouseEvent& rMEvt);
+        virtual void		MouseMove( const MouseEvent& rMEvt );
+        virtual void		MouseButtonDown( const MouseEvent& rMEvt );
+        virtual void		MouseButtonUp( const MouseEvent& rMEvt);
 
     public:
 
         ScPrivatSplit( Window* pWindow, const ResId& rResId,
                         SC_SPLIT_DIRECTION eScSplit);
 
-        virtual short   GetDeltaX();
-        virtual short   GetDeltaY();
+        virtual short	GetDeltaX();
+        virtual short	GetDeltaY();
 
         virtual void    CtrModified();
 
-        void            SetYRange(Range cRgeY);
+        void			SetYRange(Range cRgeY);
 
-        void            MoveSplitTo(Point aPos);
+        void			MoveSplitTo(Point aPos);
 
-        virtual void    StateChanged( StateChangedType nType );
-        virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+        virtual	void	StateChanged( StateChangedType nType );
+        virtual	void	DataChanged( const DataChangedEvent& rDCEvt );
 
         void            SetCtrModifiedHdl( const Link& rLink ) { aCtrModifiedLink = rLink; }
         const Link&     GetCtrModifiedHdl() const { return aCtrModifiedLink; }

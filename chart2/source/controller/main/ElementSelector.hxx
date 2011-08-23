@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 namespace chart
 {
 //.............................................................................
-
+        
 struct ListBoxEntryData
 {
     rtl::OUString UIName;
@@ -106,13 +106,13 @@ public:
      virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
      // XToolbarController
      virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& Parent ) throw (::com::sun::star::uno::RuntimeException);
-
+    
 private:
     //no default constructor
     ElementSelectorToolbarController(){}
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>        m_xCC;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>		   m_xCC;
     ::std::auto_ptr< SelectorListBox > m_apSelectorListBox;
 };
 

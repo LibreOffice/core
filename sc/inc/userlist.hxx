@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,25 +36,25 @@
 class SC_DLLPUBLIC ScUserListData : public ScDataObject
 {
 friend class ScUserList;
-    String  aStr;
-    USHORT  nTokenCount;
+    String	aStr;
+    USHORT	nTokenCount;
     String* pSubStrings;
     String* pUpperSub;
 
-    SC_DLLPRIVATE void  InitTokens();
+    SC_DLLPRIVATE void	InitTokens();
 
 public:
                     ScUserListData(const String& rStr);
                     ScUserListData(const ScUserListData& rData);
-    virtual         ~ScUserListData();
+    virtual			~ScUserListData();
 
-    virtual ScDataObject*       Clone() const { return new ScUserListData(*this); }
+    virtual	ScDataObject*		Clone() const { return new ScUserListData(*this); }
 
-    const   String&         GetString() const { return aStr; }
-            void            SetString( const String& rStr);
-            USHORT          GetSubCount() const;
-            BOOL            GetSubIndex(const String& rSubStr, USHORT& rIndex) const;
-            String          GetSubStr(USHORT nIndex) const;
+    const	String&			GetString() const { return aStr; }
+            void			SetString( const String& rStr);
+            USHORT			GetSubCount() const;
+            BOOL			GetSubIndex(const String& rSubStr, USHORT& rIndex) const;
+            String			GetSubStr(USHORT nIndex) const;
             StringCompare   Compare(const String& rSubStr1, const String& rSubStr2) const;
             StringCompare   ICompare(const String& rSubStr1, const String& rSubStr2) const;
 };
@@ -66,19 +66,19 @@ public:
                     ScUserList( USHORT nLim = 4, USHORT nDel = 4);
                     ScUserList( const ScUserList& rUserList ) : ScCollection ( rUserList ) {}
 
-    virtual ScDataObject*       Clone() const;
+    virtual	ScDataObject*		Clone() const;
 
-            ScUserListData* GetData( const String& rSubStr ) const;
+            ScUserListData*	GetData( const String& rSubStr ) const;
             /// If the list in rStr is already inserted
             BOOL            HasEntry( const String& rStr ) const;
 
-    inline  ScUserListData* operator[]( const USHORT nIndex) const;
-    inline  ScUserList&     operator= ( const ScUserList& r );
-            BOOL            operator==( const ScUserList& r ) const;
-    inline  BOOL            operator!=( const ScUserList& r ) const;
+    inline	ScUserListData*	operator[]( const USHORT nIndex) const;
+    inline	ScUserList&		operator= ( const ScUserList& r );
+            BOOL			operator==( const ScUserList& r ) const;
+    inline  BOOL			operator!=( const ScUserList& r ) const;
 };
 
-inline  ScUserList& ScUserList::operator=( const ScUserList& r )
+inline	ScUserList& ScUserList::operator=( const ScUserList& r )
     { return (ScUserList&)ScCollection::operator=( r ); }
 
 inline ScUserListData* ScUserList::operator[]( const USHORT nIndex) const

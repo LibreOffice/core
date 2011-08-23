@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,32 +67,32 @@
 
 ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile )
 
-    :   ModalDialog ( pParent, ScResId( RID_SCDLG_INSERT_TABLE ) ),
+    :	ModalDialog ( pParent, ScResId( RID_SCDLG_INSERT_TABLE ) ),
         //
-        aBtnBefore      ( this, ScResId( RB_BEFORE ) ),
-        aBtnBehind      ( this, ScResId( RB_BEHIND ) ),
-        aFlPos          ( this, ScResId( FL_POSITION ) ),
-        aBtnNew         ( this, ScResId( RB_NEW ) ),
+        aBtnBefore		( this, ScResId( RB_BEFORE ) ),
+        aBtnBehind		( this, ScResId( RB_BEHIND ) ),
+        aFlPos			( this, ScResId( FL_POSITION ) ),
+        aBtnNew   		( this, ScResId( RB_NEW ) ),
         aBtnFromFile    ( this, ScResId( RB_FROMFILE ) ),
-        aFtCount        ( this, ScResId( FT_COUNT ) ),
-        aNfCount        ( this, ScResId( NF_COUNT ) ),
-        aFtName         ( this, ScResId( FT_NAME ) ),
-        aEdName         ( this, ScResId( ED_TABNAME ) ),
-        aLbTables       ( this, ScResId( LB_TABLES ) ),
-        aFtPath         ( this, ScResId( FT_PATH ) ),
-        aBtnBrowse      ( this, ScResId( BTN_BROWSE ) ),
-        aBtnLink        ( this, ScResId( CB_LINK ) ),
-        aFlTable        ( this, ScResId( FL_TABLE ) ),
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-        rViewData       ( rData ),
-        rDoc            ( *rData.GetDocument() ),
-        pDocShTables    ( NULL ),
+        aFtCount		( this, ScResId( FT_COUNT ) ),
+        aNfCount		( this, ScResId( NF_COUNT ) ),
+        aFtName			( this, ScResId( FT_NAME ) ),
+        aEdName			( this, ScResId( ED_TABNAME ) ),
+        aLbTables		( this, ScResId( LB_TABLES ) ),
+        aFtPath			( this, ScResId( FT_PATH ) ),
+        aBtnBrowse		( this, ScResId( BTN_BROWSE ) ),
+        aBtnLink		( this, ScResId( CB_LINK ) ),
+        aFlTable    	( this, ScResId( FL_TABLE ) ),
+        aBtnOk			( this, ScResId( BTN_OK ) ),
+        aBtnCancel		( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp		( this, ScResId( BTN_HELP ) ),
+        rViewData		( rData ),
+        rDoc			( *rData.GetDocument() ),
+        pDocShTables	( NULL ),
         pDocInserter    ( NULL ),
         bMustClose      ( false ),
-        nSelTabIndex    ( 0 ),
-        nTableCount     (nTabCount)
+        nSelTabIndex	( 0 ),
+        nTableCount		(nTabCount)
 {
 #if ENABLE_LAYOUT
     SetHelpId (SID_INSERT_TABLE);
@@ -115,12 +115,12 @@ __EXPORT ScInsertTableDlg::~ScInsertTableDlg()
 
 void ScInsertTableDlg::Init_Impl( bool bFromFile )
 {
-    aBtnBrowse      .SetClickHdl( LINK( this, ScInsertTableDlg, BrowseHdl_Impl ) );
-    aBtnNew         .SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
-    aBtnFromFile    .SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
-    aLbTables       .SetSelectHdl( LINK( this, ScInsertTableDlg, SelectHdl_Impl ) );
-    aNfCount        .SetModifyHdl( LINK( this, ScInsertTableDlg, CountHdl_Impl));
-    aBtnOk          .SetClickHdl( LINK( this, ScInsertTableDlg, DoEnterHdl ));
+    aBtnBrowse		.SetClickHdl( LINK( this, ScInsertTableDlg, BrowseHdl_Impl ) );
+    aBtnNew			.SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
+    aBtnFromFile	.SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
+    aLbTables		.SetSelectHdl( LINK( this, ScInsertTableDlg, SelectHdl_Impl ) );
+    aNfCount		.SetModifyHdl( LINK( this, ScInsertTableDlg, CountHdl_Impl));
+    aBtnOk			.SetClickHdl( LINK( this, ScInsertTableDlg, DoEnterHdl ));
     aBtnBefore.Check();
 
     aNfCount.SetText( String::CreateFromInt32(nTableCount) );
@@ -172,7 +172,7 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
 short __EXPORT ScInsertTableDlg::Execute()
 {
     // set Parent of DocumentInserter and Doc-Manager
-    Window* pOldDefParent = Application::GetDefDialogParent();
+    Window*	pOldDefParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( LAYOUT_THIS_WINDOW (this) );
 
     if ( aBtnFromFile.IsChecked() )
@@ -189,12 +189,12 @@ void ScInsertTableDlg::SetNewTable_Impl()
 {
     if (aBtnNew.IsChecked() )
     {
-        aNfCount    .Enable();
-        aFtCount    .Enable();
-        aLbTables   .Disable();
-        aFtPath     .Disable();
-        aBtnBrowse  .Disable();
-        aBtnLink    .Disable();
+        aNfCount	.Enable();
+        aFtCount	.Enable();
+        aLbTables	.Disable();
+        aFtPath		.Disable();
+        aBtnBrowse	.Disable();
+        aBtnLink	.Disable();
 
         if(nTableCount==1)
         {
@@ -210,14 +210,14 @@ void ScInsertTableDlg::SetFromTo_Impl()
 {
     if (aBtnFromFile.IsChecked() )
     {
-        aEdName     .Disable();
-        aFtName     .Disable();
-        aFtCount    .Disable();
-        aNfCount    .Disable();
-        aLbTables   .Enable();
-        aFtPath     .Enable();
-        aBtnBrowse  .Enable();
-        aBtnLink    .Enable();
+        aEdName		.Disable();
+        aFtName		.Disable();
+        aFtCount	.Disable();
+        aNfCount	.Disable();
+        aLbTables	.Enable();
+        aFtPath		.Enable();
+        aBtnBrowse	.Enable();
+        aBtnLink	.Enable();
     }
 }
 

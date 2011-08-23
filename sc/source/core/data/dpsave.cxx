@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,16 +80,16 @@ using ::std::auto_ptr;
 
 // -----------------------------------------------------------------------
 
-#define SC_DPSAVEMODE_NO        0
-#define SC_DPSAVEMODE_YES       1
-#define SC_DPSAVEMODE_DONTKNOW  2
+#define SC_DPSAVEMODE_NO		0
+#define SC_DPSAVEMODE_YES		1
+#define SC_DPSAVEMODE_DONTKNOW	2
 
 // -----------------------------------------------------------------------
 
 void lcl_SetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
                             const rtl::OUString& rName, sal_Bool bValue )
 {
-    //! move to ScUnoHelpFunctions?
+    //!	move to ScUnoHelpFunctions?
 
     xProp->setPropertyValue( rName, uno::Any( &bValue, getBooleanCppuType() ) );
 }
@@ -120,8 +120,8 @@ ScDPSaveMember::~ScDPSaveMember()
 
 BOOL ScDPSaveMember::operator== ( const ScDPSaveMember& r ) const
 {
-    if ( aName            != r.aName            ||
-         nVisibleMode     != r.nVisibleMode     ||
+    if ( aName			  != r.aName 			||
+         nVisibleMode	  != r.nVisibleMode		||
          nShowDetailsMode != r.nShowDetailsMode )
         return FALSE;
 
@@ -286,18 +286,18 @@ ScDPSaveDimension::~ScDPSaveDimension()
 
 BOOL ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
 {
-    if ( aName            != r.aName            ||
-         bIsDataLayout    != r.bIsDataLayout    ||
-         bDupFlag         != r.bDupFlag         ||
-         nOrientation     != r.nOrientation     ||
-         nFunction        != r.nFunction        ||
+    if ( aName			  != r.aName			||
+         bIsDataLayout    != r.bIsDataLayout	||
+         bDupFlag		  != r.bDupFlag			||
+         nOrientation	  != r.nOrientation		||
+         nFunction		  != r.nFunction		||
          nUsedHierarchy   != r.nUsedHierarchy   ||
          nShowEmptyMode   != r.nShowEmptyMode   ||
          bSubTotalDefault != r.bSubTotalDefault ||
          nSubTotalCount   != r.nSubTotalCount )
         return FALSE;
 
-    if ( nSubTotalCount && ( !pSubTotalFuncs || !r.pSubTotalFuncs ) )   // should not happen
+    if ( nSubTotalCount && ( !pSubTotalFuncs || !r.pSubTotalFuncs ) )	// should not happen
         return FALSE;
 
     long i;
@@ -606,8 +606,8 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
             ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_FIELD_SUBTOTALNAME, *pSubTotalName);
     }
 
-    //  Level loop outside of maMemberList loop
-    //  because SubTotals have to be set independently of known members
+    //	Level loop outside of maMemberList loop
+    //	because SubTotals have to be set independently of known members
 
     long nCount = maMemberHash.size();
 
@@ -803,11 +803,11 @@ ScDPSaveData& ScDPSaveData::operator= ( const ScDPSaveData& r )
 BOOL ScDPSaveData::operator== ( const ScDPSaveData& r ) const
 {
     if ( nColumnGrandMode != r.nColumnGrandMode ||
-         nRowGrandMode    != r.nRowGrandMode    ||
+         nRowGrandMode    != r.nRowGrandMode	||
          nIgnoreEmptyMode != r.nIgnoreEmptyMode ||
          nRepeatEmptyMode != r.nRepeatEmptyMode ||
          bFilterButton    != r.bFilterButton    ||
-         mnCacheId        != r.mnCacheId ||/// Wang Xu Ming -- 2009-6-18 DataPilot Migration
+         mnCacheId		  != r.mnCacheId ||/// Wang Xu Ming -- 2009-6-18 DataPilot Migration
          bDrillDown       != r.bDrillDown ||
          mbDimensionMembersBuilt != r.mbDimensionMembersBuilt)
         return FALSE;
@@ -881,7 +881,7 @@ ScDPSaveDimension* ScDPSaveData::GetExistingDimensionByName(const String& rName)
         if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
             return pDim;
     }
-    return NULL;        // don't create new
+    return NULL;		// don't create new
 }
 
 ScDPSaveDimension* ScDPSaveData::GetNewDimensionByName(const String& rName)
@@ -923,8 +923,8 @@ ScDPSaveDimension* ScDPSaveData::GetExistingDataLayoutDimension() const
 
 ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const String& rName)
 {
-    //  always insert new
-    //! check if dimension is there?
+    //	always insert new
+    //!	check if dimension is there?
 
     ScDPSaveDimension* pOld = GetDimensionByName( rName );
     ScDPSaveDimension* pNew = new ScDPSaveDimension( *pOld );
@@ -1001,12 +1001,12 @@ long ScDPSaveData::GetDataDimensionCount() const
 
 void ScDPSaveData::SetPosition( ScDPSaveDimension* pDim, long nNew )
 {
-    //  position (nNew) is counted within dimensions of the same orientation
+    //	position (nNew) is counted within dimensions of the same orientation
 
     USHORT nOrient = pDim->GetOrientation();
 
     aDimList.Remove( pDim );
-    ULONG nCount = aDimList.Count();        // after remove
+    ULONG nCount = aDimList.Count();		// after remove
 
     ULONG nInsPos = 0;
     while ( nNew > 0 && nInsPos < nCount )
@@ -1074,14 +1074,14 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
     if (!xSource.is())
         return;
 
-    //  source options must be first!
+    //	source options must be first!
 
     uno::Reference<beans::XPropertySet> xSourceProp( xSource, uno::UNO_QUERY );
     DBG_ASSERT( xSourceProp.is(), "no properties at source" );
     if ( xSourceProp.is() )
     {
-        //  source options are not available for external sources
-        //! use XPropertySetInfo to test for availability?
+        //	source options are not available for external sources
+        //!	use XPropertySetInfo to test for availability?
 
         try
         {
@@ -1105,9 +1105,9 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
     // exceptions in the other calls are errors
     try
     {
-        //  reset all orientations
-        //! "forgetSettings" or similar at source ?????
-        //! reset all duplicated dimensions, or reuse them below !!!
+        //	reset all orientations
+        //!	"forgetSettings" or similar at source ?????
+        //!	reset all duplicated dimensions, or reuse them below !!!
         DBG_TRACE( "ScDPSaveData::WriteToSource" );
 
         lcl_ResetOrient( xSource );
@@ -1119,10 +1119,10 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
             rtl::OUString aName = pDim->GetName();
 
             DBG_TRACESTR(pDim->GetName());
-
+            
             BOOL bData = pDim->IsDataLayout();
 
-            //! getByName for ScDPSource, including DataLayoutDimension !!!!!!!!
+            //!	getByName for ScDPSource, including DataLayoutDimension !!!!!!!!
 
             uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
             uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
@@ -1138,7 +1138,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                     {
                         bFound = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
                                     rtl::OUString::createFromAscii(DP_PROP_ISDATALAYOUT) );
-                        //! error checking -- is "IsDataLayoutDimension" property required??
+                        //!	error checking -- is "IsDataLayoutDimension" property required??
                     }
                 }
                 else
@@ -1155,8 +1155,8 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                         String aNewName = pDim->GetName();
 
                         // different name for each duplication of a (real) dimension...
-                        for (long j=0; j<=i; j++)   //! Test !!!!!!
-                            aNewName += '*';        //! modify name at creation of SaveDimension
+                        for (long j=0; j<=i; j++)	//! Test !!!!!!
+                            aNewName += '*';		//! modify name at creation of SaveDimension
 
                         uno::Reference<util::XCloneable> xCloneable( xIntDim, uno::UNO_QUERY );
                         DBG_ASSERT( xCloneable.is(), "cannot clone dimension" );
@@ -1203,7 +1203,7 @@ BOOL ScDPSaveData::IsEmpty() const
         if ( pDim->GetOrientation() != sheet::DataPilotFieldOrientation_HIDDEN && !pDim->IsDataLayout() )
             return FALSE;
     }
-    return TRUE;    // no entries that are not hidden
+    return TRUE;	// no entries that are not hidden
 }
 
 ScDPDimensionSaveData* ScDPSaveData::GetDimensionData()
@@ -1346,13 +1346,13 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
             return;
 
         SCCOL nSrcDim = pCache->GetDimensionIndex( GetName() );
-
+      
         if ( nSrcDim == -1 )
             return;
         if ( pSelectedPage )
         {//check pSelected page
             DBG_TRACESTR( (*pSelectedPage) );
-            if ( pCache->GetIdByItemData( nSrcDim, *pSelectedPage ) == -1 )
+            if ( pCache->GetIdByItemData( nSrcDim, *pSelectedPage ) == -1 ) 
             {
                 delete pSelectedPage;
                 pSelectedPage = NULL;
@@ -1361,8 +1361,8 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
         };
 
         if ( pReferenceValue && pReferenceValue->ReferenceItemType == DataPilotFieldReferenceItemType::NAMED )
-        {//check pReferenceValue
-#ifdef DEBUG
+        {//check pReferenceValue 
+#ifdef DEBUG 
             switch( pReferenceValue->ReferenceType)
             {
             case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE: //both
@@ -1398,7 +1398,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
                         { //running total has not reference item
                             const String& sReferenceItemName = pReferenceValue->ReferenceItemName;
                             DBG_TRACESTR( sReferenceItemName );
-                            if ( pCache->GetIdByItemData( nRefDim, sReferenceItemName ) == -1 )
+                            if ( pCache->GetIdByItemData( nRefDim, sReferenceItemName ) == -1 ) 
                                 bValid = false;
                         }
                         if ( !bValid )
@@ -1421,7 +1421,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
                 const String& sFieldDimName = pSortInfo->Field;
                 std::list<String>::const_iterator iter = std::find( deletedDims.begin(), deletedDims.end(), sFieldDimName );
                 if ( iter != deletedDims.end() && pCache->GetDimensionIndex( sFieldDimName ) == -1  )
-                {
+                { 
                     pSortInfo->Mode = DataPilotFieldSortMode::MANUAL;
                     pSortInfo->Field = GetName();
                 }
@@ -1434,7 +1434,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
             const String& sFieldDimName = pAutoShowInfo->DataField;
             std::list<String>::const_iterator iter = std::find( deletedDims.begin(), deletedDims.end(), sFieldDimName );
             if ( iter != deletedDims.end() && pCache->GetDimensionIndex( sFieldDimName ) == -1  )
-            {
+            { 
                 delete pAutoShowInfo;
                 pAutoShowInfo = NULL;
             }
@@ -1446,10 +1446,10 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
         for (MemberList::iterator i=maMemberList.begin(); i != maMemberList.end() ; )
         {
             rtl::OUString aMemberName = (*i)->GetName();
-            if ( pCache->GetIdByItemData( nSrcDim, aMemberName ) == -1 )
+            if ( pCache->GetIdByItemData( nSrcDim, aMemberName ) == -1 ) 
                 i = maMemberList.erase( i );
             else
-                i++;
+                i++;      
         }
     }
 }
@@ -1460,15 +1460,15 @@ bool operator == (const ::com::sun::star::sheet::DataPilotFieldSortInfo &l, cons
 }
 bool operator == (const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo &l, const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo &r )
 {
-    return l.IsEnabled == r.IsEnabled &&
-        l.ShowItemsMode == r.ShowItemsMode &&
+    return l.IsEnabled == r.IsEnabled && 
+        l.ShowItemsMode == r.ShowItemsMode && 
         l.ItemCount == r.ItemCount &&
         l.DataField == r.DataField;
 }
 bool operator == (const ::com::sun::star::sheet::DataPilotFieldReference &l, const ::com::sun::star::sheet::DataPilotFieldReference &r )
 {
-    return l.ReferenceType == r.ReferenceType &&
-        l.ReferenceField == r.ReferenceField &&
+    return l.ReferenceType == r.ReferenceType && 
+        l.ReferenceField == r.ReferenceField && 
         l.ReferenceItemType == r.ReferenceItemType &&
         l.ReferenceItemName == r.ReferenceItemName;
 }

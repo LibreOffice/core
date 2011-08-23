@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -301,7 +301,7 @@ void ScScenarioWindow::SetSizePixel( const Size& rNewSize )
     aLbScenario.SetSizePixel( aSize );
 
     aSize.Height() -= 4;
-    aEdComment.SetPosSizePixel( Point( 0, nHeight+4 ), aSize );
+    aEdComment.SetPosSizePixel(	Point( 0, nHeight+4 ), aSize );
 }
 
 

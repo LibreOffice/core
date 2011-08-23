@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,12 +79,12 @@ BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xSt
     BOOL bRet = SfxObjectShell::InitNew( xStor );
 
     aDocument.MakeTable(0);
-    //  zusaetzliche Tabellen werden von der ersten View angelegt,
-    //  wenn bIsEmpty dann noch TRUE ist
+    //	zusaetzliche Tabellen werden von der ersten View angelegt,
+    //	wenn bIsEmpty dann noch TRUE ist
 
     if( bRet )
     {
-        Size aSize( (long) ( STD_COL_WIDTH           * HMM_PER_TWIPS * OLE_STD_CELLS_X ),
+        Size aSize( (long) ( STD_COL_WIDTH			 * HMM_PER_TWIPS * OLE_STD_CELLS_X ),
                     (long) ( ScGlobal::nStdRowHeight * HMM_PER_TWIPS * OLE_STD_CELLS_Y ) );
         // hier muss auch der Start angepasst werden
         SetVisAreaOrSize( Rectangle( Point(), aSize ), TRUE );
@@ -98,7 +98,7 @@ BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xSt
     aDocument.GetStyleSheetPool()->CreateStandardStyles();
     aDocument.UpdStlShtPtrsFrmNms();
 
-    //  SetDocumentModified ist in Load/InitNew nicht mehr erlaubt!
+    //	SetDocumentModified ist in Load/InitNew nicht mehr erlaubt!
 
     InitItems();
     CalcOutputFactor();
@@ -108,14 +108,14 @@ BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xSt
         aArgs[ 0 ] <<= GetModel();
     aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
     GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
-        // Fake ThisComponent being setup by Activate ( which is a view
-        // related thing ),
+        // Fake ThisComponent being setup by Activate ( which is a view 
+        // related thing ), 
         //  a) if another document is opened then in theory  ThisComponent
-        //     will be reset as before,
+        //     will be reset as before, 
         //  b) when this document is  'really' Activated then ThisComponent
         //     again will be set as before
         // The only wrinkle seems if this document is loaded 'InVisible'
-        // but.. I don't see that this is possible from the vba API
+        // but.. I don't see that this is possible from the vba API 
         // I could be wrong though
         // There may be implications setting the current component
         // too early :-/ so I will just manually set the Basic Variables
@@ -149,7 +149,7 @@ void ScDocShell::InitItems()
     // if ( pImpl->pFontList )
     //  delete pImpl->pFontList;
 
-    //  Druck-Optionen werden beim Drucken und evtl. in GetPrinter gesetzt
+    //	Druck-Optionen werden beim Drucken und evtl. in GetPrinter gesetzt
 
     // pImpl->pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
     //PutItem( SvxFontListItem( pImpl->pFontList, SID_ATTR_CHAR_FONTLIST ) );
@@ -165,23 +165,23 @@ void ScDocShell::InitItems()
         PutItem( SvxDashListItem    ( pDrawLayer->GetDashList(), SID_DASH_LIST ) );
         PutItem( SvxLineEndListItem ( pDrawLayer->GetLineEndList(), SID_LINEEND_LIST ) );
 
-            //  andere Anpassungen nach dem Anlegen des DrawLayers
+            //	andere Anpassungen nach dem Anlegen des DrawLayers
 
         pDrawLayer->SetNotifyUndoActionHdl( LINK( pDocFunc, ScDocFunc, NotifyDrawUndo ) );
 
         //if (SfxObjectShell::HasSbxObject())
-        pDrawLayer->UpdateBasic();          // DocShell-Basic in DrawPages setzen
+        pDrawLayer->UpdateBasic();			// DocShell-Basic in DrawPages setzen
     }
     else
     {
-        //  always use global color table instead of local copy
+        //	always use global color table instead of local copy
         PutItem( SvxColorTableItem( XColorTable::GetStdColorTable(), SID_COLOR_TABLE ) );
     }
 
     if ( !aDocument.GetForbiddenCharacters().isValid() ||
             !aDocument.IsValidAsianCompression() || !aDocument.IsValidAsianKerning() )
     {
-        //  get settings from SvxAsianConfig
+        //	get settings from SvxAsianConfig
         SvxAsianConfig aAsian( sal_False );
 
         if ( !aDocument.GetForbiddenCharacters().isValid() )
@@ -217,7 +217,7 @@ void ScDocShell::InitItems()
         if ( !aDocument.IsValidAsianKerning() )
         {
             // set asian punctuation kerning from configuration if not already set (e.g. XML import)
-            aDocument.SetAsianKerning( !aAsian.IsKerningWesternTextOnly() );    // reversed
+            aDocument.SetAsianKerning( !aAsian.IsKerningWesternTextOnly() );	// reversed
         }
     }
 }
@@ -254,7 +254,7 @@ ScDrawLayer* ScDocShell::MakeDrawLayer()
 
         aDocument.InitDrawLayer(this);
         pDrawLayer = aDocument.GetDrawLayer();
-        InitItems();                                            // incl. Undo und Basic
+        InitItems();											// incl. Undo und Basic
         Broadcast( SfxSimpleHint( SC_HINT_DRWLAYER_NEW ) );
         if (nDocumentLock)
             pDrawLayer->setLock(TRUE);

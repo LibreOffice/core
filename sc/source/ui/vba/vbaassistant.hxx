@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ private:
 public:
     ScVbaAssistant( const css::uno::Reference< ov::XHelperInterface > xParent, const css::uno::Reference< css::uno::XComponentContext > xContext );
     virtual ~ScVbaAssistant();
-    // XAssistant
+    // XAssistant 
     virtual sal_Bool SAL_CALL getOn() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setOn( sal_Bool _on ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,14 +42,14 @@ class ScXMLSortContext : public SvXMLImportContext
 
     com::sun::star::uno::Sequence <com::sun::star::util::SortField> aSortFields;
     com::sun::star::table::CellAddress aOutputPosition;
-    rtl::OUString   sCountry;
-    rtl::OUString   sLanguage;
-    rtl::OUString   sAlgorithm;
-    sal_Int16   nUserListIndex;
-    sal_Bool    bCopyOutputData;
-    sal_Bool    bBindFormatsToContent;
-    sal_Bool    bIsCaseSensitive;
-    sal_Bool    bEnabledUserList;
+    rtl::OUString	sCountry;
+    rtl::OUString	sLanguage;
+    rtl::OUString	sAlgorithm;
+    sal_Int16	nUserListIndex;
+    sal_Bool	bCopyOutputData;
+    sal_Bool	bBindFormatsToContent;
+    sal_Bool	bIsCaseSensitive;
+    sal_Bool	bEnabledUserList;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -78,9 +78,9 @@ class ScXMLSortByContext : public SvXMLImportContext
 {
     ScXMLSortContext* pSortContext;
 
-    rtl::OUString   sFieldNumber;
-    rtl::OUString   sDataType;
-    rtl::OUString   sOrder;
+    rtl::OUString	sFieldNumber;
+    rtl::OUString	sDataType;
+    rtl::OUString	sOrder;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

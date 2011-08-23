@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData );
 class ScAddInAsync;
 typedef ScAddInAsync* ScAddInAsyncPtr;
 SV_DECL_PTRARR_SORT( ScAddInAsyncs, ScAddInAsyncPtr, 4, 4 )
-extern ScAddInAsyncs theAddInAsyncTbl;  // in adiasync.cxx
+extern ScAddInAsyncs theAddInAsyncTbl;	// in adiasync.cxx
 
 class ScDocument;
 typedef ScDocument* ScAddInDocPtr;
@@ -54,14 +54,14 @@ class ScAddInAsync : public SvtBroadcaster
 private:
     union
     {
-        double      nVal;               // aktueller Wert
-        String*     pStr;
+        double		nVal;				// aktueller Wert
+        String*		pStr;
     };
-    ScAddInDocs*    pDocs;              // Liste der benutzenden Dokumente
-    FuncData*       pFuncData;          // Zeiger auf die Daten in der Collection
-    ULONG           nHandle;            // wird von double auf ULONG gecasted
-    ParamType       eType;              // PTR_DOUBLE oder PTR_STRING Ergebnis
-    BOOL            bValid;             // ob Wert gueltig
+    ScAddInDocs*	pDocs;				// Liste der benutzenden Dokumente
+    FuncData* 		pFuncData;			// Zeiger auf die Daten in der Collection
+    ULONG			nHandle;			// wird von double auf ULONG gecasted
+    ParamType		eType;				// PTR_DOUBLE oder PTR_STRING Ergebnis
+    BOOL			bValid;				// ob Wert gueltig
 
 public:
                     // cTor nur wenn ScAddInAsync::Get fehlschlaegt!
@@ -70,17 +70,17 @@ public:
                                     ScDocument* pDoc );
                     // default-cTor nur fuer das eine globale aSeekObj !!!
                     ScAddInAsync();
-    virtual         ~ScAddInAsync();
-    static ScAddInAsync*    Get( ULONG nHandle );
-    static void     CallBack( ULONG nHandle, void* pData );
-    static void     RemoveDocument( ScDocument* pDocument );
-    BOOL            IsValid() const         { return bValid; }
-    ParamType       GetType() const         { return eType; }
-    double          GetValue() const        { return nVal; }
-    const String&   GetString() const       { return *pStr; }
-    BOOL            HasDocument( ScDocument* pDoc ) const
+    virtual			~ScAddInAsync();
+    static ScAddInAsync*	Get( ULONG nHandle );
+    static void		CallBack( ULONG nHandle, void* pData );
+    static void		RemoveDocument( ScDocument* pDocument );
+    BOOL			IsValid() const			{ return bValid; }
+    ParamType		GetType() const			{ return eType; }
+    double			GetValue() const		{ return nVal; }
+    const String&	GetString() const		{ return *pStr; }
+    BOOL			HasDocument( ScDocument* pDoc ) const
                         { return pDocs->Seek_Entry( pDoc ); }
-    void            AddDocument( ScDocument* pDoc ) { pDocs->Insert( pDoc ); }
+    void			AddDocument( ScDocument* pDoc ) { pDocs->Insert( pDoc ); }
 
     // Vergleichsoperatoren fuer PtrArrSort
     BOOL operator < ( const ScAddInAsync& r ) { return nHandle <  r.nHandle; }

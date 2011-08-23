@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@
 static const sal_Char pStrFix[] = "FIX";
 
 //------------------------------------------------------------------------
-//  Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
-//  darum ab Version 336 Komma stattdessen
+//	Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
+//	darum ab Version 336 Komma stattdessen
 
 
 ScImportOptions::ScImportOptions( const String& rStr )
@@ -54,8 +54,8 @@ ScImportOptions::ScImportOptions( const String& rStr )
         else
             nFieldSepCode = (sal_Unicode) aToken.ToInt32();
         nTextSepCode  = (sal_Unicode) rStr.GetToken(1,',').ToInt32();
-        aStrFont      = rStr.GetToken(2,',');
-        eCharSet      = ScGlobal::GetCharsetValue(aStrFont);
+        aStrFont	  = rStr.GetToken(2,',');
+        eCharSet	  = ScGlobal::GetCharsetValue(aStrFont);
         bSaveAsShown  = (rStr.GetToken( 3, ',' ).ToInt32() ? TRUE : FALSE);
     }
 }
@@ -64,7 +64,7 @@ ScImportOptions::ScImportOptions( const String& rStr )
 
 String ScImportOptions::BuildString() const
 {
-    String  aResult;
+    String	aResult;
 
     if( bFixedWidth )
         aResult.AppendAscii( pStrFix );
