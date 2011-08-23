@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -211,7 +211,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
             if( xInit.is() )
             {
                 uno::Reference< awt::XWindow > xDialogParentWindow(0);
-                //  initialize dialog
+                //	initialize dialog
                 uno::Sequence<uno::Any> aSeq(2);
                 uno::Any* pArray = aSeq.getArray();
                 beans::PropertyValue aParam1;

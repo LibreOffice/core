@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,7 +104,7 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 
 
-#define DOCUMENT_BUFFER_SIZE    (USHORT)32768
+#define DOCUMENT_BUFFER_SIZE	(USHORT)32768
 
 static const char __FAR_DATA pStarMathDoc[] = "StarMathDocument";
 
@@ -131,7 +131,7 @@ void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
     {
         case HINT_FORMATCHANGED:
             SetFormulaArranged(FALSE);
-
+            
             nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
 
             Repaint();
@@ -264,7 +264,7 @@ void SmDocShell::ArrangeFormula()
     //! Nur f�r die Dauer der Existenz dieses Objekts sind am Drucker die
     //! richtigen Einstellungen garantiert.
     SmPrinterAccess  aPrtAcc(*this);
-//  OutputDevice    *pOutDev = aPrtAcc.GetPrinter();
+//	OutputDevice	*pOutDev = aPrtAcc.GetPrinter();
     OutputDevice* pOutDev = aPrtAcc.GetRefDev();
 
     if (!pOutDev)
@@ -422,7 +422,7 @@ EditEngine& SmDocShell::GetEditEngine()
 
         // forces new settings to be used if the itempool was modified
         // after cthe creation of the EditEngine
-        //pEditEngine->Clear(); //#77957 incorrect font size
+        //pEditEngine->Clear();	//#77957 incorrect font size
     }
     return *pEditEngine;
 }
@@ -458,7 +458,7 @@ void SmDocShell::Draw(OutputDevice &rDev, Point &rPosition)
     //angepasst werden.
 
     rPosition.X() += aFormat.GetDistance( DIS_LEFTSPACE );
-    rPosition.Y() += aFormat.GetDistance( DIS_TOPSPACE  );
+    rPosition.Y() += aFormat.GetDistance( DIS_TOPSPACE	);
 
     //! in case of high contrast-mode (accessibility option!)
     //! the draw mode needs to be set to default, because when imbedding
@@ -608,11 +608,11 @@ Printer* SmDocShell::GetPrt()
     {
         SfxItemSet *pOptions =
             new SfxItemSet(GetPool(),
-                           SID_PRINTSIZE,       SID_PRINTSIZE,
-                           SID_PRINTZOOM,       SID_PRINTZOOM,
-                           SID_PRINTTITLE,      SID_PRINTTITLE,
-                           SID_PRINTTEXT,       SID_PRINTTEXT,
-                           SID_PRINTFRAME,      SID_PRINTFRAME,
+                           SID_PRINTSIZE,		SID_PRINTSIZE,
+                           SID_PRINTZOOM,		SID_PRINTZOOM,
+                           SID_PRINTTITLE,		SID_PRINTTITLE,
+                           SID_PRINTTEXT,		SID_PRINTTEXT,
+                           SID_PRINTFRAME,		SID_PRINTFRAME,
                            SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
                            0);
 
@@ -644,7 +644,7 @@ void SmDocShell::SetPrinter( SfxPrinter *pNew )
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetPrinter" );
 
     delete pPrinter;
-    pPrinter = pNew;    //Eigentumsuebergang!
+    pPrinter = pNew;	//Eigentumsuebergang!
     pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
     SetFormulaArranged(FALSE);
     Repaint();
@@ -686,13 +686,13 @@ void SmDocShell::Repaint()
 
 SmDocShell::SmDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     SfxObjectShell( i_nSfxCreationFlags ),
-    pTree               ( 0 ),
+    pTree				( 0 ),
     pEditEngineItemPool ( 0 ),
     pEditEngine         ( 0 ),
-    pPrinter            ( 0 ),
+    pPrinter			( 0 ),
     pTmpPrinter         ( 0 ),
-    nModifyCount        ( 0 ),
-    bIsFormulaArranged  ( FALSE )
+    nModifyCount		( 0 ),
+    bIsFormulaArranged	( FALSE )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SmDocShell" );
 
@@ -738,7 +738,7 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ConvertFrom" );
 
-    BOOL     bSuccess = FALSE;
+    BOOL	 bSuccess = FALSE;
     const String& rFltName = rMedium.GetFilter()->GetFilterName();
 
     DBG_ASSERT( !rFltName.EqualsAscii( STAROFFICE_XML ), "Wrong filter!");
@@ -1206,7 +1206,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
         case SID_AUTO_REDRAW :
             {
                 SmModule  *pp = SM_MOD();
-                BOOL       bRedraw = pp->GetConfig()->IsAutoRedraw();
+                BOOL	   bRedraw = pp->GetConfig()->IsAutoRedraw();
 
                 rSet.Put(SfxBoolItem(SID_AUTO_REDRAW, bRedraw));
             }
@@ -1227,7 +1227,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
 
         case SID_GAPHIC_SM:
             //! very old (pre UNO) and ugly hack to invalidate the SmGraphicWindow.
-            //! If nModifyCount gets changed then the call below will implicitly notify
+            //! If nModifyCount gets changed then the call below will implicitly notify 
             //! SmGraphicController::StateChanged and there the window gets invalidated.
             //! Thus all the 'nModifyCount++' before invalidating this slot.
             rSet.Put(SfxInt16Item(SID_GAPHIC_SM, nModifyCount));
@@ -1368,15 +1368,15 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
 
     if (nFileFormat == SOFFICE_FILEFORMAT_60 )
     {
-        *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
-        *pFormat        = SOT_FORMATSTR_ID_STARMATH_60;
+        *pClassName 	= SvGlobalName(SO3_SM_CLASSID_60);
+        *pFormat		= SOT_FORMATSTR_ID_STARMATH_60;
         *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_CURRENT));
         *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
     }
     else if (nFileFormat == SOFFICE_FILEFORMAT_8 )
     {
-        *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
-        *pFormat        = bTemplate ? SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE : SOT_FORMATSTR_ID_STARMATH_8;
+        *pClassName 	= SvGlobalName(SO3_SM_CLASSID_60);
+        *pFormat		= bTemplate ? SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE : SOT_FORMATSTR_ID_STARMATH_8;
         *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_CURRENT));
         *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
     }

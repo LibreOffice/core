@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <editsh.hxx>
-#include <edimp.hxx>    // fuer MACROS
+#include <edimp.hxx>	// fuer MACROS
 #include <doc.hxx>
-#include <swundo.hxx>   // fuer UNDO-Ids
+#include <swundo.hxx>	// fuer UNDO-Ids
 #include <ndtxt.hxx>
 #include <ftnidx.hxx>
 #include <expfld.hxx>
@@ -51,7 +51,7 @@
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <crsskip.hxx>
-#include <txtfrm.hxx>       // SwTxtFrm
+#include <txtfrm.hxx>		// SwTxtFrm
 #include <scriptinfo.hxx>
 #include <svl/ctloptions.hxx>
 #include <charfmt.hxx>  // #i27615#
@@ -386,7 +386,7 @@ void SwEditShell::MoveLeftMargin( BOOL bRight, BOOL bModulus )
     StartUndo( UNDO_START );
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )			// Mehrfachselektion ?
     {
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
@@ -407,9 +407,9 @@ inline USHORT lcl_SetScriptFlags( USHORT nType )
     USHORT nRet;
        switch( nType )
     {
-    case ::com::sun::star::i18n::ScriptType::LATIN:     nRet = SCRIPTTYPE_LATIN;    break;
-    case ::com::sun::star::i18n::ScriptType::ASIAN:     nRet = SCRIPTTYPE_ASIAN;    break;
-    case ::com::sun::star::i18n::ScriptType::COMPLEX:   nRet = SCRIPTTYPE_COMPLEX;  break;
+    case ::com::sun::star::i18n::ScriptType::LATIN:		nRet = SCRIPTTYPE_LATIN;	break;
+    case ::com::sun::star::i18n::ScriptType::ASIAN:		nRet = SCRIPTTYPE_ASIAN;	break;
+    case ::com::sun::star::i18n::ScriptType::COMPLEX:	nRet = SCRIPTTYPE_COMPLEX;	break;
     default: nRet = 0;
     }
     return nRet;
@@ -508,7 +508,7 @@ USHORT SwEditShell::GetScriptType() const
 
                     xub_StrLen nPos = pStt->nContent.GetIndex();
                     //Task 90448: we need the scripttype of the previous
-                    //              position, if no selection exist!
+                    //				position, if no selection exist!
                     if( nPos )
                     {
                         SwIndex aIdx( pStt->nContent );
@@ -609,7 +609,7 @@ USHORT SwEditShell::GetCurLang() const
     if( pTNd )
     {
         //JP 24.9.2001: if exist no selection, then get the language before
-        //              the current character!
+        //				the current character!
         xub_StrLen nPos = rPos.nContent.GetIndex();
         if( nPos && !pCrsr->HasMark() )
             --nPos;
@@ -641,6 +641,6 @@ USHORT SwEditShell::GetScalingOfSelectedText() const
         nScaleWidth = pTNd->GetScalingOfSelectedText( nStt, nEnd );
     }
     else
-        nScaleWidth = 100;              // default are no scaling -> 100%
+        nScaleWidth = 100;		        // default are no scaling -> 100%
     return nScaleWidth;
 }

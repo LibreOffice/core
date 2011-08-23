@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -663,7 +663,7 @@ namespace sw
         */
         Frames GetFramesInNode(const Frames &rFrames, const SwNode &rNode);
 
-#if 0
+#if 0        
         /** Get the Frames anchored for all nodes between two points
 
             Given a container of frames, find the ones anchored to the nodes

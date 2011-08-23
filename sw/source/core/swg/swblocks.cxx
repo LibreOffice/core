@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 #include <shellio.hxx>
 #include <swblocks.hxx>
 #include <ndtxt.hxx>
-#include <mdiexp.hxx>       // Progress
+#include <mdiexp.hxx>		// Progress
 #include <SwXMLTextBlocks.hxx>
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
@@ -268,8 +268,8 @@ SwTextBlocks::SwTextBlocks( const String& rFile )
     {
     //case SWBLK_SW2:     pImp = new Sw2TextBlocks( sFileName );  break;
     //case SWBLK_SW3:     pImp = new Sw3TextBlocks( sFileName );  break;
-    case SWBLK_XML:     pImp = new SwXMLTextBlocks( sFileName ); break;
-    case SWBLK_NO_FILE: pImp = new SwXMLTextBlocks( sFileName ); break;
+    case SWBLK_XML:		pImp = new SwXMLTextBlocks( sFileName ); break;
+    case SWBLK_NO_FILE:	pImp = new SwXMLTextBlocks( sFileName ); break;
     }
     if( !pImp )
         nErr = ERR_SWG_FILE_FORMAT_ERROR;
@@ -533,7 +533,7 @@ USHORT SwTextBlocks::Rename( USHORT n, const String* s, const String* l )
 
         if( pImp->IsFileChanged() )
             nErr = ERR_TXTBLOCK_NEWFILE_ERROR;
-        else if( 0 == ( nErr = pImp->OpenFile( FALSE )))
+        else if( 0 == (	nErr = pImp->OpenFile( FALSE )))
         {
             // Vorher den neuen Eintrag in die Liste setzen!
             GetAppCharClass().toUpper( aNew );
@@ -579,12 +579,12 @@ BOOL SwTextBlocks::BeginGetDoc( USHORT n )
     {
 // diese Optimierierung darf es nicht mehr geben. OLE-Objecte muessen auf
 // ihre SubStorages zugreifem koennen!
-//      if( n == pImp->nCur )
-//          return TRUE;
+//		if( n == pImp->nCur )
+//			return TRUE;
 
         if( pImp->IsFileChanged() )
             nErr = ERR_TXTBLOCK_NEWFILE_ERROR;
-        else if( 0 == ( nErr = pImp->OpenFile( TRUE )))
+        else if( 0 == (	nErr = pImp->OpenFile( TRUE )))
         {
             pImp->ClearDoc();
             nErr = pImp->GetDoc( n );

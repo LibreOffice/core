@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,6 +81,8 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          // --> OD 2008-06-05 #i89181#
          TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
          // <--
+     INVERT_BORDER_SPACING,
+         COLLAPSE_EMPTY_CELL_PARA,
          // COMPATIBILITY FLAGS END
 
          BROWSE_MODE,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,11 +63,11 @@ class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper3
 //    ::osl::Mutex                     m_aMutex;#102295# solar mutex has to be used currently
 
     // the component which's dispatches we're intercepting
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>   m_xIntercepted;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>	m_xIntercepted;
 
     // chaining
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>           m_xSlaveDispatcher;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>           m_xMasterDispatcher;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>			m_xSlaveDispatcher;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>			m_xMasterDispatcher;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch>                   m_xDispatch;
 

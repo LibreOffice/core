@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,14 +62,14 @@ namespace com { namespace sun { namespace star {
 
 class SwXMLTableContext : public XMLTextTableContext
 {
-    ::rtl::OUString     aStyleName;
-    ::rtl::OUString     aDfltCellStyleName;
+    ::rtl::OUString		aStyleName;
+    ::rtl::OUString		aDfltCellStyleName;
     /// NB: this contains the xml:id only if this table is a subtable!
     ::rtl::OUString     mXmlId;
 
-    SvUShorts           aColumnWidths;
-    SvBools             aColumnRelWidths;
-    SvStringsDtor       *pColumnDefaultCellStyleNames;
+    SvUShorts			aColumnWidths;
+    SvBools				aColumnRelWidths;
+    SvStringsDtor		*pColumnDefaultCellStyleNames;
 
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextCursor > xOldCursor;
@@ -78,12 +78,12 @@ class SwXMLTableContext : public XMLTextTableContext
 
     SwXMLTableRows_Impl *pRows;
 
-    SwTableNode         *pTableNode;
-    SwTableBox          *pBox1;
-    const SwStartNode   *pSttNd1;
+    SwTableNode			*pTableNode;
+    SwTableBox 			*pBox1;
+    const SwStartNode	*pSttNd1;
 
-    SwTableBoxFmt       *pBoxFmt;
-    SwTableLineFmt      *pLineFmt;
+    SwTableBoxFmt		*pBoxFmt;
+    SwTableLineFmt 		*pLineFmt;
 
     // hash map of shared format, indexed by the (XML) style name,
     // the column width, and protection flag
@@ -91,18 +91,18 @@ class SwXMLTableContext : public XMLTextTableContext
                           TableBoxIndexHasher> map_BoxFmt;
     map_BoxFmt* pSharedBoxFormats;
 
-    SvXMLImportContextRef   xParentTable;   // if table is a sub table
+    SvXMLImportContextRef	xParentTable;	// if table is a sub table
 
-    SwXMLDDETableContext_Impl   *pDDESource;
+    SwXMLDDETableContext_Impl	*pDDESource;
 
-    sal_Bool            bFirstSection : 1;
-    sal_Bool            bRelWidth : 1;
+    sal_Bool			bFirstSection : 1;
+    sal_Bool			bRelWidth : 1;
     sal_Bool            bHasSubTables : 1;
 
     USHORT              nHeaderRows;
-    sal_uInt32          nCurRow;
-    sal_uInt32          nCurCol;
-    sal_Int32           nWidth;
+    sal_uInt32 			nCurRow;
+    sal_uInt32			nCurCol;
+    sal_Int32			nWidth;
 
     SwTableBox *NewTableBox( const SwStartNode *pStNd,
                              SwTableLine *pUpper );

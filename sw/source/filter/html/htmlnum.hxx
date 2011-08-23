@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,19 +30,19 @@
 #include <swtypes.hxx>
 #include <string.h>
 
-#define HTML_NUMBUL_MARGINLEFT  (MM50*2 + MM50/2)
-#define HTML_NUMBUL_INDENT      (-MM50)
+#define HTML_NUMBUL_MARGINLEFT 	(MM50*2 + MM50/2)
+#define HTML_NUMBUL_INDENT 		(-MM50)
 
 class SwTxtNode;
 class SwNumRule;
 
 class SwHTMLNumRuleInfo
 {
-    sal_uInt16      aNumStarts[MAXLEVEL];
-    SwNumRule   *   pNumRule;       // Aktuelle Numerierung
-    sal_uInt16      nDeep;          // aktuelle Num-Tiefe (1, 2, 3, ...)
-    sal_Bool        bRestart : 1;   // Export: Numerierung neu starten
-    sal_Bool        bNumbered : 1;  // Export: Absatz ist numeriert
+    sal_uInt16		aNumStarts[MAXLEVEL];
+    SwNumRule 	*	pNumRule;		// Aktuelle Numerierung
+    sal_uInt16		nDeep;			// aktuelle Num-Tiefe (1, 2, 3, ...)
+    sal_Bool 		bRestart : 1;	// Export: Numerierung neu starten
+    sal_Bool 		bNumbered : 1;	// Export: Absatz ist numeriert
 
 public:
 

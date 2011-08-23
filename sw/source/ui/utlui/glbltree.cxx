@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,12 +90,12 @@ using ::rtl::OUString;
 #define CTX_INSERT_NEW_FILE 12
 #define CTX_INSERT_TEXT     13
 
-#define CTX_UPDATE_SEL      20
+#define CTX_UPDATE_SEL		20
 #define CTX_UPDATE_INDEX    21
 #define CTX_UPDATE_LINK     22
 #define CTX_UPDATE_ALL      23
 
-#define CTX_UPDATE          1
+#define CTX_UPDATE			1
 #define CTX_INSERT          2
 #define CTX_EDIT            3
 #define CTX_DELETE          4
@@ -104,12 +104,12 @@ using ::rtl::OUString;
 #define GLOBAL_UPDATE_TIMEOUT 2000
 
 // Flags fuer PopupMenu-enable/disable
-#define ENABLE_INSERT_IDX   0x0001
+#define ENABLE_INSERT_IDX	0x0001
 #define ENABLE_INSERT_FILE  0x0002
 #define ENABLE_INSERT_TEXT  0x0004
 #define ENABLE_EDIT         0x0008
 #define ENABLE_DELETE       0x0010
-#define ENABLE_UPDATE       0x0020
+#define ENABLE_UPDATE		0x0020
 #define ENABLE_UPDATE_SEL   0x0040
 #define ENABLE_EDIT_LINK    0x0080
 
@@ -119,34 +119,34 @@ using ::rtl::OUString;
 const SfxObjectShell* SwGlobalTree::pShowShell = 0;
 static const USHORT __FAR_DATA aHelpForMenu[] =
 {
-    0,                          //
-    HID_GLBLTREE_UPDATE,        //CTX_UPDATE
-    HID_GLBLTREE_INSERT,        //CTX_INSERT
-    HID_GLBLTREE_EDIT,          //CTX_EDIT
-    HID_GLBLTREE_DEL,           //CTX_DELETE
+    0, 							//
+    HID_GLBLTREE_UPDATE, 		//CTX_UPDATE
+    HID_GLBLTREE_INSERT,		//CTX_INSERT
+    HID_GLBLTREE_EDIT,			//CTX_EDIT
+    HID_GLBLTREE_DEL,			//CTX_DELETE
     HID_GLBLTREE_EDIT_LINK,     //CTX_EDIT_LINK
-    0,                        //
-    0,                        //
-    0,                        //
-    0,                        //
-    HID_GLBLTREE_INS_IDX,       //CTX_INSERT_ANY_INDEX
-    HID_GLBLTREE_INS_FILE,      //CTX_INSERT_FILE
-    HID_GLBLTREE_INS_NEW_FILE,  //CTX_INSERT_NEW_FILE
-    HID_GLBLTREE_INS_TEXT,      //CTX_INSERT_TEXT
-    0,                          //
-    0,                          //
-    0,                          //
-    0,                          //
-    0,                          //
-    0,                          //
-    HID_GLBLTREE_UPD_SEL,       //CTX_UPDATE_SEL
-    HID_GLBLTREE_UPD_IDX,       //CTX_UPDATE_INDEX
-    HID_GLBLTREE_UPD_LINK,      //CTX_UPDATE_LINK
-    HID_GLBLTREEUPD_ALL         //CTX_UPDATE_ALL
+    0,						  //
+    0,						  //
+    0,						  //
+    0,						  //
+    HID_GLBLTREE_INS_IDX, 		//CTX_INSERT_ANY_INDEX
+    HID_GLBLTREE_INS_FILE,		//CTX_INSERT_FILE
+    HID_GLBLTREE_INS_NEW_FILE,	//CTX_INSERT_NEW_FILE
+    HID_GLBLTREE_INS_TEXT,		//CTX_INSERT_TEXT
+    0,							//
+    0,							//
+    0,							//
+    0,							//
+    0,							//
+    0,							//
+    HID_GLBLTREE_UPD_SEL, 		//CTX_UPDATE_SEL
+    HID_GLBLTREE_UPD_IDX, 		//CTX_UPDATE_INDEX
+    HID_GLBLTREE_UPD_LINK,		//CTX_UPDATE_LINK
+    HID_GLBLTREEUPD_ALL			//CTX_UPDATE_ALL
 };
 
 /************************************************************************/
-/*                                                                      */
+/*																		*/
 /************************************************************************/
 /* -----------------------------24.08.00 12:04--------------------------------
 
@@ -161,9 +161,9 @@ public:
             StartListening(rFrame);
         }
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    BOOL                IsValid() const {return bValid;}
+    BOOL 				IsValid() const {return bValid;}
 };
 /* -----------------------------24.08.00 12:05--------------------------------
 
@@ -292,7 +292,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
         {
             INetURLObject aTemp(sFileName);
             GraphicDescriptor aDesc(aTemp);
-            if( !aDesc.Detect() )   // keine Grafiken annehmen
+            if( !aDesc.Detect() )	// keine Grafiken annehmen
             {
                 nRet = rEvt.mnAction;
                 InsertRegion(pCnt, &sFileName);
@@ -448,7 +448,7 @@ void SwGlobalTree::TbxMenuHdl(USHORT nTbxId, ToolBox* pBox)
         pMenu->EnableItem(CTX_INSERT_FILE,      0 != (nEnableFlags & ENABLE_INSERT_FILE));
         pMenu->EnableItem(CTX_INSERT_NEW_FILE,  0 != (nEnableFlags & ENABLE_INSERT_FILE));
         pMenu->SetSelectHdl(LINK(this, SwGlobalTree, PopupHdl));
-        pMenu->Execute( pBox, pBox->GetItemRect(nTbxId).BottomLeft());
+        pMenu->Execute(	pBox, pBox->GetItemRect(nTbxId).BottomLeft());
         delete pMenu;
         pBox->EndSelection();
         pBox->Invalidate();
@@ -463,7 +463,7 @@ void SwGlobalTree::TbxMenuHdl(USHORT nTbxId, ToolBox* pBox)
         }
         pMenu->EnableItem(CTX_UPDATE_SEL, 0 != (nEnableFlags & ENABLE_UPDATE_SEL));
         pMenu->SetSelectHdl(LINK(this, SwGlobalTree, PopupHdl));
-        pMenu->Execute( pBox, pBox->GetItemRect(nTbxId).BottomLeft());
+        pMenu->Execute(	pBox, pBox->GetItemRect(nTbxId).BottomLeft());
         delete pMenu;
         pBox->EndSelection();
         pBox->Invalidate();
@@ -472,7 +472,7 @@ void SwGlobalTree::TbxMenuHdl(USHORT nTbxId, ToolBox* pBox)
 /*-----------------16.06.97 11:02-------------------
 
 --------------------------------------------------*/
-USHORT  SwGlobalTree::GetEnableFlags() const
+USHORT	SwGlobalTree::GetEnableFlags() const
 {
     SvLBoxEntry* pEntry = FirstSelected();
     USHORT nSelCount = (USHORT)GetSelectionCount();
@@ -485,7 +485,7 @@ USHORT  SwGlobalTree::GetEnableFlags() const
     if(nSelCount == 1)
     {
         nRet |= ENABLE_EDIT;
-        if( ((SwGlblDocContent*)pEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN &&
+        if(	((SwGlblDocContent*)pEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN &&
                     (!pPrevEntry || ((SwGlblDocContent*)pPrevEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN))
             nRet |= ENABLE_INSERT_TEXT;
         if( GLBLDOC_SECTION == ((SwGlblDocContent*)pEntry->GetUserData())->GetType() )
@@ -505,7 +505,7 @@ USHORT  SwGlobalTree::GetEnableFlags() const
 /*-----------------12.06.97 09:38-------------------
 
 --------------------------------------------------*/
-void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
+void	 SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
 {
     BOOL bParent = TRUE;
     Update(TRUE);
@@ -555,7 +555,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
 /*-----------------16.06.97 16:15-------------------
 
 --------------------------------------------------*/
-void     SwGlobalTree::SelectHdl()
+void	 SwGlobalTree::SelectHdl()
 {
 
     USHORT nSelCount = (USHORT)GetSelectionCount();
@@ -576,7 +576,7 @@ void     SwGlobalTree::SelectHdl()
 /*-----------------16.06.97 16:15-------------------
 
 --------------------------------------------------*/
-void     SwGlobalTree::DeselectHdl()
+void	 SwGlobalTree::DeselectHdl()
 {
     SelectHdl();
 }
@@ -613,7 +613,7 @@ BOOL     SwGlobalTree::NotifyMoving(   SvLBoxEntry*  pTarget,
     USHORT nSource = (USHORT) _pModel->GetAbsPos(pSource);
     USHORT nDest   = pTarget ? (USHORT) _pModel->GetAbsPos(pTarget) : pSwGlblDocContents->Count();
 
-    if( pActiveShell->MoveGlobalDocContent(
+    if(	pActiveShell->MoveGlobalDocContent(
             *pSwGlblDocContents, nSource, nSource + 1, nDest ) &&
             Update( FALSE ))
         Display();
@@ -655,8 +655,8 @@ void SwGlobalTree::DragFinished( sal_Int8 nAction )
 }
 
 /***************************************************************************
-    Beschreibung:   Wird ein Ctrl+DoubleClick in einen freien Bereich ausgefuehrt,
- *                  dann soll die Basisfunktion des Controls gerufen werden
+    Beschreibung: 	Wird ein Ctrl+DoubleClick in einen freien Bereich ausgefuehrt,
+ * 					dann soll die Basisfunktion des Controls gerufen werden
 ***************************************************************************/
 void  SwGlobalTree::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -709,7 +709,7 @@ void SwGlobalTree::Clear()
 /*-----------------12.06.97 12:38-------------------
 
 --------------------------------------------------*/
-void    SwGlobalTree::Display(BOOL bOnlyUpdateUserData)
+void 	SwGlobalTree::Display(BOOL bOnlyUpdateUserData)
 {
     if(!bIsImageListInitialized)
     {
@@ -732,7 +732,7 @@ void    SwGlobalTree::Display(BOOL bOnlyUpdateUserData)
     {
         SetUpdateMode( FALSE );
         SvLBoxEntry* pOldSelEntry = FirstSelected();
-        String sEntryName;  // Name des Eintrags
+        String sEntryName;	// Name des Eintrags
         USHORT nSelPos = USHRT_MAX;
         if(pOldSelEntry)
         {
@@ -823,7 +823,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const String* pF
 /*-----------------18.06.97 12:42-------------------
 
 --------------------------------------------------*/
-void    SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
+void 	SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
 {
     USHORT nSlot = 0;
     switch( pCont->GetType() )
@@ -966,8 +966,8 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
         }
         break;
         case CTX_INSERT_ANY_INDEX:
-//      case CTX_INSERT_CNTIDX:
-//      case CTX_INSERT_USRIDX:
+//		case CTX_INSERT_CNTIDX:
+//		case CTX_INSERT_USRIDX:
         {
             if(pContCopy)
             {
@@ -1141,7 +1141,7 @@ void SwGlobalTree::GotoContent(const SwGlblDocContent* pCont)
 /*-----------------16.06.97 07:42-------------------
 
 --------------------------------------------------*/
-void    SwGlobalTree::ShowTree()
+void	SwGlobalTree::ShowTree()
 {
     aUpdateTimer.Start();
     SvTreeListBox::Show();
@@ -1149,7 +1149,7 @@ void    SwGlobalTree::ShowTree()
 /*-----------------16.06.97 07:42-------------------
 
 --------------------------------------------------*/
-void    SwGlobalTree::HideTree()
+void	SwGlobalTree::HideTree()
 {
     aUpdateTimer.Stop();
     SvTreeListBox::Hide();
@@ -1157,7 +1157,7 @@ void    SwGlobalTree::HideTree()
 /*-----------------18.06.97 10:02-------------------
 
 --------------------------------------------------*/
-void    SwGlobalTree::ExecCommand(USHORT nCmd)
+void 	SwGlobalTree::ExecCommand(USHORT nCmd)
 {
     SvLBoxEntry* pEntry = FirstSelected();
     DBG_ASSERT(pEntry, "gleich knallt's");
@@ -1191,7 +1191,7 @@ void    SwGlobalTree::ExecCommand(USHORT nCmd)
                 }
                 break;
             }
-            if( bMove && pActiveShell->MoveGlobalDocContent(
+            if(	bMove && pActiveShell->MoveGlobalDocContent(
                 *pSwGlblDocContents, nSource, nSource + 1, nDest ) &&
                     Update( FALSE ))
                 Display();
@@ -1202,7 +1202,7 @@ void    SwGlobalTree::ExecCommand(USHORT nCmd)
 /*-----------------16.06.97 07:43-------------------
 
 --------------------------------------------------*/
-BOOL    SwGlobalTree::Update(BOOL bHard)
+BOOL  	SwGlobalTree::Update(BOOL bHard)
 {
     SwView* pActView = GetParentWindow()->GetCreateView();
     BOOL bRet = FALSE;
@@ -1314,7 +1314,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
 /*-----------------25.06.97 16:08-------------------
 
 --------------------------------------------------*/
-IMPL_LINK(  SwGlobalTree, DoubleClickHdl, SwGlobalTree *, EMPTYARG )
+IMPL_LINK( 	SwGlobalTree, DoubleClickHdl, SwGlobalTree *, EMPTYARG )
 {
     SvLBoxEntry* pEntry = GetCurEntry();
     SwGlblDocContent* pCont = (SwGlblDocContent*)pEntry->GetUserData();
@@ -1361,7 +1361,7 @@ void SwLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
     SwGlblDocContent* pCont = (SwGlblDocContent*)pEntry->GetUserData();
     const SwSection* pSect;
     if(pCont->GetType() == GLBLDOC_SECTION &&
-        !(pSect = pCont->GetSection())->IsConnectFlag() )
+        !(pSect = pCont->GetSection())->IsConnectFlag()	)
     {
         Font aOldFont( rDev.GetFont());
         Font aFont(aOldFont);

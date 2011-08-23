@@ -86,8 +86,8 @@
 #include <swundo.hxx>
 #include <flypos.hxx>
 #include <undobj.hxx>
-#include <expfld.hxx>       // InsertLabel
-#include <poolfmt.hxx>      // PoolVorlagen-Id's
+#include <expfld.hxx>		// InsertLabel
+#include <poolfmt.hxx>		// PoolVorlagen-Id's
 #include <docary.hxx>
 #include <swtable.hxx>
 #include <tblsel.hxx>
@@ -98,7 +98,7 @@
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>
 #include <PostItMgr.hxx>
-#include <comcore.hrc>      // STR-ResId's
+#include <comcore.hrc>		// STR-ResId's
 
 // #i11176#
 #include <unoframe.hxx>
@@ -112,7 +112,7 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-#define DEF_FLY_WIDTH    2268   //Defaultbreite fuer FlyFrms    (2268 == 4cm)
+#define DEF_FLY_WIDTH	 2268	//Defaultbreite fuer FlyFrms	(2268 == 4cm)
 
 /* #109161# */
 static bool lcl_IsItemSet(const SwCntntNode & rNode, USHORT which)
@@ -127,15 +127,15 @@ static bool lcl_IsItemSet(const SwCntntNode & rNode, USHORT which)
 
 /*************************************************************************
 |*
-|*  SwDoc::MakeLayoutFmt()
+|*	SwDoc::MakeLayoutFmt()
 |*
-|*  Beschreibung        Erzeugt ein neues Format das in seinen Einstellungen
-|*      Defaultmaessig zu dem Request passt. Das Format wird in das
-|*      entsprechende Formate-Array gestellt.
-|*      Wenn bereits ein passendes Format existiert, so wird dies
-|*      zurueckgeliefert.
-|*  Ersterstellung      MA 22. Sep. 92
-|*  Letzte Aenderung    JP 08.05.98
+|*	Beschreibung		Erzeugt ein neues Format das in seinen Einstellungen
+|* 		Defaultmaessig zu dem Request passt. Das Format wird in das
+|* 		entsprechende Formate-Array gestellt.
+|* 		Wenn bereits ein passendes Format existiert, so wird dies
+|* 		zurueckgeliefert.
+|*	Ersterstellung		MA 22. Sep. 92
+|*	Letzte Aenderung	JP 08.05.98
 |*
 |*************************************************************************/
 
@@ -181,10 +181,10 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
                                      ) ) );
             pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ));
 
-            if( pSet )      // noch ein paar Attribute setzen ?
+            if( pSet )		// noch ein paar Attribute setzen ?
                 pFmt->SetFmtAttr( *pSet );
 
-            // JP: warum zuruecksetzen ???  Doc. ist doch veraendert ???
+            // JP: warum zuruecksetzen ???	Doc. ist doch veraendert ???
             // bei den Fly auf jedenfall verkehrt !!
             if ( !bMod )
                 ResetModified();
@@ -194,7 +194,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
     case RND_DRAW_OBJECT:
         {
             pFmt = MakeDrawFrmFmt( aEmptyStr, GetDfltFrmFmt() );
-            if( pSet )      // noch ein paar Attribute setzen ?
+            if( pSet )		// noch ein paar Attribute setzen ?
                 pFmt->SetFmtAttr( *pSet );
 
             if( DoesUndo() )
@@ -224,12 +224,12 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 }
 /*************************************************************************
 |*
-|*  SwDoc::DelLayoutFmt()
+|*	SwDoc::DelLayoutFmt()
 |*
-|*  Beschreibung        Loescht das angegebene Format, der Inhalt wird mit
-|*      geloescht.
-|*  Ersterstellung      MA 23. Sep. 92
-|*  Letzte Aenderung    MA 05. Feb. 93
+|*	Beschreibung		Loescht das angegebene Format, der Inhalt wird mit
+|* 		geloescht.
+|*	Ersterstellung		MA 23. Sep. 92
+|*	Letzte Aenderung	MA 05. Feb. 93
 |*
 |*************************************************************************/
 
@@ -264,7 +264,7 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
             if( pDoc )
             {
                 SfxObjectShell* p = pDoc->GetPersist();
-                if( p )     // muss da sein
+                if( p )		// muss da sein
                 {
                     SvInfoObjectRef aRef( p->Find( pOLENd->GetOLEObj().GetName() ) );
                     if( aRef.Is() )
@@ -378,18 +378,18 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 
 /*************************************************************************
 |*
-|*  SwDoc::CopyLayoutFmt()
+|*	SwDoc::CopyLayoutFmt()
 |*
-|*  Beschreibung        Kopiert das angegebene Format pSrc in pDest und
-|*                      returnt pDest. Wenn es noch kein pDest gibt, wird
-|*                      eins angelegt.
-|*                      JP: steht das Source Format in einem anderen
-|*                          Dokument, so kopiere auch dann noch richtig !!
-|*                          Vom chaos::Anchor-Attribut wird die Position immer
-|*                          auf 0 gesetzt !!!
+|*	Beschreibung		Kopiert das angegebene Format pSrc in pDest und
+|*						returnt pDest. Wenn es noch kein pDest gibt, wird
+|*						eins angelegt.
+|*						JP: steht das Source Format in einem anderen
+|*							Dokument, so kopiere auch dann noch richtig !!
+|*							Vom chaos::Anchor-Attribut wird die Position immer
+|*							auf 0 gesetzt !!!
 |*
-|*  Ersterstellung      BP 18.12.92
-|*  Letzte Aenderung    MA 17. Jul. 96
+|*	Ersterstellung		BP 18.12.92
+|*	Letzte Aenderung	MA 17. Jul. 96
 |*
 |*************************************************************************/
 
@@ -482,12 +482,12 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 
                 String sOld( pDest->GetName() );
                 pDest->SetName( aEmptyStr );
-                if( FindFlyByName( sOld, nNdTyp ) )     // einen gefunden
+                if( FindFlyByName( sOld, nNdTyp ) )		// einen gefunden
                     switch( nNdTyp )
                     {
-                    case ND_GRFNODE:    sOld = GetUniqueGrfName();      break;
-                    case ND_OLENODE:    sOld = GetUniqueOLEName();      break;
-                    default:            sOld = GetUniqueFrameName();    break;
+                    case ND_GRFNODE:	sOld = GetUniqueGrfName();		break;
+                    case ND_OLENODE:	sOld = GetUniqueOLEName();		break;
+                    default:			sOld = GetUniqueFrameName();	break;
                     }
 
                 pDest->SetName( sOld );
@@ -618,9 +618,9 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     if( !mbInReading )
         switch( rNode.GetNodeType() )
         {
-        case ND_GRFNODE:        sName = GetUniqueGrfName();     break;
-        case ND_OLENODE:        sName = GetUniqueOLEName();     break;
-        default:                sName = GetUniqueFrameName();       break;
+        case ND_GRFNODE:		sName = GetUniqueGrfName();		break;
+        case ND_OLENODE:        sName = GetUniqueOLEName();		break;
+        default:				sName = GetUniqueFrameName();		break;
         }
     SwFlyFrmFmt* pFmt = MakeFlyFrmFmt( sName, pFrmFmt );
 
@@ -727,7 +727,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
 
     // Frames anlegen
     if( GetRootFrm() )
-        pFmt->MakeFrms();           // ???
+        pFmt->MakeFrms();			// ???
 
     if( DoesUndo() )
     {
@@ -814,14 +814,14 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
 
     if( pFmt )
     {
-        do {        // middle check loop
+        do {		// middle check loop
             const SwFmtCntnt &rCntnt = pFmt->GetCntnt();
             ASSERT( rCntnt.GetCntntIdx(), "Kein Inhalt vorbereitet." );
             SwNodeIndex aIndex( *(rCntnt.GetCntntIdx()), 1 );
             SwCntntNode *pNode = aIndex.GetNode().GetCntntNode();
 
             // ACHTUNG: nicht einen Index auf dem Stack erzeugen, sonst
-            //          kann der CntntnNode am Ende nicht geloscht werden !!
+            // 		   	kann der CntntnNode am Ende nicht geloscht werden !!
             SwPosition aPos( aIndex );
             aPos.nContent.Assign( pNode, 0 );
 
@@ -867,11 +867,11 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                 aIndex = rCntnt.GetCntntIdx()->GetNode().EndOfSectionIndex() - 1;
                 ASSERT( aIndex.GetNode().GetTxtNode(),
                         "hier sollte ein TextNode stehen" );
-                aPos.nContent.Assign( 0, 0 );       // Index abmelden !!
+                aPos.nContent.Assign( 0, 0 );		// Index abmelden !!
                 GetNodes().Delete( aIndex, 1 );
 
 //JP erstmal ein Hack, solange keine Flys/Headers/Footers Undofaehig sind
-if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
+if( DoesUndo() )	// werden erstmal alle Undo - Objecte geloescht.
     DelAllUndoObj();
 
             }
@@ -1028,10 +1028,10 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
 
 /*************************************************************************
 |*
-|*  SwDoc::GetAllFlyFmts
+|*	SwDoc::GetAllFlyFmts
 |*
-|*  Ersterstellung      MA 14. Jul. 93
-|*  Letzte Aenderung    MD 23. Feb. 95
+|*	Ersterstellung		MA 14. Jul. 93
+|*	Letzte Aenderung	MD 23. Feb. 95
 |*
 |*************************************************************************/
 
@@ -1110,7 +1110,7 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
             {
                 if( pCmpRange &&
                     !TstFlyRange( pCmpRange, pAPos, rAnchor.GetAnchorId() ))
-                        continue;       // kein gueltiger FlyFrame
+                        continue;		// kein gueltiger FlyFrame
                 pFPos = new SwPosFlyFrm( pAPos->nNode, pFly, rPosFlyFmts.Count() );
                 rPosFlyFmts.Insert( pFPos );
             }
@@ -1176,10 +1176,10 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
 
 /*************************************************************************
 |*
-|*  SwDoc::InsertLabel()
+|*	SwDoc::InsertLabel()
 |*
-|*  Ersterstellung      MA 11. Feb. 94
-|*  Letzte Aenderung    MA 12. Nov. 97
+|*	Ersterstellung		MA 11. Feb. 94
+|*	Letzte Aenderung	MA 12. Nov. 97
 |*
 |*************************************************************************/
 
@@ -1337,10 +1337,10 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
                 if( bCpyBrd )
                 {
                     // JP 07.07.99: Bug 67029 - if at Grafik no BoxItem but
-                    //              in the new Format is any, then set the
-                    //              default item in the new Set. Because
-                    //              the Size of the Grafik have never been
-                    //              changed!
+                    // 				in the new Format is any, then set the
+                    //				default item in the new Set. Because
+                    // 				the Size of the Grafik have never been
+                    //				changed!
                     const SfxPoolItem *pItem;
                     if( SFX_ITEM_SET == pOldFmt->GetAttrSet().
                             GetItemState( RES_BOX, sal_True, &pItem ))
@@ -1539,10 +1539,10 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
 
 /*************************************************************************
 |*
-|*  SwDoc::InsertDrawLabel()
+|*	SwDoc::InsertDrawLabel()
 |*
-|*  Ersterstellung      MIB 7. Dez. 98
-|*  Letzte Aenderung    MIB 7. Dez. 98
+|*	Ersterstellung		MIB 7. Dez. 98
+|*	Letzte Aenderung	MIB 7. Dez. 98
 |*
 |*************************************************************************/
 
@@ -1673,7 +1673,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
                              GetFrmFmtFromPool( RES_POOLFRM_FRAME ) );
 
     // JP 28.10.99: Bug 69487 - set border and shadow to default if the
-    //              template contains any.
+    // 				template contains any.
     if( SFX_ITEM_SET == pNewFmt->GetAttrSet().GetItemState( RES_BOX, sal_True ))
         pNewSet->Put( *GetDfltAttr( RES_BOX ) );
 
@@ -1812,7 +1812,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 
 /*************************************************************************
 |*
-|*  IDocumentTimerAccess-methods
+|*	IDocumentTimerAccess-methods
 |*
 |*************************************************************************/
 
@@ -1845,10 +1845,10 @@ void SwDoc::UnblockIdling()
 
 /*************************************************************************
 |*
-|*  SwDoc::DoIdleJobs()
+|*	SwDoc::DoIdleJobs()
 |*
-|*  Ersterstellung      OK 30.03.94
-|*  Letzte Aenderung    MA 09. Jun. 95
+|*	Ersterstellung		OK 30.03.94
+|*	Letzte Aenderung	MA 09. Jun. 95
 |*
 |*************************************************************************/
 
@@ -1909,10 +1909,10 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             const sal_Bool bOldLockView = pStartSh->IsViewLocked();
             pStartSh->LockView( sal_True );
 
-            GetSysFldType( RES_CHAPTERFLD )->Modify( 0, 0 );    // KapitelFld
-            UpdateExpFlds( 0, sal_False );      // Expression-Felder Updaten
-            UpdateTblFlds(NULL);                // Tabellen
-            UpdateRefFlds(NULL);                // Referenzen
+            GetSysFldType( RES_CHAPTERFLD )->Modify( 0, 0 );	// KapitelFld
+            UpdateExpFlds( 0, sal_False );		// Expression-Felder Updaten
+            UpdateTblFlds(NULL);				// Tabellen
+            UpdateRefFlds(NULL);				// Referenzen
 
             GetRootFrm()->EndAllAction();
 
@@ -2043,8 +2043,8 @@ void SwDoc::SetFlyName( SwFlyFrmFmt& rFmt, const String& rName )
         if( pIdx && pIdx->GetNode().GetNodes().IsDocNodes() )
             switch( GetNodes()[ pIdx->GetIndex() + 1 ]->GetNodeType() )
             {
-            case ND_GRFNODE:    nTyp = STR_GRAPHIC_DEFNAME; break;
-            case ND_OLENODE:    nTyp = STR_OBJECT_DEFNAME;  break;
+            case ND_GRFNODE:	nTyp = STR_GRAPHIC_DEFNAME;	break;
+            case ND_OLENODE:	nTyp = STR_OBJECT_DEFNAME;	break;
             }
         sName = lcl_GetUniqueFlyName( this, nTyp );
     }
@@ -2067,7 +2067,7 @@ void SwDoc::SetAllUniqueFlyNames()
         n = 255;
     SwSpzFrmFmts aArr( (sal_Int8)n, 10 );
     SwFrmFmtPtr pFlyFmt;
-    sal_Bool bLoadedFlag = sal_True;            // noch etwas fuers Layout
+    sal_Bool bLoadedFlag = sal_True;			// noch etwas fuers Layout
 
     for( n = GetSpzFrmFmts()->Count(); n; )
     {
@@ -2165,7 +2165,7 @@ void SwDoc::SetAllUniqueFlyNames()
 sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
 {
     // gibt es ein Layout, dann ueber das laufen!!
-    //  (Das kann dann auch Fly in Fly in Kopfzeile !)
+    //	(Das kann dann auch Fly in Fly in Kopfzeile !)
     // MIB 9.2.98: Wird auch vom sw3io benutzt, um festzustellen, ob sich
     // ein Redline-Objekt in einer Kopf- oder Fusszeile befindet. Da
     // Redlines auch an Start- und Endnodes haengen, muss der Index nicht

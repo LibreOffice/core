@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,13 +36,13 @@
 class ResMgr;
 struct SwDialogsResMgr
 {
-    static ResMgr*      GetResMgr();
+    static ResMgr*		GetResMgr();
 };
 
-#define SWDIALOG_MGR()  SwDialogsResMgr::GetResMgr()
-#define SW_RES(i)       ResId(i,SWDIALOG_MGR())
-#define SW_RESSTR(i)    UniString(ResId(i,SWDIALOG_MGR()))
-#define SW_RESSSTR(i)   String(ResId(i,SWDIALOG_MGR()))
+#define SWDIALOG_MGR()	SwDialogsResMgr::GetResMgr()
+#define SW_RES(i)		ResId(i,SWDIALOG_MGR())
+#define SW_RESSTR(i)	UniString(ResId(i,SWDIALOG_MGR()))
+#define SW_RESSSTR(i)	String(ResId(i,SWDIALOG_MGR()))
 
 #endif
 

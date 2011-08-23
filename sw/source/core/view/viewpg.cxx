@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 #include <fntcache.hxx>
 
 #ifndef _STATSTR_HRC
-#include <statstr.hrc>  // Text fuer SfxProgress
+#include <statstr.hrc>	// Text fuer SfxProgress
 #endif
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
@@ -94,7 +94,7 @@ void ViewShell::AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions 
 // print brochure
 // OD 05.05.2003 #i14016# - consider empty pages on calculation of the scaling
 // for a page to be printed.
-void ViewShell::PrintProspect(
+void ViewShell::PrintProspect( 
     OutputDevice *pOutDev,
     const SwPrintData &rPrintData,
     sal_Int32 nRenderer // the index in the vector of prospect pages to be printed
@@ -112,7 +112,7 @@ void ViewShell::PrintProspect(
     // output device is now provided by a call from outside the Writer)
     pPrinter->Push();
 
-    std::pair< sal_Int32, sal_Int32 > rPagesToPrint =
+    std::pair< sal_Int32, sal_Int32 > rPagesToPrint = 
             rPrintData.GetRenderData().GetPagePairsForProspectPrinting()[ nRenderer ];
 // const USHORT nPageMax = static_cast< USHORT >(rPagesToPrint.first > rPagesToPrint.second ?
 //            rPagesToPrint.first : rPagesToPrint.second);
@@ -123,7 +123,7 @@ void ViewShell::PrintProspect(
 
     // eine neue Shell fuer den Printer erzeugen
     ViewShell aShell( *this, 0, pPrinter );
-
+    
     SET_CURR_SHELL( &aShell );
 
     aShell.PrepareForPrint( rPrintData );
@@ -227,7 +227,7 @@ void ViewShell::PrintProspect(
     Size aTmpPrtSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), aMapMode ) );
 
     // calculate start point for equal border on all sides
-    Point aSttPt( (aTmpPrtSize.Width() - nMaxColSz) / 2,
+    Point aSttPt( (aTmpPrtSize.Width() - nMaxColSz) / 2, 
                   (aTmpPrtSize.Height() - nMaxRowSz) / 2 );
     for( int nC = 0; nC < 2; ++nC )
     {
@@ -251,7 +251,7 @@ void ViewShell::PrintProspect(
     SwPaintQueue::Repaint();
 
     //!! applying/modifying view options and formatting the dcoument should now only be done in getRendererCount!
-
+    
     pFntCache->Flush();
 
     // restore settings of OutputDevice (should be done always now since the

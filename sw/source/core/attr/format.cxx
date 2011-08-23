@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,18 +29,18 @@
 #include "precompiled_sw.hxx"
 
 
-#include <hintids.hxx>          // fuer RES_..
-#include <frame.hxx>            // fuer AttrCache
+#include <hintids.hxx> 			// fuer RES_..
+#include <frame.hxx>			// fuer AttrCache
 #include <format.hxx>
-#include <hints.hxx>            // fuer SwFmtChg
+#include <hints.hxx>			// fuer SwFmtChg
 #include <doc.hxx>
-#include <paratr.hxx>           // fuer SwParaFmt - SwHyphenBug
+#include <paratr.hxx>			// fuer SwParaFmt - SwHyphenBug
 #include <swcache.hxx>
 // --> OD 2006-11-22 #i71574#
 #include <fmtcolfunc.hxx>
 // <--
 
-TYPEINIT1( SwFmt, SwClient );   //rtti fuer SwFmt
+TYPEINIT1( SwFmt, SwClient );	//rtti fuer SwFmt
 
 /*************************************************************************
 |*    SwFmt::SwFmt
@@ -108,7 +108,7 @@ SwFmt::SwFmt( const SwFmt& rFmt )
 /*************************************************************************
 |*    SwFmt &SwFmt::operator=(const SwFmt& aFmt)
 |*
-|*    Beschreibung      Dokument 1.14
+|*    Beschreibung		Dokument 1.14
 |*    Ersterstellung    JP 22.11.90
 |*    Letzte Aenderung  JP 05.08.94
 *************************************************************************/
@@ -186,10 +186,10 @@ void SwFmt::SetName( const String& rNewName, sal_Bool bBroadcast )
  * Basis-Klasse auf 0 defaultet ist.
  *
  * Zusatz: JP 8.4.1994
- *  Wird ueber Dokumentgrenzen kopiert, so muss das neue Dokument
- *  mit angeben werden, in dem this steht. Z.Z. ist das fuers
- *  DropCaps wichtig, dieses haelt Daten, die tief kopiert werden
- *  muessen !!
+ * 	Wird ueber Dokumentgrenzen kopiert, so muss das neue Dokument
+ *	mit angeben werden, in dem this steht. Z.Z. ist das fuers
+ *	DropCaps wichtig, dieses haelt Daten, die tief kopiert werden
+ *	muessen !!
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
 
@@ -207,9 +207,9 @@ void SwFmt::CopyAttrs( const SwFmt& rFmt, BOOL bReplace )
     // Sonderbehandlung fuer einige Attribute
     SwAttrSet* pChgSet = (SwAttrSet*)&rFmt.aSet;
 
-    if( !bReplace )     // nur die neu, die nicht gesetzt sind ??
+    if( !bReplace )		// nur die neu, die nicht gesetzt sind ??
     {
-        if( pChgSet == (SwAttrSet*)&rFmt.aSet )     // Set hier kopieren
+        if( pChgSet == (SwAttrSet*)&rFmt.aSet )		// Set hier kopieren
             pChgSet = new SwAttrSet( rFmt.aSet );
         pChgSet->Differentiate( aSet );
     }
@@ -229,18 +229,18 @@ void SwFmt::CopyAttrs( const SwFmt& rFmt, BOOL bReplace )
 
             SwAttrSetChg aChgOld( aSet, aOld );
             SwAttrSetChg aChgNew( aSet, aNew );
-            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
         }
     }
 
-    if( pChgSet != (SwAttrSet*)&rFmt.aSet )     // Set hier angelegt ?
+    if( pChgSet != (SwAttrSet*)&rFmt.aSet )		// Set hier angelegt ?
         delete pChgSet;
 }
 
 /*************************************************************************
 |*    SwFmt::~SwFmt()
 |*
-|*    Beschreibung      Dokument 1.14
+|*    Beschreibung		Dokument 1.14
 |*    Ersterstellung    JP 22.11.90
 |*    Letzte Aenderung  JP 14.02.91
 *************************************************************************/
@@ -257,7 +257,7 @@ SwFmt::~SwFmt()
         bFmtInDTOR = TRUE;
 
         SwFmt *pParentFmt = DerivedFrom();
-        if (!pParentFmt)        // see #112405#
+        if (!pParentFmt)		// see #112405#
         {
             DBG_ERROR( "~SwFmt: parent format missing" );
         }
@@ -279,7 +279,7 @@ SwFmt::~SwFmt()
 /*************************************************************************
 |*    void SwFmt::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 |*
-|*    Beschreibung      Dokument 1.14
+|*    Beschreibung		Dokument 1.14
 |*    Ersterstellung    JP 22.11.90
 |*    Letzte Aenderung  JP 05.08.94
 *************************************************************************/
@@ -287,13 +287,13 @@ SwFmt::~SwFmt()
 
 void SwFmt::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 {
-    BOOL bWeiter = TRUE;    // TRUE = Propagierung an die Abhaengigen
+    BOOL bWeiter = TRUE;	// TRUE = Propagierung an die Abhaengigen
 
     USHORT nWhich = pOldValue ? pOldValue->Which() :
                     pNewValue ? pNewValue->Which() : 0 ;
     switch( nWhich )
     {
-    case 0:     break;          // Which-Id von 0 ???
+    case 0:		break;			// Which-Id von 0 ???
 
     case RES_OBJECTDYING :
         {
@@ -476,7 +476,7 @@ BOOL SwFmt::SetFmtAttr(const SfxPoolItem& rAttr )
 
             SwAttrSetChg aChgOld( aSet, aOld );
             SwAttrSetChg aChgNew( aSet, aNew );
-            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
         }
     }
     return bRet;
@@ -524,7 +524,7 @@ BOOL SwFmt::SetFmtAttr( const SfxItemSet& rSet )
             aSet.SetModifyAtAttr( this );
             SwAttrSetChg aChgOld( aSet, aOld );
             SwAttrSetChg aChgNew( aSet, aNew );
-            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
         }
     }
     return bRet;
@@ -539,7 +539,7 @@ BOOL SwFmt::ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 )
         return FALSE;
 
     if( !nWhich2 || nWhich2 < nWhich1 )
-        nWhich2 = nWhich1;      // dann setze auf 1. Id, nur dieses Item
+        nWhich2 = nWhich1;		// dann setze auf 1. Id, nur dieses Item
 
     if ( IsInCache() || IsInSwFntCache() )
     {
@@ -561,7 +561,7 @@ BOOL SwFmt::ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 )
     {
         SwAttrSetChg aChgOld( aSet, aOld );
         SwAttrSetChg aChgNew( aSet, aNew );
-        Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
     }
     return bRet;
 }
@@ -595,7 +595,7 @@ USHORT SwFmt::ResetAllFmtAttr()
     {
         SwAttrSetChg aChgOld( aSet, aOld );
         SwAttrSetChg aChgNew( aSet, aNew );
-        Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
     }
     return aNew.Count();
 }
@@ -644,7 +644,7 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
     {
         SwAttrSetChg aChgOld( aSet, aOld );
         SwAttrSetChg aChgNew( aSet, aNew );
-        Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
     }
 }
 

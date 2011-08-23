@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,10 +58,10 @@
 
 /*************************************************************************
 |*
-|*  SwViewImp::Init()
+|*	SwViewImp::Init()
 |*
-|*  Ersterstellung      MA 25. Jul. 94
-|*  Letzte Aenderung    MA 03. Nov. 95
+|*	Ersterstellung		MA 25. Jul. 94
+|*	Letzte Aenderung	MA 03. Nov. 95
 |*
 |*************************************************************************/
 
@@ -112,10 +112,10 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
 
 /*************************************************************************
 |*
-|*  SwViewImp::SwViewImp()  CTor fuer die Core-Internas
+|*	SwViewImp::SwViewImp()	CTor fuer die Core-Internas
 |*
-|*  Ersterstellung      MA 25. Jul. 94
-|*  Letzte Aenderung    MA 06. Sep. 96
+|*	Ersterstellung		MA 25. Jul. 94
+|*	Letzte Aenderung	MA 06. Sep. 96
 |*
 |*************************************************************************/
 
@@ -142,10 +142,10 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
 
 /******************************************************************************
 |*
-|*  SwViewImp::~SwViewImp()
+|*	SwViewImp::~SwViewImp()
 |*
-|*  Ersterstellung      MA 25. Jul. 94
-|*  Letzte Aenderung    MA 16. Dec. 94
+|*	Ersterstellung		MA 25. Jul. 94
+|*	Letzte Aenderung	MA 16. Dec. 94
 |*
 ******************************************************************************/
 
@@ -170,10 +170,10 @@ SwViewImp::~SwViewImp()
 
 /******************************************************************************
 |*
-|*  SwViewImp::DelRegions()
+|*	SwViewImp::DelRegions()
 |*
-|*  Ersterstellung      MA 14. Apr. 94
-|*  Letzte Aenderung    MA 14. Apr. 94
+|*	Ersterstellung		MA 14. Apr. 94
+|*	Letzte Aenderung	MA 14. Apr. 94
 |*
 ******************************************************************************/
 
@@ -184,10 +184,10 @@ void SwViewImp::DelRegion()
 
 /******************************************************************************
 |*
-|*  SwViewImp::AddPaintRect()
+|*	SwViewImp::AddPaintRect()
 |*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 27. Jul. 94
+|*	Ersterstellung		MA ??
+|*	Letzte Aenderung	MA 27. Jul. 94
 |*
 ******************************************************************************/
 
@@ -206,10 +206,10 @@ BOOL SwViewImp::AddPaintRect( const SwRect &rRect )
 
 /******************************************************************************
 |*
-|*  ViewImp::CheckWaitCrsr()
+|*	ViewImp::CheckWaitCrsr()
 |*
-|*  Ersterstellung      MA 10. Aug. 94
-|*  Letzte Aenderung    MA 10. Aug. 94
+|*	Ersterstellung		MA 10. Aug. 94
+|*	Letzte Aenderung	MA 10. Aug. 94
 |*
 ******************************************************************************/
 
@@ -221,10 +221,10 @@ void SwViewImp::CheckWaitCrsr()
 
 /******************************************************************************
 |*
-|*  ViewImp::IsCalcLayoutProgress()
+|*	ViewImp::IsCalcLayoutProgress()
 |*
-|*  Ersterstellung      MA 12. Aug. 94
-|*  Letzte Aenderung    MA 12. Aug. 94
+|*	Ersterstellung		MA 12. Aug. 94
+|*	Letzte Aenderung	MA 12. Aug. 94
 |*
 ******************************************************************************/
 
@@ -237,10 +237,10 @@ BOOL SwViewImp::IsCalcLayoutProgress() const
 
 /******************************************************************************
 |*
-|*  ViewImp::IsUpdateExpFlds()
+|*	ViewImp::IsUpdateExpFlds()
 |*
-|*  Ersterstellung      MA 28. Mar. 96
-|*  Letzte Aenderung    MA 28. Mar. 96
+|*	Ersterstellung		MA 28. Mar. 96
+|*	Letzte Aenderung	MA 28. Mar. 96
 |*
 ******************************************************************************/
 
@@ -257,10 +257,10 @@ BOOL SwViewImp::IsUpdateExpFlds()
 
 /******************************************************************************
 |*
-|*  SwViewImp::SetFirstVisPage(), ImplGetFirstVisPage();
+|*	SwViewImp::SetFirstVisPage(), ImplGetFirstVisPage();
 |*
-|*  Ersterstellung      MA 21. Sep. 93
-|*  Letzte Aenderung    MA 08. Mar. 94
+|*	Ersterstellung		MA 21. Sep. 93
+|*	Letzte Aenderung	MA 08. Mar. 94
 |*
 ******************************************************************************/
 
@@ -303,10 +303,10 @@ void SwViewImp::SetFirstVisPage()
 
 /******************************************************************************
 |*
-|*  SwViewImp::MakeDrawView();
+|*	SwViewImp::MakeDrawView();
 |*
-|*  Ersterstellung      AMA 01. Nov. 95
-|*  Letzte Aenderung    AMA 01. Nov. 95
+|*	Ersterstellung		AMA 01. Nov. 95
+|*	Letzte Aenderung	AMA 01. Nov. 95
 |*
 ******************************************************************************/
 
@@ -370,10 +370,10 @@ void SwViewImp::MakeDrawView()
 
 /******************************************************************************
 |*
-|*  SwViewImp::GetRetoucheColor()
+|*	SwViewImp::GetRetoucheColor()
 |*
-|*  Ersterstellung      MA 24. Jun. 98
-|*  Letzte Aenderung    MA 24. Jun. 98
+|*	Ersterstellung		MA 24. Jun. 98
+|*	Letzte Aenderung	MA 24. Jun. 98
 |*
 ******************************************************************************/
 
@@ -470,7 +470,7 @@ void SwViewImp::InvalidateAccessibleCursorPosition( const SwFrm *pFrm )
 }
 
 void SwViewImp::InvalidateAccessibleEditableState( sal_Bool bAllShells,
-                                                      const SwFrm *pFrm )
+                                                      const SwFrm *pFrm	)
 {
     if( bAllShells )
     {

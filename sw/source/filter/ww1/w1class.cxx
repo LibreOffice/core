@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -348,7 +348,7 @@ Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, ULONG nFieldFlgs)
                 //~ Ww1: new-NULL
                 if (rFib.GetStream().Read(pA, rFib.GetFIB().cbSttbfffnGet()
                  - sizeof(nCountBytes)) == (ULONG)rFib.GetFIB().cbSttbfffnGet()
-                 - sizeof(nCountBytes)) // lese alle Fonts
+                 - sizeof(nCountBytes))	// lese alle Fonts
                 {} //nothing
 
                 long nLeft = rFib.GetFIB().cbSttbfffnGet()
@@ -362,15 +362,15 @@ Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, ULONG nFieldFlgs)
                         break;
                     nMax++;
                     nLeft -= nNextSiz;
-                    if(nLeft < 1)           // naechste Laenge muss gelesen werden koennen
+                    if(nLeft < 1)			// naechste Laenge muss gelesen werden koennen
                         break;
                     p = (W1_FFN *)(((char*)p) + nNextSiz);
                 }
                 if (nMax)
                 {
-                    pFontA = new W1_FFN*[nMax];         // alloziere Index-Array
+                    pFontA = new W1_FFN*[nMax];			// alloziere Index-Array
                     //~ Ww1: new-NULL
-                    pFontA[0] = pA;                     // fuelle Index-Array
+                    pFontA[0] = pA;						// fuelle Index-Array
                     USHORT i;
                     for(i=1, p=pA; i<nMax; i++)
                     {
@@ -379,7 +379,7 @@ Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, ULONG nFieldFlgs)
                     }
                 }
                 else
-                    pFontA = 0; // Keine Eintraege -> kein Array
+                    pFontA = 0;	// Keine Eintraege -> kein Array
             }
     }
     bOK = TRUE;
@@ -501,8 +501,8 @@ USHORT Ww1SingleSprmByteSized::Size(BYTE* pSprm)
 {
     USHORT nRet;
     nRet = SVBT8ToByte(pSprm);
-    nRet += sizeof(SVBT8);  // var. l. byte-size
-//  pSprm += sizeof(SVBT8); // var. l. byte-size
+    nRet += sizeof(SVBT8);	// var. l. byte-size
+//	pSprm += sizeof(SVBT8); // var. l. byte-size
     nRet = nRet + nCountBytes;
     return nRet;
 }
@@ -512,7 +512,7 @@ USHORT Ww1SingleSprmWordSized::Size(BYTE* pSprm)
     USHORT nRet;
     nRet = SVBT16ToShort(pSprm);
     nRet += sizeof(SVBT16);  // var. l. word-size
-//  pSprm += sizeof(SVBT16); // var. l. word-size
+//	pSprm += sizeof(SVBT16); // var. l. word-size
     nRet = nRet + nCountBytes;
     return nRet;
 }
@@ -603,7 +603,7 @@ void Ww1Sprm::InitTab()
     pSingleSprm = new Ww1SingleSprm( 0, DUMPNAME(pUnknown));
 
     aTab[  2] = new Ww1SingleSprmByte(DUMPNAME("sprmPStc")); //   2 pap.istd (style code)
-    aTab[  3] = new Ww1SingleSprmByteSized(0, DUMPNAME("sprmPIstdPermute")); //   3 pap.istd    permutation
+    aTab[  3] = new Ww1SingleSprmByteSized(0, DUMPNAME("sprmPIstdPermute")); //   3 pap.istd	permutation
     aTab[  4] = new Ww1SingleSprmByte(DUMPNAME("sprmPIncLevel")); //   4 pap.istddifference
     aTab[  5] = new Ww1SingleSprmPJc(DUMPNAME("sprmPJc")); //   5 pap.jc (justification)
     aTab[  6] = new Ww1SingleSprmBool(DUMPNAME("sprmPFSideBySide")); //   6 pap.fSideBySide
@@ -620,7 +620,7 @@ void Ww1Sprm::InitTab()
     aTab[ 17] = new Ww1SingleSprmPDxaLeft(DUMPNAME("sprmPDxaLeft")); //  17 pap.dxaLeft
     aTab[ 18] = new Ww1SingleSprmWord(DUMPNAME("sprmPNest")); //  18 pap.dxaNest
     aTab[ 19] = new Ww1SingleSprmPDxaLeft1(DUMPNAME("sprmPDxaLeft1")); //  19 pap.dxaLeft1
-    aTab[ 20] = new Ww1SingleSprmPDyaLine(DUMPNAME("sprmPDyaLine")); //  20 pap.lspd    an LSPD
+    aTab[ 20] = new Ww1SingleSprmPDyaLine(DUMPNAME("sprmPDyaLine")); //  20 pap.lspd	an LSPD
     aTab[ 21] = new Ww1SingleSprmPDyaBefore(DUMPNAME("sprmPDyaBefore")); //  21 pap.dyaBefore
     aTab[ 22] = new Ww1SingleSprmPDyaAfter(DUMPNAME("sprmPDyaAfter")); //  22 pap.dyaAfter
     aTab[ 23] = new Ww1SingleSprmTab(0, DUMPNAME(pUnknown)); // 23 pap.itbdMac, pap.rgdxaTab
@@ -820,7 +820,7 @@ BYTE* Ww1Plc::GetData(USHORT nIndex)
 Ww1StringList::Ww1StringList( SvStream& rSt, ULONG nFc, USHORT nCb )
     : pIdxA(0), nMax(0)
 {
-    if( nCb > 2 )            // ueberhaupt Eintraege ?
+    if( nCb > 2 )			 // ueberhaupt Eintraege ?
     {
         SVBT16 nCountBytes;
         DBG_ASSERT(nCb > sizeof(nCountBytes), "Ww1StringList");
@@ -835,7 +835,7 @@ Ww1StringList::Ww1StringList( SvStream& rSt, ULONG nFc, USHORT nCb )
                                     // Alloziere PString-Array
                 //~ Ww1: new-NULL
                 if (rSt.Read(pA, nCb - sizeof(nCountBytes))
-                        == (ULONG)nCb - sizeof(nCountBytes))    // lese alle
+                        == (ULONG)nCb - sizeof(nCountBytes))	// lese alle
                 {}// do nothing
                                     // Zaehle, wieviele Fonts enthalten
                 long nLeft = nCb - sizeof(nCountBytes);
@@ -848,32 +848,32 @@ Ww1StringList::Ww1StringList( SvStream& rSt, ULONG nFc, USHORT nCb )
                         break;
                     nMax++;
                     nLeft -= nNextSiz;
-                    if(nLeft < 1)           // naechste Laenge muss gelesen werden koennen
+                    if(nLeft < 1)			// naechste Laenge muss gelesen werden koennen
                         break;
                     p = p + nNextSiz;
                 }
                 if (nMax)
                 {
-                    pIdxA = new sal_Char*[nMax+1];      // alloziere Index-Array
-                    pIdxA[0] = pA;                      // Index 0 : alles
+                    pIdxA = new sal_Char*[nMax+1];		// alloziere Index-Array
+                    pIdxA[0] = pA;						// Index 0 : alles
                                                         // ab Index 1 C-Strings
-                    pIdxA[1] = pA + 1;                  // fuelle Index-Array
+                    pIdxA[1] = pA + 1;					// fuelle Index-Array
                     USHORT i = 2;
                     p = pA;
                     BYTE nL = *p;
                     while(1)
                     {
-                        p += nL + 1;                    // Neues Laengen-Byte
-                        nL = *p;                        // merke Laenge
-                        *p = '\0';                      // mach C-String draus
+                        p += nL + 1;					// Neues Laengen-Byte
+                        nL = *p;						// merke Laenge
+                        *p = '\0';						// mach C-String draus
                         if( i > nMax )
                             break;
-                        pIdxA[i] = p + 1;               // Ptr auf C-String
+                        pIdxA[i] = p + 1;				// Ptr auf C-String
                         i++;
                     }
                 }
                 else
-                    pIdxA = 0;  // Keine Eintraege -> kein Array
+                    pIdxA = 0;	// Keine Eintraege -> kein Array
             }
     }
 }
@@ -994,10 +994,10 @@ BOOL Ww1FkpPap::Fill(USHORT nIndex, BYTE*& p, USHORT& rnCountBytes)
     if (nOffset)
     {
         DBG_ASSERT(nOffset>(USHORT)(Count()*sizeof(SVBT32)), "calc error");
-//      rnCountBytes = SVBT8ToByte(aFkp+nOffset) * 2 + 1;  // SH: +1 ?????
+//		rnCountBytes = SVBT8ToByte(aFkp+nOffset) * 2 + 1;  // SH: +1 ?????
         rnCountBytes = SVBT8ToByte(aFkp+nOffset) * 2;
         nOffset += sizeof(SVBT8);
-        if( nOffset + rnCountBytes < 511 )  // SH: Assert schlug 1 zu frueh zu
+        if( nOffset + rnCountBytes < 511 )	// SH: Assert schlug 1 zu frueh zu
             rnCountBytes++;                 // SH: Ich weiss nicht genau,
                                             // ob das letzte Byte des PAPX
                                             // genutzt wird, aber so vergessen
@@ -1018,7 +1018,7 @@ BOOL Ww1FkpPap::Fill(USHORT nIndex, BYTE*& p, USHORT& rnCountBytes)
 BOOL Ww1FkpChp::Fill(USHORT nIndex, W1_CHP& aChp)
 {
     DBG_ASSERT( nIndex < Count(), "Ww1FkpChp::Fill() Index out of Range" );
-    memset(&aChp, 0, sizeof(aChp)); // Default, da verkuerzt gespeichert
+    memset(&aChp, 0, sizeof(aChp));	// Default, da verkuerzt gespeichert
     USHORT nOffset = GetData(nIndex)[0] * 2;
     if (nOffset)
     {
@@ -1096,7 +1096,7 @@ ULONG Ww1Pap::Where( BOOL bSetIndex )
                 nFkpIndex = 0;
         }
     if (pPap != NULL)
-//      if (nFkpIndex < pPap->Count())
+//		if (nFkpIndex < pPap->Count())
         if (nFkpIndex <= pPap->Count())
             ulRet = pPap->Where(nFkpIndex) - rFib.GetFIB().fcMinGet();
     return ulRet;
@@ -1105,7 +1105,7 @@ ULONG Ww1Pap::Where( BOOL bSetIndex )
 void Ww1Pap::operator++(int)
 {
     if (pPap != NULL)
-//      if (++nFkpIndex >= pPap->Count())
+//		if (++nFkpIndex >= pPap->Count())
         if (++nFkpIndex > pPap->Count())
         {
             delete pPap;
@@ -1197,7 +1197,7 @@ ULONG Ww1Chp::Where( BOOL bSetIndex )
                 nFkpIndex = 0;
         }
     if (pChp != NULL)
-//      if (nFkpIndex < pChp->Count())
+//		if (nFkpIndex < pChp->Count())
         if (nFkpIndex <= pChp->Count())
             ulRet = pChp->Where(nFkpIndex) -
                      rFib.GetFIB().fcMinGet() - ulOffset;
@@ -1207,7 +1207,7 @@ ULONG Ww1Chp::Where( BOOL bSetIndex )
 void Ww1Chp::operator++(int)
 {
     if (pChp != NULL)
-//      if (++nFkpIndex >= pChp->Count())
+//		if (++nFkpIndex >= pChp->Count())
         if (++nFkpIndex > pChp->Count())
         {
             delete pChp;

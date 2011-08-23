@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -273,7 +273,7 @@ sal_Int32 ReadThroughComponent(
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
 #endif
-
+        
         return ERR_SWG_READ_ERROR;
     }
     catch( packages::zip::ZipIOException& r)
@@ -444,10 +444,10 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     for ( USHORT n = 1; n < rColls.Count(); ++n )
     {
         SwTxtFmtColl* pColl = rColls[ n ];
-        //if ( pColl->GetOutlineLevel() != NO_NUMBERING )       //#outline level zhaojianwei
+        //if ( pColl->GetOutlineLevel() != NO_NUMBERING )		//#outline level zhaojianwei
         if ( pColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-        //  aOutlineLevelAssigned[ pColl->GetOutlineLevel() ] = true;
+        //	aOutlineLevelAssigned[ pColl->GetOutlineLevel() ] = true;
             aOutlineLevelAssigned[ pColl->GetAssignedOutlineStyleLevel() ] = true;//<-end,zhaojianwei
         }
 
@@ -850,7 +850,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
         }
     }
 
-    rDoc.acquire(); // prevent deletion
+    rDoc.acquire();	// prevent deletion
     sal_uInt32 nRet = 0;
 
     // save redline mode into import info property set

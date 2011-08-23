@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -174,9 +174,9 @@ BOOL SwCSS1Parser::SetFmtBreak( SfxItemSet& rItemSet,
     case SVX_CSS1_PBREAK_AUTO:
         bSetBreak = bSetPageDesc = TRUE;
         break;
-//  case SVX_CSS1_PBREAK_AVOID:
+//	case SVX_CSS1_PBREAK_AVOID:
         // Hier koennte man SvxKeepItem am Absatz davor einfuegen
-//      break;
+//		break;
     default:
         ;
     }
@@ -1189,24 +1189,24 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( USHORT nToken2, const String& rClass ) const
     const sal_Char* sName = 0;
     switch( nToken2 )
     {
-    case HTML_EMPHASIS_ON:      nPoolId = RES_POOLCHR_HTML_EMPHASIS;    break;
-    case HTML_CITIATION_ON:     nPoolId = RES_POOLCHR_HTML_CITIATION;   break;
-    case HTML_STRONG_ON:        nPoolId = RES_POOLCHR_HTML_STRONG;      break;
-    case HTML_CODE_ON:          nPoolId = RES_POOLCHR_HTML_CODE;        break;
-    case HTML_SAMPLE_ON:        nPoolId = RES_POOLCHR_HTML_SAMPLE;      break;
-    case HTML_KEYBOARD_ON:      nPoolId = RES_POOLCHR_HTML_KEYBOARD;    break;
-    case HTML_VARIABLE_ON:      nPoolId = RES_POOLCHR_HTML_VARIABLE;    break;
-    case HTML_DEFINSTANCE_ON:   nPoolId = RES_POOLCHR_HTML_DEFINSTANCE; break;
-    case HTML_TELETYPE_ON:      nPoolId = RES_POOLCHR_HTML_TELETYPE;    break;
+    case HTML_EMPHASIS_ON:		nPoolId = RES_POOLCHR_HTML_EMPHASIS;	break;
+    case HTML_CITIATION_ON: 	nPoolId = RES_POOLCHR_HTML_CITIATION;   break;
+    case HTML_STRONG_ON:		nPoolId = RES_POOLCHR_HTML_STRONG;      break;
+    case HTML_CODE_ON:			nPoolId = RES_POOLCHR_HTML_CODE;        break;
+    case HTML_SAMPLE_ON:		nPoolId = RES_POOLCHR_HTML_SAMPLE;      break;
+    case HTML_KEYBOARD_ON:		nPoolId = RES_POOLCHR_HTML_KEYBOARD;    break;
+    case HTML_VARIABLE_ON:		nPoolId = RES_POOLCHR_HTML_VARIABLE;    break;
+    case HTML_DEFINSTANCE_ON:	nPoolId = RES_POOLCHR_HTML_DEFINSTANCE; break;
+    case HTML_TELETYPE_ON:		nPoolId = RES_POOLCHR_HTML_TELETYPE;    break;
 
-    case HTML_SHORTQUOTE_ON:    sName = OOO_STRING_SVTOOLS_HTML_shortquote;     break;
-    case HTML_LANGUAGE_ON:      sName = OOO_STRING_SVTOOLS_HTML_language;   break;
-    case HTML_AUTHOR_ON:        sName = OOO_STRING_SVTOOLS_HTML_author;         break;
-    case HTML_PERSON_ON:        sName = OOO_STRING_SVTOOLS_HTML_person;         break;
-    case HTML_ACRONYM_ON:       sName = OOO_STRING_SVTOOLS_HTML_acronym;        break;
-    case HTML_ABBREVIATION_ON:  sName = OOO_STRING_SVTOOLS_HTML_abbreviation;   break;
-    case HTML_INSERTEDTEXT_ON:  sName = OOO_STRING_SVTOOLS_HTML_insertedtext;   break;
-    case HTML_DELETEDTEXT_ON:   sName = OOO_STRING_SVTOOLS_HTML_deletedtext;    break;
+    case HTML_SHORTQUOTE_ON:	sName = OOO_STRING_SVTOOLS_HTML_shortquote; 	break;
+    case HTML_LANGUAGE_ON:		sName = OOO_STRING_SVTOOLS_HTML_language; 	break;
+    case HTML_AUTHOR_ON:		sName = OOO_STRING_SVTOOLS_HTML_author; 		break;
+    case HTML_PERSON_ON:		sName = OOO_STRING_SVTOOLS_HTML_person; 		break;
+    case HTML_ACRONYM_ON:		sName = OOO_STRING_SVTOOLS_HTML_acronym; 		break;
+    case HTML_ABBREVIATION_ON:	sName = OOO_STRING_SVTOOLS_HTML_abbreviation;	break;
+    case HTML_INSERTEDTEXT_ON:	sName = OOO_STRING_SVTOOLS_HTML_insertedtext;	break;
+    case HTML_DELETEDTEXT_ON:	sName = OOO_STRING_SVTOOLS_HTML_deletedtext; 	break;
     }
 
     // die Vorlage suchen oder anlegen (geht nur mit Namen)
@@ -1322,7 +1322,7 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( USHORT nTxtColl,
     }
 
     String sName;
-    if( USER_FMT & nTxtColl )       // eine vom Reader angelegte
+    if( USER_FMT & nTxtColl )		// eine vom Reader angelegte
     {
         ASSERT( !this, "Wo kommt die Benutzer-Vorlage her?" );
         pColl = GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
@@ -1488,12 +1488,12 @@ BOOL SwCSS1Parser::MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
                                     BOOL bAutoWidth )
 {
     // abs-pos
-    // left/top none    auto    twip    perc
+    // left/top	none	auto	twip	perc
     //
-    // none     Z       Z       -       -
-    // auto     Z       Z       -       -
-    // twip     Z       Z       S/R     -
-    // perc     -       -       -       -
+    // none		Z		Z		-		-
+    // auto		Z		Z		-		-
+    // twip		Z		Z		S/R		-
+    // perc		-		-		-		-
     //
     // - das Tag wird absolut positioniert und left/top sind beide
     //   gegeben und enthalten auch keine %-Angabe, oder
@@ -1502,9 +1502,9 @@ BOOL SwCSS1Parser::MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
     return ( ( SVX_CSS1_POS_ABSOLUTE     == rPropInfo.ePosition &&
                SVX_CSS1_LTYPE_PERCENTAGE != rPropInfo.eLeftType &&
                SVX_CSS1_LTYPE_PERCENTAGE != rPropInfo.eTopType &&
-              (SVX_CSS1_LTYPE_TWIP       == rPropInfo.eLeftType ||
-               SVX_CSS1_LTYPE_TWIP       != rPropInfo.eTopType) ) ||
-             ( SVX_ADJUST_END            != rPropInfo.eFloat  ) ) &&
+              (SVX_CSS1_LTYPE_TWIP		 == rPropInfo.eLeftType ||
+               SVX_CSS1_LTYPE_TWIP		 != rPropInfo.eTopType) ) ||
+             ( SVX_ADJUST_END        	 != rPropInfo.eFloat  ) ) &&
            ( bAutoWidth ||
              SVX_CSS1_LTYPE_TWIP         == rPropInfo.eWidthType ||
              SVX_CSS1_LTYPE_PERCENTAGE   == rPropInfo.eWidthType );
@@ -1518,8 +1518,8 @@ void SwCSS1Parser::AddClassName( String& rFmtName, const String& rClass )
     ASSERT( rClass.Len(), "Style-Klasse ohne Laenge?" );
 
 // ??????????
-//  String aTmp( rClass );
-//  GetpApp()->GetAppInternational().ToLower( aTmp );
+//	String aTmp( rClass );
+//	GetpApp()->GetAppInternational().ToLower( aTmp );
 
     (rFmtName += '.') += rClass;
 }
@@ -1918,13 +1918,13 @@ BOOL SwCSS1Parser::ParseStyleSheet( const String& rIn )
                           pPageEntry->GetPropertyInfo() );
         SetPageDescAttrs( GetRightPageDesc(), pPageEntry->GetItemSet(),
                           pPageEntry->GetPropertyInfo() );
-//      if( pNamedPageDescs )
-//      {
-//          for( USHORT i=0; i<pNamedPageDescs->Count(); i++ )
-//              SetPageDescAttrs( (*pNamedPageDescs)[i],
-//                                pPageEntry->GetItemSet(),
-//                                pPageEntry->GetPropertyInfo() );
-//      }
+//		if( pNamedPageDescs )
+//		{
+//			for( USHORT i=0; i<pNamedPageDescs->Count(); i++ )
+//				SetPageDescAttrs( (*pNamedPageDescs)[i],
+//								  pPageEntry->GetItemSet(),
+//						  		  pPageEntry->GetPropertyInfo() );
+//		}
 
     }
 
@@ -1950,27 +1950,27 @@ BOOL SwCSS1Parser::ParseStyleSheet( const String& rIn )
                           pPageEntry->GetPropertyInfo() );
 
     // und jetzt noch die benannten Vorlagen
-//  for( USHORT i=0; i < GetPageCount(); i++ )
-//  {
-//      pPageEntry = GetPage( i );
-//      const String& rKey = pPageEntry->GetKey();
-//      if( !rKey.Len() || rKey.GetChar(0) == ':' )
-//          continue;
+//	for( USHORT i=0; i < GetPageCount(); i++ )
+//	{
+//		pPageEntry = GetPage( i );
+//		const String& rKey = pPageEntry->GetKey();
+//		if( !rKey.Len() || rKey.GetChar(0) == ':' )
+//			continue;
 //
-//      String aName( rKey );
-//      GetpApp()->GetAppInternational().ToLower( aName );
-//      USHORT nPage = pDoc->MakePageDesc( aName );
-//      SwPageDesc *pPageDesc = &pDoc->_GetPageDesc( nPage );
+//		String aName( rKey );
+//		GetpApp()->GetAppInternational().ToLower( aName );
+//		USHORT nPage = pDoc->MakePageDesc( aName );
+//		SwPageDesc *pPageDesc = &pDoc->_GetPageDesc( nPage );
 //
-//      // Die neue Seitenvorlage entsteht aus dem Master durch kopieren.
-//      pDoc->CopyPageDesc( *pMasterPageDesc, *pPageDesc );
-//      SetPageDescAttrs( pPageDesc, pPageEntry->GetItemSet(),
-//                        pPageEntry->GetPropertyInfo() );
+//		// Die neue Seitenvorlage entsteht aus dem Master durch kopieren.
+//		pDoc->CopyPageDesc( *pMasterPageDesc, *pPageDesc );
+//		SetPageDescAttrs( pPageDesc, pPageEntry->GetItemSet(),
+//						  pPageEntry->GetPropertyInfo() );
 //
-//      if( !pNamedPageDescs )
-//          pNamedPageDescs = new SwHTMLPageDescs;
-//      pNamedPageDescs->Insert( pPageDesc, pNamedPageDescs->Count() );
-//  }
+//		if( !pNamedPageDescs )
+//			pNamedPageDescs = new SwHTMLPageDescs;
+//		pNamedPageDescs->Insert( pPageDesc, pNamedPageDescs->Count() );
+//	}
 
     return TRUE;
 }

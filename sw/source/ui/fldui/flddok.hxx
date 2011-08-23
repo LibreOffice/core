@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,36 +46,36 @@
 
 class SwFldDokPage : public SwFldPage
 {
-    FixedText           aTypeFT;
-    ListBox             aTypeLB;
-    FixedText           aSelectionFT;
-    ListBox             aSelectionLB;
-    FixedText           aValueFT;
-    Edit                aValueED;
-    NumericField        aLevelED;
-    NumericField        aDateOffsetED;
-    FixedText           aFormatFT;
-    ListBox             aFormatLB;
-    NumFormatListBox    aNumFormatLB;
-    CheckBox            aFixedCB;
+    FixedText 			aTypeFT;
+    ListBox				aTypeLB;
+    FixedText			aSelectionFT;
+    ListBox				aSelectionLB;
+    FixedText			aValueFT;
+    Edit				aValueED;
+    NumericField		aLevelED;
+    NumericField		aDateOffsetED;
+    FixedText			aFormatFT;
+    ListBox				aFormatLB;
+    NumFormatListBox	aNumFormatLB;
+    CheckBox			aFixedCB;
 
-    String              sDateOffset;
-    String              sTimeOffset;
-    Bitmap              aRootOpened;
-    Bitmap              aRootClosed;
+    String				sDateOffset;
+    String				sTimeOffset;
+    Bitmap				aRootOpened;
+    Bitmap 				aRootClosed;
 
-    USHORT              nOldSel;
-    ULONG               nOldFormat;
+    USHORT				nOldSel;
+    ULONG				nOldFormat;
 
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
     DECL_LINK( FormatHdl, ListBox* pLB = 0 );
     DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
 
-    void                AddSubType(USHORT nTypeId);
-    USHORT              FillFormatLB(USHORT nTypeId);
+    void				AddSubType(USHORT nTypeId);
+    USHORT				FillFormatLB(USHORT nTypeId);
 
 protected:
-    virtual USHORT      GetGroup();
+    virtual USHORT		GetGroup();
 
 public:
                         SwFldDokPage(Window* pWindow, const SfxItemSet& rSet);
@@ -87,7 +87,7 @@ public:
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
-    virtual void        FillUserData();
+    virtual void		FillUserData();
 };
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,18 +50,18 @@
 class SwOneExampleFrame;
 class SwFrmCtrlWindow : public Window
 {
-    SwOneExampleFrame*  pExampleFrame;
+    SwOneExampleFrame* 	pExampleFrame;
 public:
-    SwFrmCtrlWindow(Window* pParent, WinBits nBits, SwOneExampleFrame*  pFrame);
+    SwFrmCtrlWindow(Window* pParent, WinBits nBits, SwOneExampleFrame* 	pFrame);
 
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void	Command( const CommandEvent& rCEvt );
 };
 /* -----------------------------15.12.99 12:56--------------------------------
 
  ---------------------------------------------------------------------------*/
 class MenuResource : public Resource
 {
-    ResStringArray      aMenuArray;
+    ResStringArray		aMenuArray;
 
 public:
     MenuResource(const ResId& rResId);
@@ -71,7 +71,7 @@ public:
 /* -----------------27.07.99 15:20-------------------
 
  --------------------------------------------------*/
-#define EX_SHOW_ONLINE_LAYOUT   0x001
+#define EX_SHOW_ONLINE_LAYOUT 	0x001
 
 // hard zoom value
 #define EX_SHOW_BUSINESS_CARDS  0x02
@@ -86,28 +86,28 @@ class SW_DLLPUBLIC SwOneExampleFrame
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >    _xController;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >     _xCursor;
 
-    SwFrmCtrlWindow aTopWindow;
-    Window&         rWindow;
-    Timer           aLoadedTimer;
-    Link            aInitializedLink;
+    SwFrmCtrlWindow	aTopWindow;
+    Window& 		rWindow;
+    Timer			aLoadedTimer;
+    Link			aInitializedLink;
 
-    MenuResource    aMenuRes;
-    String          sArgumentURL;
+    MenuResource	aMenuRes;
+    String 			sArgumentURL;
 
-    SwView*         pModuleView;
+    SwView* 		pModuleView;
 
-    sal_uInt32          nStyleFlags;
+    sal_uInt32			nStyleFlags;
 
-    sal_Bool            bIsInitialized;
-    sal_Bool            bServiceAvailable;
+    sal_Bool			bIsInitialized;
+    sal_Bool 			bServiceAvailable;
 
-    static  sal_Bool    bShowServiceNotAvailableMessage;
+    static 	sal_Bool	bShowServiceNotAvailableMessage;
 
     SW_DLLPRIVATE DECL_LINK( TimeoutHdl, Timer* );
     SW_DLLPRIVATE DECL_LINK( PopupHdl, Menu* );
 
-    SW_DLLPRIVATE void  CreateControl();
-    SW_DLLPRIVATE void  DisposeControl();
+    SW_DLLPRIVATE void	CreateControl();
+    SW_DLLPRIVATE void	DisposeControl();
 
 public:
     SwOneExampleFrame(Window& rWin,
@@ -116,10 +116,10 @@ public:
                     String* pURL = 0);
     ~SwOneExampleFrame();
 
-    STAR_REFERENCE( awt::XControl ) &       GetControl()    {return _xControl; }
-    STAR_REFERENCE( frame::XModel ) &       GetModel()      {return _xModel;}
-    STAR_REFERENCE( frame::XController ) &  GetController() {return _xController;}
-    STAR_REFERENCE( text::XTextCursor ) &   GetTextCursor() {return _xCursor;}
+    STAR_REFERENCE( awt::XControl ) &		GetControl() 	{return _xControl; }
+    STAR_REFERENCE( frame::XModel ) & 		GetModel() 		{return _xModel;}
+    STAR_REFERENCE( frame::XController ) &	GetController() {return _xController;}
+    STAR_REFERENCE( text::XTextCursor ) &	GetTextCursor() {return _xCursor;}
 
     void ClearDocument( BOOL bStartTimer = FALSE );
 
@@ -128,7 +128,7 @@ public:
 
     void CreatePopup(const Point& rPt);
 
-    static void     CreateErrorMessage(Window* pParent);
+    static void		CreateErrorMessage(Window* pParent);
 };
 
 #endif

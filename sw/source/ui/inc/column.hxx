@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,28 +69,28 @@ class SwColumnPage;
 
 class SwColumnDlg : public SfxModalDialog
 {
-    OKButton            aOK;
-    CancelButton        aCancel;
-    HelpButton          aHelp;
+    OKButton 			aOK;
+    CancelButton 		aCancel;
+    HelpButton 			aHelp;
 
-    FixedText           aApplyToFT;
-    ListBox             aApplyToLB;
+    FixedText			aApplyToFT;
+    ListBox				aApplyToLB;
 
-    SwWrtShell&         rWrtShell;
-    SwColumnPage*       pTabPage;
-    SfxItemSet*         pPageSet;
-    SfxItemSet*         pSectionSet;
-    SfxItemSet*         pSelectionSet;
-    SfxItemSet*         pFrameSet;
+    SwWrtShell& 		rWrtShell;
+    SwColumnPage*		pTabPage;
+    SfxItemSet* 		pPageSet;
+    SfxItemSet* 		pSectionSet;
+    SfxItemSet* 		pSelectionSet;
+    SfxItemSet* 		pFrameSet;
 
-    long                nOldSelection;
-    long                nSelectionWidth;
-    long                nPageWidth;
+    long				nOldSelection;
+    long 				nSelectionWidth;
+    long 				nPageWidth;
 
-    BOOL                bPageChanged : 1;
-    BOOL                bSectionChanged : 1;
-    BOOL                bSelSectionChanged : 1;
-    BOOL                bFrameChanged : 1;
+    BOOL				bPageChanged : 1;
+    BOOL				bSectionChanged : 1;
+    BOOL				bSelSectionChanged : 1;
+    BOOL				bFrameChanged : 1;
 
 
     DECL_LINK(ObjectHdl, ListBox*);
@@ -100,7 +100,7 @@ public:
     SwColumnDlg(Window* pParent, SwWrtShell& rSh);
     virtual ~SwColumnDlg();
 
-    SwWrtShell&     GetWrtShell()   { return rWrtShell; }
+    SwWrtShell& 	GetWrtShell()	{ return rWrtShell; }
 };
 
 /*-----------------07.03.97 08.26-------------------
@@ -113,46 +113,46 @@ class ColumnValueSet : public ValueSet
             ValueSet(pParent, rResId){}
         ~ColumnValueSet();
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void	UserDraw( const UserDrawEvent& rUDEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Spaltendialog jetzt als TabPage
+    Beschreibung:	Spaltendialog jetzt als TabPage
  --------------------------------------------------------------------*/
 class SwColumnPage : public SfxTabPage
 {
-    FixedText       aClNrLbl;
-    NumericField    aCLNrEdt;
-    ColumnValueSet  aDefaultVS;
-    ImageList       aPreColsIL;
-    CheckBox        aBalanceColsCB;
-    FixedLine       aFLGroup;
+    FixedText		aClNrLbl;
+    NumericField	aCLNrEdt;
+    ColumnValueSet	aDefaultVS;
+    ImageList		aPreColsIL;
+    CheckBox		aBalanceColsCB;
+    FixedLine		aFLGroup;
 
-    ImageButton     aBtnUp;
+    ImageButton		aBtnUp;
     FixedText       aColumnFT;
-    FixedText       aWidthFT;
-    FixedText       aDistFT;
+    FixedText		aWidthFT;
+    FixedText		aDistFT;
     FixedText       aLbl1;
-    PercentField    aEd1;
-    PercentField    aDistEd1;
+    PercentField	aEd1;
+    PercentField	aDistEd1;
     FixedText       aLbl2;
-    PercentField    aEd2;
-    PercentField    aDistEd2;
+    PercentField	aEd2;
+    PercentField	aDistEd2;
     FixedText       aLbl3;
-    PercentField    aEd3;
-    ImageButton     aBtnDown;
-    CheckBox        aAutoWidthBox;
+    PercentField	aEd3;
+    ImageButton		aBtnDown;
+    CheckBox		aAutoWidthBox;
 
-    FixedLine       aFLLayout;
+    FixedLine		aFLLayout;
 
-    FixedText       aLineTypeLbl;
-    LineListBox     aLineTypeDLB;
-    FixedText       aLineHeightLbl;
-    MetricField     aLineHeightEdit;
-    FixedText       aLinePosLbl;
-    ListBox         aLinePosDLB;
-    FixedLine       aFLLineType;
+    FixedText		aLineTypeLbl;
+    LineListBox		aLineTypeDLB;
+    FixedText		aLineHeightLbl;
+    MetricField		aLineHeightEdit;
+    FixedText		aLinePosLbl;
+    ListBox			aLinePosDLB;
+    FixedLine		aFLLineType;
 
     FixedLine       aVertFL;
     FixedLine       aPropertiesFL;
@@ -160,21 +160,21 @@ class SwColumnPage : public SfxTabPage
     ListBox         aTextDirectionLB;
 
     // Example
-    SwColExample        aPgeExampleWN;
-    SwColumnOnlyExample aFrmExampleWN;
+    SwColExample 		aPgeExampleWN;
+    SwColumnOnlyExample	aFrmExampleWN;
 
     SwColMgr*       pColMgr;
 
-    USHORT          nFirstVis;
-    USHORT          nCols;
-    long            nColWidth[nMaxCols];
-    long            nColDist[nMaxCols];
-    USHORT          nMinWidth;
-    PercentField    *pModifiedField;
-    BOOL            bFormat;
-    BOOL            bFrm;
-    BOOL            bHtmlMode;
-    BOOL            bLockUpdate;
+    USHORT			nFirstVis;
+    USHORT			nCols;
+    long			nColWidth[nMaxCols];
+    long			nColDist[nMaxCols];
+    USHORT			nMinWidth;
+    PercentField	*pModifiedField;
+    BOOL 			bFormat;
+    BOOL			bFrm;
+    BOOL 			bHtmlMode;
+    BOOL			bLockUpdate;
 
     // Handler
     DECL_LINK( ColModify, NumericField * );
@@ -186,20 +186,20 @@ class SwColumnPage : public SfxTabPage
 
     DECL_LINK( Up, Button * );
     DECL_LINK( Down, Button * );
-    void            Apply(Button *);
+    void			Apply(Button *);
     DECL_LINK( UpdateColMgr, void* );
 
-    void            Update();
-    void            UpdateCols();
-    void            Init();
-    void            ResetColWidth();
-    void            SetLabels( USHORT nVis );
+    void			Update();
+    void			UpdateCols();
+    void			Init();
+    void			ResetColWidth();
+    void			SetLabels( USHORT nVis );
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    virtual void    ActivatePage(const SfxItemSet& rSet);
-    virtual int     DeactivatePage(SfxItemSet *pSet);
+    virtual void 	ActivatePage(const SfxItemSet& rSet);
+    virtual int 	DeactivatePage(SfxItemSet *pSet);
 
     SwColumnPage(Window *pParent, const SfxItemSet &rSet);
 
@@ -209,8 +209,8 @@ public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     static USHORT* GetRanges();
 
-    virtual BOOL    FillItemSet(SfxItemSet &rSet);
-    virtual void    Reset(const SfxItemSet &rSet);
+    virtual BOOL 	FillItemSet(SfxItemSet &rSet);
+    virtual void 	Reset(const SfxItemSet &rSet);
 
     void SetFrmMode(BOOL bMod);
     void SetPageWidth(long nPageWidth);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1901,6 +1901,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
                 }
             break;
             case XFILL_SOLID:
+            case XFILL_GRADIENT:
                 {
                     const Color aColor = static_cast< XFillColorItem const & >(
                         rOldSet.Get(XATTR_FILLCOLOR)).GetColorValue();
@@ -1912,8 +1913,8 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
                     bBrushItemOk = true;
                 }
             break;
-            case XFILL_GRADIENT:
-            break;
+            //case XFILL_GRADIENT:
+            //break;
             case XFILL_HATCH:
             break;
             case XFILL_BITMAP:

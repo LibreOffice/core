@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,16 +87,16 @@ using namespace xml::sax;
 struct XMLServiceMapEntry_Impl
 {
     const sal_Char *sFilterService;
-    sal_Int32      nFilterServiceLen;
+    sal_Int32	   nFilterServiceLen;
 
-    sal_uInt32  n1;
-    sal_uInt16  n2, n3;
-    sal_uInt8   n4, n5, n6, n7, n8, n9, n10, n11;
+    sal_uInt32	n1;
+    sal_uInt16	n2, n3;
+    sal_uInt8	n4, n5, n6, n7, n8, n9, n10, n11;
 };
 
 #define SERVICE_MAP_ENTRY( app, s ) \
     { XML_IMPORT_FILTER_##app, sizeof(XML_IMPORT_FILTER_##app)-1, \
-      SO3_##s##_CLASSID }
+      SO3_##s##_CLASSID	}
 
 const XMLServiceMapEntry_Impl aServiceMap[] =
 {

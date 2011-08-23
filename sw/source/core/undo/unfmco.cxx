@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 
 #include "doc.hxx"
-#include "swundo.hxx"           // fuer die UndoIds
+#include "swundo.hxx"			// fuer die UndoIds
 #include "pam.hxx"
 #include "ndtxt.hxx"
 
@@ -87,7 +87,7 @@ void SwUndoFmtColl::Redo( SwUndoIter& rUndoIter )
     SetPaM( rUndoIter );
     rUndoIter.pLastUndoObj = 0;
 
-    Repeat( rUndoIter );    // Collection setzen
+    Repeat( rUndoIter );	// Collection setzen
 
     rUndoIter.pLastUndoObj = 0;
 }

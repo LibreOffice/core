@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,9 +48,9 @@
 #include "porftn.hxx"
 #include "porhyph.hxx"
 #include "pordrop.hxx"
-#include "blink.hxx"    // Blink-Manager
+#include "blink.hxx" 	// Blink-Manager
 #include "init.hxx"   // Deklarationen fuer _TextInit() und _TextFinit()
-#include "txtfly.hxx"   // SwContourCache
+#include "txtfly.hxx"	// SwContourCache
 #include "dbg_lay.hxx"  // Layout Debug Fileausgabe
 
 SwCache *SwTxtFrm::pTxtCache = 0;
@@ -58,11 +58,11 @@ long SwTxtFrm::nMinPrtLine = 0;
 SwContourCache *pContourCache = 0;
 SwDropCapCache *pDropCapCache = 0;
 
-IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtLine,      50,  50 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwParaPortion,  50,  50 ) //Absaetze
-IMPL_FIXEDMEMPOOL_NEWDEL( SwLineLayout,  150, 150 ) //Zeilen
-IMPL_FIXEDMEMPOOL_NEWDEL( SwHolePortion, 150, 150 ) //z.B. Blanks am Zeilenende
-IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtPortion,  200, 100 ) //Attributwechsel
+IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtLine, 	  50,  50 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwParaPortion,  50,  50 )	//Absaetze
+IMPL_FIXEDMEMPOOL_NEWDEL( SwLineLayout,  150, 150 )	//Zeilen
+IMPL_FIXEDMEMPOOL_NEWDEL( SwHolePortion, 150, 150 )	//z.B. Blanks am Zeilenende
+IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtPortion,  200, 100 )	//Attributwechsel
 
 /*************************************************************************
  *                  _TextInit(), _TextFinit()

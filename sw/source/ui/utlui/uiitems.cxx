@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,11 +94,11 @@ int  SwPageFtnInfoItem::operator==( const SfxPoolItem& rAttr ) const
 SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    String&             rText,
+    SfxMapUnit			eCoreUnit,
+    SfxMapUnit			ePresUnit,
+    String& 			rText,
     const IntlWrapper*    pIntl
-)   const
+)	const
 {
     switch ( ePres )
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,3 +50,5 @@
 #define CB_SNAPTOCHARS      23
 #define FT_CHARWIDTH        24
 #define MF_CHARWIDTH        25
+#define FT_LINERANGE       26
+#define FT_CHARRANGE       27

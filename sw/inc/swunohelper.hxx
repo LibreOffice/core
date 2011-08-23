@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star {
 class String;
 class SvStrings;
 class SvPtrarr;
-
+        
 namespace SWUnoHelper {
 
 // calls over the compherl the getEnumAsInt32 function and handle the
@@ -64,7 +64,7 @@ SW_DLLPUBLIC BOOL UCB_IsReadOnlyFileName( const String& rURL );
 
     // get a list of files from the folder of the URL
     // options: pExtension = 0 -> all, else this specific extension
-    //          pDateTime != 0 -> returns also the modified date/time of
+    // 			pDateTime != 0 -> returns also the modified date/time of
     //                       the files in a SvPtrarr -->
     //                       !! objects must be deleted from the caller!!
 BOOL UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,

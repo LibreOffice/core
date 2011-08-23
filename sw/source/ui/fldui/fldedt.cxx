@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,8 +94,8 @@ namespace swui
 
 SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
     SfxSingleTabDialog(&rVw.GetViewFrame()->GetWindow(), 0, 0),
-    pSh         (rVw.GetWrtShellPtr()),
-    aPrevBT     (this, SW_RES(BTN_FLDEDT_PREV)),
+    pSh			(rVw.GetWrtShellPtr()),
+    aPrevBT		(this, SW_RES(BTN_FLDEDT_PREV)),
     aNextBT     (this, SW_RES(BTN_FLDEDT_NEXT)),
     aAddressBT  (this, SW_RES(PB_FLDEDT_ADDRESS))
 {
@@ -383,30 +383,30 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, EMPTYARG )
 
     switch(pCurFld->GetSubType())
     {
-        case EU_FIRSTNAME:  nEditPos = FIRSTNAME_EDIT;  break;
-        case EU_NAME:       nEditPos = LASTNAME_EDIT;   break;
-        case EU_SHORTCUT:   nEditPos = SHORTNAME_EDIT;  break;
-        case EU_COMPANY:    nEditPos = COMPANY_EDIT;    break;
-        case EU_STREET:     nEditPos = STREET_EDIT;     break;
-        case EU_TITLE:      nEditPos = TITLE_EDIT;      break;
-        case EU_POSITION:   nEditPos = POSITION_EDIT;   break;
-        case EU_PHONE_PRIVATE:nEditPos = TELPRIV_EDIT;  break;
-        case EU_PHONE_COMPANY:nEditPos = TELCOMPANY_EDIT;   break;
-        case EU_FAX:        nEditPos = FAX_EDIT;        break;
-        case EU_EMAIL:      nEditPos = EMAIL_EDIT;      break;
-        case EU_COUNTRY:    nEditPos = COUNTRY_EDIT;    break;
-        case EU_ZIP:        nEditPos = PLZ_EDIT;        break;
-        case EU_CITY:       nEditPos = CITY_EDIT;       break;
-        case EU_STATE:      nEditPos = STATE_EDIT;      break;
+        case EU_FIRSTNAME:	nEditPos = FIRSTNAME_EDIT;	break;
+        case EU_NAME:   	nEditPos = LASTNAME_EDIT;	break;
+        case EU_SHORTCUT: 	nEditPos = SHORTNAME_EDIT;	break;
+        case EU_COMPANY:  	nEditPos = COMPANY_EDIT;	break;
+        case EU_STREET:		nEditPos = STREET_EDIT;		break;
+        case EU_TITLE:  	nEditPos = TITLE_EDIT;		break;
+        case EU_POSITION: 	nEditPos = POSITION_EDIT;	break;
+        case EU_PHONE_PRIVATE:nEditPos = TELPRIV_EDIT;	break;
+        case EU_PHONE_COMPANY:nEditPos = TELCOMPANY_EDIT;	break;
+        case EU_FAX:		nEditPos = FAX_EDIT;		break;
+        case EU_EMAIL:		nEditPos = EMAIL_EDIT;		break;
+        case EU_COUNTRY:	nEditPos = COUNTRY_EDIT;	break;
+        case EU_ZIP:		nEditPos = PLZ_EDIT;		break;
+        case EU_CITY:		nEditPos = CITY_EDIT;		break;
+        case EU_STATE:		nEditPos = STATE_EDIT;		break;
 
-        default:            nEditPos = UNKNOWN_EDIT;    break;
+        default:			nEditPos = UNKNOWN_EDIT;	break;
 
     }
     aSet.Put(SfxUInt16Item(SID_FIELD_GRABFOCUS, nEditPos));
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-    SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aSet,
+    SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aSet, 
         pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(),
         RC_DLG_ADDR );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");

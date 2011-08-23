@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@
 
 class SwColumn
 {
-    USHORT nWish;   //Wunschbreite incl. Raender.
+    USHORT nWish;	//Wunschbreite incl. Raender.
                     //Verhaelt sich proportional zum Verhaeltniss:
                     //Wunschbreite der Umgebung / aktuelle Breite der Spalte
-    USHORT nUpper;  //Oberer Rand
-    USHORT nLower;  //Unterer Rand
-    USHORT nLeft;   //Linker Rand
-    USHORT nRight;  //Rechter Rand
+    USHORT nUpper;	//Oberer Rand
+    USHORT nLower;	//Unterer Rand
+    USHORT nLeft;	//Linker Rand
+    USHORT nRight;	//Rechter Rand
 
 public:
     SwColumn();
@@ -77,18 +77,18 @@ enum SwColLineAdj
 
 class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
 {
-//  Pen      aPen;          //Pen fuer die Linine zwischen den Spalten
-    ULONG   nLineWidth;     //width of the separator line
-    Color   aLineColor;     //color of the separator line
+//	Pen		 aPen;			//Pen fuer die Linine zwischen den Spalten
+    ULONG	nLineWidth;		//width of the separator line
+    Color	aLineColor;		//color of the separator line
 
-    BYTE     nLineHeight;   //Prozentuale Hoehe der Linien
+    BYTE 	 nLineHeight;	//Prozentuale Hoehe der Linien
                             //(Relativ zu der Hoehe der Spalten incl. UL).
-    SwColLineAdj eAdj;      //Linie wird oben, mittig oder unten ausgerichtet.
+    SwColLineAdj eAdj;		//Linie wird oben, mittig oder unten ausgerichtet.
 
-    SwColumns   aColumns;   //Informationen fuer die einzelnen Spalten.
-    USHORT      nWidth;     //Gesamtwunschbreite aller Spalten.
+    SwColumns	aColumns;	//Informationen fuer die einzelnen Spalten.
+    USHORT		nWidth;		//Gesamtwunschbreite aller Spalten.
 
-    BOOL bOrtho;            //Nur wenn dieses Flag gesetzt ist wird beim setzen
+    BOOL bOrtho;			//Nur wenn dieses Flag gesetzt ist wird beim setzen
                             //der GutterWidth eine 'optische Verteilung'
                             //vorgenommen.
                             //Es muss zurueckgesetzt werden wenn an den
@@ -108,39 +108,39 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
 
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	BOOL        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	BOOL			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     const SwColumns &GetColumns() const { return aColumns; }
-          SwColumns &GetColumns()       { return aColumns; }
-    USHORT           GetNumCols() const { return aColumns.Count(); }
-//  const Pen&       GetLinePen() const { return aPen; }
-    ULONG           GetLineWidth() const  { return nLineWidth;}
-    const Color&    GetLineColor() const { return aLineColor;}
+          SwColumns &GetColumns()		{ return aColumns; }
+    USHORT			 GetNumCols() const { return aColumns.Count(); }
+//	const Pen&       GetLinePen() const { return aPen; }
+    ULONG			GetLineWidth() const  { return nLineWidth;}
+    const Color&	GetLineColor() const { return aLineColor;}
 
 
-    SwColLineAdj     GetLineAdj() const { return eAdj; }
-    BOOL             IsOrtho()    const { return bOrtho; }
-    USHORT           GetWishWidth() const { return nWidth; }
-    BYTE             GetLineHeight()const { return nLineHeight; }
+    SwColLineAdj	 GetLineAdj() const { return eAdj; }
+    BOOL			 IsOrtho()	  const { return bOrtho; }
+    USHORT			 GetWishWidth() const { return nWidth; }
+    BYTE			 GetLineHeight()const { return nLineHeight; }
 
     //Return USHRT_MAX wenn uneindeutig.
     //Return die kleinste Breite wenn bMin True ist.
     USHORT GetGutterWidth( BOOL bMin = FALSE ) const;
 
-//  void SetLinePen( const Pen& rNew )  { aPen = rNew; }
+//	void SetLinePen( const Pen& rNew )  { aPen = rNew; }
     void SetLineWidth(ULONG nLWidth)        { nLineWidth = nLWidth;}
-    void SetLineColor(const Color& rCol )   { aLineColor = rCol;}
+    void SetLineColor(const Color& rCol )  	{ aLineColor = rCol;}
     void SetLineHeight( BYTE nNew )     { nLineHeight = nNew; }
     void SetLineAdj( SwColLineAdj eNew ){ eAdj = eNew; }
-    void SetWishWidth( USHORT nNew )    { nWidth = nNew; }
+    void SetWishWidth( USHORT nNew )	{ nWidth = nNew; }
 
     //Mit dieser Funktion koennen die Spalten (immer wieder) initialisert
     //werden. Das Ortho Flag wird automatisch gesetzt.

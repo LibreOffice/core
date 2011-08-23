@@ -306,7 +306,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             && maShapeRecords.Current()->nRecLen )
         {
             UINT32  nBytesLeft = maShapeRecords.Current()->nRecLen;
-            UINT32  nUDData;
+            UINT32	nUDData;
             UINT16  nPID;
             while( 5 < nBytesLeft )
             {
@@ -505,10 +505,10 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             aSet.Put( SdrTextRightDistItem( nTextRight ) );
             aSet.Put( SdrTextUpperDistItem( nTextTop ) );
             aSet.Put( SdrTextLowerDistItem( nTextBottom ) );
-            pImpRec->nDxTextLeft    = nTextLeft;
-            pImpRec->nDyTextTop     = nTextTop;
-            pImpRec->nDxTextRight   = nTextRight;
-            pImpRec->nDyTextBottom  = nTextBottom;
+            pImpRec->nDxTextLeft	= nTextLeft;
+            pImpRec->nDyTextTop		= nTextTop;
+            pImpRec->nDxTextRight	= nTextRight;
+            pImpRec->nDyTextBottom	= nTextBottom;
 
             // --> SJ 2009-03-06 : taking the correct default (which is mso_anchorTop)
             MSO_Anchor eTextAnchor =
@@ -577,10 +577,10 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             {
                 pObj->SetMergedItemSet(aSet);
                 pObj->SetModel(pSdrModel);
-
+                
                 if (bVerticalText && dynamic_cast< SdrTextObj* >( pObj ) )
                     dynamic_cast< SdrTextObj* >( pObj )->SetVerticalWriting(sal_True);
-
+                
                 if ( bIsSimpleDrawingTextBox )
                 {
                     if ( nTextRotationAngle )
@@ -599,22 +599,22 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 if ( ( ( rObjData.nSpFlags & SP_FFLIPV ) || mnFix16Angle || nTextRotationAngle ) && dynamic_cast< SdrObjCustomShape* >( pObj ) )
                 {
                     SdrObjCustomShape* pCustomShape = dynamic_cast< SdrObjCustomShape* >( pObj );
-
+                    
                     double fExtraTextRotation = 0.0;
                     if ( mnFix16Angle && !( GetPropertyValue( DFF_Prop_FitTextToShape ) & 4 ) )
-                    {   // text is already rotated, we have to take back the object rotation if DFF_Prop_RotateText is false
+                    {	// text is already rotated, we have to take back the object rotation if DFF_Prop_RotateText is false
                         fExtraTextRotation = -mnFix16Angle;
                     }
-                    if ( rObjData.nSpFlags & SP_FFLIPV )    // sj: in ppt the text is flipped, whereas in word the text
-                    {                                       // remains unchanged, so we have to take back the flipping here
-                        fExtraTextRotation += 18000.0;      // because our core will flip text if the shape is flipped.
+                    if ( rObjData.nSpFlags & SP_FFLIPV )	// sj: in ppt the text is flipped, whereas in word the text
+                    {										// remains unchanged, so we have to take back the flipping here
+                        fExtraTextRotation += 18000.0;		// because our core will flip text if the shape is flipped.
                     }
                     fExtraTextRotation += nTextRotationAngle;
                     if ( !::basegfx::fTools::equalZero( fExtraTextRotation ) )
                     {
                         fExtraTextRotation /= 100.0;
                         SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-                        const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
+                        const rtl::OUString	sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
                         com::sun::star::beans::PropertyValue aPropVal;
                         aPropVal.Name = sTextRotateAngle;
                         aPropVal.Value <<= fExtraTextRotation;
@@ -657,7 +657,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             pImpRec->bDrawHell = FALSE;
         if (GetPropertyValue(DFF_Prop_fPrint) & 0x02)
             pImpRec->bHidden = TRUE;
-        pImpRec->nNextShapeId   = GetPropertyValue( DFF_Prop_hspNext, 0 );
+        pImpRec->nNextShapeId	= GetPropertyValue( DFF_Prop_hspNext, 0 );
 
         if ( nTextId )
         {
@@ -849,13 +849,13 @@ long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFmt &rFmt,
 
 // --> OD 2010-05-06 #i103711#
 // --> OD 2010-05-11 #i105414#
-void SyncIndentWithList( SvxLRSpaceItem &rLR,
+void SyncIndentWithList( SvxLRSpaceItem &rLR, 
                          const SwNumFmt &rFmt,
                          const bool bFirstLineOfstSet,
                          const bool bLeftIndentSet )
 {
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
-    {
+    {        
         long nWantedFirstLinePos;
         long nExtraListIndent = lcl_GetTrueMargin(rLR, rFmt, nWantedFirstLinePos);
         rLR.SetTxtLeft(nWantedFirstLinePos - nExtraListIndent);
@@ -863,7 +863,7 @@ void SyncIndentWithList( SvxLRSpaceItem &rLR,
     }
     else if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
-        if ( !bFirstLineOfstSet && bLeftIndentSet &&
+        if ( !bFirstLineOfstSet && bLeftIndentSet && 
              rFmt.GetFirstLineIndent() != 0 )
         {
             rLR.SetTxtFirstLineOfst( rFmt.GetFirstLineIndent() );
@@ -932,7 +932,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         pNum = GetNumFmtFromStack(*aRegion.GetPoint(),
                             *pTxtNode);
                         if (!pNum)
-                        {
+                        {        
                             pNum = GetNumFmtFromTxtNode(*pTxtNode);
                         }
 
@@ -1393,6 +1393,9 @@ void SwWW8ImplReader::ImportDop()
     // --> FME 2006-03-01 #i3952#
     rDoc.set(IDocumentSettingAccess::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, true);
     // <--
+
+    rDoc.set(IDocumentSettingAccess::INVERT_BORDER_SPACING, true);
+    rDoc.set(IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA, true);
 
     //
     // COMPATIBILITY FLAGS END
@@ -2713,9 +2716,10 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             else if (!nInTable)
             {
                 // Always insert a txtnode for a column break, e.g. ##
-                AppendTxtNode(*pPaM->GetPoint());
-                rDoc.InsertPoolItem(*pPaM,
-                    SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
+                SwCntntNode *pCntNd=pPaM->GetCntntNode();
+                if (pCntNd!=NULL && pCntNd->Len()>0) // if par is empty not break is needed
+                    AppendTxtNode(*pPaM->GetPoint());
+                rDoc.InsertPoolItem(*pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
             }
             break;
         case 0x7:
@@ -2896,7 +2900,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTxtPos, bool& rbStartLine)
     aRes.nAktCp = rTxtPos;              // Akt. Cp-Pos
 
     bool bNewSection = (aRes.nFlags & MAN_MASK_NEW_SEP) && !bIgnoreText;
-    if ( bNewSection )  // neue Section
+    if ( bNewSection )	// neue Section
     {
         ASSERT(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
         // PageDesc erzeugen und fuellen
@@ -4542,8 +4546,8 @@ public:
     outlineeq(BYTE nNum) : mnNum(nNum) {}
     bool operator()(const SwTxtFmtColl *pTest) const
     {
-        //return pTest->GetOutlineLevel() == mnNum; //#outline level,zhaojianwei
-        return pTest->IsAssignedToListLevelOfOutlineStyle() && pTest->GetAssignedOutlineStyleLevel() == mnNum;  //<-end,zhaojianwei
+        //return pTest->GetOutlineLevel() == mnNum;	//#outline level,zhaojianwei
+        return pTest->IsAssignedToListLevelOfOutlineStyle() && pTest->GetAssignedOutlineStyleLevel() == mnNum;	//<-end,zhaojianwei
     }
 };
 
@@ -4581,7 +4585,7 @@ void SwWW8ImplReader::SetOutLineStyles()
         for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
         // <--
         {
-            //if ((*aIter)->GetOutlineLevel() < MAXLEVEL)   //#outline level,zhaojianwei,
+            //if ((*aIter)->GetOutlineLevel() < MAXLEVEL)	//#outline level,zhaojianwei,
             //nFlagsStyleOutlLevel |= 1 << (*aIter)->GetOutlineLevel();
             if ((*aIter)->IsAssignedToListLevelOfOutlineStyle())
                 nFlagsStyleOutlLevel |= 1 << (*aIter)->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
@@ -4655,7 +4659,7 @@ void SwWW8ImplReader::SetOutLineStyles()
                 //if ((*aIter)->GetOutlineLevel() < MAXLEVEL)//#outline level,zhaojianwei
                 //    (*aIter)->SetOutlineLevel(NO_NUMBERING);
                 if((*aIter)->IsAssignedToListLevelOfOutlineStyle())
-                    (*aIter)->DeleteAssignmentToListLevelOfOutlineStyle();  //<-end
+                    (*aIter)->DeleteAssignmentToListLevelOfOutlineStyle();	//<-end
 
                 else
                     break;
@@ -4727,7 +4731,7 @@ void SwWW8ImplReader::SetOutLineStyles()
                 aOutlineRule.Set(nToLevel, rRule);
                 // Set my outline level
                 //((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(nToLevel);//#outline level,zhaojianwei
-                ((SwTxtFmtColl*)rSI.pFmt)->AssignToListLevelOfOutlineStyle(nToLevel);   //<-end,zhaojianwei
+                ((SwTxtFmtColl*)rSI.pFmt)->AssignToListLevelOfOutlineStyle(nToLevel);	//<-end,zhaojianwei
                 // If there are more styles on this level ignore them
                 nFlagsStyleOutlLevel |= nAktFlags;
             }

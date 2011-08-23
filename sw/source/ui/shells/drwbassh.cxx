@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -125,10 +125,10 @@ SwDrawBaseShell::~SwDrawBaseShell()
 void SwDrawBaseShell::Execute(SfxRequest &rReq)
 {
     SwWrtShell *pSh = &GetShell();
-    SdrView*    pSdrView = pSh->GetDrawView();
+    SdrView*	pSdrView = pSh->GetDrawView();
     const SfxItemSet *pArgs = rReq.GetArgs();
-    USHORT      nSlotId = rReq.GetSlot();
-    BOOL        bChanged = pSdrView->GetModel()->IsChanged();
+    USHORT		nSlotId = rReq.GetSlot();
+    BOOL		bChanged = pSdrView->GetModel()->IsChanged();
     pSdrView->GetModel()->SetChanged(FALSE);
     const SfxPoolItem* pItem = 0;
     if(pArgs)
@@ -160,7 +160,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                     if( rMarkList.GetMark(0) != 0 )
                     {
-                        SfxItemSet aSet(GetPool(),  RES_SURROUND, RES_SURROUND,
+                        SfxItemSet aSet(GetPool(),	RES_SURROUND, RES_SURROUND,
                                                     RES_ANCHOR, RES_ANCHOR,
                                                     RES_LR_SPACE, RES_UL_SPACE,
                                                     SID_HTML_MODE, SID_HTML_MODE,
@@ -414,7 +414,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         GetView().GetDrawFuncPtr()->Deactivate();
                         GetView().SetDrawFuncPtr(NULL);
                     }
-                    GetView().LeaveDrawCreate();    // In Selektionsmode wechseln
+                    GetView().LeaveDrawCreate();	// In Selektionsmode wechseln
                 }
 
                 if (pSh->IsSelFrmMode())
@@ -430,7 +430,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         case SID_GROUP:
             if (pSh->IsObjSelected() > 1 && pSh->IsGroupAllowed())
             {
-                pSh->GroupSelection();  // Objekt gruppieren
+                pSh->GroupSelection();	// Objekt gruppieren
                 rBind.Invalidate(SID_UNGROUP);
             }
             break;
@@ -438,7 +438,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         case SID_UNGROUP:
             if (pSh->IsGroupSelected())
             {
-                pSh->UnGroupSelection();    // Objektgruppierung aufheben
+                pSh->UnGroupSelection();	// Objektgruppierung aufheben
                 rBind.Invalidate(SID_GROUP);
             }
             break;
@@ -471,7 +471,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             {
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 if( rMarkList.GetMarkCount() == 1 && bAlignPossible )
-                {   // Objekte nicht aneinander ausrichten
+                {	// Objekte nicht aneinander ausrichten
 
                     USHORT nAnchor = pSh->GetAnchorId();
                     if (nAnchor == FLY_AS_CHAR)
@@ -505,7 +505,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         break;
                     }
                     if (nAnchor == FLY_AT_PARA)
-                        break;  // Absatzverankerte Rahmen nicht ausrichten
+                        break;	// Absatzverankerte Rahmen nicht ausrichten
                 }
 
                 pSh->StartAction();
@@ -689,7 +689,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
     USHORT nWhich = aIter.FirstWhich();
     BOOL bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
 
-    if (!bProtected)    // Im Parent nachsehen
+    if (!bProtected)	// Im Parent nachsehen
         bProtected |= rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
     while( nWhich )

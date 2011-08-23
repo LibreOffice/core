@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,32 +75,32 @@ SfxTabPage *  SwDocStatPage::Create(Window *pParent, const SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Ctor
+    Beschreibung:	Ctor
  --------------------------------------------------------------------*/
 
 
 SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
 
-    SfxTabPage  (pParent, SW_RES(TP_DOC_STAT), rSet),
+    SfxTabPage	(pParent, SW_RES(TP_DOC_STAT), rSet),
 
-    aTableLbl   (this, SW_RES( FT_TABLE      )),
-    aGrfLbl     (this, SW_RES( FT_GRF        )),
-    aOLELbl     (this, SW_RES( FT_OLE        )),
-    aPageLbl    (this, SW_RES( FT_PAGE       )),
-    aParaLbl    (this, SW_RES( FT_PARA       )),
-    aWordLbl    (this, SW_RES( FT_WORD       )),
-    aCharLbl    (this, SW_RES( FT_CHAR       )),
+    aTableLbl	(this, SW_RES( FT_TABLE		 )),
+    aGrfLbl		(this, SW_RES( FT_GRF		 )),
+    aOLELbl		(this, SW_RES( FT_OLE		 )),
+    aPageLbl	(this, SW_RES( FT_PAGE		 )),
+    aParaLbl	(this, SW_RES( FT_PARA		 )),
+    aWordLbl	(this, SW_RES( FT_WORD		 )),
+    aCharLbl	(this, SW_RES( FT_CHAR 	     )),
     aLineLbl    (this, SW_RES( FT_LINE       )),
 
     aTableNo    (this, SW_RES( FT_TABLE_COUNT)),
-    aGrfNo      (this, SW_RES( FT_GRF_COUNT  )),
-    aOLENo      (this, SW_RES( FT_OLE_COUNT  )),
-    aPageNo     (this, SW_RES( FT_PAGE_COUNT )),
-    aParaNo     (this, SW_RES( FT_PARA_COUNT )),
-    aWordNo     (this, SW_RES( FT_WORD_COUNT )),
-    aCharNo     (this, SW_RES( FT_CHAR_COUNT )),
-    aLineNo     (this, SW_RES( FT_LINE_COUNT )),
-    aUpdatePB   (this, SW_RES( PB_PDATE      ))
+    aGrfNo		(this, SW_RES( FT_GRF_COUNT  )),
+    aOLENo		(this, SW_RES( FT_OLE_COUNT  )),
+    aPageNo		(this, SW_RES( FT_PAGE_COUNT )),
+    aParaNo		(this, SW_RES( FT_PARA_COUNT )),
+    aWordNo		(this, SW_RES( FT_WORD_COUNT )),
+    aCharNo		(this, SW_RES( FT_CHAR_COUNT )),
+    aLineNo		(this, SW_RES( FT_LINE_COUNT )),
+    aUpdatePB	(this, SW_RES( PB_PDATE      ))
 {
     Update();
     FreeResource();
@@ -123,7 +123,7 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   ItemSet fuellen bei Aenderung
+    Beschreibung:	ItemSet fuellen bei Aenderung
  --------------------------------------------------------------------*/
 
 
@@ -141,7 +141,7 @@ void  SwDocStatPage::Reset(const SfxItemSet &/*rSet*/)
 {
 }
 /*------------------------------------------------------------------------
- Beschreibung:  Aktualisieren / Setzen der Daten
+ Beschreibung:	Aktualisieren / Setzen der Daten
 ------------------------------------------------------------------------*/
 
 
@@ -157,7 +157,7 @@ void SwDocStatPage::SetData(const SwDocStat &rStat)
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Aktualisieren der Statistik
+ Beschreibung:	Aktualisieren der Statistik
 ------------------------------------------------------------------------*/
 
 

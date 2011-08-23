@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,12 +51,12 @@
 #include "itrtxt.hxx"
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
-#include "porglue.hxx"      // SwFlyCnt
-#include "porfld.hxx"       // SwFldPortion::IsFollow()
-#include "porfly.hxx"       // GetFlyCrsrOfst()
+#include "porglue.hxx"		// SwFlyCnt
+#include "porfld.hxx"		// SwFldPortion::IsFollow()
+#include "porfly.hxx"		// GetFlyCrsrOfst()
 #include "pordrop.hxx"
 #include "crstate.hxx"      // SwCrsrMoveState
-#include <pormulti.hxx>     // SwMultiPortion
+#include <pormulti.hxx> 	// SwMultiPortion
 // --> OD 2010-05-05 #i111284#
 #include <numrule.hxx>
 // <--
@@ -151,7 +151,7 @@ namespace {
     bool AreListLevelIndentsApplicableAndLabelAlignmentActive( const SwTxtNode& rTxtNode )
     {
         bool bRet( false );
-
+    
         if ( rTxtNode.AreListLevelIndentsApplicable() )
         {
             const SwNumFmt& rNumFmt =
@@ -159,16 +159,16 @@ namespace {
             if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 bRet = true;
-            }
-        }
-
-        return bRet;
+            }            
+        }    
+    
+        return bRet;    
     }
 } // end of anonymous namespace
 // <--
-
+            
 /*************************************************************************
- *                SwTxtMargin::CtorInitTxtMargin()
+ *				  SwTxtMargin::CtorInitTxtMargin()
  *************************************************************************/
 void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
 {
@@ -181,7 +181,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     const SvxLRSpaceItem &rSpace = pFrm->GetTxtNode()->GetSwAttrSet().GetLRSpace();
     // --> OD 2009-09-08 #i95907#, #b6879723#
     // --> OD 2010-05-05 #i111284#
-    const bool bListLevelIndentsApplicableAndLabelAlignmentActive(
+    const bool bListLevelIndentsApplicableAndLabelAlignmentActive( 
         AreListLevelIndentsApplicableAndLabelAlignmentActive( *(pFrm->GetTxtNode()) ) );
     // <--
 
@@ -381,7 +381,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
 }
 
 /*************************************************************************
- *                SwTxtMargin::DropInit()
+ *				  SwTxtMargin::DropInit()
  *************************************************************************/
 void SwTxtMargin::DropInit()
 {
@@ -401,7 +401,7 @@ void SwTxtMargin::DropInit()
 }
 
 /*************************************************************************
- *                SwTxtMargin::GetLineStart()
+ *				  SwTxtMargin::GetLineStart()
  *************************************************************************/
 
 // Unter Beruecksichtigung des Erstzeileneinzuges und der angebenen Breite.
@@ -422,7 +422,7 @@ SwTwips SwTxtMargin::GetLineStart() const
 }
 
 /*************************************************************************
- *                      SwTxtCursor::CtorInitTxtCursor()
+ *						SwTxtCursor::CtorInitTxtCursor()
  *************************************************************************/
 void SwTxtCursor::CtorInitTxtCursor( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
 {
@@ -432,7 +432,7 @@ void SwTxtCursor::CtorInitTxtCursor( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
 }
 
 /*************************************************************************
- *                      SwTxtCursor::GetEndCharRect()
+ *						SwTxtCursor::GetEndCharRect()
  *************************************************************************/
 
 // 1170: Antikbug: Shift-Ende vergisst das letzte Zeichen ...
@@ -506,7 +506,7 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 }
 
 /*************************************************************************
- * void SwTxtCursor::_GetCharRect(..)
+ * void	SwTxtCursor::_GetCharRect(..)
  * internal function, called by SwTxtCursor::GetCharRect() to calculate
  * the relative character position in the current line.
  * pOrig referes to x and y coordinates, width and height of the cursor
@@ -522,9 +522,9 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     SwTxtSizeInfo aInf( GetInfo(), rText, nStart );
     if( GetPropFont() )
         aInf.GetFont()->SetProportion( GetPropFont() );
-    KSHORT nTmpAscent, nTmpHeight;  // Zeilenhoehe
+    KSHORT nTmpAscent, nTmpHeight;	// Zeilenhoehe
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
-    const Size  aCharSize( 1, nTmpHeight );
+    const Size	aCharSize( 1, nTmpHeight );
     const Point aCharPos;
     pOrig->Pos( aCharPos );
     pOrig->SSize( aCharSize );
@@ -1058,7 +1058,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             }
             if( pPor && pCMS )
             {
-                if( pCMS->bFieldInfo && pPor->InFldGrp() && pPor->Width() )
+                if( pCMS->bFieldInfo &&	pPor->InFldGrp() && pPor->Width() )
                     pOrig->Width( pPor->Width() );
                 if( pPor->IsDropPortion() )
                 {
@@ -1191,7 +1191,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 }
 
 /*************************************************************************
- *                      SwTxtCursor::GetCharRect()
+ *						SwTxtCursor::GetCharRect()
  *************************************************************************/
 
 sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
@@ -1255,7 +1255,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         if ( pCMS && pCMS->bRealHeight && pCMS->aRealHeight.Y() >= 0 )
         {
             long nTmp = pCMS->aRealHeight.X() + pOrig->Top();
-            if( nTmp >= nMax )
+            if(	nTmp >= nMax )
             {
                 pCMS->aRealHeight.X() = nMax - pOrig->Top();
                 pCMS->aRealHeight.Y() = 0;
@@ -1278,7 +1278,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 }
 
 /*************************************************************************
- *                      SwTxtCursor::GetCrsrOfst()
+ *						SwTxtCursor::GetCrsrOfst()
  *
  * Return: Offset im String
  *************************************************************************/
@@ -1691,8 +1691,8 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 && !( (SwFlyCntPortion*)pPor )->IsDraw() )
             {
                 // JP 24.11.94: liegt die Pos nicht im Fly, dann
-                //              darf nicht mit STRING_LEN returnt werden!
-                //              (BugId: 9692 + Aenderung in feshview)
+                // 				darf nicht mit STRING_LEN returnt werden!
+                //				(BugId: 9692 + Aenderung in feshview)
                 SwFlyInCntFrm *pTmp = ( (SwFlyCntPortion*)pPor )->GetFlyFrm();
                 sal_Bool bChgNode = 1 < nChgNode;
                 if( !bChgNode )

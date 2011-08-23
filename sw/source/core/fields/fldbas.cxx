@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ using namespace nsSwDocInfoSubType;
 USHORT lcl_GetLanguageOfFormat( USHORT nLng, ULONG nFmt,
                                 const SvNumberFormatter& rFormatter )
 {
-    if( nLng == LANGUAGE_NONE ) // wegen Bug #60010
+    if( nLng == LANGUAGE_NONE )	// wegen Bug #60010
         nLng = LANGUAGE_SYSTEM;
     else if( nLng == ::GetAppLanguage() )
         switch( rFormatter.GetIndexTableOffset( nFmt ))
@@ -95,45 +95,45 @@ SvStringsDtor* SwFieldType::pFldNames = 0;
 DBG_NAME(SwFieldType)
 
     USHORT __FAR_DATA aTypeTab[] = {
-    /* RES_DBFLD            */      TYP_DBFLD,
-    /* RES_USERFLD          */      TYP_USERFLD,
-    /* RES_FILENAMEFLD      */      TYP_FILENAMEFLD,
-    /* RES_DBNAMEFLD        */      TYP_DBNAMEFLD,
-    /* RES_DATEFLD          */      TYP_DATEFLD,
-    /* RES_TIMEFLD          */      TYP_TIMEFLD,
-    /* RES_PAGENUMBERFLD    */      TYP_PAGENUMBERFLD,  // dynamisch
-    /* RES_AUTHORFLD        */      TYP_AUTHORFLD,
-    /* RES_CHAPTERFLD       */      TYP_CHAPTERFLD,
-    /* RES_DOCSTATFLD       */      TYP_DOCSTATFLD,
-    /* RES_GETEXPFLD        */      TYP_GETFLD,         // dynamisch
-    /* RES_SETEXPFLD        */      TYP_SETFLD,         // dynamisch
-    /* RES_GETREFFLD        */      TYP_GETREFFLD,
-    /* RES_HIDDENTXTFLD     */      TYP_HIDDENTXTFLD,
-    /* RES_POSTITFLD        */      TYP_POSTITFLD,
-    /* RES_FIXDATEFLD       */      TYP_FIXDATEFLD,
-    /* RES_FIXTIMEFLD       */      TYP_FIXTIMEFLD,
-    /* RES_REGFLD           */      0,                  // alt
-    /* RES_VARREGFLD        */      0,                  // alt
-    /* RES_SETREFFLD        */      TYP_SETREFFLD,
-    /* RES_INPUTFLD         */      TYP_INPUTFLD,
-    /* RES_MACROFLD         */      TYP_MACROFLD,
-    /* RES_DDEFLD           */      TYP_DDEFLD,
-    /* RES_TABLEFLD         */      TYP_FORMELFLD,
-    /* RES_HIDDENPARAFLD    */      TYP_HIDDENPARAFLD,
-    /* RES_DOCINFOFLD       */      TYP_DOCINFOFLD,
-    /* RES_TEMPLNAMEFLD     */      TYP_TEMPLNAMEFLD,
-    /* RES_DBNEXTSETFLD     */      TYP_DBNEXTSETFLD,
-    /* RES_DBNUMSETFLD      */      TYP_DBNUMSETFLD,
-    /* RES_DBSETNUMBERFLD   */      TYP_DBSETNUMBERFLD,
-    /* RES_EXTUSERFLD       */      TYP_EXTUSERFLD,
-    /* RES_REFPAGESETFLD    */      TYP_SETREFPAGEFLD,
-    /* RES_REFPAGEGETFLD    */      TYP_GETREFPAGEFLD,
-    /* RES_INTERNETFLD      */      TYP_INTERNETFLD,
-    /* RES_JUMPEDITFLD      */      TYP_JUMPEDITFLD,
-    /* RES_SCRIPTFLD        */      TYP_SCRIPTFLD,
-    /* RES_DATETIMEFLD      */      0,                  // dynamisch
-    /* RES_AUTHORITY        */      TYP_AUTHORITY,
-    /* RES_COMBINED_CHARS   */      TYP_COMBINED_CHARS,
+    /* RES_DBFLD			*/		TYP_DBFLD,
+    /* RES_USERFLD			*/		TYP_USERFLD,
+    /* RES_FILENAMEFLD		*/		TYP_FILENAMEFLD,
+    /* RES_DBNAMEFLD		*/		TYP_DBNAMEFLD,
+    /* RES_DATEFLD	   		*/		TYP_DATEFLD,
+    /* RES_TIMEFLD			*/		TYP_TIMEFLD,
+    /* RES_PAGENUMBERFLD	*/		TYP_PAGENUMBERFLD,	// dynamisch
+    /* RES_AUTHORFLD		*/		TYP_AUTHORFLD,
+    /* RES_CHAPTERFLD		*/		TYP_CHAPTERFLD,
+    /* RES_DOCSTATFLD		*/		TYP_DOCSTATFLD,
+    /* RES_GETEXPFLD		*/		TYP_GETFLD,			// dynamisch
+    /* RES_SETEXPFLD		*/		TYP_SETFLD,			// dynamisch
+    /* RES_GETREFFLD		*/		TYP_GETREFFLD,
+    /* RES_HIDDENTXTFLD		*/		TYP_HIDDENTXTFLD,
+    /* RES_POSTITFLD		*/		TYP_POSTITFLD,
+    /* RES_FIXDATEFLD		*/		TYP_FIXDATEFLD,
+    /* RES_FIXTIMEFLD		*/		TYP_FIXTIMEFLD,
+    /* RES_REGFLD			*/		0,					// alt
+    /* RES_VARREGFLD		*/		0,					// alt
+    /* RES_SETREFFLD		*/		TYP_SETREFFLD,
+    /* RES_INPUTFLD			*/		TYP_INPUTFLD,
+    /* RES_MACROFLD			*/		TYP_MACROFLD,
+    /* RES_DDEFLD			*/		TYP_DDEFLD,
+    /* RES_TABLEFLD			*/		TYP_FORMELFLD,
+    /* RES_HIDDENPARAFLD	*/		TYP_HIDDENPARAFLD,
+    /* RES_DOCINFOFLD		*/		TYP_DOCINFOFLD,
+    /* RES_TEMPLNAMEFLD		*/		TYP_TEMPLNAMEFLD,
+    /* RES_DBNEXTSETFLD		*/		TYP_DBNEXTSETFLD,
+    /* RES_DBNUMSETFLD		*/		TYP_DBNUMSETFLD,
+    /* RES_DBSETNUMBERFLD	*/		TYP_DBSETNUMBERFLD,
+    /* RES_EXTUSERFLD		*/		TYP_EXTUSERFLD,
+    /* RES_REFPAGESETFLD	*/		TYP_SETREFPAGEFLD,
+    /* RES_REFPAGEGETFLD    */		TYP_GETREFPAGEFLD,
+    /* RES_INTERNETFLD		*/ 		TYP_INTERNETFLD,
+    /* RES_JUMPEDITFLD		*/		TYP_JUMPEDITFLD,
+    /* RES_SCRIPTFLD		*/		TYP_SCRIPTFLD,
+    /* RES_DATETIMEFLD		*/		0,					// dynamisch
+    /* RES_AUTHORITY		*/		TYP_AUTHORITY,
+    /* RES_COMBINED_CHARS	*/		TYP_COMBINED_CHARS,
     /* RES_DROPDOWN         */      TYP_DROPDOWN
     };
         // ????? TYP_USRINPFLD,
@@ -188,7 +188,7 @@ BOOL SwFieldType::PutValue( const uno::Any& , USHORT )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Basisklasse aller Felder
+    Beschreibung:	Basisklasse aller Felder
                     Felder referenzieren einen Feldtyp
                     Felder sind n-mal vorhanden, Feldtypen nur einmal
  --------------------------------------------------------------------*/
@@ -317,13 +317,13 @@ void SwField::SetPar2(const String& )
 
 USHORT SwField::GetSubType() const
 {
-//  ASSERT(0, "Sorry Not implemented");
+//	ASSERT(0, "Sorry Not implemented");
     return 0;
 }
 
 void SwField::SetSubType(USHORT )
 {
-//  ASSERT(0, "Sorry Not implemented");
+//	ASSERT(0, "Sorry Not implemented");
 }
 
 BOOL  SwField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
@@ -360,7 +360,7 @@ BOOL SwField::PutValue( const uno::Any& rVal, USHORT nWhichId )
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   neuen Typ setzen
+    Beschreibung: 	neuen Typ setzen
                     (wird fuer das Kopieren zwischen Dokumenten benutzt)
                     muss immer vom gleichen Typ sein.
  --------------------------------------------------------------------*/
@@ -495,7 +495,7 @@ SwValueFieldType::SwValueFieldType( const SwValueFieldType& rTyp )
 String SwValueFieldType::ExpandValue( const double& rVal,
                                         sal_uInt32 nFmt, USHORT nLng) const
 {
-    if (rVal >= DBL_MAX)        // FehlerString fuer Calculator
+    if (rVal >= DBL_MAX)		// FehlerString fuer Calculator
         return ViewShell::GetShellRes()->aCalc_Error;
 
     String sExpand;
@@ -567,10 +567,10 @@ void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
 
     // wegen Bug #60010
-    if( nLng == LANGUAGE_NONE ) // wegen Bug #60010
+    if( nLng == LANGUAGE_NONE )	// wegen Bug #60010
         nLng = LANGUAGE_SYSTEM;
 
-    pFormatter->ChangeIntl( nLng ); // Separator in der richtigen Sprache besorgen
+    pFormatter->ChangeIntl( nLng );	// Separator in der richtigen Sprache besorgen
     rValue = ::rtl::math::doubleToUString( rVal, rtl_math_StringFormat_F, 12,
                                     pFormatter->GetDecSep(), true );
 }
@@ -596,7 +596,7 @@ SwValueField::~SwValueField()
 {
 }
 /*--------------------------------------------------------------------
-    Beschreibung:   neuen Typ setzen
+    Beschreibung: 	neuen Typ setzen
                     (wird fuer das Kopieren zwischen Dokumenten benutzt)
                     muss immer vom gleichen Typ sein.
  --------------------------------------------------------------------*/

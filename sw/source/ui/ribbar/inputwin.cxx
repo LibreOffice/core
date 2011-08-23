@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,10 +65,10 @@ SFX_IMPL_POS_CHILDWINDOW( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OBJECT )
 //==================================================================
 
 SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
-    : ToolBox(  pParent ,   SW_RES( RID_TBX_FORMULA )),
+    : ToolBox( 	pParent ,	SW_RES( RID_TBX_FORMULA )),
     aPos(       this,       SW_RES(ED_POS)),
     aEdit(      this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION),
-    aPopMenu(   SW_RES(MN_CALC_POPUP)),
+    aPopMenu(	SW_RES(MN_CALC_POPUP)),
     pMgr(0),
     pWrtShell(0),
     pView(0),
@@ -100,12 +100,12 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     SetItemBits( FN_FORMULA_CALC, GetItemBits( FN_FORMULA_CALC ) | TIB_DROPDOWNONLY );
     SetDropdownClickHdl( LINK( this, SwInputWindow, DropdownClickHdl ));
 
-    Size    aSizeTbx = CalcWindowSizePixel();
+    Size	aSizeTbx = CalcWindowSizePixel();
     Size aSize = GetSizePixel();
     aSize.Height() = aSizeTbx.Height();
     SetSizePixel( aSize );
-    Size    aPosSize = aPos.GetSizePixel();
-    Size    aEditSize = aEdit.GetSizePixel();
+    Size 	aPosSize = aPos.GetSizePixel();
+    Size 	aEditSize = aEdit.GetSizePixel();
     aPosSize.Height() = aEditSize.Height() = GetItemRect(FN_FORMULA_CALC).GetHeight() - 2;
 
     Point aPosPos = aPos.GetPosPixel();
@@ -169,9 +169,9 @@ void __EXPORT SwInputWindow::Resize()
 {
     ToolBox::Resize();
 
-    long    nWidth      = GetSizePixel().Width();
-    long    nLeft       = aEdit.GetPosPixel().X();
-    Size    aEditSize   = aEdit.GetSizePixel();
+    long	nWidth		= GetSizePixel().Width();
+    long	nLeft		= aEdit.GetPosPixel().X();
+    Size	aEditSize	= aEdit.GetSizePixel();
 
     aEditSize.Width() = Max( ((long)(nWidth - nLeft - 5)), (long)0 );
     aEdit.SetSizePixel( aEditSize );
@@ -214,7 +214,7 @@ void SwInputWindow::ShowWin()
         pMgr = new SwFldMgr;
 
         // JP 13.01.97: Formel soll immer mit einem "=" beginnen, hier
-        //              also setzen
+        //				also setzen
         String sEdit( '=' );
         if( pMgr->GetCurFld() && TYP_FORMELFLD == pMgr->GetCurTypeId() )
         {
@@ -324,7 +324,7 @@ static const char * __READONLY_DATA aStrArr[] = {
 IMPL_LINK( SwInputWindow, DropdownClickHdl, ToolBox*, EMPTYARG )
 {
     USHORT nCurID = GetCurItemId();
-    EndSelection(); // setzt CurItemId zurueck !
+    EndSelection();	// setzt CurItemId zurueck !
     switch ( nCurID )
     {
         case FN_FORMULA_CALC :
@@ -345,7 +345,7 @@ IMPL_LINK( SwInputWindow, DropdownClickHdl, ToolBox*, EMPTYARG )
 void __EXPORT SwInputWindow::Click( )
 {
     USHORT nCurID = GetCurItemId();
-    EndSelection(); // setzt CurItemId zurueck !
+    EndSelection();	// setzt CurItemId zurueck !
     switch ( nCurID )
     {
         case FN_FORMULA_CANCEL:
@@ -379,7 +379,7 @@ void  SwInputWindow::ApplyFormula()
     pWrtShell->Pop( FALSE );
 
     // JP 13.01.97: Formel soll immer mit einem "=" beginnen, hier
-    //              also wieder entfernen
+    //				also wieder entfernen
     String sEdit( aEdit.GetText() );
     sEdit.EraseLeadingChars().EraseTrailingChars();
     if( sEdit.Len() && '=' == sEdit.GetChar( 0 ) )
@@ -542,7 +542,7 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
         GrabFocus();
         return;
     }
-    const sal_Unicode   cOpen = '<', cClose = '>',
+    const sal_Unicode	cOpen = '<', cClose = '>',
                 cOpenBracket = '(';
     String aPrefix = rName;
     if(rName.Len())
@@ -626,7 +626,7 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
         {
             SetText( aActText );
             SetSelection( Selection( nPos, nPos ) );
-//          GetModifyHdl().Call( this );
+//			GetModifyHdl().Call( this );
         }
     }
     GrabFocus();
@@ -657,7 +657,7 @@ __EXPORT SwInputChild::~SwInputChild()
 
 SfxChildWinInfo __EXPORT SwInputChild::GetInfo() const
 {
-    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
+    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();	   \
     return aInfo;
 }
 

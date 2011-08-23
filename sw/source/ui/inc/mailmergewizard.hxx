@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class SwMailMergeConfigItem;
 #define MM_MERGEPAGE            6
 #define MM_OUTPUTPAGE           7
 
-class SwMailMergeWizard : public ::svt::RoadmapWizard
+class SwMailMergeWizard : public ::svt::RoadmapWizard 
 {
     SwView*                 m_pSwView;
     String                  sDocumentURL;
@@ -68,11 +68,11 @@ protected:
     virtual svt::OWizardPage*       createPage(WizardState _nState);
     virtual void                    enterState( WizardState _nState );
 
-// roadmap feature ??
+// roadmap feature ?? 
 //    virtual sal_Bool            prepareLeaveCurrentState( CommitPageReason _eReason );
     virtual String                  getStateDisplayName( WizardState _nState ) const;
 
-public:
+public:     
     SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rConfigItem);
     ~SwMailMergeWizard();
 
@@ -91,13 +91,13 @@ public:
     sal_uInt16              GetRestartPage() const {return m_nRestartPage;}
     void                    SetRestartPage(sal_uInt16 nPage) { m_nRestartPage = nPage;}
 
-    sal_Bool                skipUntil( sal_uInt16 nPage)
+    sal_Bool                skipUntil( sal_uInt16 nPage) 
                                 {return ::svt::RoadmapWizard::skipUntil(WizardState(nPage));}
 
-    void                    updateRoadmapItemLabel( WizardState _nState );
+    void                    updateRoadmapItemLabel( WizardState _nState ); 
 
-     virtual short          Execute();
-    virtual void            StartExecuteModal( const Link& rEndDialogHdl );
+     virtual short		    Execute();
+    virtual void            StartExecuteModal( const Link& rEndDialogHdl );  
 };
 #endif
 

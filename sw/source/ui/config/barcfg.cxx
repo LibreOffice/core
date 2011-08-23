@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,11 +41,11 @@ using namespace utl;
 using rtl::OUString;
 using namespace com::sun::star::uno;
 
-#define SEL_TYPE_TABLE_TEXT     0
+#define SEL_TYPE_TABLE_TEXT		0
 #define SEL_TYPE_LIST_TEXT      1
 #define SEL_TYPE_TABLE_LIST     2
 #define SEL_TYPE_BEZIER         3
-#define SEL_TYPE_GRAPHIC        4
+#define SEL_TYPE_GRAPHIC		4
 
 /* ---------------------------------------------------------------------------
 
@@ -123,8 +123,8 @@ Sequence<OUString> SwToolbarConfigItem::GetPropertyNames()
         "Selection/Table",                   //  SEL_TYPE_TABLE_TEXT
         "Selection/NumberedList",            //  SEL_TYPE_LIST_TEXT
         "Selection/NumberedList_InTable",     //  SEL_TYPE_TABLE_LIST
-        "Selection/BezierObject",           //  SEL_TYPE_BEZIER
-        "Selection/Graphic"                 //SEL_TYPE_GRAPHIC
+        "Selection/BezierObject",   		//  SEL_TYPE_BEZIER
+        "Selection/Graphic"					//SEL_TYPE_GRAPHIC
     };
     const int nCount = 5;
     Sequence<OUString> aNames(nCount);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ using namespace ::com::sun::star::lang;
 struct  ProvNamesId_Type
 {
     const char *    pName;
-    sal_uInt16      nType;
+    sal_uInt16  	nType;
 };
 
 // note: this thing is indexed as an array, so do not insert/remove entries!
@@ -259,7 +259,7 @@ const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { CSS_TEXT_TEXTFIELD_DOCINFO_SUBJECT,             SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT },
     { CSS_TEXT_TEXTFIELD_DOCINFO_TITLE,               SW_SERVICE_FIELDTYPE_DOCINFO_TITLE },
     { CSS_TEXT_TEXTFIELD_DOCINFO_REVISION,            SW_SERVICE_FIELDTYPE_DOCINFO_REVISION },
-    { CSS_TEXT_TEXTFIELD_DOCINFO_CUSTOM,              SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_CUSTOM,			  SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM },
     { CSS_TEXT_TEXTFIELD_BIBLIOGRAPHY,                SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY },
     { CSS_TEXT_TEXTFIELD_COMBINED_CHARACTERS,         SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS },
     { CSS_TEXT_TEXTFIELD_DROP_DOWN,                   SW_SERVICE_FIELDTYPE_DROPDOWN },
@@ -293,7 +293,7 @@ const SvEventDescription* lcl_GetSupportedMacroItems()
 /*-- 13.01.99 13:31:44---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-OUString    SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
+OUString	SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     OUString sRet;
@@ -305,7 +305,7 @@ OUString    SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
 /* -----------------11.03.99 12:05-------------------
  *
  * --------------------------------------------------*/
-uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
+uno::Sequence<OUString> 	SwXServiceProvider::GetAllServiceNames()
 {
     sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
     uno::Sequence<OUString> aRet(nEntries);
@@ -328,7 +328,7 @@ uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
 /*-- 13.01.99 13:31:45---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_uInt16  SwXServiceProvider::GetProviderType(const OUString& rServiceName)
+sal_uInt16	SwXServiceProvider::GetProviderType(const OUString& rServiceName)
 {
     sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
     for(sal_uInt16 i = 0; i < nEntries; i++ )
@@ -813,7 +813,7 @@ XTextTable* SwXTextTables::GetObject( SwFrmFmt& rFmt )
 
 
 /******************************************************************
- *  SwXFrameEnumeration
+ *	SwXFrameEnumeration
  ******************************************************************/
 namespace
 {
@@ -963,7 +963,7 @@ Sequence< OUString > SwXFrameEnumeration<T>::getSupportedServiceNames(void) thro
 }
 
 /******************************************************************
- *  SwXFrames
+ *	SwXFrames
  ******************************************************************/
 OUString SwXFrames::getImplementationName(void) throw( RuntimeException )
 {
@@ -1171,7 +1171,7 @@ SwXTextFrames::~SwXTextFrames()
 }
 
 /******************************************************************
- *  SwXTextGraphicObjects
+ *	SwXTextGraphicObjects
  ******************************************************************/
 //SMART_UNO_IMPLEMENTATION( SwXTextGraphicObjects, UsrObject );
 
@@ -1214,7 +1214,7 @@ SwXTextGraphicObjects::~SwXTextGraphicObjects()
 }
 
 /******************************************************************
- *  SwXTextEmbeddedObjects
+ *	SwXTextEmbeddedObjects
  ******************************************************************/
 /* -----------------------------06.04.00 12:44--------------------------------
 
@@ -1504,7 +1504,7 @@ sal_Int32 SwXBookmarks::getCount(void)
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw uno::RuntimeException();
-    return GetDoc()->getIDocumentMarkAccess()->getBookmarksCount();
+    return GetDoc()->getIDocumentMarkAccess()->getMarksCount();
 }
 
 uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
@@ -1514,11 +1514,11 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
     if(!IsValid())
         throw uno::RuntimeException();
     IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
-    if(nIndex < 0 || nIndex >= pMarkAccess->getBookmarksCount())
+    if(nIndex < 0 || nIndex >= pMarkAccess->getMarksCount())
         throw IndexOutOfBoundsException();
 
     uno::Any aRet;
-    ::sw::mark::IMark* pBkmk = pMarkAccess->getBookmarksBegin()[nIndex].get();
+    ::sw::mark::IMark* pBkmk = pMarkAccess->getMarksBegin()[nIndex].get();
     const uno::Reference< text::XTextContent > xRef =
         SwXBookmark::CreateXBookmark(*GetDoc(), *pBkmk);
     aRet <<= xRef;
@@ -1533,8 +1533,8 @@ uno::Any SwXBookmarks::getByName(const rtl::OUString& rName)
         throw uno::RuntimeException();
 
     IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
-    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findBookmark(rName);
-    if(ppBkmk == pMarkAccess->getBookmarksEnd())
+    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark(rName);
+    if(ppBkmk == pMarkAccess->getMarksEnd())
         throw NoSuchElementException();
 
     uno::Any aRet;
@@ -1552,10 +1552,10 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames(void)
         throw uno::RuntimeException();
 
     IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
-    uno::Sequence<OUString> aSeq(pMarkAccess->getBookmarksCount());
+    uno::Sequence<OUString> aSeq(pMarkAccess->getMarksCount());
     sal_Int32 nCnt = 0;
-    for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
-        ppMark != pMarkAccess->getBookmarksEnd();)
+    for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
+        ppMark != pMarkAccess->getMarksEnd();)
         aSeq[nCnt++] = (*ppMark++)->GetName();
     return aSeq;
 }
@@ -1568,7 +1568,7 @@ sal_Bool SwXBookmarks::hasByName(const OUString& rName)
         throw uno::RuntimeException();
 
     IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
-    return pMarkAccess->findBookmark(rName) != pMarkAccess->getBookmarksEnd();
+    return pMarkAccess->findMark(rName) != pMarkAccess->getMarksEnd();
 }
 
 uno::Type SAL_CALL SwXBookmarks::getElementType()
@@ -1757,7 +1757,7 @@ sal_Bool SwXFootnotes::hasElements(void) throw( uno::RuntimeException )
 /* -----------------------------05.09.00 12:48--------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference<XFootnote>    SwXFootnotes::GetObject( SwDoc& rDoc, const SwFmtFtn& rFmt )
+Reference<XFootnote> 	SwXFootnotes::GetObject( SwDoc& rDoc, const SwFmtFtn& rFmt )
 {
     return SwXFootnote::CreateXFootnote(rDoc, rFmt);
 }
@@ -1904,7 +1904,7 @@ sal_Bool SwXReferenceMarks::hasElements(void) throw( uno::RuntimeException )
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw uno::RuntimeException();
-    return 0 != GetDoc()->GetRefMarks();
+    return 0 !=	GetDoc()->GetRefMarks();
 }
 /*-- 14.01.99 09:03:19---------------------------------------------------
 

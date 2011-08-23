@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@
 
 /*************************************************************************
 |*
-|*  SwTxtLine::SwTxtLine(), ~SwTxtLine()
+|*	SwTxtLine::SwTxtLine(), ~SwTxtLine()
 |*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 16. Mar. 94
+|*	Ersterstellung		MA 16. Mar. 94
+|*	Letzte Aenderung	MA 16. Mar. 94
 |*
 |*************************************************************************/
 
@@ -58,10 +58,10 @@ SwTxtLine::~SwTxtLine()
 
 /*************************************************************************
 |*
-|*  SwTxtLineAccess::NewObj()
+|*	SwTxtLineAccess::NewObj()
 |*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 16. Mar. 94
+|*	Ersterstellung		MA 16. Mar. 94
+|*	Letzte Aenderung	MA 16. Mar. 94
 |*
 |*************************************************************************/
 
@@ -72,10 +72,10 @@ SwCacheObj *SwTxtLineAccess::NewObj()
 
 /*************************************************************************
 |*
-|*  SwTxtLineAccess::GetPara()
+|*	SwTxtLineAccess::GetPara()
 |*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 16. Mar. 94
+|*	Ersterstellung		MA 16. Mar. 94
+|*	Letzte Aenderung	MA 16. Mar. 94
 |*
 |*************************************************************************/
 
@@ -97,10 +97,10 @@ SwParaPortion *SwTxtLineAccess::GetPara()
 
 /*************************************************************************
 |*
-|*  SwTxtLineAccess::SwTxtLineAccess()
+|*	SwTxtLineAccess::SwTxtLineAccess()
 |*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 16. Mar. 94
+|*	Ersterstellung		MA 16. Mar. 94
+|*	Letzte Aenderung	MA 16. Mar. 94
 |*
 |*************************************************************************/
 
@@ -111,10 +111,10 @@ SwTxtLineAccess::SwTxtLineAccess( const SwTxtFrm *pOwn ) :
 
 /*************************************************************************
 |*
-|*  SwTxtLineAccess::IsAvailable
+|*	SwTxtLineAccess::IsAvailable
 |*
-|*  Ersterstellung      MA 23. Mar. 94
-|*  Letzte Aenderung    MA 23. Mar. 94
+|*	Ersterstellung		MA 23. Mar. 94
+|*	Letzte Aenderung	MA 23. Mar. 94
 |*
 |*************************************************************************/
 
@@ -127,10 +127,10 @@ sal_Bool SwTxtLineAccess::IsAvailable() const
 
 /*************************************************************************
 |*
-|*  SwTxtFrm::HasPara()
+|*	SwTxtFrm::HasPara()
 |*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 22. Aug. 94
+|*	Ersterstellung		MA 16. Mar. 94
+|*	Letzte Aenderung	MA 22. Aug. 94
 |*
 |*************************************************************************/
 
@@ -151,17 +151,17 @@ sal_Bool SwTxtFrm::_HasPara() const
 
 /*************************************************************************
 |*
-|*  SwTxtFrm::GetPara()
+|*	SwTxtFrm::GetPara()
 |*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 22. Aug. 94
+|*	Ersterstellung		MA 16. Mar. 94
+|*	Letzte Aenderung	MA 22. Aug. 94
 |*
 |*************************************************************************/
 
 SwParaPortion *SwTxtFrm::GetPara()
 {
     if ( GetCacheIdx() != MSHRT_MAX )
-    {   SwTxtLine *pLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
+    {	SwTxtLine *pLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
                                         Get( this, GetCacheIdx(), sal_False );
         if ( pLine )
             return pLine->GetPara();
@@ -174,10 +174,10 @@ SwParaPortion *SwTxtFrm::GetPara()
 
 /*************************************************************************
 |*
-|*  SwTxtFrm::ClearPara()
+|*	SwTxtFrm::ClearPara()
 |*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 22. Aug. 94
+|*	Ersterstellung		MA 16. Mar. 94
+|*	Letzte Aenderung	MA 22. Aug. 94
 |*
 |*************************************************************************/
 
@@ -200,10 +200,10 @@ void SwTxtFrm::ClearPara()
 
 /*************************************************************************
 |*
-|*  SwTxtFrm::SetPara()
+|*	SwTxtFrm::SetPara()
 |*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 22. Aug. 94
+|*	Ersterstellung		MA 16. Mar. 94
+|*	Letzte Aenderung	MA 22. Aug. 94
 |*
 |*************************************************************************/
 
@@ -227,7 +227,7 @@ void SwTxtFrm::SetPara( SwParaPortion *pNew, sal_Bool bDelete )
         }
     }
     else if ( pNew )
-    {   //Einen neuen einfuegen.
+    {	//Einen neuen einfuegen.
         SwTxtLine *pTxtLine = new SwTxtLine( this, pNew );
         if ( SwTxtFrm::GetTxtCache()->Insert( pTxtLine ) )
             nCacheIdx = pTxtLine->GetCachePos();

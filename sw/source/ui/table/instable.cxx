@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,30 +91,30 @@ void SwInsTableDlg::GetValues( String& rName, USHORT& rRow, USHORT& rCol,
 SwInsTableDlg::SwInsTableDlg( SwView& rView )
     : SfxModalDialog( rView.GetWindow(), SW_RES(DLG_INSERT_TABLE) ),
     aNameFT                 (this, SW_RES(FT_NAME)),
-    aNameEdit               (this, SW_RES(ED_NAME)),
+    aNameEdit				(this, SW_RES(ED_NAME)),
 
     aFL                     (this, SW_RES(FL_TABLE)),
     aColLbl                 (this, SW_RES(FT_COL)),
-    aColEdit                (this, SW_RES(ED_COL)),
-    aRowLbl                 (this, SW_RES(FT_ROW)),
-    aRowEdit                (this, SW_RES(ED_ROW)),
+    aColEdit				(this, SW_RES(ED_COL)),
+    aRowLbl					(this, SW_RES(FT_ROW)),
+    aRowEdit				(this, SW_RES(ED_ROW)),
 
     aOptionsFL              (this, SW_RES(FL_OPTIONS)),
     aHeaderCB               (this, SW_RES(CB_HEADER)),
-    aRepeatHeaderCB         (this, SW_RES(CB_REPEAT_HEADER)),
-    aRepeatHeaderFT         (this, SW_RES(FT_REPEAT_HEADER)),
-    aRepeatHeaderBeforeFT   (this),
-    aRepeatHeaderNF         (this, SW_RES(NF_REPEAT_HEADER)),
-    aRepeatHeaderAfterFT    (this),
-    aRepeatHeaderCombo      (this, SW_RES(WIN_REPEAT_HEADER), aRepeatHeaderNF, aRepeatHeaderBeforeFT, aRepeatHeaderAfterFT),
+    aRepeatHeaderCB			(this, SW_RES(CB_REPEAT_HEADER)),
+    aRepeatHeaderFT			(this, SW_RES(FT_REPEAT_HEADER)),
+    aRepeatHeaderBeforeFT	(this),
+    aRepeatHeaderNF			(this, SW_RES(NF_REPEAT_HEADER)),
+    aRepeatHeaderAfterFT	(this),
+    aRepeatHeaderCombo		(this, SW_RES(WIN_REPEAT_HEADER), aRepeatHeaderNF, aRepeatHeaderBeforeFT, aRepeatHeaderAfterFT),
 
     aDontSplitCB            (this, SW_RES(CB_DONT_SPLIT)),
-    aBorderCB               (this, SW_RES(CB_BORDER)),
+    aBorderCB				(this, SW_RES(CB_BORDER)),
 
     aOkBtn                  (this, SW_RES(BT_OK)),
-    aCancelBtn              (this, SW_RES(BT_CANCEL)),
-    aHelpBtn                (this, SW_RES(BT_HELP)),
-    aAutoFmtBtn             (this, SW_RES(BT_AUTOFORMAT)),
+    aCancelBtn				(this, SW_RES(BT_CANCEL)),
+    aHelpBtn				(this, SW_RES(BT_HELP)),
+    aAutoFmtBtn				(this, SW_RES(BT_AUTOFORMAT)),
 
     pShell(&rView.GetWrtShell()),
     pTAutoFmt( 0 ),

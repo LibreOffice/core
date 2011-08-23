@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -164,7 +164,7 @@ uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
     ::vos::OGuard aGuard(Application::GetSolarMutex());
 
     uno::Reference< text::XAutoTextGroup > xGroup;
-    if ( pGlossaries && hasByName( GroupName ) )    // group name already known?
+    if ( pGlossaries && hasByName( GroupName ) )	// group name already known?
         // TRUE = create group if not already available
         xGroup = pGlossaries->GetAutoTextGroup( GroupName, TRUE );
 
@@ -224,7 +224,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     for(sal_Int32 nPos = 0; nPos < aGroupName.getLength(); nPos++)
     {
         sal_Unicode cChar = aGroupName[nPos];
-        if( ((cChar >= 'A') && (cChar <= 'Z')) ||
+        if(	((cChar >= 'A') && (cChar <= 'Z')) ||
             ((cChar >= 'a') && (cChar <= 'z')) ||
             ((cChar >= '0') && (cChar <= '9')) ||
             (cChar == '_') ||
@@ -321,7 +321,7 @@ sal_Int64 SAL_CALL SwXAutoTextGroup::getSomething( const uno::Sequence< sal_Int8
 
   -----------------------------------------------------------------------*/
 SwXAutoTextGroup::SwXAutoTextGroup(const OUString& rName,
-            SwGlossaries*   pGlos) :
+            SwGlossaries*	pGlos) :
     pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_AUTO_TEXT_GROUP)),
     pGlossaries(pGlos),
     sName(rName),
@@ -932,7 +932,7 @@ void SwXAutoTextEntry::implFlushDocument( bool _bCloseDoc )
 void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
 {
     if ( &_rBC == &xDocSh )
-    {   // it's our document
+    {	// it's our document
         if ( _rHint.ISA( SfxSimpleHint ) )
         {
             if ( SFX_HINT_DEINITIALIZING == static_cast< const SfxSimpleHint& >( _rHint ).GetId() )
@@ -1186,8 +1186,8 @@ uno::Reference< container::XNameReplace > SwXAutoTextEntry::getEvents()
  ---------------------------------------------------------------------------*/
 const struct SvEventDescription aAutotextEvents[] =
 {
-    { SW_EVENT_START_INS_GLOSSARY,  "OnInsertStart" },
-    { SW_EVENT_END_INS_GLOSSARY,    "OnInsertDone" },
+    { SW_EVENT_START_INS_GLOSSARY,	"OnInsertStart" },
+    { SW_EVENT_END_INS_GLOSSARY,	"OnInsertDone" },
     { 0, NULL }
 };
 

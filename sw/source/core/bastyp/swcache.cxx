@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,15 +38,15 @@ SV_IMPL_PTRARR(SwCacheObjArr,SwCacheObj*);
 #ifndef DBG_UTIL
 #define INCREMENT( nVar )
 #else
-#define INCREMENT( nVar )   ++nVar
+#define INCREMENT( nVar )	++nVar
 #endif
 
 /*************************************************************************
 |*
-|*  SwCache::Check()
+|*	SwCache::Check()
 |*
-|*  Ersterstellung      MA 23. Mar. 94
-|*  Letzte Aenderung    MA 23. Mar. 94
+|*	Ersterstellung		MA 23. Mar. 94
+|*	Letzte Aenderung	MA 23. Mar. 94
 |*
 |*************************************************************************/
 
@@ -95,10 +95,10 @@ void SwCache::Check()
 
 /*************************************************************************
 |*
-|*  SwCache::SwCache(), ~SwCache()
+|*	SwCache::SwCache(), ~SwCache()
 |*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 15. Mar. 94
+|*	Ersterstellung		MA 15. Mar. 94
+|*	Letzte Aenderung	MA 15. Mar. 94
 |*
 |*************************************************************************/
 
@@ -142,31 +142,31 @@ SwCache::~SwCache()
 #if OSL_DEBUG_LEVEL > 1
     {
         ByteString sOut( aName ); sOut += '\n';
-        (( sOut += "Anzahl neuer Eintraege:             " )
+        (( sOut += "Anzahl neuer Eintraege:				" )
                     += ByteString::CreateFromInt32( nAppend ))+= '\n';
-        (( sOut += "Anzahl Insert auf freie Plaetze:    " )
+        (( sOut += "Anzahl Insert auf freie Plaetze:	" )
                     += ByteString::CreateFromInt32( nInsertFree ))+= '\n';
-        (( sOut += "Anzahl Ersetzungen:                 " )
+        (( sOut += "Anzahl Ersetzungen:					" )
                     += ByteString::CreateFromInt32( nReplace ))+= '\n';
-        (( sOut += "Anzahl Erfolgreicher Get's:         " )
+        (( sOut += "Anzahl Erfolgreicher Get's:			" )
                     += ByteString::CreateFromInt32( nGetSuccess ))+= '\n';
-        (( sOut += "Anzahl Fehlgeschlagener Get's:      " )
+        (( sOut += "Anzahl Fehlgeschlagener Get's:		" )
                     += ByteString::CreateFromInt32( nGetFail ))+= '\n';
-        (( sOut += "Anzahl Umsortierungen (LRU):        " )
+        (( sOut += "Anzahl Umsortierungen (LRU):		" )
                     += ByteString::CreateFromInt32( nToTop ))+= '\n';
-        (( sOut += "Anzahl Loeschungen:                 " )
+        (( sOut += "Anzahl Loeschungen:					" )
                     += ByteString::CreateFromInt32( nDelete ))+= '\n';
-        (( sOut += "Anzahl Get's ohne Index:            " )
+        (( sOut += "Anzahl Get's ohne Index:			" )
                     += ByteString::CreateFromInt32( nGetSeek ))+= '\n';
-        (( sOut += "Anzahl Seek fuer Get ohne Index:    " )
+        (( sOut += "Anzahl Seek fuer Get ohne Index:	" )
                     += ByteString::CreateFromInt32( nAverageSeekCnt ))+= '\n';
-        (( sOut += "Anzahl Flush-Aufrufe:               " )
+        (( sOut += "Anzahl Flush-Aufrufe:				" )
                     += ByteString::CreateFromInt32( nFlushCnt ))+= '\n';
-        (( sOut += "Anzahl geflush'ter Objekte:         " )
+        (( sOut += "Anzahl geflush'ter Objekte:			" )
                     += ByteString::CreateFromInt32( nFlushedObjects ))+= '\n';
-        (( sOut += "Anzahl Cache-Erweiterungen:         " )
+        (( sOut += "Anzahl Cache-Erweiterungen:			" )
                     += ByteString::CreateFromInt32( nIncreaseMax ))+= '\n';
-        (( sOut += "Anzahl Cache-Verkleinerungen:       " )
+        (( sOut += "Anzahl Cache-Verkleinerungen:		" )
                     += ByteString::CreateFromInt32( nDecreaseMax ))+= '\n';
 
         DBG_ERROR( sOut.GetBuffer() );
@@ -178,10 +178,10 @@ SwCache::~SwCache()
 
 /*************************************************************************
 |*
-|*  SwCache::Flush()
+|*	SwCache::Flush()
 |*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 15. Mar. 94
+|*	Ersterstellung		MA 15. Mar. 94
+|*	Letzte Aenderung	MA 15. Mar. 94
 |*
 |*************************************************************************/
 
@@ -206,7 +206,7 @@ void SwCache::Flush( const BYTE )
                 pObj = pTmp;
             }
             else
-            {   pLast->SetNext( pObj );
+            {	pLast->SetNext( pObj );
                 pObj->SetPrev( pLast );
                 pLast = pObj;
                 pTmp = pObj->GetNext();
@@ -229,10 +229,10 @@ void SwCache::Flush( const BYTE )
 
 /*************************************************************************
 |*
-|*  SwCache::ToTop()
+|*	SwCache::ToTop()
 |*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 24. Apr. 95
+|*	Ersterstellung		MA 15. Mar. 94
+|*	Letzte Aenderung	MA 24. Apr. 95
 |*
 |*************************************************************************/
 
@@ -242,13 +242,13 @@ void SwCache::ToTop( SwCacheObj *pObj )
     INCREMENT( nToTop );
 
     //Objekt aus der LRU-Kette ausschneiden und am Anfang einfuegen.
-    if ( pRealFirst == pObj )   //pFirst wurde vom Aufrufer geprueft!
-    {   CHECK;
+    if ( pRealFirst == pObj )	//pFirst wurde vom Aufrufer geprueft!
+    {	CHECK;
         return;
     }
 
     if ( !pRealFirst )
-    {   //Der erste wird eingetragen.
+    {	//Der erste wird eingetragen.
         ASSERT( !pFirst && !pLast, "First not first." );
         pRealFirst = pFirst = pLast = pObj;
         CHECK;
@@ -299,10 +299,10 @@ void SwCache::ToTop( SwCacheObj *pObj )
 
 /*************************************************************************
 |*
-|*  SwCache::Get()
+|*	SwCache::Get()
 |*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 22. Aug. 94
+|*	Ersterstellung		MA 15. Mar. 94
+|*	Letzte Aenderung	MA 22. Aug. 94
 |*
 |*************************************************************************/
 
@@ -355,10 +355,10 @@ SwCacheObj *SwCache::Get( const void *pOwner, const BOOL bToTop )
 
 /*************************************************************************
 |*
-|*  SwCache::Delete()
+|*	SwCache::Delete()
 |*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 15. Mar. 94
+|*	Ersterstellung		MA 15. Mar. 94
+|*	Letzte Aenderung	MA 15. Mar. 94
 |*
 |*************************************************************************/
 
@@ -403,7 +403,7 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
         {
             SwCacheObj *pTmpObj = operator[](i);
             if ( !pTmpObj )
-            {   SwCacheObjArr::Remove( i, 1 );
+            {	SwCacheObjArr::Remove( i, 1 );
                 --i;
             }
             else
@@ -439,10 +439,10 @@ void SwCache::Delete( const void *pOwner )
 
 /*************************************************************************
 |*
-|*  SwCache::Insert()
+|*	SwCache::Insert()
 |*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 20. Sep. 94
+|*	Ersterstellung		MA 15. Mar. 94
+|*	Letzte Aenderung	MA 20. Sep. 94
 |*
 |*************************************************************************/
 
@@ -485,7 +485,7 @@ BOOL SwCache::Insert( SwCacheObj *pNew )
 
         nPos = pObj->GetCachePos();
         if ( pObj == pLast )
-        {   ASSERT( pObj->GetPrev(), "Last but no Prev" );
+        {	ASSERT( pObj->GetPrev(), "Last but no Prev" );
             pLast = pObj->GetPrev();
             pLast->SetNext( 0 );
         }
@@ -502,18 +502,18 @@ BOOL SwCache::Insert( SwCacheObj *pNew )
     pNew->SetCachePos( nPos );
 
     //Anstelle von ToTop, einfach als pFirst einfuegen.
-//  ToTop( nPos );
+//	ToTop( nPos );
     if ( pFirst )
     {
         if ( pFirst->GetPrev() )
-        {   pFirst->GetPrev()->SetNext( pNew );
+        {	pFirst->GetPrev()->SetNext( pNew );
             pNew->SetPrev( pFirst->GetPrev() );
         }
         pFirst->SetPrev( pNew );
         pNew->SetNext( pFirst );
     }
     else
-    {   ASSERT( !pLast, "Last but no First." );
+    {	ASSERT( !pLast, "Last but no First." );
         pLast = pNew;
     }
     if ( pFirst == pRealFirst )
@@ -526,10 +526,10 @@ BOOL SwCache::Insert( SwCacheObj *pNew )
 
 /*************************************************************************
 |*
-|*  SwCache::SetLRUOfst()
+|*	SwCache::SetLRUOfst()
 |*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 15. Mar. 94
+|*	Ersterstellung		MA 15. Mar. 94
+|*	Letzte Aenderung	MA 15. Mar. 94
 |*
 |*************************************************************************/
 
@@ -553,10 +553,10 @@ void SwCache::SetLRUOfst( const USHORT nOfst )
 
 /*************************************************************************
 |*
-|*  SwCacheObj::SwCacheObj()
+|*	SwCacheObj::SwCacheObj()
 |*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 24. Nov. 95
+|*	Ersterstellung		MA 15. Mar. 94
+|*	Letzte Aenderung	MA 24. Nov. 95
 |*
 |*************************************************************************/
 
@@ -578,10 +578,10 @@ SwCacheObj::~SwCacheObj()
 
 /*************************************************************************
 |*
-|*  SwCacheObj::SetLock(), Unlock()
+|*	SwCacheObj::SetLock(), Unlock()
 |*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 15. Mar. 94
+|*	Ersterstellung		MA 15. Mar. 94
+|*	Letzte Aenderung	MA 15. Mar. 94
 |*
 |*************************************************************************/
 
@@ -613,10 +613,10 @@ SwCacheAccess::~SwCacheAccess()
 
 /*************************************************************************
 |*
-|*  SwCacheAccess::Get()
+|*	SwCacheAccess::Get()
 |*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 04. Apr. 95
+|*	Ersterstellung		MA 15. Mar. 94
+|*	Letzte Aenderung	MA 04. Apr. 95
 |*
 |*************************************************************************/
 
@@ -637,10 +637,10 @@ void SwCacheAccess::_Get()
 
 /*************************************************************************
 |*
-|*  SwCacheAccess::IsAvailable()
+|*	SwCacheAccess::IsAvailable()
 |*
-|*  Ersterstellung      MA 23. Mar. 94
-|*  Letzte Aenderung    MA 23. Mar. 94
+|*	Ersterstellung		MA 23. Mar. 94
+|*	Letzte Aenderung	MA 23. Mar. 94
 |*
 |*************************************************************************/
 

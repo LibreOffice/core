@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,7 +121,7 @@ public:
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );
-
+    
     virtual void DoComboBox(const rtl::OUString &rName,
                     const rtl::OUString &rHelp,
                     const rtl::OUString &ToolTip,
@@ -129,7 +129,7 @@ public:
                     com::sun::star::uno::Sequence<rtl::OUString> &rListItems);
 
     virtual void DoFormText(const SwInputField * pFld);
-
+    
     virtual ULONG ReplaceCr( BYTE nChar );
 
 protected:
@@ -138,7 +138,7 @@ protected:
 
     /// Output page/section breaks
     virtual void OutputPageSectionBreaks( const SwTxtNode& );
-
+    
     /// Output SwEndNode
     virtual void OutputEndNode( const SwEndNode& );
 
@@ -173,14 +173,14 @@ private:
     ///
     /// Returns false when there is no bookmark.
     bool NearestBookmark( xub_StrLen& rNearest );
-
-    void GetSortedBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos,
+    
+    void GetSortedBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos, 
                 xub_StrLen nLen );
 
     bool GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt, xub_StrLen nEnd,
             IMarkVector& rArr );
 
-    /// Setup pStyles and write styles.xml
+    /// Setup pStyles and write styles.xml 
     void InitStyles();
 
     /// Write footnotes.xml and endnotes.xml.

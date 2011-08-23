@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ class SwFrm;
 
 class SW_DLLPUBLIC SwDBFieldType : public SwValueFieldType
 {
-    SwDBData    aDBData;        //
-    String      sName;          // only used in ::GetName() !
-    String      sColumn;
-    long        nRefCnt;
+    SwDBData 	aDBData;		//
+    String 		sName;			// only used in ::GetName() !
+    String 		sColumn;
+    long   		nRefCnt;
 
 public:
 
@@ -54,11 +54,11 @@ public:
     virtual const String& GetName() const;
     virtual SwFieldType*  Copy() const;
 
-    inline void     AddRef() { nRefCnt++; }
-    void            ReleaseRef();
+    inline void		AddRef() { nRefCnt++; }
+    void			ReleaseRef();
 
-    const String&   GetColumnName() const {return sColumn;}
-    const SwDBData& GetDBData() const {return aDBData;}
+    const String&	GetColumnName()	const {return sColumn;}
+    const SwDBData&	GetDBData()	const {return aDBData;}
 
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
@@ -74,44 +74,44 @@ class SW_DLLPUBLIC SwDBField : public SwValueField
 {
     String  aContent;
     String  sFieldCode; // contains Word's field code
-    USHORT  nSubType;
-    BOOL    bIsInBodyTxt    : 1;
-    BOOL    bValidValue     : 1;
-    BOOL    bInitialized    : 1;
+    USHORT	nSubType;
+    BOOL 	bIsInBodyTxt	: 1;
+    BOOL	bValidValue		: 1;
+    BOOL	bInitialized	: 1;
 
 public:
     SwDBField(SwDBFieldType*, ULONG nFmt = 0);
     virtual ~SwDBField();
 
-    virtual SwFieldType*    ChgTyp( SwFieldType* );
+    virtual SwFieldType*	ChgTyp( SwFieldType* );
 
     // Der aktuelle Text
-    inline  void        SetExpansion(const String& rStr);
-    virtual String      Expand() const;
-    virtual SwField*    Copy() const;
+    inline  void		SetExpansion(const String& rStr);
+    virtual String 		Expand() const;
+    virtual SwField*	Copy() const;
 
-    virtual USHORT      GetSubType() const;
-    virtual void        SetSubType(USHORT nType);
+    virtual USHORT		GetSubType() const;
+    virtual void		SetSubType(USHORT nType);
 
     // Name oder Inhalt
-    virtual String      GetCntnt(BOOL bName = FALSE) const;
+    virtual	String		GetCntnt(BOOL bName = FALSE) const;
 
     // fuer Berechnungen in Ausdruecken
-    void                ChgValue( double d, BOOL bVal );
+    void 				ChgValue( double d, BOOL bVal );
 
     // Evaluierung ueber den DBMgr String rauspulen
-    void                Evaluate();
+    void				Evaluate();
 
     // Evaluierung fuer Kopf und Fusszeilen
-    void                ChangeExpansion( const SwFrm*, const SwTxtFld* );
-    void                InitContent();
-    void                InitContent(const String& rExpansion);
+    void 			    ChangeExpansion( const SwFrm*, const SwTxtFld* );
+    void				InitContent();
+    void				InitContent(const String& rExpansion);
 
-    inline void         ChgBodyTxtFlag( BOOL bIsInBody );
+    inline void 		ChgBodyTxtFlag( BOOL bIsInBody );
 
-    inline BOOL         IsInitialized() const   { return bInitialized; }
-    inline void         ClearInitialized()      { bInitialized = FALSE; }
-    inline void         SetInitialized()        { bInitialized = TRUE; }
+    inline BOOL 		IsInitialized() const	{ return bInitialized; }
+    inline void			ClearInitialized()		{ bInitialized = FALSE; }
+    inline void			SetInitialized()		{ bInitialized = TRUE; }
 
     // Name erfragen
     virtual const String& GetPar1() const;
@@ -123,7 +123,7 @@ public:
                         { sFieldCode = rStr; }
 
     // DBName
-    inline const SwDBData&  GetDBData() const { return ((SwDBFieldType*)GetTyp())->GetDBData(); }
+    inline const SwDBData& 	GetDBData() const { return ((SwDBFieldType*)GetTyp())->GetDBData(); }
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
@@ -141,24 +141,24 @@ inline void SwDBField::ChgBodyTxtFlag( BOOL bIsInBody )
 
 class SW_DLLPUBLIC SwDBNameInfField : public SwField
 {
-    SwDBData    aDBData;
+    SwDBData 	aDBData;
     USHORT      nSubType;
 
 protected:
     const SwDBData& GetDBData() const {return aDBData;}
-    SwDBData&       GetDBData() {return aDBData;}
+    SwDBData& 		GetDBData() {return aDBData;}
 
     SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, ULONG nFmt = 0);
 
 public:
     // DBName
-    inline const SwDBData&  GetRealDBData() { return aDBData; }
+    inline const SwDBData&	GetRealDBData() { return aDBData; }
 
-    SwDBData                GetDBData(SwDoc* pDoc);
-    void                    SetDBData(const SwDBData& rDBData); // #111840#
+    SwDBData				GetDBData(SwDoc* pDoc);
+    void				    SetDBData(const SwDBData& rDBData); // #111840#
 
     // Name oder Inhalt
-    virtual String          GetCntnt(BOOL bName = FALSE) const;
+    virtual	String			GetCntnt(BOOL bName = FALSE) const;
     virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual BOOL            PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
     virtual USHORT          GetSubType() const;
@@ -175,7 +175,7 @@ class SW_DLLPUBLIC SwDBNextSetFieldType : public SwFieldType
 public:
     SwDBNextSetFieldType();
 
-    virtual SwFieldType*    Copy() const;
+    virtual SwFieldType* 	Copy() const;
 };
 
 
@@ -185,31 +185,31 @@ public:
 
 class SW_DLLPUBLIC SwDBNextSetField : public SwDBNameInfField
 {
-    String  aCond;
-    BOOL    bCondValid;
+    String 	aCond;
+    BOOL	bCondValid;
 
 public:
     SwDBNextSetField( SwDBNextSetFieldType*,
                       const String& rCond, const String& rDummy, const SwDBData& rDBData);
 
-    virtual String          Expand() const;
-    virtual SwField*        Copy() const;
+    virtual String 			Expand() const;
+    virtual SwField*		Copy() const;
 
-    void                    Evaluate(SwDoc*);
-    inline void             SetCondValid(BOOL bCond);
-    inline BOOL             IsCondValid() const;
+    void					Evaluate(SwDoc*);
+    inline void				SetCondValid(BOOL bCond);
+    inline BOOL				IsCondValid() const;
 
     // Condition
-    virtual const String&   GetPar1() const;
-    virtual void            SetPar1(const String& rStr);
+    virtual const String&	GetPar1() const;
+    virtual void	   		SetPar1(const String& rStr);
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
-inline BOOL SwDBNextSetField::IsCondValid() const
+inline BOOL	SwDBNextSetField::IsCondValid() const
     { return bCondValid; }
 
-inline void SwDBNextSetField::SetCondValid(BOOL bCond)
+inline void	SwDBNextSetField::SetCondValid(BOOL bCond)
     { bCondValid = bCond; }
 
 /*--------------------------------------------------------------------
@@ -221,7 +221,7 @@ class SwDBNumSetFieldType : public SwFieldType
 public:
     SwDBNumSetFieldType();
 
-    virtual SwFieldType*    Copy() const;
+    virtual SwFieldType*	Copy() const;
 };
 
 
@@ -233,37 +233,37 @@ public:
 
 class SwDBNumSetField : public SwDBNameInfField
 {
-    String  aCond;
-    String  aPar2;
-    BOOL    bCondValid;
+    String 	aCond;
+    String 	aPar2;
+    BOOL 	bCondValid;
 
 public:
     SwDBNumSetField(SwDBNumSetFieldType*, const String& rCond, const String& rDBNum, const SwDBData& rDBData);
 
-    virtual String          Expand() const;
-    virtual SwField*        Copy() const;
+    virtual String 			Expand() const;
+    virtual SwField*		Copy() const;
 
-    inline BOOL             IsCondValid() const;
-    inline void             SetCondValid(BOOL bCond);
-    void                    Evaluate(SwDoc*);
+    inline BOOL				IsCondValid() const;
+    inline void				SetCondValid(BOOL bCond);
+    void					Evaluate(SwDoc*);
 
     // Condition
-    virtual const String&   GetPar1() const;
-    virtual void            SetPar1(const String& rStr);
+    virtual const String&	GetPar1() const;
+    virtual void	   		SetPar1(const String& rStr);
 
     // Datensatznummer
-    virtual String          GetPar2()   const;
-    virtual void            SetPar2(const String& rStr);
+    virtual String			GetPar2() 	const;
+    virtual void			SetPar2(const String& rStr);
 
     // Die Datensatznummer steht in nFormat !!
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
-inline BOOL SwDBNumSetField::IsCondValid() const
+inline BOOL	SwDBNumSetField::IsCondValid() const
     { return bCondValid; }
 
-inline void SwDBNumSetField::SetCondValid(BOOL bCond)
+inline void	SwDBNumSetField::SetCondValid(BOOL bCond)
     { bCondValid = bCond; }
 
 /*--------------------------------------------------------------------
@@ -276,7 +276,7 @@ class SwDBNameFieldType : public SwFieldType
 public:
     SwDBNameFieldType(SwDoc*);
 
-    String                  Expand(ULONG) const;
+    String 					Expand(ULONG) const;
     virtual SwFieldType*    Copy() const;
 };
 
@@ -289,7 +289,7 @@ class SW_DLLPUBLIC SwDBNameField : public SwDBNameInfField
 public:
     SwDBNameField(SwDBNameFieldType*, const SwDBData& rDBData, ULONG nFmt = 0);
 
-    virtual String   Expand() const;
+    virtual String	 Expand() const;
     virtual SwField* Copy() const;
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
@@ -313,25 +313,25 @@ public:
 
 class SW_DLLPUBLIC SwDBSetNumberField : public SwDBNameInfField
 {
-    long    nNumber;
+    long	nNumber;
 
 public:
     SwDBSetNumberField(SwDBSetNumberFieldType*, const SwDBData& rDBData, ULONG nFmt = 0);
 
-    virtual String  Expand() const;
-    virtual         SwField* Copy() const;
-    void            Evaluate(SwDoc*);
+    virtual String	Expand() const;
+    virtual 		SwField* Copy() const;
+    void			Evaluate(SwDoc*);
 
-    inline long     GetSetNumber() const;
-    inline void     SetSetNumber(long nNum);
+    inline long		GetSetNumber() const;
+    inline void		SetSetNumber(long nNum);
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
-inline long SwDBSetNumberField::GetSetNumber() const
+inline long	SwDBSetNumberField::GetSetNumber() const
     { return nNumber; }
 
-inline void SwDBSetNumberField::SetSetNumber(long nNum)
+inline void	SwDBSetNumberField::SetSetNumber(long nNum)
     { nNumber = nNum; }
 
 

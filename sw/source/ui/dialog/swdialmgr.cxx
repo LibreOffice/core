@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include <sfx2/app.hxx>
 
 //copy from core\bastyp\swtypes.cxx
-String aEmptyStr;               // Konstante Strings
+String aEmptyStr;				// Konstante Strings
 
 ResMgr* pSwResMgr=0;
 

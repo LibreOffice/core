@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,8 +93,8 @@ SwComboBox::SwComboBox(Window* pParent, const ResId& rId, USHORT nStyleBits ):
 SwComboBox::~SwComboBox()
 {
 // das erledigen die Listen doch schon selbst im DTOR!
-//  aEntryLst.DeleteAndDestroy(0,   aEntryLst.Count());
-//  aDelEntryLst.DeleteAndDestroy(0, aDelEntryLst.Count());
+//	aEntryLst.DeleteAndDestroy(0, 	aEntryLst.Count());
+//	aDelEntryLst.DeleteAndDestroy(0, aDelEntryLst.Count());
 }
 
 /*--------------------------------------------------------------------

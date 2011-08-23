@@ -33,13 +33,13 @@
 class SwCellFrm;
 class SwFrmFmt;
 
-class SwAccessibleCell : public SwAccessibleContext,
+class SwAccessibleCell : public	SwAccessibleContext,
                   ::com::sun::star::accessibility::XAccessibleValue
 
 {
-    sal_Bool    bIsSelected;    // protected by base class mutex
+    sal_Bool	bIsSelected;	// protected by base class mutex
 
-    sal_Bool    IsSelected();
+    sal_Bool	IsSelected();
 
     sal_Bool _InvalidateMyCursorPos();
     sal_Bool _InvalidateChildrenCursorPos( const SwFrm *pFrm );
@@ -58,24 +58,24 @@ public:
 
     SwAccessibleCell( SwAccessibleMap* pInitMap, const SwCellFrm *pCellFrm );
 
-    virtual sal_Bool HasCursor();   // required by map to remember that object
+    virtual sal_Bool HasCursor();	// required by map to remember that object
 
     //=====  XAccessibleContext  ==============================================
 
-    /// Return this object's description.
+    ///	Return this object's description.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleDescription (void)
         throw (com::sun::star::uno::RuntimeException);
 
     //=====  XServiceInfo  ====================================================
 
-    /** Returns an identifier for the implementation of this object.
+    /**	Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Return whether the specified service is supported by this class.
+    /**	Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
         supportsService (const ::rtl::OUString& sServiceName)

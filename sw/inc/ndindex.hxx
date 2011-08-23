@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ class SW_DLLPUBLIC SwNodeIndex
     SwNode* pNd;
     SwNodeIndex *pNext, *pPrev;
 
-    void Remove();                  // Ausketten
+    void Remove();					// Ausketten
 
     // diese sind nicht erlaubt!
     SwNodeIndex( SwNodes& rNds, USHORT nIdx );
@@ -101,7 +101,7 @@ public:
 
         // Herausgabe des Pointers auf das NodesArray,
     inline const SwNodes& GetNodes() const;
-    inline       SwNodes& GetNodes();
+    inline	  	 SwNodes& GetNodes();
 
     SwNode& GetNode() const { return *pNd; }
 };
@@ -242,7 +242,7 @@ inline SwNodeIndex& SwNodeIndex::operator=( ULONG nWert )
 
 
 //JP 29.09.97: impl. steht im ndindex.hxx - sollte moeglichst bald auf die
-//              neue Schnittstelle angepasst werden
+//				neue Schnittstelle angepasst werden
 inline SwNode* SwNodes::operator[]( const SwNodeIndex& rIdx ) const
 {
     return &rIdx.GetNode();

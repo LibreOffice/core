@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -565,7 +565,7 @@ throw (uno::RuntimeException)
     USHORT nObjectType = SW_SERVICE_TYPE_INDEX;
     switch (m_pImpl->m_eTOXType)
     {
-//      case TOX_INDEX:             break;
+//		case TOX_INDEX:      		break;
         case TOX_USER:          nObjectType = SW_SERVICE_USER_INDEX;
         break;
         case TOX_CONTENT:       nObjectType = SW_SERVICE_CONTENT_INDEX;
@@ -1005,7 +1005,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     }
                 }
             break;
-            case WID_IDX_TITLE  :
+            case WID_IDX_TITLE	:
             {
                 OUString uRet(pTOXBase->GetTitle());
                 aRet <<= uRet;
@@ -1036,7 +1036,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case WID_IDX_SORT_ALGORITHM:
                 aRet <<= OUString(pTOXBase->GetSortAlgorithm());
             break;
-            case WID_LEVEL      :
+            case WID_LEVEL		:
                 aRet <<= static_cast<sal_Int16>(pTOXBase->GetLevel());
             break;
             case WID_CREATE_FROM_MARKS:

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,26 +67,26 @@
  --------------------------------------------------------------------*/
 
 SwFldVarPage::SwFldVarPage(Window* pParent, const SfxItemSet& rCoreSet ) :
-    SwFldPage       ( pParent, SW_RES( TP_FLD_VAR ), rCoreSet ),
-    aTypeFT         (this, SW_RES(FT_VARTYPE)),
-    aTypeLB         (this, SW_RES(LB_VARTYPE)),
-    aSelectionFT    (this, SW_RES(FT_VARSELECTION)),
-    aSelectionLB    (this, SW_RES(LB_VARSELECTION)),
-    aNameFT         (this, SW_RES(FT_VARNAME)),
-    aNameED         (this, SW_RES(ED_VARNAME)),
-    aValueFT        (this, SW_RES(FT_VARVALUE)),
-    aValueED        (this, SW_RES(ED_VARVALUE)),
-    aFormatFT       (this, SW_RES(FT_VARFORMAT)),
-    aNumFormatLB    (this, SW_RES(LB_VARNUMFORMAT)),
-    aFormatLB       (this, SW_RES(LB_VARFORMAT)),
+    SwFldPage		( pParent, SW_RES( TP_FLD_VAR ), rCoreSet ),
+    aTypeFT			(this, SW_RES(FT_VARTYPE)),
+    aTypeLB			(this, SW_RES(LB_VARTYPE)),
+    aSelectionFT	(this, SW_RES(FT_VARSELECTION)),
+    aSelectionLB	(this, SW_RES(LB_VARSELECTION)),
+    aNameFT			(this, SW_RES(FT_VARNAME)),
+    aNameED			(this, SW_RES(ED_VARNAME)),
+    aValueFT		(this, SW_RES(FT_VARVALUE)),
+    aValueED		(this, SW_RES(ED_VARVALUE)),
+    aFormatFT		(this, SW_RES(FT_VARFORMAT)),
+    aNumFormatLB	(this, SW_RES(LB_VARNUMFORMAT)),
+    aFormatLB		(this, SW_RES(LB_VARFORMAT)),
     aChapterHeaderFT(this, SW_RES(FT_VARCHAPTERHEADER)),
-    aChapterLevelFT (this, SW_RES(FT_VARCHAPTERLEVEL)),
-    aChapterLevelLB (this, SW_RES(LB_VARCHAPTERLEVEL)),
-    aInvisibleCB    (this, SW_RES(CB_VARINVISIBLE)),
-    aSeparatorFT    (this, SW_RES(FT_VARSEPARATOR)),
-    aSeparatorED    (this, SW_RES(ED_VARSEPARATOR)),
-    aNewDelTBX      (this, SW_RES(TBX_VARNEWDEL)),
-    bInit           (TRUE)
+    aChapterLevelFT	(this, SW_RES(FT_VARCHAPTERLEVEL)),
+    aChapterLevelLB	(this, SW_RES(LB_VARCHAPTERLEVEL)),
+    aInvisibleCB	(this, SW_RES(CB_VARINVISIBLE)),
+    aSeparatorFT	(this, SW_RES(FT_VARSEPARATOR)),
+    aSeparatorED	(this, SW_RES(ED_VARSEPARATOR)),
+    aNewDelTBX		(this, SW_RES(TBX_VARNEWDEL)),
+    bInit			(TRUE)
 {
     FreeResource();
 
@@ -125,7 +125,7 @@ void SwFldVarPage::Reset(const SfxItemSet& )
 {
     SavePos(&aTypeLB);
 
-    Init(); // Allgemeine initialisierung
+    Init();	// Allgemeine initialisierung
 
     aTypeLB.SetUpdateMode(FALSE);
     aTypeLB.Clear();
@@ -167,17 +167,17 @@ void SwFldVarPage::Reset(const SfxItemSet& )
     // alte Pos selektieren
     RestorePos(&aTypeLB);
 
-    aTypeLB.SetDoubleClickHdl       (LINK(this, SwFldVarPage, InsertHdl));
-    aTypeLB.SetSelectHdl            (LINK(this, SwFldVarPage, TypeHdl));
-    aSelectionLB.SetSelectHdl       (LINK(this, SwFldVarPage, SubTypeHdl));
-    aSelectionLB.SetDoubleClickHdl  (LINK(this, SwFldVarPage, InsertHdl));
-    aFormatLB.SetDoubleClickHdl     (LINK(this, SwFldVarPage, InsertHdl));
-    aNumFormatLB.SetDoubleClickHdl  (LINK(this, SwFldVarPage, InsertHdl));
-    aNameED.SetModifyHdl            (LINK(this, SwFldVarPage, ModifyHdl));
-    aValueED.SetModifyHdl           (LINK(this, SwFldVarPage, ModifyHdl));
-    aNewDelTBX.SetClickHdl          (LINK(this, SwFldVarPage, TBClickHdl));
-    aChapterLevelLB.SetSelectHdl    (LINK(this, SwFldVarPage, ChapterHdl));
-    aSeparatorED.SetModifyHdl       (LINK(this, SwFldVarPage, SeparatorHdl));
+    aTypeLB.SetDoubleClickHdl		(LINK(this, SwFldVarPage, InsertHdl));
+    aTypeLB.SetSelectHdl			(LINK(this, SwFldVarPage, TypeHdl));
+    aSelectionLB.SetSelectHdl		(LINK(this, SwFldVarPage, SubTypeHdl));
+    aSelectionLB.SetDoubleClickHdl	(LINK(this, SwFldVarPage, InsertHdl));
+    aFormatLB.SetDoubleClickHdl		(LINK(this, SwFldVarPage, InsertHdl));
+    aNumFormatLB.SetDoubleClickHdl	(LINK(this, SwFldVarPage, InsertHdl));
+    aNameED.SetModifyHdl			(LINK(this, SwFldVarPage, ModifyHdl));
+    aValueED.SetModifyHdl			(LINK(this, SwFldVarPage, ModifyHdl));
+    aNewDelTBX.SetClickHdl			(LINK(this, SwFldVarPage, TBClickHdl));
+    aChapterLevelLB.SetSelectHdl	(LINK(this, SwFldVarPage, ChapterHdl));
+    aSeparatorED.SetModifyHdl		(LINK(this, SwFldVarPage, SeparatorHdl));
 
     if( !IsRefresh() )
     {
@@ -242,7 +242,7 @@ IMPL_LINK( SwFldVarPage, TypeHdl, ListBox *, EMPTYARG )
         }
 
         aValueED.SetDropEnable(FALSE);
-        UpdateSubType();    // Auswahl-Listboxen initialisieren
+        UpdateSubType();	// Auswahl-Listboxen initialisieren
     }
 
     bInit = FALSE;
@@ -297,7 +297,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
             {
                 if (!IsFldEdit())
                 {
-                    if (pBox || (bInit && !IsRefresh()))    // Nur bei Interaktion mit Maus
+                    if (pBox || (bInit && !IsRefresh()))	// Nur bei Interaktion mit Maus
                     {
                         aNameED.SetText(pType->GetName());
 
@@ -308,7 +308,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         }
                         else
                             aValueED.SetText(pType->GetContent());
-//                          aValueED.SetText(pType->GetContent(aNumFormatLB.GetFormat()));
+//							aValueED.SetText(pType->GetContent(aNumFormatLB.GetFormat()));
                     }
                 }
                 else
@@ -316,7 +316,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
             }
             else
             {
-                if (pBox)   // Nur bei Interaktion mit Maus
+                if (pBox)	// Nur bei Interaktion mit Maus
                 {
                     aNameED.SetText(aEmptyStr);
                     aValueED.SetText(aEmptyStr);
@@ -343,7 +343,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 aNumFormatLB.SelectEntryPos(0);
             }
             // gibt es ein entprechendes SetField
-            if (IsFldEdit() || pBox)    // Nur bei Interaktion mit Maus
+            if (IsFldEdit() || pBox)	// Nur bei Interaktion mit Maus
             {
                 if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
@@ -442,7 +442,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 USHORT nInpType = 0;
                 nInpType = static_cast< USHORT >(GetFldMgr().GetFldType(RES_USERFLD, sName) ? 0 : TYP_SETINPFLD);
 
-                if (nInpType)   // SETEXPFLD
+                if (nInpType)	// SETEXPFLD
                 {
                     // gibt es ein entprechendes SetField
                     SwSetExpFieldType* pSetTyp = (SwSetExpFieldType*)
@@ -450,7 +450,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
                     if(pSetTyp)
                     {
-                        if (pSetTyp->GetType() == nsSwGetSetExpType::GSE_STRING)    // Textuell?
+                        if (pSetTyp->GetType() == nsSwGetSetExpType::GSE_STRING)	// Textuell?
                         {
                             aNumFormatLB.Clear();
 
@@ -462,7 +462,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                     if (IsFldEdit() && (!pBox || bInit) )
                         aValueED.SetText(((SwSetExpField*)GetCurField())->GetPromptText());
                 }
-                else    // USERFLD
+                else	// USERFLD
                     bFormat = bNumFmt = FALSE;
             }
             break;
@@ -470,7 +470,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
         case TYP_DDEFLD:
             aValueFT.SetText(SW_RESSTR(STR_DDE_CMD));
 
-            if (IsFldEdit() || pBox)    // Nur bei Interaktion mit Maus
+            if (IsFldEdit() || pBox)	// Nur bei Interaktion mit Maus
             {
                 if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
@@ -482,7 +482,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         aNameED.SetText(pType->GetName());
 
                         //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
-                        //              Namen haben! Wird hier noch nicht beachtet
+                        //				Namen haben! Wird hier noch nicht beachtet
                         String sCmd( pType->GetCmd() );
                         USHORT nTmpPos = sCmd.SearchAndReplace( sfx2::cTokenSeperator, ' ' );
                         sCmd.SearchAndReplace( sfx2::cTokenSeperator, ' ', nTmpPos );
@@ -517,7 +517,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                     aValueED.SetText( ((SwSetExpField*)GetCurField())->
                                         GetFormula() );
 
-                if( IsFldEdit() || pBox )   // Nur bei Interaktion mit Maus
+                if( IsFldEdit() || pBox )	// Nur bei Interaktion mit Maus
                     aNameED.SetText( aSelectionLB.GetSelectEntry() );
 
                 if( pFldTyp )
@@ -539,12 +539,12 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 bValue = FALSE;
                 aValueFT.SetText( SW_RESSTR( STR_OFFSET ));
 
-                if (IsFldEdit() || pBox)    // Nur bei Interaktion mit Maus
+                if (IsFldEdit() || pBox)	// Nur bei Interaktion mit Maus
                     aNameED.SetText(aEmptyStr);
 
                 if (nSelPos != 0 && nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
-                    bValue = TRUE;      // SubType OFF - kennt keinen Offset
+                    bValue = TRUE;		// SubType OFF - kennt keinen Offset
                     if (IsFldEdit())
                         aValueED.SetText(String::CreateFromInt32(((SwRefPageSetField*)GetCurField())->GetOffset()));
                 }
@@ -587,7 +587,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
     aChapterLevelLB.Show(bChapterLevel);
     aInvisibleCB.Enable(bInvisible);
 
-    ModifyHdl();    // Anwenden/Einfuegen/Loeschen Status update
+    ModifyHdl();	// Anwenden/Einfuegen/Loeschen Status update
 
     aNumFormatLB.SetUpdateMode(TRUE);
     aFormatLB.SetUpdateMode(TRUE);
@@ -714,7 +714,7 @@ void SwFldVarPage::UpdateSubType()
         if (!aSelectionLB.GetSelectEntryCount())
         {
             aSelectionLB.SelectEntryPos(0);
-            pLB = &aSelectionLB;    // Alle Controls neu initialisieren
+            pLB = &aSelectionLB;	// Alle Controls neu initialisieren
         }
     }
 
@@ -884,7 +884,7 @@ IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
             nLen = sName.Len();
             Selection aSel(aNameED.GetSelection());
             aNameED.SetText( sName );
-            aNameED.SetSelection( aSel );   // Cursorpos restaurieren
+            aNameED.SetSelection( aSel );	// Cursorpos restaurieren
         }
         break;
     }
@@ -922,7 +922,7 @@ IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
                 bDelete = !pSh->IsUsed( *pType );
 
             pType = GetFldMgr().GetFldType(RES_SETEXPFLD, sName);
-            if (!pType) // Kein Namenskonflikt mit Variablen
+            if (!pType)	// Kein Namenskonflikt mit Variablen
             {
                 // Benutzerfelder duerfen auch ohne Inhalt eingefuegt werden!
                 // Bug #56845
@@ -1040,9 +1040,9 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
 
             switch (nTypeId)
             {
-                case TYP_USERFLD:   nId = RES_USERFLD;  break;
-                case TYP_DDEFLD:    nId = RES_DDEFLD;   break;
-                case TYP_SETFLD:    nId = RES_SETEXPFLD;break;
+                case TYP_USERFLD:	nId = RES_USERFLD;	break;
+                case TYP_DDEFLD:	nId = RES_DDEFLD;	break;
+                case TYP_SETFLD:	nId = RES_SETEXPFLD;break;
             }
             pType = GetFldMgr().GetFldType(nId, sName);
 
@@ -1050,7 +1050,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
             if (nFormat != LISTBOX_ENTRY_NOTFOUND)
                 nFormat = (ULONG)aFormatLB.GetEntryData((USHORT)nFormat);
 
-            if (pType)  // Aendern
+            if (pType)	// Aendern
             {
                 SwWrtShell *pSh = GetWrtShell();
                 if(!pSh)
@@ -1092,7 +1092,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                     pSh->EndAllAction();
                 }
             }
-            else        // Neu
+            else		// Neu
             {
                 if(nTypeId == TYP_USERFLD)
                 {
@@ -1118,19 +1118,19 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                     if (nFormat != LISTBOX_ENTRY_NOTFOUND)
                     {
                         //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
-                        //              Namen haben! Wird hier noch nicht beachtet.
+                        //				Namen haben! Wird hier noch nicht beachtet.
                         USHORT nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator );
                         sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
 
                         SwDDEFieldType aType(sName, sValue, (USHORT)nFormat);
                         aSelectionLB.InsertEntry(sName);
                         aSelectionLB.SelectEntry(sName);
-                        GetFldMgr().InsertFldType(aType);   // DDE-Feld Neu
+                        GetFldMgr().InsertFldType(aType);	// DDE-Feld Neu
                     }
                 }
             }
             if (IsFldEdit())
-                GetFldMgr().GetCurFld();    // FieldManager Updaten
+                GetFldMgr().GetCurFld();	// FieldManager Updaten
 
             UpdateSubType();
         }
@@ -1265,7 +1265,7 @@ BOOL SwFldVarPage::FillItemSet(SfxItemSet& )
         }
         case TYP_SEQFLD:
         {
-            // nSubType = nsSwGetSetExpType::GSE_SEQ;   // nsSwGetSetExpType::GSE_SEQ wird im Fldmgr fest gesetzt, kann also entfallen
+            // nSubType = nsSwGetSetExpType::GSE_SEQ;	// nsSwGetSetExpType::GSE_SEQ wird im Fldmgr fest gesetzt, kann also entfallen
             nSubType = aChapterLevelLB.GetSelectEntryPos();
             if (nSubType == 0)
                 nSubType = 0x7f;
@@ -1308,7 +1308,7 @@ BOOL SwFldVarPage::FillItemSet(SfxItemSet& )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SfxTabPage* SwFldVarPage::Create(   Window* pParent,
+SfxTabPage* SwFldVarPage::Create( 	Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldVarPage( pParent, rAttrSet ) );
@@ -1328,8 +1328,8 @@ USHORT SwFldVarPage::GetGroup()
  --------------------------------------------------------------------*/
 
 SelectionListBox::SelectionListBox( SwFldVarPage* pDialog, const ResId& rResId ) :
-    ListBox (pDialog, rResId),
-    pDlg    (pDialog),
+    ListBox	(pDialog, rResId),
+    pDlg	(pDialog),
     bCallAddSelection(FALSE)
 {
 }
@@ -1348,20 +1348,20 @@ long SelectionListBox::PreNotify( NotifyEvent& rNEvt )
         const KeyCode aKeyCode = pKEvt->GetKeyCode();
         const USHORT nModifier = aKeyCode.GetModifier();
         if( aKeyCode.GetCode() == KEY_SPACE && !nModifier)
-//          bAddSel = TRUE;
+//			bAddSel = TRUE;
             bCallAddSelection = TRUE;
     }
     if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
     {
         const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
 
-        if (pMEvt && (pMEvt->IsMod1() || pMEvt->IsMod2()))  // Alt oder Ctrl
+        if (pMEvt && (pMEvt->IsMod1() || pMEvt->IsMod2()))	// Alt oder Ctrl
             //bAddSel = TRUE;
             bCallAddSelection = TRUE;
     }
 
-//  if (bAddSel)
-//      pDlg->AddSelection(this);
+//	if (bAddSel)
+//		pDlg->AddSelection(this);
 
     return nHandled;
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,7 +136,7 @@ GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex,
 
 
 /* -----------------16.09.98 12:27-------------------
-*   Lesen spezieller Properties am Cursor
+* 	Lesen spezieller Properties am Cursor
  * --------------------------------------------------*/
 sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
@@ -394,8 +394,8 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
-/*              laesst sich nicht feststellen
-*               case FN_UNO_BOOKMARK:
+/*				laesst sich nicht feststellen
+* 				case FN_UNO_BOOKMARK:
         {
             if()
             {
@@ -695,7 +695,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         const SvxFontListItem* pFontListItem =
                                 (const SvxFontListItem* )pDoc->GetDocShell()
                                                     ->GetItem( SID_ATTR_CHAR_FONTLIST );
-                        const FontList*  pList = pFontListItem->GetFontList();
+                        const FontList*	 pList = pFontListItem->GetFontList();
 
                         FontInfo aInfo = pList->Get(
                             pBulletFontNames[i],WEIGHT_NORMAL, ITALIC_NONE);
@@ -795,7 +795,7 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
     switch(rEntry.nWID)
     {
         case FN_UNO_PARA_STYLE :
-//          lcl_SetTxtFmtColl(aValue, pUnoCrsr);
+//			lcl_SetTxtFmtColl(aValue, pUnoCrsr);
         break;
         case FN_UNO_PAGE_STYLE :
         break;
@@ -803,7 +803,7 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
         {
             UnoActionContext aAction(pDoc);
 
-            if( rPam.GetNext() != &rPam )           // Mehrfachselektion ?
+            if( rPam.GetNext() != &rPam )			// Mehrfachselektion ?
             {
                 pDoc->StartUndo( UNDO_START, NULL );
                 SwPamRanges aRangeArr( rPam );
@@ -820,7 +820,7 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
         case FN_UNO_NUM_LEVEL  :
         break;
         case FN_UNO_NUM_RULES:
-//          lcl_setNumberingProperty(aValue, pUnoCrsr);
+//    		lcl_setNumberingProperty(aValue, pUnoCrsr);
         break;
         case FN_UNO_CHARFMT_SEQUENCE:
         {
@@ -938,11 +938,11 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     SfxObjectShellRef aRef( pDocSh );
 
     pDocSh->RegisterTransfer( *pMed );
-    pMed->DownLoad();   // ggfs. den DownLoad anstossen
-    if( aRef.Is() && 1 < aRef->GetRefCount() )  // noch gueltige Ref?
+    pMed->DownLoad();	// ggfs. den DownLoad anstossen
+    if( aRef.Is() && 1 < aRef->GetRefCount() )	// noch gueltige Ref?
     {
         SwReader* pRdr;
-        SfxItemSet* pSet =  pMed->GetItemSet();
+        SfxItemSet* pSet = 	pMed->GetItemSet();
         pSet->Put(SfxBoolItem(FN_API_CALL, sal_True));
         if(sPassword.getLength())
             pSet->Put(SfxStringItem(SID_PASSWORD, sPassword));
@@ -975,11 +975,11 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
             delete pRdr;
 
             // ggfs. alle Verzeichnisse updaten:
-/*          if( pWrtShell->IsUpdateTOX() )
+/*			if( pWrtShell->IsUpdateTOX() )
             {
                 SfxRequest aReq( *this, FN_UPDATE_TOX );
                 Execute( aReq );
-                pWrtShell->SetUpdateTOX( sal_False );       // wieder zurueck setzen
+                pWrtShell->SetUpdateTOX( sal_False );		// wieder zurueck setzen
             }*/
 
         }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,19 +63,19 @@ class IDocumentChartDataProviderAccess;
 
 class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 {
-    SwDoc*                  pDoc;           // Document
-    rtl::Reference< SfxStyleSheetBasePool > mxBasePool;     // Durchreiche fuer Formate
-    FontList*               pFontList;      // aktuelle FontListe
+    SwDoc*					pDoc;			// Document
+    rtl::Reference< SfxStyleSheetBasePool >	mxBasePool;		// Durchreiche fuer Formate
+    FontList*				pFontList;		// aktuelle FontListe
 
     // Nix geht ohne die WrtShell (historische Gruende)
     // RuekwaertsPointer auf die View (historische Gruende)
     // Dieser gilt solange bis im Activate ein neuer gesetzt wird
     // oder dieser im Dtor der View geloescht wird
     //
-    SwView*                 pView;
-    SwWrtShell*             pWrtShell;
+    SwView* 				pView;
+    SwWrtShell* 			pWrtShell;
 
-    Timer                   aFinishedTimer; // Timer fuers ueberpriefen der
+    Timer					aFinishedTimer;	// Timer fuers ueberpriefen der
                                             // Grafik-Links. Sind alle da,
                                             // dann ist Doc voll. geladen
 
@@ -84,11 +84,11 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     sal_Int16               nUpdateDocMode; // contains the com::sun::star::document::UpdateDocMode
     bool                    bInUpdateFontList; //prevent nested calls of UpdateFontList
     // Methoden fuer den Zugriff aufs Doc
-    SW_DLLPRIVATE void                  AddLink();
-    SW_DLLPRIVATE void                  RemoveLink();
+    SW_DLLPRIVATE void					AddLink();
+    SW_DLLPRIVATE void					RemoveLink();
 
     // Hint abfangen fuer DocInfo
-    SW_DLLPRIVATE virtual void          Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    SW_DLLPRIVATE virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     // FileIO
     SW_DLLPRIVATE virtual sal_Bool InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
@@ -99,34 +99,34 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     SW_DLLPRIVATE virtual sal_Bool SaveAs( SfxMedium& rMedium );
     SW_DLLPRIVATE virtual sal_Bool SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
-    SW_DLLPRIVATE virtual USHORT            PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
+    SW_DLLPRIVATE virtual USHORT			PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
 
     // DocInfo dem Doc melden
     //
     SW_DLLPRIVATE virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
                                     Window *pParent, const SfxItemSet &);
     // OLE-Geraffel
-    SW_DLLPRIVATE virtual void          Draw( OutputDevice*, const JobSetup&, USHORT);
+    SW_DLLPRIVATE virtual void			Draw( OutputDevice*, const JobSetup&, USHORT);
 
     // Methoden fuer StyleSheets
-    SW_DLLPRIVATE USHORT                    Edit( const String &rName, const String& rParent, USHORT nFamily,
+    SW_DLLPRIVATE USHORT					Edit( const String &rName, const String& rParent, USHORT nFamily,
                                     USHORT nMask, BOOL bNew,
                                     BOOL bColumn = FALSE,
                                     SwWrtShell* pActShell = 0,
                                     BOOL bBasic = FALSE );
-    SW_DLLPRIVATE USHORT                    Delete(const String &rName, USHORT nFamily);
-    SW_DLLPRIVATE USHORT                    ApplyStyles(const String &rName, USHORT nFamily, SwWrtShell* pShell = 0,
+    SW_DLLPRIVATE USHORT					Delete(const String &rName, USHORT nFamily);
+    SW_DLLPRIVATE USHORT					ApplyStyles(const String &rName, USHORT nFamily, SwWrtShell* pShell = 0,
                                         USHORT nMode = 0 );
-    SW_DLLPRIVATE USHORT                    DoWaterCan( const String &rName, USHORT nFamily);
-    SW_DLLPRIVATE USHORT                    UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* pShell = 0);
-    SW_DLLPRIVATE USHORT                    MakeByExample(const String &rName,
+    SW_DLLPRIVATE USHORT					DoWaterCan( const String &rName, USHORT nFamily);
+    SW_DLLPRIVATE USHORT					UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* pShell = 0);
+    SW_DLLPRIVATE USHORT					MakeByExample(const String &rName,
                                             USHORT nFamily, USHORT nMask, SwWrtShell* pShell = 0);
 
-    SW_DLLPRIVATE void                  InitDraw();
-    SW_DLLPRIVATE void                  SubInitNew();   // fuer InitNew und HtmlSourceModus
+    SW_DLLPRIVATE void					InitDraw();
+    SW_DLLPRIVATE void					SubInitNew();   // fuer InitNew und HtmlSourceModus
 
-    SW_DLLPRIVATE void                  RemoveOLEObjects();
-    SW_DLLPRIVATE void                  CalcLayoutForOLEObjects();
+    SW_DLLPRIVATE void 					RemoveOLEObjects();
+    SW_DLLPRIVATE void					CalcLayoutForOLEObjects();
 
     SW_DLLPRIVATE void                    Init_Impl();
     SW_DLLPRIVATE DECL_STATIC_LINK( SwDocShell, IsLoadFinished, void* );
@@ -161,24 +161,24 @@ public:
     DECL_LINK( Ole2ModifiedHdl, void * );
 
     // OLE-Geraffel
-    virtual void      SetVisArea( const Rectangle &rRect );
+    virtual void	  SetVisArea( const Rectangle &rRect );
     virtual Rectangle GetVisArea( USHORT nAspect ) const;
     virtual Printer  *GetDocumentPrinter();
     virtual OutputDevice* GetDocumentRefDev();
-    virtual void      OnDocumentPrinterChanged( Printer * pNewPrinter );
-    virtual ULONG     GetMiscStatus() const;
+    virtual void	  OnDocumentPrinterChanged( Printer * pNewPrinter );
+    virtual ULONG	  GetMiscStatus() const;
 
-    virtual void            PrepareReload();
-    virtual void            SetModified( BOOL = TRUE );
+    virtual void			PrepareReload();
+    virtual void			SetModified( BOOL = TRUE );
 
     // Dispatcher
-    void                    Execute(SfxRequest &);
-    void                    ExecStyleSheet(SfxRequest&);
-    void                    ExecDB(SfxRequest&);
+    void					Execute(SfxRequest &);
+    void					ExecStyleSheet(SfxRequest&);
+    void					ExecDB(SfxRequest&);
 
-    void                    GetState(SfxItemSet &);
-    void                    StateAlways(SfxItemSet &);
-    void                    StateStyleSheet(SfxItemSet&, SwWrtShell* pSh = 0 );
+    void					GetState(SfxItemSet &);
+    void					StateAlways(SfxItemSet &);
+    void					StateStyleSheet(SfxItemSet&, SwWrtShell* pSh = 0 );
 
     // Doc rausreichen aber VORSICHT
     inline SwDoc*                   GetDoc() { return pDoc; }
@@ -189,19 +189,19 @@ public:
 
 
     void                    UpdateFontList();
-    void                    UpdateChildWindows();
+    void					UpdateChildWindows();
 
     // globaler IO
-    virtual BOOL            Save();
+    virtual BOOL			Save();
 
     // fuer VorlagenPI
-    virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
+    virtual SfxStyleSheetBasePool*	GetStyleSheetPool();
 
     // Fuer Organizer
     virtual BOOL Insert(SfxObjectShell &rSource,
-                        USHORT  nSourceIdx1,
-                        USHORT  nSourceIdx2,
-                        USHORT  nSourceIdx3,
+                        USHORT	nSourceIdx1,
+                        USHORT	nSourceIdx2,
+                        USHORT	nSourceIdx3,
                         USHORT& nIdx1,
                         USHORT& nIdx2,
                         USHORT& nIdx3,
@@ -211,15 +211,15 @@ public:
                         USHORT nIdx2 = INDEX_IGNORE,
                         USHORT nIdx3 = INDEX_IGNORE);
 
-    virtual Bitmap      GetStyleFamilyBitmap( SfxStyleFamily eFamily, BmpColorMode eColorMode );
+    virtual Bitmap 		GetStyleFamilyBitmap( SfxStyleFamily eFamily, BmpColorMode eColorMode );
 
     // View setzen fuer Aktionen ueber Shell
-    void          SetView(SwView* pVw);
+    void 		  SetView(SwView* pVw);
     const SwView *GetView() const { return pView; }
     SwView       *GetView()       { return pView; }
 
     // Zugriff auf die zur SwView gehoerige SwWrtShell
-          SwWrtShell *GetWrtShell()       { return pWrtShell; }
+          SwWrtShell *GetWrtShell() 	  { return pWrtShell; }
     const SwWrtShell *GetWrtShell() const { return pWrtShell; }
 
     // fuer die Core - die kennt die DocShell aber keine WrtShell!
@@ -252,7 +252,7 @@ public:
     // Seitenvorlagedialog anzeigen, ggf. auf Spaltenpage
     void FormatPage( const String& rPage,
                         BOOL bColumn = FALSE,
-                        SwWrtShell*     pActShell = 0 );
+                        SwWrtShell* 	pActShell = 0 );
 
     // --> OD 2006-11-07 #i59688#
     // linked graphics are now loaded on demand.
@@ -268,7 +268,7 @@ public:
     virtual void CancelTransfers();
 
     // Doc aus Html-Source neu laden
-    void    ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView );
+    void	ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView );
 
     sal_Int16   GetUpdateDocMode() const {return nUpdateDocMode;}
 
@@ -285,7 +285,7 @@ public:
     void InvalidateModel();
     void ReactivateModel();
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >  GetEventNames();
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >	GetEventNames();
 
     // --> FME 2004-08-05 #i20883# Digital Signatures and Encryption
     virtual sal_uInt16 GetHiddenInformationState( sal_uInt16 nStates );

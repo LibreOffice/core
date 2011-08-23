@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,20 +124,20 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             SwViewOption aUsrPref( *pVOpt );
 
             SfxItemSet aSet(GetPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-                            RES_GRFATR_MIRRORGRF,   RES_GRFATR_CROPGRF,
-                            SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
+                            RES_GRFATR_MIRRORGRF, 	RES_GRFATR_CROPGRF,
+                            SID_ATTR_BORDER_INNER, 	SID_ATTR_BORDER_INNER,
                             SID_ATTR_GRAF_KEEP_ZOOM, SID_ATTR_GRAF_KEEP_ZOOM,
                             SID_ATTR_GRAF_FRMSIZE, SID_ATTR_GRAF_FRMSIZE,
                             SID_ATTR_GRAF_FRMSIZE_PERCENT, SID_ATTR_GRAF_FRMSIZE_PERCENT,
                             SID_ATTR_GRAF_GRAPHIC, SID_ATTR_GRAF_GRAPHIC,
-                            FN_PARAM_GRF_CONNECT,   FN_PARAM_GRF_CONNECT,
-                            SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
-                            FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
-                            FN_SET_FRM_NAME,        FN_KEEP_ASPECT_RATIO,
-                            FN_PARAM_GRF_DIALOG,    FN_PARAM_GRF_DIALOG,
-                            SID_DOCFRAME,           SID_DOCFRAME,
-                            SID_HTML_MODE,          SID_HTML_MODE,
-                            FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,
+                            FN_PARAM_GRF_CONNECT, 	FN_PARAM_GRF_CONNECT,
+                            SID_ATTR_PAGE_SIZE, 	SID_ATTR_PAGE_SIZE,
+                            FN_GET_PRINT_AREA, 		FN_GET_PRINT_AREA,
+                            FN_SET_FRM_NAME, 		FN_KEEP_ASPECT_RATIO,
+                            FN_PARAM_GRF_DIALOG, 	FN_PARAM_GRF_DIALOG,
+                            SID_DOCFRAME, 			SID_DOCFRAME,
+                            SID_HTML_MODE, 			SID_HTML_MODE,
+                            FN_SET_FRM_ALT_NAME,	FN_SET_FRM_ALT_NAME,
                             0);
 
             USHORT nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
@@ -181,7 +181,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 aSet.Put( aSzItm );
 
                 Size aSz( aSizeCopy.GetWidthPercent(), aSizeCopy.GetHeightPercent() );
-                if( 0xff == aSz.Width() )   aSz.Width() = 0;
+                if( 0xff == aSz.Width() ) 	aSz.Width() = 0;
                 if( 0xff == aSz.Height() )  aSz.Height() = 0;
 
                 aSzItm.SetSize( aSz );
@@ -265,9 +265,9 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if(pFmt && pFmt->IsAutoUpdateFmt())
                 {
                     pFmt->SetFmtAttr(*pSet);
-                    SfxItemSet aShellSet(GetPool(), RES_FRM_SIZE,   RES_FRM_SIZE,
-                                                    RES_SURROUND,   RES_SURROUND,
-                                                    RES_ANCHOR,     RES_ANCHOR,
+                    SfxItemSet aShellSet(GetPool(), RES_FRM_SIZE,	RES_FRM_SIZE,
+                                                    RES_SURROUND, 	RES_SURROUND,
+                                                    RES_ANCHOR,		RES_ANCHOR,
                                                     RES_VERT_ORIENT,RES_HORI_ORIENT,
                                                     0);
                     aShellSet.Put(*pSet);

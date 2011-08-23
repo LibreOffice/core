@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ namespace utl {
 
 class SwTxtFmtColl;
 class SwCntntFrm;
-class SwTxtFld;          // Fuer GetTxtFld()
+class SwTxtFld; 		 // Fuer GetTxtFld()
 class SfxItemSet;
 class SwUndoTransliterate;
 
@@ -91,7 +91,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 {
 
     // fuer das Erzeugen des ersten TextNode
-    friend class SwDoc;         // CTOR und AppendTxtNode()
+    friend class SwDoc; 		// CTOR und AppendTxtNode()
     friend class SwNodes;
     friend class SwTxtFrm;
     friend class SwScriptInfo;
@@ -283,12 +283,12 @@ public:
             refmarks, toxmarks, and metas will be ignored unless this is true
         ATTENTION: setting bInclRefToxMark is only allowed from UNDO!
      */
-    void    RstAttr( const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich = 0,
+    void	RstAttr( const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich = 0,
                     const SfxItemSet* pSet = 0, BOOL bInclRefToxMark = FALSE );
-    void    GCAttr();
+    void	GCAttr();
 
     // loesche das Text-Attribut (muss beim Pool abgemeldet werden!)
-    void    DestroyAttr( SwTxtAttr* pAttr );
+    void 	DestroyAttr( SwTxtAttr* pAttr );
 
     // loesche alle Attribute aus dem SwpHintsArray.
     void    ClearSwpHintsArr( bool bDelFields );
@@ -716,7 +716,7 @@ public:
                     USHORT nScript = 0 ) const;
 
     // steht in ndcopy.cxx
-    BOOL IsSymbol( const xub_StrLen nBegin ) const; // steht in itratr.cxx
+    BOOL IsSymbol( const xub_StrLen nBegin ) const;	// steht in itratr.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 
     // interaktive Trennung: wir finden den TxtFrm und rufen sein CalcHyph
@@ -792,7 +792,7 @@ public:
     bool IsHidden() const;
 // <--
 
-    TYPEINFO(); // fuer rtti
+    TYPEINFO();	// fuer rtti
 
     // fuers Umhaengen der TxtFmtCollections (Outline-Nummerierung!!)
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
@@ -855,6 +855,8 @@ public:
     virtual bool IsInContent() const;
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::rdf::XMetadatable > MakeUnoObject();
+
+    bool IsCollapse() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 };

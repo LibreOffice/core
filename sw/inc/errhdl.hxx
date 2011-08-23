@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <sal/types.h>
 #include "swdllapi.h"
 
-extern BOOL bAssert;                // TRUE, wenn eine ASSERT-Box hochkam
+extern BOOL bAssert;				// TRUE, wenn eine ASSERT-Box hochkam
 
 
 // -----------------------------------------------------------------------
@@ -46,8 +46,8 @@ SW_DLLPUBLIC void AssertFail( USHORT, const sal_Char*, USHORT );
 
 #define ASSERT( cond, message ) \
     if( !(cond) ) { \
-        const char   *_pErrorText = #message; \
-        const char   *_pFileName  = __FILE__; \
+        const char	 *_pErrorText = #message; \
+        const char	 *_pFileName  = __FILE__; \
        ::AssertFail( _pErrorText, _pFileName, __LINE__ ); \
     }
 
@@ -57,7 +57,7 @@ SW_DLLPUBLIC void AssertFail( USHORT, const sal_Char*, USHORT );
 // -----------------------------------------------------------------------
 #define ASSERT_ID( cond, id ) \
     if( !(cond) ) { \
-        const char   *_pFileName  = __FILE__; \
+        const char	 *_pFileName  = __FILE__; \
        ::AssertFail( (USHORT)id, _pFileName, __LINE__ ); \
     }
 
@@ -67,8 +67,8 @@ SW_DLLPUBLIC void AssertFail( USHORT, const sal_Char*, USHORT );
 // ignoriert
 // -----------------------------------------------------------------------
 #else
-#define ASSERT( cond, message )     ;
-#define ASSERT_ID( cond, id )       ;
+#define ASSERT( cond, message ) 	;
+#define ASSERT_ID( cond, id )		;
 #endif // PRODUCT
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@ class SwMailMergeWizard;
 /*-- 17.05.2004 14:51:45---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-class SwGreetingsHandler
+class SwGreetingsHandler 
 {
     friend class SwMailBodyDialog;
     friend class SwMailMergeGreetingsPage;
     CheckBox*           m_pGreetingLineCB;
-
+    
     CheckBox*           m_pPersonalizedCB;
 
     FixedText*          m_pFemaleFT;
@@ -63,32 +63,32 @@ class SwGreetingsHandler
     ListBox*            m_pFemaleColumnLB;
     FixedText*          m_pFemaleFieldFT;
     ComboBox*           m_pFemaleFieldCB;
-
+                    
     FixedText*          m_pNeutralFT;
     ComboBox*           m_pNeutralCB;
 
     bool                m_bIsTabPage;
 
     SwMailMergeWizard*  m_pWizard;
-
+    
     DECL_LINK(IndividualHdl_Impl, CheckBox*);
     DECL_LINK(GreetingHdl_Impl, PushButton*);
-
+    
     void    Contains(sal_Bool bContainsGreeting);
     virtual void    UpdatePreview();
-};
+};  
 /*-- 02.04.2004 09:21:06---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-class SwMailMergeGreetingsPage : public svt::OWizardPage,
+class SwMailMergeGreetingsPage : public svt::OWizardPage, 
                                     public SwGreetingsHandler
 {
     SwBoldFixedInfo     m_aHeaderFI;
-
+                        
     CheckBox            m_aGreetingLineCB;
-
+                        
     CheckBox            m_aPersonalizedCB;
-
+    
     FixedText           m_aFemaleFT;
     ListBox             m_aFemaleLB;
     PushButton          m_aFemalePB;
@@ -102,19 +102,19 @@ class SwMailMergeGreetingsPage : public svt::OWizardPage,
     ListBox             m_aFemaleColumnLB;
     FixedText           m_aFemaleFieldFT;
     ComboBox            m_aFemaleFieldCB;
-
+    
     FixedText           m_aNeutralFT;
     ComboBox            m_aNeutralCB;
-
+    
     FixedInfo           m_aPreviewFI;
     SwAddressPreview    m_aPreviewWIN;
     PushButton          m_aAssignPB;
     FixedInfo           m_aDocumentIndexFI;
     ImageButton         m_aPrevSetIB;
     ImageButton         m_aNextSetIB;
-
+                    
     String              m_sDocument;
-
+    
     DECL_LINK(ContainsHdl_Impl, CheckBox*);
     DECL_LINK(InsertDataHdl_Impl, ImageButton*);
     DECL_LINK(GreetingSelectHdl_Impl, ListBox*);
@@ -123,7 +123,7 @@ class SwMailMergeGreetingsPage : public svt::OWizardPage,
     virtual void    UpdatePreview();
     virtual void        ActivatePage();
     virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
-public:
+public:     
         SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent);
         ~SwMailMergeGreetingsPage();
 
@@ -134,9 +134,9 @@ public:
 class SwMailBodyDialog : public SfxModalDialog, public SwGreetingsHandler
 {
     CheckBox            m_aGreetingLineCB;
-
+                        
     CheckBox            m_aPersonalizedCB;
-
+    
     FixedText           m_aFemaleFT;
     ListBox             m_aFemaleLB;
     PushButton          m_aFemalePB;
@@ -150,10 +150,10 @@ class SwMailBodyDialog : public SfxModalDialog, public SwGreetingsHandler
     ListBox             m_aFemaleColumnLB;
     FixedText           m_aFemaleFieldFT;
     ComboBox            m_aFemaleFieldCB;
-
+    
     FixedText           m_aNeutralFT;
     ComboBox            m_aNeutralCB;
-
+    
     FixedText           m_aBodyFT;
     MultiLineEdit       m_aBodyMLE;
     FixedLine           m_aSeparatorFL;
@@ -164,7 +164,7 @@ class SwMailBodyDialog : public SfxModalDialog, public SwGreetingsHandler
 
     DECL_LINK(ContainsHdl_Impl, CheckBox*);
     DECL_LINK(OKHdl, PushButton*);
-public:
+public: 
     SwMailBodyDialog(Window* pParent, SwMailMergeWizard* pWizard);
     ~SwMailBodyDialog();
 

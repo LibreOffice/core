@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@
 class IntlWrapper;
 
 //SwFmtSurround, wie soll sich der ---------------
-//  Dokumentinhalt unter dem Rahmen verhalten ---
+//	Dokumentinhalt unter dem Rahmen verhalten ---
 
 class SW_DLLPUBLIC SwFmtSurround: public SfxEnumItem
 {
-    BOOL    bAnchorOnly :1;
-    BOOL    bContour    :1;
-    BOOL    bOutside    :1;
+    BOOL	bAnchorOnly :1;
+    BOOL	bContour 	:1;
+    BOOL	bOutside 	:1;
 public:
     SwFmtSurround( SwSurround eNew = SURROUND_PARALLEL );
     SwFmtSurround( const SwFmtSurround & );
@@ -53,25 +53,25 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual USHORT          GetValueCount() const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
+    virtual USHORT			GetValueCount() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	BOOL        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	BOOL			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
 
     SwSurround GetSurround()const { return SwSurround( GetValue() ); }
-    BOOL    IsAnchorOnly()  const { return bAnchorOnly; }
-    BOOL    IsContour()     const { return bContour; }
-    BOOL    IsOutside()     const { return bOutside; }
-    void    SetSurround  ( SwSurround eNew ){ SfxEnumItem::SetValue( USHORT( eNew ) ); }
-    void    SetAnchorOnly( BOOL bNew )      { bAnchorOnly = bNew; }
-    void    SetContour( BOOL bNew )         { bContour = bNew; }
-    void    SetOutside( BOOL bNew )         { bOutside = bNew; }
+    BOOL    IsAnchorOnly()	const { return bAnchorOnly; }
+    BOOL    IsContour()		const { return bContour; }
+    BOOL    IsOutside()		const { return bOutside; }
+    void	SetSurround  ( SwSurround eNew ){ SfxEnumItem::SetValue( USHORT( eNew ) ); }
+    void	SetAnchorOnly( BOOL bNew )		{ bAnchorOnly = bNew; }
+    void	SetContour( BOOL bNew )			{ bContour = bNew; }
+    void	SetOutside( BOOL bNew )			{ bOutside = bNew; }
 };
 
 inline SwFmtSurround &SwFmtSurround::operator=( const SwFmtSurround &rCpy )

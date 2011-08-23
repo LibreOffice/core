@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,8 +103,8 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>
                         GetColumnsSupplier();
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>
+    
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>   
                         GetResultSet() const;
 
     void                DisposeResultSet();
@@ -136,14 +136,14 @@ public:
 
     sal_Bool            IsAddressBlock()const;
     void                SetAddressBlock(sal_Bool bSet);
-
+    
     sal_Bool            IsHideEmptyParagraphs() const;
     void                SetHideEmptyParagraphs(sal_Bool bSet);
 
-    const com::sun::star::uno::Sequence< ::rtl::OUString>
+    const com::sun::star::uno::Sequence< ::rtl::OUString>   
                         GetAddressBlocks() const;
     void                SetAddressBlocks(const com::sun::star::uno::Sequence< ::rtl::OUString>& rBlocks);
-
+    
     void                SetCurrentAddressBlockIndex( sal_Int32 nSet );
     sal_Int32           GetCurrentAddressBlockIndex() const;
 
@@ -178,7 +178,7 @@ public:
     bool                IsAddressFieldsAssigned() const;
     bool                IsGreetingFieldsAssigned() const;
 
-    //e-Mail settings:
+    //e-Mail settings: 
     ::rtl::OUString     GetMailDisplayName() const;
     void                SetMailDisplayName(const ::rtl::OUString& rName);
 

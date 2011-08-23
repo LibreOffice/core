@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,13 +35,13 @@ class SwView;
 
 class SW_DLLPUBLIC NumFormatListBox : public ListBox
 {
-    short               nCurrFormatType;
-    USHORT              nStdEntry;
-    BOOL                bOneArea;
-    ULONG               nDefFormat;
-    SwView*             pVw;
-    SvNumberFormatter*  pOwnFormatter;
-    LanguageType        eCurLanguage;
+    short				nCurrFormatType;
+    USHORT				nStdEntry;
+    BOOL				bOneArea;
+    ULONG				nDefFormat;
+    SwView*				pVw;
+    SvNumberFormatter*	pOwnFormatter;
+    LanguageType		eCurLanguage;
     BOOL                bShowLanguageControl; //determine whether the language control has
                                               //to be shown in the number format dialog
     BOOL                bUseAutomaticLanguage;//determine whether language is automatically assigned
@@ -50,7 +50,7 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
 
     SW_DLLPRIVATE double          GetDefValue(const short nFormatType) const;
     SW_DLLPRIVATE void            Init(short nFormatType, BOOL bUsrFmts);
-    SW_DLLPRIVATE SwView*           GetView();
+    SW_DLLPRIVATE SwView*			GetView();
 
 public:
     NumFormatListBox( Window* pWin, const ResId& rResId,
@@ -65,14 +65,14 @@ public:
 
     void            Clear();
 
-    inline void     SetOneArea(BOOL bOnlyOne = TRUE) { bOneArea = bOnlyOne; }
+    inline void		SetOneArea(BOOL bOnlyOne = TRUE) { bOneArea = bOnlyOne; }
 
-    void            SetFormatType(const short nFormatType);
-    inline short    GetFormatType() const { return nCurrFormatType; }
-    void            SetDefFormat(const ULONG nDefFmt);
-    ULONG           GetFormat() const;
+    void			SetFormatType(const short nFormatType);
+    inline short	GetFormatType() const { return nCurrFormatType; }
+    void			SetDefFormat(const ULONG nDefFmt);
+    ULONG			GetFormat() const;
 
-    inline LanguageType GetCurLanguage() const { return eCurLanguage;}
+    inline LanguageType	GetCurLanguage() const { return eCurLanguage;}
     void                SetLanguage(LanguageType eSet)  { eCurLanguage = eSet;}
 
     void            SetAutomaticLanguage(BOOL bSet){bUseAutomaticLanguage = bSet;}

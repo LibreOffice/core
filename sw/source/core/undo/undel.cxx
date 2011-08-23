@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <fmtanchr.hxx>
 #include <doc.hxx>
 #include <swtable.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>			// fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <undobj.hxx>
@@ -183,7 +183,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
         pHistory->Add( pSttTxtNd->GetTxtColl(),pStt->nNode.GetIndex(), ND_TEXTNODE );
         pHistory->Add( pEndTxtNd->GetTxtColl(),pEnd->nNode.GetIndex(), ND_TEXTNODE );
 
-        if( !bJoinNext )        // Selection von Unten nach Oben
+        if( !bJoinNext )	 	// Selection von Unten nach Oben
         {
             // Beim JoinPrev() werden die AUTO-PageBreak's richtig
             // kopiert. Um diese beim Undo wieder herzustellen, muss das
@@ -211,14 +211,14 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
 
     if( !pSttTxtNd && !pEndTxtNd )
         rPam.GetPoint()->nNode--;
-    rPam.DeleteMark();          // der SPoint ist aus dem Bereich
+    rPam.DeleteMark();			// der SPoint ist aus dem Bereich
 
     if( !pEndTxtNd )
         nEndCntnt = 0;
     if( !pSttTxtNd )
         nSttCntnt = 0;
 
-    if( bMoveNds )      // sind noch Nodes zu verschieben ?
+    if( bMoveNds )		// sind noch Nodes zu verschieben ?
     {
         SwNodes& rNds = (SwNodes&)*pDoc->GetUndoNds();
         SwNodes& rDocNds = pDoc->GetNodes();
@@ -306,7 +306,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
         nNode = rNds.GetEndOfContent().GetIndex();
         rDocNds._MoveNodes( aRg, rNds, SwNodeIndex( rNds.GetEndOfContent() ));
         pMvStt = new SwNodeIndex( rNds, nNode );
-        nNode = rNds.GetEndOfContent().GetIndex() - nNode;      // Differenz merken !
+        nNode = rNds.GetEndOfContent().GetIndex() - nNode;		// Differenz merken !
         if( pSttTxtNd && pEndTxtNd )
         {
             //Step 4: Moving around sections
@@ -333,7 +333,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
                 bJoinNext ? pEndTxtNd->GetIndex() : pSttTxtNd->GetIndex() );
     }
     else
-        nNode = 0;      // kein Node verschoben -> keine Differenz zum Ende
+        nNode = 0;		// kein Node verschoben -> keine Differenz zum Ende
 
     // wurden davor noch Nodes geloescht ?? (FootNotes haben ContentNodes!)
     if( !pSttTxtNd && !pEndTxtNd )
@@ -525,7 +525,7 @@ SwUndoDelete::~SwUndoDelete()
 {
     delete pSttStr;
     delete pEndStr;
-    if( pMvStt )        // loesche noch den Bereich aus dem UndoNodes Array
+    if( pMvStt )		// loesche noch den Bereich aus dem UndoNodes Array
     {
         // Insert speichert den Inhalt in der IconSection
         pMvStt->GetNode().GetNodes().Delete( *pMvStt, nNode );
@@ -662,7 +662,7 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
     SwNodeIndex aIdx( pDoc->GetNodes(), nCalcStt );
     SwNode* pInsNd = &aIdx.GetNode();
 
-    {       // Block, damit der SwPosition beim loeschen vom Node
+    {		// Block, damit der SwPosition beim loeschen vom Node
             // abgemeldet ist
         SwPosition aPos( aIdx );
         if( !bDelFullPara )
@@ -680,11 +680,11 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
                 if( pInsNd->IsCntntNode() )
                     aPos.nContent.Assign( (SwCntntNode*)pInsNd, nSttCntnt );
                 if( !bTblDelLastNd )
-                    pInsNd = 0;         // Node nicht loeschen !!
+                    pInsNd = 0;			// Node nicht loeschen !!
             }
         }
         else
-            pInsNd = 0;         // Node nicht loeschen !!
+            pInsNd = 0;			// Node nicht loeschen !!
 
         SwNodes* pUNds = (SwNodes*)pDoc->GetUndoNds();
         BOOL bNodeMove = 0 != nNode;
@@ -805,7 +805,7 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
                     pTxtNd->ClearSwpHintsArr( true );
 
                 // SectionNode-Modus und von oben nach unten selektiert:
-                //  -> im StartNode steht noch der Rest vom Join => loeschen
+                //	-> im StartNode steht noch der Rest vom Join => loeschen
                 aPos.nContent.Assign( pTxtNd, nSttCntnt );
                 pTxtNd->InsertText( *pSttStr, aPos.nContent,
                         IDocumentContentOperations::INS_NOHINTEXPAND );
@@ -817,7 +817,7 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
         if( pHistory )
         {
             pHistory->TmpRollback( pDoc, nSetPos, false );
-            if( nSetPos )       // es gab Fussnoten/FlyFrames
+            if( nSetPos )		// es gab Fussnoten/FlyFrames
             {
                 // gibts ausser diesen noch andere ?
                 if( nSetPos < pHistory->Count() )
@@ -854,7 +854,7 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
     if( pRedlSaveData )
         SetSaveData( *pDoc, *pRedlSaveData );
 
-    pDoc->DoUndo( bUndo );          // Undo wieder einschalten
+    pDoc->DoUndo( bUndo );			// Undo wieder einschalten
     SetPaM( rUndoIter, TRUE );
 }
 

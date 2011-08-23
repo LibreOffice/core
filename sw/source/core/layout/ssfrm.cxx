@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <dcontact.hxx>
 #include <dflyobj.hxx>
 #include <flyfrm.hxx>
-#include <txtfrm.hxx>       // ClearPara()
+#include <txtfrm.hxx>		// ClearPara()
 #include <cellfrm.hxx>
 #include <swtable.hxx>
 #include <fmtfsize.hxx>
@@ -358,10 +358,10 @@ Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 
 /*************************************************************************
 |*
-|*  SwFrm::~SwFrm()
+|*	SwFrm::~SwFrm()
 |*
-|*  Ersterstellung      MA 02. Mar. 94
-|*  Letzte Aenderung    MA 25. Jun. 95
+|*	Ersterstellung		MA 02. Mar. 94
+|*	Letzte Aenderung	MA 25. Jun. 95
 |*
 |*************************************************************************/
 
@@ -416,9 +416,9 @@ SwFrm::~SwFrm()
 
 /*************************************************************************
 |*
-|*    SwLayoutFrm::SetFrmFmt()
-|*    Ersterstellung    MA 22. Apr. 93
-|*    Letzte Aenderung  MA 02. Nov. 94
+|*	  SwLayoutFrm::SetFrmFmt()
+|*	  Ersterstellung	MA 22. Apr. 93
+|*	  Letzte Aenderung	MA 02. Nov. 94
 |*
 |*************************************************************************/
 
@@ -488,10 +488,10 @@ SwCntntFrm::~SwCntntFrm()
 
 /*************************************************************************
 |*
-|*  SwLayoutFrm::~SwLayoutFrm
+|*	SwLayoutFrm::~SwLayoutFrm
 |*
-|*  Ersterstellung      AK 28-Feb-1991
-|*  Letzte Aenderung    MA 11. Jan. 95
+|*	Ersterstellung		AK 28-Feb-1991
+|*	Letzte Aenderung	MA 11. Jan. 95
 |*
 |*************************************************************************/
 
@@ -582,10 +582,10 @@ SwLayoutFrm::~SwLayoutFrm()
 
 /*************************************************************************
 |*
-|*  SwFrm::PaintArea()
+|*	SwFrm::PaintArea()
 |*
-|*  Created     AMA 08/22/2000
-|*  Last change AMA 08/23/2000
+|*	Created		AMA 08/22/2000
+|*	Last change	AMA 08/23/2000
 |*
 |*  The paintarea is the area, in which the content of a frame is allowed
 |*  to be displayed. This region could be larger than the printarea (Prt())
@@ -685,10 +685,10 @@ const SwRect SwFrm::PaintArea() const
 
 /*************************************************************************
 |*
-|*  SwFrm::UnionFrm()
+|*	SwFrm::UnionFrm()
 |*
-|*  Created     AMA 08/22/2000
-|*  Last change AMA 08/23/2000
+|*	Created		AMA 08/22/2000
+|*	Last change	AMA 08/23/2000
 |*
 |*  The unionframe is the framearea (Frm()) of a frame expanded by the
 |*  printarea, if there's a negative margin at the left or right side.

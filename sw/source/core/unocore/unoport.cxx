@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -685,7 +685,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
             rPropertyNames,
             SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT );
     const beans::PropertyState* pPropertyStates = aPropertyStates.getConstArray();
-
+    
     std::vector< beans::GetDirectPropertyTolerantResult > aResultVector;
     for (sal_Int32 i = 0;  i < nProps;  ++i)
     {
@@ -694,7 +694,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
         {
             aResult.Name = pProp[i];
             if(pPropertyStates[i] == beans::PropertyState_MAKE_FIXED_SIZE)     // property unknown?
-            {
+            {    
                 if( bDirectValuesOnly )
                     continue;
                 else
@@ -706,7 +706,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
                 aResult.State  = pPropertyStates[i];
 
                 aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
-                //#i104499# ruby portion attributes need special handling:
+                //#i104499# ruby portion attributes need special handling: 
                 if( pEntry->nWID == RES_TXTATR_CJK_RUBY &&
                     m_ePortionType == PORTION_RUBY_START )
                 {

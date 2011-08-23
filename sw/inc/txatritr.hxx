@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,9 +52,9 @@ public:
 
     sal_Bool Next();
 
-    sal_uInt16 GetCurrScript() const        { return nCurScript; }
-    xub_StrLen GetScriptChgPos() const      { return nChgPos; }
-    const String& GetText() const           { return rText; }
+    sal_uInt16 GetCurrScript() const 		{ return nCurScript; }
+    xub_StrLen GetScriptChgPos() const		{ return nChgPos; }
+    const String& GetText() const			{ return rText;	}
 };
 
 
@@ -77,8 +77,8 @@ public:
 
     sal_Bool Next();
 
-    const SfxPoolItem& GetAttr() const  { return *pCurItem; }
-    xub_StrLen GetChgPos() const        { return nChgPos; }
+    const SfxPoolItem& GetAttr() const	{ return *pCurItem; }
+    xub_StrLen GetChgPos() const		{ return nChgPos; }
 };
 
 

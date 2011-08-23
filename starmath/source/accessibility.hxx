@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -203,7 +203,7 @@ public:
 class SmTextForwarder :     /* analog to SvxEditEngineForwarder */
     public SvxTextForwarder
 {
-    SmEditAccessible &  rEditAcc;
+    SmEditAccessible &	rEditAcc;
     SmEditSource &      rEditSource;
 
     DECL_LINK( NotifyHdl, EENotify * );
@@ -216,64 +216,64 @@ public:
     SmTextForwarder( SmEditAccessible& rAcc, SmEditSource & rSource );
     virtual ~SmTextForwarder();
 
-    virtual USHORT      GetParagraphCount() const;
-    virtual USHORT      GetTextLen( USHORT nParagraph ) const;
-    virtual String      GetText( const ESelection& rSel ) const;
-    virtual SfxItemSet  GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib = EditEngineAttribs_All ) const;
-    virtual SfxItemSet  GetParaAttribs( USHORT nPara ) const;
-    virtual void        SetParaAttribs( USHORT nPara, const SfxItemSet& rSet );
+    virtual USHORT		GetParagraphCount() const;
+    virtual USHORT		GetTextLen( USHORT nParagraph ) const;
+    virtual String		GetText( const ESelection& rSel ) const;
+    virtual SfxItemSet	GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib = EditEngineAttribs_All ) const;
+    virtual	SfxItemSet	GetParaAttribs( USHORT nPara ) const;
+    virtual void		SetParaAttribs( USHORT nPara, const SfxItemSet& rSet );
     virtual void        RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
-    virtual void        GetPortions( USHORT nPara, SvUShorts& rList ) const;
+    virtual void		GetPortions( USHORT nPara, SvUShorts& rList ) const;
 
-    virtual USHORT      GetItemState( const ESelection& rSel, USHORT nWhich ) const;
-    virtual USHORT      GetItemState( USHORT nPara, USHORT nWhich ) const;
+    virtual USHORT		GetItemState( const ESelection& rSel, USHORT nWhich ) const;
+    virtual USHORT		GetItemState( USHORT nPara, USHORT nWhich ) const;
 
-    virtual void        QuickInsertText( const String& rText, const ESelection& rSel );
-    virtual void        QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
-    virtual void        QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
-    virtual void        QuickInsertLineBreak( const ESelection& rSel );
+    virtual void		QuickInsertText( const String& rText, const ESelection& rSel );
+    virtual void		QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
+    virtual void		QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
+    virtual void		QuickInsertLineBreak( const ESelection& rSel );
 
     virtual SfxItemPool* GetPool() const;
 
     virtual XubString    CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor );
-    virtual void        FieldClicked(const SvxFieldItem&, USHORT, USHORT);
-    virtual BOOL         IsValid() const;
+    virtual void 		FieldClicked(const SvxFieldItem&, USHORT, USHORT);
+    virtual BOOL		 IsValid() const;
 
-    virtual LanguageType    GetLanguage( USHORT, USHORT ) const;
-    virtual USHORT          GetFieldCount( USHORT nPara ) const;
-    virtual EFieldInfo      GetFieldInfo( USHORT nPara, USHORT nField ) const;
+    virtual LanguageType 	GetLanguage( USHORT, USHORT ) const;
+    virtual USHORT			GetFieldCount( USHORT nPara ) const;
+    virtual EFieldInfo		GetFieldInfo( USHORT nPara, USHORT nField ) const;
     virtual EBulletInfo     GetBulletInfo( USHORT nPara ) const;
-    virtual Rectangle       GetCharBounds( USHORT nPara, USHORT nIndex ) const;
-    virtual Rectangle       GetParaBounds( USHORT nPara ) const;
-    virtual MapMode         GetMapMode() const;
-    virtual OutputDevice*   GetRefDevice() const;
-    virtual sal_Bool        GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const;
-    virtual sal_Bool        GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const;
-    virtual sal_Bool        GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const;
-    virtual USHORT          GetLineCount( USHORT nPara ) const;
-    virtual USHORT          GetLineLen( USHORT nPara, USHORT nLine ) const;
+    virtual Rectangle		GetCharBounds( USHORT nPara, USHORT nIndex ) const;
+    virtual Rectangle		GetParaBounds( USHORT nPara ) const;
+    virtual MapMode			GetMapMode() const;
+    virtual OutputDevice*	GetRefDevice() const;
+    virtual sal_Bool		GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const;
+    virtual sal_Bool		GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const;
+    virtual sal_Bool 		GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const;
+    virtual USHORT			GetLineCount( USHORT nPara ) const;
+    virtual USHORT			GetLineLen( USHORT nPara, USHORT nLine ) const;
     virtual void            GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const;
     virtual USHORT          GetLineNumberAtIndex( USHORT nPara, USHORT nLine ) const;
-    virtual sal_Bool        Delete( const ESelection& );
-    virtual sal_Bool        InsertText( const String&, const ESelection& );
-    virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE );
+    virtual sal_Bool		Delete( const ESelection& );
+    virtual sal_Bool		InsertText( const String&, const ESelection& );
+    virtual sal_Bool		QuickFormatDoc( BOOL bFull=FALSE );
 
     virtual sal_Int16       GetDepth( USHORT nPara ) const;
     virtual sal_Bool        SetDepth( USHORT nPara, sal_Int16 nNewDepth );
-
+    
     virtual const SfxItemSet*   GetEmptyItemSetPtr();
     // implementation functions for XParagraphAppend and XTextPortionAppend
     virtual void        AppendParagraph();
     virtual xub_StrLen  AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet &rSet );
-
-    virtual void        CopyText(const SvxTextForwarder& rSource);
+    
+    virtual void        CopyText(const SvxTextForwarder& rSource); 
 };
 
 
 class SmEditViewForwarder :     /* analog to SvxEditEngineViewForwarder */
     public SvxEditViewForwarder
 {
-    SmEditAccessible&       rEditAcc;
+    SmEditAccessible&		rEditAcc;
 
     // disallow copy-ctor and assignment-operator for now
     SmEditViewForwarder( const SmEditViewForwarder & );
@@ -283,17 +283,17 @@ public:
                         SmEditViewForwarder( SmEditAccessible& rAcc );
     virtual             ~SmEditViewForwarder();
 
-    virtual BOOL        IsValid() const;
+    virtual BOOL		IsValid() const;
 
-    virtual Rectangle   GetVisArea() const;
-    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
-    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual Rectangle	GetVisArea() const;
+    virtual Point		LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual Point		PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
 
-    virtual sal_Bool    GetSelection( ESelection& rSelection ) const;
-    virtual sal_Bool    SetSelection( const ESelection& rSelection );
-    virtual sal_Bool    Copy();
-    virtual sal_Bool    Cut();
-    virtual sal_Bool    Paste();
+    virtual sal_Bool	GetSelection( ESelection& rSelection ) const;
+    virtual sal_Bool	SetSelection( const ESelection& rSelection );
+    virtual sal_Bool	Copy();
+    virtual sal_Bool	Cut();
+    virtual sal_Bool	Paste();
 };
 
 
@@ -305,7 +305,7 @@ class SmEditSource :
     SmTextForwarder         aTextFwd;
     SmEditViewForwarder     aEditViewFwd;
 
-    SmEditAccessible&       rEditAcc;
+    SmEditAccessible&		rEditAcc;		
 
     // disallow copy-ctor and assignment-operator for now
     SmEditSource( const SmEditSource &rSrc );
@@ -317,10 +317,10 @@ public:
 
     virtual SvxEditSource*      Clone() const;
     virtual SvxTextForwarder*   GetTextForwarder();
-     virtual SvxViewForwarder*  GetViewForwarder();
-     virtual SvxEditViewForwarder*  GetEditViewForwarder( sal_Bool bCreate = sal_False );
+     virtual SvxViewForwarder*	GetViewForwarder();
+     virtual SvxEditViewForwarder*	GetEditViewForwarder( sal_Bool bCreate = sal_False );
     virtual void                UpdateData();
-    virtual SfxBroadcaster&     GetBroadcaster() const;
+    virtual SfxBroadcaster&		GetBroadcaster() const;
 };
 
 
@@ -366,8 +366,8 @@ public:
 
     //! access EditEngine and EditView via the functions in the respective window
     //! pointers may be 0 (e.g. during reload)
-    EditEngine * GetEditEngine()    { return pWin ? pWin->GetEditEngine() : 0; }
-    EditView   * GetEditView()      { return pWin ? pWin->GetEditView() : 0; }
+    EditEngine * GetEditEngine()	{ return pWin ? pWin->GetEditEngine() : 0; }
+    EditView   * GetEditView()		{ return pWin ? pWin->GetEditView() : 0; }
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);

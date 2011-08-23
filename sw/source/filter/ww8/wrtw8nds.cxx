@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -337,7 +337,7 @@ xub_StrLen SwAttrIter::SearchNext( xub_StrLen nStartPos )
     xub_StrLen pos = lcl_getMinPos( fieldEndPos, fieldStartPos );
     pos = lcl_getMinPos( pos, formElementPos );
 
-    if (pos!=STRING_NOTFOUND)
+    if (pos!=STRING_NOTFOUND)  
         nMinPos=pos;
 
     // first the redline, then the attributes
@@ -762,14 +762,14 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRu
         /*Get defaults if no formatting on ruby text*/
 
         const SfxItemPool *pPool = rNode.GetSwAttrSet().GetPool();
-        const SfxItemPool &rPool = pPool ? *pPool : m_rWW8Export.pDoc->GetAttrPool();
+        pPool = pPool ? pPool : &m_rWW8Export.pDoc->GetAttrPool();
 
-        const SvxFontItem &rFont  = DefaultItemGet< SvxFontItem >( rPool,
+        const SvxFontItem &rFont  = DefaultItemGet< SvxFontItem >( *pPool,
                 GetWhichOfScript( RES_CHRATR_FONT,nRubyScript ) );
         sFamilyName = rFont.GetFamilyName();
 
         const SvxFontHeightItem &rHeight = DefaultItemGet< SvxFontHeightItem >
-            ( rPool, GetWhichOfScript( RES_CHRATR_FONTSIZE, nRubyScript ) );
+            ( *pPool, GetWhichOfScript( RES_CHRATR_FONTSIZE, nRubyScript ) );
         nHeight = rHeight.GetHeight();
     }
     nHeight = (nHeight + 5)/10;
@@ -894,7 +894,7 @@ bool WW8AttributeOutput::AnalyzeURL( const String& rUrl, const String& rTarget, 
 
     if ( sMark.Len() )
         ( ( sURL.APPEND_CONST_ASC( " \\l \"" ) ) += sMark ) += '\"';
-
+    
     if ( rTarget.Len() )
         ( sURL.APPEND_CONST_ASC( " \\n " ) ) += rTarget;
 
@@ -1344,10 +1344,10 @@ short MSWordExportBase::GetDefaultFrameDirection( ) const
         else if ( pOutFmtNode->ISA( SwTxtFmtColl ) )
             nDir = FRMDIR_HORI_LEFT_TOP;    //what else can we do :-(
     }
-
+    
     if ( nDir == FRMDIR_ENVIRONMENT )
         nDir = FRMDIR_HORI_LEFT_TOP;        //Set something
-
+    
     return nDir;
 }
 
@@ -1597,12 +1597,12 @@ void WW8AttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rS
     m_rWW8Export.WriteCR( pTextNodeInfoInner );
 
     if ( pTextNodeInfo.get() != NULL )
-    {
-#ifdef DEBUG
+    { 
+#ifdef DEBUG            
         ::std::clog << pTextNodeInfo->toString() << ::std::endl;
 #endif
 
-        TableInfoCell( pTextNodeInfoInner );
+        TableInfoCell( pTextNodeInfoInner );        
     }
 
     m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->Count(), m_rWW8Export.pO->GetData() );
@@ -1834,7 +1834,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 }
             }
         }
-
+        
         // Output the character attributes
         AttrOutput().StartRunProperties();
         aAttrIter.OutAttr( nAktPos );   // nAktPos - 1 ??
@@ -1887,7 +1887,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     while ( nAktPos < nEnd );
 
     AttrOutput().StartParagraphProperties( rNode );
-
+    
     AttrOutput().ParagraphStyle( nStyle );
 
     if ( mpParentFrame && !bIsInTable )    // Fly-Attrs
@@ -1903,7 +1903,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         if (pTextNodeInfoInner->isFirstInTable())
         {
             const SwTable * pTable = pTextNodeInfoInner->getTable();
-            const SwTableFmt * pTabFmt =
+            const SwTableFmt * pTabFmt = 
                 dynamic_cast<const SwTableFmt *>(pTable->GetRegisteredIn());
             if (pTabFmt != NULL)
             {
@@ -1911,8 +1911,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     AttrOutput().PageBreakBefore(true);
             }
         }
-    }
-
+    } 
+    
     if ( !bFlyInTable )
     {
         SfxItemSet* pTmpSet = 0;

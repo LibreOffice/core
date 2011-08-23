@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 class SwHyphPortion : public SwExpandPortion
 {
 public:
-    inline  SwHyphPortion( ) { SetWhichPor( POR_HYPH ); }
+    inline	SwHyphPortion( ) { SetWhichPor( POR_HYPH ); }
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 
@@ -71,7 +71,7 @@ class SwSoftHyphPortion : public SwHyphPortion
 {
     sal_Bool    bExpand;
     KSHORT  nViewWidth;
-    KSHORT  nHyphWidth;
+    KSHORT	nHyphWidth;
 
 public:
     SwSoftHyphPortion();
@@ -92,7 +92,7 @@ public:
 };
 
 /*************************************************************************
- *                      class SwSoftHyphStrPortion
+ *						class SwSoftHyphStrPortion
  *************************************************************************/
 
 class SwSoftHyphStrPortion : public SwHyphStrPortion

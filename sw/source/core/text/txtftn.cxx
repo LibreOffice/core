@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,16 +51,16 @@
 #include <sortedobjs.hxx>
 
 #include "txtcfg.hxx"
-#include "swfont.hxx"   // new SwFont
+#include "swfont.hxx"	// new SwFont
 #include "porftn.hxx"
 #include "porfly.hxx"
 #include "porlay.hxx"
 #include "txtfrm.hxx"
 #include "itrform2.hxx"
-#include "ftnfrm.hxx"   // FindQuoVadisFrm(),
+#include "ftnfrm.hxx"	// FindQuoVadisFrm(),
 #include "pagedesc.hxx"
 #include "redlnitr.hxx" // SwRedlnItr
-#include "sectfrm.hxx"  // SwSectionFrm
+#include "sectfrm.hxx"	// SwSectionFrm
 #include "layouter.hxx" // Endnote-Collection
 #include "frmtool.hxx"
 #include "ndindex.hxx"
@@ -68,7 +68,7 @@
 using namespace ::com::sun::star;
 
 /*************************************************************************
- *                              _IsFtnNumFrm()
+ *								_IsFtnNumFrm()
  *************************************************************************/
 
 sal_Bool SwTxtFrm::_IsFtnNumFrm() const
@@ -80,7 +80,7 @@ sal_Bool SwTxtFrm::_IsFtnNumFrm() const
 }
 
 /*************************************************************************
- *                              FindFtn()
+ *								FindFtn()
  *************************************************************************/
 
 // Sucht innerhalb einer Master-Follow-Kette den richtigen TxtFrm zum SwTxtFtn
@@ -100,7 +100,7 @@ SwTxtFrm *SwTxtFrm::FindFtnRef( const SwTxtFtn *pFtn )
 }
 
 /*************************************************************************
- *                              CalcFtnFlag()
+ *								CalcFtnFlag()
  *************************************************************************/
 
 #ifndef DBG_UTIL
@@ -142,7 +142,7 @@ void SwTxtFrm::CalcFtnFlag( xub_StrLen nStop )//Fuer den Test von SplitFrm
 }
 
 /*************************************************************************
- *                              CalcPrepFtnAdjust()
+ *								CalcPrepFtnAdjust()
  *************************************************************************/
 
 sal_Bool SwTxtFrm::CalcPrepFtnAdjust()
@@ -174,7 +174,7 @@ sal_Bool SwTxtFrm::CalcPrepFtnAdjust()
             SwTxtFormatInfo aInf( this );
             SwTxtFormatter aLine( this, &aInf );
             aLine.TruncLines();
-            SetPara( 0 );       //Wird ggf. geloescht!
+            SetPara( 0 );		//Wird ggf. geloescht!
             ResetPreps();
             return sal_False;
         }
@@ -289,7 +289,7 @@ SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
 
 
 /*************************************************************************
- *                      SwTxtFrm::GetFtnLine()
+ *						SwTxtFrm::GetFtnLine()
  *************************************************************************/
 
 SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn ) const
@@ -328,7 +328,7 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn ) const
 }
 
 /*************************************************************************
- *                      SwTxtFrm::GetFtnRstHeight()
+ *						SwTxtFrm::GetFtnRstHeight()
  *************************************************************************/
 
 // Ermittelt die max. erreichbare Hoehe des TxtFrm im Ftn-Bereich.
@@ -409,7 +409,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
 }
 
 /*************************************************************************
- *                      SwTxtFrm::FindQuoVadisFrm()
+ *						SwTxtFrm::FindQuoVadisFrm()
  *************************************************************************/
 
 SwTxtFrm *SwTxtFrm::FindQuoVadisFrm()
@@ -429,14 +429,14 @@ SwTxtFrm *SwTxtFrm::FindQuoVadisFrm()
         return NULL;
     const SwCntntFrm *pLast;
     do
-    {   pLast = pCnt;
+    {	pLast = pCnt;
         pCnt = pCnt->GetNextCntntFrm();
     } while( pCnt && pFtnFrm->IsAnLower( pCnt ) );
     return (SwTxtFrm*)pLast;
 }
 
 /*************************************************************************
- *                      SwTxtFrm::RemoveFtn()
+ *						SwTxtFrm::RemoveFtn()
  *************************************************************************/
 
 void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
@@ -511,11 +511,11 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
                 // Wir loeschen nicht, sondern wollen die Ftn verschieben.
                 // Drei Faelle koennen auftreten:
                 // 1) Es gibt weder Follow noch PrevFollow
-                //    -> RemoveFtn()  (vielleicht sogar ein ASSERT wert)
+                //	  -> RemoveFtn()  (vielleicht sogar ein ASSERT wert)
                 // 2) nStart > GetOfst, ich habe einen Follow
-                //    -> Ftn wandert in den Follow
+                //	  -> Ftn wandert in den Follow
                 // 3) nStart < GetOfst, ich bin ein Follow
-                //    -> Ftn wandert in den PrevFollow
+                //	  -> Ftn wandert in den PrevFollow
                 // beide muessen auf einer Seite/in einer Spalte stehen.
 
                 SwFtnFrm *pFtnFrm = bEndn ? pEndBoss->FindFtn( pSource, pFtn ) :
@@ -616,7 +616,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::ConnectFtn()
+ *						SwTxtFormatter::ConnectFtn()
  *************************************************************************/
 // sal_False, wenn irgendetwas schief gegangen ist.
 // Es gibt eigentlich nur zwei Moeglichkeiten:
@@ -636,7 +636,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
             "SwTxtFrm::ConnectFtn with swapped frame" );
 
     bFtn = sal_True;
-    bInFtnConnect = sal_True;   //Bloss zuruecksetzen!
+    bInFtnConnect = sal_True;	//Bloss zuruecksetzen!
     sal_Bool bEnd = pFtn->GetFtn().IsEndNote();
 
     //
@@ -726,7 +726,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 
     SwSaveFtnHeight aHeight( pBoss, nDeadLine );
 
-    if( !pSrcFrm )      // Es wurde ueberhaupt keine Ftn gefunden.
+    if( !pSrcFrm )		// Es wurde ueberhaupt keine Ftn gefunden.
         pBoss->AppendFtn( this, pFtn );
     else
     {
@@ -735,7 +735,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 
         sal_Bool bBrutal = sal_False;
 
-        if( pFtnBoss == pBoss ) // Ref und Ftn sind auf der selben Seite/Spalte.
+        if( pFtnBoss == pBoss )	// Ref und Ftn sind auf der selben Seite/Spalte.
         {
             SwFrm *pCont = pFtnFrm->GetUpper();
 
@@ -843,7 +843,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 
 
 /*************************************************************************
- *                      SwTxtFormatter::NewFtnPortion()
+ *						SwTxtFormatter::NewFtnPortion()
  *************************************************************************/
 
 // Die Portion fuer die Ftn-Referenz im Text
@@ -990,7 +990,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
  }
 
 /*************************************************************************
- *                      SwTxtFormatter::NewFtnNumPortion()
+ *						SwTxtFormatter::NewFtnNumPortion()
  *************************************************************************/
 
 // Die Portion fuer die Ftn-Nummerierung im Ftn-Bereich
@@ -1048,7 +1048,7 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
 }
 
 /*************************************************************************
- *                  SwTxtFormatter::NewErgoSumPortion()
+ *					SwTxtFormatter::NewErgoSumPortion()
  *************************************************************************/
 
 XubString lcl_GetPageNumber( const SwPageFrm* pPage )
@@ -1089,7 +1089,7 @@ SwErgoSumPortion *SwTxtFormatter::NewErgoSumPortion( SwTxtFormatInfo &rInf ) con
 }
 
 /*************************************************************************
- *                  SwTxtFormatter::FormatQuoVadis()
+ *					SwTxtFormatter::FormatQuoVadis()
  *************************************************************************/
 
 xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
@@ -1130,7 +1130,7 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
     // Ein Wort zu QuoVadis/ErgoSum:
     // Fuer diese Texte wird der am Absatz eingestellte Font verwendet.
     // Wir initialisieren uns also:
-//  ResetFont();
+//	ResetFont();
     FeedInf( rInf );
     SeekStartAndChg( rInf, sal_True );
     if( GetRedln() && pCurr->HasRedline() )
@@ -1284,8 +1284,8 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
 #if OSL_DEBUG_LEVEL > 1
     if( OPTDBG( rInf ) )
     {
-//        aDbstream << "FormatQuoVadis:" << endl;
-//        pCurr->DebugPortions( aDbstream, rInf.GetTxt(), nStart );
+//		  aDbstream << "FormatQuoVadis:" << endl;
+//		  pCurr->DebugPortions( aDbstream, rInf.GetTxt(), nStart );
     }
 #endif
 
@@ -1295,7 +1295,7 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
 
 
 /*************************************************************************
- *                  SwTxtFormatter::MakeDummyLine()
+ *					SwTxtFormatter::MakeDummyLine()
  *************************************************************************/
 
 // MakeDummyLine() erzeugt eine Line, die bis zum unteren Seitenrand
@@ -1373,7 +1373,7 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
             pInfo = &pDoc->GetEndNoteInfo();
         else
             pInfo = &pDoc->GetFtnInfo();
-        const SwAttrSet& rSet = pInfo->GetAnchorCharFmt((SwDoc&)*pDoc)->GetAttrSet();
+        const SwAttrSet& rSet =	pInfo->GetAnchorCharFmt((SwDoc&)*pDoc)->GetAttrSet();
         pFnt->SetDiffFnt( &rSet, rInf.GetTxtFrm()->GetNode()->getIDocumentSettingAccess() );
 
         // we reduce footnote size, if we are inside a double line portion
@@ -1403,7 +1403,7 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
 }
 
 /*************************************************************************
- *                     SwFtnSave::~SwFtnSave()
+ *					   SwFtnSave::~SwFtnSave()
  *************************************************************************/
 
 SwFtnSave::~SwFtnSave()
@@ -1419,7 +1419,7 @@ SwFtnSave::~SwFtnSave()
 }
 
 /*************************************************************************
- *                      SwFtnPortion::SwFtnPortion()
+ *						SwFtnPortion::SwFtnPortion()
  *************************************************************************/
 
 SwFtnPortion::SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrame,
@@ -1438,7 +1438,7 @@ SwFtnPortion::SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrame,
 }
 
 /*************************************************************************
- *                      SwFtnPortion::GetExpTxt()
+ *						SwFtnPortion::GetExpTxt()
  *************************************************************************/
 
 sal_Bool SwFtnPortion::GetExpTxt( const SwTxtSizeInfo &, XubString &rTxt ) const
@@ -1448,7 +1448,7 @@ sal_Bool SwFtnPortion::GetExpTxt( const SwTxtSizeInfo &, XubString &rTxt ) const
 }
 
 /*************************************************************************
- *                 virtual SwFtnPortion::Format()
+ *				   virtual SwFtnPortion::Format()
  *************************************************************************/
 
 sal_Bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
@@ -1472,7 +1472,7 @@ sal_Bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *               virtual SwFtnPortion::Paint()
+ *				 virtual SwFtnPortion::Paint()
  *************************************************************************/
 
 void SwFtnPortion::Paint( const SwTxtPaintInfo &rInf ) const
@@ -1486,7 +1486,7 @@ void SwFtnPortion::Paint( const SwTxtPaintInfo &rInf ) const
 }
 
 /*************************************************************************
- *               virtual SwFtnPortion::GetTxtSize()
+ *				 virtual SwFtnPortion::GetTxtSize()
  *************************************************************************/
 
 SwPosSize SwFtnPortion::GetTxtSize( const SwTxtSizeInfo &rInfo ) const
@@ -1507,7 +1507,7 @@ void SwFtnPortion::SetPreferredScriptType( BYTE nPreferredScriptType )
 // <--
 
 /*************************************************************************
- *                      class SwQuoVadisPortion
+ *						class SwQuoVadisPortion
  *************************************************************************/
 
 SwFldPortion *SwQuoVadisPortion::Clone( const XubString &rExpand ) const
@@ -1521,7 +1521,7 @@ SwQuoVadisPortion::SwQuoVadisPortion( const XubString &rExp, const XubString& rS
 }
 
 /*************************************************************************
- *                 virtual SwQuoVadisPortion::Format()
+ *				   virtual SwQuoVadisPortion::Format()
  *************************************************************************/
 
 sal_Bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
@@ -1552,7 +1552,7 @@ sal_Bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *               virtual SwQuoVadisPortion::GetExpTxt()
+ *				 virtual SwQuoVadisPortion::GetExpTxt()
  *************************************************************************/
 
 sal_Bool SwQuoVadisPortion::GetExpTxt( const SwTxtSizeInfo &, XubString &rTxt ) const
@@ -1577,7 +1577,7 @@ void SwQuoVadisPortion::HandlePortion( SwPortionHandler& rPH ) const
 }
 
 /*************************************************************************
- *               virtual SwQuoVadisPortion::Paint()
+ *				 virtual SwQuoVadisPortion::Paint()
  *************************************************************************/
 
 void SwQuoVadisPortion::Paint( const SwTxtPaintInfo &rInf ) const
@@ -1594,7 +1594,7 @@ void SwQuoVadisPortion::Paint( const SwTxtPaintInfo &rInf ) const
 }
 
 /*************************************************************************
- *                      class SwErgoSumPortion
+ *						class SwErgoSumPortion
  *************************************************************************/
 
 SwFldPortion *SwErgoSumPortion::Clone( const XubString &rExpand ) const
@@ -1620,7 +1620,7 @@ xub_StrLen SwErgoSumPortion::GetCrsrOfst( const KSHORT ) const
 }
 
 /*************************************************************************
- *                 virtual SwErgoSumPortion::Format()
+ *				   virtual SwErgoSumPortion::Format()
  *************************************************************************/
 
 sal_Bool SwErgoSumPortion::Format( SwTxtFormatInfo &rInf )
@@ -1643,7 +1643,7 @@ sal_Bool SwErgoSumPortion::Format( SwTxtFormatInfo &rInf )
 
 
 /*************************************************************************
- *                      SwParaPortion::SetErgoSumNum()
+ *						SwParaPortion::SetErgoSumNum()
  *************************************************************************/
 
 void SwParaPortion::SetErgoSumNum( const XubString& rErgo )
@@ -1654,7 +1654,7 @@ void SwParaPortion::SetErgoSumNum( const XubString& rErgo )
         DBG_LOOP;
         pLay = pLay->GetNext();
     }
-    SwLinePortion     *pPor = pLay;
+    SwLinePortion	  *pPor = pLay;
     SwQuoVadisPortion *pQuo = 0;
     while( pPor && !pQuo )
     {
@@ -1667,7 +1667,7 @@ void SwParaPortion::SetErgoSumNum( const XubString& rErgo )
 }
 
 /*************************************************************************
- *                      SwParaPortion::UpdateQuoVadis()
+ *						SwParaPortion::UpdateQuoVadis()
  *
  * Wird im SwTxtFrm::Prepare() gerufen
  *************************************************************************/
@@ -1680,7 +1680,7 @@ sal_Bool SwParaPortion::UpdateQuoVadis( const XubString &rQuo )
         DBG_LOOP;
         pLay = pLay->GetNext();
     }
-    SwLinePortion     *pPor = pLay;
+    SwLinePortion	  *pPor = pLay;
     SwQuoVadisPortion *pQuo = 0;
     while( pPor && !pQuo )
     {

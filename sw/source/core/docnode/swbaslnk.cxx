@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 #include <sfx2/objsh.hxx>
 #include <editeng/boxitem.hxx>
 #ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>       // fuer die EventIds
+#include <svx/svxids.hrc>		// fuer die EventIds
 #endif
 #include <sfx2/linkmgr.hxx>
 #include <svtools/soerr.hxx>
@@ -75,16 +75,16 @@ SV_IMPL_REF( SwServerObject )
 void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 {
     //JP 4.7.2001: call fist all not SwNoTxtFrames, then the SwNoTxtFrames.
-    //              The reason is, that in the SwNoTxtFrames the Graphic
-    //              after a Paint will be swapped out! So all other "behind"
-    //              them havent't a loaded Graphic. - #86501#
+    //				The reason is, that in the SwNoTxtFrames the Graphic
+    //				after a Paint will be swapped out! So all other "behind"
+    //				them havent't a loaded Graphic. - #86501#
     rGrfNd.LockModify();
 
     SwClientIter aIter( rGrfNd );
     for( int n = 0; n < 2; ++n )
     {
         SwClient * pLast = aIter.GoStart();
-        if( pLast )     // konnte zum Anfang gesprungen werden ??
+        if( pLast ) 	// konnte zum Anfang gesprungen werden ??
         {
             do {
                 if( (0 == n) ^ ( 0 != pLast->ISA( SwCntntFrm )) )
@@ -124,9 +124,9 @@ void SwBaseLink::DataChanged( const String& rMimeType,
             USHORT nEvent = 0;
             switch( sState.toInt32() )
             {
-            case sfx2::LinkManager::STATE_LOAD_OK:      nEvent = SVX_EVENT_IMAGE_LOAD;  break;
-            case sfx2::LinkManager::STATE_LOAD_ERROR:   nEvent = SVX_EVENT_IMAGE_ERROR; break;
-            case sfx2::LinkManager::STATE_LOAD_ABORT:   nEvent = SVX_EVENT_IMAGE_ABORT; break;
+            case sfx2::LinkManager::STATE_LOAD_OK:		nEvent = SVX_EVENT_IMAGE_LOAD;	break;
+            case sfx2::LinkManager::STATE_LOAD_ERROR: 	nEvent = SVX_EVENT_IMAGE_ERROR;	break;
+            case sfx2::LinkManager::STATE_LOAD_ABORT: 	nEvent = SVX_EVENT_IMAGE_ABORT;	break;
             }
 
             SwFrmFmt* pFmt;
@@ -137,7 +137,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
                 pDoc->CallEvent( nEvent, aCallEvent );
             }
         }
-        return;         // das wars!
+        return;			// das wars!
     }
 
     BOOL bUpdate = FALSE;
@@ -191,12 +191,12 @@ void SwBaseLink::DataChanged( const String& rMimeType,
             bUpdate = TRUE;
 
             // Bug 33999: damit der Node den Transparent-Status
-            //      richtig gesetzt hat, ohne auf die Grafik
-            //      zugreifen zu muessen (sonst erfolgt ein SwapIn!).
+            //		richtig gesetzt hat, ohne auf die Grafik
+            //		zugreifen zu muessen (sonst erfolgt ein SwapIn!).
             if( bGraphicArrived )
             {
                 // Bug #34735#: immer mit der korrekten Grafik-Size
-                //              arbeiten
+                //				arbeiten
                 if( aGrfSz.Height() && aGrfSz.Width() &&
                     aSz.Height() && aSz.Width() &&
                     aGrfSz != aSz )
@@ -331,7 +331,7 @@ BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
                 //Hoehe und Breite uebernehmen
                 aCalcSz = rFrmSz;
 
-            const SvxBoxItem     &rBox = pFmt->GetBox();
+            const SvxBoxItem 	 &rBox = pFmt->GetBox();
             aCalcSz.Width() += rBox.CalcLineSpace(BOX_LINE_LEFT) +
                                rBox.CalcLineSpace(BOX_LINE_RIGHT);
             aCalcSz.Height()+= rBox.CalcLineSpace(BOX_LINE_TOP) +
@@ -360,12 +360,12 @@ BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
                     const BOOL bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
                     SwHTMLTableLayout *pLayout =
                         pTblNd->GetTable().GetHTMLTableLayout();
-                    if( pLayout )
+                    if(	pLayout )
                     {
                         const USHORT nBrowseWidth =
                                     pLayout->GetBrowseWidthByTable( *pDoc );
                         if ( nBrowseWidth )
-                        {
+                        {        
                             pLayout->Resize( nBrowseWidth, TRUE, TRUE,
                                              bLastGrf ? HTMLTABLE_RESIZE_NOW
                                                       : 500 );
@@ -430,8 +430,8 @@ BOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
         String aMimeType( SotExchange::GetFormatMimeType( GetContentType() ));
 
 //!! ??? what have we here to do ????
-//!!        if( bNativFormat )
-//!!            aData.SetAspect( aData.GetAspect() | ASPECT_ICON );
+//!!		if( bNativFormat )
+//!!			aData.SetAspect( aData.GetAspect() | ASPECT_ICON );
 
         uno::Any aValue;
         GetObj()->GetData( aValue, aMimeType, !IsSynchron() && bWaitForData );
@@ -444,8 +444,8 @@ BOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
         else if( 0 != ( bRes = aValue.hasValue() ) )
         {
             //JP 14.04.99: Bug 64820 - das Flag muss beim SwapIn natuerlich
-            //              zurueckgesetzt werden. Die Daten sollen ja neu
-            //              uebernommen werden
+            //				zurueckgesetzt werden. Die Daten sollen ja neu
+            //				uebernommen werden
             bIgnoreDataChanged = FALSE;
             DataChanged( aMimeType, aValue );
         }

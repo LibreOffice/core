@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,13 +27,13 @@
 #ifndef _PAM_HXX
 #define _PAM_HXX
 
-#include <stddef.h>         // fuer MemPool
+#include <stddef.h>			// fuer MemPool
 #include <tools/gen.hxx>
 #include <tools/mempool.hxx>
-#include <cshtyp.hxx>       // fuer die Funktions-Definitionen
-#include <ring.hxx>         // Superklasse
-#include <index.hxx>        // fuer SwIndex
-#include <ndindex.hxx>      // fuer SwNodeIndex
+#include <cshtyp.hxx>		// fuer die Funktions-Definitionen
+#include <ring.hxx>			// Superklasse
+#include <index.hxx>		// fuer SwIndex
+#include <ndindex.hxx>		// fuer SwNodeIndex
 #include "swdllapi.h"
 
 class SwFmt;
@@ -74,7 +74,7 @@ struct SW_DLLPUBLIC SwPosition
     SwDoc * GetDoc() const;
 
     BOOL operator < (const SwPosition &) const;
-    BOOL operator > (const SwPosition &) const;
+    BOOL operator >	(const SwPosition &) const;
     BOOL operator <=(const SwPosition &) const;
     BOOL operator >=(const SwPosition &) const;
     BOOL operator ==(const SwPosition &) const;
@@ -84,15 +84,15 @@ struct SW_DLLPUBLIC SwPosition
 
 // das Ergebnis eines Positions Vergleiches
 enum SwComparePosition {
-    POS_BEFORE,             // Pos1 liegt vor Pos2
-    POS_BEHIND,             // Pos1 liegt hinter Pos2
-    POS_INSIDE,             // Pos1 liegt vollstaendig in Pos2
-    POS_OUTSIDE,            // Pos2 liegt vollstaendig in Pos1
-    POS_EQUAL,              // Pos1 ist genauso gross wie Pos2
-    POS_OVERLAP_BEFORE,     // Pos1 ueberlappt Pos2 am Anfang
-    POS_OVERLAP_BEHIND,     // Pos1 ueberlappt Pos2 am Ende
-    POS_COLLIDE_START,      // Pos1 Start stoesst an Pos2 Ende
-    POS_COLLIDE_END         // Pos1 End stoesst an Pos2 Start
+    POS_BEFORE,				// Pos1 liegt vor Pos2
+    POS_BEHIND,				// Pos1 liegt hinter Pos2
+    POS_INSIDE,				// Pos1 liegt vollstaendig in Pos2
+    POS_OUTSIDE,			// Pos2 liegt vollstaendig in Pos1
+    POS_EQUAL,				// Pos1 ist genauso gross wie Pos2
+    POS_OVERLAP_BEFORE,		// Pos1 ueberlappt Pos2 am Anfang
+    POS_OVERLAP_BEHIND,		// Pos1 ueberlappt Pos2 am Ende
+    POS_COLLIDE_START,		// Pos1 Start stoesst an Pos2 Ende
+    POS_COLLIDE_END			// Pos1 End stoesst an Pos2 Start
 };
 SwComparePosition ComparePosition(
             const SwPosition& rStt1, const SwPosition& rEnd1,
@@ -137,9 +137,9 @@ public:
            long nMkOffset = 0, long nPtOffset = 0, SwPaM* pRing = 0 );
     SwPaM( const SwNode& rMk, const SwNode& rPt,
            long nMkOffset = 0, long nPtOffset = 0, SwPaM* pRing = 0 );
-    SwPaM(  const SwNodeIndex& rMk, xub_StrLen nMkCntnt,
+    SwPaM(	const SwNodeIndex& rMk, xub_StrLen nMkCntnt,
             const SwNodeIndex& rPt, xub_StrLen nPtCntnt, SwPaM* pRing = 0 );
-    SwPaM(  const SwNode& rMk, xub_StrLen nMkCntnt,
+    SwPaM(	const SwNode& rMk, xub_StrLen nMkCntnt,
             const SwNode& rPt, xub_StrLen nPtCntnt, SwPaM* pRing = 0 );
     SwPaM( const SwNode& rNd, xub_StrLen nCntnt = 0, SwPaM* pRing = 0 );
     SwPaM( const SwNodeIndex& rNd, xub_StrLen nCntnt = 0, SwPaM* pRing = 0 );
@@ -155,18 +155,18 @@ public:
                     SwGoInDoc fnGo = fnGoCntnt );
 
     // Suchen
-    BYTE Find(  const com::sun::star::util::SearchOptions& rSearchOpt,
+    BYTE Find(	const com::sun::star::util::SearchOptions& rSearchOpt,
                 BOOL bSearchInNotes,
                 utl::TextSearch& rSTxt,
                 SwMoveFn fnMove = fnMoveForward,
                 const SwPaM *pPam =0, BOOL bInReadOnly = FALSE);
-    BOOL Find(  const SwFmt& rFmt,
+    BOOL Find(	const SwFmt& rFmt,
                 SwMoveFn fnMove = fnMoveForward,
                 const SwPaM *pPam =0, BOOL bInReadOnly = FALSE);
-    BOOL Find(  const SfxPoolItem& rAttr, BOOL bValue = TRUE,
+    BOOL Find(	const SfxPoolItem& rAttr, BOOL bValue = TRUE,
                 SwMoveFn fnMove = fnMoveForward,
                 const SwPaM *pPam =0, BOOL bInReadOnly = FALSE );
-    BOOL Find(  const SfxItemSet& rAttr, BOOL bNoColls,
+    BOOL Find(	const SfxItemSet& rAttr, BOOL bNoColls,
                 SwMoveFn fnMove,
                 const SwPaM *pPam, BOOL bInReadOnly, BOOL bMoveFirst );
 
@@ -263,7 +263,7 @@ public:
     { return *Start() <= rPos && rPos <= *End(); }
 
     static BOOL Overlap(const SwPaM & a, const SwPaM & b);
-
+    
     static BOOL LessThan(const SwPaM & a, const SwPaM & b);
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwPaM);
@@ -277,4 +277,4 @@ BOOL CheckNodesRange( const SwNodeIndex&, const SwNodeIndex&, BOOL );
 BOOL GoInCntnt( SwPaM & rPam, SwMoveFn fnMove );
 
 
-#endif  // _PAM_HXX
+#endif	// _PAM_HXX

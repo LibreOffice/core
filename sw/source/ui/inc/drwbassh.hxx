@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,11 +36,11 @@ struct SvxSwFrameValidation;
 
 class SwDrawBaseShell: public SwBaseShell
 {
-    SwDrawBase* pDrawActual;
+    SwDrawBase*	pDrawActual;
 
-    UINT16      eDrawMode;
-    BOOL        bRotate : 1;
-    BOOL        bSelMove: 1;
+    UINT16		eDrawMode;
+    BOOL 		bRotate : 1;
+    BOOL 		bSelMove: 1;
 
     DECL_LINK( CheckGroupShapeNameHdl, AbstractSvxNameDialog* );
     DECL_LINK(ValidatePosition, SvxSwFrameValidation* );
@@ -51,12 +51,12 @@ public:
     SFX_DECL_INTERFACE(SW_DRAWBASESHELL)
     TYPEINFO();
 
-    void        Execute(SfxRequest &);
-    void        GetState(SfxItemSet &);
-    void        DisableState(SfxItemSet &rSet)               { Disable(rSet);}
-    BOOL        Disable(SfxItemSet& rSet, USHORT nWhich = 0);
+    void		Execute(SfxRequest &);
+    void		GetState(SfxItemSet &);
+    void		DisableState(SfxItemSet &rSet)				 { Disable(rSet);}
+    BOOL		Disable(SfxItemSet& rSet, USHORT nWhich = 0);
 
-    void        StateStatusline(SfxItemSet &rSet);
+    void		StateStatusline(SfxItemSet &rSet);
 
 };
 

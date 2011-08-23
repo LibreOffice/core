@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -176,16 +176,16 @@ void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
 
 class SwPreViewZoomDlg : public SvxStandardDialog
 {
-    FixedText       aRowLbl;
-    NumericField    aRowEdit;
-    FixedText       aColLbl;
-    NumericField    aColEdit;
+    FixedText		aRowLbl;
+    NumericField 	aRowEdit;
+    FixedText		aColLbl;
+    NumericField 	aColEdit;
 
-    OKButton        aOkBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
+    OKButton	 	aOkBtn;
+    CancelButton 	aCancelBtn;
+    HelpButton 		aHelpBtn;
 
-    virtual void    Apply();
+    virtual void 	Apply();
 
 public:
     SwPreViewZoomDlg( SwPagePreViewWin& rParent );
@@ -235,11 +235,11 @@ void  SwPreViewZoomDlg::Apply()
 struct PrintSettingsStruct;
 class PrtPrvWindow : public Window
 {
-        const PrintSettingsStruct&  rSettings;
+        const PrintSettingsStruct& 	rSettings;
 
-        virtual void    Paint(const Rectangle&);
+        virtual void 	Paint(const Rectangle&);
 public :
-    PrtPrvWindow(Window* pParent, const ResId& rResId, const PrintSettingsStruct&   rSett) :
+    PrtPrvWindow(Window* pParent, const ResId& rResId, const PrintSettingsStruct& 	rSett) :
         Window(pParent, rResId), rSettings(rSett){}
 };
 /*--------------------------------------------------------------------
@@ -247,109 +247,109 @@ public :
  --------------------------------------------------------------------*/
 struct PrintSettingsStruct
 {
-    Size                aPageMaxSize;   // groesste Seite
-    Size                aPrtSize;       // Papiergroesse
-    Size                aPrvPrtSize;    // Groesse innerhalb der LRTB-Raender
-    Size                aGridSize;      // Groesse fuer jede Seite, enthaelt je
+    Size				aPageMaxSize;	// groesste Seite
+    Size				aPrtSize;		// Papiergroesse
+    Size				aPrvPrtSize;	// Groesse innerhalb der LRTB-Raender
+    Size 				aGridSize;		// Groesse fuer jede Seite, enthaelt je
                                         // die Haelfte von H- und V-Distance
 
-    long                nLeft;
-    long                nRight;
-    long                nTop;
-    long                nBottom;
-    long                nHori;
-    long                nVert;
+    long 				nLeft;
+    long 				nRight;
+    long				nTop;
+    long 				nBottom;
+    long 				nHori;
+    long 				nVert;
 
-    USHORT              nRows;
-    USHORT              nCols;
+    USHORT 				nRows;
+    USHORT				nCols;
 
-    BOOL                bPrinterLandscape;      // Ausrichtung
+    BOOL 				bPrinterLandscape;		// Ausrichtung
 };
 
 class SwPreviewPrintOptionsDialog : public SvxStandardDialog
 {
     FixedLine            aRowColFL;
-    FixedText           aRowsFT;
-    NumericField        aRowsNF;
-    FixedText           aColsFT;
-    NumericField        aColsNF;
+    FixedText   		aRowsFT;
+    NumericField 		aRowsNF;
+    FixedText   		aColsFT;
+    NumericField 		aColsNF;
 
     FixedLine            aMarginFL;
-    FixedText           aLSpaceFT;
-    MetricField         aLSpaceMF;
-    FixedText           aRSpaceFT;
-    MetricField         aRSpaceMF;
-    FixedText           aTSpaceFT;
-    MetricField         aTSpaceMF;
-    FixedText           aBSpaceFT;
-    MetricField         aBSpaceMF;
+    FixedText			aLSpaceFT;
+    MetricField 		aLSpaceMF;
+    FixedText   		aRSpaceFT;
+    MetricField 		aRSpaceMF;
+    FixedText   		aTSpaceFT;
+    MetricField 		aTSpaceMF;
+    FixedText   		aBSpaceFT;
+    MetricField 		aBSpaceMF;
     FixedLine            aDistanceFL;
-    FixedText           aHSpaceFT;
-    MetricField         aHSpaceMF;
-    FixedText           aVSpaceFT;
-    MetricField         aVSpaceMF;
+    FixedText   		aHSpaceFT;
+    MetricField 		aHSpaceMF;
+    FixedText   		aVSpaceFT;
+    MetricField 		aVSpaceMF;
 
-    RadioButton         aLandscapeRB;
-    RadioButton         aPortraitRB;
+    RadioButton			aLandscapeRB;
+    RadioButton			aPortraitRB;
     FixedLine            aOrientationFL;
 
-    PrtPrvWindow        aPreviewWin;
+    PrtPrvWindow 		aPreviewWin;
 
-    OKButton            aOkBtn;
-    CancelButton        aCancelBtn;
-    HelpButton          aHelpBtn;
+    OKButton	 		aOkBtn;
+    CancelButton 		aCancelBtn;
+    HelpButton 			aHelpBtn;
 
-    PushButton          aStandardPB;
+    PushButton 			aStandardPB;
 
-    SwPagePreView&      rPreView;
+    SwPagePreView&		rPreView;
     SwPagePreViewWin&   rParentWin;
     PrintSettingsStruct aSettings;
-/*  Size                aPageMaxSize;
-    Size                aPrtSize;
+/*	Size				aPageMaxSize;
+    Size				aPrtSize;
 
-    BOOL                bOrientation;
+    BOOL 				bOrientation;
 */
-    BOOL                bStandard;
+    BOOL 				bStandard;
 
-    virtual void        Apply();
-    void                FillControls(SwPagePreViewPrtData& rData);
+    virtual void 		Apply();
+    void				FillControls(SwPagePreViewPrtData& rData);
 
             DECL_LINK( ModifyHdl, Edit* );
             DECL_LINK( StandardHdl, PushButton* );
 
 public:
-    SwPreviewPrintOptionsDialog(SwPagePreViewWin& rParent, SwPagePreView&   rView);
+    SwPreviewPrintOptionsDialog(SwPagePreViewWin& rParent, SwPagePreView&	rView);
     ~SwPreviewPrintOptionsDialog();
 };
 
 /* -----------------19.08.98 13:35-------------------
  *
  * --------------------------------------------------*/
-SwPreviewPrintOptionsDialog::SwPreviewPrintOptionsDialog( SwPagePreViewWin& rParent, SwPagePreView& rView ) :
+SwPreviewPrintOptionsDialog::SwPreviewPrintOptionsDialog( SwPagePreViewWin& rParent, SwPagePreView&	rView ) :
     SvxStandardDialog( &rParent, SW_RES(DLG_PAGEPREVIEW_PRINTOPTIONS) ),
     aRowColFL(this,SW_RES(  FL_ROWCOL)),
-    aRowsFT(this,SW_RES(    FT_ROWS)),
-    aRowsNF(this,SW_RES(    NF_ROWS)),
-    aColsFT(this,SW_RES(    FT_COLS)),
-    aColsNF(this,SW_RES(    NF_COLS)),
+    aRowsFT(this,SW_RES(	FT_ROWS)),
+    aRowsNF(this,SW_RES(	NF_ROWS)),
+    aColsFT(this,SW_RES(	FT_COLS)),
+    aColsNF(this,SW_RES(	NF_COLS)),
     aMarginFL(this,SW_RES(  FL_MARGINS)),
-    aLSpaceFT(this,SW_RES(  FT_LMARGIN)),
-    aLSpaceMF(this,SW_RES(  MF_LMARGIN)),
-    aRSpaceFT(this,SW_RES(  FT_RMARGIN)),
-    aRSpaceMF(this,SW_RES(  MF_RMARGIN)),
-    aTSpaceFT(this,SW_RES(  FT_TMARGIN)),
-    aTSpaceMF(this,SW_RES(  MF_TMARGIN)),
-    aBSpaceFT(this,SW_RES(  FT_BMARGIN)),
-    aBSpaceMF(this,SW_RES(  MF_BMARGIN)),
+    aLSpaceFT(this,SW_RES(	FT_LMARGIN)),
+    aLSpaceMF(this,SW_RES(	MF_LMARGIN)),
+    aRSpaceFT(this,SW_RES(	FT_RMARGIN)),
+    aRSpaceMF(this,SW_RES(	MF_RMARGIN)),
+    aTSpaceFT(this,SW_RES(	FT_TMARGIN)),
+    aTSpaceMF(this,SW_RES(	MF_TMARGIN)),
+    aBSpaceFT(this,SW_RES(	FT_BMARGIN)),
+    aBSpaceMF(this,SW_RES(	MF_BMARGIN)),
     aDistanceFL(this,SW_RES(FL_DISTANCE)),
-    aHSpaceFT(this,SW_RES(  FT_HMARGIN)),
-    aHSpaceMF(this,SW_RES(  MF_HMARGIN)),
-    aVSpaceFT(this,SW_RES(  FT_VMARGIN)),
-    aVSpaceMF(this,SW_RES(  MF_VMARGIN)),
-    aLandscapeRB(this,SW_RES(   RB_LANDSCAPE)),
-    aPortraitRB(this,SW_RES(    RB_PORTRAIT)),
+    aHSpaceFT(this,SW_RES(	FT_HMARGIN)),
+    aHSpaceMF(this,SW_RES(	MF_HMARGIN)),
+    aVSpaceFT(this,SW_RES(	FT_VMARGIN)),
+    aVSpaceMF(this,SW_RES(	MF_VMARGIN)),
+    aLandscapeRB(this,SW_RES(	RB_LANDSCAPE)),
+    aPortraitRB(this,SW_RES(	RB_PORTRAIT)),
     aOrientationFL(this,SW_RES( FL_ORIENTATION)),
-    aPreviewWin(this,SW_RES(    WIN_PREVIEW), aSettings),
+    aPreviewWin(this,SW_RES(	WIN_PREVIEW), aSettings),
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),
     aHelpBtn(this,SW_RES(BT_HELP)),
@@ -451,7 +451,7 @@ SwPreviewPrintOptionsDialog::~SwPreviewPrintOptionsDialog()
 /* -----------------12.11.98 11:32-------------------
  *
  * --------------------------------------------------*/
-void    SwPreviewPrintOptionsDialog::FillControls(SwPagePreViewPrtData& rData)
+void	SwPreviewPrintOptionsDialog::FillControls(SwPagePreViewPrtData& rData)
 {
     aLSpaceMF.SetValue(aLSpaceMF.Normalize(rData.GetLeftSpace()  ), FUNIT_TWIP);
     aRSpaceMF.SetValue(aRSpaceMF.Normalize(rData.GetRightSpace() ), FUNIT_TWIP);
@@ -475,15 +475,15 @@ void    SwPreviewPrintOptionsDialog::FillControls(SwPagePreViewPrtData& rData)
     aLandscapeRB.SaveValue();
     aPortraitRB.SaveValue();
 
-    aSettings.nLeft     = rData.GetLeftSpace()  ;
+    aSettings.nLeft		= rData.GetLeftSpace()  ;
     aSettings.nRight    = rData.GetRightSpace() ;
     aSettings.nTop      = rData.GetTopSpace()   ;
     aSettings.nBottom   = rData.GetBottomSpace();
     aSettings.nHori     = rData.GetHorzSpace()  ;
     aSettings.nVert     = rData.GetVertSpace()  ;
-    aSettings.nRows     = rData.GetRow()        ;
+    aSettings.nRows	    = rData.GetRow()        ;
     aSettings.nCols     = rData.GetCol()        ;
-    aSettings.aPrvPrtSize = aSettings.aPrtSize  ;
+    aSettings.aPrvPrtSize = aSettings.aPrtSize	;
 }
 
 /* -----------------19.08.98 14:31-------------------
@@ -495,7 +495,7 @@ void SwPreviewPrintOptionsDialog::Apply()
     SwDoc* pDoc = rPreView.GetDocShell()->GetDoc();
     if(bStandard)
         pDoc->SetPreViewPrtData(0);
-    else if(    aLSpaceMF.GetSavedValue() != aLSpaceMF.GetText() ||
+    else if(	aLSpaceMF.GetSavedValue() != aLSpaceMF.GetText() ||
         aRSpaceMF.GetSavedValue() != aRSpaceMF.GetText() ||
         aTSpaceMF.GetSavedValue() != aTSpaceMF.GetText() ||
         aBSpaceMF.GetSavedValue() != aBSpaceMF.GetText() ||
@@ -563,7 +563,7 @@ IMPL_LINK( SwPreviewPrintOptionsDialog, ModifyHdl, Edit*, pEdit )
     else if(pEdit == &aVSpaceMF)
         aSettings.nVert     =  static_cast< long >(aVSpaceMF.Denormalize(aVSpaceMF.GetValue(FUNIT_TWIP)));
     else if(pEdit == &aRowsNF)
-        aSettings.nRows = (USHORT)aRowsNF.GetValue();
+        aSettings.nRows	= (USHORT)aRowsNF.GetValue();
     else if(pEdit == &aColsNF)
         aSettings.nCols = (USHORT)aColsNF.GetValue();
     else if(pEdit == (Edit*)&aLandscapeRB)
@@ -581,7 +581,7 @@ IMPL_LINK( SwPreviewPrintOptionsDialog, ModifyHdl, Edit*, pEdit )
     aSettings.aPrvPrtSize = Size(aSettings.aPrtSize.Width()  - aSettings.nRight - aSettings.nLeft,
                             aSettings.aPrtSize.Height() - aSettings.nTop - aSettings.nBottom);
     aSettings.aGridSize = Size(aSettings.aPrvPrtSize.Width() / aSettings.nCols,
-                                aSettings.aPrvPrtSize.Height() / aSettings.nRows    );
+                                aSettings.aPrvPrtSize.Height() / aSettings.nRows	);
     // was fehlt noch: Orientation auswerten, minimalrand ausrechnen, Beispiel fuettern
 
 
@@ -630,7 +630,7 @@ IMPL_LINK( SwPreviewPrintOptionsDialog, StandardHdl, PushButton*, EMPTYARG )
 /* -----------------20.08.98 15:28-------------------
  * Preview anzeigen
  * --------------------------------------------------*/
-void    PrtPrvWindow::Paint(const Rectangle&)
+void 	PrtPrvWindow::Paint(const Rectangle&)
 {
         Size aWinSize(GetOutputSizePixel());
         long nWidth = rSettings.aPrtSize.Width();
@@ -1034,7 +1034,7 @@ void  SwPagePreViewWin::KeyInput( const KeyEvent &rKEvt )
 }
 
 /******************************************************************************
- *  Beschreibung:
+ *	Beschreibung:
  ******************************************************************************/
 
 void SwPagePreViewWin::Command( const CommandEvent& rCEvt )
@@ -1121,7 +1121,7 @@ void SwPagePreViewWin::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 /******************************************************************************
- *  Beschreibung: Userprefs bzw Viewoptions setzen
+ *	Beschreibung: Userprefs bzw Viewoptions setzen
  ******************************************************************************/
 
 
@@ -1480,7 +1480,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
         case FN_START_OF_LINE:
         case FN_START_OF_DOCUMENT:
             aViewWin.SetSelectedPage( 1 );
-            eMvMode = SwPagePreViewWin::MV_DOC_STT; bRetVal = TRUE; goto MOVEPAGE;
+            eMvMode = SwPagePreViewWin::MV_DOC_STT;	bRetVal = TRUE;	goto MOVEPAGE;
         case FN_END_OF_LINE:
         case FN_END_OF_DOCUMENT:
             aViewWin.SetSelectedPage( mnPageCount );
@@ -1524,9 +1524,9 @@ MOVEPAGE:
             return;
         case FN_CLOSE_PAGEPREVIEW:
         case SID_PRINTPREVIEW:
-            //  print preview is now always in the same frame as the tab view
-            //  -> always switch this frame back to normal view
-            //  (ScTabViewShell ctor reads stored view data)
+            //	print preview is now always in the same frame as the tab view
+            //	-> always switch this frame back to normal view
+            //	(ScTabViewShell ctor reads stored view data)
             GetViewFrame()->GetDispatcher()->Execute( SID_VIEWSHELL0, 0, 0, SFX_CALLMODE_ASYNCHRON );
             break;
         case FN_INSERT_BREAK:
@@ -1564,7 +1564,7 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
     ASSERT(nWhich, leeres Set);
     SwPagePreviewLayout* pPagePrevwLay = GetViewShell()->PagePreviewLayout();
     //#106746# zoom has to be disabled if Accessibility support is switched on
-    // MT 2010/01, see #110498#
+    // MT 2010/01, see #110498# 
     BOOL bZoomEnabled = TRUE; // !Application::GetSettings().GetMiscSettings().GetEnableATToolSupport();
 
     while(nWhich)
@@ -1703,7 +1703,7 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
 
         case SID_PRINTDOC:
         case SID_PRINTDOCDIRECT:
-            GetSlotState( nWhich, SfxViewShell::GetInterface(), &rSet );
+            GetSlotState( nWhich, SfxViewShell::GetInterface(),	&rSet );
             break;
         }
         nWhich = aIter.NextWhich();
@@ -1748,7 +1748,7 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
 
     // die Felder aktualisieren
     // ACHTUNG: hochcasten auf die EditShell, um die SS zu nutzen.
-    //          In den Methoden wird auf die akt. Shell abgefragt!
+    //			In den Methoden wird auf die akt. Shell abgefragt!
     SwEditShell* pESh = (SwEditShell*)GetViewShell();
     BOOL bIsModified = pESh->IsModified();
 
@@ -1936,9 +1936,9 @@ int SwPagePreView::_CreateScrollbar( BOOL bHori )
     if( !bHori )
     {
 
-        pPageUpBtn      = new ImageButton(pMDI, SW_RES( BTN_PAGEUP ) );
+        pPageUpBtn		= new ImageButton(pMDI, SW_RES( BTN_PAGEUP ) );
         pPageUpBtn->SetHelpId(FN_PAGEUP);
-        pPageDownBtn    = new ImageButton(pMDI, SW_RES( BTN_PAGEDOWN ) );
+        pPageDownBtn	= new ImageButton(pMDI, SW_RES( BTN_PAGEDOWN ) );
         pPageDownBtn->SetHelpId(FN_PAGEDOWN);
         Link aLk( LINK( this, SwPagePreView, BtnPage ) );
         pPageUpBtn->SetClickHdl( aLk );
@@ -2031,7 +2031,7 @@ int SwPagePreView::ChgPage( int eMvMode, int bUpdateScrollbar )
 
 void SwPagePreView::CalcAndSetBorderPixel( SvBorder &rToFill, BOOL /*bInner*/ )
 {
-//  const long nAdd = bInner ? 0 : ScrollBar::GetWindowOverlapPixel();
+//	const long nAdd = bInner ? 0 : ScrollBar::GetWindowOverlapPixel();
     const StyleSettings &rSet = aViewWin.GetSettings().GetStyleSettings();
     const long nTmp = rSet.GetScrollBarSize();// - nAdd;
     if ( pVScrollbar->IsVisible( FALSE ))
@@ -2084,7 +2084,7 @@ void  SwPagePreView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     //Aufruf der DocSzChgd-Methode der Scrollbars ist noetig, da vom maximalen
     //Scrollrange immer die halbe Hoehe der VisArea abgezogen wird.
     if ( pVScrollbar &&
-             aTmpSize.Width() > 0 && aTmpSize.Height() > 0 )
+             aTmpSize.Width() > 0 && aTmpSize.Height() > 0 ) 
         {
             ScrollDocSzChg();
         }
@@ -2169,10 +2169,10 @@ IMPL_LINK( SwPagePreView, ScrollHdl, SwScrollbar *, pScrollbar )
         aPos.Y() = pScrollbar->OutputToScreenPixel(pScrollbar->GetPointerPosPixel()).Y();
         Size aSize = pScrollbar->GetSizePixel();
         Rectangle aRect;
-        aRect.Left()    = aPos.X() -8;
-        aRect.Right()   = aRect.Left();
-        aRect.Top()     = aPos.Y();
-        aRect.Bottom()  = aRect.Top();
+        aRect.Left() 	= aPos.X() -8;
+        aRect.Right() 	= aRect.Left();
+        aRect.Top()		= aPos.Y();
+        aRect.Bottom()	= aRect.Top();
 
         Help::ShowQuickHelp(pScrollbar, aRect, sStateStr,
                 QUICKHELP_RIGHT|QUICKHELP_VCENTER);
@@ -2425,7 +2425,7 @@ USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags, bool )
     if ( pOld && pOld->IsPrinting() )
         return SFX_PRINTERROR_BUSY;
 
-    SwEditShell &rESh = (SwEditShell&)rSh;  //Buh...
+    SwEditShell &rESh = (SwEditShell&)rSh;	//Buh...
     if( ( SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP ) & nDiffFlags )
     {
         rSh.getIDocumentDeviceAccess()->setPrinter( pNew, true, true );
@@ -2646,7 +2646,7 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 uno::Reference< ::com::sun::star::accessibility::XAccessible >
     SwPagePreViewWin::CreateAccessible()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());   // this should have
+    vos::OGuard aGuard(Application::GetSolarMutex());	// this should have
                                                         // happend already!!!
 
     DBG_ASSERT( GetViewShell() != NULL, "We need a view shell" );

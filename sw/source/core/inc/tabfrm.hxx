@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,19 +47,19 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 
     SwTable* pTable;
 
-    BOOL bComplete          :1; //Eintrage als Repaint ohne das CompletePaint
+    BOOL bComplete	  		:1;	//Eintrage als Repaint ohne das CompletePaint
                                 //der Basisklasse gesetzt werden muss. Damit
                                 //sollen unertraegliche Tabellen-Repaints
                                 //vermieden werden.
-    BOOL bCalcLowers        :1; //Im MakeAll auf jedenfall auch fuer Stabilitaet
+    BOOL bCalcLowers  		:1;	//Im MakeAll auf jedenfall auch fuer Stabilitaet
                                 //des Inhaltes sorgen.
-    BOOL bLowersFormatted   :1;//Kommunikation zwischen MakeAll und Layact
-    BOOL bLockBackMove      :1; //BackMove-Test hat der Master erledigt.
-    BOOL bResizeHTMLTable   :1; //Resize des HTMLTableLayout rufen im MakeAll
+    BOOL bLowersFormatted	:1;//Kommunikation zwischen MakeAll und Layact
+    BOOL bLockBackMove		:1;	//BackMove-Test hat der Master erledigt.
+    BOOL bResizeHTMLTable	:1;	//Resize des HTMLTableLayout rufen im MakeAll
                                 //Zur Optimierung, damit dies nicht im
                                 //CntntFrm::Grow gerufen werden muss, denn dann
                                 //wird es ggf. fuer jede Zelle gerufen #47483#
-    BOOL bONECalcLowers     :1; //Primaer fuer die StarONE-SS. Beim MakeAll werden
+    BOOL bONECalcLowers		:1;	//Primaer fuer die StarONE-SS. Beim MakeAll werden
                                 //die Cntnts auf jedenfall per Calc() formatiert.
                                 //es finden keine zusaetzlichen Invalidierungen
                                 //statt und dieser Weg kann auch kaum garantien
@@ -113,21 +113,21 @@ protected:
         //Aendert nur die Framesize, nicht die PrtArea-SSize
     virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 public:
-    SwTabFrm( SwTable & );  //Immer nach dem erzeugen _und_ pasten das
+    SwTabFrm( SwTable & );	//Immer nach dem erzeugen _und_ pasten das
                             //Regist Flys rufen!
-    SwTabFrm( SwTabFrm & ); //_Nur_ zum erzeugen von Follows
+    SwTabFrm( SwTabFrm & );	//_Nur_ zum erzeugen von Follows
     ~SwTabFrm();
 
-    void JoinAndDelFollows();   //Fuer DelFrms des TableNodes!
+    void JoinAndDelFollows();	//Fuer DelFrms des TableNodes!
 
     //Ruft das RegistFlys der Zeilen.
     void RegistFlys();
 
     inline const SwTabFrm *GetFollow() const;
-    inline       SwTabFrm *GetFollow();
+    inline		 SwTabFrm *GetFollow();
     SwTabFrm* FindMaster( bool bFirstMaster = false ) const;
 
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual	void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual BOOL GetInfo( SfxPoolItem &rHnt ) const;
     virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
     virtual void  CheckDirection( BOOL bVert );
@@ -142,18 +142,18 @@ public:
     inline const SwCntntFrm *FindLastCntnt() const;
 
     const SwTable *GetTable() const { return pTable; }
-          SwTable *GetTable()       { return pTable; }
+          SwTable *GetTable() 		{ return pTable; }
 
     BOOL IsComplete()  { return bComplete; }
     void SetComplete() { bComplete = TRUE; }
     void ResetComplete() { bComplete = FALSE; }
 
-    BOOL IsLowersFormatted() const      { return bLowersFormatted; }
-    void SetLowersFormatted( BOOL b )   { bLowersFormatted = b;    }
+    BOOL IsLowersFormatted() const 		{ return bLowersFormatted; }
+    void SetLowersFormatted( BOOL b )	{ bLowersFormatted = b;    }
 
-    void SetCalcLowers()        { bCalcLowers = TRUE;      } //Sparsam einsetzen!
+    void SetCalcLowers()		{ bCalcLowers = TRUE; 	   } //Sparsam einsetzen!
     void SetResizeHTMLTable()   { bResizeHTMLTable = TRUE; } //dito
-    void SetONECalcLowers()     { bONECalcLowers = TRUE;   }
+    void SetONECalcLowers()		{ bONECalcLowers = TRUE;   }
 
     //
     // Start: New stuff for breaking table rows
@@ -230,4 +230,4 @@ inline SwTabFrm *SwTabFrm::GetFollow()
     return (SwTabFrm*)SwFlowFrm::GetFollow();
 }
 
-#endif  //_TABFRM_HXX
+#endif	//_TABFRM_HXX

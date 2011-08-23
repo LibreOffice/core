@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ void SwVbaWrapFormat::makeWrap() throw (uno::RuntimeException)
             m_xPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SurroundContour") )) >>= bContour;
             if( bContour )
                 nType = word::WdWrapType::wdWrapTight;
-            else
+            else    
                 nType = word::WdWrapType::wdWrapSquare;
             break;
         }
@@ -220,14 +220,14 @@ void SAL_CALL SwVbaWrapFormat::setDistanceRight( float _distanceright ) throw (u
     setDistance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightMargin") ), _distanceright );
 }
 
-rtl::OUString&
+rtl::OUString& 
 SwVbaWrapFormat::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaWrapFormat") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 SwVbaWrapFormat::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

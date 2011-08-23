@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
-#include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx>	// helper for implementations
 
 
 namespace com { namespace sun { namespace star {
@@ -54,7 +54,7 @@ namespace com { namespace sun { namespace star {
 // dictionaries of the dictionary list, or properties) were made.
 //
 
-class SwLinguServiceEventListener :
+class SwLinguServiceEventListener : 
     public cppu::WeakImplHelper2
     <
         com::sun::star::linguistic2::XLinguServiceEventListener,
@@ -63,10 +63,10 @@ class SwLinguServiceEventListener :
 {
     com::sun::star::uno::Reference<
         com::sun::star::frame::XDesktop >                       xDesktop;
-    com::sun::star::uno::Reference<
+    com::sun::star::uno::Reference< 
         com::sun::star::linguistic2::XLinguServiceManager >     xLngSvcMgr;
-    com::sun::star::uno::Reference<
-        com::sun::star::linguistic2::XProofreadingIterator >    xGCIterator;
+    com::sun::star::uno::Reference< 
+        com::sun::star::linguistic2::XProofreadingIterator > 	xGCIterator;
 
     // disallow use of copy-constructor and assignment operator
     SwLinguServiceEventListener(const SwLinguServiceEventListener &);

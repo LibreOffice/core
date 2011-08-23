@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 #ifndef _CMDID_H
-#include <cmdid.h>          // Funktion-Ids
+#include <cmdid.h>		  	// Funktion-Ids
 #endif
 
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -67,8 +67,8 @@
 #include <IDocumentDeviceAccess.hxx>
 #endif
 #include <uitool.hxx>
-#include <initui.hxx>                   // fuer ::GetGlossaries()
-#include <fldbas.hxx>      //fuer UpdateFields
+#include <initui.hxx>					// fuer ::GetGlossaries()
+#include <fldbas.hxx>	   //fuer UpdateFields
 #ifndef _WVIEW_HXX
 #include <wview.hxx>
 #endif
@@ -90,7 +90,7 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
-#include <globals.h>        // globale Konstanten z.B.
+#include <globals.h>		// globale Konstanten z.B.
 #include <svl/slstitm.hxx>
 #include "swabstdlg.hxx"
 #include <swwrtshitem.hxx>
@@ -104,7 +104,7 @@ using namespace ::com::sun::star::lang;
  *
  * --------------------------------------------------*/
 
-SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
+SfxItemSet*	 SwModule::CreateItemSet( USHORT nId )
 {
     BOOL bTextDialog = (nId == SID_SW_EDITOPTIONS) ? TRUE : FALSE;
 
@@ -128,28 +128,29 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         }
 
     /********************************************************************/
-    /*                                                                  */
-    /* Optionen/Bearbeiten                                              */
-    /*                                                                  */
+    /*																	*/
+    /* Optionen/Bearbeiten  											*/
+    /*																	*/
     /********************************************************************/
-    SfxItemSet* pRet = new SfxItemSet (GetPool(),   FN_PARAM_DOCDISP,       FN_PARAM_ELEM,
-                                    SID_PRINTPREVIEW,       SID_PRINTPREVIEW,
-                                    SID_ATTR_GRID_OPTIONS,  SID_ATTR_GRID_OPTIONS,
-                                    FN_PARAM_PRINTER,       FN_PARAM_STDFONTS,
-                                    FN_PARAM_WRTSHELL,      FN_PARAM_WRTSHELL,
-                                    FN_PARAM_ADDPRINTER,    FN_PARAM_ADDPRINTER,
-                                    SID_ATTR_METRIC,        SID_ATTR_METRIC,
-                                    SID_ATTR_DEFTABSTOP,    SID_ATTR_DEFTABSTOP,
-                                    RES_BACKGROUND,         RES_BACKGROUND,
-                                    SID_HTML_MODE,          SID_HTML_MODE,
-                                    FN_PARAM_SHADOWCURSOR,  FN_PARAM_SHADOWCURSOR,
+    SfxItemSet*	pRet = new SfxItemSet (GetPool(),	FN_PARAM_DOCDISP,		FN_PARAM_ELEM,
+                                    SID_PRINTPREVIEW, 		SID_PRINTPREVIEW,
+                                    SID_ATTR_GRID_OPTIONS, 	SID_ATTR_GRID_OPTIONS,
+                                    FN_PARAM_PRINTER, 		FN_PARAM_STDFONTS,
+                                    FN_PARAM_WRTSHELL,		FN_PARAM_WRTSHELL,
+                                    FN_PARAM_ADDPRINTER, 	FN_PARAM_ADDPRINTER,
+                                    SID_ATTR_METRIC,		SID_ATTR_METRIC,
+                                    SID_ATTR_APPLYCHARUNIT, SID_ATTR_APPLYCHARUNIT,
+                                    SID_ATTR_DEFTABSTOP, 	SID_ATTR_DEFTABSTOP,
+                                    RES_BACKGROUND,			RES_BACKGROUND,
+                                    SID_HTML_MODE,			SID_HTML_MODE,
+                                    FN_PARAM_SHADOWCURSOR,	FN_PARAM_SHADOWCURSOR,
                                     FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED,
                                     FN_HSCROLL_METRIC,      FN_VSCROLL_METRIC,
                                     SID_ATTR_LANGUAGE,      SID_ATTR_LANGUAGE,
                                     SID_ATTR_CHAR_CJK_LANGUAGE,   SID_ATTR_CHAR_CJK_LANGUAGE,
                                     SID_ATTR_CHAR_CTL_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
 #ifdef DBG_UTIL
-                                    FN_PARAM_SWTEST,        FN_PARAM_SWTEST,
+                                    FN_PARAM_SWTEST,		FN_PARAM_SWTEST,
 #endif
                                     0);
 
@@ -181,8 +182,8 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
     }
     else
     {
-/*      Der Drucker wird jetzt von der TabPage erzeugt und auch geloescht
- *      SfxItemSet* pSet = new SfxItemSet( SFX_APP()->GetPool(),
+/* 		Der Drucker wird jetzt von der TabPage erzeugt und auch geloescht
+ * 		SfxItemSet* pSet = new SfxItemSet( SFX_APP()->GetPool(),
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0 );
@@ -229,6 +230,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         pAppView->GetVLinealMetric(eUnit);
     pRet->Put(SfxUInt16Item( FN_VSCROLL_METRIC, static_cast< UINT16 >(eUnit) ));
     pRet->Put(SfxUInt16Item( SID_ATTR_METRIC, static_cast< UINT16 >(pPref->GetMetric()) ));
+    pRet->Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, pPref->IsApplyCharUnit()));
     if(bTextDialog)
     {
         if(pAppView)
@@ -304,7 +306,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
     --------------------------------------------------*/
     if(!bTextDialog)
         pRet->Put(SfxUInt16Item(SID_HTML_MODE, HTMLMODE_ON));
-//  delete pPrt;
+//	delete pPrt;
     return pRet;
 }
 /* -----------------12.02.99 12:28-------------------
@@ -341,7 +343,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 
         if(!aViewOpt.IsViewMetaChars())
         {
-            if(     (!aViewOpt.IsTab( TRUE ) &&  pDocDispItem->bTab) ||
+            if( 	(!aViewOpt.IsTab( TRUE ) &&  pDocDispItem->bTab) ||
                     (!aViewOpt.IsBlank( TRUE ) && pDocDispItem->bSpace) ||
                     (!aViewOpt.IsParagraph( TRUE ) && pDocDispItem->bParagraphEnd) ||
                     (!aViewOpt.IsLineBreak( TRUE ) && pDocDispItem->bManualBreak) )
@@ -379,6 +381,15 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
         const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
         ::SetDfltMetric((FieldUnit)pMetricItem->GetValue(), !bTextDialog);
     }
+
+    if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_APPLYCHARUNIT,
+                                                    FALSE, &pItem ) )
+    {
+        SFX_APP()->SetOptions(rSet);
+        const SfxBoolItem* pCharItem = (const SfxBoolItem*)pItem;
+        ::SetApplyCharUnit(pCharItem->GetValue(), !bTextDialog);
+    }
+
     if( SFX_ITEM_SET == rSet.GetItemState(FN_HSCROLL_METRIC,
                                                     FALSE, &pItem ) )
     {
@@ -455,7 +466,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     }
 
     //--------------------------------------------------------------------------
-    //      Writer Drucker Zusatzeinstellungen auswerten
+    //	 	Writer Drucker Zusatzeinstellungen auswerten
     //----------------------------------------------------------------------------
 
     if( SFX_ITEM_SET == rSet.GetItemState(

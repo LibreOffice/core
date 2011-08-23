@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,14 +31,14 @@
 
 #include <pam.hxx>              // fuer SwPam
 #include <doc.hxx>
-#include <ndtxt.hxx>            // class SwTxtNode
-#include <fltini.hxx>           // Ww1Reader
+#include <ndtxt.hxx>			// class SwTxtNode
+#include <fltini.hxx>			// Ww1Reader
 #include <w1par.hxx>
 #ifndef _SWFLTOPT_HXX
 #include <swfltopt.hxx>
 #endif
-#include <mdiexp.hxx>           // StatLine...()
-#include <swerror.h>            // ERR_WW1_...
+#include <mdiexp.hxx>			// StatLine...()
+#include <swerror.h>			// ERR_WW1_...
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
 #endif
@@ -49,7 +49,7 @@
 
 static ULONG WW1_Read_FieldIniFlags()
 {
-//  USHORT i;
+//	USHORT i;
     static const sal_Char* aNames[ 1 ] = { "WinWord/WW1F" };
     sal_uInt32 aVal[ 1 ];
     SwFilterOptions aOpt( 1, aNames, aVal );
@@ -79,7 +79,7 @@ ULONG WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, const St
     ASSERT(pStrm!=NULL, "W1-Read ohne Stream");
     if (pStrm != NULL)
     {
-        BOOL bNew = !bInsertMode;           // Neues Doc ( kein Einfuegen )
+        BOOL bNew = !bInsertMode;			// Neues Doc ( kein Einfuegen )
 
         // erstmal eine shell konstruieren: die ist schnittstelle
         // zum writer-dokument
@@ -112,7 +112,7 @@ ULONG WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, const St
                         // das nicht unterstuetzt. Stattdessen temporaer
                         // nur eine Warnung, bis die entsprechende
                         // Meldung und Behandlung weiter oben eingebaut ist.
-//                      nRet = WARN_WW6_FASTSAVE_ERR;
+//						nRet = WARN_WW6_FASTSAVE_ERR;
                         // Zum Einchecken mit neuem String:
                         nRet = ERR_WW6_FASTSAVE_ERR;
                 }

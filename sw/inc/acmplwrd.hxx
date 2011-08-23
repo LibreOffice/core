@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,12 +57,12 @@ public:
 
     const String& operator[]( USHORT n ) const { return *aWordLst[ n ]; }
 
-    BOOL IsLockWordLstLocked() const        { return bLockWordLst; }
+    BOOL IsLockWordLstLocked() const 		{ return bLockWordLst; }
     void SetLockWordLstLocked( BOOL bFlag ) { bLockWordLst = bFlag; }
 
     void SetMaxCount( USHORT n );
 
-    USHORT GetMinWordLen() const                { return nMinWrdLen; }
+    USHORT GetMinWordLen() const 				{ return nMinWrdLen; }
     void SetMinWordLen( USHORT n );
 
     const SvStringsISortDtor& GetWordList() const { return aWordLst; }

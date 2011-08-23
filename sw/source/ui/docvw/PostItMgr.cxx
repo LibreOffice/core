@@ -91,12 +91,12 @@
 // distance between Anchor Y and initial note position
 #define POSTIT_INITIAL_ANCHOR_DISTANCE      20
 //distance between two postits
-#define POSTIT_SPACE_BETWEEN                8
-#define POSTIT_MINIMUMSIZE_WITH_META        60
-#define POSTIT_SCROLL_SIDEBAR_HEIGHT        20
+#define POSTIT_SPACE_BETWEEN				8
+#define POSTIT_MINIMUMSIZE_WITH_META		60
+#define POSTIT_SCROLL_SIDEBAR_HEIGHT		20
 
 // if we layout more often we stop, this should never happen
-#define MAX_LOOP_COUNT                      50
+#define MAX_LOOP_COUNT						50
 
 using namespace sw::sidebarwindows;
 
@@ -277,7 +277,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if ( rHint.IsA(TYPE(SfxSimpleHint) ) )
+    else if ( rHint.IsA(TYPE(SfxSimpleHint)	) )
     {
         sal_uInt32 nId = ((SfxSimpleHint&)rHint).GetId();
         switch ( nId )
@@ -630,9 +630,9 @@ void SwPostItMgr::LayoutPostIts()
                 if (mPages[n]->mList->size()>0)
                 {
                     std::list<SwSidebarWin*>    aVisiblePostItList;
-                    unsigned long           lNeededHeight = 0;
-                    long                    mlPageBorder = 0;
-                    long                    mlPageEnd = 0;
+                    unsigned long			lNeededHeight = 0;
+                    long					mlPageBorder = 0;
+                    long					mlPageEnd = 0;
 
                     for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
                     {
@@ -883,7 +883,7 @@ void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
         if ((*i)->bShow)
         {
             bool bBottom  = mpEditWin->PixelToLogic(Point(0,pPostIt->VirtualPos().Y()+pPostIt->VirtualSize().Height())).Y() <= (mPages[aPage-1]->mPageRect.Bottom()-aSidebarheight);
-            bool bTop = mpEditWin->PixelToLogic(Point(0,pPostIt->VirtualPos().Y())).Y() >=   (mPages[aPage-1]->mPageRect.Top()+aSidebarheight);
+            bool bTop = mpEditWin->PixelToLogic(Point(0,pPostIt->VirtualPos().Y())).Y() >=	 (mPages[aPage-1]->mPageRect.Top()+aSidebarheight);
             if ( bBottom && bTop)
             {
                     pPostIt->ShowNote();
@@ -999,19 +999,19 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
     //  - if we have space left, we always move the current one up,
     //    otherwise the next one down
     //  - first all notes are resized
-    //  - then the real layout starts
+    //	- then the real layout starts
     /*************************************************************/
 
     //rBorder is the page rect
-    const Rectangle rBorder         = mpEditWin->LogicToPixel( aBorder);
-    long            lTopBorder      = rBorder.Top() + 5;
-    long            lBottomBorder   = rBorder.Bottom() - 5;
-    const long      lVisibleHeight  = lBottomBorder - lTopBorder; //rBorder.GetHeight() ;
-    long            lSpaceUsed      = 0;
-    long            lTranslatePos   = 0;
-    int             loop            = 0;
-    bool            bDone           = false;
-    bool            bScrollbars     = false;
+    const Rectangle	rBorder			= mpEditWin->LogicToPixel( aBorder);
+    long			lTopBorder		= rBorder.Top() + 5;
+    long			lBottomBorder	= rBorder.Bottom() - 5;
+    const long		lVisibleHeight	= lBottomBorder - lTopBorder; //rBorder.GetHeight() ;
+    long			lSpaceUsed		= 0;
+    long			lTranslatePos	= 0;
+    int				loop			= 0;
+    bool			bDone			= false;
+    bool			bScrollbars		= false;
 
     // do all neccessary resizings
     if (lVisibleHeight < lNeededHeight)
@@ -1158,7 +1158,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
         {
             (*i)->TranslateTopPosition(lTranslatePos+GetSpaceBetween());
         }
-        lTranslatePos = lBottomBorder - ((*i)->VirtualPos().Y()+ (*i)->VirtualSize().Height());
+        lTranslatePos =	lBottomBorder - ((*i)->VirtualPos().Y()+ (*i)->VirtualSize().Height());
         if (lTranslatePos<0)
         {
             (*i)->TranslateTopPosition(lTranslatePos);
@@ -1330,7 +1330,7 @@ void SwPostItMgr::Hide( const String& rAuthor )
     {
         if ( (*i)->pPostIt && ((*i)->pPostIt->GetAuthor() == rAuthor) )
         {
-            (*i)->bShow  = false;
+            (*i)->bShow	 = false;
             (*i)->pPostIt->HideNote();
         }
     }
@@ -1647,13 +1647,13 @@ void SwPostItMgr::CorrectPositions()
 
     // yeah, I know,    if this is a left page it could be wrong, but finding the page and the note is probably not even faster than just doing it
     // --> OD 2010-06-03 #i111964# - check, if anchor overlay object exists.
-    const long aAnchorX = pFirstPostIt->Anchor()
+    const long aAnchorX = pFirstPostIt->Anchor() 
                           ? mpEditWin->LogicToPixel( Point((long)(pFirstPostIt->Anchor()->GetSixthPosition().getX()),0)).X()
                           : 0;
-    const long aAnchorY = pFirstPostIt->Anchor()
+    const long aAnchorY = pFirstPostIt->Anchor() 
                           ? mpEditWin->LogicToPixel( Point(0,(long)(pFirstPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1
                           : 0;
-    // <--
+    // <-- 
     if (Point(aAnchorX,aAnchorY) != pFirstPostIt->GetPosPixel())
     {
         long aAnchorPosX = 0;
@@ -1664,7 +1664,7 @@ void SwPostItMgr::CorrectPositions()
             {
                 // --> OD 2010-06-03 #i111964# - check, if anchor overlay object exists.
                 if ( (*i)->bShow && (*i)->pPostIt && (*i)->pPostIt->Anchor() )
-                // <--
+                // <--                                    
                 {
                     aAnchorPosX = mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT
                         ? mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Anchor()->GetSeventhPosition().getX()),0)).X()
@@ -1716,9 +1716,9 @@ Color SwPostItMgr::GetColorDark(sal_uInt16 aAuthorIndex)
     if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         static const Color aArrayNormal[] = {
-            COL_AUTHOR1_NORMAL,     COL_AUTHOR2_NORMAL,     COL_AUTHOR3_NORMAL,
-            COL_AUTHOR4_NORMAL,     COL_AUTHOR5_NORMAL,     COL_AUTHOR6_NORMAL,
-            COL_AUTHOR7_NORMAL,     COL_AUTHOR8_NORMAL,     COL_AUTHOR9_NORMAL };
+            COL_AUTHOR1_NORMAL,		COL_AUTHOR2_NORMAL,		COL_AUTHOR3_NORMAL,
+            COL_AUTHOR4_NORMAL,		COL_AUTHOR5_NORMAL,		COL_AUTHOR6_NORMAL,
+            COL_AUTHOR7_NORMAL,		COL_AUTHOR8_NORMAL,		COL_AUTHOR9_NORMAL };
 
         return Color( aArrayNormal[ aAuthorIndex % (sizeof( aArrayNormal )/ sizeof( aArrayNormal[0] ))]);
     }
@@ -1731,9 +1731,9 @@ Color SwPostItMgr::GetColorLight(sal_uInt16 aAuthorIndex)
     if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         static const Color aArrayLight[] = {
-            COL_AUTHOR1_LIGHT,      COL_AUTHOR2_LIGHT,      COL_AUTHOR3_LIGHT,
-            COL_AUTHOR4_LIGHT,      COL_AUTHOR5_LIGHT,      COL_AUTHOR6_LIGHT,
-            COL_AUTHOR7_LIGHT,      COL_AUTHOR8_LIGHT,      COL_AUTHOR9_LIGHT };
+            COL_AUTHOR1_LIGHT,		COL_AUTHOR2_LIGHT,		COL_AUTHOR3_LIGHT,
+            COL_AUTHOR4_LIGHT,		COL_AUTHOR5_LIGHT,		COL_AUTHOR6_LIGHT,
+            COL_AUTHOR7_LIGHT,		COL_AUTHOR8_LIGHT,		COL_AUTHOR9_LIGHT };
 
         return Color( aArrayLight[ aAuthorIndex % (sizeof( aArrayLight )/ sizeof( aArrayLight[0] ))]);
     }
@@ -1746,9 +1746,9 @@ Color SwPostItMgr::GetColorAnchor(sal_uInt16 aAuthorIndex)
     if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         static const Color aArrayAnchor[] = {
-            COL_AUTHOR1_DARK,       COL_AUTHOR2_DARK,       COL_AUTHOR3_DARK,
-            COL_AUTHOR4_DARK,       COL_AUTHOR5_DARK,       COL_AUTHOR6_DARK,
-            COL_AUTHOR7_DARK,       COL_AUTHOR8_DARK,       COL_AUTHOR9_DARK };
+            COL_AUTHOR1_DARK,		COL_AUTHOR2_DARK,		COL_AUTHOR3_DARK,
+            COL_AUTHOR4_DARK,		COL_AUTHOR5_DARK,		COL_AUTHOR6_DARK,
+            COL_AUTHOR7_DARK,		COL_AUTHOR8_DARK,		COL_AUTHOR9_DARK };
 
         return Color( aArrayAnchor[  aAuthorIndex % (sizeof( aArrayAnchor )  / sizeof( aArrayAnchor[0] ))]);
     }

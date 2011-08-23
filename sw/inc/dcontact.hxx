@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 #ifndef _DCONTACT_HXX
-#define _DCONTACT_HXX
+#define	_DCONTACT_HXX
 
 #include <svx/svdobj.hxx>
 // OD 14.05.2003 #108784#
@@ -66,7 +66,7 @@ class SwIndex;
 //Implementierung in dcontact.cxx
 SW_DLLPUBLIC SwFrmFmt *FindFrmFmt( SdrObject *pObj );
 inline const SwFrmFmt *FindFrmFmt( const SdrObject *pObj )
-{   return ::FindFrmFmt( (SdrObject*)pObj ); }
+{	return ::FindFrmFmt( (SdrObject*)pObj ); }
 sal_Bool HasWrap( const SdrObject* pObj );
 
 void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor );
@@ -143,8 +143,8 @@ public:
     virtual SdrObject *GetMaster() = 0;
     virtual void SetMaster( SdrObject* _pNewMaster ) = 0;
 
-          SwFrmFmt  *GetFmt(){ return (SwFrmFmt*)GetRegisteredIn(); }
-    const SwFrmFmt  *GetFmt() const
+          SwFrmFmt	*GetFmt(){ return (SwFrmFmt*)GetRegisteredIn(); }
+    const SwFrmFmt	*GetFmt() const
         { return (const SwFrmFmt*)GetRegisteredIn(); }
 
     // OD 05.09.2003 #112039# - accessor for member <mbInDTOR>
@@ -301,7 +301,7 @@ class SwDrawVirtObj : public SdrVirtObj
         SwDrawContact&  mrDrawContact;
 
         using SdrVirtObj::GetPlusHdl;
-
+    
    protected:
         // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
         // not used but something own (top left of new SnapRect minus top left

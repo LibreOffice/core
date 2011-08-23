@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ extern SwNodeFnTab aRTFNodeFnTab;
 
 // the default text encoding for the export, if it doesn't fit unicode will
 // be used
-#define DEF_ENCODING        RTL_TEXTENCODING_ASCII_US
+#define DEF_ENCODING		RTL_TEXTENCODING_ASCII_US
 
 
 class RTF_WrtRedlineAuthor : public sw::util::WrtRedlineAuthor
@@ -72,15 +72,15 @@ class SwRTFWriter : public Writer
 
     SvPtrarr* pFontRemoveLst;
     RTFColorTbl* pColTbl;
-    SwPosFlyFrms* pFlyPos;          // Pointer auf die aktuelle "FlyFrmTabelle"
+    SwPosFlyFrms* pFlyPos;			// Pointer auf die aktuelle "FlyFrmTabelle"
     RTFEndPosLst* pCurEndPosLst;
-    const SfxItemSet* pAttrSet;     // akt. Format/Collection vom Node
+    const SfxItemSet* pAttrSet;		// akt. Format/Collection vom Node
                                     // fuer den Zugriff auf einige Attribute
                                     // z.B. Font-Size, LR-Space,..
-    SwNumRuleTbl* pNumRuleTbl;      // list of all exported numrules
+    SwNumRuleTbl* pNumRuleTbl;		// list of all exported numrules
     RTF_WrtRedlineAuthor *pRedlAuthors;
 
-    USHORT nAktFlyPos;              // Index auf das naechste "FlyFrmFmt"
+    USHORT nAktFlyPos;				// Index auf das naechste "FlyFrmFmt"
     void OutRTFColorTab();
     void OutRTFFontTab();
     const rtl::OUString XlateFmtName( const rtl::OUString &rName, SwGetPoolIdFromName eFlags );
@@ -106,44 +106,44 @@ public:
     USHORT nCurRedline;
 
 
-    const SwFlyFrmFmt* pFlyFmt; // liegt der Node in einem FlyFrame,
+    const SwFlyFrmFmt* pFlyFmt;	// liegt der Node in einem FlyFrame,
                                         // ist das Format gesetzt, sonst 0
-    const SwPageDesc* pAktPageDesc;     // aktuell gesetzter PageDesc.
-    sal_Int32 nBkmkTabPos;              // akt. Position in der Bookmark-Tabelle
-    USHORT nCurScript;                  // actual scripttype
+    const SwPageDesc* pAktPageDesc;		// aktuell gesetzter PageDesc.
+    sal_Int32 nBkmkTabPos;				// akt. Position in der Bookmark-Tabelle
+    USHORT nCurScript;				    // actual scripttype
     rtl_TextEncoding eDefaultEncoding;
     rtl_TextEncoding eCurrentEncoding;
 
 #if defined(UNX)
-    static const sal_Char sNewLine;                 // nur \012 oder \015
+    static const sal_Char sNewLine;					// nur \012 oder \015
 #else
-    static const sal_Char __FAR_DATA sNewLine[];    // \015\012
+    static const sal_Char __FAR_DATA sNewLine[];	// \015\012
 #endif
 
 
-    BOOL bFirstLine : 1;            // wird die 1. Zeile ausgegeben ?
-    BOOL bOutFmtAttr : 1;           // TRUE: beim Schreiben eines Formates
+    BOOL bFirstLine : 1;			// wird die 1. Zeile ausgegeben ?
+    BOOL bOutFmtAttr : 1;			// TRUE: beim Schreiben eines Formates
                                     // existierte mindestens ein Attribut
-    BOOL bRTFFlySyntax : 1;         // gebe nur original RTFSyntax aus
+    BOOL bRTFFlySyntax : 1;			// gebe nur original RTFSyntax aus
                                     // (nur fuer die fliegenden Rahmen)
-    BOOL bOutPageDesc: 1;           // gebe einen PageDescriptor aus
-    BOOL bOutPageDescTbl: 1;        // gebe die PageDescriptor-Tabelle aus
-    BOOL bOutTable : 1;             // gebe eine Tabelle aus
-    BOOL bTxtAttr : 1;              // werden TextAttribute ausgegeben ?
-    BOOL bWriteHelpFmt : 1;         // schreibe Win-RTF-HelpFileFmt
-    BOOL bOutStyleTab : 1;          // gebe die StyleSheet-Tabelle aus
-    BOOL bOutPageAttr : 1;          // PageDescAttribut ausgeben?
-    BOOL bAutoAttrSet : 1;          // TRUE:  pAttrSet ist harte Attributierung
+    BOOL bOutPageDesc: 1;			// gebe einen PageDescriptor aus
+    BOOL bOutPageDescTbl: 1; 		// gebe die PageDescriptor-Tabelle aus
+    BOOL bOutTable : 1;				// gebe eine Tabelle aus
+    BOOL bTxtAttr : 1;				// werden TextAttribute ausgegeben ?
+    BOOL bWriteHelpFmt : 1;			// schreibe Win-RTF-HelpFileFmt
+    BOOL bOutStyleTab : 1;			// gebe die StyleSheet-Tabelle aus
+    BOOL bOutPageAttr : 1;			// PageDescAttribut ausgeben?
+    BOOL bAutoAttrSet : 1;			// TRUE:  pAttrSet ist harte Attributierung
                                     // FALSE: pAttrSet ist vom Format/Collection
-    BOOL bOutOutlineOnly : 1;       // TRUE: nur Gliederungs-Absaetze schreiben
-    BOOL bOutListNumTxt : 1;        // TRUE: der ListNumText wird ausgegeben
-    BOOL bOutLeftHeadFoot : 1;      // gebe vom PageDesc. den linkten
+    BOOL bOutOutlineOnly : 1;		// TRUE: nur Gliederungs-Absaetze schreiben
+    BOOL bOutListNumTxt : 1;		// TRUE: der ListNumText wird ausgegeben
+    BOOL bOutLeftHeadFoot : 1;		// gebe vom PageDesc. den linkten
                                     // Header/Footer aus
-    BOOL bOutSection : 1;           // TRUE: Section PageDesc ausgeben
-    BOOL bIgnoreNextPgBreak : 1;    // TRUE: naechsten PageDesc/Break ignorieren
-    BOOL bAssociated : 1;           // use associated tokens
+    BOOL bOutSection : 1;			// TRUE: Section PageDesc ausgeben
+    BOOL bIgnoreNextPgBreak : 1;	// TRUE: naechsten PageDesc/Break ignorieren
+    BOOL bAssociated : 1;			// use associated tokens
 
-    BOOL bNonStandard : 1;          // use non-standard tags (for cut and paste)
+    BOOL bNonStandard : 1;			// use non-standard tags (for cut and paste)
 
     // --- public Methoden ------------------------------------------------
 
@@ -151,7 +151,7 @@ public:
     virtual ~SwRTFWriter();
     virtual ULONG WriteStream();
 
-    void Out_SwDoc( SwPaM* );       // schreibe den makierten Bereich
+    void Out_SwDoc( SwPaM* );		// schreibe den makierten Bereich
 
         // gebe die evt. an der akt. Position stehenden FlyFrame aus.
     void OutFlyFrm();
@@ -179,21 +179,21 @@ public:
     USHORT GetNumRuleId( const SwNumRule& rRule );
 
     // fuer RTFSaveData
-    SwPaM* GetEndPaM()              { return pOrigPam; }
-    void SetEndPaM( SwPaM* pPam )   { pOrigPam = pPam; }
+    SwPaM* GetEndPaM() 				{ return pOrigPam; }
+    void SetEndPaM( SwPaM* pPam ) 	{ pOrigPam = pPam; }
 
     const SfxPoolItem& GetItem( USHORT nWhich ) const;
 
-    const SfxItemSet* GetAttrSet() const    { return pAttrSet; }
-    void SetAttrSet( const SfxItemSet* p )  { pAttrSet = p; }
+    const SfxItemSet* GetAttrSet() const 	{ return pAttrSet; }
+    void SetAttrSet( const SfxItemSet* p )	{ pAttrSet = p; }
 
     const RTFEndPosLst* GetEndPosLst() const { return pCurEndPosLst; }
 
-    void SetAssociatedFlag( BOOL b )        { bAssociated = b; }
-    BOOL IsAssociatedFlag() const           { return bAssociated; }
+    void SetAssociatedFlag( BOOL b )		{ bAssociated = b; }
+    BOOL IsAssociatedFlag() const			{ return bAssociated; }
 
-    void SetCurrScriptType( USHORT n )      { nCurScript = n; }
-    USHORT GetCurrScriptType() const        { return nCurScript; }
+    void SetCurrScriptType( USHORT n )		{ nCurScript = n; }
+    USHORT GetCurrScriptType() const		{ return nCurScript; }
 
     short TrueFrameDirection(const SwFrmFmt &rFlyFmt) const;
     short GetCurrentPageDirection() const;
@@ -213,7 +213,7 @@ struct RTFSaveData
     SwPaM* pOldPam, *pOldEnd;
     const SwFlyFrmFmt* pOldFlyFmt;
     const SwPageDesc* pOldPageDesc;
-    const SfxItemSet* pOldAttrSet;          // akt. Attribute vom Node
+    const SfxItemSet* pOldAttrSet; 			// akt. Attribute vom Node
 
     BOOL bOldWriteAll : 1;
     BOOL bOldOutTable : 1;
@@ -248,6 +248,6 @@ SvStream& OutComment( Writer& rWrt, const sal_Char* pStr );
 SvStream& OutComment( Writer& rWrt, const sal_Char* pStr, BOOL bSetFlag );
 bool ExportAsInline(const SwFlyFrmFmt& rFlyFrmFmt);
 
-#endif  //  _WRTRTF_HXX
+#endif	//  _WRTRTF_HXX
 
 

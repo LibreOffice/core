@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,31 +85,31 @@ public:
 
 class SwLabFmtPage : public SfxTabPage
 {
-    FixedInfo       aMakeFI;
-    FixedInfo       aTypeFI;
+    FixedInfo		aMakeFI;
+    FixedInfo		aTypeFI;
     SwLabPreview aPreview;
-    FixedText    aHDistText;
-    MetricField  aHDistField;
-    FixedText    aVDistText;
-    MetricField  aVDistField;
-    FixedText    aWidthText;
-    MetricField  aWidthField;
-    FixedText    aHeightText;
-    MetricField  aHeightField;
-    FixedText    aLeftText;
-    MetricField  aLeftField;
-    FixedText    aUpperText;
-    MetricField  aUpperField;
-    FixedText    aColsText;
+    FixedText	 aHDistText;
+    MetricField	 aHDistField;
+    FixedText	 aVDistText;
+    MetricField	 aVDistField;
+    FixedText	 aWidthText;
+    MetricField	 aWidthField;
+    FixedText	 aHeightText;
+    MetricField	 aHeightField;
+    FixedText	 aLeftText;
+    MetricField	 aLeftField;
+    FixedText	 aUpperText;
+    MetricField	 aUpperField;
+    FixedText	 aColsText;
     NumericField aColsField;
-    FixedText    aRowsText;
+    FixedText	 aRowsText;
     NumericField aRowsField;
-    PushButton   aSavePB;
+    PushButton 	 aSavePB;
 
     Timer aPreviewTimer;
     BOOL  bModified;
 
-    SwLabItem    aItem;
+    SwLabItem	 aItem;
 
      SwLabFmtPage(Window* pParent, const SfxItemSet& rSet);
     ~SwLabFmtPage();
@@ -143,20 +143,20 @@ public:
 class SwSaveLabelDlg : public ModalDialog
 {
     FixedLine       aOptionsFL;
-    FixedText       aMakeFT;
-    ComboBox        aMakeCB;
-    FixedText       aTypeFT;
-    Edit            aTypeED;
+    FixedText		aMakeFT;
+    ComboBox		aMakeCB;
+    FixedText		aTypeFT;
+    Edit			aTypeED;
 
-    OKButton        aOKPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
+    OKButton		aOKPB;
+    CancelButton	aCancelPB;
+    HelpButton		aHelpPB;
 
-    QueryBox        aQueryMB;
+    QueryBox		aQueryMB;
 
-    sal_Bool        bSuccess;
-    SwLabFmtPage*   pLabPage;
-    SwLabRec&       rLabRec;
+    sal_Bool 		bSuccess;
+    SwLabFmtPage* 	pLabPage;
+    SwLabRec&		rLabRec;
 
     DECL_LINK(OkHdl, OKButton*);
     DECL_LINK(ModifyHdl, Edit*);
@@ -164,7 +164,7 @@ class SwSaveLabelDlg : public ModalDialog
 public:
     SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec);
 
-    void    SetLabel(const rtl::OUString& rMake, const rtl::OUString& rType)
+    void	SetLabel(const rtl::OUString& rMake, const rtl::OUString& rType)
         {
             aMakeCB.SetText(String(rMake));
             aTypeED.SetText(String(rType));

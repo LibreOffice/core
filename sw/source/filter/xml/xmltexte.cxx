@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ SwNoTxtNode *SwXMLTextParagraphExport::GetNoTxtNode(
     SwFrmFmt *pFrmFmt = pFrame->GetFrmFmt();
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
     const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
-    return  pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTxtNode();
+    return	pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTxtNode();
 }
 
 void SwXMLTextParagraphExport::exportStyleContent(

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@
 #include "pagefrm.hxx"  // NewFldPortion, GetVirtPageNum()
 #include "ndtxt.hxx"    // NewNumberPortion, pHints->GetNum()
 #include "fldbas.hxx"      // SwField
-#include "viewopt.hxx"  // SwViewOptions
-#include "flyfrm.hxx"   //IsInBody()
+#include "viewopt.hxx"	// SwViewOptions
+#include "flyfrm.hxx"	//IsInBody()
 #include "viewimp.hxx"
 #include "txtatr.hxx"   // SwTxtFld
 #include "txtcfg.hxx"
@@ -59,7 +59,7 @@
 #include "expfld.hxx"
 #include "docufld.hxx"
 #include "pagedesc.hxx"  // NewFldPortion, GetNum()
-#include <pormulti.hxx>     // SwMultiPortion
+#include <pormulti.hxx> 	// SwMultiPortion
 #include "fmtmeta.hxx" // lcl_NewMetaPortion
 
 
@@ -102,7 +102,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
         pFld->SetLanguage( GetFnt()->GetLanguage() );
         // let the visual note know about its new language
         if (pFld->GetTyp()->Which()==RES_POSTITFLD)
-            const_cast<SwFmtFld*> (&pHint->GetFld())->Broadcast( SwFmtFldHint( &pHint->GetFld(), SWFMTFLD_LANGUAGE ) );
+            const_cast<SwFmtFld*> (&pHint->GetFld())->Broadcast( SwFmtFldHint( &pHint->GetFld(), SWFMTFLD_LANGUAGE ) );		
     }
 
     ViewShell *pSh = rInf.GetVsh();

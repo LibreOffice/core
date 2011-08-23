@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@ class SW_DLLPUBLIC PercentField : public MetricField
     sal_Int64   nOldBaseValue;
     sal_Int64   nLastPercent;
     sal_Int64   nLastValue;
-    USHORT      nOldDigits;
-    FieldUnit   eOldUnit;
+    USHORT		nOldDigits;
+    FieldUnit	eOldUnit;
     sal_Bool    bLockAutoCalculation; //prevent recalcution of percent values when the
                                         //reference value is changed
 
@@ -70,7 +70,7 @@ public:
 
     sal_Int64        GetValue(FieldUnit eOutUnit = FUNIT_NONE);
 
-    BOOL        IsValueModified();
+    BOOL		IsValueModified();
 
     //using NumericFormatter::SetMax;
     void        SetMax(sal_Int64 nNewMax, FieldUnit eInUnit = FUNIT_NONE);
@@ -87,9 +87,9 @@ public:
 
     sal_Int64   Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit);
 
-    void        ShowPercent(BOOL bPercent);
+    void		ShowPercent(BOOL bPercent);
 
-    USHORT      GetOldDigits() const {return nOldDigits;}
+    USHORT		GetOldDigits() const {return nOldDigits;}
 
     void        LockAutoCalculation(sal_Bool bLock) {bLockAutoCalculation = bLock;}
     sal_Bool    IsAutoCalculationLocked()const {return bLockAutoCalculation;}

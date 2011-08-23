@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,10 +69,10 @@ class SwEndnoter
 public:
     SwEndnoter( SwLayouter* pLay )
         : pMaster( pLay ), pSect( NULL ), pEndArr( NULL ) {}
-    ~SwEndnoter() { delete pEndArr; }
+    ~SwEndnoter() { delete pEndArr;	}
     void CollectEndnotes( SwSectionFrm* pSct );
     void CollectEndnote( SwFtnFrm* pFtn );
-    const SwSectionFrm* GetSect() { return pSect; }
+    const SwSectionFrm* GetSect() {	return pSect; }
     void InsertEndnotes();
     BOOL HasEndnotes() const { return pEndArr && pEndArr->Count(); }
 };
@@ -102,14 +102,14 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
             if ( pCnt )
             {
                 do
-                {   SwFrm *pNxtCnt = pCnt->GetNext();
+                {	SwFrm *pNxtCnt = pCnt->GetNext();
                     pCnt->Cut();
                     pCnt->Paste( pFtn );
                     pCnt = pNxtCnt;
                 } while ( pCnt );
             }
             else
-            {   ASSERT( pNxt->Lower() && pNxt->Lower()->IsSctFrm(),
+            {	ASSERT( pNxt->Lower() && pNxt->Lower()->IsSctFrm(),
                         "Endnote without content?" );
                 pNxt->Cut();
                 delete pNxt;
@@ -226,10 +226,10 @@ void SwLooping::Control( SwPageFrm* pPage )
 
 /*************************************************************************
 |*
-|*  SwLayouter::SwLayouter()
+|*	SwLayouter::SwLayouter()
 |*
-|*  Ersterstellung      AMA 02. Nov. 99
-|*  Letzte Aenderung    AMA 02. Nov. 99
+|*	Ersterstellung		AMA 02. Nov. 99
+|*	Letzte Aenderung	AMA 02. Nov. 99
 |*
 |*************************************************************************/
 

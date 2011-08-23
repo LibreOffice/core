@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,14 +41,14 @@ class SfxItemSet;
 
 class SmConfig : public SmMathConfig, public SfxBroadcaster
 {
-    SmFontPickList  vFontPickList[7];
+    SmFontPickList	vFontPickList[7];
 
 public:
     SmConfig();
     virtual ~SmConfig();
 
     SmFontPickList & GetFontPickList(USHORT nIdent) { return vFontPickList[nIdent]; }
-
+    
     void ItemSetToConfig(const SfxItemSet &rSet);
     void ConfigToItemSet(SfxItemSet &rSet) const;
 };

@@ -1,29 +1,3 @@
-/*************************************************************************
- *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
@@ -43,6 +17,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wrlmitem.hxx>
+#include <editeng/numitem.hxx>
 #include <shellio.hxx>
 #include <fltini.hxx>
 #include <swtypes.hxx>
@@ -72,7 +47,7 @@ void lcl_ExpandNumFmts( SwNumRule& rRule )
         if( !rRule.GetNumFmt( n ) )
         {
             SwNumFmt aNumFmt( rRule.Get( 0 ));
-            aNumFmt.SetAbsLSpace( aNumFmt.GetAbsLSpace() * ( n + 1 ) );
+            aNumFmt.SetIndentAt( aNumFmt.GetIndentAt() * ( n + 1 ) );
             rRule.Set( n, aNumFmt );
         }
 }
@@ -95,17 +70,17 @@ SfxItemSet& GetNumChrFmt( SwDoc& rDoc, SwNumRule& rRule, BYTE nNumLvl )
 void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
 {
     int nToken;
-    int nNumOpenBrakets = 1;        // die erste wurde schon vorher erkannt !!
+    int nNumOpenBrakets = 1;		// die erste wurde schon vorher erkannt !!
     int nLvlTxtLevel = 0, nLvlNumberLevel = 0;
     String sLvlText, sLvlNumber;
     SwNumFmt* pCurNumFmt;
-    String aStringFollow = aEmptyStr;
+    SvxNumberFormat::SvxNumLabelFollowedBy eFollowedBy = SvxNumberFormat::NOTHING;
 
     if( MAXLEVEL >= nNumLvl )
     {
         pCurNumFmt = (SwNumFmt*)rRule.GetNumFmt( nNumLvl );
-        pCurNumFmt->SetAbsLSpace( 0 );
-        pCurNumFmt->SetFirstLineOffset( 0 );
+        pCurNumFmt->SetIndentAt( 0 );
+        pCurNumFmt->SetFirstLineIndent( 0 );
     }
     else
         pCurNumFmt = 0;
@@ -141,9 +116,9 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 // Unknown und alle bekannten nicht ausgewerteten Gruppen
                 // sofort ueberspringen
                 else if( RTF_UNKNOWNCONTROL != ( nToken = GetNextToken() ))
-//                      RTF_PANOSE != nToken && RTF_FALT != nToken &&
-//                      RTF_FALT != nToken && RTF_FNAME != nToken &&
-//                      RTF_FONTEMB != nToken && RTF_FONTFILE != nToken )
+//						RTF_PANOSE != nToken && RTF_FALT != nToken &&
+//						RTF_FALT != nToken && RTF_FNAME != nToken &&
+//						RTF_FONTEMB != nToken && RTF_FONTFILE != nToken )
                     nToken = SkipToken( -2 );
                 else
                 {
@@ -163,12 +138,12 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 sal_Int16 eType = SVX_NUM_ARABIC;
                 switch( nTokenValue )
                 {
-                case 1:     eType = SVX_NUM_ROMAN_UPPER;            break;
-                case 2:     eType = SVX_NUM_ROMAN_LOWER;            break;
-                case 3:     eType = SVX_NUM_CHARS_UPPER_LETTER_N;   break;
-                case 4:     eType = SVX_NUM_CHARS_LOWER_LETTER_N;   break;
+                case 1:		eType = SVX_NUM_ROMAN_UPPER;			break;
+                case 2:		eType = SVX_NUM_ROMAN_LOWER;			break;
+                case 3:		eType = SVX_NUM_CHARS_UPPER_LETTER_N;	break;
+                case 4:		eType = SVX_NUM_CHARS_LOWER_LETTER_N;	break;
                 case 255:
-                case 23:    eType = SVX_NUM_CHAR_SPECIAL;           break;
+                case 23:	eType = SVX_NUM_CHAR_SPECIAL;			break;
                 }
                 if( pCurNumFmt )
                     pCurNumFmt->SetNumberingType(eType);
@@ -180,8 +155,8 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 SvxAdjust eAdj = SVX_ADJUST_LEFT;
                 switch( nTokenValue )
                 {
-                case 1:     eAdj = SVX_ADJUST_CENTER;   break;
-                case 2:     eAdj = SVX_ADJUST_RIGHT;    break;
+                case 1:		eAdj = SVX_ADJUST_CENTER;	break;
+                case 2:		eAdj = SVX_ADJUST_RIGHT;	break;
                 }
                 if( pCurNumFmt )
                     pCurNumFmt->SetNumAdjust( eAdj );
@@ -210,17 +185,16 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
             break;
 
         case RTF_LEVELFOLLOW:
-          /* removed; waiting for swnum02 to be integrated!
+          /* removed; waiting for swnum02 to be integrated! */
             switch (nTokenValue)
             {
             case 0:
-                aStringFollow=String('\t');
+                eFollowedBy = SvxNumberFormat::LISTTAB;
                 break;
             case 1:
-                aStringFollow=String(' ');
+                eFollowedBy = SvxNumberFormat::SPACE;
                 break;
             }
-            */
             break;
 
         case RTF_LEVELOLD:
@@ -244,8 +218,8 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 // and put the current "LRSpace" into the set
                 {
                     SvxLRSpaceItem aLR( RES_LR_SPACE );
-                    aLR.SetTxtLeft( pCurNumFmt->GetAbsLSpace() );
-                    aLR.SetTxtFirstLineOfst(pCurNumFmt->GetFirstLineOffset());
+                    aLR.SetTxtLeft( pCurNumFmt->GetIndentAt() );
+                    aLR.SetTxtFirstLineOfst(pCurNumFmt->GetFirstLineIndent());
                     aSet.Put( aLR );
                 }
 
@@ -264,8 +238,9 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                         FALSE, &pItem ))
                 {
                     const SvxLRSpaceItem& rLR = *(SvxLRSpaceItem*)pItem;
-                    pCurNumFmt->SetAbsLSpace( static_cast< short >(rLR.GetTxtLeft()) );
-                    pCurNumFmt->SetFirstLineOffset( rLR.GetTxtFirstLineOfst());
+                    pCurNumFmt->SetListtabPos( rLR.GetTxtLeft( ) );
+                    pCurNumFmt->SetIndentAt( rLR.GetTxtLeft() );
+                    pCurNumFmt->SetFirstLineIndent( rLR.GetTxtFirstLineOfst());
                 }
 
                 // dann aus der Vorlage den Font holen
@@ -306,16 +281,13 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
             pCurNumFmt->SetSuffix( sLvlText );
         }
 
-        String newSuffix=pCurNumFmt->GetSuffix();
-        newSuffix+=aStringFollow;
-        pCurNumFmt->SetSuffix(newSuffix);
-        /* removed; waiting for swnum02 to be integrated!
-        if (aStringFollow.GetChar(0)=='\t' && !pCurNumFmt->IsItemize())
+        /* removed; waiting for swnum02 to be integrated!*/
+        pCurNumFmt->SetLabelFollowedBy( eFollowedBy );
+        if (eFollowedBy == SvxNumberFormat::LISTTAB && !pCurNumFmt->IsItemize())
         {
-            pCurNumFmt->SetAbsLSpace(0);
-            pCurNumFmt->SetFirstLineOffset(0);
+            pCurNumFmt->SetIndentAt(0);
+            pCurNumFmt->SetFirstLineIndent(0);
         }
-        */
     }
 
     SkipToken( -1 );
@@ -324,7 +296,7 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
 void SwRTFParser::ReadListTable()
 {
     int nToken;
-    int nNumOpenBrakets = 1;        // die erste wurde schon vorher erkannt !!
+    int nNumOpenBrakets = 1;		// die erste wurde schon vorher erkannt !!
     bNewNumList = TRUE;
 
     BYTE nNumLvl = 0;
@@ -335,7 +307,7 @@ void SwRTFParser::ReadListTable()
     {
         switch( ( nToken = GetNextToken() ))
         {
-        case '}':       if( --nNumOpenBrakets && IsParserWorking() )
+        case '}':		if( --nNumOpenBrakets && IsParserWorking() )
                         {
                             // Style konnte vollstaendig gelesen werden,
                             // also ist das noch ein stabiler Status
@@ -356,9 +328,9 @@ void SwRTFParser::ReadListTable()
                 // Unknown und alle bekannten nicht ausgewerteten Gruppen
                 // sofort ueberspringen
                 else if( RTF_UNKNOWNCONTROL != ( nToken = GetNextToken() ))
-//                      RTF_PANOSE != nToken && RTF_FALT != nToken &&
-//                      RTF_FALT != nToken && RTF_FNAME != nToken &&
-//                      RTF_FONTEMB != nToken && RTF_FONTFILE != nToken )
+//						RTF_PANOSE != nToken && RTF_FALT != nToken &&
+//						RTF_FALT != nToken && RTF_FNAME != nToken &&
+//						RTF_FONTEMB != nToken && RTF_FONTFILE != nToken )
                     nToken = SkipToken( -2 );
                 else
                 {
@@ -380,7 +352,7 @@ void SwRTFParser::ReadListTable()
 
                 String sTmp( String::CreateFromAscii(
                     RTL_CONSTASCII_STRINGPARAM( RTF_NUMRULE_NAME " 1" )));
-                aEntry.nListDocPos = pDoc->MakeNumRule( sTmp );
+                aEntry.nListDocPos = pDoc->MakeNumRule( sTmp, 0, FALSE, SvxNumberFormat::LABEL_ALIGNMENT );
                 pCurRule = pDoc->GetNumRuleTbl()[ aEntry.nListDocPos ];
                 // --> OD 2008-07-08 #i91400#
                 pCurRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, FALSE ),
@@ -391,8 +363,8 @@ void SwRTFParser::ReadListTable()
             }
             break;
 
-        case RTF_LISTID:            aEntry.nListId = nTokenValue;       break;
-        case RTF_LISTTEMPLATEID:    aEntry.nListTemplateId = nTokenValue; break;
+        case RTF_LISTID:			aEntry.nListId = nTokenValue;		break;
+        case RTF_LISTTEMPLATEID:	aEntry.nListTemplateId = nTokenValue; break;
 
         case RTF_LISTRESTARTHDN:
             break;
@@ -428,7 +400,7 @@ void SwRTFParser::ReadListTable()
     if( pCurRule && pCurRule->IsContinusNum() )
         lcl_ExpandNumFmts( *pCurRule );
 
-    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
 }
 
 BOOL lcl_IsEqual( SwNumRule* pOrigRule, SwNumRule* pRule )
@@ -443,7 +415,7 @@ BOOL lcl_IsEqual( SwNumRule* pOrigRule, SwNumRule* pRule )
             for( BYTE n = 0; bRet && n < MAXLEVEL; ++n )
             {
                 const SwNumFmt* pOFmt = pOrigRule->GetNumFmt( n ),
-                              * pFmt = pRule->GetNumFmt( n );
+                              *	pFmt = pRule->GetNumFmt( n );
                 if( pFmt && pOFmt )
                 {
                     SwCharFmt* pOCFmt = pOFmt->GetCharFmt(),
@@ -473,7 +445,7 @@ BOOL lcl_IsEqual( SwNumRule* pOrigRule, SwNumRule* pRule )
 void SwRTFParser::ReadListOverrideTable()
 {
     int nToken;
-    int nNumOpenBrakets = 1;        // die erste wurde schon vorher erkannt !!
+    int nNumOpenBrakets = 1;		// die erste wurde schon vorher erkannt !!
     SwListEntry aEntry;
     SwNumRule* pRule = 0, *pOrigRule = 0;
     BYTE nNumLvl = 0;
@@ -563,9 +535,9 @@ void SwRTFParser::ReadListOverrideTable()
             }
             break;
 
-        case RTF_LISTOVERRIDE:      aEntry.Clear();                 break;
-        case RTF_LISTID:            aEntry.nListId = nTokenValue;   break;
-        case RTF_LS:                aEntry.nListNo = nTokenValue;   break;
+        case RTF_LISTOVERRIDE:		aEntry.Clear();					break;
+        case RTF_LISTID:			aEntry.nListId = nTokenValue;	break;
+        case RTF_LS:				aEntry.nListNo = nTokenValue;	break;
         case RTF_LISTOVERRIDECOUNT:
             if( nTokenValue )
             {
@@ -692,7 +664,7 @@ void SwRTFParser::ReadListOverrideTable()
         } while( 0 != (pStyle = GetStyleTbl().Next()) );
     }
 
-    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
 }
 
 SwNumRule* SwRTFParser::GetNumRuleOfListNo( long nListNo, BOOL bRemoveFromList )
@@ -813,7 +785,7 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
     {
         switch( nToken = GetNextToken() )
         {
-        case RTF_PNLVL:         nListNo = 3;
+        case RTF_PNLVL:			nListNo = 3;
                                 bContinus = FALSE;
                                 nLevel = MAXLEVEL <= nTokenValue
                                                     ? MAXLEVEL - 1
@@ -877,7 +849,7 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
     }
 
     FontUnderline eUnderline;
-    int nNumOpenBrakets = 1;        // die erste wurde schon vorher erkannt !!
+    int nNumOpenBrakets = 1;		// die erste wurde schon vorher erkannt !!
     while( nNumOpenBrakets && IsParserWorking() )
     {
         switch( ( nToken = GetNextToken() ))
@@ -915,11 +887,11 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
         case RTF_PNCARD:
         case RTF_PNORD:
         case RTF_PNORDT:
-        case RTF_PNDEC:     pCurNumFmt->SetNumberingType(SVX_NUM_ARABIC);               break;
-        case RTF_PNUCLTR:   pCurNumFmt->SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER_N); break;
-        case RTF_PNUCRM:    pCurNumFmt->SetNumberingType(SVX_NUM_ROMAN_UPPER);          break;
-        case RTF_PNLCLTR:   pCurNumFmt->SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER_N); break;
-        case RTF_PNLCRM:    pCurNumFmt->SetNumberingType(SVX_NUM_ROMAN_LOWER);          break;
+        case RTF_PNDEC: 	pCurNumFmt->SetNumberingType(SVX_NUM_ARABIC);				break;
+        case RTF_PNUCLTR:	pCurNumFmt->SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER_N);	break;
+        case RTF_PNUCRM:    pCurNumFmt->SetNumberingType(SVX_NUM_ROMAN_UPPER);			break;
+        case RTF_PNLCLTR:   pCurNumFmt->SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER_N);	break;
+        case RTF_PNLCRM:    pCurNumFmt->SetNumberingType(SVX_NUM_ROMAN_LOWER);			break;
 
         case RTF_PNF:
             {
@@ -1011,8 +983,8 @@ NUMATTR_SETUNDERLINE:
         case RTF_PNINDENT:
             if( 0 > short( nTokenValue ) )
                 nTokenValue = - (short)nTokenValue;
-            pCurNumFmt->SetFirstLineOffset( - short( nTokenValue ));
-            pCurNumFmt->SetAbsLSpace( (nLevel + 1 ) * USHORT( nTokenValue ));
+            pCurNumFmt->SetFirstLineIndent( - nTokenValue );
+            pCurNumFmt->SetIndentAt( (nLevel + 1 ) * nTokenValue );
             break;
         case RTF_PNSP:
             pCurNumFmt->SetCharTextDistance( USHORT( nTokenValue ));
@@ -1028,9 +1000,9 @@ NUMATTR_SETUNDERLINE:
             }
             break;
 
-        case RTF_PNQC:  pCurNumFmt->SetNumAdjust( SVX_ADJUST_CENTER );  break;
-        case RTF_PNQL:  pCurNumFmt->SetNumAdjust( SVX_ADJUST_LEFT );        break;
-        case RTF_PNQR:  pCurNumFmt->SetNumAdjust( SVX_ADJUST_RIGHT );       break;
+        case RTF_PNQC:	pCurNumFmt->SetNumAdjust( SVX_ADJUST_CENTER ); 	break;
+        case RTF_PNQL:	pCurNumFmt->SetNumAdjust( SVX_ADJUST_LEFT ); 		break;
+        case RTF_PNQR:	pCurNumFmt->SetNumAdjust( SVX_ADJUST_RIGHT );		break;
 
         case RTF_PNSTART:
             pCurNumFmt->SetStart( USHORT( nTokenValue ));
@@ -1039,7 +1011,7 @@ NUMATTR_SETUNDERLINE:
         case RTF_PNNUMONCE:
         case RTF_PNACROSS:
         case RTF_PNHANG:
-        case RTF_PNRESTART:     break;
+        case RTF_PNRESTART:		break;
 
         case RTF_PNTXTA:
             {
@@ -1100,7 +1072,7 @@ NUMATTR_SETUNDERLINE:
         }
     }
 
-    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
     return pCurRule;
 }
 
@@ -1166,7 +1138,7 @@ void SwRTFWriter::OutRTFListTab()
         {
             const SwNumFmt& rFmt = pRule->Get( nLvl );
             Strm() << sNewLine;
-            if( nLvl > 8 )          // RTF-kennt nur 9 Ebenen
+            if( nLvl > 8 )			// RTF-kennt nur 9 Ebenen
                 OutComment( *this, OOO_STRING_SVTOOLS_RTF_SOUTLVL );
 
             Strm() << '{' << OOO_STRING_SVTOOLS_RTF_LISTLEVEL << OOO_STRING_SVTOOLS_RTF_LEVELNFC;
@@ -1174,23 +1146,23 @@ void SwRTFWriter::OutRTFListTab()
             USHORT nVal = 0;
             switch( rFmt.GetNumberingType() )
             {
-            case SVX_NUM_ROMAN_UPPER:           nVal = 1;   break;
-            case SVX_NUM_ROMAN_LOWER:           nVal = 2;   break;
+            case SVX_NUM_ROMAN_UPPER:			nVal = 1;	break;
+            case SVX_NUM_ROMAN_LOWER:			nVal = 2;	break;
             case SVX_NUM_CHARS_UPPER_LETTER:
-            case SVX_NUM_CHARS_UPPER_LETTER_N:  nVal = 3;   break;
+            case SVX_NUM_CHARS_UPPER_LETTER_N:	nVal = 3;	break;
             case SVX_NUM_CHARS_LOWER_LETTER:
-            case SVX_NUM_CHARS_LOWER_LETTER_N:  nVal = 4;   break;
+            case SVX_NUM_CHARS_LOWER_LETTER_N:	nVal = 4;	break;
 
             case SVX_NUM_BITMAP:
-            case SVX_NUM_CHAR_SPECIAL:          nVal = 23;  break;
+            case SVX_NUM_CHAR_SPECIAL:			nVal = 23;	break;
             }
             OutLong( nVal ) << OOO_STRING_SVTOOLS_RTF_LEVELJC;
 
             switch( rFmt.GetNumAdjust() )
             {
-            case SVX_ADJUST_CENTER:     nVal = 1;   break;
-            case SVX_ADJUST_RIGHT:      nVal = 2;   break;
-            default:                    nVal = 0;   break;
+            case SVX_ADJUST_CENTER:		nVal = 1;	break;
+            case SVX_ADJUST_RIGHT:		nVal = 2;	break;
+            default:					nVal = 0;	break;
             }
             OutLong( nVal ) << OOO_STRING_SVTOOLS_RTF_LEVELSTARTAT;
             OutLong( rFmt.GetStart() )
@@ -1288,12 +1260,12 @@ void SwRTFWriter::OutRTFListTab()
             }
 
             Strm() << OOO_STRING_SVTOOLS_RTF_FI;
-            OutLong( rFmt.GetFirstLineOffset() ) << OOO_STRING_SVTOOLS_RTF_LI;
-            OutLong( rFmt.GetAbsLSpace() );
+            OutLong( rFmt.GetFirstLineIndent() ) << OOO_STRING_SVTOOLS_RTF_LI;
+            OutLong( rFmt.GetIndentAt() );
 
             Strm() << '}';
 
-            if( nLvl > 8 )      // RTF-kennt nur 9 Ebenen
+            if( nLvl > 8 )		// RTF-kennt nur 9 Ebenen
                 Strm() << '}';
         }
 
@@ -1401,9 +1373,9 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
         SfxItemSet aSet( *rNdSet.GetPool(), rNdSet.GetRanges() );
         aSet.SetParent( &rNdSet );
         SvxLRSpaceItem aLR( (SvxLRSpaceItem&)rNdSet.Get( RES_LR_SPACE ) );
-        aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
+        aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetIndentAt() );
 
-        aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
+        aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineIndent() );
         if ( bExportNumRule )
             Strm() << '{' << OOO_STRING_SVTOOLS_RTF_LISTTEXT << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << ' ';
 
@@ -1438,7 +1410,7 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
                 if( OUTLINE_RULE != pRule->GetRuleType() )
                 {
                     Strm() << OOO_STRING_SVTOOLS_RTF_TAB << '}' << OOO_STRING_SVTOOLS_RTF_ILVL;
-                    if( nLvl > 8 )          // RTF-kennt nur 9 Ebenen
+                    if( nLvl > 8 )			// RTF-kennt nur 9 Ebenen
                     {
                         OutULong( 8 );
                         OutComment( *this, OOO_STRING_SVTOOLS_RTF_SOUTLVL );

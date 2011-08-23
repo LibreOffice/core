@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,25 +49,25 @@ class SwWrtShell;
 
 class SwBreakDlg: public SvxStandardDialog
 {
-    SwWrtShell     &rSh;
-    RadioButton     aLineBtn;
-    RadioButton     aColumnBtn;
-    RadioButton     aPageBtn;
-    FixedText       aPageCollText;
-    ListBox         aPageCollBox;
-    CheckBox        aPageNumBox;
-    NumericField    aPageNumEdit;
+    SwWrtShell	   &rSh;
+    RadioButton		aLineBtn;
+    RadioButton		aColumnBtn;
+    RadioButton		aPageBtn;
+    FixedText		aPageCollText;
+    ListBox			aPageCollBox;
+    CheckBox		aPageNumBox;
+    NumericField	aPageNumEdit;
     FixedLine       aBreakFL;
 
-    OKButton        aOkBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
+    OKButton		aOkBtn;
+    CancelButton	aCancelBtn;
+    HelpButton		aHelpBtn;
 
     String          aTemplate;
     USHORT          nKind;
     USHORT          nPgNum;
 
-    BOOL            bHtmlMode;
+    BOOL 			bHtmlMode;
 
     DECL_LINK( ClickHdl, void * );
     DECL_LINK( PageNumHdl, CheckBox * );

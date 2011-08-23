@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,25 +136,25 @@ TYPEINIT1(SwTableShell,SwBaseShell)
 
 const USHORT __FAR_DATA aUITableAttrRange[] =
 {
-    FN_PARAM_TABLE_NAME,            FN_PARAM_TABLE_NAME,
-    FN_PARAM_TABLE_HEADLINE,        FN_PARAM_TABLE_HEADLINE,
-    FN_PARAM_TABLE_SPACE,           FN_PARAM_TABLE_SPACE,
-    FN_TABLE_REP,                   FN_TABLE_REP,
+    FN_PARAM_TABLE_NAME, 			FN_PARAM_TABLE_NAME,
+    FN_PARAM_TABLE_HEADLINE, 		FN_PARAM_TABLE_HEADLINE,
+    FN_PARAM_TABLE_SPACE, 			FN_PARAM_TABLE_SPACE,
+    FN_TABLE_REP,					FN_TABLE_REP,
     SID_RULER_BORDERS,              SID_RULER_BORDERS,
-    RES_LR_SPACE,                   RES_UL_SPACE,
-    SID_ATTR_BORDER_INNER,          SID_ATTR_BORDER_SHADOW,
-    RES_BOX,                        RES_SHADOW,
-    RES_BACKGROUND,                 RES_BACKGROUND,
-    SID_BACKGRND_DESTINATION,       SID_BACKGRND_DESTINATION,
-    SID_HTML_MODE,                  SID_HTML_MODE,
-    SID_ATTR_BRUSH_ROW,             SID_ATTR_BRUSH_TABLE,
-    RES_PAGEDESC,                   RES_BREAK,
-    RES_KEEP,                       RES_KEEP,
-    RES_LAYOUT_SPLIT,               RES_LAYOUT_SPLIT,
-    FN_TABLE_SET_VERT_ALIGN,        FN_TABLE_SET_VERT_ALIGN,
+    RES_LR_SPACE,					RES_UL_SPACE,
+    SID_ATTR_BORDER_INNER,			SID_ATTR_BORDER_SHADOW,
+    RES_BOX, 			   			RES_SHADOW,
+    RES_BACKGROUND, 	   			RES_BACKGROUND,
+    SID_BACKGRND_DESTINATION, 		SID_BACKGRND_DESTINATION,
+    SID_HTML_MODE,					SID_HTML_MODE,
+    SID_ATTR_BRUSH_ROW, 			SID_ATTR_BRUSH_TABLE,
+    RES_PAGEDESC,					RES_BREAK,
+    RES_KEEP,						RES_KEEP,
+    RES_LAYOUT_SPLIT,				RES_LAYOUT_SPLIT,
+    FN_TABLE_SET_VERT_ALIGN,		FN_TABLE_SET_VERT_ALIGN,
     RES_FRAMEDIR,                   RES_FRAMEDIR,
     RES_ROW_SPLIT,                  RES_ROW_SPLIT,
-    FN_TABLE_BOX_TEXTDIRECTION,     FN_TABLE_BOX_TEXTDIRECTION,
+    FN_TABLE_BOX_TEXTDIRECTION,		FN_TABLE_BOX_TEXTDIRECTION,
 // --> collapsing borders FME 2005-05-27 #i29550#
     RES_COLLAPSING_BORDERS,         RES_COLLAPSING_BORDERS,
 // <-- collapsing borders
@@ -195,8 +195,8 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     USHORT  nBackgroundDestination = rSh.GetViewOptions()->GetTblDest();
     rSet.Put(SwBackgroundDestinationItem(SID_BACKGRND_DESTINATION, nBackgroundDestination ));
     SvxBrushItem aBrush( RES_BACKGROUND );
-//      rSh.GetBoxBackground(aBrush);
-//  rSet.Put( aBrush );
+// 		rSh.GetBoxBackground(aBrush);
+//	rSet.Put( aBrush );
     if(rSh.GetRowBackground(aBrush))
         rSet.Put( aBrush, SID_ATTR_BRUSH_ROW );
     else
@@ -219,7 +219,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
 
         // Tabellenvariante, wenn mehrere Tabellenzellen selektiert
-    rSh.GetCrsr();                  //Damit GetCrsrCnt() auch das Richtige liefert
+    rSh.GetCrsr();					//Damit GetCrsrCnt() auch das Richtige liefert
     aBoxInfo.SetTable          (rSh.IsTableMode() && rSh.GetCrsrCnt() > 1 ||
                                     !bTableSel);
         // Abstandsfeld immer anzeigen
@@ -518,7 +518,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
     {
         case SID_ATTR_BORDER:
         {
-/*          BOOL bPopCrsr = FALSE;
+/*			BOOL bPopCrsr = FALSE;
             if ( !rReq.IsAPI() )
             {
                 //Keine Tabellenselektion -> Aenderung wird auf die gesamte
@@ -610,8 +610,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if ((pBorderLine = aInfo.GetVert()) != NULL)
                 aInfo.SetLine(&aBorderLine, BOXINFO_LINE_VERT), bLine |= TRUE;
 
-//          if ( bPopCrsr && !bLine )
-//              aBox.SetDistance( 0 );
+//			if ( bPopCrsr && !bLine )
+//				aBox.SetDistance( 0 );
 
             aCoreSet.Put( aBox  );
             aCoreSet.Put( aInfo );
@@ -624,7 +624,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             rReq.AppendItem( aInfo );
             bCallDone = TRUE;
 
-/*          if ( bPopCrsr )
+/*			if ( bPopCrsr )
             {
                 rSh.KillPams();
                 rSh.Pop(FALSE);
@@ -813,7 +813,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     case TBLMERGE_OK:
                          bCallDone = TRUE;
                     //no break;
-                    case TBLMERGE_NOSELECTION:  break;
+                    case TBLMERGE_NOSELECTION:	break;
                     case TBLMERGE_TOOCOMPLEX:
                     {
                         InfoBox aInfoBox( GetView().GetWindow(),
@@ -1078,7 +1078,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
         case FN_TABLE_MODE_FIX       :
         case FN_TABLE_MODE_FIX_PROP  :
-        case FN_TABLE_MODE_VARIABLE  :
+        case FN_TABLE_MODE_VARIABLE	 :
         {
             rSh.SetTblChgMode( ( FN_TABLE_MODE_FIX == nSlot ? TBLFIX_CHGABS
                                     : FN_TABLE_MODE_FIX_PROP == nSlot
@@ -1295,7 +1295,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case FN_INSERT_TABLE:
                 // Irgendeinen Wert "putten", damit Controller enabled bleibt.
                 // Statt "Insert:Table" erscheint dann "Format:Table".
-//              rSet.Put(SfxUInt16Item(nSlot, 1));
+//				rSet.Put(SfxUInt16Item(nSlot, 1));
                 break;
 
             case FN_TABLE_OPTIMAL_HEIGHT:
@@ -1338,7 +1338,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
 
             case FN_TABLE_MODE_FIX       :
             case FN_TABLE_MODE_FIX_PROP  :
-            case FN_TABLE_MODE_VARIABLE  :
+            case FN_TABLE_MODE_VARIABLE	 :
                 {
                     TblChgMode nMode = rSh.GetTblChgMode();
                     BOOL bSet = nSlot == FN_TABLE_MODE_FIX && nMode == TBLFIX_CHGABS ||
@@ -1467,7 +1467,7 @@ void SwTableShell::ExecTableStyle(SfxRequest& rReq)
             case SID_FRAME_LINESTYLE:
             case SID_FRAME_LINECOLOR:
             {
-/*  Tabellenselektion ist abgeschafft
+/*	Tabellenselektion ist abgeschafft
                 BOOL bPopCrsr = FALSE;
                 if ( !rReq.IsAPI() )
                 {
@@ -1500,7 +1500,7 @@ void SwTableShell::ExecTableStyle(SfxRequest& rReq)
                 }
 
                 rReq.Done();
-/*              if ( bPopCrsr )
+/*				if ( bPopCrsr )
                 {
                     rSh.KillPams();
                     rSh.Pop(FALSE);
@@ -1541,7 +1541,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
     if(pArgs)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), FALSE, &pItem);
 
-    //  Sprache immer von Cursorposition besorgen
+    //	Sprache immer von Cursorposition besorgen
     LanguageType eLang = rSh.GetCurLang();
     SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
     sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
@@ -1552,12 +1552,12 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
     case FN_NUMBER_FORMAT:
         if( pItem )
         {
-            //  Index fuer String bestimmen
+            //	Index fuer String bestimmen
             String aCode( ((const SfxStringItem*)pItem)->GetValue() );
             nNumberFormat = pFormatter->GetEntryKey( aCode, eLang );
             if( NUMBERFORMAT_ENTRY_NOT_FOUND == nNumberFormat )
             {
-                //  neu eintragen
+                //	neu eintragen
                 xub_StrLen nErrPos;
                 short nType;
                 if( !pFormatter->PutEntry( aCode, nErrPos, nType,
@@ -1566,14 +1566,14 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
             }
         }
         break;
-    case FN_NUMBER_STANDARD:        nFmtType = NUMBERFORMAT_NUMBER; break;
-    case FN_NUMBER_SCIENTIFIC:      nFmtType = NUMBERFORMAT_SCIENTIFIC; break;
+    case FN_NUMBER_STANDARD:		nFmtType = NUMBERFORMAT_NUMBER; break;
+    case FN_NUMBER_SCIENTIFIC:		nFmtType = NUMBERFORMAT_SCIENTIFIC; break;
     case FN_NUMBER_DATE:            nFmtType = NUMBERFORMAT_DATE; break;
-    case FN_NUMBER_TIME:            nFmtType = NUMBERFORMAT_TIME; break;
-    case FN_NUMBER_CURRENCY:        nFmtType = NUMBERFORMAT_CURRENCY; break;
-    case FN_NUMBER_PERCENT:         nFmtType = NUMBERFORMAT_PERCENT; break;
+    case FN_NUMBER_TIME:			nFmtType = NUMBERFORMAT_TIME; break;
+    case FN_NUMBER_CURRENCY:		nFmtType = NUMBERFORMAT_CURRENCY; break;
+    case FN_NUMBER_PERCENT:			nFmtType = NUMBERFORMAT_PERCENT; break;
 
-    case FN_NUMBER_TWODEC:          // #.##0,00
+    case FN_NUMBER_TWODEC:  		// #.##0,00
         nFmtType = NUMBERFORMAT_NUMBER;
         nOffset = NF_NUMBER_1000DEC2;
         break;
@@ -1584,7 +1584,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
     }
 
     if( nFmtType )
-        nNumberFormat = pFormatter->GetStandardFormat( nFmtType, eLang ) + nOffset;
+        nNumberFormat =	pFormatter->GetStandardFormat( nFmtType, eLang ) + nOffset;
 
     if( NUMBERFORMAT_ENTRY_NOT_FOUND != nNumberFormat )
     {

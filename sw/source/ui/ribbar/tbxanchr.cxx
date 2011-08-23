@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@
 SFX_IMPL_TOOLBOX_CONTROL(SwTbxAnchor, SfxUInt16Item);
 
 /******************************************************************************
- *  Beschreibung:
+ *	Beschreibung:
  ******************************************************************************/
 
 SwTbxAnchor::SwTbxAnchor( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
@@ -69,7 +69,7 @@ SwTbxAnchor::SwTbxAnchor( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
 }
 
 /******************************************************************************
- *  Beschreibung:
+ *	Beschreibung:
  ******************************************************************************/
 
  SwTbxAnchor::~SwTbxAnchor()
@@ -77,7 +77,7 @@ SwTbxAnchor::SwTbxAnchor( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
 }
 
 /******************************************************************************
- *  Beschreibung:
+ *	Beschreibung:
  ******************************************************************************/
 
 void  SwTbxAnchor::StateChanged( USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
@@ -94,7 +94,7 @@ void  SwTbxAnchor::StateChanged( USHORT /*nSID*/, SfxItemState eState, const Sfx
 }
 
 /******************************************************************************
- *  Beschreibung:
+ *	Beschreibung:
  ******************************************************************************/
 
 SfxPopupWindow* SwTbxAnchor::CreatePopupWindow()
@@ -104,7 +104,7 @@ SfxPopupWindow* SwTbxAnchor::CreatePopupWindow()
 }
 
 /******************************************************************************
- *  Beschreibung:
+ *	Beschreibung:
  ******************************************************************************/
 
 void  SwTbxAnchor::Click()

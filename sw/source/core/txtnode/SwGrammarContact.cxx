@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ class SwGrammarContact : public IGrammarContact, public SwClient
     bool mbFinished;
     SwTxtNode* getMyTxtNode() { return (SwTxtNode*)pRegisteredIn; }
       DECL_LINK( TimerRepaint, Timer * );
-
+    
 public:
     SwGrammarContact();
     ~SwGrammarContact() { aTimer.Stop(); delete mpProxyList; }
@@ -209,7 +209,7 @@ void repaintTextFrames( SwModify& rModify )
         ViewShell *pCurShell = pRootFrm ? pRootFrm->GetCurrShell() : NULL;
         if( pCurShell )
             pCurShell->InvalidateWindows( aRec );
-    }
+    }    
 }
 
 void finishGrammarCheck( SwTxtNode& rTxtNode )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,18 +67,18 @@
 #include <swwait.hxx>
 #include <swprtopt.hxx>
 #include <frmatr.hxx>
-#include <view.hxx>         // fuer die aktuelle Sicht
+#include <view.hxx> 		// fuer die aktuelle Sicht
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
-#include <wrtsh.hxx>        // Verbindung zur Core
-#include <docsh.hxx>        // Dokumenterzeugung
+#include <wrtsh.hxx>		// Verbindung zur Core
+#include <docsh.hxx>	  	// Dokumenterzeugung
 #include <basesh.hxx>
 #include <viewopt.hxx>
 #include <wdocsh.hxx>
 #include <swmodule.hxx>
 #include <globdoc.hxx>
 #include <usrpref.hxx>
-#include <shellio.hxx>      // I/O
+#include <shellio.hxx> 		// I/O
 #include <docstyle.hxx>
 #include <doc.hxx>
 #include <docstat.hxx>
@@ -97,7 +97,7 @@
 #include <fldbas.hxx>
 #include <docary.hxx>
 // <--
-#include <swerror.h>        // Fehlermeldungen
+#include <swerror.h>		// Fehlermeldungen
 #include <helpid.h>
 #include <cmdid.h>
 #include <globals.hrc>
@@ -329,7 +329,7 @@ BOOL SwDocShell::Save()
         pView->GetEditWin().StopQuickHelp();
     SwWait aWait( *this, TRUE );
 
-    CalcLayoutForOLEObjects();  // format for OLE objets
+    CalcLayoutForOLEObjects();	// format for OLE objets
     // --> OD 2006-03-17 #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if ( pWrtShell && pDoc &&
@@ -460,7 +460,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         }
     }
 
-    CalcLayoutForOLEObjects();  // format for OLE objets
+    CalcLayoutForOLEObjects();	// format for OLE objets
     // --> OD 2006-03-17 #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if ( pWrtShell && pDoc &&
@@ -567,7 +567,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     WriterRef xWriter;
     SwReaderWriter::GetWriter( pFlt->GetUserData(), rMedium.GetBaseURL( true ), xWriter );
     if( !xWriter.Is() )
-    {   // Der Filter ist nicht vorhanden
+    { 	// Der Filter ist nicht vorhanden
         InfoBox( 0,
                  SW_RESSTR(STR_DLLNOTFOUND) ).Execute();
         return FALSE;
@@ -640,7 +640,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     SwDocStat aDocStat( pDoc->GetDocStat() );;
     pDoc->UpdateDocStat( aDocStat );
     // <--
-    CalcLayoutForOLEObjects();  // format for OLE objets
+    CalcLayoutForOLEObjects();	// format for OLE objets
     // --> OD 2006-03-17 #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if ( pWrtShell && pDoc &&
@@ -779,7 +779,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         SwWriter aWrt( rMedium, *pWrtShell, TRUE );
         nErrno = aWrt.Write( xWriter, &aFileName );
         //JP 16.05.97: falls der SFX uns die View waehrend des speicherns
-        //              entzieht
+        //				entzieht
         if( pWrtShell )
         {
             pWrtShell->Pop(FALSE);
@@ -814,7 +814,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Haende weg
+    Beschreibung:	Haende weg
  --------------------------------------------------------------------*/
 
 
@@ -882,7 +882,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     if ( rSetup.GetPrinterName().Len() && ASPECT_THUMBNAIL != nAspect )
     {
         pOrig = const_cast<JobSetup*>(pDoc->getJobsetup());
-        if( pOrig )         // dann kopieren wir uns den
+        if( pOrig )			// dann kopieren wir uns den
             pOrig = new JobSetup( *pOrig );
         pDoc->setJobsetup( rSetup );
     }
@@ -1042,7 +1042,7 @@ sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
 void SwDocShell::GetState(SfxItemSet& rSet)
 {
     SfxWhichIter aIter(rSet);
-    USHORT  nWhich  = aIter.FirstWhich();
+    USHORT 	nWhich 	= aIter.FirstWhich();
 
     while (nWhich)
     {
@@ -1051,11 +1051,11 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         // MT: MakroChosser immer enablen, weil Neu moeglich
         // case SID_BASICCHOOSER:
         // {
-        //  StarBASIC* pBasic = GetBasic();
-        //  StarBASIC* pAppBasic = SFX_APP()->GetBasic();
-        //  if ( !(pBasic->GetModules()->Count() ||
-        //      pAppBasic->GetModules()->Count()) )
-        //          rSet.DisableItem(nWhich);
+        // 	StarBASIC* pBasic = GetBasic();
+        // 	StarBASIC* pAppBasic = SFX_APP()->GetBasic();
+        // 	if ( !(pBasic->GetModules()->Count() ||
+        // 		pAppBasic->GetModules()->Count()) )
+        // 			rSet.DisableItem(nWhich);
         // }
         // break;
         case SID_PRINTPREVIEW:
@@ -1064,7 +1064,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             if ( !bDisable )
             {
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
-                while (pTmpFrm)     // Preview suchen
+                while (pTmpFrm)		// Preview suchen
                 {
                     if ( PTR_CAST(SwView, pTmpFrm->GetViewShell()) &&
                          ((SwView*)pTmpFrm->GetViewShell())->GetWrtShell().getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
@@ -1156,15 +1156,15 @@ void SwDocShell::GetState(SfxItemSet& rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   OLE-Hdls
+    Beschreibung:	OLE-Hdls
  --------------------------------------------------------------------*/
 
 
 IMPL_LINK( SwDocShell, Ole2ModifiedHdl, void *, p )
 {
     // vom Doc wird der Status mitgegeben (siehe doc.cxx)
-    //  Bit 0:  -> alter Zustand
-    //  Bit 1:  -> neuer Zustand
+    // 	Bit 0:	-> alter Zustand
+    //	Bit 1: 	-> neuer Zustand
     long nStatus = (long)p;
     if( IsEnableSetModified() )
         SetModified( (nStatus & 2) ? TRUE : FALSE );
@@ -1172,11 +1172,11 @@ IMPL_LINK( SwDocShell, Ole2ModifiedHdl, void *, p )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Pool returnen Hier weil virtuelll
+    Beschreibung:	Pool returnen Hier weil virtuelll
  --------------------------------------------------------------------*/
 
 
-SfxStyleSheetBasePool*  SwDocShell::GetStyleSheetPool()
+SfxStyleSheetBasePool*	SwDocShell::GetStyleSheetPool()
 {
     return mxBasePool.get();
 }
@@ -1339,7 +1339,7 @@ static const char* pEventNames[] =
     "OnLayoutFinished"
 };
 
-Sequence< OUString >    SwDocShell::GetEventNames()
+Sequence< OUString >	SwDocShell::GetEventNames()
 {
     Sequence< OUString > aRet = SfxObjectShell::GetEventNames();
     sal_Int32 nLen = aRet.getLength();
@@ -1375,13 +1375,13 @@ bool SwDocShell::IsChangeRecording() const
     return (pWrtShell->GetRedlineMode() & nsRedlineMode_t::REDLINE_ON) != 0;
 }
 
-
+    
 bool SwDocShell::HasChangeRecordProtection() const
 {
     return pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength() > 0;
 }
 
-
+    
 void SwDocShell::SetChangeRecording( bool bActivate )
 {
     USHORT nOn = bActivate ? nsRedlineMode_t::REDLINE_ON : 0;
@@ -1389,13 +1389,13 @@ void SwDocShell::SetChangeRecording( bool bActivate )
     pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
 }
 
-
+    
 bool SwDocShell::SetProtectionPassword( const String &rNewPassword )
 {
     const SfxAllItemSet aSet( GetPool() );
     const SfxItemSet*   pArgs = &aSet;
     const SfxPoolItem*  pItem = NULL;
-
+    
     IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
     Sequence< sal_Int8 > aPasswd = pIDRA->GetRedlinePassword();
     if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
@@ -1403,12 +1403,12 @@ bool SwDocShell::SetProtectionPassword( const String &rNewPassword )
         return false;
 
     bool bRes = false;
-
+    
     if (rNewPassword.Len())
     {
         // when password protection is applied change tracking must always be active
         SetChangeRecording( true );
-
+        
         Sequence< sal_Int8 > aNewPasswd;
         SvPasswordHelper::GetHashPassword( aNewPasswd, rNewPassword );
         pIDRA->SetRedlinePassword( aNewPasswd );
@@ -1423,7 +1423,7 @@ bool SwDocShell::SetProtectionPassword( const String &rNewPassword )
     return bRes;
 }
 
-
+    
 bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash )
 {
     bool bRes = false;
@@ -1431,7 +1431,7 @@ bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
     const SfxAllItemSet aSet( GetPool() );
     const SfxItemSet*   pArgs = &aSet;
     const SfxPoolItem*  pItem = NULL;
-
+        
     IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
     Sequence< sal_Int8 > aPasswdHash( pIDRA->GetRedlinePassword() );
     if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
@@ -1441,6 +1441,6 @@ bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
     bRes = true;
 
     return bRes;
-}
+}    
 
-
+    

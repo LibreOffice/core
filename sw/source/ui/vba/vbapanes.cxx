@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public:
     {
         if( Index != 1 )
             throw container::NoSuchElementException();
-        return uno::makeAny( uno::Reference< word::XPane >( new SwVbaPane( mxParent,  mxContext, mxModel ) ) );
+        return uno::makeAny( uno::Reference< word::XPane >( new SwVbaPane( mxParent,  mxContext, mxModel ) ) );    
     }
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
@@ -104,14 +104,14 @@ SwVbaPanes::createCollectionObject( const css::uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString&
+rtl::OUString& 
 SwVbaPanes::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaPanes") );
     return sImplName;
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<rtl::OUString> 
 SwVbaPanes::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > sNames;

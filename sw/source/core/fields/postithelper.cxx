@@ -90,7 +90,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLa
 {
     SwLayoutStatus aRet = INVISIBLE;
     const SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-    SwCntntNode* pNode = rPos.nNode.GetNode().GetCntntNode();   // getfirstcontentnode // getnext...
+    SwCntntNode* pNode = rPos.nNode.GetNode().GetCntntNode();	// getfirstcontentnode // getnext...
     if( !pNode )
         return aRet;
     SwClientIter aIter( *pNode );
@@ -179,12 +179,12 @@ SwPosition SwAnnotationItem::GetAnchorPosition() const
     //if( pFld )
     //{
         SwTxtNode* pTNd = pFld->GetpTxtNode();
-    //  if( pTNd )
-    //  {
+    //	if( pTNd )
+    //	{
             SwPosition aPos( *pTNd );
             aPos.nContent.Assign( pTNd, *pFld->GetStart() );
             return aPos;
-    //  }
+    //	}
     //}
 }
 

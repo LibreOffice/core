@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _WRONG_HXX
-#define _WRONG_HXX
+#ifndef	_WRONG_HXX
+#define	_WRONG_HXX
 
 #ifndef _COM_SUN_STAR_SMARTTAGS_XSMARTTAGPROPERTIES_HPP_
 #include <com/sun/star/container/XStringKeyMap.hpp>

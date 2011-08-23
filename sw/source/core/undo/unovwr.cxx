@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <doc.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>			// fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <undobj.hxx>
@@ -53,9 +53,9 @@ using namespace ::com::sun::star::uno;
 
 // zwei Zugriffs-Funktionen
 inline SwPosition* IterPt( SwUndoIter& rUIter )
-{   return rUIter.pAktPam->GetPoint();  }
+{	return rUIter.pAktPam->GetPoint();	}
 inline SwPosition* IterMk( SwUndoIter& rUIter )
-{   return rUIter.pAktPam->GetMark();   }
+{	return rUIter.pAktPam->GetMark();	}
 
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
@@ -87,7 +87,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
 
     bInsChar = TRUE;
     xub_StrLen nTxtNdLen = pTxtNd->GetTxt().Len();
-    if( nSttCntnt < nTxtNdLen )     // kein reines Einfuegen ?
+    if( nSttCntnt < nTxtNdLen )		// kein reines Einfuegen ?
     {
         aDelStr.Insert( pTxtNd->GetTxt().GetChar( nSttCntnt ) );
         if( !pHistory )
@@ -352,16 +352,14 @@ SwRewriter SwUndoOverwrite::GetRewriter() const
 
 struct _UndoTransliterate_Data
 {
-    String sText;
-    _UndoTransliterate_Data* pNext;
-    SwHistory* pHistory;
-    Sequence <sal_Int32>* pOffsets;
-    ULONG nNdIdx;
-    xub_StrLen nStart, nLen;
+    String          sText;
+    SwHistory*      pHistory;
+    Sequence< sal_Int32 >*  pOffsets;
+    ULONG           nNdIdx;
+    xub_StrLen      nStart, nLen;
 
-    _UndoTransliterate_Data( ULONG nNd, xub_StrLen nStt, xub_StrLen nStrLen,
-                                const String& rTxt )
-        : sText( rTxt ), pNext( 0 ), pHistory( 0 ), pOffsets( 0 ),
+    _UndoTransliterate_Data( ULONG nNd, xub_StrLen nStt, xub_StrLen nStrLen, const String& rTxt )
+        : sText( rTxt ), pHistory( 0 ), pOffsets( 0 ),
         nNdIdx( nNd ), nStart( nStt ), nLen( nStrLen )
     {}
     ~_UndoTransliterate_Data() { delete pOffsets; delete pHistory; }
@@ -369,22 +367,17 @@ struct _UndoTransliterate_Data
     void SetChangeAtNode( SwDoc& rDoc );
 };
 
-SwUndoTransliterate::SwUndoTransliterate( const SwPaM& rPam,
-                            const utl::TransliterationWrapper& rTrans )
-    : SwUndo( UNDO_TRANSLITERATE ), SwUndRng( rPam ),
-    pData( 0 ), pLastData( 0 ), nType( rTrans.getType() )
+SwUndoTransliterate::SwUndoTransliterate( 
+    const SwPaM& rPam,
+    const utl::TransliterationWrapper& rTrans )
+    : SwUndo( UNDO_TRANSLITERATE ), SwUndRng( rPam ), nType( rTrans.getType() )
 {
 }
 
 SwUndoTransliterate::~SwUndoTransliterate()
 {
-    _UndoTransliterate_Data* pD = pData;
-    while( pD )
-    {
-        pData = pD;
-        pD = pD->pNext;
-        delete pData;
-    }
+    for (size_t i = 0; i < aChanges.size();  ++i)
+        delete aChanges[i];
 }
 
 void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
@@ -393,8 +386,12 @@ void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
     BOOL bUndo = rDoc.DoesUndo();
     rDoc.DoUndo( FALSE );
 
-    for( _UndoTransliterate_Data* pD = pData; pD; pD = pD->pNext )
-        pD->SetChangeAtNode( rDoc );
+    // since the changes were added to the vector from the end of the string/node towards
+    // the start, we need to revert them from the start towards the end now to keep the 
+    // offset information of the undo data in sync with the changing text.
+    // Thus we need to iterate from the end of the vector to the start
+    for (sal_Int32 i = aChanges.size() - 1; i >= 0;  --i)
+        aChanges[i]->SetChangeAtNode( rDoc );
 
     rDoc.DoUndo( bUndo );
     SetPaM( rUndoIter, TRUE );
@@ -402,7 +399,7 @@ void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
 
 void SwUndoTransliterate::Redo( SwUndoIter& rUndoIter )
 {
-/* ??? */   rUndoIter.SetUpdateAttr( TRUE );
+/* ??? */	rUndoIter.SetUpdateAttr( TRUE );
 
     SetPaM( *rUndoIter.pAktPam );
     Repeat( rUndoIter );
@@ -413,8 +410,7 @@ void SwUndoTransliterate::Repeat( SwUndoIter& rUndoIter )
     SwPaM& rPam = *rUndoIter.pAktPam;
     SwDoc& rDoc = rUndoIter.GetDoc();
 
-    utl::TransliterationWrapper aTrans(
-                        ::comphelper::getProcessServiceFactory(), nType );
+    utl::TransliterationWrapper aTrans( ::comphelper::getProcessServiceFactory(), nType );
     rDoc.TransliterateText( rPam, aTrans );
 
     rUndoIter.pLastUndoObj = this;
@@ -428,67 +424,63 @@ void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
     _UndoTransliterate_Data* pNew = new _UndoTransliterate_Data(
                         rTNd.GetIndex(), nStart, (xub_StrLen)nOffsLen,
                         rTNd.GetTxt().Copy( nStart, nLen ));
-    if( pData )
-        pLastData->pNext = pNew;
-    else
-        pData = pNew;
-    pLastData = pNew;
+
+    aChanges.push_back( pNew );
 
     const sal_Int32* pOffsets = rOffsets.getConstArray();
     // where did we need less memory ?
     const sal_Int32* p = pOffsets;
     for( long n = 0; n < nOffsLen; ++n, ++p )
-        if( *p != ( nStart + n ))
+    if( *p != ( nStart + n ))
+    {
+        // create the Offset array
+        pNew->pOffsets = new Sequence <sal_Int32> ( nLen );
+        sal_Int32* pIdx = pNew->pOffsets->getArray();
+        p = pOffsets;
+        long nMyOff, nNewVal = nStart;
+        for( n = 0, nMyOff = nStart; n < nOffsLen; ++p, ++n, ++nMyOff )
         {
-            // create the Offset array
-            pNew->pOffsets = new Sequence <sal_Int32> ( nLen );
-            sal_Int32* pIdx = pNew->pOffsets->getArray();
-            p = pOffsets;
-            long nMyOff, nNewVal = nStart;
-            for( n = 0, nMyOff = nStart; n < nOffsLen; ++p, ++n, ++nMyOff )
+            if( *p < nMyOff )
             {
-                if( *p < nMyOff )
-                {
-                    // something is deleted
-                    nMyOff = *p;
-                    *(pIdx-1) = nNewVal++;
-                }
-                else if( *p > nMyOff )
-                {
-                    for( ; *p > nMyOff; ++nMyOff )
-                        *pIdx++ = nNewVal;
-                    --nMyOff;
-                    --n;
-                    --p;
-                }
-                else
-                    *pIdx++ = nNewVal++;
+                // something is deleted
+                nMyOff = *p;
+                *(pIdx-1) = nNewVal++;
             }
-
-            // and then we need to save the attributes/bookmarks
-            // but this data must moved every time to the last in the chain!
-            _UndoTransliterate_Data* pD = pData;
-            while( pD != pNew )
+            else if( *p > nMyOff )
             {
-                if( pD->nNdIdx == pNew->nNdIdx && pD->pHistory )
-                {
-                    // same node and have a history?
-                    pNew->pHistory = pD->pHistory;
-                    pD->pHistory = 0;
-                    break;          // more can't exist
-                }
-                pD = pD->pNext;
+                for( ; *p > nMyOff; ++nMyOff )
+                    *pIdx++ = nNewVal;
+                --nMyOff;
+                --n;
+                --p;
             }
-
-            if( !pNew->pHistory )
-            {
-                pNew->pHistory = new SwHistory;
-                SwRegHistory aRHst( rTNd, pNew->pHistory );
-                pNew->pHistory->CopyAttr( rTNd.GetpSwpHints(),
-                        pNew->nNdIdx, 0, rTNd.GetTxt().Len(), false );
-            }
-            break;
+            else
+                *pIdx++ = nNewVal++;
         }
+
+        // and then we need to save the attributes/bookmarks
+        // but this data must moved every time to the last in the chain!
+        for (size_t i = 0; i + 1 < aChanges.size(); ++i)    // check all changes but not the current one
+        {
+            _UndoTransliterate_Data* pD = aChanges[i];
+            if( pD->nNdIdx == pNew->nNdIdx && pD->pHistory )
+            {
+                // same node and have a history?
+                pNew->pHistory = pD->pHistory;
+                pD->pHistory = 0;
+                break;		    // more can't exist
+            }
+        }
+
+        if( !pNew->pHistory )
+        {
+            pNew->pHistory = new SwHistory;
+            SwRegHistory aRHst( rTNd, pNew->pHistory );
+            pNew->pHistory->CopyAttr( rTNd.GetpSwpHints(),
+                    pNew->nNdIdx, 0, rTNd.GetTxt().Len(), false );
+        }
+        break;
+    }
 }
 
 void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )

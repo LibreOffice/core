@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ class SwNoTxtFrm: public SwCntntFrm
 {
     friend void _FrmFinit();
 
-    short    nWeight;                   // "Wichtigkeit" der Grafik
+    short	 nWeight;					// "Wichtigkeit" der Grafik
 
     const Size& GetSize() const;
 
@@ -62,7 +62,7 @@ public:
     BOOL GetCrsrOfst(SwPosition* pPos, Point& aPoint,
                      SwCrsrMoveState* = 0) const;
 
-    const Size &GetGrfSize() const  { return GetSize(); }
+    const Size &GetGrfSize() const	{ return GetSize(); }
     void GetGrfArea( SwRect &rRect, SwRect * = 0, BOOL bMirror = TRUE ) const;
 
     BOOL IsTransparent() const;

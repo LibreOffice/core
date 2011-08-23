@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <ndtxt.hxx>
 #include <docary.hxx>
 #include <swwait.hxx>
-#include <swundo.hxx>       // fuer die UndoIds
+#include <swundo.hxx>		// fuer die UndoIds
 #include <section.hxx>
 #include <doctxm.hxx>
 #include <edglbldc.hxx>
@@ -51,7 +51,7 @@ BOOL SwEditShell::IsGlobalDoc() const
 void SwEditShell::SetGlblDocSaveLinks( BOOL bFlag )
 {
     getIDocumentSettingAccess()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, bFlag);
-    if( !GetDoc()->IsModified() )   // Bug 57028
+    if( !GetDoc()->IsModified() )	// Bug 57028
         GetDoc()->SetUndoNoResetModified();
     GetDoc()->SetModified();
 }
@@ -82,7 +82,7 @@ USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
             SwGlblDocContentPtr pNew;
             switch( pSect->GetType() )
             {
-            case TOX_HEADER_SECTION:    break;      // ignore
+            case TOX_HEADER_SECTION:	break;		// ignore
             case TOX_CONTENT_SECTION:
                 ASSERT( pSect->ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
                 pNew = new SwGlblDocContent( (SwTOXBaseSection*)pSect );
@@ -113,7 +113,7 @@ USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
                 if( !rArr.Insert( pNew ) )
                     delete pNew;
                 else
-                    ++n;        // auf die naechste Position
+                    ++n;		// auf die naechste Position
                 break;
             }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
         StringList [en-US]=             \
         {                               \
             < "< not available >" ; > ; \
-        };
+        };                              
 
 
 #define GREETINGS_BODY  \
@@ -150,23 +150,23 @@ TabPage DLG_MM_GREETINGS_PAGE
     };
     GREETINGS_BODY
     FixedText       FI_PREVIEW
-    {
+    {                                                                               
         Pos = MAP_APPFONT ( 12 , 168 ) ;
-        Size = MAP_APPFONT ( 242 , 8 ) ;
+        Size = MAP_APPFONT ( 242 , 8 ) ;                                            
         Text[ en-US ] = "Preview";
-    };
+    };                                                                              
     Window          WIN_PREVIEW
-    {
+    {                                                                               
         Pos = MAP_APPFONT ( 12 , 179 );
-        Size = MAP_APPFONT ( 186 , 21 ) ;
+        Size = MAP_APPFONT ( 186 , 21 ) ;                                           
         Border = TRUE;
-    };
+    };                                                                              
     PushButton      PB_ASSIGN
-    {
+    {                                                                               
         Pos = MAP_APPFONT ( 204 , 179 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;                                            
         Text[ en-US ] = "~Match fields...";
-    };
+    };                                                                              
     FixedText       FI_DOCINDEX
     {
         Pos = MAP_APPFONT ( 121 , 206 ) ;
@@ -193,7 +193,7 @@ TabPage DLG_MM_GREETINGS_PAGE
     };
 };
 
-#undef TOP_OFFSET
+#undef TOP_OFFSET 
 #undef LEFT_OFFSET
 
 #define TOP_OFFSET 0
@@ -207,11 +207,11 @@ ModalDialog DLG_MM_MAILBODY
     Moveable = TRUE ;
     Text [ en-US ] = "E-Mail Message";
     CheckBox    CB_GREETINGLINE
-    {
-        Pos = MAP_APPFONT ( 6  , 3 ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
+    {                                                                               
+        Pos = MAP_APPFONT ( 6  , 3 ) ;                    
+        Size = MAP_APPFONT ( 242 , 10 ) ;                                           
         Text[ en-US ] = "This e-mail should contain a salutation";
-    };
+    };                                                                              
     GREETINGS_BODY
     FixedText           FT_BODY
     {

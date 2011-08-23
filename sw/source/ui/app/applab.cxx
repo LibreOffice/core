@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,10 +117,10 @@ const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
         aSet.Put(SwFmtVertOrient(rItem.lUpper + nRow * rItem.lVDist,
                                                     text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
     }
-    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Fly einfuegen
+    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );	// Fly einfuegen
     ASSERT( pFmt, "Fly not inserted" );
 
-    rSh.UnSelectFrm();  //Rahmen wurde automatisch selektiert
+    rSh.UnSelectFrm();	//Rahmen wurde automatisch selektiert
 
     rSh.SetTxtFmtColl( rSh.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
 
@@ -157,10 +157,10 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
         aSet.Put(SwFmtVertOrient(rItem.lUpper + nRow * rItem.lVDist,
                                                     text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
     }
-    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Fly einfuegen
+    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );	// Fly einfuegen
     ASSERT( pFmt, "Fly not inserted" );
 
-    rSh.UnSelectFrm();  //Rahmen wurde automatisch selektiert
+    rSh.UnSelectFrm();	//Rahmen wurde automatisch selektiert
 
     rSh.SetTxtFmtColl( rSh.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
 
@@ -245,7 +245,7 @@ static sal_uInt16 nBCTitleNo = 0;
         SwWrtShell *pSh = pNewView->GetWrtShellPtr();
         ASSERT( pSh, "missing WrtShell" );
 
-        {   // block for locks the dispatcher!!
+        {	// block for locks the dispatcher!!
 
             SwWait aWait( (SwDocShell&)*xDocSh, sal_True );
 
@@ -254,7 +254,7 @@ static sal_uInt16 nBCTitleNo = 0;
             pSh->DoUndo( sal_False );
             pSh->StartAllAction();
 
-            pSh->SetNewDoc();       // Performanceprobleme vermeiden
+            pSh->SetNewDoc();		// Performanceprobleme vermeiden
 
             SwPageDesc aDesc = pSh->GetPageDesc( 0 );
             SwFrmFmt&  rFmt  = aDesc.GetMaster();
@@ -276,7 +276,7 @@ static sal_uInt16 nBCTitleNo = 0;
             aDesc.ChgFooterShare(sal_False);
 
 
-            aDesc.SetUseOn(nsUseOnPage::PD_ALL);                // Seitennumerierung
+            aDesc.SetUseOn(nsUseOnPage::PD_ALL);				// Seitennumerierung
 
             // Einstellen der Seitengroesse
             rFmt.SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE,
@@ -305,7 +305,7 @@ static sal_uInt16 nBCTitleNo = 0;
             pSh->ChgPageDesc( 0, aDesc );
 
             // Rahmen einfuegen
-            SwFldMgr*        pFldMgr = new SwFldMgr;
+            SwFldMgr*		 pFldMgr = new SwFldMgr;
             pFldMgr->SetEvalExpFlds(sal_False);
 
             //fix(24446): Damit der Text der Ettiketten nicht im unbedruckbaren
@@ -327,17 +327,17 @@ static sal_uInt16 nBCTitleNo = 0;
 
             // Rahmenvorlage vorbereiten
             SwFrmFmt* pFmt = pSh->GetFrmFmtFromPool( RES_POOLFRM_LABEL );
-            SwFmtFrmSize aFrmSize(  ATT_FIX_SIZE,
+            SwFmtFrmSize aFrmSize(	ATT_FIX_SIZE,
                                     rItem.lHDist - (rItem.lHDist-rItem.lWidth),
                                     rItem.lVDist - (rItem.lVDist-rItem.lHeight));
             pFmt->SetFmtAttr(aFrmSize);
 
-            SvxLRSpaceItem aFrmLRSpace( 0, (sal_uInt16)(rItem.lHDist - rItem.lWidth),
+            SvxLRSpaceItem aFrmLRSpace(	0, (sal_uInt16)(rItem.lHDist - rItem.lWidth),
                                         0, 0,
                                         RES_LR_SPACE);
             pFmt->SetFmtAttr(aFrmLRSpace);
 
-            SvxULSpaceItem aFrmULSpace( 0, (sal_uInt16)(rItem.lVDist - rItem.lHeight),
+            SvxULSpaceItem aFrmULSpace(	0, (sal_uInt16)(rItem.lVDist - rItem.lHeight),
                                         RES_UL_SPACE);
             pFmt->SetFmtAttr(aFrmULSpace);
 
@@ -373,10 +373,10 @@ static sal_uInt16 nBCTitleNo = 0;
                                 pSh->Pop( bInFly );
 
                                 if( bInFly )
-                                    pSh->EndDoc(sal_True);  // select all content
+                                    pSh->EndDoc(sal_True);	// select all content
                                                         // in the fly
                                 else
-                                    pSh->SetMark();     // set only the mark
+                                    pSh->SetMark();		// set only the mark
 
                                 SwSectionData aSect(CONTENT_SECTION,
                                     String::CreateFromAscii(MASTER_LABEL));
@@ -392,9 +392,9 @@ static sal_uInt16 nBCTitleNo = 0;
                             sLinkName += String::CreateFromAscii(MASTER_LABEL);
                             aSect.SetLinkFileName(sLinkName);
                             aSect.SetProtectFlag(true);
-                            pSh->Insert(aDotStr);   // Dummytext zum Zuweisen der Section
+                            pSh->Insert(aDotStr);	// Dummytext zum Zuweisen der Section
                             pSh->SttDoc();
-                            pSh->EndDoc(sal_True);  // Alles im Rahmen selektieren
+                            pSh->EndDoc(sal_True);	// Alles im Rahmen selektieren
                             pSh->InsertSection(aSect);
                         }
                         pSh->Pop( sal_False );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@ class SwXMLBrushItemImportContext : public SvXMLImportContext
 {
 private:
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xBase64Stream;
-    SvxBrushItem                *pItem;
-
+    SvxBrushItem				*pItem;
+    
     void ProcessAttrs(
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
@@ -58,7 +58,7 @@ public:
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const SvXMLUnitConverter& rUnitConv,
-               const SvxBrushItem& rItem    );
+               const SvxBrushItem& rItem	);
 
     SwXMLBrushItemImportContext(
             SvXMLImport& rImport,
@@ -67,7 +67,7 @@ public:
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const SvXMLUnitConverter& rUnitConv,
-            sal_uInt16 nWhich   );
+            sal_uInt16 nWhich	);
 
     virtual ~SwXMLBrushItemImportContext();
 
@@ -82,5 +82,5 @@ public:
 };
 
 
-#endif  //  _XMLBRSHI_HXX
+#endif	//  _XMLBRSHI_HXX
 

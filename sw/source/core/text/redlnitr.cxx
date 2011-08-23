@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,18 +36,18 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 #include <swmodule.hxx>
-#include <redline.hxx>      // SwRedline
-#include <txtatr.hxx>       // SwTxt ...
-#include <docary.hxx>       // SwRedlineTbl
-#include <itratr.hxx>       // SwAttrIter
-#include <ndtxt.hxx>        // SwTxtNode
-#include <doc.hxx>          // SwDoc
+#include <redline.hxx>		// SwRedline
+#include <txtatr.hxx>		// SwTxt ...
+#include <docary.hxx>		// SwRedlineTbl
+#include <itratr.hxx>		// SwAttrIter
+#include <ndtxt.hxx>		// SwTxtNode
+#include <doc.hxx>			// SwDoc
 #include <rootfrm.hxx>
 #include <breakit.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/cmdevt.hxx>
 #include <vcl/settings.hxx>
-#include <txtfrm.hxx>       // SwTxtFrm
+#include <txtfrm.hxx>		// SwTxtFrm
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
@@ -59,7 +59,7 @@
 using namespace ::com::sun::star;
 
 /*************************************************************************
- *                      SwAttrIter::CtorInitAttrIter()
+ *						SwAttrIter::CtorInitAttrIter()
  *************************************************************************/
 void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm )
 {
@@ -224,15 +224,15 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
             if( nNew >= nEnd )
             {
                 --nRet;
-                _Clear( &rFnt );    // Wir gehen hinter den aktuellen Bereich
-                ++nAct;             // und pruefen gleich den naechsten
+                _Clear( &rFnt );	// Wir gehen hinter den aktuellen Bereich
+                ++nAct;		   		// und pruefen gleich den naechsten
             }
             else if( nNew < nStart )
             {
                 --nRet;
-                _Clear( &rFnt );    // Wir gehen vor den aktuellen Bereich
+                _Clear( &rFnt );	// Wir gehen vor den aktuellen Bereich
                 if( nAct > nFirst )
-                    nAct = nFirst;  // Die Pruefung muss von vorne beginnen
+                    nAct = nFirst;	// Die Pruefung muss von vorne beginnen
                 else
                     return nRet + EnterExtend( rFnt, nNew ); // Es gibt keinen vor uns.
             }
@@ -275,7 +275,7 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
                     {
                         const SfxPoolItem* pItem;
                         if( ( nWhich < RES_CHRATR_END ) &&
-                            ( SFX_ITEM_SET == pSet->GetItemState( nWhich, sal_True, &pItem ) ) )
+                            ( SFX_ITEM_SET == pSet->GetItemState( nWhich, sal_True,	&pItem ) ) )
                         {
                             SwTxtAttr* pAttr = MakeRedlineTxtAttr(
                                 const_cast<SwDoc&>(rDoc),
@@ -466,7 +466,7 @@ sal_Bool SwExtend::_Leave( SwFont& rFnt, xub_StrLen nNew )
     MSHORT nOldAttr = rArr[ nPos - nStart ];
     nPos = nNew;
     if( Inside() )
-    {   // Wir sind innerhalb des ExtendText-Bereichs geblieben
+    {	// Wir sind innerhalb des ExtendText-Bereichs geblieben
         MSHORT nAttr = rArr[ nPos - nStart ];
         if( nOldAttr != nAttr ) // Gibt es einen (inneren) Attributwechsel?
         {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,14 +84,14 @@ SwVbaVariable::getIndex() throw ( css::uno::RuntimeException )
     return 0;
 }
 
-rtl::OUString&
+rtl::OUString& 
 SwVbaVariable::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaVariable") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 SwVbaVariable::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

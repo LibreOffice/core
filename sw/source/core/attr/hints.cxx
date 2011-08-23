@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -296,9 +296,9 @@ USHORT GetWhichOfScript( USHORT nWhich, USHORT nScript )
                 nScript = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
             switch( nScript)
             {
-            case ScriptType::COMPLEX:   ++pM;  // no break;
-            case ScriptType::ASIAN:     ++pM;  // no break;
-            default:                    nRet = *pM;
+            case ScriptType::COMPLEX:	++pM;  // no break;
+            case ScriptType::ASIAN:		++pM;  // no break;
+            default:					nRet = *pM;
             }
         }
     }

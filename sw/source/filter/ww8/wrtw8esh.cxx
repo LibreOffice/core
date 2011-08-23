@@ -173,8 +173,8 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
         // --> OD 2010-05-14 #160026#
         // property "Help" does not exist and due to the no-existence an exception is thrown.
 //        uno::Any aTmp = xPropSet->getPropertyValue(C2U("Help"));
-        try
-        {
+        try 
+        {        
             uno::Any aTmp = xPropSet->getPropertyValue(C2U("HelpText"));
             // <--
             const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();

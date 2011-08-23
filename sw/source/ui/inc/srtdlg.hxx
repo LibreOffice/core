@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,38 +47,38 @@ class CollatorRessource;
 
 class SwSortDlg : public SvxStandardDialog
 {
-    FixedText           aColLbl;
-    FixedText           aTypLbl;
-    FixedText           aDirLbl;
+    FixedText			aColLbl;
+    FixedText			aTypLbl;
+    FixedText 			aDirLbl;
 
     FixedLine           aDirFL;
 
-    CheckBox            aKeyCB1;
-    NumericField        aColEdt1;
-    ListBox             aTypDLB1;
-    RadioButton         aSortUpRB;
-    RadioButton         aSortDnRB;
+    CheckBox			aKeyCB1;
+    NumericField		aColEdt1;
+    ListBox				aTypDLB1;
+    RadioButton			aSortUpRB;
+    RadioButton			aSortDnRB;
 
-    CheckBox            aKeyCB2;
-    NumericField        aColEdt2;
-    ListBox             aTypDLB2;
-    RadioButton         aSortUp2RB;
-    RadioButton         aSortDn2RB;
+    CheckBox			aKeyCB2;
+    NumericField		aColEdt2;
+    ListBox				aTypDLB2;
+    RadioButton			aSortUp2RB;
+    RadioButton			aSortDn2RB;
 
-    CheckBox            aKeyCB3;
-    NumericField        aColEdt3;
-    ListBox             aTypDLB3;
-    RadioButton         aSortUp3RB;
-    RadioButton         aSortDn3RB;
+    CheckBox			aKeyCB3;
+    NumericField		aColEdt3;
+    ListBox				aTypDLB3;
+    RadioButton			aSortUp3RB;
+    RadioButton			aSortDn3RB;
 
     FixedLine           aSortFL;
-    RadioButton         aColumnRB;
-    RadioButton         aRowRB;
+    RadioButton			aColumnRB;
+    RadioButton			aRowRB;
 
     FixedLine           aDelimFL;
-    RadioButton         aDelimTabRB;
-    RadioButton         aDelimFreeRB;
-    Edit                aDelimEdt;
+    RadioButton			aDelimTabRB;
+    RadioButton			aDelimFreeRB;
+    Edit				aDelimEdt;
     PushButton          aDelimPB;
 
     FixedLine           aLangFL;
@@ -87,22 +87,22 @@ class SwSortDlg : public SvxStandardDialog
     FixedLine           aSortOptFL;
     CheckBox            aCaseCB;
 
-    OKButton            aOkBtn;
-    CancelButton        aCancelBtn;
-    HelpButton          aHelpBtn;
+    OKButton			aOkBtn;
+    CancelButton		aCancelBtn;
+    HelpButton			aHelpBtn;
 
     String aColTxt;
     String aRowTxt;
     String aNumericTxt;
 
-    SwWrtShell          &rSh;
+    SwWrtShell			&rSh;
     CollatorRessource* pColRes;
 
     USHORT nX;
     USHORT nY;
 
-    virtual void        Apply();
-    sal_Unicode         GetDelimChar() const;
+    virtual void		Apply();
+    sal_Unicode			GetDelimChar() const;
 
     DECL_LINK( CheckHdl, CheckBox * );
     DECL_LINK( DelimHdl, RadioButton* );

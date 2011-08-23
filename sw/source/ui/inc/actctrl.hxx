@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include "swdllapi.h"
 
 /*--------------------------------------------------------------------
-    Beschreibung:   numerische Eingabe
+    Beschreibung:	numerische Eingabe
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC NumEditAction: public NumericField
@@ -41,14 +41,14 @@ class SW_DLLPUBLIC NumEditAction: public NumericField
     Link aActionLink;
 
 protected:
-    virtual void Action();
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual	void Action();
+    virtual long	Notify( NotifyEvent& rNEvt );
 public:
     NumEditAction( Window* pParent, const ResId& rResId ) :
                                 NumericField(pParent, rResId) {}
 
-    void        SetActionHdl( const Link& rLink )   { aActionLink = rLink;}
-    const Link& GetActionHdl() const                { return aActionLink; }
+    void 		SetActionHdl( const Link& rLink )	{ aActionLink = rLink;}
+    const Link& GetActionHdl() const 				{ return aActionLink; }
 };
 
 
@@ -60,13 +60,13 @@ class SW_DLLPUBLIC NoSpaceEdit : public Edit
     String sForbiddenChars;
 protected:
     virtual void KeyInput( const KeyEvent& );
-    virtual void        Modify();
+    virtual void		Modify();
 
 public:
     NoSpaceEdit( Window* pParent, const ResId& rResId);
     virtual ~NoSpaceEdit();
-    void            SetForbiddenChars(const String& rSet){sForbiddenChars = rSet;}
-    const String&   GetForbiddenChars(){return sForbiddenChars;}
+    void			SetForbiddenChars(const String& rSet){sForbiddenChars = rSet;}
+    const String& 	GetForbiddenChars(){return sForbiddenChars;}
 };
 
 /* -----------------21.04.98 08:33-------------------
@@ -93,6 +93,6 @@ public:
 
     void SetReturnActionLink(const Link& rLink)
             { aReturnActionLink = rLink;}
-};
+};        
 
 #endif

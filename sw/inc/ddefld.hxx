@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@ public:
                     USHORT = sfx2::LINKUPDATE_ONCALL );
     ~SwDDEFieldType();
 
-    const String& GetExpansion() const          { return aExpansion; }
-    void SetExpansion( const String& rStr )     { aExpansion = rStr,
+    const String& GetExpansion() const			{ return aExpansion; }
+    void SetExpansion( const String& rStr )		{ aExpansion = rStr,
                                                   bCRLFFlag = FALSE; }
 
     virtual SwFieldType* Copy() const;
@@ -69,26 +69,26 @@ public:
     String GetCmd() const;
     void SetCmd( const String& rStr );
 
-    USHORT GetType() const          { return refLink->GetUpdateMode();  }
-    void SetType( USHORT nType )    { refLink->SetUpdateMode( nType );  }
+    USHORT GetType() const 			{ return refLink->GetUpdateMode();	}
+    void SetType( USHORT nType )	{ refLink->SetUpdateMode( nType );	}
 
-    BOOL IsDeleted() const          { return bDeleted; }
-    void SetDeleted( BOOL b )       { bDeleted = b; }
+    BOOL IsDeleted() const 			{ return bDeleted; }
+    void SetDeleted( BOOL b )		{ bDeleted = b; }
 
     void UpdateNow()                { refLink->Update(); }
-    void Disconnect()               { refLink->Disconnect(); }
+    void Disconnect()				{ refLink->Disconnect(); }
 
     const ::sfx2::SvBaseLink& GetBaseLink() const    { return *refLink; }
           ::sfx2::SvBaseLink& GetBaseLink()          { return *refLink; }
 
-    const SwDoc* GetDoc() const     { return pDoc; }
-          SwDoc* GetDoc()           { return pDoc; }
+    const SwDoc* GetDoc() const 	{ return pDoc; }
+          SwDoc* GetDoc() 			{ return pDoc; }
     void SetDoc( SwDoc* pDoc );
 
-    void IncRefCnt() {  if( !nRefCnt++ && pDoc ) _RefCntChgd(); }
-    void DecRefCnt() {  if( !--nRefCnt && pDoc ) _RefCntChgd(); }
+    void IncRefCnt() {	if( !nRefCnt++ && pDoc ) _RefCntChgd();	}
+    void DecRefCnt() {	if( !--nRefCnt && pDoc ) _RefCntChgd(); }
 
-    void SetCRLFDelFlag( BOOL bFlag = TRUE )    { bCRLFFlag = bFlag; }
+    void SetCRLFDelFlag( BOOL bFlag = TRUE )	{ bCRLFFlag = bFlag; }
 };
 
 /*--------------------------------------------------------------------
@@ -101,7 +101,7 @@ public:
     SwDDEField(SwDDEFieldType*);
     ~SwDDEField();
 
-    virtual String   Expand() const;
+    virtual String	 Expand() const;
     virtual SwField* Copy() const;
 
     // ueber Typen Parameter ermitteln
@@ -109,8 +109,8 @@ public:
     virtual const String& GetPar1() const;
 
     // Commando
-    virtual String  GetPar2() const;
-    virtual void    SetPar2(const String& rStr);
+    virtual String	GetPar2() const;
+    virtual void	SetPar2(const String& rStr);
 };
 
 

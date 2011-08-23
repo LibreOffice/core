@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -319,6 +319,14 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
 
         return FLD_OK;
     }
+}
+
+eF_ResT SwWW8ImplReader::Read_F_HTMLControl( WW8FieldDesc* pF, String& rStr)
+{
+    if( bObj && nPicLocFc )
+        nObjLocFc = nPicLocFc;
+    bEmbeddObj = true;
+    return FLD_TEXT;
 }
 
 void SwWW8ImplReader::DeleteFormImpl()

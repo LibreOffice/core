@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <fldbas.hxx>
-#include <swtable.hxx>      // SwTxtFld
+#include <swtable.hxx>		// SwTxtFld
 #include <docary.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
@@ -315,8 +315,8 @@ BOOL SwCrsrShell::GotoNextTOXBase( const String* pName )
              pCurCrsr->GetPoint()->nNode < pSectNd->GetIndex() &&
             ( !pFnd || pFnd->GetIndex() > pSectNd->GetIndex() ) &&
 // JP 10.12.96: solange wir nur 3 Typen kennen und UI-seitig keine anderen
-//              einstellbar sind, muss ueber den Titel gesucht werden!
-//          ( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTypeName() ) &&
+//				einstellbar sind, muss ueber den Titel gesucht werden!
+//			( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTypeName() ) &&
             ( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTOXName() )
             )
         {
@@ -365,8 +365,8 @@ BOOL SwCrsrShell::GotoPrevTOXBase( const String* pName )
             pCurCrsr->GetPoint()->nNode > pSectNd->EndOfSectionIndex() &&
             ( !pFnd || pFnd->GetIndex() < pSectNd->GetIndex() ) &&
 // JP 10.12.96: solange wir nur 3 Typen kennen und UI-seitig keine anderen
-//              einstellbar sind, muss ueber den Titel gesucht werden!
-//          ( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTypeName() ) &&
+//				einstellbar sind, muss ueber den Titel gesucht werden!
+//			( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTypeName() ) &&
             ( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTOXName() )
             )
         {
@@ -566,7 +566,7 @@ BOOL SwCrsrShell::GotoNxtPrvTOXMark( BOOL bNext )
                 0 != ( pCFrm = pTxtNd->GetFrm( &aPt, 0, FALSE )) &&
                 ( IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
             {
-                SwNodeIndex aNdIndex( *pTxtNd );    // UNIX benoetigt dieses Obj.
+                SwNodeIndex aNdIndex( *pTxtNd );	// UNIX benoetigt dieses Obj.
                 _SetGetExpFld aCmp( aNdIndex, *pTxtTOX, 0 );
                 aCmp.SetBodyPos( *pCFrm );
 
@@ -700,9 +700,9 @@ BOOL SwCrsrShell::MoveFldType( const SwFieldType* pFldType, BOOL bNext,
     SwCursor* pCrsr = getShellCrsr( true );
     {
         // JP 19.08.98: es muss immer ueber das Feld gesucht werden, damit
-        //              auch immer das richtige gefunden wird, wenn welche in
-        //              Rahmen stehen, die in einem Absatz verankert sind,
-        //              in dem ein Feld steht - siehe auch Bug 55247
+        //				auch immer das richtige gefunden wird, wenn welche in
+        //				Rahmen stehen, die in einem Absatz verankert sind,
+        //				in dem ein Feld steht - siehe auch Bug 55247
         const SwPosition& rPos = *pCrsr->GetPoint();
 
         SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
@@ -737,15 +737,15 @@ BOOL SwCrsrShell::MoveFldType( const SwFieldType* pFldType, BOOL bNext,
             delete pTxtFld;
         }
 
-        if( bFound )        // stehe auf einem ?
+        if( bFound )		// stehe auf einem ?
         {
             if( bNext )
             {
                 if( ++nPos >= aSrtLst.Count() )
-                    return FALSE;                   // schon am Ende
+                    return FALSE;					// schon am Ende
             }
             else if( !nPos-- )
-                return FALSE;       // weiter nach vorne geht nicht
+                return FALSE;	  	// weiter nach vorne geht nicht
         }
         else if( bNext ? nPos >= aSrtLst.Count() : !nPos--)
             return FALSE;
@@ -826,7 +826,7 @@ BOOL SwCrsrShell::GotoOutline( const String& rName )
 
 
 
-BOOL SwCrsrShell::GotoNextOutline()         // naechster Node mit Outline-Num.
+BOOL SwCrsrShell::GotoNextOutline()			// naechster Node mit Outline-Num.
 {
     SwCursor* pCrsr = getShellCrsr( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
@@ -854,7 +854,7 @@ BOOL SwCrsrShell::GotoNextOutline()         // naechster Node mit Outline-Num.
 }
 
 
-BOOL SwCrsrShell::GotoPrevOutline()         // vorheriger Node mit Outline-Num.
+BOOL SwCrsrShell::GotoPrevOutline()			// vorheriger Node mit Outline-Num.
 {
     SwCursor* pCrsr = getShellCrsr( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
@@ -866,7 +866,7 @@ BOOL SwCrsrShell::GotoPrevOutline()         // vorheriger Node mit Outline-Num.
     BOOL bRet = FALSE;
     if( nPos )
     {
-        --nPos; // davor
+        --nPos;	// davor
 
         pNd = rNds.GetOutLineNds()[ nPos ];
         if( pNd->GetIndex() > pCrsr->GetPoint()->nNode.GetIndex() )
@@ -896,9 +896,9 @@ USHORT SwCrsrShell::GetOutlinePos( BYTE nLevel )
     SwNode* pNd = pCrsr->GetNode();
     USHORT nPos;
     if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
-        nPos++;         // steht auf der Position, fuers while zum Naechsten
+        nPos++;			// steht auf der Position, fuers while zum Naechsten
 
-    while( nPos-- )     // immer den davor testen !
+    while( nPos-- )		// immer den davor testen !
     {
         pNd = rNds.GetOutLineNds()[ nPos ];
 
@@ -907,7 +907,7 @@ USHORT SwCrsrShell::GetOutlinePos( BYTE nLevel )
             return nPos;
 
     }
-    return USHRT_MAX;       // davor keiner mehr also Ende
+    return USHRT_MAX;		// davor keiner mehr also Ende
 }
 
 
@@ -916,13 +916,13 @@ BOOL SwCrsrShell::MakeOutlineSel( USHORT nSttPos, USHORT nEndPos,
 {
     const SwNodes& rNds = GetDoc()->GetNodes();
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
-    if( !rOutlNds.Count() )     // wie jetzt ???
+    if( !rOutlNds.Count() )		// wie jetzt ???
         return FALSE;
 
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
 
-    if( nSttPos > nEndPos )         // sollte jemand das vertauscht haben?
+    if( nSttPos > nEndPos )			// sollte jemand das vertauscht haben?
     {
         ASSERT( !this, "Start- > Ende-Position im Array" );
         USHORT nTmp = nSttPos;
@@ -943,14 +943,14 @@ BOOL SwCrsrShell::MakeOutlineSel( USHORT nSttPos, USHORT nEndPos,
             //BYTE nNxtLevel = pEndNd->GetTxtNode()->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
             const int nNxtLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;//<-end,zhaojianwei
             if( nNxtLevel <= nLevel )
-                break;          // EndPos steht jetzt auf dem naechsten
+                break;			// EndPos steht jetzt auf dem naechsten
         }
     }
     // ohne Childs, dann aber zumindest auf den naechsten
     else if( ++nEndPos < rOutlNds.Count() )
         pEndNd = rOutlNds[ nEndPos ];
 
-    if( nEndPos == rOutlNds.Count() )       // kein Ende gefunden
+    if( nEndPos == rOutlNds.Count() )		// kein Ende gefunden
         pEndNd = &rNds.GetEndOfContent();
 
     KillPams();
@@ -962,7 +962,7 @@ BOOL SwCrsrShell::MakeOutlineSel( USHORT nSttPos, USHORT nEndPos,
     pCurCrsr->GetPoint()->nContent.Assign( pSttNd->GetCntntNode(), 0 );
     pCurCrsr->SetMark();
     pCurCrsr->GetPoint()->nNode = *pEndNd;
-    pCurCrsr->Move( fnMoveBackward, fnGoNode );     // ans Ende vom Vorgaenger
+    pCurCrsr->Move( fnMoveBackward, fnGoNode );		// ans Ende vom Vorgaenger
 
     // und schon ist alles selektiert
     BOOL bRet = !pCurCrsr->IsSelOvr();
@@ -1103,14 +1103,14 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                         }
                         if( bRet )
                         {
-//                          rCntntAtPos.sStr = pTxtNd->GetExpandTxt(
-//                                      *pTxtAttr->GetStart(),
-//                                      *pTxtAttr->GetEnd() - *pTxtAttr->GetStart(),
-//                                      FALSE );
+//							rCntntAtPos.sStr = pTxtNd->GetExpandTxt(
+//										*pTxtAttr->GetStart(),
+//										*pTxtAttr->GetEnd() - *pTxtAttr->GetStart(),
+//										FALSE );
 
-//                          rCntntAtPos.aFnd.pAttr = &pTxtAttr->GetAttr();
+//							rCntntAtPos.aFnd.pAttr = &pTxtAttr->GetAttr();
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_SMARTTAG;
-//                          rCntntAtPos.pFndTxtAttr = pTxtAttr;
+//							rCntntAtPos.pFndTxtAttr = pTxtAttr;
 
                             if( pFldRect && 0 != ( pFrm = pTxtNd->GetFrm( &aPt ) ) )
                                 pFrm->GetCharRect( *pFldRect, aPos, &aTmpState );
@@ -1158,7 +1158,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                             // erzeuge aus der internen (fuer CORE)
                             // die externe (fuer UI) Formel
                             const SwTableNode* pTblNd = pTxtNd->FindTableNode();
-                            if( pTblNd )        // steht in einer Tabelle
+                            if( pTblNd )		// steht in einer Tabelle
                                 ((SwTblField*)pFld)->PtrToBoxNm( &pTblNd->GetTable() );
                         }
                     }
@@ -1373,7 +1373,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                                     pSttNd->GetIndex() )) &&
 #ifdef DBG_UTIL
                     ( SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
-                        RES_BOXATR_FORMULA, FALSE, &pItem ) ||
+                        RES_BOXATR_FORMULA, FALSE, &pItem )	||
                       SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
                         RES_BOXATR_VALUE, FALSE, &pItem ))
 #else
@@ -1400,7 +1400,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                     else if( !pF )
                         pF = pFrm;
 
-                    if( pF )            // nur dann ist es gueltig!!
+                    if( pF )			// nur dann ist es gueltig!!
                     {
                         // erzeuge aus der internen (fuer CORE)
                         // die externe (fuer UI) Formel
@@ -1451,7 +1451,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                     {
                         const SwTxtAttr* pHt = pTxtNd->GetSwpHints()[i];
                         xub_StrLen nAttrStart = *pHt->GetStart();
-                        if( nAttrStart > n )        // ueber den Bereich hinaus
+                        if( nAttrStart > n ) 		// ueber den Bereich hinaus
                             break;
 
                         if( 0 != pHt->GetEnd() && (
@@ -1784,7 +1784,7 @@ BOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     *pCurCrsr->GetPoint() = aPos;
                     GetDoc()->SetTxtFmtColl( *pCurCrsr, pNextFmt, false );
                     //JP 04.11.97: erstmal keine Folgevorlage der
-                    //              Folgevorlage beachten
+                    //				Folgevorlage beachten
                     // pNextFmt = pNextFmt->GetNextTxtFmtColl();
                 }
                 if( n < aFPos.nColumnCnt )
@@ -2014,7 +2014,7 @@ const SwRedline* SwCrsrShell::GotoRedline( USHORT nArrPos, BOOL bSelect )
                         switch( ::ComparePosition( *pCStt, *pCEnd,
                                                    *pNStt, *pNEnd ))
                         {
-                        case POS_INSIDE:    // Pos1 liegt vollstaendig in Pos2
+                        case POS_INSIDE:	// Pos1 liegt vollstaendig in Pos2
                             if( !pCur->HasMark() )
                             {
                                 pCur->SetMark();
@@ -2025,16 +2025,16 @@ const SwRedline* SwCrsrShell::GotoRedline( USHORT nArrPos, BOOL bSelect )
                             *pCEnd = *pNEnd;
                             break;
 
-                        case POS_OUTSIDE:   // Pos2 liegt vollstaendig in Pos1
-                        case POS_EQUAL:     // Pos1 ist genauso gross wie Pos2
+                        case POS_OUTSIDE:	// Pos2 liegt vollstaendig in Pos1
+                        case POS_EQUAL:		// Pos1 ist genauso gross wie Pos2
                             break;
 
-                        case POS_OVERLAP_BEFORE:        // Pos1 ueberlappt Pos2 am Anfang
+                        case POS_OVERLAP_BEFORE:		// Pos1 ueberlappt Pos2 am Anfang
                             if( !pCur->HasMark() )
                                 pCur->SetMark();
                             *pCEnd = *pNEnd;
                             break;
-                        case POS_OVERLAP_BEHIND:        // Pos1 ueberlappt Pos2 am Ende
+                        case POS_OVERLAP_BEHIND: 		// Pos1 ueberlappt Pos2 am Ende
                             if( !pCur->HasMark() )
                             {
                                 pCur->SetMark();
@@ -2200,7 +2200,7 @@ BOOL SwCrsrShell::SelectNxtPrvHyperlink( BOOL bNext )
             MakeSelVisible();
             bRet = TRUE;
         }
-        else        // then is it a fly
+        else		// then is it a fly
         {
             SwFlyFrm* pFly = pFndFmt->GetFrm(&aPt, FALSE );
             if( pFly )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,10 +31,10 @@
 
 enum HTMLEventType
 {
-    HTML_ET_ONSUBMITFORM,   HTML_ET_ONRESETFORM,
-    HTML_ET_ONGETFOCUS,     HTML_ET_ONLOSEFOCUS,
-    HTML_ET_ONCLICK,        HTML_ET_ONCLICK_ITEM,
-    HTML_ET_ONCHANGE,       HTML_ET_ONSELECT,
+    HTML_ET_ONSUBMITFORM,	HTML_ET_ONRESETFORM,
+    HTML_ET_ONGETFOCUS,		HTML_ET_ONLOSEFOCUS,
+    HTML_ET_ONCLICK,		HTML_ET_ONCLICK_ITEM,
+    HTML_ET_ONCHANGE,		HTML_ET_ONSELECT,
     HTML_ET_END
 };
 

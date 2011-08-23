@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,12 +90,12 @@ TYPEINIT1(SwDrawShell,SwDrawBaseShell)
 
 void SwDrawShell::Execute(SfxRequest &rReq)
 {
-    SwWrtShell          &rSh = GetShell();
-    SdrView             *pSdrView = rSh.GetDrawView();
-    const SfxItemSet    *pArgs = rReq.GetArgs();
-    SfxBindings         &rBnd  = GetView().GetViewFrame()->GetBindings();
-    USHORT               nSlotId = rReq.GetSlot();
-    BOOL                 bChanged = pSdrView->GetModel()->IsChanged();
+    SwWrtShell			&rSh = GetShell();
+    SdrView				*pSdrView = rSh.GetDrawView();
+    const SfxItemSet	*pArgs = rReq.GetArgs();
+    SfxBindings			&rBnd  = GetView().GetViewFrame()->GetBindings();
+    USHORT				 nSlotId = rReq.GetSlot();
+    BOOL				 bChanged = pSdrView->GetModel()->IsChanged();
 
     pSdrView->GetModel()->SetChanged(FALSE);
 
@@ -312,7 +312,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
     USHORT nWhich = aIter.FirstWhich();
     BOOL bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
 
-    if (!bProtected)    // Im Parent nachsehen
+    if (!bProtected)	// Im Parent nachsehen
         bProtected |= rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
     while( nWhich )
@@ -401,8 +401,8 @@ SwDrawShell::SwDrawShell(SwView &_rView) :
 void SwDrawShell::ExecFormText(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
-    SdrView*    pDrView = rSh.GetDrawView();
-    BOOL        bChanged = pDrView->GetModel()->IsChanged();
+    SdrView*	pDrView = rSh.GetDrawView();
+    BOOL		bChanged = pDrView->GetModel()->IsChanged();
     pDrView->GetModel()->SetChanged(FALSE);
 
     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
@@ -472,7 +472,7 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
     if ( pObj == NULL || !pObj->ISA(SdrTextObj) ||
         !((SdrTextObj*) pObj)->HasText() )
     {
-#define XATTR_ANZ 12
+#define	XATTR_ANZ 12
         static const USHORT nXAttr[ XATTR_ANZ ] =
         {
             XATTR_FORMTXTSTYLE, XATTR_FORMTXTADJUST, XATTR_FORMTXTDISTANCE,

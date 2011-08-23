@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,15 +136,15 @@ struct SwTOXSortTabBase
                       const ::com::sun::star::lang::Locale* pLocale = NULL );
     virtual ~SwTOXSortTabBase() {}
 
-    USHORT  GetType() const         { return nType; }
-    USHORT  GetOptions() const      { return nOpt; }
+    USHORT	GetType() const 		{ return nType; }
+    USHORT	GetOptions() const		{ return nOpt; }
 
-    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0) const;
-    virtual USHORT  GetLevel()  const = 0;
-    virtual BOOL    operator==( const SwTOXSortTabBase& );
-    virtual BOOL    operator<( const SwTOXSortTabBase& );
+    virtual void 	FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0) const;
+    virtual USHORT  GetLevel() 	const = 0;
+    virtual BOOL 	operator==( const SwTOXSortTabBase& );
+    virtual BOOL 	operator<( const SwTOXSortTabBase& );
 
-    virtual String  GetURL() const;
+    virtual String 	GetURL() const;
 
     inline void GetTxt( String&, String& ) const;
     inline const ::com::sun::star::lang::Locale& GetLocale() const;
@@ -188,15 +188,15 @@ struct SwTOXIndex : public SwTOXSortTabBase
     virtual ~SwTOXIndex() {}
 
 
-    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
+    virtual void 	FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
     virtual USHORT  GetLevel() const;
-    virtual BOOL    operator==( const SwTOXSortTabBase& );
-    virtual BOOL    operator<( const SwTOXSortTabBase& );
+    virtual BOOL 	operator==( const SwTOXSortTabBase& );
+    virtual BOOL 	operator<( const SwTOXSortTabBase& );
 
 private:
     virtual void _GetText( String&, String& );
 
-    BYTE    nKeyLevel;
+    BYTE	nKeyLevel;
 };
 
 struct SwTOXCustom : public SwTOXSortTabBase
@@ -228,7 +228,7 @@ struct SwTOXContent : public SwTOXSortTabBase
                 const SwTOXInternational& rIntl );
     virtual ~SwTOXContent() {}
 
-    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
+    virtual void 	FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
     virtual USHORT  GetLevel() const;
 private:
     virtual void _GetText( String&, String& );
@@ -240,13 +240,13 @@ struct SwTOXPara : public SwTOXSortTabBase
     SwTOXPara( const SwCntntNode&, SwTOXElement, USHORT nLevel = FORM_ALPHA_DELIMITTER );
     virtual ~SwTOXPara() {}
 
-    void    SetStartIndex( xub_StrLen nSet)     { nStartIndex = nSet;}
-    void    SetEndIndex( xub_StrLen nSet )      { nEndIndex = nSet;}
+    void	SetStartIndex( xub_StrLen nSet) 	{ nStartIndex = nSet;}
+    void 	SetEndIndex( xub_StrLen nSet ) 		{ nEndIndex = nSet;}
 
-    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
+    virtual void 	FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
     virtual USHORT  GetLevel() const;
 
-    virtual String  GetURL() const;
+    virtual String 	GetURL() const;
 private:
     virtual void _GetText( String&, String& );
 
@@ -261,11 +261,11 @@ struct SwTOXTable : public SwTOXSortTabBase
     SwTOXTable( const SwCntntNode& rNd );
     virtual ~SwTOXTable() {}
 
-    void    SetLevel(USHORT nSet){nLevel = nSet;}
+    void	SetLevel(USHORT nSet){nLevel = nSet;}
 
     virtual USHORT  GetLevel() const;
 
-    virtual String  GetURL() const;
+    virtual String 	GetURL() const;
 private:
     virtual void _GetText( String&, String& );
 
@@ -276,7 +276,7 @@ struct SwTOXAuthority : public SwTOXSortTabBase
 {
 private:
     SwFmtFld& m_rField;
-    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
+    virtual void 	FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
     virtual void _GetText( String&, String& );
 
 public:
@@ -285,8 +285,8 @@ public:
 
     SwFmtFld& GetFldFmt() {return m_rField;}
 
-    virtual BOOL    operator==( const SwTOXSortTabBase& );
-    virtual BOOL    operator<( const SwTOXSortTabBase& );
+    virtual BOOL 	operator==( const SwTOXSortTabBase& );
+    virtual BOOL 	operator<( const SwTOXSortTabBase& );
     virtual USHORT  GetLevel() const;
 };
 

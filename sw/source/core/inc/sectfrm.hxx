@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ protected:
     virtual BOOL ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReformat );
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
 public:
-    SwSectionFrm( SwSection & );                 //Inhalt wird nicht erzeugt!
+    SwSectionFrm( SwSection & );				 //Inhalt wird nicht erzeugt!
     SwSectionFrm( SwSectionFrm &, BOOL bMaster );//_Nur_ zum Erzeugen von Master/Follows
     ~SwSectionFrm();
 
@@ -69,18 +69,18 @@ public:
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual	void Modify( SfxPoolItem*, SfxPoolItem* );
 
     inline const SwSectionFrm *GetFollow() const;
-    inline       SwSectionFrm *GetFollow();
+    inline		 SwSectionFrm *GetFollow();
     SwSectionFrm* FindMaster() const;
 
                  SwCntntFrm *FindLastCntnt( BYTE nMode = 0 );
     inline const SwCntntFrm *FindLastCntnt( BYTE nMode = 0 ) const;
     inline SwSection* GetSection() { return pSection; }
     inline const SwSection* GetSection() const { return pSection; }
-    inline void ColLock()       { bColLocked = TRUE; }
-    inline void ColUnlock()     { bColLocked = FALSE; }
+    inline void ColLock()		{ bColLocked = TRUE; }
+    inline void ColUnlock()   	{ bColLocked = FALSE; }
 
     void CalcFtnCntnt();
     void SimpleFormat();
@@ -90,8 +90,8 @@ public:
     //Zerlegt den pFrm umgebenden SectionFrm in zwei Teile,
     //pFrm an den Anfang des 2. Teils
     BOOL SplitSect( SwFrm* pFrm, BOOL bApres );
-    void DelEmpty( BOOL bRemove );  // wie Cut(), Follow-Verkettung wird aber mitgepflegt
-    BOOL IsToIgnore() const         // Keine Groesse, kein Inhalt, muss ignoriert werden
+    void DelEmpty( BOOL bRemove ); 	// wie Cut(), Follow-Verkettung wird aber mitgepflegt
+    BOOL IsToIgnore() const			// Keine Groesse, kein Inhalt, muss ignoriert werden
     { return !Frm().Height() && !ContainsCntnt(); }
     SwFtnContFrm* ContainsFtnCont( const SwFtnContFrm* pCont = NULL ) const;
     BOOL Growable() const;
@@ -103,7 +103,7 @@ public:
     // if bCheckFollow is set.
     BOOL ToMaximize( BOOL bCheckFollow ) const;
     inline BOOL _ToMaximize() const
-        { if( !pSection ) return FALSE; return ToMaximize( FALSE ); }
+        { if( !pSection ) return FALSE; return ToMaximize( FALSE );	}
     BOOL MoveAllowed( const SwFrm* ) const;
     BOOL CalcMinDiff( SwTwips& rMinDiff ) const;
     // Uebergibt man kein bOverSize bzw. FALSE, so ist der Returnwert
@@ -145,4 +145,4 @@ inline const SwCntntFrm *SwSectionFrm::FindLastCntnt( BYTE nMode ) const
 }
 
 
-#endif  //_SECTFRM_HXX
+#endif	//_SECTFRM_HXX

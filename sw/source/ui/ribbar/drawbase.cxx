@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 
 using namespace ::com::sun::star;
 
-extern BOOL bNoInterrupt;       // in mainwn.cxx
+extern BOOL bNoInterrupt;		// in mainwn.cxx
 
 #define MINMOVE ((USHORT)m_pSh->GetOut()->PixelToLogic(Size(m_pSh->GetDrawView()->GetMarkHdlSizePixel()/2,0)).Width())
 
@@ -187,7 +187,7 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                 ******************************************************************/
                 if (pSdrView->HasMarkablePoints() && (!pSdrView->IsPointMarked(*aVEvt.pHdl) || rMEvt.IsShift()))
                 {
-                    SdrHdl* pHdl = NULL;
+                    SdrHdl*	pHdl = NULL;
 
                     if (!rMEvt.IsShift())
                     {
@@ -240,7 +240,7 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                         if (!pSdrView->HasMarkablePoints())
                         {
                             //JP 10.10.2001: Bug 89619 - don't scroll the
-                            //              cursor into the visible area
+                            //				cursor into the visible area
                             BOOL bUnlockView = !m_pSh->IsViewLocked();
                             m_pSh->LockView( TRUE ); //lock visible section
                             m_pSh->SelectObj(Point(LONG_MAX, LONG_MAX)); // Alles deselektieren
@@ -402,7 +402,7 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                     }
                     m_pView->NoRotate();
 
-                    bCheckShell = TRUE; // ggf BezierShell anwerfen
+                    bCheckShell = TRUE;	// ggf BezierShell anwerfen
                 }
                 else if (!m_pSh->IsObjSelected() && !m_pWin->IsDrawAction())
                 {
@@ -462,7 +462,7 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                     }
                     m_pView->NoRotate();
 
-                    bCheckShell = TRUE; // ggf BezierShell anwerfen
+                    bCheckShell = TRUE;	// ggf BezierShell anwerfen
                 }
             }
 

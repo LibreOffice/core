@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,8 +97,8 @@ struct DBTextStruct_Impl
 {
     SwDBData aDBData;
     Sequence<Any> aSelection;
-    Reference<XResultSet>   xCursor;
-    Reference<XConnection>  xConnection;
+    Reference<XResultSet>	xCursor;
+    Reference<XConnection>	xConnection;
 };
 inline void AddSelList( List& rLst, long nRow )
 {
@@ -166,15 +166,15 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
             {
                 if(pSourceItem && pCommandItem && pCommandTypeItem)
                 {
-                    DBTextStruct_Impl* pNew     = new DBTextStruct_Impl;
-                    pNew->aDBData.sDataSource   = sSourceArg;
-                    pNew->aDBData.sCommand      = sCommandArg;
-                    pNew->aDBData.nCommandType  = nCommandTypeArg;
-                    pNew->aSelection            = aSelection;
+                    DBTextStruct_Impl* pNew		= new DBTextStruct_Impl;
+                    pNew->aDBData.sDataSource	= sSourceArg;
+                    pNew->aDBData.sCommand		= sCommandArg;
+                    pNew->aDBData.nCommandType	= nCommandTypeArg;
+                    pNew->aSelection			= aSelection;
                     //if the cursor is NULL, it must be created inside InsertDBTextHdl
                     // because it called via a PostUserEvent
-                    pNew->xCursor               = xCursor;
-                    pNew->xConnection           = xConnection;
+                    pNew->xCursor				= xCursor;
+                    pNew->xConnection			= xConnection;
 
                     Application::PostUserEvent( STATIC_LINK( this, SwBaseShell,
                                             InsertDBTextHdl ), pNew );
@@ -195,10 +195,10 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
 
                 ODataAccessDescriptor aDescriptor;
                 aDescriptor.setDataSource(sSourceArg);
-                aDescriptor[daCommand]      <<= sCommandArg;
-                aDescriptor[daCursor]       <<= xCursor;
-                aDescriptor[daSelection]    <<= aSelection;
-                aDescriptor[daCommandType]  <<= nCommandTypeArg;
+                aDescriptor[daCommand]		<<= sCommandArg;
+                aDescriptor[daCursor]		<<= xCursor;
+                aDescriptor[daSelection]	<<= aSelection;
+                aDescriptor[daCommandType]	<<= nCommandTypeArg;
 
                 SwMergeDescriptor aMergeDesc( DBMGR_MERGE, *GetShellPtr(), aDescriptor );
                 pNewDBMgr->MergeNew(aMergeDesc);

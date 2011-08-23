@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -181,7 +181,7 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
     // aktuelle Dispatcher-Shell
     SwPagePreViewWin        aViewWin;
     //viewdata of the previous SwView and the new crsrposition
-    String                  sSwViewData,
+    String 					sSwViewData,
     //and the new cursor position if the user double click in the PagePreView
                             sNewCrsrPos;
     // to support keyboard the number of the page to go to can be set too
@@ -198,7 +198,7 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
                             *pPageDownBtn;
     // Dummy-Window zum F�llen der rechten unteren Ecke, wenn beide Scrollbars
     // aktiv sind
-    Window                  *pScrollFill;
+    Window					*pScrollFill;
 
     USHORT                  mnPageCount;
     BOOL                    bNormalPrint;
@@ -246,7 +246,7 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
 protected:
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize );
-    virtual Size    GetOptimalSizePixel() const;
+    virtual Size	GetOptimalSizePixel() const;
 
     void         SetZoom(SvxZoomType eSet, USHORT nFactor);
 
@@ -277,11 +277,11 @@ public:
 
     USHORT          GetPageCount() const        { return mnPageCount; }
 
-    BOOL            HandleWheelCommands( const CommandEvent& );
+    BOOL 			HandleWheelCommands( const CommandEvent& );
 
-    const String&   GetPrevSwViewData() const       { return sSwViewData; }
-    void            SetNewCrsrPos( const String& rStr ) { sNewCrsrPos = rStr; }
-    const String&   GetNewCrsrPos() const           { return sNewCrsrPos; }
+    const String&	GetPrevSwViewData() const		{ return sSwViewData; }
+    void 			SetNewCrsrPos( const String& rStr ) { sNewCrsrPos = rStr; }
+    const String&	GetNewCrsrPos() const			{ return sNewCrsrPos; }
 
     USHORT          GetNewPage() const {return nNewPage;}
     void            SetNewPage(USHORT nSet)  {nNewPage = nSet;}

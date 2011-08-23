@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ BigPtrArray::BigPtrArray()
 {
     nBlock = nCur = 0;
     nSize = 0;
-    nMaxBlock = nBlockGrowSize;     // == 20 * 1000 Eintraege
+    nMaxBlock = nBlockGrowSize;		// == 20 * 1000 Eintraege
     ppInf = new BlockInfo* [ nMaxBlock ];
 }
 
@@ -97,7 +97,7 @@ void BigPtrArray::Move( ULONG from, ULONG to )
     USHORT cur = Index2Block( from );
     BlockInfo* p = ppInf[ cur ];
     ElementPtr pElem = p->pData[ from - p->nStart ];
-    Insert( pElem, to );            // erst einfuegen, dann loeschen !!!!
+    Insert( pElem, to );			// erst einfuegen, dann loeschen !!!!
     Remove( ( to < from ) ? ( from + 1 ) : from );
 }
 
@@ -249,7 +249,7 @@ BlockInfo* BigPtrArray::InsBlock( USHORT pos )
         p->nStart = p->nEnd = ppInf[ pos-1 ]->nEnd + 1;
     else
         p->nStart = p->nEnd = 0;
-    p->nEnd--;  // keine Elemente
+    p->nEnd--;	// keine Elemente
     p->nElem = 0;
     p->pData = new ElementPtr [ MAXENTRY ];
     p->pBigArr = this;
@@ -376,10 +376,10 @@ void BigPtrArray::Remove( ULONG pos, ULONG n )
 {
     CHECKIDX( ppInf, nBlock, nSize, nCur );
 
-    USHORT nBlkdel = 0;                 // entfernte Bloecke
-    USHORT cur = Index2Block( pos );    // aktuelle Blocknr
+    USHORT nBlkdel = 0;					// entfernte Bloecke
+    USHORT cur = Index2Block( pos );	// aktuelle Blocknr
     USHORT nBlk1 = cur;                 // 1. behandelter Block
-    USHORT nBlk1del = USHRT_MAX;        // 1. entfernter Block
+    USHORT nBlk1del = USHRT_MAX;		// 1. entfernter Block
     BlockInfo* p = ppInf[ cur ];
     pos -= p->nStart;
     ULONG nElem = n;
@@ -430,7 +430,7 @@ void BigPtrArray::Remove( ULONG pos, ULONG n )
                      ( nBlock - nBlkdel - nBlk1del ) * sizeof( BlockInfo* ) );
 
             // JP 19.07.95: nicht den ersten behandelten, sondern den davor!!
-            //              UpdateIdx updatet nur alle Nachfolgende!!
+            //				UpdateIdx updatet nur alle Nachfolgende!!
             if( !nBlk1 )
             {
                 p = ppInf[ 0 ];
@@ -440,7 +440,7 @@ void BigPtrArray::Remove( ULONG pos, ULONG n )
             else
                 --nBlk1;
         }
-        BlockDel( nBlkdel );            // es wurden Bloecke geloescht
+        BlockDel( nBlkdel );			// es wurden Bloecke geloescht
     }
 
     nSize -= n;
@@ -483,10 +483,10 @@ USHORT BigPtrArray::Compress( short nMax )
     // benutzt; wobei pp das "alte" Array, qq das "neue" Array ist.
     BlockInfo** pp = ppInf, **qq = pp;
     BlockInfo* p;
-    BlockInfo* pLast(0);                // letzter nicht voller Block
-    USHORT nLast = 0;                   // fehlende Elemente
-    USHORT nBlkdel = 0;                 // Anzahl der geloeschte Bloecke
-    USHORT nFirstChgPos = USHRT_MAX;    // ab welcher Pos gab es die 1. Aenderung?
+    BlockInfo* pLast(0);				// letzter nicht voller Block
+    USHORT nLast = 0;					// fehlende Elemente
+    USHORT nBlkdel = 0;					// Anzahl der geloeschte Bloecke
+    USHORT nFirstChgPos = USHRT_MAX;	// ab welcher Pos gab es die 1. Aenderung?
 
     // von Fuell-Prozenten auf uebrige Eintrage umrechnen
     nMax = MAXENTRY - (long) MAXENTRY * nMax / 100;
@@ -547,9 +547,9 @@ USHORT BigPtrArray::Compress( short nMax )
             }
         }
 
-        if( p )     // die Blockinfo wurde nicht geloescht
+        if( p )		// die Blockinfo wurde nicht geloescht
         {
-            *qq++ = p;      // dann setze sie an die richtige neue Position
+            *qq++ = p;		// dann setze sie an die richtige neue Position
 
             // eventuell den letzten halbvollen Block festhalten
             if( !nLast && p->nElem < MAXENTRY )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@
 SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
                               SwField* pField, BOOL bNextButton ) :
 
-    SvxStandardDialog(pParent,  SW_RES(DLG_FLD_INPUT)),
+    SvxStandardDialog(pParent,	SW_RES(DLG_FLD_INPUT)),
 
     rSh( rS ),
     pInpFld(0),
@@ -71,12 +71,12 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     pUsrType(0),
 
     aLabelED    (this, SW_RES(ED_LABEL  )),
-    aEditED     (this, SW_RES(ED_EDIT   )),
+    aEditED		(this, SW_RES(ED_EDIT	)),
     aEditFL     (this, SW_RES(FL_EDIT       )),
 
     aOKBT       (this, SW_RES(BT_OK     )),
-    aCancelBT   (this, SW_RES(BT_CANCEL )),
-    aNextBT     (this, SW_RES(PB_NEXT   )),
+    aCancelBT	(this, SW_RES(BT_CANCEL	)),
+    aNextBT		(this, SW_RES(PB_NEXT	)),
     aHelpBT     (this, SW_RES(PB_HELP    ))
 {
     // Font fuers Edit umschalten
@@ -100,7 +100,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     // Auswertung hier
     String aStr;
     if( RES_INPUTFLD == pField->GetTyp()->Which() )
-    {   // Es ist eine Eingabefeld
+    {	// Es ist eine Eingabefeld
         //
         pInpFld = (SwInputField*)pField;
         aLabelED.SetText( pInpFld->GetPar2() );
@@ -135,7 +135,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     }
 
     // JP 31.3.00: Inputfields in readonly regions must be allowed to
-    //              input any content. - 74639
+    //				input any content. - 74639
     BOOL bEnable = !rSh.IsCrsrReadonly();
                     /*!rSh.IsReadOnlyAvailable() || !rSh.HasReadonlySel()*/;
     aOKBT.Enable( bEnable );
@@ -158,7 +158,7 @@ void SwFldInputDlg::StateChanged( StateChangedType nType )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Schliessen
+     Beschreibung:	Schliessen
  --------------------------------------------------------------------*/
 
 void SwFldInputDlg::Apply()

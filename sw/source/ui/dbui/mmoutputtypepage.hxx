@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ class SwMailMergeOutputTypePage : public svt::OWizardPage
     FixedInfo       m_aTypeFT;
     RadioButton     m_aLetterRB;
     RadioButton     m_aMailRB;
-
+    
     SwBoldFixedInfo m_aHintHeaderFI;
     FixedInfo       m_aHintFI;
     FixedInfo       m_aNoMailHintFI;
@@ -57,7 +57,7 @@ class SwMailMergeOutputTypePage : public svt::OWizardPage
 
     DECL_LINK(TypeHdl_Impl, RadioButton*);
 
-public:
+public:     
         SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent);
         ~SwMailMergeOutputTypePage();
 

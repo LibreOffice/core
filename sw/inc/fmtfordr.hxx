@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,8 @@ public:
     inline SwFmtFillOrder &operator=( const SwFmtFillOrder &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual USHORT          GetValueCount() const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual USHORT			GetValueCount() const;
 
     SwFillOrder GetFillOrder() const { return SwFillOrder(GetValue()); }
 };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@ using namespace ::ooo::vba;
 
 #define FIRST_PAGE 1;
 
-// Class HeaderFooterHelper
+// Class HeaderFooterHelper 
 
 sal_Bool HeaderFooterHelper::isHeader( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XText >& xCurrentText ) throw (uno::RuntimeException)
 {
     uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xStyleProps( word::getCurrentPageStyle( xModel ), uno::UNO_QUERY_THROW );
-
+    
     sal_Bool isOn = sal_False;
     xStyleProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderIsOn"))) >>= isOn;
     if( !isOn )
@@ -64,7 +64,7 @@ sal_Bool HeaderFooterHelper::isHeader( const uno::Reference< frame::XModel >& xM
             aPropText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderTextRight") );
         }
     }
-
+    
     uno::Reference< text::XText > xText( xStyleProps->getPropertyValue( aPropText ), uno::UNO_QUERY_THROW );
     //FIXME: can not compare in this way?
     return ( xText == xCurrentText );
@@ -93,7 +93,7 @@ sal_Bool HeaderFooterHelper::isEvenPagesHeader( const uno::Reference< frame::XMo
         {
             uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
             return ( 0 == xPageCursor->getPage() % 2 );
-        }
+        }    
     }
     return sal_False;
 }
@@ -102,7 +102,7 @@ sal_Bool HeaderFooterHelper::isFooter( const uno::Reference< frame::XModel >& xM
 {
     uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xStyleProps( word::getCurrentPageStyle( xModel ), uno::UNO_QUERY_THROW );
-
+    
     sal_Bool isOn = sal_False;
     xStyleProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterIsOn"))) >>= isOn;
     if( !isOn )
@@ -123,7 +123,7 @@ sal_Bool HeaderFooterHelper::isFooter( const uno::Reference< frame::XModel >& xM
             aPropText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterTextRight") );
         }
     }
-
+    
     uno::Reference< text::XText > xText( xStyleProps->getPropertyValue( aPropText ), uno::UNO_QUERY_THROW );
 
     return ( xText == xCurrentText );
@@ -151,7 +151,7 @@ sal_Bool HeaderFooterHelper::isEvenPagesFooter( const uno::Reference< frame::XMo
         {
             uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
             return ( 0 == xPageCursor->getPage() % 2 );
-        }
+        }    
     }
     return sal_False;
 }

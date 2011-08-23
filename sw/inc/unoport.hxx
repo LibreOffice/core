@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ enum SwTextPortionType
     PORTION_FIELD,
     PORTION_FRAME,
     PORTION_FOOTNOTE,
-// obsolete!    PORTION_CONTROL_CHAR,
+// obsolete!	PORTION_CONTROL_CHAR,
     PORTION_REFMARK_START,
     PORTION_REFMARK_END,
     PORTION_TOXMARK_START,
@@ -137,12 +137,12 @@ protected:
 
     //SfxItemPropertySet& GetPropSet() { return aPropSet; }
 
-    void SAL_CALL SetPropertyValues_Impl(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues )
+    void SAL_CALL SetPropertyValues_Impl( 
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, 
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) 
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL GetPropertyValues_Impl(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames )
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL GetPropertyValues_Impl( 
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) 
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 //    ::com::sun::star::uno::Any  GetPropertyValue( const SfxItemPropertyMap *pEntry,
@@ -162,7 +162,7 @@ protected:
     virtual ~SwXTextPortion();
 
 public:
-    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwTextPortionType   eType   );
+    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwTextPortionType	eType	);
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwFrmFmt& rFmt );
 
     // for Ruby
@@ -230,7 +230,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getAvailableServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
-    virtual void                Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void 				Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     void SetRefMark( ::com::sun::star::uno::Reference<
                         ::com::sun::star::text::XTextContent >  xMark)

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
-#include <dcontact.hxx>     // Spelling von DrawObj
+#include <dcontact.hxx>		// Spelling von DrawObj
 #include <doc.hxx>        //     "     "     "
 #include <docary.hxx>
 #include <edtwin.hxx>
@@ -92,7 +92,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     pOutlView->GetOutliner()->SetRefDevice(pView->GetWrtShell().getIDocumentDeviceAccess()->getPrinter( false ));
 
     // Hack: Es sollten alle SdrTextObj-Attribute an die EditEngine
-    //       uebertragen werden.
+    //		 uebertragen werden.
     pOutlView->SetBackgroundColor( Color( COL_WHITE ) );
 
 
@@ -100,7 +100,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     Point aPoint( 0, 0 );
      Rectangle aRect( aPoint, aSize );
     pOutlView->SetOutputArea( aRect );
-//  SetText( NULL );
+//	SetText( NULL );
     ClearModifyFlag();
 }
 
@@ -113,9 +113,9 @@ SdrHHCWrapper::~SdrHHCWrapper()
         pSdrView->SdrEndTextEdit( sal_True );
         SetUpdateMode(sal_False);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
-//      SetPaperSize( Size(1, 1) );
-//      SetText(NULL);
-//      pTextObj = NULL;
+//		SetPaperSize( Size(1, 1) );
+//		SetText(NULL);
+//		pTextObj = NULL;
     }
     RemoveView( pOutlView );
     delete pOutlView;
@@ -215,7 +215,7 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
                     SetPaperSize( pTextObj->GetLogicRect().GetSize() );
                     SetUpdateMode(sal_True);
                     pView->GetWrtShell().MakeVisible(pTextObj->GetLogicRect());
-
+                    
                     pSdrView->SdrBeginTextEdit(pTextObj, pPV, &pView->GetEditWin(), sal_False, this, pOutlView, sal_True, sal_True);
                 }
                 else

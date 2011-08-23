@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,11 +30,11 @@
 #include <sfx2/sfx.hrc>
 
 #define CFG_STATUSBAR                         (SFX_ITEMTYPE_SW_BEGIN +13)
-#define CFG_SW_MENU             (SFX_ITEMTYPE_SW_BEGIN +16)
-#define CFG_SW_ACCEL            (SFX_ITEMTYPE_SW_BEGIN +17)
+#define CFG_SW_MENU 			(SFX_ITEMTYPE_SW_BEGIN +16)
+#define CFG_SW_ACCEL 			(SFX_ITEMTYPE_SW_BEGIN +17)
 #define CFG_SWWEB_MENU          (SFX_ITEMTYPE_SW_BEGIN +19)
 #define CFG_SWWEB_ACCEL         (SFX_ITEMTYPE_SW_BEGIN +20)
-#define CFG_INSERT_DBCOLUMN_ITEM    (SFX_ITEMTYPE_SW_BEGIN +25)
+#define CFG_INSERT_DBCOLUMN_ITEM 	(SFX_ITEMTYPE_SW_BEGIN +25)
 #define CFG_SWGLOBAL_MENU           (SFX_ITEMTYPE_SW_BEGIN +29)
 
 #endif

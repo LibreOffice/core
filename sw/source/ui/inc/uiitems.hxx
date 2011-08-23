@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,11 +57,11 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const;
 
     virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	BOOL			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     SwPageFtnInfo& GetPageFtnInfo()             { return aFtnInfo; }
     const SwPageFtnInfo& GetPageFtnInfo() const { return aFtnInfo; }
-    void SetPageFtnInfo(SwPageFtnInfo& rInf)    { aFtnInfo = rInf; }
+    void SetPageFtnInfo(SwPageFtnInfo& rInf) 	{ aFtnInfo = rInf; }
 };
 
 /*******************************************************************/
@@ -77,8 +77,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
 
-    void    SetValue(void * pPtr)   { pMisc= pPtr; }
-    void*   GetValue() const        { return pMisc; }
+    void	SetValue(void * pPtr) 	{ pMisc= pPtr; }
+    void*	GetValue() const 		{ return pMisc; }
 };
 
 /*******************************************************************/
@@ -95,11 +95,11 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
 
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	BOOL        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	BOOL			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-    const SwNumRule* GetNumRule() const         { return pRule; }
-          SwNumRule* GetNumRule()               { return pRule; }
+    const SwNumRule* GetNumRule() const 		{ return pRule; }
+          SwNumRule* GetNumRule() 				{ return pRule; }
 };
 
 /* -----------------17.06.98 17:40-------------------

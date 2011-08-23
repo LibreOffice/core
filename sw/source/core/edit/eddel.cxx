@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <editsh.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
-#include <swundo.hxx>       // fuer die UndoIds
+#include <swundo.hxx>		// fuer die UndoIds
 #include <edimp.hxx>
 #include <IMark.hxx>
 #include <docary.hxx>
@@ -58,8 +58,8 @@ void SwEditShell::DeleteSel( SwPaM& rPam, BOOL* pUndo )
     // besteht eine Selection in einer Tabelle ?
     // dann nur den Inhalt der selektierten Boxen loeschen
     // jetzt gibt es 2 Faelle die beachtet werden muessen:
-    //  1. Point und Mark stehen in einer Box, Selection normal loeschen
-    //  2. Point und Mark stehen in unterschiedlichen Boxen, alle
+    //	1. Point und Mark stehen in einer Box, Selection normal loeschen
+    //	2. Point und Mark stehen in unterschiedlichen Boxen, alle
     // selektierten Boxen suchen in den Inhalt loeschen
     if( rPam.GetNode()->FindTableNode() &&
         rPam.GetNode()->StartOfSectionNode() !=
@@ -80,7 +80,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, BOOL* pUndo )
             if( pEndSelPos->nNode.GetIndex() <= rEndNd.GetIndex() )
             {
                 *aDelPam.GetPoint() = *pEndSelPos;
-                pEndSelPos = 0;     // Pointer als Flag missbrauchen
+                pEndSelPos = 0;		// Pointer als Flag missbrauchen
             }
             else
             {
@@ -97,15 +97,15 @@ void SwEditShell::DeleteSel( SwPaM& rPam, BOOL* pUndo )
                 SaveTblBoxCntnt( aDelPam.GetPoint() );
             }
 
-            if( !pEndSelPos )               // am Ende der Selection
+            if( !pEndSelPos )				// am Ende der Selection
                 break;
             aDelPam.DeleteMark();
-            aDelPam.Move( fnMoveForward, fnGoCntnt );   // naechste Box
+            aDelPam.Move( fnMoveForward, fnGoCntnt );	// naechste Box
         } while( pEndSelPos );
     }
     else
     {
-            // alles loeschen
+            // alles loeschen		
         GetDoc()->DeleteAndJoin( rPam );
         SaveTblBoxCntnt( rPam.GetPoint() );
     }
@@ -175,7 +175,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
                     pPos = pDestShell->GetCrsr()->GetPoint();
             }
             if( IsBlockMode() )
-            {   // In block mode different insert positions will be calculated
+            {	// In block mode different insert positions will be calculated
                 // by simulated cursor movements from the given first insert position
                 if( nMove )
                 {
@@ -192,7 +192,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             }
             SwPosition *pTmp = IsBlockMode() ? pInsertPos.get() : pPos;
             // Check if a selection would be copied into itself
-            if( pDestShell->GetDoc() == GetDoc() &&
+            if( pDestShell->GetDoc() == GetDoc() && 
                 *PCURCRSR->Start() <= *pTmp && *pTmp < *PCURCRSR->End() )
                 return FALSE;
         FOREACHPAM_END()
@@ -301,9 +301,9 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
     // Ersetz einen selektierten Bereich in einem TextNode mit dem
     // String. Ist fuers Suchen&Ersetzen gedacht.
     // bRegExpRplc - ersetze Tabs (\\t) und setze den gefundenen String
-    //               ein ( nicht \& )
-    //              z.B.: Fnd: "zzz", Repl: "xx\t\\t..&..\&"
-    //                      --> "xx\t<Tab>..zzz..&"
+    //				 ein ( nicht \& )
+    // 				z.B.: Fnd: "zzz", Repl: "xx\t\\t..&..\&"
+    //						--> "xx\t<Tab>..zzz..&"
 BOOL SwEditShell::Replace( const String& rNewStr, BOOL bRegExpRplc )
 {
     SET_CURR_SHELL( this );

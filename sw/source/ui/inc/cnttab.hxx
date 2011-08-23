@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,8 +61,8 @@
 
 struct CurTOXType
 {
-    TOXTypes    eType;
-    USHORT      nIndex; //for TOX_USER only
+    TOXTypes 	eType;
+    USHORT 		nIndex; //for TOX_USER only
 
     BOOL operator==(const CurTOXType aCmp)
        {
@@ -77,13 +77,13 @@ struct CurTOXType
 
 class SwOLENames : public Resource
 {
-    ResStringArray      aNamesAry;
+    ResStringArray		aNamesAry;
 public:
     SwOLENames(const ResId& rResId) :
         Resource(rResId),
         aNamesAry(ResId(1,*rResId.GetResMgr())){FreeResource();}
 
-    ResStringArray&     GetNames() { return aNamesAry;}
+    ResStringArray& 	GetNames() { return aNamesAry;}
 
 };
 
