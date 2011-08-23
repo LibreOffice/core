@@ -60,7 +60,7 @@
 #include "lwpdefs.hxx"
 #include "lwpobjstrm.hxx"
 /**
- * @brief   AtomHolder class of Word Pro to hold a string
+ * @brief	AtomHolder class of Word Pro to hold a string
 */
 class LwpAtomHolder
 {
@@ -68,10 +68,10 @@ public:
     LwpAtomHolder();
     ~LwpAtomHolder();
 private:
-    sal_Int32   m_nAtom;
-    sal_Int32   m_nAssocAtom;
+    sal_Int32	m_nAtom;
+    sal_Int32	m_nAssocAtom;
     OUString m_String;
-    //OUString m_UniString;         //no use temporarily
+    //OUString m_UniString;			//no use temporarily
 public:
     void Read(LwpObjectStream *pStrm);
     void ReadPathAtom(LwpObjectStream *pStrm);

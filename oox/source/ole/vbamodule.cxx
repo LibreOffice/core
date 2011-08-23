@@ -134,7 +134,7 @@ void VbaModule::importSourceCode( StorageBase& rVbaStrg,
 {
     if( (maName.getLength() == 0) || (maStreamName.getLength() == 0) || (mnOffset == SAL_MAX_UINT32) )
         return;
-
+        
     BinaryXInputStream aInStrm( rVbaStrg.openInputStream( maStreamName ), true );
     OSL_ENSURE( !aInStrm.isEof(), "VbaModule::importSourceCode - cannot open module stream" );
     // skip the 'performance cache' stored before the actual source code

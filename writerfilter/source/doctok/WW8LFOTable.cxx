@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,21 +37,21 @@ void WW8LFOTable::initPayload()
 
     sal_uInt32 nOffset = 4;
     sal_uInt32 nOffsetLFOData = mnPlcfPayloadOffset;
-
+    
     for (sal_uInt32 n = 0; n < nCount; ++n)
     {
         WW8LFO aLFO(this, nOffset);
-
+        
         entryOffsets.push_back(nOffset);
         nOffset += WW8LFO::getSize();
-
+        
         payloadOffsets.push_back(nOffsetLFOData);
         payloadIndices.push_back(n);
-
+        
         nOffsetLFOData += 4;
-
+        
         sal_uInt32 nLvls = aLFO.get_clfolvl();
-
+        
         for (sal_uInt32 k = 0; k < nLvls; ++k)
         {
             WW8LFOLevel aLevel(this, nOffsetLFOData);
@@ -84,7 +84,7 @@ WW8LFO::get_LFOData()
     WW8LFOTable * pLFOTable = dynamic_cast<WW8LFOTable *>(mpParent);
     sal_uInt32 nPayloadOffset = pLFOTable->getPayloadOffset(mnIndex);
     sal_uInt32 nPayloadSize = pLFOTable->getPayloadSize(mnIndex);
-
+    
     return writerfilter::Reference<Properties>::Pointer_t
     (new WW8LFOData(mpParent, nPayloadOffset, nPayloadSize));
 }
@@ -97,7 +97,7 @@ WW8LFO::get_lfolevel(sal_uInt32 nIndex)
     sal_uInt32 nPayloadIndex = pLFOTable->getPayloadIndex(mnIndex) + nIndex;
     sal_uInt32 nPayloadOffset = pLFOTable->getPayloadOffset(nPayloadIndex);
     sal_uInt32 nPayloadSize = pLFOTable->getPayloadSize(nPayloadIndex);
-
+    
     return writerfilter::Reference<Properties>::Pointer_t
         (new WW8LFOLevel(mpParent, nPayloadOffset, nPayloadSize));
 }
@@ -105,7 +105,7 @@ WW8LFO::get_lfolevel(sal_uInt32 nIndex)
 
 void WW8LFOLevel::resolveNoAuto(Properties & /*rHandler*/)
 {
-
+    
 }
 
 sal_uInt32 WW8LFOLevel::calcSize()

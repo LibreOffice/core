@@ -1,0 +1,823 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SWACC_HRC
+#define _SWACC_HRC
+
+#ifndef _GLOBALACC_SRC
+#include <bf_svx/globlac.hrc>
+#endif
+#ifndef _SFX_HRC
+#include <bf_sfx2/sfx.hrc>
+#endif
+#ifndef _SVX_SVXIDS_HRC
+#include <bf_svx/svxids.hrc>
+#endif
+#include "app.hrc"
+#include "globals.hrc"
+#include "cmdid.h"
+
+
+#define  ACC Accelerator
+#define ACCK AcceleratorItem
+
+// die Acceleratoren
+
+#define AT_FN_LINE_DOWN				ACC_CODE( FN_LINE_DOWN, KEY_DOWN, FALSE, FALSE, FALSE )
+#define AT_FN_LINE_DOWN_SEL			ACC_CODE( FN_LINE_DOWN_SEL, KEY_DOWN, TRUE, FALSE, FALSE )
+#define AT_FN_NUM_BULLET_MOVEDOWN   ACC_CODE( FN_NUM_BULLET_MOVEDOWN, KEY_DOWN, FALSE, TRUE, TRUE )
+#define AT_FN_END_TABLE 			ACC_CODE( FN_END_TABLE, KEY_DOWN, TRUE, TRUE, FALSE )
+#define AT_FN_REPEAT_SEARCH 		AcceleratorItem { Identifier = FN_REPEAT_SEARCH; \
+                                        ACC_DEF_KEY( 	KEY_F, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( de ,	KEY_G, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( en-us  ,	KEY_F, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( it ,		KEY_B, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( fr ,		KEY_F, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( nl , 		KEY_F, TRUE, TRUE, FALSE ) };
+
+#define AT_FN_SET_SUPER_SCRIPT		AcceleratorItem { Identifier = FN_SET_SUPER_SCRIPT; \
+                                        ACC_DEF_KEY( 	KEY_P, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( de ,	KEY_H, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( it ,		KEY_A, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( en-US ,	KEY_P, TRUE, TRUE, FALSE ) };
+
+#define AT_FN_SET_SUB_SCRIPT		AcceleratorItem { Identifier = FN_SET_SUB_SCRIPT; \
+                                        ACC_DEF_KEY( 	KEY_B, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( de ,	KEY_T, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( en-US ,	KEY_B, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( it ,		KEY_P, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( nl , 		KEY_P, TRUE, TRUE, FALSE ) };
+
+/* old ones
+#define AT_FN_REPEAT_SEARCH 		AcceleratorItem { Identifier = FN_REPEAT_SEARCH; \
+                                        ACC_DEF_KEY(	KEY_G, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( English_us,	KEY_F, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( Italian,		KEY_B, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( French,		KEY_F, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( Dutch, 		KEY_F, TRUE, TRUE, FALSE ) };
+
+#define AT_FN_SET_SUPER_SCRIPT		AcceleratorItem { Identifier = FN_SET_SUPER_SCRIPT; \
+                                        ACC_DEF_KEY(	KEY_H, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Italian,		KEY_A, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( English_us,	KEY_P, TRUE, TRUE, FALSE ) };
+
+#define AT_FN_SET_SUB_SCRIPT		AcceleratorItem { Identifier = FN_SET_SUB_SCRIPT; \
+                                        ACC_DEF_KEY(	KEY_T, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( English_us,	KEY_B, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( Italian,		KEY_P, TRUE, TRUE, FALSE ) \
+                                        ACC_KEY( Dutch, 		KEY_P, TRUE, TRUE, FALSE ) };
+*/
+
+
+
+/***********************************************************************
+   per define ACC_SW_WEB wird auf StarWriter/WEB umgeschaltet
+***********************************************************************/
+
+
+/****************************************************************
+    defines fuer MAC/NoMac
+****************************************************************/
+#define NOMAC_LINESPACE	AI_ATTR_PARA_LINESPACE_10 	\
+AI_ATTR_PARA_LINESPACE_20	\
+AI_ATTR_PARA_LINESPACE_15
+
+#define NOPM_THES						\
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F7;                          \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_THESAURUS_DLG;          \
+    };
+#define NOPM_VIEWMARKS                                          \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F8;                          \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_VIEW_MARKS;             \
+    };
+#define NOPM_VIEWFIELDNAME                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F9;                          \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_VIEW_FIELDNAME;         \
+    };
+#define NOPM_VIEWMETA                                           \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F10;                         \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_VIEW_META_CHARS;        \
+    };
+
+
+/****************************************************************
+    defines, fuer StarWriter/Web
+****************************************************************/
+
+#ifdef ACC_SW_WEB
+#define WEB_ACC_PARA_BLOCK
+#else
+#define WEB_ACC_PARA_BLOCK 					\
+AI_ATTR_PARA_ADJUST_BLOCK
+#endif
+
+/****************************************************************
+
+****************************************************************/
+
+
+#define ALL_ACCELS						\
+    /* STANDARD betriebssystemspezifisch --------*/         \
+    /* Bearbeiten ----------------------------------------*/\
+AI_UNDO	  \
+AI_REDO	  \
+AI_REPEAT \
+/* -----------------------------------------------------*/      \
+AT_FN_LINE_DOWN	\
+AT_FN_LINE_DOWN_SEL	\
+AT_FN_NUM_BULLET_MOVEDOWN \
+AT_FN_END_TABLE \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+                Code = KEY_UP;                  \
+                Shift = FALSE;                  \
+                Modifier1 = FALSE;              \
+                Modifier2 = FALSE;              \
+            };                                      \
+            Identifier = FN_LINE_UP;                \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_UP;                          \
+            Shift = TRUE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_LINE_UP_SEL;            \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_UP;                          \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = TRUE;                      \
+            };                                      \
+            Identifier = FN_NUM_BULLET_MOVEUP;      \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_UP;                          \
+            Shift = TRUE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_START_TABLE;            \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_LEFT;                        \
+            Shift = FALSE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_CHAR_LEFT;              \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_LEFT;                        \
+            Shift = TRUE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_CHAR_LEFT_SEL;          \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_LEFT;                        \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_PREV_WORD;              \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_LEFT;                        \
+            Shift = TRUE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_PREV_WORD_SEL;          \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_RIGHT;                       \
+            Shift = FALSE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_CHAR_RIGHT;             \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_RIGHT;                       \
+            Shift = TRUE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_CHAR_RIGHT_SEL;         \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_RIGHT;                       \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_NEXT_WORD;              \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_RIGHT;                       \
+            Shift = TRUE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_NEXT_WORD_SEL;          \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_PAGEUP;                      \
+            Shift = FALSE; Modifier1 = FALSE;       \
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_PAGEUP;                 \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_PAGEUP;                      \
+            Shift = TRUE; Modifier1 = FALSE;        \
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_PAGEUP_SEL;             \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_PAGEUP;                      \
+            Shift = FALSE; Modifier1 = TRUE;        \
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_TO_HEADER;              \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_PAGEDOWN;                    \
+            Shift = FALSE; Modifier1 = FALSE;       \
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_PAGEDOWN;               \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_PAGEDOWN;                    \
+            Shift = TRUE; Modifier1 = FALSE;        \
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_PAGEDOWN_SEL;           \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_PAGEDOWN;                    \
+            Shift = FALSE; Modifier1 = TRUE;        \
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_TO_FOOTER;              \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_PAGEDOWN;                    \
+            Shift = TRUE; Modifier1 = TRUE;        \
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_TO_FOOTNOTE_AREA;              \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_RETURN;                      \
+            Shift = FALSE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_INSERT_BREAK;           \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_RETURN;                      \
+            Shift = TRUE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_INSERT_LINEBREAK;       \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_RETURN;                      \
+            Shift = FALSE ; Modifier1 = TRUE ;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_INSERT_PAGEBREAK;       \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_RETURN;                      \
+            Shift = TRUE ;	Modifier1 = TRUE ;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_INSERT_COLUMN_BREAK;    \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_ESCAPE;                      \
+            Shift = FALSE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_ESCAPE;                 \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_BACKSPACE;                   \
+            Shift = FALSE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_BACKSPACE;              \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_BACKSPACE;                   \
+            Shift = TRUE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_SHIFT_BACKSPACE;        \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_BACKSPACE;                   \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_DELETE_BACK_WORD;       \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_BACKSPACE;                   \
+            Shift = TRUE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_DELETE_BACK_SENT;       \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_DELETE;                      \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_DELETE_WORD;            \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_DELETE;                      \
+            Shift = TRUE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_DELETE_SENT;            \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_INSERT;                      \
+            Shift = FALSE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = SID_ATTR_INSERT;           \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_HOME;                        \
+            Shift = FALSE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_START_OF_LINE;          \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_HOME;                        \
+            Shift = TRUE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_START_OF_LINE_SEL;      \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_HOME;                        \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_START_OF_DOCUMENT;      \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_HOME;                        \
+            Shift = TRUE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_START_OF_DOCUMENT_SEL;  \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_END;                         \
+            Shift = FALSE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_END_OF_LINE;            \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_END;                         \
+            Shift = TRUE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_END_OF_LINE_SEL;        \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_END;                         \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_END_OF_DOCUMENT;        \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_END;                         \
+            Shift = TRUE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_END_OF_DOCUMENT_SEL;    \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+WEB_ACC_PARA_BLOCK						\
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_A;                           \
+            Shift = TRUE;  Modifier1 = TRUE;   \
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;       \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_D;                           \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Key[ es ]  = KeyCode {               \
+            Code = KEY_B;                           \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_UNDERLINE_DOUBLE;       \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_D;                           \
+            Shift = TRUE;  Modifier1 = TRUE;   \
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;       \
+    };                                                      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_I;                           \
+            Shift = TRUE;  Modifier1 = TRUE;   \
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_READONLY_SELECTION_MODE;       \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+AI_ATTR_PARA_ADJUST_CENTER \
+/* -----------------------------------------------------*/      \
+AI_ATTR_CHAR_WEIGHT	\
+/* -----------------------------------------------------*/      \
+AT_FN_REPEAT_SEARCH \
+/* -----------------------------------------------------*/      \
+AT_FN_SET_SUPER_SCRIPT \
+/* -----------------------------------------------------*/      \
+AI_ATTR_CHAR_POSTURE \
+/* -----------------------------------------------------*/      \
+AI_ATTR_PARA_ADJUST_LEFT \
+/* -----------------------------------------------------*/      \
+AI_ATTR_PARA_ADJUST_RIGHT \
+    \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_R;                           \
+            Shift = TRUE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_REFRESH_VIEW;           \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+AT_FN_SET_SUB_SCRIPT \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_T;                           \
+            Shift = TRUE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_TABLE_UNSET_READ_ONLY;  \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+AI_ATTR_CHAR_UNDERLINE \
+/* -----------------------------------------------------*/      \
+AI_STYLE_CATALOG \
+NOMAC_LINESPACE                                         	\
+                                \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_ADD;                         \
+            Shift = FALSE ; Modifier1 = TRUE ;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_CALCULATE;              \
+    };                                                      \
+/* -----------------------------------------------------*/	\
+ACCK {                                                  	\
+            Key  = KeyCode {                        \
+            Code = KEY_SUBTRACT;                    \
+            Shift = FALSE ; Modifier1 = TRUE ;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_INSERT_SOFT_HYPHEN;     \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+ACCK {                                                  	\
+            Key  = KeyCode {                        \
+            Code = KEY_SUBTRACT;                    \
+            Shift = TRUE; Modifier1 = TRUE ;	    \
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_INSERT_HARDHYPHEN;     \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_MULTIPLY;                    \
+            Shift = FALSE ; Modifier1 = TRUE ;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_EXECUTE_MACROFIELD;     \
+    };                                                      \
+/* -----------------------------------------------------*/      \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_SPACE;                       \
+            Shift = FALSE ; Modifier1 = TRUE ;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_INSERT_HARD_SPACE;      \
+    };
+
+#define FUNCTIONKEYS 	\
+/* FUNKTIONTASTEN --------------------------------------*/    	\
+                                \
+/* -F2--------------------------------------------------*/      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F2;                          \
+            Shift = FALSE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_EDIT_FORMULA;           \
+    };                                                      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F2;                          \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_INSERT_FIELD;           \
+    };                                                      \
+                                \
+                                \
+/* -F3--------------------------------------------------*/      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F3;                          \
+            Shift = FALSE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_EXPAND_GLOSSARY;        \
+    };                                                      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F3;                          \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_GLOSSARY_DLG;           \
+    };                                                      \
+                                \
+/* --F5-------------------------------------------------*/      \
+                                \
+AI_NAVIGATOR \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F5;                          \
+            Shift = TRUE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_CNTNT_TO_NEXT_FRAME;    \
+    };                                                      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F5;                          \
+            Shift = TRUE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_NAVIGATION_PI_GOTO_PAGE;\
+    };                                                      \
+                                \
+                                \
+/* ---F6------------------------------------------------*/      \
+/* ---F7------------------------------------------------*/      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F7;                          \
+            Shift = FALSE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_SPELLING_DLG;           \
+    };                                                      \
+                                \
+NOPM_THES							\
+/* ---F8------------------------------------------------*/      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F8;                          \
+            Shift = FALSE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_SET_EXT_MODE;           \
+    };                                                      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F8;                          \
+            Shift = TRUE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_SET_ADD_MODE;           \
+    };                                                      \
+                                \
+NOPM_VIEWMARKS                                          	\
+                                \
+/* ---F9------------------------------------------------*/      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F9;                          \
+            Shift = FALSE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_UPDATE_FIELDS;          \
+    };                                                      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F9;                          \
+            Shift = TRUE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_CALC_TABLE;             \
+    };                                                      \
+                                \
+NOPM_VIEWFIELDNAME                                              \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F9;                          \
+            Shift = TRUE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_UPDATE_INPUTFIELDS;     \
+    };                                                      \
+                                \
+/* ---F10-------------------------------------------------*/    \
+                                \
+NOPM_VIEWMETA                                                   \
+                                \
+/* ---F11-----------------------------------------------*/      \
+                                \
+AI_STYLE_DESIGNER \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F11;                         \
+            Shift = TRUE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = SID_STYLE_NEW_BY_EXAMPLE;  \
+    };                                                      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F11;                         \
+            Shift = TRUE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+        Identifier = SID_STYLE_UPDATE_BY_EXAMPLE;	\
+    };                                                      \
+                                \
+/* ---F12-----------------------------------------------*/      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F12;                         \
+            Shift = FALSE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_NUM_NUMBERING_ON;       \
+    };                                                      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F12;                         \
+            Shift = TRUE;	Modifier1 = FALSE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_NUM_BULLET_ON;          \
+    };                                                      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F12;                         \
+            Shift = FALSE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_INSERT_TABLE;           \
+    };                                                      \
+                                \
+    ACCK {                                                  \
+            Key  = KeyCode {                        \
+            Code = KEY_F12;                         \
+            Shift = TRUE;	Modifier1 = TRUE;	\
+            Modifier2 = FALSE;                      \
+            };                                      \
+            Identifier = FN_NUM_BULLET_OFF;         \
+    };                                                      \
+
+
+#endif

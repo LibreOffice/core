@@ -73,11 +73,11 @@ void OrderedListLevelStyle::write(DocumentHandlerInterface *pHandler, int iLevel
     listLevelStyleOpen.write(pHandler);
 
     TagOpenElement stylePropertiesOpen("style:list-level-properties");
-    if (mPropList["text:space-before"] && mPropList["text:space-before"]->getDouble() > 0.0f)
+    if (mPropList["text:space-before"] && mPropList["text:space-before"]->getDouble() > 0.0)
                 stylePropertiesOpen.addAttribute("text:space-before", mPropList["text:space-before"]->getStr());
-    if (mPropList["text:min-label-width"] && mPropList["text:min-label-width"]->getDouble() > 0.0f)
+    if (mPropList["text:min-label-width"] && mPropList["text:min-label-width"]->getDouble() > 0.0)
         stylePropertiesOpen.addAttribute("text:min-label-width", mPropList["text:min-label-width"]->getStr());
-    if (mPropList["text:min-label-distance"] && mPropList["text:min-label-distance"]->getDouble() > 0.0f)
+    if (mPropList["text:min-label-distance"] && mPropList["text:min-label-distance"]->getDouble() > 0.0)
         stylePropertiesOpen.addAttribute("text:min-label-distance", mPropList["text:min-label-distance"]->getStr());
     stylePropertiesOpen.write(pHandler);
 
@@ -120,11 +120,11 @@ void UnorderedListLevelStyle::write(DocumentHandlerInterface *pHandler, int iLev
     listLevelStyleOpen.write(pHandler);
 
     TagOpenElement stylePropertiesOpen("style:list-level-properties");
-    if (mPropList["text:space-before"] && mPropList["text:space-before"]->getDouble() > 0.0f)
+    if (mPropList["text:space-before"] && mPropList["text:space-before"]->getDouble() > 0.0)
                 stylePropertiesOpen.addAttribute("text:space-before", mPropList["text:space-before"]->getStr());
-    if (mPropList["text:min-label-width"] && mPropList["text:min-label-width"]->getDouble() > 0.0f)
+    if (mPropList["text:min-label-width"] && mPropList["text:min-label-width"]->getDouble() > 0.0)
         stylePropertiesOpen.addAttribute("text:min-label-width", mPropList["text:min-label-width"]->getStr());
-    if (mPropList["text:min-label-distance"] && mPropList["text:min-label-distance"]->getDouble() > 0.0f)
+    if (mPropList["text:min-label-distance"] && mPropList["text:min-label-distance"]->getDouble() > 0.0)
         stylePropertiesOpen.addAttribute("text:min-label-distance", mPropList["text:min-label-distance"]->getStr());
     stylePropertiesOpen.addAttribute("style:font-name", "OpenSymbol");
     stylePropertiesOpen.write(pHandler);
@@ -176,7 +176,7 @@ void ListStyle::write(DocumentHandlerInterface *pHandler) const
 
     for (int i=0; i<WP6_NUM_LIST_LEVELS; i++) {
         if (mppListLevels[i] != NULL)
-            mppListLevels[i]->write(pHandler, i);
+            mppListLevels[i]->write(pHandler, i);		
     }
 
     pHandler->endElement("text:list-style");

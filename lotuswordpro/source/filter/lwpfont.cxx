@@ -119,9 +119,9 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
             case UNDER_WORD_DOUBLE:
                 pFont->SetUnderline(enumXFUnderlineSingle, true);
                 break;
-            case UNDER_DONTCARE:    //fall through
-            case UNDER_OFF:         //fall through
-            case UNDER_STYLE:       //fall through
+            case UNDER_DONTCARE:	//fall through
+            case UNDER_OFF:			//fall through
+            case UNDER_STYLE:		//fall through
             default:
                 break;
                 //do nothing;
@@ -144,8 +144,8 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
         case CASE_INITCAPS:
             pFont->SetTransform(enumXFTransformCapitalize);
             break;
-        case CASE_STYLE:        //fall through
-        case CASE_DONTCARE: //fall through
+        case CASE_STYLE:		//fall through
+        case CASE_DONTCARE:	//fall through
         default:
             //do nothing
             ;
@@ -156,7 +156,7 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
     //for SmallCaps has higher priority than LowerCase but low
     if (IsSmallCapsOverridden())
     {
-        if( pFont->GetTransform()!=enumXFTransformUpper )   //SmallCaps should not override upper case
+        if( pFont->GetTransform()!=enumXFTransformUpper )	//SmallCaps should not override upper case
         {
             if(Is(SMALLCAPS))
                 pFont->SetTransform(enumXFTransformSmallCaps);
@@ -165,7 +165,7 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
 
     // TODO: tightness
     //if (IsTightnessOverridden())
-    //  pFont->SetTightness(cTightness);*/
+    //	pFont->SetTightness(cTightness);*/
 }
 
 BOOL LwpFontAttrEntry::Is(sal_uInt16 Attr)
@@ -327,7 +327,7 @@ void LwpFontNameEntry::Override(XFFont* pFont)
 
     // TODO: tightness
     //if (IsTightnessOverridden())
-    //  pFont->SetTightness(cTightness);
+    //	pFont->SetTightness(cTightness);
 }
 
 BOOL LwpFontNameEntry::IsFaceNameOverridden()
@@ -394,7 +394,7 @@ void LwpFontNameManager::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 
-void    LwpFontNameManager::Override(sal_uInt16 index, XFFont* pFont)
+void	LwpFontNameManager::Override(sal_uInt16 index, XFFont* pFont)
     //index: start from 1
 {
     if(index<1) return;
@@ -432,7 +432,7 @@ void LwpFontAttrManager::Read(LwpObjectStream *pStrm) {
     pStrm->SkipExtra();
 }
 
-void    LwpFontAttrManager::Override(sal_uInt16 index, XFFont* pFont)
+void	LwpFontAttrManager::Override(sal_uInt16 index, XFFont* pFont)
     //index: start from 1
 {
     if(index<1) return;
@@ -465,7 +465,7 @@ Note: A temporary method for only font support phase. The next AddStyle should b
 */
 /*void LwpFontManager::AddStyle(LwpObjectID styleObjID, sal_uInt32 fontID, OUString styleName)
 {
-    XFTextStyle* pStyle = new XFTextStyle();        //to be deleted by XFStyleManager
+    XFTextStyle* pStyle = new XFTextStyle();		//to be deleted by XFStyleManager
     AddStyle(styleObjID, fontID, styleName, pStyle);
 }*/
 
@@ -506,7 +506,7 @@ Refer to CFontManager::OverrideID
 //OUString LwpFontManager::GetOverrideStyle(sal_uInt32 fontID, sal_uInt32 overID)
 XFFont* LwpFontManager::CreateOverrideFont(sal_uInt32 fontID, sal_uInt32 overID)
 {
-    XFFont* pFont = new XFFont();   //To be deleted by XFFontFactory
+    XFFont* pFont = new XFFont();	//To be deleted by XFFontFactory
     SetDfltFont(pFont);
     if(fontID)
     {

@@ -25,7 +25,7 @@ public:
 
     virtual void attribute( Id aName, Value& rVal );
     virtual void sprm( Sprm& rSprm );
-};
+}; 
 typedef boost::shared_ptr<PositionHandler> PositionHandlerPtr;
 
 class WRITERFILTER_DLLPRIVATE WrapHandler: public Properties

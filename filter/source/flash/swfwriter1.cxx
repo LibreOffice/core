@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -151,7 +151,7 @@ void Writer::Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, sal_Bool b
     while( ( i + 1 ) < nSize )
     {
         if( ( i + 3 ) < nSize )
-        {
+        { 
             PolyFlags P1( rPoly.GetFlags( i ) );
             PolyFlags P4( rPoly.GetFlags( i + 3 ) );
 
@@ -160,7 +160,7 @@ void Writer::Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, sal_Bool b
                 ( POLY_CONTROL == rPoly.GetFlags( i + 2 ) ) &&
                 ( POLY_NORMAL == P4 || POLY_SMOOTH == P4 || POLY_SYMMTR == P4 ) )
             {
-                Impl_quadBezierApprox( rBits, aLastPoint, d*d,
+                Impl_quadBezierApprox( rBits, aLastPoint, d*d, 
                                       rPoly.GetPoint( i ).X(),   rPoly.GetPoint( i ).Y(),
                                       rPoly.GetPoint( i+1 ).X(), rPoly.GetPoint( i+1 ).Y(),
                                       rPoly.GetPoint( i+2 ).X(), rPoly.GetPoint( i+2 ).Y(),
@@ -168,8 +168,8 @@ void Writer::Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, sal_Bool b
                 i += 3;
                 continue;
             }
-        }
-
+        }		
+        
         ++i;
 
         const Point aPolyPoint( rPoly[ i ] );
@@ -196,21 +196,21 @@ void Writer::Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, sal_Bool b
 */
 void Writer::Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int16 dy, sal_Bool bFilled )
 {
-    rBits.writeUB( 0, 1 );          // TypeFlag
-    rBits.writeUB( 0, 1 );          // StateNewStyles
-    rBits.writeUB( !bFilled, 1 );   // StateLineStyle
-    rBits.writeUB( 0, 1 );          // StateFillStyle0
-    rBits.writeUB( bFilled, 1 );        // StateFillStyle1
-    rBits.writeUB( 1, 1 );          // StateMoveTo
+    rBits.writeUB( 0, 1 );			// TypeFlag
+    rBits.writeUB( 0, 1 );			// StateNewStyles
+    rBits.writeUB( !bFilled, 1 );	// StateLineStyle
+    rBits.writeUB( 0, 1 );			// StateFillStyle0
+    rBits.writeUB( bFilled, 1 );		// StateFillStyle1
+    rBits.writeUB( 1, 1 );			// StateMoveTo
 
     sal_uInt16 nMoveBits = max( getMaxBitsSigned( dx ), getMaxBitsSigned( dy ) );
 
-    rBits.writeUB( nMoveBits, 5 );  // Number of bits per value
+    rBits.writeUB( nMoveBits, 5 );	// Number of bits per value
                                     // TODO: Optimize horizontal and vertical lines
-    rBits.writeSB( dx, nMoveBits ); // DeltaX
-    rBits.writeSB( dy, nMoveBits ); // DeltaY
+    rBits.writeSB( dx, nMoveBits );	// DeltaX
+    rBits.writeSB( dy, nMoveBits );	// DeltaY
 
-    rBits.writeUB( 1, 1 );          // set FillStyle1 or LineStyle to 1
+    rBits.writeUB( 1, 1 );			// set FillStyle1 or LineStyle to 1
 }
 
 // -----------------------------------------------------------------------------
@@ -219,18 +219,18 @@ void Writer::Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int1
 */
 void Writer::Impl_addStraightEdgeRecord( BitStream& rBits, sal_Int16 dx, sal_Int16 dy )
 {
-    rBits.writeUB( 1, 1 );          // TypeFlag
-    rBits.writeUB( 1, 1 );          // StraightFlag
+    rBits.writeUB( 1, 1 );			// TypeFlag
+    rBits.writeUB( 1, 1 );			// StraightFlag
 
     sal_uInt16 nBits = max( getMaxBitsSigned( dx ), getMaxBitsSigned( dy ) );
 
-    rBits.writeUB( nBits - 2, 4 );  // Number of bits per value
+    rBits.writeUB( nBits - 2, 4 );	// Number of bits per value
 
     if( (dx != 0) && (dy != 0) )
     {
-        rBits.writeUB( 1, 1 );          // GeneralLineFlag
-        rBits.writeSB( dx, nBits );     // DeltaX
-        rBits.writeSB( dy, nBits );     // DeltaY
+        rBits.writeUB( 1, 1 );			// GeneralLineFlag 
+        rBits.writeSB( dx, nBits );		// DeltaX
+        rBits.writeSB( dy, nBits );		// DeltaY
     }
     else
     {
@@ -238,11 +238,11 @@ void Writer::Impl_addStraightEdgeRecord( BitStream& rBits, sal_Int16 dx, sal_Int
         rBits.writeUB( ( dx == 0 ), 1 );
         if( dx == 0 )
         {
-            rBits.writeSB( dy, nBits );     // DeltaY
+            rBits.writeSB( dy, nBits );		// DeltaY
         }
         else
         {
-            rBits.writeSB( dx, nBits );     // DeltaX
+            rBits.writeSB( dx, nBits );		// DeltaX
         }
     }
 }
@@ -253,21 +253,21 @@ void Writer::Impl_addStraightEdgeRecord( BitStream& rBits, sal_Int16 dx, sal_Int
 */
 void Writer::Impl_addCurvedEdgeRecord( BitStream& rBits, sal_Int16 control_dx, sal_Int16 control_dy, sal_Int16 anchor_dx, sal_Int16 anchor_dy )
 {
-    rBits.writeUB( 1, 1 );          // TypeFlag
-    rBits.writeUB( 0, 1 );          // CurvedFlag
+    rBits.writeUB( 1, 1 );			// TypeFlag
+    rBits.writeUB( 0, 1 );			// CurvedFlag
 
     sal_uInt8 nBits = static_cast<sal_uInt8>(
-        max( getMaxBitsSigned( control_dx ),
-            max( getMaxBitsSigned( control_dy ),
+        max( getMaxBitsSigned( control_dx ), 
+            max( getMaxBitsSigned( control_dy ), 
                 max( getMaxBitsSigned( anchor_dx ),
                     max( getMaxBitsSigned( anchor_dy ), (sal_uInt16)3 ) ) ) ) );
 
-    rBits.writeUB( nBits - 2, 4 );  // Number of bits per value
+    rBits.writeUB( nBits - 2, 4 );	// Number of bits per value
 
-    rBits.writeSB( control_dx, nBits );     // DeltaX
-    rBits.writeSB( control_dy, nBits );     // DeltaY
-    rBits.writeSB( anchor_dx, nBits );      // DeltaX
-    rBits.writeSB( anchor_dy, nBits );      // DeltaY
+    rBits.writeSB( control_dx, nBits );		// DeltaX
+    rBits.writeSB( control_dy, nBits );		// DeltaY
+    rBits.writeSB( anchor_dx, nBits );		// DeltaX
+    rBits.writeSB( anchor_dy, nBits );		// DeltaY
 }
 
 // -----------------------------------------------------------------------------
@@ -368,7 +368,7 @@ void Writer::Impl_writeGradientEx( const PolyPolygon& rPolyPoly, const Gradient&
 
             // render the gradient filling to simple polygons
             {
-                GDIMetaFile aTmpMtf;
+                GDIMetaFile	aTmpMtf;
                 mpVDev->AddGradientActions( aPolyPolygon.GetBoundRect(), rGradient, aTmpMtf );
                 Impl_writeActions( aTmpMtf );
             }
@@ -546,7 +546,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
     }
     else
     {
-        Size    aNormSize;
+        Size	aNormSize;
         sal_Int32* pOwnArray;
         sal_Int32* pDX;
 
@@ -558,7 +558,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
             pDX = (sal_Int32*) pDXArray;
         }
         else
-        {
+        {	
             pOwnArray = new sal_Int32[ nLen ];
             aNormSize = Size( mpVDev->GetTextArray( rText, pOwnArray ), 0 );
             pDX = pOwnArray;
@@ -579,7 +579,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
         }
 
         Font aOldFont( mpVDev->GetFont() );
-        Point               aBaseLinePos( rPos );
+        Point				aBaseLinePos( rPos );
 
         Font aFont(aOldFont);
         short nOrientation = aFont.GetOrientation();
@@ -588,10 +588,10 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
         aFont.SetStrikeout(STRIKEOUT_NONE);
         mpVDev->SetFont( aFont );
 
-        const FontMetric    aMetric( mpVDev->GetFontMetric() );
+        const FontMetric	aMetric( mpVDev->GetFontMetric() );
 
-        FlashFont&          rFlashFont = Impl_getFont( aFont );
-
+        FlashFont&			rFlashFont = Impl_getFont( aFont );
+        
         // always adjust text position to match baseline alignment
         switch( aOldFont.GetAlign() )
         {
@@ -613,12 +613,12 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
         // write text element
 
 /* test code to create a bound rect, not realy working for rotated text
-            Size        aTextSize( map( Size( mpVDev->GetTextWidth( rText ), mpVDev->GetTextHeight() ) ) );
-            Point       aMetricPoint( map( Point( aMetric.GetLeading(), aMetric.GetAscent() )  ) );
+            Size		aTextSize( map( Size( mpVDev->GetTextWidth( rText ), mpVDev->GetTextHeight() ) ) );
+            Point		aMetricPoint( map( Point( aMetric.GetLeading(), aMetric.GetAscent() )  ) );
 
-            Point       aTmpPoint( map( Point( - aMetric.GetLeading(), - aMetric.GetAscent() )  ) ); ;
-            Rectangle   aTmpRectangle(aTmpPoint, aTextSize );
-            Polygon     aPoly( aTmpRectangle );
+            Point		aTmpPoint( map( Point( - aMetric.GetLeading(), - aMetric.GetAscent() )  ) ); ;
+            Rectangle	aTmpRectangle(aTmpPoint, aTextSize );
+            Polygon 	aPoly( aTmpRectangle );
 
             aPoly.Rotate( aTmpPoint, (USHORT) nOrientation );
 
@@ -628,7 +628,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
 
 */
 
-#if 0 // makes the calculated bound rect visible for debuging
+#if	0 // makes the calculated bound rect visible for debuging
 {
         Polygon aTmpPoly( aPoly );
         sal_uInt16 nID = FlashGeometryExporter::writePolygonShape( aMovieStream, aTmpPoly, false, Color(COL_MAGENTA), Color(COL_MAGENTA), mpClipPolyPolygon  );
@@ -636,8 +636,8 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
 }
 #endif
 
-        // CL: This is still a hack until we figure out how to calculate a correct bound rect
-        //     for rotatet text
+        // CL: This is still a hack until we figure out how to calculate a correct bound rect 
+        //	   for rotatet text
         Rectangle textBounds( 0, 0, static_cast<long>(mnDocWidth*mnDocXScale), static_cast<long>(mnDocHeight*mnDocYScale) );
         double scale = 1.0;
 
@@ -657,7 +657,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
         }
 
         basegfx::B2DHomMatrix m(basegfx::tools::createRotateB2DHomMatrix(static_cast<double>(nOrientation) * F_PI1800));
-        m.translate( double(aPt.X() / scale), double(aPt.Y()) );
+        m.translate( double(aPt.X() / scale), double(aPt.Y()) );	
         m.scale( scale, scale );
 
         sal_Int16 nHeight = _Int16( map( Size( 0, aFont.GetHeight() ) ).Height() );
@@ -719,23 +719,23 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
         //  export facility, although the positioning had to be tweaked a little.  I can't explain the
         //  numbers, but the flash lines up very well with the original OOo document.  All of this should
         //  probably be converted to polygons as part of the meta file, though, as we don't handle any
-        //  fancy lines (like dashes).
+        //  fancy lines (like dashes).  
         if( ( aOldFont.GetStrikeout() != STRIKEOUT_NONE ) || ( aOldFont.GetUnderline() != UNDERLINE_NONE ) )
         {
-            Polygon     aPoly( 4 );
-            const long  nLineHeight = Max( (long) FRound( aMetric.GetLineHeight() * 0.05 ), (long) 1 );
+            Polygon		aPoly( 4 );
+            const long	nLineHeight = Max( (long) FRound( aMetric.GetLineHeight() * 0.05 ), (long) 1 );
 
             if( aOldFont.GetStrikeout() != STRIKEOUT_NONE )
             {
-                aPoly[ 0 ].X() = aBaseLinePos.X();
+                aPoly[ 0 ].X() = aBaseLinePos.X(); 
                 aPoly[ 0 ].Y() = aBaseLinePos.Y() - FRound( aMetric.GetAscent() * 0.26 ) - nLineHeight;
-                aPoly[ 1 ].X() = aPoly[ 0 ].X() + aNormSize.Width() - 1;
+                aPoly[ 1 ].X() = aPoly[ 0 ].X() + aNormSize.Width() - 1; 
                 aPoly[ 1 ].Y() = aPoly[ 0 ].Y();
-                aPoly[ 2 ].X() = aPoly[ 1 ].X();
+                aPoly[ 2 ].X() = aPoly[ 1 ].X(); 
                 aPoly[ 2 ].Y() = aPoly[ 1 ].Y() + nLineHeight - 1;
-                aPoly[ 3 ].X() = aPoly[ 0 ].X();
+                aPoly[ 3 ].X() = aPoly[ 0 ].X(); 
                 aPoly[ 3 ].Y() = aPoly[ 2 ].Y();
-
+                        
                 Impl_writePolygon( aPoly, sal_True, aTextColor, aTextColor );
             }
 
@@ -743,13 +743,13 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
             //  but it looks good to me.
             if( aOldFont.GetUnderline() != UNDERLINE_NONE )
             {
-                aPoly[ 0 ].X() = aBaseLinePos.X();
+                aPoly[ 0 ].X() = aBaseLinePos.X(); 
                 aPoly[ 0 ].Y() = static_cast<long>(aBaseLinePos.Y() + 1.5*nLineHeight);
-                aPoly[ 1 ].X() = aPoly[ 0 ].X() + aNormSize.Width() - 1;
+                aPoly[ 1 ].X() = aPoly[ 0 ].X() + aNormSize.Width() - 1; 
                 aPoly[ 1 ].Y() = aPoly[ 0 ].Y();
-                aPoly[ 2 ].X() = aPoly[ 1 ].X();
+                aPoly[ 2 ].X() = aPoly[ 1 ].X(); 
                 aPoly[ 2 ].Y() = aPoly[ 1 ].Y() + nLineHeight - 1;
-                aPoly[ 3 ].X() = aPoly[ 0 ].X();
+                aPoly[ 3 ].X() = aPoly[ 0 ].X(); 
                 aPoly[ 3 ].Y() = aPoly[ 2 ].Y();
 
                 Impl_writePolygon( aPoly, sal_True, aTextColor, aTextColor );
@@ -864,7 +864,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     compress2(pCompressed, &compressed_size, pImageData, raw_size, Z_BEST_COMPRESSION);
 #endif
 
-    // AS: SWF files let you provide an Alpha mask for JPEG images, but we have
+    // AS: SWF files let you provide an Alpha mask for JPEG images, but we have 
     //  to ZLIB compress the alpha channel seperately.
     uLong alpha_compressed_size = 0;
     sal_uInt8 *pAlphaCompressed = NULL;
@@ -873,7 +873,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
         alpha_compressed_size = uLongf(width * height + (sal_uInt32)(raw_size/100) + 12);
         pAlphaCompressed = new sal_uInt8[ compressed_size ];
 
-#ifdef DBG_UTIL
+#ifdef DBG_UTIL		
         if(compress2(pAlphaCompressed, &alpha_compressed_size, pAlphaData, width * height, Z_BEST_COMPRESSION) != Z_OK)
         {
             DBG_ASSERT( false, "compress2 failed!" ); ((void)0);
@@ -949,14 +949,14 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
         //  However, I can't explain why exactly.  I got some of this by trial and error.
         double XScale = static_cast<double>(originalPixelRect.GetWidth())/destRect.GetWidth();
         double YScale = static_cast<double>(originalPixelRect.GetHeight())/destRect.GetHeight();
-
+        
         // AS: If rClipRect has a value set, then we need to crop the bmp appropriately.
         //  If a map event already occurred in the metafile, then we do not need to map
         //  the clip rect as it's already been done.
         if (!rClipRect.IsEmpty())
         {
             // AS: Christian, I also don't understand why bNeedToMapClipRect is necessary, but it
-            //  works like a charm.  Usually, the map event in the meta file does not cause the
+            //  works like a charm.  Usually, the map event in the meta file does not cause the 
             //  clipping rectangle to get mapped.  However, sometimes there are multiple layers
             //  of mapping which eventually do cause the clipping rect to be mapped.
             Size clipSize( bNeedToMapClipRect ? map(rClipRect.GetSize()) : rClipRect.GetSize() );
@@ -968,9 +968,9 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
             // AS: The bmp origion is always 0,0 so we have to adjust before we crop.
             cropRect.Move(-srcPt.X(), -srcPt.Y());
             // AS: Rectangle has no scale function (?!) so I do it manually...
-            Rectangle cropPixelRect(static_cast<long>(cropRect.Left()*XScale),
-                                    static_cast<long>(cropRect.Top()*YScale),
-                                    static_cast<long>(cropRect.Right()*XScale),
+            Rectangle cropPixelRect(static_cast<long>(cropRect.Left()*XScale), 
+                                    static_cast<long>(cropRect.Top()*YScale), 
+                                    static_cast<long>(cropRect.Right()*XScale), 
                                     static_cast<long>(cropRect.Bottom()*YScale));
 
             bmpSource.Crop(cropPixelRect);
@@ -979,8 +979,8 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
         if( !!bmpSource )
         {
             // #105949# fix images that are under 16 pixels width or height by
-            //          expanding them. Some swf players can't display such small
-            //          bitmaps
+            //			expanding them. Some swf players can't display such small
+            //		    bitmaps
             const Size& rSizePixel = bmpSource.GetSizePixel();
             if( (rSizePixel.Width() < 16) || (rSizePixel.Height() < 16) )
             {
@@ -1054,7 +1054,7 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
     //  the header and the image need start and stop (D8 and D9),
     //  so that's why you see those written to both.  I don't
     //  really know what the rest of these are, I got it to work
-    //  kind of by trial and error and by comparing with known
+    //  kind of by trial and error and by comparing with known 
     //  good SWF files.
     sal_uInt8 cType = 0x01;
     const sal_uInt8* pJpgSearch = pJpgData;
@@ -1090,7 +1090,7 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
         {
             // AS: Lengths are big endian.
 
-            // Beware. pJpgSearch is not necessarily word-aligned,
+            // Beware. pJpgSearch is not necessarily word-aligned, 
             // so we access it byte-wise.
 
             // AS: Add 2 to the length to include the 0xFFXX itself.
@@ -1126,7 +1126,7 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
         case 0xC5:
         case 0xC6:
         case 0xC7:
-//      case 0xC8: Apparently reserved for JPEG extensions?
+//		case 0xC8: Apparently reserved for JPEG extensions?
         case 0xC9:
         case 0xCA:
         case 0xCB:
@@ -1203,7 +1203,7 @@ void Writer::Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY )
     if( (rRect.nTop == rRect.nBottom) || (rRect.nLeft == rRect.nRight) )
     {
         Color aColor( mpVDev->GetFillColor() );
-        Impl_writeLine( rRect.TopLeft(), rRect.BottomRight(), &aColor );
+        Impl_writeLine( rRect.TopLeft(), rRect.BottomRight(), &aColor ); 
     }
     else
     {
@@ -1245,17 +1245,17 @@ bool Writer::Impl_writeStroke( SvtGraphicStroke& rStroke )
     PolyPolygon aStartArrow;
     rStroke.getStartArrow( aStartArrow );
     if( 0 != aStartArrow.Count() )
-        return false;       // todo: Implement line ends
+        return false;		// todo: Implement line ends
 
     PolyPolygon aEndArrow;
     rStroke.getEndArrow( aEndArrow );
     if( 0 != aEndArrow.Count() )
-        return false;       // todo: Implement line ends
+        return false;		// todo: Implement line ends
 
     SvtGraphicStroke::DashArray aDashArray;
     rStroke.getDashArray( aDashArray );
     if( 0 != aDashArray.size() )
-        return false;       // todo: implement dashes
+        return false;		// todo: implement dashes
 
     Color aColor( mpVDev->GetLineColor() );
 
@@ -1324,9 +1324,9 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
                     aMatrix.set(a, b, aTransform.matrix[a*3+b]);
                 }
             }
-            aMatrix.set(2, 0, 0.0);
-            aMatrix.set(2, 1, 0.0);
-            aMatrix.set(2, 2, 1.0);
+            aMatrix.set(2, 0, 0.0); 
+            aMatrix.set(2, 1, 0.0); 
+            aMatrix.set(2, 2, 1.0); 
 
             // scale bitmap
             Rectangle originalPixelRect = Rectangle(Point(), aGraphic.GetBitmapEx().GetSizePixel());
@@ -1348,7 +1348,7 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
 
 // -----------------------------------------------------------------------------
 
-/* CL: The idea was to export page fields as text fields that get theire
+/* CL: The idea was to export page fields as text fields that get theire 
    string from a variable set with actionscript by each page. This didn't
    work out since the formating is always wrong when text follows the
    page number field since pages greater one may require more space than
@@ -1365,21 +1365,21 @@ bool Writer::Impl_writePageField( Rectangle& rTextBounds )
     mpTag->addRect( rTextBounds );
 
     BitStream aBits;
-    aBits.writeUB( 1, 1 );                  // HasText
-    aBits.writeUB( 0, 1 );                  // WordWrap
-    aBits.writeUB( 0, 1 );                  // MultiLine
-    aBits.writeUB( 0, 1 );                  // Password
-    aBits.writeUB( 1, 1 );                  // HasTextColor
-    aBits.writeUB( 0, 1 );                  // HasMaxLength
-    aBits.writeUB( 0, 1 );                  // HasFont
-    aBits.writeUB( 0, 1 );                  // Reserved
-    aBits.writeUB( 0, 1 );                  // AutoSize
-    aBits.writeUB( 0, 1 );                  // HasLayout
-    aBits.writeUB( 1, 1 );                  // NoSelect
-    aBits.writeUB( 1, 1 );                  // Border
-    aBits.writeUB( 0, 1 );                  // Reserved
-    aBits.writeUB( 0, 1 );                  // HTML
-    aBits.writeUB( 0, 1 );                  // UseOutlines
+    aBits.writeUB( 1, 1 );					// HasText
+    aBits.writeUB( 0, 1 );					// WordWrap
+    aBits.writeUB( 0, 1 );					// MultiLine
+    aBits.writeUB( 0, 1 );					// Password
+    aBits.writeUB( 1, 1 );					// HasTextColor
+    aBits.writeUB( 0, 1 );					// HasMaxLength
+    aBits.writeUB( 0, 1 );					// HasFont
+    aBits.writeUB( 0, 1 );					// Reserved
+    aBits.writeUB( 0, 1 );					// AutoSize
+    aBits.writeUB( 0, 1 );					// HasLayout
+    aBits.writeUB( 1, 1 );					// NoSelect
+    aBits.writeUB( 1, 1 );					// Border
+    aBits.writeUB( 0, 1 );					// Reserved
+    aBits.writeUB( 0, 1 );					// HTML
+    aBits.writeUB( 0, 1 );					// UseOutlines
     mpTag->addBits( aBits );
 
     Color aColor( COL_BLACK );
@@ -1443,12 +1443,12 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
     int bMap = 0;
     for( ULONG i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
     {
-        const MetaAction*   pAction = rMtf.GetAction( i );
-        const USHORT        nType = pAction->GetType();
+        const MetaAction*	pAction = rMtf.GetAction( i );
+        const USHORT		nType = pAction->GetType();
 
         switch( nType )
         {
-            case( META_PIXEL_ACTION ):
+            case( META_PIXEL_ACTION	):
             {
                 const MetaPixelAction* pA = (const MetaPixelAction*) pAction;
 
@@ -1456,7 +1456,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_POINT_ACTION ):
+            case( META_POINT_ACTION	):
             {
                 const MetaPointAction* pA = (const MetaPointAction*) pAction;
 
@@ -1467,7 +1467,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_LINE_ACTION ):
             {
                 const MetaLineAction* pA = (const MetaLineAction*) pAction;
-
+                
                 if(pA->GetLineInfo().IsDefault())
                 {
                     Impl_writeLine( pA->GetStartPoint(), pA->GetEndPoint() );
@@ -1489,7 +1489,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_ROUNDRECT_ACTION ):
+            case( META_ROUNDRECT_ACTION	):
             {
                 const MetaRoundRectAction* pA = (const MetaRoundRectAction*) pAction;
 
@@ -1499,8 +1499,8 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
             case( META_ELLIPSE_ACTION ):
             {
-                const MetaEllipseAction*    pA = (const MetaEllipseAction*) pAction;
-                const Rectangle&            rRect = pA->GetRect();
+                const MetaEllipseAction*	pA = (const MetaEllipseAction*) pAction;
+                const Rectangle&			rRect = pA->GetRect();
 
                 Impl_writeEllipse( rRect.Center(), rRect.GetWidth() >> 1, rRect.GetHeight() >> 1 );
             }
@@ -1508,7 +1508,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
             case( META_ARC_ACTION ):
             case( META_PIE_ACTION ):
-            case( META_CHORD_ACTION ):
+            case( META_CHORD_ACTION	):
             case( META_POLYGON_ACTION ):
             {
                 Polygon aPoly;
@@ -1529,13 +1529,13 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                     }
                     break;
 
-                    case( META_CHORD_ACTION ):
+                    case( META_CHORD_ACTION	):
                     {
                         const MetaChordAction* pA = (const MetaChordAction*) pAction;
                         aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD );
                     }
                     break;
-
+                    
                     case( META_POLYGON_ACTION ):
                         aPoly = ( (const MetaPolygonAction*) pAction )->GetPolygon();
                     break;
@@ -1550,8 +1550,8 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
             case( META_POLYLINE_ACTION ):
             {
-                const MetaPolyLineAction*   pA = (const MetaPolyLineAction*) pAction;
-                const Polygon&              rPoly = pA->GetPolygon();
+                const MetaPolyLineAction*	pA = (const MetaPolyLineAction*) pAction;
+                const Polygon&				rPoly = pA->GetPolygon();
 
                 if( rPoly.GetSize() )
                 {
@@ -1570,8 +1570,8 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
             case( META_POLYPOLYGON_ACTION ):
             {
-                const MetaPolyPolygonAction*    pA = (const MetaPolyPolygonAction*) pAction;
-                const PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
+                const MetaPolyPolygonAction*	pA = (const MetaPolyPolygonAction*) pAction;
+                const PolyPolygon&				rPolyPoly = pA->GetPolyPolygon();
 
                 if( rPolyPoly.Count() )
                     Impl_writePolyPolygon( rPolyPoly, sal_True );
@@ -1580,7 +1580,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
             case( META_GRADIENT_ACTION ):
             {
-                const MetaGradientAction*   pA = (const MetaGradientAction*) pAction;
+                const MetaGradientAction*	pA = (const MetaGradientAction*) pAction;
 
                 Polygon aPoly( pA->GetRect() );
                 Impl_writeGradientEx( aPoly, pA->GetGradient() );
@@ -1589,15 +1589,15 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
             case( META_GRADIENTEX_ACTION ):
             {
-                const MetaGradientExAction* pA = (const MetaGradientExAction*) pAction;
+                const MetaGradientExAction*	pA = (const MetaGradientExAction*) pAction;
                 Impl_writeGradientEx( pA->GetPolyPolygon(), pA->GetGradient() );
             }
             break;
 
             case META_HATCH_ACTION:
             {
-                const MetaHatchAction*  pA = (const MetaHatchAction*) pAction;
-                GDIMetaFile             aTmpMtf;
+                const MetaHatchAction*	pA = (const MetaHatchAction*) pAction;
+                GDIMetaFile				aTmpMtf;
 
                 mpVDev->AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
                 Impl_writeActions( aTmpMtf );
@@ -1606,8 +1606,8 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
             case( META_TRANSPARENT_ACTION ):
             {
-                const MetaTransparentAction*    pA = (const MetaTransparentAction*) pAction;
-                const PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
+                const MetaTransparentAction*	pA = (const MetaTransparentAction*) pAction;
+                const PolyPolygon&				rPolyPoly = pA->GetPolyPolygon();
 
                 if( rPolyPoly.Count() )
                 {
@@ -1620,15 +1620,15 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
             case( META_FLOATTRANSPARENT_ACTION ):
             {
-                const MetaFloatTransparentAction*   pA = (const MetaFloatTransparentAction*) pAction;
-                GDIMetaFile                         aTmpMtf( pA->GetGDIMetaFile() );
-                Point                               aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
-                const Size                          aSrcSize( aTmpMtf.GetPrefSize() );
-                const Point                         aDestPt( pA->GetPoint() );
-                const Size                          aDestSize( pA->GetSize() );
-                const double                        fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
-                const double                        fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
-                long                                nMoveX, nMoveY;
+                const MetaFloatTransparentAction*	pA = (const MetaFloatTransparentAction*) pAction;
+                GDIMetaFile							aTmpMtf( pA->GetGDIMetaFile() );
+                Point								aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
+                const Size							aSrcSize( aTmpMtf.GetPrefSize() );
+                const Point							aDestPt( pA->GetPoint() );
+                const Size							aDestSize( pA->GetSize() );
+                const double						fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
+                const double						fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
+                long								nMoveX, nMoveY;
 
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {
@@ -1658,20 +1658,20 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
             case( META_EPS_ACTION ):
             {
-                const MetaEPSAction*    pA = (const MetaEPSAction*) pAction;
-                const GDIMetaFile       aGDIMetaFile( pA->GetSubstitute() );
-                sal_Bool                bFound = sal_False;
+                const MetaEPSAction*	pA = (const MetaEPSAction*) pAction;
+                const GDIMetaFile		aGDIMetaFile( pA->GetSubstitute() );
+                sal_Bool				bFound = sal_False;
 
                 for( ULONG j = 0, nC = aGDIMetaFile.GetActionCount(); ( j < nC ) && !bFound; j++ )
                 {
                     const MetaAction* pSubstAct = aGDIMetaFile.GetAction( j );
-
+                    
                     if( pSubstAct->GetType() == META_BMPSCALE_ACTION )
                     {
                         bFound = sal_True;
                         const MetaBmpScaleAction* pBmpScaleAction = (const MetaBmpScaleAction*) pSubstAct;
-                        Impl_writeImage( pBmpScaleAction->GetBitmap(),
-                                      pA->GetPoint(), pA->GetSize(),
+                        Impl_writeImage( pBmpScaleAction->GetBitmap(), 
+                                      pA->GetPoint(), pA->GetSize(), 
                                       Point(), pBmpScaleAction->GetBitmap().GetSizePixel(), clipRect, 1 == bMap  );
                     }
                 }
@@ -1680,14 +1680,14 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
             case( META_COMMENT_ACTION ):
             {
-                const MetaCommentAction*    pA = (const MetaCommentAction*) pAction;
-                const BYTE*                 pData = pA->GetData();
-                String                      aSkipComment;
+                const MetaCommentAction*	pA = (const MetaCommentAction*) pAction;
+                const BYTE* 				pData = pA->GetData();
+                String						aSkipComment;
 
                 if( pA->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL )
                 {
-                    const MetaGradientExAction* pGradAction = NULL;
-                    sal_Bool                    bDone = sal_False;
+                    const MetaGradientExAction*	pGradAction = NULL;
+                    sal_Bool					bDone = sal_False;
 
                     while( !bDone && ( ++i < nCount ) )
                     {
@@ -1695,7 +1695,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
                         if( pAction->GetType() == META_GRADIENTEX_ACTION )
                             pGradAction = (const MetaGradientExAction*) pAction;
-                        else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
+                        else if( ( pAction->GetType() == META_COMMENT_ACTION ) && 
                                  ( ( (const MetaCommentAction*) pAction )->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_END" ) == COMPARE_EQUAL ) )
                         {
                             bDone = sal_True;
@@ -1705,15 +1705,15 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                     if( pGradAction )
                         Impl_writeGradientEx( pGradAction->GetPolyPolygon(), pGradAction->GetGradient());
                 }
-                else if( pA->GetComment().CompareIgnoreCaseToAscii( "XPATHFILL_SEQ_BEGIN" ) == COMPARE_EQUAL &&
+                else if( pA->GetComment().CompareIgnoreCaseToAscii( "XPATHFILL_SEQ_BEGIN" ) == COMPARE_EQUAL && 
                          pData )
                 {
 
                     // this comment encapsulates all high level information for a filling that caused
                     // the meta actions between the "XPATHFILL_SEQ_BEGIN" and "XPATHFILL_SEQ_END" comment.
 
-                    SvtGraphicFill  aFilling;
-                    SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
+                    SvtGraphicFill 	aFilling;
+                    SvMemoryStream	aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
 
                     // read the fill info
                     aMemStm >> aFilling;
@@ -1728,7 +1728,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                         {
                             pAction = rMtf.GetAction( i );
 
-                            if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
+                            if( ( pAction->GetType() == META_COMMENT_ACTION ) && 
                                      ( ( (const MetaCommentAction*) pAction )->GetComment().CompareIgnoreCaseToAscii( "XPATHFILL_SEQ_END" ) == COMPARE_EQUAL ) )
                             {
                                 bDone = sal_True;
@@ -1736,7 +1736,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                         }
                     }
                 }
-                else if( pA->GetComment().CompareIgnoreCaseToAscii( "XPATHSTROKE_SEQ_BEGIN" ) == COMPARE_EQUAL &&
+                else if( pA->GetComment().CompareIgnoreCaseToAscii( "XPATHSTROKE_SEQ_BEGIN" ) == COMPARE_EQUAL && 
                          pData )
                 {
 
@@ -1744,7 +1744,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                     // the meta actions between the "XPATHFILL_SEQ_BEGIN" and "XPATHFILL_SEQ_END" comment.
 
                     SvtGraphicStroke aStroke;
-                    SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
+                    SvMemoryStream	aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
 
                     // read the fill info
                     aMemStm >> aStroke;
@@ -1759,7 +1759,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                         {
                             pAction = rMtf.GetAction( i );
 
-                            if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
+                            if( ( pAction->GetType() == META_COMMENT_ACTION ) && 
                                      ( ( (const MetaCommentAction*) pAction )->GetComment().CompareIgnoreCaseToAscii( "XPATHSTROKE_SEQ_END" ) == COMPARE_EQUAL ) )
                             {
                                 bDone = sal_True;
@@ -1783,7 +1783,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                             Impl_writePageField( aRect );
                         }
 
-                        if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
+                        if( ( pAction->GetType() == META_COMMENT_ACTION ) && 
                                  ( ( (const MetaCommentAction*) pAction )->GetComment().CompareIgnoreCaseToAscii( "FIELD_SEQ_END" ) == COMPARE_EQUAL ) )
                         {
                             bDone = sal_True;
@@ -1798,8 +1798,8 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             {
                 const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pAction;
 
-                Impl_writeImage( pA->GetBitmap(),
-                          pA->GetPoint(), pA->GetSize(),
+                Impl_writeImage( pA->GetBitmap(), 
+                          pA->GetPoint(), pA->GetSize(), 
                           Point(), pA->GetBitmap().GetSizePixel(), clipRect, 1 == bMap );
             }
             break;
@@ -1807,8 +1807,8 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_BMP_ACTION ):
             {
                 const MetaBmpAction* pA = (const MetaBmpAction*) pAction;
-                Impl_writeImage( pA->GetBitmap(),
-                          pA->GetPoint(), mpVDev->PixelToLogic( pA->GetBitmap().GetSizePixel()),
+                Impl_writeImage( pA->GetBitmap(), 
+                          pA->GetPoint(), mpVDev->PixelToLogic( pA->GetBitmap().GetSizePixel()), 
                           Point(), pA->GetBitmap().GetSizePixel(), clipRect, 1 ==bMap );
             }
             break;
@@ -1816,17 +1816,17 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_BMPSCALEPART_ACTION ):
             {
                 const MetaBmpScalePartAction* pA = (const MetaBmpScalePartAction*) pAction;
-                Impl_writeImage( pA->GetBitmap(),
-                          pA->GetDestPoint(), pA->GetDestSize(),
+                Impl_writeImage( pA->GetBitmap(), 
+                          pA->GetDestPoint(), pA->GetDestSize(), 
                           pA->GetSrcPoint(), pA->GetSrcSize(), clipRect, 1 == bMap );
             }
             break;
 
-            case( META_BMPEX_ACTION ):
+            case( META_BMPEX_ACTION	):
             {
-                const MetaBmpExAction*  pA = (const MetaBmpExAction*) pAction;
-                Impl_writeImage( pA->GetBitmapEx(),
-                          pA->GetPoint(), mpVDev->PixelToLogic( pA->GetBitmapEx().GetSizePixel() ),
+                const MetaBmpExAction*	pA = (const MetaBmpExAction*) pAction;
+                Impl_writeImage( pA->GetBitmapEx(), 
+                          pA->GetPoint(), mpVDev->PixelToLogic( pA->GetBitmapEx().GetSizePixel() ), 
                           Point(), pA->GetBitmapEx().GetSizePixel(), clipRect, 1 == bMap );
             }
             break;
@@ -1834,8 +1834,8 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_BMPEXSCALE_ACTION ):
             {
                 const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
-                Impl_writeImage( pA->GetBitmapEx(),
-                          pA->GetPoint(), pA->GetSize(),
+                Impl_writeImage( pA->GetBitmapEx(), 
+                          pA->GetPoint(), pA->GetSize(), 
                           Point(), pA->GetBitmapEx().GetSizePixel(), clipRect, 1 == bMap );
             }
             break;
@@ -1843,8 +1843,8 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_BMPEXSCALEPART_ACTION ):
             {
                 const MetaBmpExScalePartAction* pA = (const MetaBmpExScalePartAction*) pAction;
-                Impl_writeImage( pA->GetBitmapEx(),
-                          pA->GetDestPoint(), pA->GetDestSize(),
+                Impl_writeImage( pA->GetBitmapEx(), 
+                          pA->GetDestPoint(), pA->GetDestSize(), 
                           pA->GetSrcPoint(), pA->GetSrcSize(), clipRect, 1 == bMap );
             }
             break;
@@ -1853,7 +1853,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             {
                 const MetaTextAction* pA = (const MetaTextAction*) pAction;
                 Impl_writeText( pA->GetPoint(), String( pA->GetText(), pA->GetIndex(), pA->GetLen() ), NULL, 0);
-            }
+            }			
             break;
 
             case( META_TEXTRECT_ACTION ):
@@ -1863,9 +1863,9 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_TEXTARRAY_ACTION ):
+            case( META_TEXTARRAY_ACTION	):
             {
-                const MetaTextArrayAction*  pA = (const MetaTextArrayAction*) pAction;
+                const MetaTextArrayAction*	pA = (const MetaTextArrayAction*) pAction;
                 Impl_writeText( pA->GetPoint(), String( pA->GetText(), pA->GetIndex(), pA->GetLen() ), pA->GetDXArray(), 0 );
             }
             break;
@@ -1883,33 +1883,33 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 clipRect = pA->GetRect();
             }
             case( META_CLIPREGION_ACTION ):
-            case( META_ISECTREGIONCLIPREGION_ACTION ):
+            case( META_ISECTREGIONCLIPREGION_ACTION	):
             case( META_MOVECLIPREGION_ACTION ):
             {
                 ( (MetaAction*) pAction )->Execute( mpVDev );
-//              mbClipAttrChanged = sal_True;
+//				mbClipAttrChanged = sal_True;
             }
             break;
 
             case( META_MAPMODE_ACTION ):
             {
-//              const MetaMapModeAction *pA = (const MetaMapModeAction*) pAction;
-//              MapMode mm = pA->GetMapMode();
-//              MapUnit mu = mm.GetMapUnit();
+//				const MetaMapModeAction *pA = (const MetaMapModeAction*) pAction;
+//				MapMode mm = pA->GetMapMode();
+//				MapUnit mu = mm.GetMapUnit();
 //
-//              Point pt = mm.GetOrigin();
-//              Fraction fx = mm.GetScaleX();
-//              Fraction fy = mm.GetScaleY();
+//				Point pt = mm.GetOrigin();
+//				Fraction fx = mm.GetScaleX();
+//				Fraction fy = mm.GetScaleY();
 
                 bMap++;
             }
             case( META_REFPOINT_ACTION ):
-            case( META_LINECOLOR_ACTION ):
-            case( META_FILLCOLOR_ACTION ):
+            case( META_LINECOLOR_ACTION	):
+            case( META_FILLCOLOR_ACTION	):
             case( META_TEXTLINECOLOR_ACTION ):
-            case( META_TEXTFILLCOLOR_ACTION ):
-            case( META_TEXTCOLOR_ACTION ):
-            case( META_TEXTALIGN_ACTION ):
+            case( META_TEXTFILLCOLOR_ACTION	):
+            case( META_TEXTCOLOR_ACTION	):
+            case( META_TEXTALIGN_ACTION	):
             case( META_FONT_ACTION ):
             case( META_PUSH_ACTION ):
             case( META_POP_ACTION ):
@@ -1921,9 +1921,9 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
             case( META_RASTEROP_ACTION ):
             case( META_MASK_ACTION ):
-            case( META_MASKSCALE_ACTION ):
-            case( META_MASKSCALEPART_ACTION ):
-            case( META_WALLPAPER_ACTION ):
+            case( META_MASKSCALE_ACTION	):
+            case( META_MASKSCALEPART_ACTION	):
+            case( META_WALLPAPER_ACTION	):
             case( META_TEXTLINE_ACTION ):
             {
                 // !!! >>> we don't want to support these actions
@@ -1984,7 +1984,7 @@ void Writer::Impl_quadBezierApprox( BitStream& rBits,
         P4y == 3.0*P3y - 3.0*P2y + P1y )
     {
         Impl_addQuadBezier( rBits, rLastPoint,
-                           3.0/2.0*P2x - 1.0/2.0*P1x, 3.0/2.0*P2y - 1.0/2.0*P1y,
+                           3.0/2.0*P2x - 1.0/2.0*P1x, 3.0/2.0*P2y - 1.0/2.0*P1y, 
                            P4x, P4y);
     }
     else
@@ -1998,8 +1998,8 @@ void Writer::Impl_quadBezierApprox( BitStream& rBits,
 
         // Intersection of P2P1 and P4P3
         //           (P2y-P4y)(P3x-P4x)-(P2x-P4x)(P3y-P4y)
-        //  lambda = -------------------------------------
-        //           (P1x-P2x)(P3y-P4y)-(P1y-P2y)(P3x-P4x)
+        //  lambda = ------------------------------------- 
+        //           (P1x-P2x)(P3y-P4y)-(P1y-P2y)(P3x-P4x) 
         //
         // Intersection point IP is now
         // IP = P2 + lambda(P1-P2)
@@ -2007,7 +2007,7 @@ void Writer::Impl_quadBezierApprox( BitStream& rBits,
         const double nominator( (P2y-P4y)*(P3x-P4x) - (P2x-P4x)*(P3y-P4y) );
         const double denominator( (P1x-P2x)*(P3y-P4y) - (P1y-P2y)*(P3x-P4x) );
         const double lambda( nominator / denominator );
-
+    
         const double IPx( P2x + lambda*( P1x - P2x) );
         const double IPy( P2y + lambda*( P1y - P2y) );
 
@@ -2051,14 +2051,14 @@ void Writer::Impl_quadBezierApprox( BitStream& rBits,
         // Should denominator be 0: then P1P2 and P3P4 are parallel (P1P2^T R[90,P3P4] = 0.0),
         // meaning that either we have a straight line or an inflexion point (see else block below)
         if( 0.0 != denominator &&
-            ::std::max( fJ1x*fJ1x + fJ1y*fJ1y,
+            ::std::max( fJ1x*fJ1x + fJ1y*fJ1y, 
                         fJ2x*fJ2x + fJ2y*fJ2y) < d2 )
         {
             // requested resolution reached.
             // Add end points to output file.
             // order is preserved, since this is so to say depth first traversal.
             Impl_addQuadBezier( rBits, rLastPoint,
-                                QP2x, QP2y,
+                                QP2x, QP2y, 
                                 QP3x, QP3y);
         }
         else
@@ -2070,7 +2070,7 @@ void Writer::Impl_quadBezierApprox( BitStream& rBits,
             // straight line. If the given cubic bezier does not deviate by
             // more than d/4 from a straight line, either:
             //  - take the line (that's what we do here)
-            //  - express the line by a quadratic bezier
+            //  - express the line by a quadratic bezier    
 
             // Perform bezier flatness test (lecture notes from R. Schaback,
             // Mathematics of Computer-Aided Design, Uni Goettingen, 2000)
@@ -2088,7 +2088,7 @@ void Writer::Impl_quadBezierApprox( BitStream& rBits,
             const double fJ2y2( P3y - P1y - 2.0/3.0*(P4y - P1y) );
 
             // stop if distance from line is guaranteed to be bounded by d/4
-            if( ::std::max( fJ1x2*fJ1x2 + fJ1y2*fJ1y2,
+            if( ::std::max( fJ1x2*fJ1x2 + fJ1y2*fJ1y2, 
                             fJ2x2*fJ2x2 + fJ2y2*fJ2y2) < d2/16.0 )
             {
                 // do not subdivide further, add straight line instead
@@ -2098,15 +2098,15 @@ void Writer::Impl_quadBezierApprox( BitStream& rBits,
             {
                 // deCasteljau bezier arc, split at t=0.5
                 // Foley/vanDam, p. 508
-                const double L1x( P1x ),             L1y( P1y );
+                const double L1x( P1x ), 		   	 L1y( P1y );
                 const double L2x( (P1x + P2x)*0.5 ), L2y( (P1y + P2y)*0.5 );
                 const double Hx ( (P2x + P3x)*0.5 ), Hy ( (P2y + P3y)*0.5 );
                 const double L3x( (L2x + Hx)*0.5 ),  L3y( (L2y + Hy)*0.5 );
-                const double R4x( P4x ),             R4y( P4y );
+                const double R4x( P4x ), 		   	 R4y( P4y );
                 const double R3x( (P3x + P4x)*0.5 ), R3y( (P3y + P4y)*0.5 );
                 const double R2x( (Hx + R3x)*0.5 ),  R2y( (Hy + R3y)*0.5 );
                 const double R1x( (L3x + R2x)*0.5 ), R1y( (L3y + R2y)*0.5 );
-                const double L4x( R1x ),             L4y( R1y );
+                const double L4x( R1x ), 		     L4y( R1y );
 
                 // subdivide further
                 Impl_quadBezierApprox(rBits, rLastPoint, d2, L1x, L1y, L2x, L2y, L3x, L3y, L4x, L4y);

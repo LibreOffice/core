@@ -1,0 +1,16 @@
+UDK_3_0_0 {
+    global:
+        CreateSwDocShellDll;
+        CreateSwWebDocShellDll;
+        CreateSwGlobalDocShellDll;
+        CreateObjSwDocShellDll;
+        CreateObjSwWebDocShellDll;
+        CreateObjSwGlobalDocShellDll;
+        InitSwDll;
+        DeInitSwDll;
+        component_getImplementationEnvironment;
+        component_writeInfo;
+        component_getFactory;
+    local:
+        *;
+};

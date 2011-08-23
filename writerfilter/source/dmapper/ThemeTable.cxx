@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ void ThemeTable::sprm(Sprm& rSprm)
     dmapper_logger->startElement("ThemeTable.sprm");
     dmapper_logger->chars(rSprm.toString());
 #endif
-
+    
     sal_uInt32 nSprmId = rSprm.getId();
     (void)nSprmId;
 
@@ -164,7 +164,7 @@ void ThemeTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer
 #endif
 
     ref->resolve(*this);
-
+    
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement("ThemeTable.entry");
 #endif
@@ -190,7 +190,7 @@ const ::rtl::OUString ThemeTable::getFontNameForTheme(const Id id) const
     default:
         return ::rtl::OUString();
     }
-
+    
     switch (id)
     {
     case NS_ooxml::LN_Value_ST_Theme_majorAscii:

@@ -78,7 +78,7 @@ public:
  * define the function type for input read, output write
  */
 #define CHUNK 16384
-#define MAXWIN 4096     /* maximum window size */
+#define MAXWIN 4096		/* maximum window size */
 class Decompression
 {
 public:
@@ -104,14 +104,14 @@ public:
     SvStream *m_pOutStream;
 
     sal_uInt32 m_nCurrent4Byte;   // bit buffer
-    sal_uInt32 m_nBitsLeft;     // number of bits remained in bit buffer
+    sal_uInt32 m_nBitsLeft;		// number of bits remained in bit buffer
 
-    sal_uInt8 m_Buffer[CHUNK];  // input byte buffer
-    sal_uInt8 *m_pBuffer;           // pointer to input buffer
-    sal_uInt32 m_nBytesLeft;        // number of bytes remained in byte buffer
+    sal_uInt8 m_Buffer[CHUNK];	// input byte buffer
+    sal_uInt8 *m_pBuffer;			// pointer to input buffer
+    sal_uInt32 m_nBytesLeft;		// number of bytes remained in byte buffer
 
-    sal_uInt8 m_Output[MAXWIN]; // output byte buffer
-    sal_uInt32 m_nOutputBufferPos;  // pointer to output buffer
+    sal_uInt8 m_Output[MAXWIN];	// output byte buffer
+    sal_uInt32 m_nOutputBufferPos;	// pointer to output buffer
 
     sal_uInt32 m_iArrayOfM[16];
 

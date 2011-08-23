@@ -68,7 +68,7 @@ namespace OpenStormBento
 #define UtErr_OK 0
 #define UtErr_Fail 1
 
-#define UT_TRUE sal_True
+#define UT_TRUE	sal_True
 #define UT_FALSE sal_False
 
 #define UtByte sal_uInt8

@@ -46,22 +46,22 @@ public class SheetSettings implements OfficeConstants {
     /**  A w3c <code>Document</code>. */
     private org.w3c.dom.Document settings = null;
 
-    private String  sheetName;
-    private int     cursorX     = 0;
-    private int     cursorY     = 0;
-    private int     splitTypeX;
-    private int     splitTypeY;
-    private int     splitPointX = 0;
-    private int     splitPointY = 0;
-    private int     posLeft     = 0;
-    private int     posRight    = 0;
-    private int     posBottom   = 0;
-    private int     posTop      = 0;
-    private int     paneNumber  = 2;
+    private String	sheetName;
+    private int		cursorX		= 0;
+    private int		cursorY		= 0;
+    private int		splitTypeX;
+    private int		splitTypeY;
+    private int		splitPointX	= 0;
+    private int		splitPointY	= 0;
+    private int		posLeft 	= 0;
+    private int		posRight	= 0;
+    private int		posBottom	= 0;
+    private int		posTop		= 0;
+    private int		paneNumber	= 2;
 
-    final public static int NONE    = 0x00;
-    final public static int SPLIT   = 0x01;
-    final public static int FREEZE  = 0x02;
+    final public static int NONE	= 0x00;
+    final public static int SPLIT	= 0x01;
+    final public static int FREEZE	= 0x02;
 
     /**
      * Default Constructor for a <code>SheetSettings</code>
@@ -116,10 +116,10 @@ public class SheetSettings implements OfficeConstants {
      */
     public void setFreeze(Point splitPoint) {
 
-        splitTypeX      = FREEZE;
-        splitTypeY      = FREEZE;
-        splitPointX     = (int) splitPoint.getX();
-        splitPointY     = (int) splitPoint.getY();
+        splitTypeX		= FREEZE;
+        splitTypeY		= FREEZE;
+        splitPointX		= (int) splitPoint.getX();
+        splitPointY		= (int) splitPoint.getY();
     }
 
     /**
@@ -129,10 +129,10 @@ public class SheetSettings implements OfficeConstants {
      */
     public void setSplit(Point splitPoint) {
 
-        splitTypeX      = SPLIT;
-        splitTypeY      = SPLIT;
-        splitPointX     = (int) splitPoint.getX();
-        splitPointY     = (int) splitPoint.getY();
+        splitTypeX		= SPLIT;
+        splitTypeY		= SPLIT;
+        splitPointX		= (int) splitPoint.getX();
+        splitPointY		= (int) splitPoint.getY();
     }
 
     /**
@@ -260,7 +260,7 @@ public class SheetSettings implements OfficeConstants {
     public void writeNode(org.w3c.dom.Document settings, Node root) {
 
         this.settings = settings;
-        Element configItemMapEntry      = (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_ENTRY);
+        Element configItemMapEntry		= (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_ENTRY);
         configItemMapEntry.setAttribute(ATTRIBUTE_CONFIG_NAME, getSheetName());
         addConfigItem(configItemMapEntry, "CursorPositionX", "int", Integer.toString(cursorX));
         addConfigItem(configItemMapEntry, "CursorPositionY", "int", Integer.toString(cursorY));

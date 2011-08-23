@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Feb 2005           Created
+ Feb 2005		 	Created
  ************************************************************************/
 #ifndef _LWPOLEOBJECT_HXX_
 #define _LWPOLEOBJECT_HXX_
@@ -83,18 +83,18 @@
 
 typedef struct tagAFID_CACHE
 {
-    unsigned long LinkedFileSize;               /* 0 if not linked */
-    unsigned long LinkedFileTime;               /* 0 if not linked */
-    long Width;                             /* -1 if not present */
-    long Height;                                /* -1 if not present */
+    unsigned long LinkedFileSize;				/* 0 if not linked */
+    unsigned long LinkedFileTime;				/* 0 if not linked */
+    long Width;								/* -1 if not present */
+    long Height;								/* -1 if not present */
 } AFID_CACHE,  * PAFID_CACHE;
 
 /* Maximum string sizes - includes space for null terminator */
-#define AFID_MAX_FILE_FORMAT_SIZE                   80
-#define AFID_MAX_CONTEXT_FORMAT_SIZE                80
+#define AFID_MAX_FILE_FORMAT_SIZE                	80
+#define AFID_MAX_CONTEXT_FORMAT_SIZE             	80
 
 // OLE defined maximum
-#define MAX_STREAMORSTORAGENAME     32
+#define MAX_STREAMORSTORAGENAME		32
 /**
  * @descr
  * super class of LwpOleObject and LwpGraphicObject
@@ -147,15 +147,15 @@ private:
 #include <vcl/outdev.hxx>
 class LwpOlePres
 {
-    ULONG   nFormat;
-    USHORT  nAspect;
-    Bitmap *        pBmp;
-    GDIMetaFile *   pMtf;
+    ULONG	nFormat;
+    USHORT	nAspect;
+    Bitmap *		pBmp;
+    GDIMetaFile *	pMtf;
 
     UINT32  nAdvFlags;
-    INT32   nJobLen;
-    BYTE *  pJob;
-    Size    aSize;      // Groesse in 100TH_MM
+    INT32 	nJobLen;
+    BYTE *	pJob;
+    Size	aSize;		// Groesse in 100TH_MM
 public:
     LwpOlePres( ULONG nF )
         : nFormat( nF )
@@ -171,7 +171,7 @@ public:
         delete pBmp;
         delete pMtf;
     }
-    void    SetMtf( const GDIMetaFile & rMtf )
+    void	SetMtf( const GDIMetaFile & rMtf )
     {
         if( pMtf )
             delete pMtf;
@@ -179,15 +179,15 @@ public:
     }
     Bitmap *GetBitmap() const { return pBmp; }
     GDIMetaFile *GetMetaFile() const { return pMtf; }
-    ULONG   GetFormat() const { return nFormat; }
-    void    SetAspect( USHORT nAsp ) { nAspect = nAsp; }
-    ULONG   GetAdviseFlags() const { return nAdvFlags; }
-    void    SetAdviseFlags( ULONG nAdv ) { nAdvFlags = nAdv; }
-    void    SetSize( const Size & rSize ) { aSize = rSize; }
+    ULONG	GetFormat() const { return nFormat; }
+    void	SetAspect( USHORT nAsp ) { nAspect = nAsp; }
+    ULONG	GetAdviseFlags() const { return nAdvFlags; }
+    void	SetAdviseFlags( ULONG nAdv ) { nAdvFlags = nAdv; }
+    void	SetSize( const Size & rSize ) { aSize = rSize; }
     Size GetSize() const { return aSize; } //Add by , 10/26/2005
     /// return FALSE => unknown format
-    BOOL    Read( SvStream & rStm );
-    void    Write( SvStream & rStm );
+    BOOL 	Read( SvStream & rStm );
+    void 	Write( SvStream & rStm );
 };
 //End by
 

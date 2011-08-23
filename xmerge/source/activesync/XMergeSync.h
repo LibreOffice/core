@@ -13,7 +13,7 @@
 
 // Used to keep track of the dll
 
-class CXMergeSyncModule
+class CXMergeSyncModule  
 {
 protected:
     long  m_lLocks;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,38 +39,38 @@ class XPMWriter {
 
 private:
 
-    SvStream*           mpOStm;             // Die auszugebende XPM-Datei
-    USHORT              mpOStmOldModus;
+    SvStream*			mpOStm; 			// Die auszugebende XPM-Datei
+    USHORT				mpOStmOldModus;
 
-    BOOL                mbStatus;
-    BOOL                mbTrans;
-    BitmapReadAccess*   mpAcc;
-    ULONG               mnWidth, mnHeight;  // Bildausmass in Pixeln
-    USHORT              mnColors;
+    BOOL				mbStatus;
+    BOOL				mbTrans;
+    BitmapReadAccess*	mpAcc;
+    ULONG				mnWidth, mnHeight;	// Bildausmass in Pixeln
+    USHORT				mnColors;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
-    void                ImplCallback( USHORT nPercent );
-    BOOL                ImplWriteHeader();
-    void                ImplWritePalette();
-    void                ImplWriteColor( USHORT );
-    void                ImplWriteBody();
-    void                ImplWriteNumber( sal_Int32 );
-    void                ImplWritePixel( ULONG );
+    void				ImplCallback( USHORT nPercent );
+    BOOL				ImplWriteHeader();
+    void				ImplWritePalette();
+    void				ImplWriteColor( USHORT );
+    void				ImplWriteBody();
+    void				ImplWriteNumber( sal_Int32 );
+    void				ImplWritePixel( ULONG );
 
 public:
                         XPMWriter();
                         ~XPMWriter();
 
-    BOOL                WriteXPM( const Graphic& rGraphic, SvStream& rXPM, FilterConfigItem* pFilterConfigItem );
+    BOOL				WriteXPM( const Graphic& rGraphic, SvStream& rXPM, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von XPMWriter ==============================
 
 XPMWriter::XPMWriter() :
-    mbStatus    ( TRUE ),
-    mbTrans     ( FALSE ),
-    mpAcc       ( NULL )
+    mbStatus	( TRUE ),
+    mbTrans		( FALSE ),
+    mpAcc		( NULL )
 {
 }
 
@@ -91,11 +91,11 @@ void XPMWriter::ImplCallback( USHORT nPercent )
     }
 }
 
-//  ------------------------------------------------------------------------
+//	------------------------------------------------------------------------
 
 BOOL XPMWriter::WriteXPM( const Graphic& rGraphic, SvStream& rXPM, FilterConfigItem* pFilterConfigItem)
 {
-    Bitmap  aBmp;
+    Bitmap	aBmp;
 
     mpOStm = &rXPM;
 
@@ -109,13 +109,13 @@ BOOL XPMWriter::WriteXPM( const Graphic& rGraphic, SvStream& rXPM, FilterConfigI
         }
     }
 
-    BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
+    BitmapEx	aBmpEx( rGraphic.GetBitmapEx() );
     aBmp = aBmpEx.GetBitmap();
 
-    if ( rGraphic.IsTransparent() )                 // event. transparente Farbe erzeugen
+    if ( rGraphic.IsTransparent() )					// event. transparente Farbe erzeugen
     {
         mbTrans = TRUE;
-        if ( aBmp.GetBitCount() >= 8 )              // wenn noetig Bild auf 8 bit konvertieren
+        if ( aBmp.GetBitCount() >= 8 )				// wenn noetig Bild auf 8 bit konvertieren
             aBmp.Convert( BMP_CONVERSION_8BIT_TRANS );
         else
             aBmp.Convert( BMP_CONVERSION_4BIT_TRANS );
@@ -123,7 +123,7 @@ BOOL XPMWriter::WriteXPM( const Graphic& rGraphic, SvStream& rXPM, FilterConfigI
     }
     else
     {
-        if ( aBmp.GetBitCount() > 8 )               // wenn noetig Bild auf 8 bit konvertieren
+        if ( aBmp.GetBitCount() > 8 )				// wenn noetig Bild auf 8 bit konvertieren
             aBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
     }
     mpAcc = aBmp.AcquireReadAccess();
@@ -203,7 +203,7 @@ void XPMWriter::ImplWriteBody()
 {
     for ( ULONG y = 0; y < mnHeight; y++ )
     {
-        ImplCallback( (USHORT)( ( 100 * y ) / mnHeight ) );         // processing output in percent
+        ImplCallback( (USHORT)( ( 100 * y ) / mnHeight ) );			// processing output in percent
         *mpOStm << (BYTE)0x22;
         for ( ULONG x = 0; x < mnWidth; x++ )
         {
@@ -243,10 +243,10 @@ void XPMWriter::ImplWritePixel( ULONG nCol )
 // ein Farbwert wird im Hexadezimalzahlformat in den Stream geschrieben
 void XPMWriter::ImplWriteColor( USHORT nNumber )
 {
-    ULONG   nTmp;
-    BYTE    j;
+    ULONG	nTmp;
+    BYTE	j;
 
-    *mpOStm << "c #";   // # zeigt einen folgenden Hexwert an
+    *mpOStm << "c #";	// # zeigt einen folgenden Hexwert an
     const BitmapColor& rColor = mpAcc->GetPaletteColor( nNumber );
     nTmp = ( rColor.GetRed() << 16 ) | ( rColor.GetGreen() << 8 ) | rColor.GetBlue();
     for ( signed char i = 20; i >= 0 ; i-=4 )

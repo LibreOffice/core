@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,33 +70,33 @@ private:
     com::sun::star::uno::Reference< com::sun::star::document::XEventListener > mxGlobalEventListener;
     com::sun::star::uno::WeakReference< com::sun::star::lang::XComponent > mxLastFocusModel;
 
-    ResMgr&             mrResMgr;
+    ResMgr&				mrResMgr;
 
-    rtl::OUString   maImportRecentFile;
-    rtl::OUString   maExportRecentFile;
+    rtl::OUString	maImportRecentFile;
+    rtl::OUString	maExportRecentFile;
 
-    FixedLine   maFLExport;
-    FixedText   maFTExportXSLT;
-    FixedText   maFTExportXSLTFile;
-    FixedText   maFTTransformDocument;
-    PushButton  maPBExportBrowse;
-    PushButton  maPBCurrentDocument;
-    FixedText   maFTNameOfCurentFile;
-    FixedLine   maFLImport;
-    FixedText   maFTImportXSLT;
-    FixedText   maFTImportXSLTFile;
-    FixedText   maFTImportTemplate;
-    FixedText   maFTImportTemplateFile;
-    FixedText   maFTTransformFile;
-    CheckBox    maCBXDisplaySource;
-    PushButton  maPBImportBrowse;
-    PushButton  maPBRecentDocument;
-    FixedText   maFTNameOfRecentFile;
-    PushButton  maPBClose;
-    HelpButton  maPBHelp;
+    FixedLine	maFLExport;
+    FixedText	maFTExportXSLT;
+    FixedText	maFTExportXSLTFile;
+    FixedText	maFTTransformDocument;
+    PushButton	maPBExportBrowse;
+    PushButton	maPBCurrentDocument;
+    FixedText	maFTNameOfCurentFile;
+    FixedLine	maFLImport;
+    FixedText	maFTImportXSLT;
+    FixedText	maFTImportXSLTFile;
+    FixedText	maFTImportTemplate;
+    FixedText	maFTImportTemplateFile;
+    FixedText	maFTTransformFile;
+    CheckBox	maCBXDisplaySource;
+    PushButton	maPBImportBrowse;
+    PushButton	maPBRecentDocument;
+    FixedText	maFTNameOfRecentFile;
+    PushButton	maPBClose;
+    HelpButton	maPBHelp;
 
-    XMLSourceFileDialog*    mpSourceDLG;
-    filter_info_impl*       mpFilterInfo;
+    XMLSourceFileDialog*	mpSourceDLG;
+    filter_info_impl*		mpFilterInfo;
 
     String maDialogTitle;
 

@@ -62,15 +62,15 @@
  * 2004-12-23 create this file.
  ************************************************************************/
 
-#ifndef     _XFFILEATTRLIST_HXX
-#define     _XFFILEATTRLIST_HXX
+#ifndef		_XFFILEATTRLIST_HXX
+#define		_XFFILEATTRLIST_HXX
 
-#include    "ixfattrlist.hxx"
-#include    "rtl/ustring.hxx"
-#include    <vector>
-#include    <utility>
+#include	"ixfattrlist.hxx"
+#include	"rtl/ustring.hxx"
+#include	<vector>
+#include	<utility>
 
-class   XFFileAttrList : public IXFAttrList
+class	XFFileAttrList : public IXFAttrList
 {
 public:
 
@@ -78,8 +78,8 @@ public:
     virtual ~XFFileAttrList();
     //Interface ISaxAttributeList:
 
-    virtual void    AddAttribute(const rtl::OUString& name, const rtl::OUString& value);
-    virtual void    Clear();
+    virtual void	AddAttribute(const rtl::OUString& name, const rtl::OUString& value);
+    virtual void	Clear();
 
     friend class XFFileStream;
 private:

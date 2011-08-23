@@ -62,8 +62,8 @@
  * 2005-01-27 create this file.
  * 2005-04-08 add copy constructure.
  ************************************************************************/
-#include    "xfcontentcontainer.hxx"
-#include    "xftextcontent.hxx"
+#include	"xfcontentcontainer.hxx"
+#include	"xftextcontent.hxx"
 
 XFContentContainer::XFContentContainer()
 {
@@ -114,7 +114,7 @@ XFContentContainer::~XFContentContainer()
     }
 }
 
-void    XFContentContainer::Add(IXFContent *pContent)
+void	XFContentContainer::Add(IXFContent *pContent)
 {
     m_aContents.push_back(pContent);
 }
@@ -127,19 +127,19 @@ void XFContentContainer::RemoveAt(sal_uInt32 nPos)
 {
     m_aContents.erase(m_aContents.begin()+nPos);
 }
-void    XFContentContainer::Add(const rtl::OUString& text)
+void	XFContentContainer::Add(const rtl::OUString& text)
 {
     XFTextContent *pTC = new XFTextContent();
     pTC->SetText(text);
     Add(pTC);
 }
 
-int     XFContentContainer::GetCount() const
+int		XFContentContainer::GetCount() const
 {
     return m_aContents.size();
 }
 
-void    XFContentContainer::Reset()
+void	XFContentContainer::Reset()
 {
     std::vector<IXFContent*>::iterator it;
 
@@ -153,10 +153,10 @@ void    XFContentContainer::Reset()
 }
 
 
-IXFContent* XFContentContainer::FindFirstContent(enumXFContent type)
+IXFContent*	XFContentContainer::FindFirstContent(enumXFContent type)
 {
     IXFContent *pRet = NULL;
-    IXFContent  *pContent = NULL;
+    IXFContent	*pContent = NULL;
 
     for( int i=0; i<GetCount(); i++ )
     {
@@ -181,12 +181,12 @@ IXFContent* XFContentContainer::FindFirstContent(enumXFContent type)
     return pRet;
 }
 
-enumXFContent   XFContentContainer::GetContentType()
+enumXFContent	XFContentContainer::GetContentType()
 {
     return enumXFContentContainer;
 }
 
-void    XFContentContainer::ToXml(IXFStream *pStrm)
+void	XFContentContainer::ToXml(IXFStream *pStrm)
 {
     std::vector<IXFContent*>::iterator it;
 

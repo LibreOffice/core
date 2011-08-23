@@ -61,12 +61,12 @@
  * Change History
  * 2005-01-31 create this file.
  ************************************************************************/
-#ifndef     _XFPAGECOUNT_HXX
-#define     _XFPAGECOUNT_HXX
+#ifndef		_XFPAGECOUNT_HXX
+#define		_XFPAGECOUNT_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
-#include    "xfnumfmt.hxx"
+#include	"xfglobal.hxx"
+#include	"xfcontent.hxx"
+#include	"xfnumfmt.hxx"
 
 /**
  * @brief
@@ -75,12 +75,12 @@
 class XFPageCount : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 inline void XFPageCount::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     pStrm->StartElement( A2OUSTR("text:page-count") );

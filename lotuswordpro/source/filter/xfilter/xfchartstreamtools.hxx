@@ -56,7 +56,7 @@
 /*****************************************************************************
 * Change History
 * <<Date>> <<Name of editor>> <<Description>>
-2005/2      draft code for chart stream helpers
+2005/2		draft code for chart stream helpers
 ****************************************************************************/
 
 /**
@@ -105,7 +105,7 @@ class XFChartStreamTools
 public:
     static void ParseStream(SvStorageStreamRef rInpStream, Reference<XDocumentHandler> aHandler);
 
-    static void ParseStream(    SvStorageStreamRef rCntStream,
+    static void ParseStream(	SvStorageStreamRef rCntStream,
                                 IXFStream* pOutputStream);
 };
 

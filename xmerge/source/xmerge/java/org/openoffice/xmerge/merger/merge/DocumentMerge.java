@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -194,7 +194,7 @@ public class DocumentMerge implements MergeAlgorithm {
     }
 
 
-    /**
+    /** 
      *  Removes the specified <code>Node</code>.
      *
      *  @param  node  <code>Node</code> to remove.

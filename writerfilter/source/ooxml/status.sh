@@ -8,7 +8,7 @@ echo "<stage1>"
 
 xsltproc analyzemodel.xsl model.xml | tail -n +2
 
-find $SEARCHIN -name "*.cxx" -exec grep -nH -A 1 "case NS_" {} \; |
+find $SEARCHIN -name "*.cxx" -exec grep -nH -A 1 "case NS_" {} \; | 
 grep -v "//.*case NS_" |
 sed 's#'$SEARCHIN'##' |
 sed 's#\(^[^:]*\):\([0-9]*\):#<qname file="\1" line="\2"#' |

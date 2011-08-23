@@ -1,0 +1,57 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <bf_sfx2/sfx.hrc>
+//#define RID_APP_START 30000
+#define STR_LAYOUT						(RID_APP_START + 500)
+#define STR_CONTROLS					(RID_APP_START + 501)
+#define STR_CHARTVIEWSHELL				(RID_APP_START + 502)
+#define STR_STDOBJECTBARSHELL			(RID_APP_START + 503)
+#define STR_APPLICATIONOBJECTBAR		(RID_APP_START + 504)
+
+#define STR_TITLE_MAIN					(RID_APP_START + 520)
+#define STR_TITLE_SUB					(RID_APP_START + 521)
+#define STR_DIAGRAM_TITLE_X_AXIS		(RID_APP_START + 522)
+#define STR_DIAGRAM_TITLE_Y_AXIS		(RID_APP_START + 523)
+#define STR_DIAGRAM_TITLE_Z_AXIS		(RID_APP_START + 524)
+#define STR_COLUMN						(RID_APP_START + 525)
+#define STR_ROW							(RID_APP_START + 526)
+#define STR_STLSHEET_TITLE_MAIN			(RID_APP_START + 527)
+#define STR_STLSHEET_TITLE_SUB			(RID_APP_START + 528)
+#define STR_STLSHEET_TITLE_X_AXIS		(RID_APP_START + 529)
+#define STR_STLSHEET_TITLE_Y_AXIS		(RID_APP_START + 530)
+#define STR_STLSHEET_TITLE_Z_AXIS		(RID_APP_START + 531)
+#define STR_STLSHEET_DATAROWS			(RID_APP_START + 532)
+#define STR_STLSHEET_DATACOLS			(RID_APP_START + 533)
+#define STR_STLSHEET_DATAVALUES			(RID_APP_START + 534)
+#define STR_STLSHEET_DATADESCR			(RID_APP_START + 535)
+#define STR_STLSHEET_LEGEND				(RID_APP_START + 536)
+
+#define STR_NO_LOGARITHMIC_MIN_VALUES	(RID_APP_START + 540)
+#define STR_NO_MIN_VALUES				(RID_APP_START + 541)
+#define STR_ONLY_ABS_VALUES             (RID_APP_START + 542)
+// #define STR_EQUIVALATE_AXIS             (RID_APP_START + 543)	// unused
+

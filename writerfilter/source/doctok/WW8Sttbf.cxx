@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ WW8Sttbf::WW8Sttbf(WW8Stream & rStream, sal_uInt32 nOffset, sal_uInt32 nCount)
         mEntryOffsets.push_back(nOffset);
 
         sal_uInt32 nStringLength = getU16(nOffset);
-
+        
         nOffset += 2 + nStringLength * (mbComplex ? 2 : 1);
 
         mExtraOffsets.push_back(nOffset);
@@ -100,12 +100,12 @@ WW8SttbTableResource::~WW8SttbTableResource()
 void WW8SttbTableResource::resolve(Table & rTable)
 {
     sal_uInt32 nCount = mpSttbf->getEntryCount();
-
+    
     for (sal_uInt32 n = 0; n < nCount; n++)
     {
         WW8StringValue::Pointer_t pVal(new WW8StringValue(mpSttbf->getEntry(n)));
         ::writerfilter::Reference<Properties>::Pointer_t pProps(new WW8StringProperty(0, pVal));
-
+        
         rTable.entry(n, pProps);
     }
 }
@@ -139,30 +139,30 @@ sal_uInt32 WW8SttbRgtplc::getEntryCount()
     return getU16(2);
 }
 
-::writerfilter::Reference<Properties>::Pointer_t
+::writerfilter::Reference<Properties>::Pointer_t 
 WW8SttbRgtplc::getEntry(sal_uInt32 nIndex)
 {
     ::writerfilter::Reference<Properties>::Pointer_t pResult;
-
+    
     sal_uInt32 nOffset = 6;
-
+    
     while (nIndex > 0)
     {
         sal_uInt16 nCount = getU16(nOffset);
-
+        
         nOffset = nOffset + 2 + nCount;
         ++nIndex;
     }
-
+    
     sal_uInt16 nCount = getU16(nOffset);
-
+    
     if (nCount > 0)
     {
         WW8Tplc * pTplc = new WW8Tplc(*this, nOffset + 2, nCount);
-
+        
         pResult.reset(pTplc);
     }
-
+    
     return pResult;
 }
 

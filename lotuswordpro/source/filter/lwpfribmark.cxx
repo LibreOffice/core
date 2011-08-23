@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- May 2005           Created
+ May 2005			Created
  ************************************************************************/
 
 #include "lwpfribmark.hxx"
@@ -168,7 +168,7 @@ void  LwpFribBookMark::RegisterStyle(LwpFoundry* pFoundry)
         XFBookmarkEnd* pMarkEnd = new XFBookmarkEnd;
         pMarkEnd->SetDivision(sDivision);
         pMarkEnd->SetName(name);
-        pMarkMgr->AddXFBookmarkEnd(name,pMarkEnd);  //add to map
+        pMarkMgr->AddXFBookmarkEnd(name,pMarkEnd);	//add to map
         m_pEnd = pMarkEnd;
     }
 }
@@ -570,7 +570,7 @@ void LwpFribField::RegisterDateTimeStyle(OUString sFormula)
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLYYYY") )
+        else if (sFormula == A2OUSTR("%FLYYYY")	)
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddYear();
@@ -657,8 +657,8 @@ void LwpFribField::RegisterDateTimeStyle(OUString sFormula)
         else if (sFormula == A2OUSTR("%FLeeeeoa") || sFormula == A2OUSTR("%FLffffooaa") || sFormula == A2OUSTR("%FLEEEEOA"))
         {
             pDateStyle = new XFDateStyle;
-    //      OUString lang = OUString::createFromAscii("zh-CN");
-    //      pDateStyle->SetLanguage( lang);
+    //		OUString lang = OUString::createFromAscii("zh-CN");
+    //		pDateStyle->SetLanguage( lang);
             rtl::OUString sText;
             pDateStyle->AddYear();
             sText = rtl::OUString(0x5e74);
@@ -962,7 +962,7 @@ void LwpFribField::RegisterDateTimeStyle(OUString sFormula)
             pTimeStyle->SetAmPm(sal_True);
         }
         //chinese version begin
-        else     if (sFormula == A2OUSTR("%FLjF") || sFormula == A2OUSTR("%FLJFF")
+        else	 if (sFormula == A2OUSTR("%FLjF") || sFormula == A2OUSTR("%FLJFF")
             || sFormula == A2OUSTR("%FLjjF") || sFormula == A2OUSTR("%FLJJFF ") )
         {
             pTimeStyle = new XFTimeStyle;
@@ -1231,12 +1231,12 @@ void LwpFribField::ConvertDocFieldStart(XFContentContainer* pXFPara,LwpFieldMark
             pContent = new XFCharCountStart;
             break;
         }
-//      case LwpFieldMark::DOC_TOTALTIME:
-//      {
-//          pContent = new XFTotalEditTimeStart;
-//          pContent->SetStyleName(m_TimeStyle);
-//          break;
-//      }
+//		case LwpFieldMark::DOC_TOTALTIME:
+//		{
+//			pContent = new XFTotalEditTimeStart;
+//			pContent->SetStyleName(m_TimeStyle);
+//			break;
+//		}
     }
     if (pContent)
     {
@@ -1278,11 +1278,11 @@ void LwpFribField::ConvertDocFieldEnd(XFContentContainer* pXFPara,LwpFieldMark* 
             pContent = new XFCharCountEnd;
             break;
         }
-//      case LwpFieldMark::DOC_TOTALTIME:
-//      {
-//          pContent = new XFTotalEditTimeEnd;
-//          break;
-//      }
+//		case LwpFieldMark::DOC_TOTALTIME:
+//		{
+//			pContent = new XFTotalEditTimeEnd;
+//			break;
+//		}
     }
     if (pContent)
     {
@@ -1389,7 +1389,7 @@ void LwpFribField::ConvertCrossRefStart(XFContentContainer* pXFPara,LwpFieldMark
     XFCrossRefStart* pRef = new XFCrossRefStart;
     pRef->SetRefType(m_nCrossRefType);
     pRef->SetMarkName(m_sFormula);
-//  pFieldMark->SetStart(sal_True);//for some disnormal cases
+//	pFieldMark->SetStart(sal_True);//for some disnormal cases
     if (m_ModFlag)
     {
         XFTextSpanStart* pSpan = new XFTextSpanStart;

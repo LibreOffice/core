@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPPARASTYLE_HXX
@@ -84,7 +84,7 @@ public:
 
     void Read();
 
-    virtual void    Apply(XFParaStyle *pStrm);
+    virtual void	Apply(XFParaStyle *pStrm);
     // 01/26/2005
     void ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverride* pBorder);
     void ApplyBreaks(XFParaStyle* pParaStyle, LwpBreaksOverride* pBreaks);
@@ -115,17 +115,17 @@ public:
 
 private:
     //style IDs
-    LwpObjectID m_AlignmentStyle;
-    LwpObjectID m_SpacingStyle;
-    LwpObjectID m_IndentStyle;
-    LwpObjectID m_BorderStyle;
-    LwpObjectID m_BreaksStyle;
-    LwpObjectID m_NumberingStyle;
-    LwpObjectID m_TabStyle;
-    LwpObjectID m_BackgroundStyle;
+    LwpObjectID	m_AlignmentStyle;
+    LwpObjectID	m_SpacingStyle;
+    LwpObjectID	m_IndentStyle;
+    LwpObjectID	m_BorderStyle;
+    LwpObjectID	m_BreaksStyle;
+    LwpObjectID	m_NumberingStyle;
+    LwpObjectID	m_TabStyle;
+    LwpObjectID	m_BackgroundStyle;
 
-    LwpKinsokuOptsOverride* m_pKinsokuOptsOverride;
-    LwpBulletOverride*      m_pBulletOverride;
+    LwpKinsokuOptsOverride*	m_pKinsokuOptsOverride;
+    LwpBulletOverride*		m_pBulletOverride;
 };
 
 #endif

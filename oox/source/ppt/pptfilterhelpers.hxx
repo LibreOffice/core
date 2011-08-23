@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,34 +47,34 @@ namespace oox { namespace ppt {
 
     struct ImplAttributeNameConversion
     {
-        MS_AttributeNames   meAttribute;
+        MS_AttributeNames	meAttribute;
         const char* mpMSName;
         const char* mpAPIName;
     };
 
-    static const ImplAttributeNameConversion gImplConversionList[] =
+    static const ImplAttributeNameConversion gImplConversionList[] = 
     {
-        { MS_PPT_X,             "ppt_x",                        "X" },
-        { MS_PPT_Y,             "ppt_y",                        "Y" },
-        { MS_PPT_W,             "ppt_w",                        "Width" },
-        { MS_PPT_H,             "ppt_h",                        "Height" },
-        { MS_PPT_C,             "ppt_c",                        "DimColor" },
-        { MS_R,                 "r",                            "Rotate" },
-        { MS_XSHEAR,            "xshear",                       "SkewX" },
-        { MS_FILLCOLOR,         "fillColor",                    "FillColor" },
-        { MS_FILLCOLOR,         "fillcolor",                    "FillColor" },
-        { MS_FILLTYPE,          "fill.type",                    "FillStyle" },
-        { MS_STROKECOLOR,       "stroke.color",                 "LineColor" },
-        { MS_STROKEON,          "stroke.on",                    "LineStyle" },
-        { MS_STYLECOLOR,        "style.color",                  "CharColor" },
-        { MS_STYLEROTATION,     "style.rotation",               "Rotate" },
-        { MS_FONTWEIGHT,        "style.fontWeight",             "CharWeight" },
-        { MS_STYLEUNDERLINE,    "style.textDecorationUnderline","CharUnderline" },
-        { MS_STYLEFONTFAMILY,   "style.fontFamily",             "CharFontName" },
-        { MS_STYLEFONTSIZE,     "style.fontSize",               "CharHeight" },
-        { MS_STYLEFONTSTYLE,    "style.fontStyle",              "CharPosture" },
-        { MS_STYLEVISIBILITY,   "style.visibility",             "Visibility" },
-        { MS_STYLEOPACITY,      "style.opacity",                "Opacity" },
+        { MS_PPT_X,				"ppt_x",						"X" },
+        { MS_PPT_Y,				"ppt_y",						"Y" },
+        { MS_PPT_W,				"ppt_w",						"Width" },
+        { MS_PPT_H,				"ppt_h",						"Height" },
+        { MS_PPT_C,				"ppt_c",						"DimColor" },
+        { MS_R,					"r",							"Rotate" },
+        { MS_XSHEAR,			"xshear",						"SkewX" },
+        { MS_FILLCOLOR,			"fillColor",					"FillColor" },
+        { MS_FILLCOLOR,			"fillcolor",					"FillColor" },
+        { MS_FILLTYPE,			"fill.type",					"FillStyle" },
+        { MS_STROKECOLOR,		"stroke.color",					"LineColor" },
+        { MS_STROKEON,			"stroke.on",					"LineStyle" },
+        { MS_STYLECOLOR,		"style.color",					"CharColor" },
+        { MS_STYLEROTATION,		"style.rotation",				"Rotate" },
+        { MS_FONTWEIGHT,		"style.fontWeight",				"CharWeight" },
+        { MS_STYLEUNDERLINE,	"style.textDecorationUnderline","CharUnderline" },
+        { MS_STYLEFONTFAMILY,	"style.fontFamily",				"CharFontName" },
+        { MS_STYLEFONTSIZE,		"style.fontSize",				"CharHeight" },
+        { MS_STYLEFONTSTYLE,	"style.fontStyle",				"CharPosture" },
+        { MS_STYLEVISIBILITY,	"style.visibility",				"Visibility" },
+        { MS_STYLEOPACITY,		"style.opacity",				"Opacity" },
         { MS_UNKNOWN, NULL, NULL }
     };
     //END CUT&PASTE
@@ -87,7 +87,7 @@ namespace oox { namespace ppt {
         sal_Int16 mnType;
         sal_Int16 mnSubType;
         sal_Bool mbDirection; // true: default geometric direction
-
+        
         static const transition* find( const rtl::OUString& rName );
         static const sal_Char* find( const sal_Int16 mnType, const sal_Int16 mnSubType, const sal_Bool bDirection );
     };

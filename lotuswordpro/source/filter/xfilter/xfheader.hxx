@@ -61,12 +61,12 @@
  * Change History
  * 2005-01-19 create this file.
  ************************************************************************/
-#ifndef     _XFHEADER_HXX
-#define     _XFHEADER_HXX
+#ifndef		_XFHEADER_HXX
+#define		_XFHEADER_HXX
 
-#include    "xfcontentcontainer.hxx"
-#include    "xfparagraph.hxx"
-#include    <vector>
+#include	"xfcontentcontainer.hxx"
+#include	"xfparagraph.hxx"
+#include	<vector>
 
 class XFHeader : public XFContentContainer
 {
@@ -77,7 +77,7 @@ public:
 public:
     virtual void ToXml(IXFStream *pStrm)
     {
-        IXFAttrList *pAttrList = pStrm->GetAttrList();
+        IXFAttrList	*pAttrList = pStrm->GetAttrList();
         pAttrList->Clear();
 
         pStrm->StartElement( A2OUSTR("style:header") );
@@ -85,7 +85,7 @@ public:
         pStrm->EndElement( A2OUSTR("style:header") );
     }
 private:
-    XFContentContainer  m_aContents;
+    XFContentContainer	m_aContents;
 };
 
 #endif

@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPFOUNDRY_HXX
@@ -83,7 +83,7 @@ class LwpDocument;
 class LwpBookMark;
 
 #include <vector>
-#define TAG_USER_VERSION    0x72655655UL        // "UVer"
+#define TAG_USER_VERSION	0x72655655UL		// "UVer"
 
 
 class LwpVersionManager
@@ -230,7 +230,7 @@ private: //file members
     LwpBulletManager m_BulMgr;
     LwpOrderedObjectManager m_SectionList;
 
-    LwpObjectID m_Layout;   //The head layout
+    LwpObjectID m_Layout;	//The head layout
     LwpObjectID m_TextStyle;
     LwpObjectID m_DefaultTextStyle;
     LwpObjectID m_DefaultClickStyle;

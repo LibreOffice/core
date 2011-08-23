@@ -61,8 +61,8 @@
  * Change History
  * 2005-06-21  create this file.
  ************************************************************************/
-#ifndef     _XFRUBYSTYLE_HXX
-#define     _XFRUBYSTYLE_HXX
+#ifndef		_XFRUBYSTYLE_HXX
+#define		_XFRUBYSTYLE_HXX
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"
@@ -97,7 +97,7 @@ enumXFStyle XFRubyStyle::GetStyleFamily()
 }
 void XFRubyStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     rtl::OUString style = GetStyleName();
 
     pAttrList->Clear();

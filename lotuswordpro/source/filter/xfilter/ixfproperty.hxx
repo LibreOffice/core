@@ -61,10 +61,10 @@
  * Change History
  * 2005-01-19 create this file.
  ************************************************************************/
-#ifndef     _IXFPROPERTY_HXX
-#define     _IXFPROPERTY_HXX
+#ifndef		_IXFPROPERTY_HXX
+#define		_IXFPROPERTY_HXX
 
-#include    "ixfobject.hxx"
+#include	"ixfobject.hxx"
 
 class IXFStream;
 

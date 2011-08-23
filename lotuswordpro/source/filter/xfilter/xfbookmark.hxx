@@ -61,10 +61,10 @@
  * Change History
  * 2005-02-03 create this file.
  ************************************************************************/
-#ifndef     _XFBOOKMARK_HXX
-#define     _XFBOOKMARK_HXX
+#ifndef		_XFBOOKMARK_HXX
+#define		_XFBOOKMARK_HXX
 
-#include    "xfcontent.hxx"
+#include	"xfcontent.hxx"
 
 /**
  * @brief
@@ -84,16 +84,16 @@ public:
 
 public:
     /**
-     * @descr   Set bookmark name, which will be used in bookmark-ref or formula.
+     * @descr	Set bookmark name, which will be used in bookmark-ref or formula.
      */
-    void    SetName(rtl::OUString name)
+    void	SetName(rtl::OUString name)
     {
         m_strName = name;
     }
 
     virtual void ToXml(IXFStream *pStrm)
     {
-        IXFAttrList *pAttrList = pStrm->GetAttrList();
+        IXFAttrList	*pAttrList = pStrm->GetAttrList();
         pAttrList->Clear();
 
         pAttrList->AddAttribute( A2OUSTR("text:name"), m_strName );
@@ -110,7 +110,7 @@ public:
     }
 
 private:
-    sal_Bool    m_bStart;
+    sal_Bool	m_bStart;
     rtl::OUString m_strName;
     rtl::OUString m_strDivision;
 };

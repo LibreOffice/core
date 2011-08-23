@@ -55,8 +55,8 @@
  ************************************************************************/
 /*****************************************************************************
  * Change History
- * Mar 2005         revised for new processing procedure.
- * Jan 2005         created
+ * Mar 2005			revised for new processing procedure.
+ * Jan 2005			created
  ****************************************************************************/
 #include <assert.h>
 #include <tools/stream.hxx>
@@ -78,8 +78,8 @@ public:
         IXFStream* pOutputStream=NULL);
     ~LwpSdwFileLoader(void);
 public:
-//  void LoadObjectList(void);
-//  void RegisterStyle(void);
+//	void LoadObjectList(void);
+//	void RegisterStyle(void);
 
     // add by  ,03/25/2005
     void CreateDrawObjects(vector <XFFrame*>* pDrawObjVector);

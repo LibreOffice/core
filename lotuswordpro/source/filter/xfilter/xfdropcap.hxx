@@ -61,11 +61,11 @@
  * Change History
  * 2005-01-28 create this file.
  ************************************************************************/
-#ifndef     _XFDROPCAP_HXX
-#define     _XFDROPCAP_HXX
+#ifndef		_XFDROPCAP_HXX
+#define		_XFDROPCAP_HXX
 
-#include    "xfglobal.hxx"
-#include    "ixfproperty.hxx"
+#include	"xfglobal.hxx"
+#include	"ixfproperty.hxx"
 
 class XFDropcap : public IXFProperty
 {
@@ -76,42 +76,42 @@ public:
     }
 
 public:
-    void    SetCharCount(sal_Int32 count);
+    void	SetCharCount(sal_Int32 count);
 
-    void    SetLines(sal_Int32 lines);
+    void	SetLines(sal_Int32 lines);
 
-    void    SetDistance(double distance);
+    void	SetDistance(double distance);
 
-    void    Reset();
+    void	Reset();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFDropcap& dc1, XFDropcap& dc2);
     friend bool operator!=(XFDropcap& dc1, XFDropcap& dc2);
     friend class XFParaStyle;
 private:
-    sal_Int32       m_nCharCount;
-    sal_Int32       m_nLines;
-    double          m_fDistance;
-    rtl::OUString   m_strStyleName;
+    sal_Int32		m_nCharCount;
+    sal_Int32		m_nLines;
+    double			m_fDistance;
+    rtl::OUString	m_strStyleName;
 };
 
-inline void XFDropcap::SetCharCount(sal_Int32 count)
+inline void	XFDropcap::SetCharCount(sal_Int32 count)
 {
     m_nCharCount = count;
 }
 
-inline void XFDropcap::SetLines(sal_Int32 lines)
+inline void	XFDropcap::SetLines(sal_Int32 lines)
 {
     m_nLines = lines;
 }
 
-inline void XFDropcap::SetDistance(double distance)
+inline void	XFDropcap::SetDistance(double distance)
 {
     m_fDistance = distance;
 }
 
-inline void XFDropcap::Reset()
+inline void	XFDropcap::Reset()
 {
     m_nCharCount = 0;
     m_nLines = 0;
@@ -121,7 +121,7 @@ inline void XFDropcap::Reset()
 
 inline void XFDropcap::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     if( m_nCharCount < 1 || m_nLines < 2 )

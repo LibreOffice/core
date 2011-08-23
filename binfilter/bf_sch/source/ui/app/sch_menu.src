@@ -1,0 +1,1955 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+
+
+#ifndef _GLOBLMN_HRC //autogen
+#include <bf_svx/globlmn.hrc>
+#endif
+
+#include "sch_menuids.src"
+
+#define MN_SUB_VIEW 91
+#define MN_SUB_TOOLBAR 92
+#define MN_SUB_GRAPHIC 93
+#define MN_SUB_SPELLING 94
+#define MN_SUB_TEMPLATES 95
+
+
+#define MN_WIN 28
+#define WORKAROUND_20 20
+#define WORKAROUND_21 21
+#define WORKAROUND_22 22
+#define WORKAROUND_23 23
+#define WORKAROUND_25 25
+
+
+ // defines fuer das Helpmenu
+ // in globlmn.hrc nur fuer Writer benoetigt
+#ifndef MN_HELP
+#define MN_HELP
+#endif
+
+#ifdef IS_DEFAULT
+Accelerator RID_DEFAULTACCEL
+#else
+Accelerator RID_ACCEL
+#endif
+{
+    ItemList =
+    {
+        AcceleratorItem
+        {
+            Identifier = SID_SHOW_ITEMBROWSER ;
+            Key = KeyCode
+            {
+                Code = KEY_9 ;
+                Shift = TRUE ;
+                Modifier1 = TRUE ;
+                Modifier2 = TRUE ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_NEWDOC ;
+            Key = KeyCode
+            {
+                Function = KEYFUNC_NEW ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_OPENDOC ;
+            Key = KeyCode
+            {
+                Function = KEYFUNC_OPEN ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_SAVEDOC ;
+            Key = KeyCode
+            {
+                Function = KEYFUNC_SAVE ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_SAVEASDOC ;
+            Key = KeyCode
+            {
+                Function = KEYFUNC_SAVEAS ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_PRINTDOC ;
+            Key = KeyCode
+            {
+                Function = KEYFUNC_PRINT ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_QUITAPP ;
+            Key = KeyCode
+            {
+                Function = KEYFUNC_QUIT ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_CUT ;
+            Key = KeyCode
+            {
+                Function = KEYFUNC_CUT ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_COPY ;
+            Key = KeyCode
+            {
+                Function = KEYFUNC_COPY ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_PASTE ;
+            Key = KeyCode
+            {
+                Function = KEYFUNC_PASTE ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_DELETE ;
+            Key = KeyCode
+            {
+                Function = KEYFUNC_DELETE ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_UNDO ;
+            Key = KeyCode
+            {
+                Function = KEYFUNC_UNDO ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_REDO ;
+            Key = KeyCode
+            {
+                Function = KEYFUNC_REDO ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_REPEAT ;
+            Key = KeyCode
+            {
+                Function = KEYFUNC_REPEAT ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_FOCUSURLBOX ;
+            Key = KeyCode
+            {
+                Code = KEY_O ;
+                Shift = TRUE ; Modifier1 = TRUE ; Modifier2 = FALSE ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_WIN_FULLSCREEN ;
+            Key = KeyCode
+            {
+                Code = KEY_J ;
+                Shift = TRUE ;
+                Modifier1 = TRUE ;
+                Modifier2 = FALSE ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_DESKTOPMODE ;
+            Key = KeyCode
+            {
+                Code = KEY_I ;
+                Shift = TRUE ;
+                Modifier1 = TRUE ;
+                Modifier2 = FALSE ;
+            };
+        };
+        AcceleratorItem
+        {
+            Identifier = SID_CLOSEWIN ;
+            Key = KeyCode
+            {
+                Function = KEYFUNC_CLOSE ;
+            };
+        };
+    };
+};
+
+#ifdef IS_DEFAULT
+Menu RID_DEFAULTMENU
+#else
+Menu RID_MENU
+#endif
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_FILE_PICKLIST
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_NEWDOCDIRECT ;
+                        HelpID = SID_NEWDOCDIRECT ;
+                        Text [ de ] = "~Neu" ;
+                        Text [ en-US ] = "~New" ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Novo";
+                        Text[ ru ] = "Созд~ать";
+                        Text[ el ] = "~Δημιουργία";
+                        Text[ nl ] = "~Nieuw";
+                        Text[ fr ] = "N~ouveau";
+                        Text[ es ] = "~Nuevo";
+                        Text[ fi ] = "~Uusi";
+                        Text[ ca ] = "~Nou";
+                        Text[ it ] = "Nuovo";
+                        Text[ da ] = "~Ny(t)";
+                        Text[ sv ] = "~Nytt";
+                        Text[ pl ] = "~Nowy";
+                        Text[ pt-BR ] = "~Novo";
+                        Text[ th ] = "ใ~หม่";
+                        Text[ ja ] = "新規作成(~N)";
+                        Text[ ko ] = "새로 만들기(~N)";
+                        Text[ zh-CN ] = "新建(~N)";
+                        Text[ zh-TW ] = "開啟新檔(~N)";
+                        Text[ tr ] = "Yeni";
+                        Text[ hi-IN ] = "~नया";
+                        Text[ ar ] = "جديد";
+                        Text[ he ] = "‮חדש‬";
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_OPENDOC
+                    };
+                    ITEM_FILE_AUTOPILOT
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_CLOSEDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SAVEDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SAVEASDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SAVEDOCS
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_LASTVERSIONDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_VERSIONDIALOG
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_MAIL_SENDDOC
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_DOCINFO
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_PRINTDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SETUPPRINTER
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_QUITAPP
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = WORKAROUND_20 ;
+            HelpID = 20 ;
+            Text [ de ] = "~Bearbeiten" ;
+            Text [ en-US ] = "~Edit" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_EDIT_UNDO
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_REDO
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_REPEAT
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_DIAGRAM_DATA ;
+                        HelpID = SID_DIAGRAM_DATA ;
+                        Text [ de ] = "~Diagrammdaten" ;
+                        Text [ en-US ] = "~Chart Data" ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Dados do gráfico";
+                        Text[ ru ] = "~Данные диаграммы";
+                        Text[ el ] = "~Δεδομένα διαγράμματος";
+                        Text[ nl ] = "~Diagramgegevens";
+                        Text[ fr ] = "~Données du diagramme";
+                        Text[ es ] = "Datos del ~diagrama";
+                        Text[ fi ] = "~Kaaviotiedot";
+                        Text[ ca ] = "Dades del ~diagrama ";
+                        Text[ it ] = "~Dati del diagramma";
+                        Text[ da ] = "Diagramdata";
+                        Text[ sv ] = "~Diagramdata";
+                        Text[ pl ] = "Dane wykresu";
+                        Text[ pt-BR ] = "Diagrammdaten";
+                        Text[ th ] = "ข้อมูลแ~ผนภูมิ";
+                        Text[ ja ] = "グラフのデータ(~C)";
+                        Text[ ko ] = "차트 데이터(~C)";
+                        Text[ zh-CN ] = "图表数据(~C)";
+                        Text[ zh-TW ] = "圖表資料(~C)";
+                        Text[ tr ] = "~Karakter Verisi";
+                        Text[ hi-IN ] = "~चार्ट् डॉटा";
+                        Text[ ar ] = "بيانات الرسم البياني";
+                        Text[ he ] = "~Diagrammdaten";
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_CUT
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_COPY
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_PASTE
+                    };
+                };
+            };
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Editar";
+            Text[ ru ] = "~Правка";
+            Text[ el ] = "~Επεξεργασία";
+            Text[ nl ] = "Be~werken";
+            Text[ fr ] = "~Édition";
+            Text[ es ] = "~Editar";
+            Text[ fi ] = "~Muokkaa";
+            Text[ ca ] = "~Edita";
+            Text[ it ] = "~Modifica";
+            Text[ da ] = "~Rediger";
+            Text[ sv ] = "~Redigera";
+            Text[ pl ] = "~Edytuj";
+            Text[ pt-BR ] = "~Editar";
+            Text[ th ] = "แ~ก้ไข";
+            Text[ ja ] = "編集(~E)";
+            Text[ ko ] = "편집(~E)";
+            Text[ zh-CN ] = "编辑(~E)";
+            Text[ zh-TW ] = "編輯(~E)";
+            Text[ tr ] = "Dü~zenle";
+            Text[ hi-IN ] = "~संपादन";
+            Text[ ar ] = "~تحرير";
+            Text[ he ] = "‮עריכה‬";
+        };
+        MenuItem
+        {
+            Identifier = WORKAROUND_21 ;
+            HelpID = 21 ;
+            Text [ de ] = "~Ansicht" ;
+            Text [ en-US ] = "~View" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_SUB_TOOLBAR ;
+                        HelpID = MN_SUB_TOOLBAR ;
+                        Text [ de ] = "S~ymbolleisten" ;
+                        SubMenu = Menu
+                        {
+                            ItemList =
+                            {
+                                MenuItem
+                                {
+                                    ITEM_VIEW_TOGGLEFUNCTIONBAR
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_TOGGLETOOLBAR ;
+                                    HelpID = SID_TOGGLETOOLBAR ;
+                                    Text [ de ] = "~Werkzeugleiste" ;
+                                    Text [ en-US ] = "Main ~Toolbar" ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Barra de ~ferramentas";
+                                    Text[ ru ] = "~Панель инструментов";
+                                    Text[ el ] = "~Γραμμή εργαλειών";
+                                    Text[ nl ] = "~Werktuigbalk";
+                                    Text[ fr ] = "Barre d'~instruments";
+                                    Text[ es ] = "Barra de ~herramientas";
+                                    Text[ fi ] = "Pää~työkalurivi";
+                                    Text[ ca ] = "Barra d'~eines principal";
+                                    Text[ it ] = "Barra st~rumenti";
+                                    Text[ da ] = "~Værktøjslinje";
+                                    Text[ sv ] = "~Verktygslist";
+                                    Text[ pl ] = "Pasek narzędziowy";
+                                    Text[ pt-BR ] = "Barra de ~ferramentas";
+                                    Text[ th ] = "แ~ถบเครื่องมือหลัก";
+                                    Text[ ja ] = "標準ツールバー(~T)";
+                                    Text[ ko ] = "주 도구 모음(~T)";
+                                    Text[ zh-CN ] = "主工具栏(~T)";
+                                    Text[ zh-TW ] = "主工具列(~T)";
+                                    Text[ tr ] = "Ana ~Araççubuğu";
+                                    Text[ hi-IN ] = "~मुख्य औज़ार पट्टी";
+                                    Text[ ar ] = "شريط الأدوات";
+                                    Text[ he ] = "~Werkzeugleiste";
+                                };
+                                MenuItem
+                                {
+                                    ITEM_INSERT_HYPERLINK_INSERT
+                                };
+                                MenuItem
+                                {
+                                    Separator = TRUE ;
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_CUSTOMIZETOOLBOX ;
+                                    HelpID = SID_CUSTOMIZETOOLBOX ;
+                                    Text [ de ] = "~Bearbeiten..." ;
+                                    Text [ en-US ] = "Customi~ze..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "~Personalizar...";
+                                    Text[ ru ] = "~Правка...";
+                                    Text[ el ] = "~Επεξεργασία...";
+                                    Text[ nl ] = "Be~werken...";
+                                    Text[ fr ] = "~Personnaliser...";
+                                    Text[ es ] = "~Personalizar...";
+                                    Text[ fi ] = "Mukau~ta";
+                                    Text[ ca ] = "Personalit~za...";
+                                    Text[ it ] = "~Modifica...";
+                                    Text[ da ] = "~Rediger...";
+                                    Text[ sv ] = "~Redigera...";
+                                    Text[ pl ] = "Edytuj...";
+                                    Text[ pt-BR ] = "~Configurar...";
+                                    Text[ th ] = "กำหนดเ~อง...";
+                                    Text[ ja ] = "カスタマイズ(~Z)...";
+                                    Text[ ko ] = "사용자 정의(~Z)...";
+                                    Text[ zh-CN ] = "编辑(~Z)...";
+                                    Text[ zh-TW ] = "編輯(~Z)...";
+                                    Text[ tr ] = "Özelle~ştir...";
+                                    Text[ hi-IN ] = "~व्यवस्था करो...";
+                                    Text[ ar ] = "تحرير...";
+                                    Text[ he ] = "~Bearbeiten...";
+                                };
+                            };
+                        };
+                        Text [ en-US ] = "~Toolbars" ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "Barras de ~ferramentas";
+                        Text[ ru ] = "Панели символов";
+                        Text[ el ] = "Γραμμές σ~υμβόλων";
+                        Text[ nl ] = "~Werkbalken";
+                        Text[ fr ] = "Barres d'~outils";
+                        Text[ es ] = "~Barras de símbolos";
+                        Text[ fi ] = "~Työkalurivit";
+                        Text[ ca ] = "~Barres d'eines";
+                        Text[ it ] = "~Barre dei simboli";
+                        Text[ da ] = "Ikonlin~jer";
+                        Text[ sv ] = "S~ymbollister";
+                        Text[ pl ] = "Paski symboli";
+                        Text[ pt-BR ] = "Barras de ~ferramentas";
+                        Text[ th ] = "แ~ถบเครื่องมือ";
+                        Text[ ja ] = "ツールバー(~T)";
+                        Text[ ko ] = "도구 모음(~T)";
+                        Text[ zh-CN ] = "图标栏(~T)";
+                        Text[ zh-TW ] = "工具列(~T)";
+                        Text[ tr ] = "~Araç çubukları";
+                        Text[ hi-IN ] = "~औज़ार पट्टी";
+                        Text[ ar ] = "أشرطة الرموز";
+                        Text[ he ] = "‮סרגלי כלים‬";
+                    };
+                    MenuItem
+                    {
+                        ITEM_VIEW_TOGGLESTATUSBAR //ITEM_VIEW_TASKBAR
+                    };
+                    MenuItem
+                    {
+                        ITEM_VIEW_TOGGLEIMESTATUSWINDOW
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    ITEM_VIEW_SCREENMODE
+                };
+            };
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Ver";
+            Text[ ru ] = "~Вид";
+            Text[ el ] = "Προ~βολή";
+            Text[ nl ] = "Beel~d";
+            Text[ fr ] = "~Affichage";
+            Text[ es ] = "~Ver";
+            Text[ fi ] = "~Näytä";
+            Text[ ca ] = "~Visualitza";
+            Text[ it ] = "~Visualizza";
+            Text[ da ] = "~Vis";
+            Text[ sv ] = "Vi~sa";
+            Text[ pl ] = "~Widok";
+            Text[ pt-BR ] = "~Ver";
+            Text[ th ] = "~มุมมอง";
+            Text[ ja ] = "表示(~V)";
+            Text[ ko ] = "보기(~V)";
+            Text[ zh-CN ] = "视图(~V)";
+            Text[ zh-TW ] = "檢視(~V)";
+            Text[ tr ] = "~Görüntüle";
+            Text[ hi-IN ] = "~à¤¦à¥ƒà¤¶à¥à¤¯";
+            Text[ ar ] = "~عرض";
+            Text[ he ] = "‮תצוגה‬";
+        };
+        MenuItem
+        {
+            Identifier = WORKAROUND_22 ;
+            HelpID = 22 ;
+            Text [ de ] = "~Einfügen" ;
+            Text [ en-US ] = "~Insert" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_INSERT_TITLE ;
+                        HelpID = SID_INSERT_TITLE ;
+                        Text [ de ] = "~Titel..." ;
+                        Text [ en-US ] = "~Title..." ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Título...";
+                        Text[ ru ] = "~Заголовок...";
+                        Text[ el ] = "~Τίτλος...";
+                        Text[ nl ] = "~Titel...";
+                        Text[ fr ] = "~Titre...";
+                        Text[ es ] = "~Título...";
+                        Text[ fi ] = "~Otsikko";
+                        Text[ ca ] = "~Títol...";
+                        Text[ it ] = "~Titolo...";
+                        Text[ da ] = "Titel...";
+                        Text[ sv ] = "~Rubrik...";
+                        Text[ pl ] = "~Tytuł...";
+                        Text[ pt-BR ] = "T?tulo...";
+                        Text[ th ] = "~ชื่อ...";
+                        Text[ ja ] = "タイトル(~T)...";
+                        Text[ ko ] = "제목(~T)...";
+                        Text[ zh-CN ] = "标题(~T)...";
+                        Text[ zh-TW ] = "標題(~T)...";
+                        Text[ tr ] = "~Başlık...";
+                        Text[ hi-IN ] = "~Title...";
+                        Text[ ar ] = "عنوان...";
+                        Text[ he ] = "‮כותרת...‬";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_INSERT_CHART_LEGEND ;
+                        HelpID = SID_INSERT_CHART_LEGEND ;
+                        Text [ de ] = "~Legende..." ;
+                        Text [ en-US ] = "~Legend..." ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Legenda...";
+                        Text[ ru ] = "Легенда...";
+                        Text[ el ] = "Υπόμνημα...";
+                        Text[ nl ] = "~Legenda...";
+                        Text[ fr ] = "~Légende...";
+                        Text[ es ] = "~Leyenda...";
+                        Text[ fi ] = "~Selite...";
+                        Text[ ca ] = "~Llegenda...";
+                        Text[ it ] = "~Legenda...";
+                        Text[ da ] = "Forklaring...";
+                        Text[ sv ] = "~Förklaring...";
+                        Text[ pl ] = "~Legenda...";
+                        Text[ pt-BR ] = "Legenda...";
+                        Text[ th ] = "~คำอธิบาย...";
+                        Text[ ja ] = "凡例(~L)...";
+                        Text[ ko ] = "범례(~L)...";
+                        Text[ zh-CN ] = "图例(~L)...";
+                        Text[ zh-TW ] = "圖例(~L)...";
+                        Text[ tr ] = "~Gösterge";
+                        Text[ hi-IN ] = "~लेज़न्ड़...";
+                        Text[ ar ] = "مفتاح الرسم البياني...";
+                        Text[ he ] = "~Legende...";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_INSERT_DESCRIPTION ;
+                        HelpID = SID_INSERT_DESCRIPTION ;
+                        Text [ de ] = "~Datenbeschriftung..." ;
+                        Text [ en-US ] = "~Data Labels..." ;
+                        Text[ pt ] = "~Rótulos de dados...";
+                        Text[ ru ] = "~Подпись данных...";
+                        Text[ el ] = "Επιγραφή δε~δομένων...";
+                        Text[ nl ] = "~Gegevenslabels...";
+                        Text[ fr ] = "Étiquetage des ~données...";
+                        Text[ es ] = "~Etiqueta datos...";
+                        Text[ fi ] = "~Tietonimiöt";
+                        Text[ ca ] = "Etiquetes de ~dades...";
+                        Text[ it ] = "~Dicitura dati...";
+                        Text[ da ] = "Dataetiketter...";
+                        Text[ sv ] = "~Dataetiketter...";
+                        Text[ pl ] = "~Etykiety danych...";
+                        Text[ pt-BR ] = "Descri??o dos dados...";
+                        Text[ th ] = "ป้ายชื่อ~ข้อมูล...";
+                        Text[ ja ] = "データラベル(~D)...";
+                        Text[ ko ] = "데이터 레이블(~D)...";
+                        Text[ zh-CN ] = "数据标志(~D)...";
+                        Text[ zh-TW ] = "資料標籤(~D)...";
+                        Text[ tr ] = "~Veri Etiketleri...";
+                        Text[ hi-IN ] = "~Data Labels...";
+                        Text[ ar ] = "عنونة البيانات...";
+                        Text[ he ] = "~Datenbeschriftung...";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_INSERT_AXIS ;
+                        HelpID = SID_INSERT_AXIS ;
+                        Text [ de ] = "~Achsen..." ;
+                        Text [ en-US ] = "~Axes..." ;
+//  						Text [ norwegian ] = "Akse og rutenett" ;
+//  						Text [ italian ] = "~Assi e Griglia..." ;
+//  						Text [ portuguese_brazilian ] = "Eixo e grade" ;
+//  						Text [ portuguese ] = "Eixos e ~grelhas..." ;
+//  						Text [ finnish ] = "Akseli ja taustaruudukko" ;
+//  						Text [ danish ] = "Akser og gitterlinjer..." ;
+//  						Text [ french ] = "~Axes et grilles..." ;
+//  						Text [ swedish ] = "~Axlar och st�draster..." ;
+//  						Text [ dutch ] = "~Assen en rasters..." ;
+//  						Text [ spanish ] = "~Ejes y cuadr�culas..." ;
+//  						Text[ chinese_simplified ] = "����ֵ��������(~A)...";
+//  						Text[ russian ] = "~��� � �����...";
+//  						Text[ polish ] = "Osie i siatki...";
+//  						Text[ japanese ] = "���Ɩڐ���(~A)...";
+//  						Text[ chinese_traditional ] = "�b�M����u(~A)...";
+//  						Text[ arabic ] = "����� ������...";
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "Ei~xos...";
+                        Text[ ru ] = "~Оси...";
+                        Text[ el ] = "Άξον~ες...";
+                        Text[ nl ] = "~Assen...";
+                        Text[ fr ] = "~Axes...";
+                        Text[ es ] = "~Ejes...";
+                        Text[ fi ] = "~Akselit";
+                        Text[ ca ] = "~Eixos...";
+                        Text[ it ] = "~Assi...";
+                        Text[ da ] = "Akser...";
+                        Text[ sv ] = "~Axlar...";
+                        Text[ pl ] = "~Osie...";
+                        Text[ pt-BR ] = "Eixo e grade";
+                        Text[ th ] = "แ~กน...";
+                        Text[ ja ] = "軸(~A)...";
+                        Text[ ko ] = "축(~A)...";
+                        Text[ zh-CN ] = "轴(~A)...";
+                        Text[ zh-TW ] = "軸(~A)...";
+                        Text[ tr ] = "~Eksenler...";
+                        Text[ hi-IN ] = "~Axes...";
+                        Text[ ar ] = "محاور...";
+                        Text[ he ] = "~Achsen...";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_INSERT_GRIDS ;
+                        HelpID = SID_INSERT_GRIDS ;
+                        Text [ de ] = "~Gitter...";
+                        Text [ en-US ] = "~Grids...";
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Grelhas...";
+                        Text[ ru ] = "~Сетка...";
+                        Text[ el ] = "Πλέ~γμα...";
+                        Text[ nl ] = "~Rasters...";
+                        Text[ fr ] = "~Grilles...";
+                        Text[ es ] = "~Cuadrículas...";
+                        Text[ fi ] = "~Ruudukot";
+                        Text[ ca ] = "~Graelles...";
+                        Text[ it ] = "~Griglia...";
+                        Text[ da ] = "Gitre...";
+                        Text[ sv ] = "~Gitter...";
+                        Text[ pl ] = "~Siatki...";
+                        Text[ pt-BR ] = "~Gridlines...";
+                        Text[ th ] = "เ~ส้นตาราง...";
+                        Text[ ja ] = "目盛線(~G)...";
+                        Text[ ko ] = "눈금선(~G)...";
+                        Text[ zh-CN ] = "网格线(~G)...";
+                        Text[ zh-TW ] = "網格線(~G)...";
+                        Text[ tr ] = "~Izgaralar...";
+                        Text[ hi-IN ] = "~Grids...";
+                        Text[ ar ] = "شبكات...";
+                        Text[ he ] = "~Gitter...";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_INSERT_STATISTICS ;
+                        HelpID = SID_INSERT_STATISTICS ;
+                        Text [ de ] = "~Statistik..." ;
+                        Text [ en-US ] = "~Statistics..." ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Estatística...";
+                        Text[ ru ] = "Статистика...";
+                        Text[ el ] = "~Στατιστικά...";
+                        Text[ nl ] = "~Statistiek...";
+                        Text[ fr ] = "~Statistiques...";
+                        Text[ es ] = "~Estadística...";
+                        Text[ fi ] = "~Tilastotiedot";
+                        Text[ ca ] = "~Estadística...";
+                        Text[ it ] = "~Statistica...";
+                        Text[ da ] = "Statistik...";
+                        Text[ sv ] = "~Statistik...";
+                        Text[ pl ] = "~Statystyka...";
+                        Text[ pt-BR ] = "Eixo e grade";
+                        Text[ th ] = "~สถิติ...";
+                        Text[ ja ] = "統計(~S)...";
+                        Text[ ko ] = "통계(~S)...";
+                        Text[ zh-CN ] = "统计(~S)...";
+                        Text[ zh-TW ] = "統計(~S)...";
+                        Text[ tr ] = "~İstatistikler...";
+                        Text[ hi-IN ] = "~Statistics...";
+                        Text[ ar ] = "إحصائيات...";
+                        Text[ he ] = "‮סטטיסטיקות...‬";
+                    };
+                     //------------------------------
+                    MenuItem { Separator = TRUE ; }; 
+                     //------------------------------
+                    MenuItem
+                    {
+                        Identifier = SID_CHARMAP ; 
+                        HelpId = SID_CHARMAP ; 
+                        Text [ de ] = "~Sonderzeichen..." ;
+                        Text [ en-US ] = "S~pecial Character..." ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Caracteres especiais...";
+                        Text[ ru ] = "Специальные символы...";
+                        Text[ el ] = "Ειδικοί ~χαρακτήρες...";
+                        Text[ nl ] = "~Speciale tekens...";
+                        Text[ fr ] = "~Caractères spéciaux...";
+                        Text[ es ] = "~Símbolos...";
+                        Text[ fi ] = "E~rikoismerkki";
+                        Text[ ca ] = "~Símbols...";
+                        Text[ it ] = "Caratteri ~speciali...";
+                        Text[ da ] = "~Specialtegn...";
+                        Text[ sv ] = "S~pecialtecken...";
+                        Text[ pl ] = "~Znaki specjalne...";
+                        Text[ pt-BR ] = "S?mbolo...";
+                        Text[ th ] = "ตัวอักขระพิเ~ศษ...";
+                        Text[ ja ] = "記号と特殊文字(~P)...";
+                        Text[ ko ] = "기호 및 특수 문자(~P)...";
+                        Text[ zh-CN ] = "特殊字符(~P)...";
+                        Text[ zh-TW ] = "特殊字元(~P)...";
+                        Text[ tr ] = "~Özel Karakterler...";
+                        Text[ hi-IN ] = "~विशेष अक्षर...";
+                        Text[ ar ] = "رموز خاصة...";
+                        Text[ he ] = "~Sonderzeichen...";
+                    };					
+                };
+
+
+
+
+
+
+
+        };
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Inserir";
+            Text[ ru ] = "Вст~авка";
+            Text[ el ] = "~Εισαγωγή";
+            Text[ nl ] = "~Invoegen";
+            Text[ fr ] = "~Insertion";
+            Text[ es ] = "~Insertar";
+            Text[ fi ] = "~Lisää";
+            Text[ ca ] = "~Insereix";
+            Text[ it ] = "~Inserisci";
+            Text[ da ] = "~Indsæt";
+            Text[ sv ] = "~Infoga";
+            Text[ pl ] = "W~staw";
+            Text[ pt-BR ] = "~Inserir";
+            Text[ th ] = "แ~ทรก";
+            Text[ ja ] = "挿入(~I)";
+            Text[ ko ] = "삽입(~I)";
+            Text[ zh-CN ] = "插入(~I)";
+            Text[ zh-TW ] = "插入(~I)";
+            Text[ tr ] = "~Ekle";
+            Text[ hi-IN ] = "~छिपकाओ";
+            Text[ ar ] = "إد~راج";
+            Text[ he ] = "~Einfügen";
+        };
+        MenuItem
+        {
+            Identifier = WORKAROUND_23 ;
+            HelpID = 23 ;
+            Text [ de ] = "~Format" ;
+            Text [ en-US ] = "F~ormat" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_DIAGRAM_OBJECTS ;
+                        HelpID = SID_DIAGRAM_OBJECTS ;
+                        Text [ de ] = "~Objekteigenschaften..." ;
+                        Text [ en-US ] = "~Object Properties..." ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Propriedades do objecto...";
+                        Text[ ru ] = "~Свойства объекта...";
+                        Text[ el ] = "Ιδιότητες αντικειμέν~ων...";
+                        Text[ nl ] = "~Objecteigenschappen";
+                        Text[ fr ] = "Propriétés de l'~objet...";
+                        Text[ es ] = "~Propiedades del objeto...";
+                        Text[ fi ] = "~Objektin ominaisuudet";
+                        Text[ ca ] = "~Propietats de l'objecte...";
+                        Text[ it ] = "Proprietà ~oggetto...";
+                        Text[ da ] = "Objektegenskaber...";
+                        Text[ sv ] = "~Objektegenskaper...";
+                        Text[ pl ] = "Właściwości obiektu...";
+                        Text[ pt-BR ] = "Linha de dados/~ponto...";
+                        Text[ th ] = "คุณสมบัติ~วัตถุ...";
+                        Text[ ja ] = "オブジェクトの属性(~O)...";
+                        Text[ ko ] = "개체 등록 정보(~O)...";
+                        Text[ zh-CN ] = "对象属性(~O)...";
+                        Text[ zh-TW ] = "物件屬性(~O)...";
+                        Text[ tr ] = "~Nesne Özellikleri...";
+                        Text[ hi-IN ] = "~वस्तु का विशेषतायें...";
+                        Text[ ar ] = "خصائص الكائن...";
+                        Text[ he ] = "~Objekteigenschaften...";
+                    };
+                    MN_TRANSFORM;
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_CHART_TITLE ;
+                        HelpID = SID_CHART_TITLE ;
+                        Text [ de ] = "~Titel" ;
+                        Text [ en-US ] = "~Title" ;
+                        SubMenu = Menu
+                        {
+                            ItemList =
+                            {
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_TITLE_MAIN ;
+                                    HelpID = SID_DIAGRAM_TITLE_MAIN ;
+                                    Text [ de ] = "~Haupttitel..." ;
+                                    Text [ en-US ] = "~Main Title..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "~Título principal...";
+                                    Text[ ru ] = "Главный заголовок...";
+                                    Text[ el ] = "~Κύριος τίτλος...";
+                                    Text[ nl ] = "~Hoofdtitel...";
+                                    Text[ fr ] = "Titre ~principal...";
+                                    Text[ es ] = "Título ~principal...";
+                                    Text[ fi ] = "~Pääotsikko";
+                                    Text[ ca ] = "Títol ~principal...";
+                                    Text[ it ] = "Titolo principale...";
+                                    Text[ da ] = "Hovedtitel...";
+                                    Text[ sv ] = "~Huvudrubrik...";
+                                    Text[ pl ] = "Tytuł główny...";
+                                    Text[ pt-BR ] = "Título ~principal...";
+                                    Text[ th ] = "ชื่อ~หลัก...";
+                                    Text[ ja ] = "メインタイトル(~M)...";
+                                    Text[ ko ] = "주 제목(~M)...";
+                                    Text[ zh-CN ] = "主标题(~M)...";
+                                    Text[ zh-TW ] = "主標題(~M)...";
+                                    Text[ tr ] = "Ana ~Başlık..";
+                                    Text[ hi-IN ] = "~प्रधान शीर्षक्...";
+                                    Text[ ar ] = "العنوان الرئيسي...";
+                                    Text[ he ] = "~Haupttitel...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_TITLE_SUB ;
+                                    HelpID = SID_DIAGRAM_TITLE_SUB ;
+                                    Text [ de ] = "~Untertitel..." ;
+                                    Text [ en-US ] = "S~ubtitle..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "~Subtítulo...";
+                                    Text[ ru ] = "Подзаголовок...";
+                                    Text[ el ] = "~Υπότιτλος...";
+                                    Text[ nl ] = "~Subtitel...";
+                                    Text[ fr ] = "~Sous-titre...";
+                                    Text[ es ] = "~Subtítulo...";
+                                    Text[ fi ] = "Ala~otsikko";
+                                    Text[ ca ] = "~Subtítol...";
+                                    Text[ it ] = "Sottotitolo...";
+                                    Text[ da ] = "Undertitel...";
+                                    Text[ sv ] = "~Underrubrik...";
+                                    Text[ pl ] = "Podtytuł...";
+                                    Text[ pt-BR ] = "~Sub-título...";
+                                    Text[ th ] = "ชื่อ~รอง...";
+                                    Text[ ja ] = "サブタイトル(~U)...";
+                                    Text[ ko ] = "부제(~U)...";
+                                    Text[ zh-CN ] = "分标题(~U)...";
+                                    Text[ zh-TW ] = "分標題(~U)...";
+                                    Text[ tr ] = "~Altbaşlık...";
+                                    Text[ hi-IN ] = "उ~पशीर्षक...";
+                                    Text[ ar ] = "عنوان فرعي...";
+                                    Text[ he ] = "~Untertitel...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_TITLE_X ;
+                                    HelpID = SID_DIAGRAM_TITLE_X ;
+                                    Text [ de ] = "~X-Achsentitel..." ;
+                                    Text [ en-US ] = "Title (~X Axis)..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Título do eixo ~X...";
+                                    Text[ ru ] = "Заголовок оси X...";
+                                    Text[ el ] = "Τίτλος άξονα ~X...";
+                                    Text[ nl ] = "Titel  ~X-as...";
+                                    Text[ fr ] = "Titre de l'axe ~X...";
+                                    Text[ es ] = "Título del eje ~X...";
+                                    Text[ fi ] = "Otsikko (~X-akseli)";
+                                    Text[ ca ] = "Títol de l'eix ~X...";
+                                    Text[ it ] = "Titolo asse ~X...";
+                                    Text[ da ] = "X-aksetitel...";
+                                    Text[ sv ] = "~X-axelrubrik...";
+                                    Text[ pl ] = "Tytuł osi X...";
+                                    Text[ pt-BR ] = "Título do eixo ~X...";
+                                    Text[ th ] = "ชื่อ (แกน~X )...";
+                                    Text[ ja ] = "X軸タイトル...(~X)";
+                                    Text[ ko ] = "X축 제목(~X)...";
+                                    Text[ zh-CN ] = "~X 轴标题...";
+                                    Text[ zh-TW ] = "標題(~X 軸)...";
+                                    Text[ tr ] = "Başlık (~X Ekseni)...";
+                                    Text[ hi-IN ] = "~X अक्ष का शीर्षक....";
+                                    Text[ ar ] = "عنوان المحور س...";
+                                    Text[ he ] = "~X-Achsentitel...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_TITLE_Y ;
+                                    HelpID = SID_DIAGRAM_TITLE_Y ;
+                                    Text [ de ] = "~Y-Achsentitel..." ;
+                                    Text [ en-US ] = "Title (~Y Axis)..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Título do eixo ~Y...";
+                                    Text[ ru ] = "Заголовок оси Y...";
+                                    Text[ el ] = "Τίτλος άξονα ~Y...";
+                                    Text[ nl ] = "Titel ~ Y -as...";
+                                    Text[ fr ] = "Titre de l'axe ~Y...";
+                                    Text[ es ] = "Título del eje ~Y...";
+                                    Text[ fi ] = "Otsikko (~Y-akseli)";
+                                    Text[ ca ] = "Títol de l'eix ~Y...";
+                                    Text[ it ] = "Titolo asse ~Y...";
+                                    Text[ da ] = "Y-aksetitel...";
+                                    Text[ sv ] = "~Y-axelrubrik...";
+                                    Text[ pl ] = "Tytuł osi Y...";
+                                    Text[ pt-BR ] = "Título do eixo ~Y...";
+                                    Text[ th ] = "ชื่อ (แกน~Y )...";
+                                    Text[ ja ] = "Y軸タイトル...(~Y)";
+                                    Text[ ko ] = "Y축 제목(~Y)...";
+                                    Text[ zh-CN ] = "~Y 轴标题...";
+                                    Text[ zh-TW ] = "標題(~Y 軸)...";
+                                    Text[ tr ] = "Başlık (~Y Eksen)...";
+                                    Text[ hi-IN ] = "~Y अक्ष का शीर्षक...";
+                                    Text[ ar ] = "عنوان المحور ص...";
+                                    Text[ he ] = "~Y-Achsentitel...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_TITLE_Z ;
+                                    HelpID = SID_DIAGRAM_TITLE_Z ;
+                                    Text [ de ] = "~Z-Achsentitel..." ;
+                                    Text [ en-US ] = "Title (~Z Axis)..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Título do eixo ~Z...";
+                                    Text[ ru ] = "Заголовок оси Z...";
+                                    Text[ el ] = "Τίτλος άξονα ~Z...";
+                                    Text[ nl ] = "Titel  ~Z-as...";
+                                    Text[ fr ] = "Titre de l'axe ~Z...";
+                                    Text[ es ] = "Título del eje ~Z...";
+                                    Text[ fi ] = "Otsikko (~Z-akseli)";
+                                    Text[ ca ] = "Títol de l'eix ~Z...";
+                                    Text[ it ] = "Titolo asse ~Z...";
+                                    Text[ da ] = "Z-aksetitel...";
+                                    Text[ sv ] = "~Z-axelrubrik...";
+                                    Text[ pl ] = "Tytuł osi Z...";
+                                    Text[ pt-BR ] = "Título do eixo ~Z...";
+                                    Text[ th ] = "ชื่อ (แกน~Z )...";
+                                    Text[ ja ] = "Z軸タイトル...(~Z)";
+                                    Text[ ko ] = "Z축 제목(~Z)...";
+                                    Text[ zh-CN ] = "~Z 轴标题...";
+                                    Text[ zh-TW ] = "標題(~Z 軸)...";
+                                    Text[ tr ] = "Başlık (~Z Ekseni)...";
+                                    Text[ hi-IN ] = "~Z अक्ष का शीर्षक...";
+                                    Text[ ar ] = "عنوان المحور ع...";
+                                    Text[ he ] = "~Z-Achsentitel...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_TITLE_ALL ;
+                                    HelpID = SID_DIAGRAM_TITLE_ALL ;
+                                    Text [ de ] = "~Alle Titel..." ;
+                                    Text [ en-US ] = "~All Titles..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "~Todos os títulos...";
+                                    Text[ ru ] = "Все заголовки...";
+                                    Text[ el ] = "Όλ~οι οι τίτλοι...";
+                                    Text[ nl ] = "~Alle titels...";
+                                    Text[ fr ] = "T~ous les titres...";
+                                    Text[ es ] = "~Todos los títulos...";
+                                    Text[ fi ] = "Kaikki otsikot...";
+                                    Text[ ca ] = "~Tots els títols...";
+                                    Text[ it ] = "~Tutti i titoli...";
+                                    Text[ da ] = "Alle titler...";
+                                    Text[ sv ] = "~Alla rubriker...";
+                                    Text[ pl ] = "Wszystkie tytuły...";
+                                    Text[ pt-BR ] = "~Todos os títulos...";
+                                    Text[ th ] = "ชื่อทั้งหมด...";
+                                    Text[ ja ] = "すべてのタイトル(~A)...";
+                                    Text[ ko ] = "모든 제목(~A)...";
+                                    Text[ zh-CN ] = "全部的标题(~A)...";
+                                    Text[ zh-TW ] = "全部的標題(~A)...";
+                                    Text[ tr ] = "Bütün Başlıklar...";
+                                    Text[ hi-IN ] = "सब शीर्षक्...";
+                                    Text[ ar ] = "كل العناوين...";
+                                    Text[ he ] = "~Alle Titel...";
+                                };
+                            };
+                        };
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Título";
+                        Text[ ru ] = "Заголовок";
+                        Text[ el ] = "~Τίτλος";
+                        Text[ nl ] = "Tite~l";
+                        Text[ fr ] = "~Titre";
+                        Text[ es ] = "~Título";
+                        Text[ fi ] = "~Otsikko";
+                        Text[ ca ] = "~Títol";
+                        Text[ it ] = "~Titolo";
+                        Text[ da ] = "Titel";
+                        Text[ sv ] = "~Rubrik";
+                        Text[ pl ] = "Tytuł";
+                        Text[ pt-BR ] = "~T?tulo";
+                        Text[ th ] = "~ชื่อ";
+                        Text[ ja ] = "タイトル(~T)";
+                        Text[ ko ] = "제목(~T)";
+                        Text[ zh-CN ] = "标题(~T)";
+                        Text[ zh-TW ] = "標題(~T)";
+                        Text[ tr ] = "~Başlık";
+                        Text[ hi-IN ] = "~उपाधि";
+                        Text[ ar ] = "العنوان";
+                        Text[ he ] = "‮כותרת‬";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_LEGEND ;
+                        HelpID = SID_LEGEND ;
+                        Text [ de ] = "~Legende..." ;
+                        Text [ en-US ] = "~Legend..." ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Legenda...";
+                        Text[ ru ] = "Легенда...";
+                        Text[ el ] = "Υπόμνημα...";
+                        Text[ nl ] = "~Legenda...";
+                        Text[ fr ] = "~Légende...";
+                        Text[ es ] = "~Leyenda...";
+                        Text[ fi ] = "~Selite...";
+                        Text[ ca ] = "~Llegenda...";
+                        Text[ it ] = "~Legenda...";
+                        Text[ da ] = "Forklaring...";
+                        Text[ sv ] = "Förk~laring...";
+                        Text[ pl ] = "Legenda...";
+                        Text[ pt-BR ] = "~Legenda...";
+                        Text[ th ] = "~คำอธิบาย...";
+                        Text[ ja ] = "凡例(~L)...";
+                        Text[ ko ] = "범례(~L)...";
+                        Text[ zh-CN ] = "图例(~L)...";
+                        Text[ zh-TW ] = "圖例(~L)...";
+                        Text[ tr ] = "~Gösterge";
+                        Text[ hi-IN ] = "~लेज़न्ड़...";
+                        Text[ ar ] = "مفتاح الرسم البياني...";
+                        Text[ he ] = "~Legende...";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_DIAGRAM_AXIS ;
+                        HelpID = SID_DIAGRAM_AXIS ;
+                        Text [ de ] = "~Achse" ;
+                        Text [ en-US ] = "A~xis" ;
+                        SubMenu = Menu
+                        {
+                            ItemList =
+                            {
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_AXIS_X ;
+                                    HelpID = SID_DIAGRAM_AXIS_X ;
+                                    Text [ de ] = "~X-Achse..." ;
+                                    Text [ en-US ] = "~X Axis..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Eixo ~X...";
+                                    Text[ ru ] = "Ось X...";
+                                    Text[ el ] = "Άξονας ~Χ...";
+                                    Text[ nl ] = "~X-as...";
+                                    Text[ fr ] = "Axe ~X...";
+                                    Text[ es ] = "Eje ~X...";
+                                    Text[ fi ] = "~X-akseli";
+                                    Text[ ca ] = "Eix ~X...";
+                                    Text[ it ] = "Asse ~X...";
+                                    Text[ da ] = "X-akse...";
+                                    Text[ sv ] = "~X-axel...";
+                                    Text[ pl ] = "Oś X...";
+                                    Text[ pt-BR ] = "Eixo ~X...";
+                                    Text[ th ] = "แกน~X ...";
+                                    Text[ ja ] = "X軸...(~X)";
+                                    Text[ ko ] = "X축(~X)...";
+                                    Text[ zh-CN ] = "~X 轴...";
+                                    Text[ zh-TW ] = "~X 軸...";
+                                    Text[ tr ] = "~X Ekseni...";
+                                    Text[ hi-IN ] = "~X अक्ष";
+                                    Text[ ar ] = "المحور س...";
+                                    Text[ he ] = "~X-Achse...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_AXIS_Y ;
+                                    HelpID = SID_DIAGRAM_AXIS_Y ;
+                                    Text [ de ] = "~Y-Achse..." ;
+                                    Text [ en-US ] = "~Y Axis..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Eixo ~Y...";
+                                    Text[ ru ] = "Ось Y...";
+                                    Text[ el ] = "Άξονας ~Y...";
+                                    Text[ nl ] = "~Y-as...";
+                                    Text[ fr ] = "Axe ~Y...";
+                                    Text[ es ] = "Eje ~Y...";
+                                    Text[ fi ] = "~Y-akseli...";
+                                    Text[ ca ] = "Eix ~Y...";
+                                    Text[ it ] = "Asse ~Y...";
+                                    Text[ da ] = "Y-akse...";
+                                    Text[ sv ] = "~Y-axel...";
+                                    Text[ pl ] = "Oś Y...";
+                                    Text[ pt-BR ] = "Eixo ~Y...";
+                                    Text[ th ] = "แกน~Y ...";
+                                    Text[ ja ] = "Y軸...(~Y)";
+                                    Text[ ko ] = "Y축(~Y)...";
+                                    Text[ zh-CN ] = "~Y 轴...";
+                                    Text[ zh-TW ] = "~Y 軸...";
+                                    Text[ tr ] = "~Y Ekseni...";
+                                    Text[ hi-IN ] = "~Y अक्ष";
+                                    Text[ ar ] = "المحور ص...";
+                                    Text[ he ] = "~Y-Achse...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_AXIS_Z ;
+                                    HelpID = SID_DIAGRAM_AXIS_Z ;
+                                    Text [ de ] = "~Z-Achse..." ;
+                                    Text [ en-US ] = "~Z Axis..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Eixo ~Z...";
+                                    Text[ ru ] = "Ось Z...";
+                                    Text[ el ] = "Άξονας ~Z...";
+                                    Text[ nl ] = "~Z-as...";
+                                    Text[ fr ] = "Axe ~Z...";
+                                    Text[ es ] = "Eje ~Z...";
+                                    Text[ fi ] = "~Z-akseli...";
+                                    Text[ ca ] = "Eix ~Z...";
+                                    Text[ it ] = "Asse ~Z...";
+                                    Text[ da ] = "Z-akse...";
+                                    Text[ sv ] = "~Z-axel...";
+                                    Text[ pl ] = "Oś Z...";
+                                    Text[ pt-BR ] = "Eixo ~Z...";
+                                    Text[ th ] = "แกน~Z ...";
+                                    Text[ ja ] = "Z軸...(~Z)";
+                                    Text[ ko ] = "Z축(~Z)...";
+                                    Text[ zh-CN ] = "~Z 轴...";
+                                    Text[ zh-TW ] = "~Z 軸...";
+                                    Text[ tr ] = "~Z Ekseni...";
+                                    Text[ hi-IN ] = "~Z अक्ष";
+                                    Text[ ar ] = "المحور ع...";
+                                    Text[ he ] = "~Z-Achse...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_AXIS_A ;
+                                    HelpID = SID_DIAGRAM_AXIS_A ;
+                                    Text [ de ] = "~Sekundäre X-Achse..." ;
+                                    Text [ en-US ] = "~Secondary X Axis...";
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Eixo X ~secundário...";
+                                    Text[ ru ] = "Дополнительная ось X...";
+                                    Text[ el ] = "~Δευτερεύων άξονας Χ...";
+                                    Text[ nl ] = "~Secundaire X as...";
+                                    Text[ fr ] = "Axe X ~secondaire...";
+                                    Text[ es ] = "Eje ~secundario X...";
+                                    Text[ fi ] = "Toissijainen X-akseli...";
+                                    Text[ ca ] = "Eix X secundari...";
+                                    Text[ it ] = "Asse ~X secondario...";
+                                    Text[ da ] = "Sekundær X-akse...";
+                                    Text[ sv ] = "Sekundär X-axel...";
+                                    Text[ pl ] = "Pomocnicze osie X...";
+                                    Text[ pt-BR ] = "2nd X Axis...";
+                                    Text[ th ] = "แกน X ทุติยภูมิ...";
+                                    Text[ ja ] = "第2X軸(~S)...";
+                                    Text[ ko ] = "2차 X축...";
+                                    Text[ zh-CN ] = "第二个 Y 轴(~S)...";
+                                    Text[ zh-TW ] = "第二個 X 軸(~S)...";
+                                    Text[ tr ] = "~İkinci X Ekseni...";
+                                    Text[ hi-IN ] = "दूसरे X अक्ष...";
+                                    Text[ ar ] = "المحور س الفرعي...";
+                                    Text[ he ] = "~Sekundäre X-Achse...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_AXIS_B ;
+                                    HelpID = SID_DIAGRAM_AXIS_B ;
+                                    Text [ de ] = "~Sekundäre Y-Achse..." ;
+                                    Text [ en-US ] = "S~econdary Y Axis...";
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Eixo Y ~secundário...";
+                                    Text[ ru ] = "Дополнительная ось Y...";
+                                    Text[ el ] = "~Δευτερεύων άξονας Y...";
+                                    Text[ nl ] = "~Secundaire Y-as...";
+                                    Text[ fr ] = "Axe Y s~econdaire...";
+                                    Text[ es ] = "~Eje secundario Y...";
+                                    Text[ fi ] = "Toissijainen Y-akseli...";
+                                    Text[ ca ] = "Eix Y secundari...";
+                                    Text[ it ] = "Asse ~Y secondario...";
+                                    Text[ da ] = "Sekundær Y-akse...";
+                                    Text[ sv ] = "~Sekundär Y-axel...";
+                                    Text[ pl ] = "Pomocnicza oś Y...";
+                                    Text[ pt-BR ] = "~Secondary Y-Axis...";
+                                    Text[ th ] = "แกน Y ทุติยภูมิ...";
+                                    Text[ ja ] = "第2Y軸(~E)...";
+                                    Text[ ko ] = "2차 Y축...";
+                                    Text[ zh-CN ] = "第二个 Y 轴(~E)...";
+                                    Text[ zh-TW ] = "第二個 Y 軸(~e)...";
+                                    Text[ tr ] = "~İkinci Y Ekseni...";
+                                    Text[ hi-IN ] = "~2nd Y Axis...";
+                                    Text[ ar ] = "المحور ص فرعي...";
+                                    Text[ he ] = "~Sekundäre Y-Achse...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_AXIS_ALL ;
+                                    HelpID = SID_DIAGRAM_AXIS_ALL ;
+                                    Text [ de ] = "~Alle Achsen..." ;
+                                    Text [ en-US ] = "~All Axes..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "~Todos os eixos...";
+                                    Text[ ru ] = "Все оси...";
+                                    Text[ el ] = "Ό~λοι οι άξονες...";
+                                    Text[ nl ] = "~Alle assen...";
+                                    Text[ fr ] = "~Tous les axes...";
+                                    Text[ es ] = "~Todos los ejes...";
+                                    Text[ fi ] = "Kaikki akselit...";
+                                    Text[ ca ] = "Tots els eixos...";
+                                    Text[ it ] = "~Tutti gli assi...";
+                                    Text[ da ] = "Alle akser...";
+                                    Text[ sv ] = "~Alla axlar...";
+                                    Text[ pl ] = "Wszystkie osie...";
+                                    Text[ pt-BR ] = "~Todos os eixos...";
+                                    Text[ th ] = "แกนทั้งหมด...";
+                                    Text[ ja ] = "すべての軸(~A)...";
+                                    Text[ ko ] = "모든 축...";
+                                    Text[ zh-CN ] = "所有的轴(~A)...";
+                                    Text[ zh-TW ] = "所有的軸(~A)...";
+                                    Text[ tr ] = "~Tüm Eksenler...";
+                                    Text[ hi-IN ] = "सब अक्ष...";
+                                    Text[ ar ] = "كل المحاور...";
+                                    Text[ he ] = "~Alle Achsen...";
+                                };
+                            };
+                        };
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Eixo";
+                        Text[ ru ] = "Ось";
+                        Text[ el ] = "Άξον~ας";
+                        Text[ nl ] = "~As";
+                        Text[ fr ] = "A~xe";
+                        Text[ es ] = "~Eje";
+                        Text[ fi ] = "A~kselit";
+                        Text[ ca ] = "Ei~x";
+                        Text[ it ] = "A~sse";
+                        Text[ da ] = "Akse";
+                        Text[ sv ] = "~Axel";
+                        Text[ pl ] = "Oś";
+                        Text[ pt-BR ] = "~Eixo";
+                        Text[ th ] = "แก~น";
+                        Text[ ja ] = "軸(~X)";
+                        Text[ ko ] = "축(~X)";
+                        Text[ zh-CN ] = "轴(~X)";
+                        Text[ zh-TW ] = "軸(~X)";
+                        Text[ tr ] = "~Eksen";
+                        Text[ hi-IN ] = "अ~क्ष";
+                        Text[ ar ] = "محور";
+                        Text[ he ] = "~Achse";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_DIAGRAM_GRID ;
+                        HelpID = SID_DIAGRAM_GRID ;
+                         // ### ACHTUNG: Neuer Text in Resource? ~Gitter : ~Gitter...
+                        Text [ de ] = "~Gitter" ;
+                        Text [ en-US ] = "~Grid" ;
+                         // ### ACHTUNG: Neuer Text in Resource? Gitter bearbeiten : Gitter bearbeiten...
+                        SubMenu = Menu
+                        {
+                            ItemList =
+                            {
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_GRID_Y_MAIN ;
+                                    HelpID = SID_DIAGRAM_GRID_Y_MAIN ;
+                                    Text [ de ] = "~X-Achsenhauptgitter..." ;
+                                    Text [ en-US ] = "~X Axis Main Grid..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Grelha ~principal do eixo X...";
+                                    Text[ ru ] = "Основная сетка оси X...";
+                                    Text[ el ] = "Κύριο πλέγμα άξονα ~Χ...";
+                                    Text[ nl ] = "Hoofdraster ~X-as...";
+                                    Text[ fr ] = "Grille principale de l'axe ~X...";
+                                    Text[ es ] = "Cuadrícula principal del eje ~X....";
+                                    Text[ fi ] = "~X-akselin pääruudukko";
+                                    Text[ ca ] = "Graella principal de l'eix ~X...";
+                                    Text[ it ] = "Griglia principale asse ~X...";
+                                    Text[ da ] = "X-akse overordnet gitter...";
+                                    Text[ sv ] = "~X-axelhuvudgitter...";
+                                    Text[ pl ] = "Główna siatka osi X...";
+                                    Text[ pt-BR ] = "~Y-Achsenhauptgitter...";
+                                    Text[ th ] = "เส้นตารางหลักแกน~ X ...";
+                                    Text[ ja ] = "X軸主目盛線...(~X)";
+                                    Text[ ko ] = "X축 주 눈금선(~X)...";
+                                    Text[ zh-CN ] = "~X 轴主网格线...";
+                                    Text[ zh-TW ] = "~X 軸主網格線...";
+                                    Text[ tr ] = "X ~Koordinatı Ana Izgarası...";
+                                    Text[ hi-IN ] = "~X अक्ष का प्रधान जाल...";
+                                    Text[ ar ] = "الشبكة الرئيسية للمحور س...";
+                                    Text[ he ] = "~X-Achsenhauptgitter...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_GRID_X_MAIN ;
+                                    HelpID = SID_DIAGRAM_GRID_X_MAIN ;
+                                    Text [ de ] = "~Y-Achsenhauptgitter..." ;
+                                    Text [ en-US ] = "~Y Axis Main Grid..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Grelha principal do eixo ~Y...";
+                                    Text[ ru ] = "Основная сетка оси Y...";
+                                    Text[ el ] = "Κύριο πλέγμα άξονα ~Y...";
+                                    Text[ nl ] = "Hoofdraster ~Y-as...";
+                                    Text[ fr ] = "Grille principale de l'axe ~Y...";
+                                    Text[ es ] = "Cuadrícula principal del eje ~Y...";
+                                    Text[ fi ] = "~Y-akselin pääruudukko...";
+                                    Text[ ca ] = "Graella principal de l'eix ~Y...";
+                                    Text[ it ] = "Griglia principale asse ~Y...";
+                                    Text[ da ] = "Y-akse overordnet gitter...";
+                                    Text[ sv ] = "~Y-axelhuvudgitter...";
+                                    Text[ pl ] = "Główna siatka osi Y...";
+                                    Text[ pt-BR ] = "~X-Achsenhauptgitter...";
+                                    Text[ th ] = "เส้นตารางหลักแกน~Y ...";
+                                    Text[ ja ] = "Y軸主目盛線...(~Y)";
+                                    Text[ ko ] = "Y축 주 눈금선(~Y)...";
+                                    Text[ zh-CN ] = "~Y 轴主网格线...";
+                                    Text[ zh-TW ] = "~Y 軸網格線...";
+                                    Text[ tr ] = "~Y Ekseni Ana Izgarası...";
+                                    Text[ hi-IN ] = "~Y अक्ष का प्रधान जाल...";
+                                    Text[ ar ] = "الشبكة الرئيسية للمحور ص...";
+                                    Text[ he ] = "~Y-Achsenhauptgitter...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_GRID_Z_MAIN ;
+                                    HelpID = SID_DIAGRAM_GRID_Z_MAIN ;
+                                    Text [ de ] = "~Z-Achsenhauptgitter..." ;
+                                    Text [ en-US ] = "~Z Axis Main Grid..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Grelha p~rincipal do eixo Z...";
+                                    Text[ ru ] = "Основная сетка оси Z...";
+                                    Text[ el ] = "Κύριο πλέγμα άξονα ~Z...";
+                                    Text[ nl ] = "Hoofdraster ~Z-as...";
+                                    Text[ fr ] = "Grille principale de l'axe ~Z...";
+                                    Text[ es ] = "Cuadrícula principal del eje ~Z...";
+                                    Text[ fi ] = "~Z-akselin pääruudukko...";
+                                    Text[ ca ] = "Graella principal de l'eix ~Z...";
+                                    Text[ it ] = "Griglia principale asse ~Z...";
+                                    Text[ da ] = "Z-akse overordnet gitter...";
+                                    Text[ sv ] = "~Z-axelhuvudgitter...";
+                                    Text[ pl ] = "Główna siatka osi Z...";
+                                    Text[ pt-BR ] = "Grade principal do eixo ~Z...";
+                                    Text[ th ] = "เส้นตารางหลักแกน~Z ...";
+                                    Text[ ja ] = "Z軸主目盛線...(~Z)";
+                                    Text[ ko ] = "Z축 주 눈금선(~Z)...";
+                                    Text[ zh-CN ] = "~Z 轴主网格线...";
+                                    Text[ zh-TW ] = "~Z 軸主網格線...";
+                                    Text[ tr ] = "~Z Ekseni Ana Izgarası...";
+                                    Text[ hi-IN ] = "~Z अक्ष का प्रधान जाल...";
+                                    Text[ ar ] = "شبكة رئيسية للمحور ع...";
+                                    Text[ he ] = "~Z-Achsenhauptgitter...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_GRID_Y_HELP ;
+                                    HelpID = SID_DIAGRAM_GRID_Y_HELP ;
+                                    Text [ de ] = "X-A~chsenhilfsgitter..." ;
+                                    Text [ en-US ] = "X Axis ~Minor Grid..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Grelha auxiliar do eixo ~X...";
+                                    Text[ ru ] = "Промежуточная сетка оси X...";
+                                    Text[ el ] = "Βοη~θητικό πλέγμα του άξονα Χ...";
+                                    Text[ nl ] = "Hulpraster ~X-as...";
+                                    Text[ fr ] = "Grille auxiliaire de l'axe ~X...";
+                                    Text[ es ] = "Cuadrícula auxiliar del eje ~X...";
+                                    Text[ fi ] = "X-akselin toissijainen ruudukko...";
+                                    Text[ ca ] = "Cuadrícula auxiliar de l'eix ~X...";
+                                    Text[ it ] = "Griglia ausiliaria a~sse X...";
+                                    Text[ da ] = "X-akse underordnet gitter...";
+                                    Text[ sv ] = "X-axels~tödgitter...";
+                                    Text[ pl ] = "Pomocnicza siatka osi X...";
+                                    Text[ pt-BR ] = "~Y-Achsenhilfsgitter...";
+                                    Text[ th ] = "เส้นตาราง~รองแกน X ...";
+                                    Text[ ja ] = "X軸補助目盛線(~M)...";
+                                    Text[ ko ] = "X축 보조 눈금선(~M)...";
+                                    Text[ zh-CN ] = "X 轴次网格线(~M)...";
+                                    Text[ zh-TW ] = "X 軸次網格線(~M)...";
+                                    Text[ tr ] = "X Ekseni ~Küçük Izgarası...";
+                                    Text[ hi-IN ] = "X अक्ष का ~छोटा जाल...";
+                                    Text[ ar ] = "شبكة مساعدة للمحور س...";
+                                    Text[ he ] = "X-A~chsenhilfsgitter...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_GRID_X_HELP ;
+                                    HelpID = SID_DIAGRAM_GRID_X_HELP ;
+                                    Text [ de ] = "Y-Ac~hsenhilfsgitter..." ;
+                                    Text [ en-US ] = "Y Axis Minor ~Grid..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Grelha auxiliar do eixo ~Y...";
+                                    Text[ ru ] = "Промежуточная сетка оси Y...";
+                                    Text[ el ] = "Βοη~θητικό πλέγμα του άξονα Y...";
+                                    Text[ nl ] = "Hulpraster ~Y-as...";
+                                    Text[ fr ] = "Grille auxiliaire de l'axe ~Y...";
+                                    Text[ es ] = "Cuadrícula auxiliar del eje ~Y...";
+                                    Text[ fi ] = "Y-akselin toissijainen ruudukko...";
+                                    Text[ ca ] = "Cuadrícula auxiliar de l'eix ~Y...";
+                                    Text[ it ] = "Griglia ausiliaria ~asse Y...";
+                                    Text[ da ] = "Y-akse underordnet gitter...";
+                                    Text[ sv ] = "Y-axel~stödgitter...";
+                                    Text[ pl ] = "Pomocnicza siatka osi Y...";
+                                    Text[ pt-BR ] = "~X-Achsenhilfsgitter...";
+                                    Text[ th ] = "เ~ส้นตารางรองแกน Y...";
+                                    Text[ ja ] = "Y軸補助目盛線(~G)...";
+                                    Text[ ko ] = "Y축 보조 눈금선(~G)...";
+                                    Text[ zh-CN ] = "Y 轴次网格线(~G)...";
+                                    Text[ zh-TW ] = "Y 軸次網格線(~G)...";
+                                    Text[ tr ] = "Y Ekseni Küçük ~Izgarası...";
+                                    Text[ hi-IN ] = "Y अक्ष का ~छोटा जाल...";
+                                    Text[ ar ] = "شبكة مساعدة للمحور ص...";
+                                    Text[ he ] = "Y-Ac~hsenhilfsgitter...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_GRID_Z_HELP ;
+                                    HelpID = SID_DIAGRAM_GRID_Z_HELP ;
+                                    Text [ de ] = "Z-Ach~senhilfsgitter..." ;
+                                    Text [ en-US ] = "Z Ax~is Minor Grid..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "Grelha a~uxiliar do eixo Z...";
+                                    Text[ ru ] = "Промежуточная сетка оси Z...";
+                                    Text[ el ] = "Βοηθητικό πλέγμα του άξονα Z...";
+                                    Text[ nl ] = "Hulpraster ~Z-as...";
+                                    Text[ fr ] = "Grille auxiliaire de l'axe ~Z...";
+                                    Text[ es ] = "Cuadrícula auxiliar del eje ~Z...";
+                                    Text[ fi ] = "Z Ak~selin toissijainen ruudukko...";
+                                    Text[ ca ] = "Cuadrícula auxiliar de l'eix ~Z...";
+                                    Text[ it ] = "Griglia ausiliaria ass~e Z...";
+                                    Text[ da ] = "Z-akse underordnet gitter...";
+                                    Text[ sv ] = "Z-axelstö~dgitter...";
+                                    Text[ pl ] = "Pomocnicza siatka osi Z...";
+                                    Text[ pt-BR ] = "~Z-Achsenhilfsgitter...";
+                                    Text[ th ] = "เส้นตารางรองแก~น Z ...";
+                                    Text[ ja ] = "Z軸補助目盛線(~I)...";
+                                    Text[ ko ] = "Z축 보조 눈금선(~I)...";
+                                    Text[ zh-CN ] = "Z 轴次网格线(~I)...";
+                                    Text[ zh-TW ] = "Z 軸次網格線(~I)...";
+                                    Text[ tr ] = "Z Ek~seni Küçük Izgarası...";
+                                    Text[ hi-IN ] = "Z अक्ष का ~छोटा जाल...";
+                                    Text[ ar ] = "شبكة مساعدة للمحور ع...";
+                                    Text[ he ] = "Z-Ach~senhilfsgitter...";
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_DIAGRAM_GRID_ALL ;
+                                    HelpID = SID_DIAGRAM_GRID_ALL ;
+                                    Text [ de ] = "~Alle Achsengitter..." ;
+                                    Text [ en-US ] = "~All Axis Grids..." ;
+                                    Text [ x-comment ] = " ";
+                                    Text[ pt ] = "~Todas as grelhas dos eixos...";
+                                    Text[ ru ] = "Все сетки оси...";
+                                    Text[ el ] = "Όλ~α τα πλέγματα αξόνων...";
+                                    Text[ nl ] = "~Alle asrasters...";
+                                    Text[ fr ] = "~Toutes les grilles d'axes...";
+                                    Text[ es ] = "~Todas las cuadrículas de ejes...";
+                                    Text[ fi ] = "~Kaikki akseliruudukot...";
+                                    Text[ ca ] = "~Totes les graelles de l'eix...";
+                                    Text[ it ] = "Tutte le griglie degli assi...";
+                                    Text[ da ] = "Alle aksegitre...";
+                                    Text[ sv ] = "~Alla axelgitter...";
+                                    Text[ pl ] = "Wszystkie siatki osi...";
+                                    Text[ pt-BR ] = "~Todas as grades dos eixos...";
+                                    Text[ th ] = "เส้นตารางแกน~ทั้งหมด...";
+                                    Text[ ja ] = "すべての軸目盛線(~A)...";
+                                    Text[ ko ] = "모든 축 눈금선(~A)...";
+                                    Text[ zh-CN ] = "全部的轴网格线(~A)...";
+                                    Text[ zh-TW ] = "所有的軸網格線(~A)...";
+                                    Text[ tr ] = "~Tüm Eksen Izgaraları...";
+                                    Text[ hi-IN ] = "~सब अक्ष का जाल..";
+                                    Text[ ar ] = "كل شبكات المحاور...";
+                                    Text[ he ] = "~Alle Achsengitter...";
+                                };
+                            };
+                        };
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Grelha";
+                        Text[ ru ] = "Сетка";
+                        Text[ el ] = "Πλέ~γμα";
+                        Text[ nl ] = "~Raster";
+                        Text[ fr ] = "~Grille";
+                        Text[ es ] = "~Cuadrícula";
+                        Text[ fi ] = "~Ruudukko";
+                        Text[ ca ] = "~Graella";
+                        Text[ it ] = "~Griglia";
+                        Text[ da ] = "Gitter";
+                        Text[ sv ] = "~Gitter";
+                        Text[ pl ] = "Siatka";
+                        Text[ pt-BR ] = "~Grade...";
+                        Text[ th ] = "เ~ส้นตาราง";
+                        Text[ ja ] = "目盛線(~G)";
+                        Text[ ko ] = "눈금선(~G)";
+                        Text[ zh-CN ] = "网格线(~G)";
+                        Text[ zh-TW ] = "網格線(~G)";
+                        Text[ tr ] = "~Izgara";
+                        Text[ hi-IN ] = "~जाल";
+                        Text[ ar ] = "شبكة";
+                        Text[ he ] = "~Gitter";
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_DIAGRAM_WALL ;
+                        HelpID = SID_DIAGRAM_WALL ;
+                        Text [ de ] = "Diagramm~wand..." ;
+                        Text [ en-US ] = "Chart ~Wall..." ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Parede do gráfico...";
+                        Text[ ru ] = "Стена диаграммы...";
+                        Text[ el ] = "Τοίχο~ς διαγράμματος...";
+                        Text[ nl ] = "Diagram~wand...";
+                        Text[ fr ] = "P~aroi du diagramme...";
+                        Text[ es ] = "~Pared del diagrama...";
+                        Text[ fi ] = "Kaavio~seinä...";
+                        Text[ ca ] = "~Pla lateral del diagrama...";
+                        Text[ it ] = "~Pareti del diagramma...";
+                        Text[ da ] = "Diagramvæg...";
+                        Text[ sv ] = "Diagram~vägg...";
+                        Text[ pl ] = "Ściana wykresu...";
+                        Text[ pt-BR ] = "Diagram ~wall...";
+                        Text[ th ] = "~ผนังแผนภูมิ...";
+                        Text[ ja ] = "グラフの壁面(~W)...";
+                        Text[ ko ] = "차트 옆면(~W)...";
+                        Text[ zh-CN ] = "图表背景墙(~W)...";
+                        Text[ zh-TW ] = "圖表背景牆(~W)...";
+                        Text[ tr ] = "Harita ~Alanı...";
+                        Text[ hi-IN ] = "चार्ट ~वॉल...";
+                        Text[ ar ] = "حائط الرسم البياني...";
+                        Text[ he ] = "Diagramm~wand...";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_DIAGRAM_FLOOR ;
+                        HelpID = SID_DIAGRAM_FLOOR ;
+                        Text [ de ] = "Diagramm~boden..." ;
+                        Text [ en-US ] = "~Chart Floor..." ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Base do gráfico...";
+                        Text[ ru ] = "Основание диаграммы...";
+                        Text[ el ] = "Δά~πεδο διαγράμματος...";
+                        Text[ nl ] = "Diagram~bodem...";
+                        Text[ fr ] = "P~lancher du diagramme...";
+                        Text[ es ] = "~Base del diagrama...";
+                        Text[ fi ] = "~Kaavion perusta";
+                        Text[ ca ] = "Base del ~diagrama...";
+                        Text[ it ] = "~Pavimento del diagramma...";
+                        Text[ da ] = "Diagramgulv...";
+                        Text[ sv ] = "D~iagramgolv...";
+                        Text[ pl ] = "Podłoże wykresu...";
+                        Text[ pt-BR ] = "Diagram ~floor...";
+                        Text[ th ] = "พื้นแผ~นภูมิ...";
+                        Text[ ja ] = "グラフの床面(~C)...";
+                        Text[ ko ] = "차트 밑면(~C)...";
+                        Text[ zh-CN ] = "图表基底(~C)...";
+                        Text[ zh-TW ] = "座標軸(~C)...";
+                        Text[ tr ] = "~Karakter Altı...";
+                        Text[ hi-IN ] = "~चार्ट् फ़ोर्...";
+                        Text[ ar ] = "أرضية الرسم البياني...";
+                        Text[ he ] = "Diagramm~boden...";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_DIAGRAM_AREA ;
+                        HelpID = SID_DIAGRAM_AREA ;
+                        Text [ de ] = "Diagram~mfläche..." ;
+                        Text [ en-US ] = "C~hart Area..." ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "Á~rea do gráfico...";
+                        Text[ ru ] = "Область диаграммы...";
+                        Text[ el ] = "Περιοχή διαγρά~μματος...";
+                        Text[ nl ] = "Diagram~oppervlak...";
+                        Text[ fr ] = "~Arrière-plan du diagramme...";
+                        Text[ es ] = "~Superficie del diagrama...";
+                        Text[ fi ] = "Kaa~vioalue";
+                        Text[ ca ] = "~Àrea de diagrama...";
+                        Text[ it ] = "~Area del diagramma...";
+                        Text[ da ] = "Diagramområde...";
+                        Text[ sv ] = "Diagra~mområde...";
+                        Text[ pl ] = "Obszar wykresu...";
+                        Text[ pt-BR ] = "?~rea do diagrama...";
+                        Text[ th ] = "พื้นที่แผน~ภูมิ...";
+                        Text[ ja ] = "グラフエリア(~H)...";
+                        Text[ ko ] = "차트 영역(~H)...";
+                        Text[ zh-CN ] = "图表平面(~H)...";
+                        Text[ zh-TW ] = "圖表平面(~H)...";
+                        Text[ tr ] = "K~arakter Alanı...";
+                        Text[ hi-IN ] = "चा~र्ट विस्तीर्ण...";
+                        Text[ ar ] = "مساحة الرسم البياني...";
+                        Text[ he ] = "Diagram~mfläche...";
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_DIAGRAM_TYPE ;
+                        HelpID = SID_DIAGRAM_TYPE ;
+                        Text [ de ] = "~Diagrammtyp..." ;
+                        Text [ en-US ] = "Cha~rt Type..." ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Tipo de gráfico...";
+                        Text[ ru ] = "Тип диаграммы...";
+                        Text[ el ] = "Τύπος ~διαγράμματος...";
+                        Text[ nl ] = "Diagram~type...";
+                        Text[ fr ] = "Type de ~diagramme...";
+                        Text[ es ] = "~Tipo de diagrama...";
+                        Text[ fi ] = "Kaa~viotyyppi...";
+                        Text[ ca ] = "Tipus de diag~rama...";
+                        Text[ it ] = "Ti~po di diagramma...";
+                        Text[ da ] = "Diagramtype...";
+                        Text[ sv ] = "~Diagramtyp...";
+                        Text[ pl ] = "Typ wykresu...";
+                        Text[ pt-BR ] = "~Tipo de diagrama...";
+                        Text[ th ] = "ชนิดแผนภู~มิ...";
+                        Text[ ja ] = "グラフの種類(~R)...";
+                        Text[ ko ] = "차트 유형(~R)...";
+                        Text[ zh-CN ] = "图表类型(~R)...";
+                        Text[ zh-TW ] = "圖表類型(~R)...";
+                        Text[ tr ] = "Ka~rakter Türü...";
+                        Text[ hi-IN ] = "चा~र्ट वर्ग....";
+                        Text[ ar ] = "نوع الرسم البياني...";
+                        Text[ he ] = "~Diagrammtyp...";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_AUTOFORMAT ;
+                        HelpID = HID_SCH_CHART_AUTO_FORMAT ;
+                        /* ### ACHTUNG: Neuer Text in Resource? Auto~Format... : Auto~format... */
+                        /* ### ACHTUNG: Neuer Text in Resource? Auto~Format... : Auto~format... */
+                        Text [ de ] = "Auto~Format..." ;
+                        Text [ en-US ] = "Auto~Format..." ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "Auto~Formato...";
+                        Text[ ru ] = "Автоформат...";
+                        Text[ el ] = "ΑυτοΜορ~φή...";
+                        Text[ nl ] = "A~utoOpmaak...";
+                        Text[ fr ] = "Auto~Format...";
+                        Text[ es ] = "~Formateado automático...";
+                        Text[ fi ] = "~Automaattinen muotoilu";
+                        Text[ ca ] = "A~utoFormat...";
+                        Text[ it ] = "~Formattazione automatica...";
+                        Text[ da ] = "AutoFormat...";
+                        Text[ sv ] = "Auto~Format...";
+                        Text[ pl ] = "Autoformat...";
+                        Text[ pt-BR ] = "Auto ~formata??o...";
+                        Text[ th ] = "~รูปแบบอัตโนมัติ...";
+                        Text[ ja ] = "オートフォーマット(~F)...";
+                        Text[ ko ] = "자동 서식(~F)...";
+                        Text[ zh-CN ] = "自动格式(~F)...";
+                        Text[ zh-TW ] = "自動格式(~F)...";
+                        Text[ tr ] = "Otomatık ~Biçim...";
+                        Text[ hi-IN ] = "स्वचालित ~ढंग से रचना...";
+                        Text[ ar ] = "تنسيق تلقائي...";
+                        Text[ he ] = "‮עיצוב אוטומטי...‬";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_3D_WIN ;
+                        HelpID = SID_3D_WIN ;
+                        Text [ de ] = "~3D-Effekte" ;
+                        Text [ en-US ] = "~3D Effects" ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Efeitos-3D";
+                        Text[ ru ] = "Эффекты 3-М";
+                        Text[ el ] = "Εφέ ~3Δ";
+                        Text[ nl ] = "3D-~effecten";
+                        Text[ fr ] = "~Effets 3D";
+                        Text[ es ] = "~Efectos 3D";
+                        Text[ fi ] = "~Kolmiulotteiset tehosteet";
+                        Text[ ca ] = "Efectes ~3D";
+                        Text[ it ] = "Effetti ~3D";
+                        Text[ da ] = "3D-effekter";
+                        Text[ sv ] = "~3D-effekter";
+                        Text[ pl ] = "Efekty 3-W";
+                        Text[ pt-BR ] = "3D-~Effekte";
+                        Text[ th ] = "ลักษณะพิเศษ~3มิติ";
+                        Text[ ja ] = "3D 効果(~3)";
+                        Text[ ko ] = "3Ｄ 효과";
+                        Text[ zh-CN ] = "~3 维效果";
+                        Text[ zh-TW ] = "~3D 效果";
+                        Text[ tr ] = "~3D Efektleri";
+                        Text[ hi-IN ] = "~3D प्रभाव";
+                        Text[ ar ] = "تأثيرات ثلاثية الأبعاد";
+                        Text[ he ] = "~3D-Effekte";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_3D_VIEW ;
+                        HelpID = SID_3D_VIEW ;
+                        Text [ de ] = "3D-An~sicht..." ;
+                        Text [ en-US ] = "3~D View..." ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Vista 3D...";
+                        Text[ ru ] = "Вид 3-М...";
+                        Text[ el ] = "Προ~βολή 3Δ...";
+                        Text[ nl ] = "~3D-weergave...";
+                        Text[ fr ] = "Affichage ~3D...";
+                        Text[ es ] = "~Ver en 3D...";
+                        Text[ fi ] = "Kolmi~ulotteinen näkymä...";
+                        Text[ ca ] = "Vista 3~D...";
+                        Text[ it ] = "~Vista 3D...";
+                        Text[ da ] = "3D-visning...";
+                        Text[ sv ] = "3D-v~y...";
+                        Text[ pl ] = "Widok 3-W...";
+                        Text[ pt-BR ] = "~Ver 3D...";
+                        Text[ th ] = "มุมมอง 3~มิติ...";
+                        Text[ ja ] = "3D 表示...(~D)";
+                        Text[ ko ] = "3Ｄ 보기(~D)...";
+                        Text[ zh-CN ] = "~3 维视图...";
+                        Text[ zh-TW ] = "~3D 檢視...";
+                        Text[ tr ] = "3~B Görünüm...";
+                        Text[ hi-IN ] = "3~D दृश्य";
+                        Text[ ar ] = "عرض ثلاثي الأبعاد...";
+                        Text[ he ] = "3D-An~sicht...";
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MN_ROW_POSITION;
+                };
+};
+            Text[ pt ] = "~Formatar";
+            Text[ ru ] = "Фор~мат";
+            Text[ el ] = "Μορ~φοποίηση";
+            Text[ nl ] = "~Formaat";
+            Text[ fr ] = "Forma~t";
+            Text[ es ] = "~Formato";
+            Text[ fi ] = "~Muotoile";
+            Text[ ca ] = "F~ormata";
+            Text[ it ] = "F~ormato";
+            Text[ da ] = "Forma~ter";
+            Text[ sv ] = "F~ormat";
+            Text[ pl ] = "Format";
+            Text[ pt-BR ] = "Form~at";
+            Text[ th ] = "รู~ปแบบ";
+            Text[ ja ] = "書式(~O)";
+            Text[ ko ] = "서식(~O)";
+            Text[ zh-CN ] = "格式(~O)";
+            Text[ zh-TW ] = "格式(~O)";
+            Text[ tr ] = "~Biçim";
+            Text[ hi-IN ] = "~रचना";
+            Text[ ar ] = "تنس~يق";
+            Text[ he ] = "‮עיצוב‬";
+        };
+        MenuItem
+        {
+            Identifier = WORKAROUND_25 ;
+            HelpID = 25 ;
+            Text [ de ] = "E~xtras" ;
+            Text [ en-US ] = "~Tools" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_TOOLS_CONFIG
+                    };
+                    ITEM_MN_OPTIONS
+                    /*
+                    MenuItem
+                    {
+                        Identifier = SID_OPTIONS ;
+                        HelpID = SID_OPTIONS ;
+                        Text [ de ] = "Optionen..." ;
+                        Text [ en-US ] = "Options..." ;
+                    };
+                                        */
+                };
+            };
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Ferramentas";
+            Text[ ru ] = "~Сервис";
+            Text[ el ] = "Ε~ργαλεία";
+            Text[ nl ] = "E~xtra";
+            Text[ fr ] = "~Outils";
+            Text[ es ] = "~Herramientas";
+            Text[ fi ] = "~Työkalut";
+            Text[ ca ] = "Ei~nes";
+            Text[ it ] = "~Strumenti";
+            Text[ da ] = "Fun~ktioner";
+            Text[ sv ] = "~Verktyg";
+            Text[ pl ] = "~Narzędzia";
+            Text[ pt-BR ] = "F~erramentas";
+            Text[ th ] = "เ~ครื่องมือ";
+            Text[ ja ] = "ツール(~T)";
+            Text[ ko ] = "도구(~T)";
+            Text[ zh-CN ] = "工具(~T)";
+            Text[ zh-TW ] = "工具(~T)";
+            Text[ tr ] = "~Araçlar";
+            Text[ hi-IN ] = "~औज़ार";
+            Text[ ar ] = "أ~دوات";
+            Text[ he ] = "‮כלים‬";
+        };
+        ITEM_WINDOW_MENU
+        ITEM_HELP_MENU
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

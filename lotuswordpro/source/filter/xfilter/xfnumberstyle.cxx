@@ -61,7 +61,7 @@
  * Change History
  * 2005-03-23 create this file.
  ************************************************************************/
-#include    "xfnumberstyle.hxx"
+#include	"xfnumberstyle.hxx"
 
 XFNumberStyle::XFNumberStyle():m_aColor(0,0,0),m_aNegativeColor(255,0,0)
 {
@@ -264,7 +264,7 @@ void XFNumberStyle::ToXml_Negative(IXFStream *pStrm)
 
 void XFNumberStyle::ToXml_Content(IXFStream *pStrm, sal_Bool nagetive)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     //color:
     if( !nagetive )

@@ -61,7 +61,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPSTORY_HXX
@@ -85,9 +85,9 @@ private:
 
     // , 02/16/2005
     sal_Bool m_bPMModified;
-    LwpPageLayout* m_pCurrentLayout;    //for register page layout style
+    LwpPageLayout* m_pCurrentLayout;	//for register page layout style
     std::vector<LwpPageLayout*> m_LayoutList;
-    LwpLayout* m_pTabLayout;    //for register tab style
+    LwpLayout* m_pTabLayout;	//for register tab style
 
     sal_Bool m_bDropcap;
     LwpHyperlinkMgr* m_pHyperlinkMgr;

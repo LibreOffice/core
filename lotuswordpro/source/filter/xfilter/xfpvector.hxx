@@ -61,13 +61,13 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#ifndef     _XFPVECTOR_HXX
-#define     _XFPVECTOR_HXX
+#ifndef		_XFPVECTOR_HXX
+#define		_XFPVECTOR_HXX
 
-#include    <vector>
+#include	<vector>
 
 template<class T>
-class   XFPVector : public std::vector<T>
+class	XFPVector : public std::vector<T>
 {
 public:
     ~XFPVector()
@@ -83,7 +83,7 @@ public:
         }
     }
 
-    void        Reset()
+    void		Reset()
     {
         std::vector<T>::iterator it;
         for( it=begin(); it != end(); it++ )

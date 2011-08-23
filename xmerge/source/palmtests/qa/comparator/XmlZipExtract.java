@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ public class XmlZipExtract
 
 
   /**
-   * Constructor
+   * Constructor 
    *
    * @param filename Full Path to Zip file to process
    *
@@ -99,7 +99,7 @@ public class XmlZipExtract
      raf.write(b);
      raf.close();
   }
-
+  
   /**
    * Get the specified entry in the zip file as a stream.
    *
@@ -110,7 +110,7 @@ public class XmlZipExtract
    *
    * @throws IOException if something goes wrong
    */
-  public byte[] getEntry(String entryName) throws IOException
+  public byte[] getEntry(String entryName) throws IOException 
   {
         ZipFile zf = new ZipFile(filename);
         ZipEntry ze = zf.getEntry(entryName);
@@ -127,7 +127,7 @@ public class XmlZipExtract
    *
    * @return an array of Bytes
    */
-  private byte[] readStream(InputStream is) throws IOException
+  private byte[] readStream(InputStream is) throws IOException 
   {
         BufferedInputStream bis = new BufferedInputStream(is);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

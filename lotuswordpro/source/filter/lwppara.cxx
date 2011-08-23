@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwppara.hxx"
@@ -121,7 +121,7 @@ LwpPara::~LwpPara()
         delete m_pBreaks;
         m_pBreaks = NULL;
     }
-/*  if (m_pParaNumbering)
+/*	if (m_pParaNumbering)
     {
         delete m_pParaNumbering;
         m_pParaNumbering = NULL;
@@ -152,8 +152,8 @@ void LwpPara::Read()
 
     sal_Bool Simple;
     sal_Bool Notify = sal_False;
-//  m_Fribs.SetPara(this);
-//  LwpParaPropListProperty *PropList = NULL;
+//	m_Fribs.SetPara(this);
+//	LwpParaPropListProperty *PropList = NULL;
     if(LwpFileHeader::m_nFileRevision<0x0006)
         Simple = sal_False;
     else if(LwpFileHeader::m_nFileRevision<0x000B)
@@ -355,8 +355,8 @@ sal_Bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
  */
 void LwpPara::RegisterStyle()
 { //1 reg autostyle
-//  m_Fribs.SetPara(this);
-//  m_Fribs.RegisterStyle();
+//	m_Fribs.SetPara(this);
+//	m_Fribs.RegisterStyle();
 
   //2 reg para style
     if (!m_pFoundry)
@@ -372,8 +372,8 @@ void LwpPara::RegisterStyle()
         m_pIndentOverride = new LwpIndentOverride;
         *m_pIndentOverride = *(GetParaStyle()->GetIndent()); //add by  2-6,for indent hierachy
     }
-//  else
-//      m_pIndentOverride = NULL;
+//	else
+//		m_pIndentOverride = NULL;
 
     XFParaStyle* pOverStyle = NULL;
     sal_Bool noSpacing = sal_True;
@@ -444,13 +444,13 @@ void LwpPara::RegisterStyle()
         case PP_LOCAL_BULLET:
         {
             pBulletProps = pProps;
-//          OverrideParaBullet(pProps);
+//			OverrideParaBullet(pProps);
             break;
         }
         case PP_LOCAL_NUMBERING:
         {
             pNumberingProps = pProps;
-//          OverrideParaNumbering(pProps);
+//			OverrideParaNumbering(pProps);
             break;
         }
         //end
@@ -470,7 +470,7 @@ void LwpPara::RegisterStyle()
         }
         case PP_LOCAL_BACKGROUND:
         {
-/*          LwpBackgroundOverride aBackground;
+/*			LwpBackgroundOverride aBackground;
             if (!pParaStyle->GetBackground())
                 OverrideBackground(NULL,static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground(),pOverStyle);
             else
@@ -965,10 +965,10 @@ XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
     }
     if (m_pSilverBullet->HasName())
     {
-//      nLevel = m_pParaNumbering->GetPosition();
+//		nLevel = m_pParaNumbering->GetPosition();
         nLevel = m_aParaNumbering.GetPosition();
         m_nLevel = nLevel;//add by ,for get para level
-//      m_aBulletStyleName = m_pSilverBullet->GetBulletStyleName();
+//		m_aBulletStyleName = m_pSilverBullet->GetBulletStyleName();
     }
 
     return ( pBulletStyleMgr->AddBulletList(pCont, bOrdered, m_aBulletStyleName,

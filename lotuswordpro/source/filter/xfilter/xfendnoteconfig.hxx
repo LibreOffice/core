@@ -61,10 +61,10 @@
  * Change History
  * 2005-03-29 create this file.
  ************************************************************************/
-#ifndef     _XFENDNOTECONFIG_HXX
-#define     _XFENDNOTECONFIG_HXX
+#ifndef		_XFENDNOTECONFIG_HXX
+#define		_XFENDNOTECONFIG_HXX
 
-#include    "xfendnoteconfig.hxx"
+#include	"xfendnoteconfig.hxx"
 
 class XFEndnoteConfig : public XFFootnoteConfig
 {

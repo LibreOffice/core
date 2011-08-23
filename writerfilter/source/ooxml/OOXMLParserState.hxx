@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ public:
 
     bool isInSectionGroup() const;
     void setInSectionGroup(bool bInSectionGroup);
-
+    
     void setLastParagraphInSection(bool bLastParagraphInSection);
     bool isLastParagraphInSection() const;
 
@@ -79,7 +79,7 @@ public:
 
     void setForwardEvents(bool bForwardEvents);
     bool isForwardEvents() const;
-
+    
     const string getHandle() const;
     void setHandle();
 
@@ -102,7 +102,7 @@ public:
 
     void startTable();
     void endTable();
-
+    
     void incContextCount();
 
 #ifdef DEBUG

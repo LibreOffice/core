@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -138,7 +138,7 @@ public final class PalmDB {
      *  @param  attribute  The PDB header attribute.
      *  @param  recs       Array of <code>Record</code> objects.
      *
-     *  @throws  UnsupportedEncodingException  If <code>name</code> is
+     *  @throws  UnsupportedEncodingException  If <code>name</code> is 
      *                                         not properly encoded.
      *  @throws  NullPointerException          If <code>recs</code> is null.
      */
@@ -164,7 +164,7 @@ public final class PalmDB {
      *  @param  attribute  The PDB header attribute.
      *  @param   recs      Array of <code>Record</code> objects.
      *
-     *  @throws  UnsupportedEncodingException  If <code>name</code> is
+     *  @throws  UnsupportedEncodingException  If <code>name</code> is 
      *                                         not properly encoded.
      *  @throws  NullPointerException          If recs is null.
      */
@@ -188,10 +188,10 @@ public final class PalmDB {
      *  @param  attribute  The PDB header attribute.
      */
     public void setAttributes (int creatorID, int typeID, int version, short attribute) {
-        this.creatorID = creatorID;
-        this.typeID = typeID;
-        this.version = version;
-        this.attribute = attribute;
+        this.creatorID = creatorID;	
+        this.typeID = typeID;	
+        this.version = version;	
+        this.attribute = attribute;	
     }
 
 

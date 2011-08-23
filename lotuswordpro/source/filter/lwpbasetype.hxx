@@ -60,7 +60,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 
@@ -71,7 +71,7 @@
 #include "lwpheader.hxx"
 
 /**
- * @brief   used for lwpfont for font description
+ * @brief	used for lwpfont for font description
 */
 class LwpPanoseNumber
 {
@@ -93,7 +93,7 @@ private:
     sal_uInt8 m_nXHeight;
 };
 /**
- * @brief   point class
+ * @brief	point class
 */
 class LwpPoint
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -613,9 +613,9 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
     }
     catch(const css::container::NoSuchElementException&)
     {
-        /*  Ignore exceptions for missing elements inside configuration.
+        /*	Ignore exceptions for missing elements inside configuration.
             May by the following reason exists:
-                -   The item does not exists inside the new configuration package org.openoffice.TypeDetection - but
+                -	The item does not exists inside the new configuration package org.openoffice.TypeDetection - but
                     we got it from the old package org.openoffice.Office/TypeDetection. We dont migrate such items
                     automaticly to the new format. Because it will disturb e.g. the deinstallation of an external filter
                     package. Because such external filter can remove the old file - but not the automaticly created new one ...
@@ -718,7 +718,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 // Reject flush operation by throwing an exception. At least one item couldnt be flushed.
                 if (!xItem.is())
                     throw css::uno::Exception(::rtl::OUString::createFromAscii("Cant add item. Set is finalized or mandatory!"),
-                                              css::uno::Reference< css::uno::XInterface >()                                   );
+                                              css::uno::Reference< css::uno::XInterface >()									  );
 
                 CacheItemList::const_iterator pItem = rCache.find(sItem);
                 impl_saveItem(xItem, eType, pItem->second);
@@ -735,7 +735,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 // Reject flush operation by throwing an exception. At least one item couldnt be flushed.
                 if (!xItem.is())
                     throw css::uno::Exception(::rtl::OUString::createFromAscii("Cant change item. Its finalized or mandatory!"),
-                                              css::uno::Reference< css::uno::XInterface >()                                    );
+                                              css::uno::Reference< css::uno::XInterface >()									   );
 
                 CacheItemList::const_iterator pItem = rCache.find(sItem);
                 impl_saveItem(xItem, eType, pItem->second);
@@ -1053,7 +1053,7 @@ void FilterCache::impl_validateAndOptimize()
 
     sal_Int32             nWarnings = 0;
 
-//  sal_Bool bAllTypesShouldExist    = ((m_eFillState & E_CONTAINS_TYPES          ) == E_CONTAINS_TYPES          );
+//	sal_Bool bAllTypesShouldExist    = ((m_eFillState & E_CONTAINS_TYPES          ) == E_CONTAINS_TYPES          );
     sal_Bool bAllLoadersShouldExist  = ((m_eFillState & E_CONTAINS_FRAMELOADERS   ) == E_CONTAINS_FRAMELOADERS   );
     sal_Bool bAllHandlersShouldExist = ((m_eFillState & E_CONTAINS_CONTENTHANDLERS) == E_CONTAINS_CONTENTHANDLERS);
 #endif

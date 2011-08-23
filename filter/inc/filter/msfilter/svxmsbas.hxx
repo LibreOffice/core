@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ class MSFILTER_DLLPUBLIC SvxImportMSVBasic
 public:
     SvxImportMSVBasic( SfxObjectShell &rDocS, SotStorage &rRoot,
                         BOOL bImportCode = TRUE, BOOL bCopyStorage = TRUE )
-        :   xRoot(&rRoot), rDocSh(rDocS),
+        :	xRoot(&rRoot), rDocSh(rDocS),
             bImport(bImportCode), bCopy(bCopyStorage)
         {}
     // returns the status of import:
@@ -96,20 +96,20 @@ private:
     SfxObjectShell &rDocSh;
     BOOL bImport;
     BOOL bCopy;
-    ControlAttributeInfo m_ModuleNameToObjIdHash;
-    MSFILTER_DLLPRIVATE void extractAttribute( const String& rAttribute, const String& rModName );
+	ControlAttributeInfo m_ModuleNameToObjIdHash;
+	MSFILTER_DLLPRIVATE void extractAttribute( const String& rAttribute, const String& rModName );
 
     MSFILTER_DLLPRIVATE BOOL ImportCode_Impl( const String& rStorageName,
                           const String &rSubStorageName,
                           const std::vector< String >& codeNames,
                           BOOL bAsComment, BOOL bStripped);
-    MSFILTER_DLLPRIVATE bool ImportForms_Impl(const String& rStorageName,
-        const String &rSubStorageName, BOOL bVBAMode);
+    MSFILTER_DLLPRIVATE bool ImportForms_Impl(const String& rStorageName, 
+		const String &rSubStorageName, BOOL bVBAMode);
     MSFILTER_DLLPRIVATE BOOL CopyStorage_Impl( const String& rStorageName,
                            const String &rSubStorageName);
         rtl::OUString msProjectName;
-    MSFILTER_DLLPRIVATE BOOL ImportCode_Impl( VBA_Impl&, const std::vector< String >&, BOOL, BOOL );
-    MSFILTER_DLLPRIVATE bool ImportForms_Impl( VBA_Impl&, const String&, const String&, BOOL);
+	MSFILTER_DLLPRIVATE BOOL ImportCode_Impl( VBA_Impl&, const std::vector< String >&, BOOL, BOOL );
+	MSFILTER_DLLPRIVATE bool ImportForms_Impl( VBA_Impl&, const String&, const String&, BOOL);
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,19 +50,19 @@ using resourcemodel::resolveSprmProps;
 
 namespace dmapper
 {
-
+        
 struct SettingsTable_Impl
 {
     DomainMapper&       m_rDMapper;
     const uno::Reference< lang::XMultiServiceFactory > m_xTextFactory;
-
+            
     ::rtl::OUString     m_sCharacterSpacing;
     ::rtl::OUString     m_sDecimalSymbol;
     ::rtl::OUString     m_sListSeparatorForFields; //2.15.1.56 listSeparator (List Separator for Field Code Evaluation)
-
+            
     int                 m_nDefaultTabStop;
     int                 m_nHyphenationZone;
-
+            
     bool                m_bNoPunctuationKerning;
     bool                m_doNotIncludeSubdocsInStats; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
     bool                m_bRecordChanges;
@@ -81,7 +81,7 @@ struct SettingsTable_Impl
     ::rtl::OUString     m_sCryptProviderTypeExtSource;
     ::rtl::OUString     m_sHash;
     ::rtl::OUString     m_sSalt;
-
+            
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
     m_rDMapper( rDMapper )
     , m_xTextFactory( xTextFactory )
@@ -99,18 +99,18 @@ struct SettingsTable_Impl
     , m_nCryptSpinCount(0)
     {}
 };
-
+        
 SettingsTable::SettingsTable(DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory) :
 m_pImpl( new SettingsTable_Impl(rDMapper, xTextFactory) )
 {
     // printf("SettingsTable::SettingsTable()\n");
 }
-
+        
 SettingsTable::~SettingsTable()
 {
     delete m_pImpl;
 }
-
+        
 void SettingsTable::attribute(Id nName, Value & val)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -126,8 +126,8 @@ void SettingsTable::attribute(Id nName, Value & val)
     (void)sValue;
     //printf ( "SettingsTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     /* WRITERFILTERSTATUS: table: SettingsTable_attributedata */
-#if 0 //no values known, yet
-
+#if 0 //no values known, yet   
+            
     switch(Name)
     {
     /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
@@ -142,7 +142,7 @@ void SettingsTable::attribute(Id nName, Value & val)
     dmapper_logger->endElement("SettingsTable.attribute");
 #endif
 }
-
+        
 void SettingsTable::sprm(Sprm& rSprm)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -151,14 +151,14 @@ void SettingsTable::sprm(Sprm& rSprm)
 #endif
 
     sal_uInt32 nSprmId = rSprm.getId();
-
+            
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     (void)nIntValue;
     rtl::OUString sStringValue = pValue->getString();
-
+            
     //printf ( "SettingsTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
-
+            
     /* WRITERFILTERSTATUS: table: SettingsTable_sprm */
     switch(nSprmId)
     {
@@ -180,7 +180,7 @@ void SettingsTable::sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_themeFontLang: //  92552;
     /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_shapeDefaults: //  92560;
-
+                    
     //PropertySetValues - need to be resolved
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -201,7 +201,7 @@ void SettingsTable::sprm(Sprm& rSprm)
     break;
     /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_characterSpacingControl: //  92527;
-    m_pImpl->m_sCharacterSpacing = sStringValue; // doNotCompress, compressPunctuation, compressPunctuationAndJapaneseKana
+    m_pImpl->m_sCharacterSpacing = sStringValue; // doNotCompress, compressPunctuation, compressPunctuationAndJapaneseKana  
     break;
     /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_doNotIncludeSubdocsInStats: //  92554; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
@@ -217,7 +217,7 @@ void SettingsTable::sprm(Sprm& rSprm)
     break;
     /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_rsids: //  92549; revision save Ids - probably not necessary
-    break;
+    break;        
     /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_hyphenationZone: // 92508;
     m_pImpl->m_nHyphenationZone = nIntValue;
@@ -246,31 +246,31 @@ void SettingsTable::sprm(Sprm& rSprm)
     dmapper_logger->endElement("SettingsTable.sprm");
 #endif
 }
-
+        
 void SettingsTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
     // printf ( "SettingsTable::entry\n");
     ref->resolve(*this);
 }
 //returns default TabStop in 1/100th mm
-
+        
 /*-- 22.09.2009 10:29:32---------------------------------------------------
-
+         
   -----------------------------------------------------------------------*/
-int SettingsTable::GetDefaultTabStop() const
+int SettingsTable::GetDefaultTabStop() const 
 {
     return ConversionHelper::convertTwipToMM100( m_pImpl->m_nDefaultTabStop );
 }
-
+            
 void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc )
 {
     uno::Reference< beans::XPropertySet> xDocProps( xDoc, uno::UNO_QUERY );
-
+            
     // Record changes value
     xDocProps->setPropertyValue( ::rtl::OUString::createFromAscii( "RecordChanges" ), uno::makeAny( m_pImpl->m_bRecordChanges ) );
 }
-
-
+        
+        
 }//namespace dmapper
 } //namespace writerfilter
 

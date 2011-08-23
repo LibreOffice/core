@@ -1,0 +1,147 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SVX_FMRESIDS_HRC
+#define _SVX_FMRESIDS_HRC
+
+// include	   -----------------------------------------------------------
+#include <bf_svtools/solar.hrc>
+
+// unnamed ressources -------------------------------------------------------
+// sub ressources .....................
+
+// ImageList-Id's -----------------------------------------------------------
+
+// Image-Id's -----------------------------------------------------------
+#define RID_SVXIMG_FORM								SID_FM_CONFIG
+#define RID_SVXIMG_CONTROL							SID_CHOOSE_CONTROLS
+#define RID_SVXIMG_COLLAPSEDNODE					(RID_FORMS_START + 2)
+#define RID_SVXIMG_EXPANDEDNODE						(RID_FORMS_START + 3)
+#define RID_SVXIMG_BUTTON							SID_FM_PUSHBUTTON
+#define RID_SVXIMG_RADIOBUTTON						SID_FM_RADIOBUTTON
+#define RID_SVXIMG_CHECKBOX							SID_FM_CHECKBOX
+#define RID_SVXIMG_FIXEDTEXT						SID_FM_FIXEDTEXT
+#define RID_SVXIMG_GROUPBOX							SID_FM_GROUPBOX
+#define RID_SVXIMG_EDIT								SID_FM_EDIT
+#define RID_SVXIMG_LISTBOX							SID_FM_LISTBOX
+#define RID_SVXIMG_COMBOBOX							SID_FM_COMBOBOX
+#define RID_SVXIMG_URLBUTTON						SID_FM_URLBUTTON
+#define RID_SVXIMG_FORMS							(RID_FORMS_START +13)
+#define RID_SVXIMG_IMAGEBUTTON						SID_FM_IMAGEBUTTON
+#define RID_SVXIMG_IMAGECONTROL						SID_FM_IMAGECONTROL
+#define RID_SVXIMG_FILECONTROL						SID_FM_FILECONTROL
+#define RID_SVXIMG_DATEFIELD						SID_FM_DATEFIELD
+#define RID_SVXIMG_TIMEFIELD						SID_FM_TIMEFIELD
+#define RID_SVXIMG_NUMERICFIELD						SID_FM_NUMERICFIELD
+#define RID_SVXIMG_CURRENCYFIELD					SID_FM_CURRENCYFIELD
+#define RID_SVXIMG_PATTERNFIELD						SID_FM_PATTERNFIELD
+#define RID_SVXIMG_HIDDEN							(RID_FORMS_START +22)
+#define RID_SVXIMG_GRID								SID_FM_DBGRID
+#define RID_SVXIMG_FORMATTEDFIELD                   SID_FM_FORMATTEDFIELD
+#define RID_SVXIMG_FILTER							SID_FM_FILTERCRIT
+#define RID_SVXIMG_DATE_N_TIME_FIELDS               SID_FM_TWOFIELDS_DATE_N_TIME
+#define RID_SVXIMG_FIELD							(RID_FORMS_START +27)
+
+// Dialog-Id's -----------------------------------------------------------
+#define RID_SVXTBX_FORM								(RID_FORMS_START + 1)
+#define TBX_FORM									(RID_FORMS_START + 2)
+#define RID_SVXTBX_FORM_NAVIGATION					(RID_FORMS_START + 3)
+#define RID_SVXTBX_FORM_FILTER						(RID_FORMS_START + 4)
+#define RID_SVXDLG_ADD_TABLE						(RID_FORMS_START + 5)
+#define RID_SVXDLG_TAB_ORDER						(RID_FORMS_START + 6)
+// --------- free id -----------------
+#define RID_SVXERR_SEARCH_NORECORD					(RID_FORMS_START + 15)
+#define RID_SVXERR_SEARCH_GENERAL_ERROR				(RID_FORMS_START + 16)
+
+// Menu-Id's -----------------------------------------------------------
+#define RID_FMEXPLORER_POPUPMENU					(RID_FORMS_START + 0)
+#define RID_SVXMNU_ROWS			                    (RID_FORMS_START + 1)
+#define RID_SVXMNU_COLS			                    (RID_FORMS_START + 2)
+#define RID_SVXMNU_CELL			                    (RID_FORMS_START + 3)
+#define RID_FMSHELL_CONVERSIONMENU					(RID_FORMS_START + 4)
+#define RID_FM_FILTER_MENU							(RID_FORMS_START + 5)
+
+
+// QueryBox-Id's -----------------------------------------------------------
+#define RID_QRY_SAVEMODIFIED	                    (RID_FORMS_START + 1)
+
+// String-Id's -----------------------------------------------------------
+#define RID_STR_FORMSHELL							(RID_FORMS_START + 10)
+#define RID_STR_FORM_FILTERED						(RID_FORMS_START + 14)
+
+// Undo Strings
+
+// ErrorStrings
+
+#define RID_STR_NAME								(RID_FORMS_START + 46)
+#define RID_STR_FORM								(RID_FORMS_START + 72)
+#define RID_STR_FORMS								(RID_FORMS_START + 84)
+
+
+    // free
+
+    // FREE
+
+
+#define RID_STR_CONTROL								(RID_FORMS_START +197)
+
+
+
+#define RID_STR_SYNTAXERROR							(RID_FORMS_START +218)
+
+
+    // free
+
+#define RID_STR_ERR_DELETERECORD					(RID_FORMS_START +235)
+
+#define RID_STR_SVT_SQL_INTERNATIONAL				(RID_FORMS_START +240)
+
+// ClassNames
+#define RID_CLASSNAMES_START						(RID_FORMS_START + 300)
+
+
+
+// Events
+#define RID_STR_EVT_START							(RID_FORMS_START +400)
+
+
+// Error-String-Id's -----------------------------------------------------------
+#define RID_ERR_START								(RID_FORMS_START + 600)
+
+// Error-Id's  -----------------------------------------------------------
+
+
+// Ueberlaufpruefung -----------------------------------------------------
+
+// Dialog-Id's
+#define ACTFRM_RID_END RID_SVX_DLG_LABELCONTROL
+#if ACTFRM_RID_END > RID_FORMS_END
+#error Resource-Ueberlauf in #line, #file
+#endif
+
+
+#endif          // _FM_FMPAGE_HXX
+

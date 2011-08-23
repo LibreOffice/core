@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef     _XFCONDITIONFORMAT_HXX
-#define     _XFCONDITIONFORMAT_HXX
+#ifndef		_XFCONDITIONFORMAT_HXX
+#define		_XFCONDITIONFORMAT_HXX
 
 class XFConditionFormat
 {
@@ -62,7 +62,7 @@ public:
     XFConditionFormat();
 
 public:
-    void    SetCondition();
+    void	SetCondition();
 
 private:
 

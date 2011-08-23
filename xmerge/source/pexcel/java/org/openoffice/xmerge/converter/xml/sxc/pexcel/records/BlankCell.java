@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records;
-
+ 
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
@@ -36,36 +36,36 @@ import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
- * Represents a BIFF Record that describes a blank cell
+ * Represents a BIFF Record that describes a blank cell 
  */
 public class BlankCell extends CellValue {
-
+    
     /**
-     * Constructs a BlankCell <code>InputStream</code>
+     * Constructs a BlankCell <code>InputStream</code> 
      *
-     * @param   is InputStream containing a BlankCell.
+     * @param	is InputStream containing a BlankCell.
      */
     public BlankCell(InputStream is) throws IOException {
-       read(is);
+       read(is); 
     }
-
+    
     /**
       * Constructs a <code>BlankCell</code> using specified attributes
-     *
+     * 
      * @param row row number
-     * @param col column number
-     * @param cellContents contents of the cell
+     * @param col column number 
+     * @param cellContents contents of the cell 
      * @param ixfe font index
-      */
+      */	 
     public BlankCell(int row, int column, int ixfe) throws IOException {
 
         setRow(row);
            setCol(column);
         setIxfe(ixfe);
     }
-
+    
     /**
-     * Get the hex code for this particular <code>BIFFRecord</code>
+     * Get the hex code for this particular <code>BIFFRecord</code> 
      *
      * @return the hex code for <code>BlankCell</code>
      */
@@ -81,35 +81,35 @@ public class BlankCell extends CellValue {
         output.write(ixfe);
 
         Debug.log(Debug.TRACE, "Writing BlankCell record");
-
+    
     }
-
+    
     /**
-     * Reads a BlankCell <code>InputStream</code>
+     * Reads a BlankCell <code>InputStream</code> 
      *
-     * @param   is InputStream containing a BlankCell.
+     * @param	is InputStream containing a BlankCell.
      */
     public int read(InputStream input) throws IOException {
 
-        int numOfBytesRead  = input.read(rw);
-        numOfBytesRead++;
-        col                 += input.read();
-        numOfBytesRead      += input.read(ixfe);
+        int numOfBytesRead 	= input.read(rw);
+        numOfBytesRead++; 
+        col					+= input.read();
+        numOfBytesRead		+= input.read(ixfe);
 
-        Debug.log(Debug.TRACE, "\tRow : "+ EndianConverter.readShort(rw) +
+        Debug.log(Debug.TRACE, "\tRow : "+ EndianConverter.readShort(rw) + 
                             " Column : " + col +
-                            " ixfe : " + EndianConverter.readShort(ixfe));
-
+                            " ixfe : " + EndianConverter.readShort(ixfe));        
+        
         return numOfBytesRead;
     }
-
+    
     /**
-     * Gets the <code>String</code> representing the cells contents
+     * Gets the <code>String</code> representing the cells contents 
      *
      * @return the <code>String</code> representing the cells contents
      */
     public String getString() throws IOException {
 
         return (new String(""));
-    }
+    }  
 }

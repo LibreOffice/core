@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 //!! no such defines in global namespaces - it will break other existing code that uses the same define!!
 //#ifndef C2U
-//#define C2U(cChar)    rtl::OUString::createFromAscii(cChar)
+//#define C2U(cChar)	rtl::OUString::createFromAscii(cChar)
 //#endif
 #include "filter/msfilter/msfilterdllapi.h"
 #include <vector>
@@ -151,7 +151,7 @@ protected:
         GetShapes();
 
     const com::sun::star::uno::Reference<
-        com::sun::star::container::XIndexContainer > &  GetFormComps();
+        com::sun::star::container::XIndexContainer > & 	GetFormComps();
 
     SfxObjectShell *pDocSh;
     SwPaM *pPaM;
@@ -161,7 +161,7 @@ protected:
         xDrawPage;
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >
         xShapes;
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >        xServiceFactory;
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > 		xServiceFactory;
 
     // das einzige Formular
     com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >
@@ -289,7 +289,7 @@ public:
     bool mbVisible;
     UniString sName;
     UniString msToolTip;
-    UniString msParentName;
+	UniString msParentName;
     OCX_FontData aFontData;
     rtl::OUString msCtrlSource;
     rtl::OUString msRowSource;
@@ -342,57 +342,57 @@ public:
 
     /*sal_uInt8 for sal_uInt8 Word Struct*/
     sal_uInt16  nIdentifier;
-    sal_uInt16  nFixedAreaLen;
-    sal_uInt8   pBlockFlags[8];
+    sal_uInt16 	nFixedAreaLen;
+    sal_uInt8	pBlockFlags[8];
 
-    sal_uInt8   fUnknown1:1;
-    sal_uInt8   fEnabled:1;
-    sal_uInt8   fLocked:1;
-    sal_uInt8   fBackStyle:1;
-    sal_uInt8   fUnknown2:4;
+    sal_uInt8	fUnknown1:1;
+    sal_uInt8	fEnabled:1;
+    sal_uInt8	fLocked:1;
+    sal_uInt8	fBackStyle:1;
+    sal_uInt8	fUnknown2:4;
 
-    sal_uInt8   fUnknown3:2;
-    sal_uInt8   fColumnHeads:1;
-    sal_uInt8   fIntegralHeight:1;
-    sal_uInt8   fMatchRequired:1;
-    sal_uInt8   fAlignment:1;
-    sal_uInt8   fUnknown4:2;
+    sal_uInt8	fUnknown3:2;
+    sal_uInt8	fColumnHeads:1;
+    sal_uInt8	fIntegralHeight:1;
+    sal_uInt8	fMatchRequired:1;
+    sal_uInt8	fAlignment:1;
+    sal_uInt8	fUnknown4:2;
 
-    sal_uInt8   fUnknown5:3;
-    sal_uInt8   fDragBehaviour:1;
-    sal_uInt8   fEnterKeyBehaviour:1;
-    sal_uInt8   fEnterFieldBehaviour:1;
-    sal_uInt8   fTabKeyBehaviour:1;
-    sal_uInt8   fWordWrap:1;
+    sal_uInt8	fUnknown5:3;
+    sal_uInt8	fDragBehaviour:1;
+    sal_uInt8	fEnterKeyBehaviour:1;
+    sal_uInt8	fEnterFieldBehaviour:1;
+    sal_uInt8	fTabKeyBehaviour:1;
+    sal_uInt8	fWordWrap:1;
 
-    sal_uInt8   fUnknown6:2;
-    sal_uInt8   fSelectionMargin:1;
-    sal_uInt8   fAutoWordSelect:1;
-    sal_uInt8   fAutoSize:1;
-    sal_uInt8   fHideSelection:1;
-    sal_uInt8   fAutoTab:1;
-    sal_uInt8   fMultiLine:1;
+    sal_uInt8	fUnknown6:2;
+    sal_uInt8	fSelectionMargin:1;
+    sal_uInt8	fAutoWordSelect:1;
+    sal_uInt8	fAutoSize:1;
+    sal_uInt8	fHideSelection:1;
+    sal_uInt8	fAutoTab:1;
+    sal_uInt8	fMultiLine:1;
 
-    sal_uInt32  nMaxLength;
-    sal_uInt8   nBorderStyle;
-    sal_uInt8   nScrollBars;
-    sal_uInt8   nStyle;
-    sal_uInt8   nMousePointer;
-    sal_uInt8   nUnknown7;
-    sal_uInt8   nPasswordChar;
-    sal_uInt32  nListWidth;
-    sal_uInt16  nBoundColumn;
-    sal_Int16   nTextColumn;
-    sal_uInt16  nColumnCount;
-    sal_uInt16  nListRows;
-    sal_uInt16  nUnknown8;
-    sal_uInt8   nMatchEntry;
-    sal_uInt8   nListStyle;
-    sal_uInt8   nShowDropButtonWhen;
-    sal_uInt8   nDropButtonStyle;
-    sal_uInt8   nMultiState;
-    sal_uInt32  nValueLen;
-    sal_uInt32  nCaptionLen;
+    sal_uInt32 	nMaxLength;
+    sal_uInt8	nBorderStyle;
+    sal_uInt8	nScrollBars;
+    sal_uInt8	nStyle;
+    sal_uInt8	nMousePointer;
+    sal_uInt8	nUnknown7;
+    sal_uInt8	nPasswordChar;
+    sal_uInt32	nListWidth;
+    sal_uInt16	nBoundColumn;
+    sal_Int16	nTextColumn;
+    sal_uInt16	nColumnCount;
+    sal_uInt16	nListRows;
+    sal_uInt16	nUnknown8;
+    sal_uInt8	nMatchEntry;
+    sal_uInt8	nListStyle;
+    sal_uInt8	nShowDropButtonWhen;
+    sal_uInt8	nDropButtonStyle;
+    sal_uInt8	nMultiState;
+    sal_uInt32	nValueLen;
+    sal_uInt32	nCaptionLen;
 
     sal_uInt16 nVertPos;
     sal_uInt16 nHorzPos;
@@ -417,7 +417,7 @@ public:
     sal_uInt8 pPictureHeader[20];
     sal_uInt32 nPictureLen;
     ::rtl::OUString sImageUrl;
-    com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
+	com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
 
 };
 
@@ -428,10 +428,10 @@ public:
         virtual sal_Bool ReadFontData(SotStorageStream *pS);
         virtual sal_Bool Read(SotStorageStream *pS);
 
-    sal_uInt16  nIdentifier;
-    sal_uInt16  nFixedAreaLen;
-    sal_uInt8   pBlockFlags[4];
-    sal_uInt16  nNumTabs;
+    sal_uInt16	nIdentifier;
+    sal_uInt16	nFixedAreaLen;
+    sal_uInt8	pBlockFlags[4];
+    sal_uInt16	nNumTabs;
 };
 
 class OCX_Image : public OCX_Control
@@ -444,29 +444,29 @@ public:
 
     ~OCX_Image() { }
     /*sal_uInt8 for sal_uInt8 Word Struct*/
-    sal_uInt16  nIdentifier;
-    sal_uInt16  nFixedAreaLen;
-    sal_uInt8   pBlockFlags[4];
+    sal_uInt16	nIdentifier;
+    sal_uInt16	nFixedAreaLen;
+    sal_uInt8	pBlockFlags[4];
 
-    sal_uInt32  nBorderColor;
-    sal_uInt8   nBorderStyle;
-    sal_uInt8   nMousePointer;
+    sal_uInt32	nBorderColor;
+    sal_uInt8	nBorderStyle;
+    sal_uInt8 	nMousePointer;
         sal_uInt8       nPictureSizeMode;
 
 
-           sal_uInt8    fUnknown1:1;
-    sal_uInt8   fEnabled:1;
-    sal_uInt8   fUnknown2:2;
-    sal_uInt8   fBackStyle:1;
-    sal_uInt8   fUnknown3:3;
+           sal_uInt8	fUnknown1:1;
+    sal_uInt8	fEnabled:1;
+    sal_uInt8	fUnknown2:2;
+    sal_uInt8	fBackStyle:1;
+    sal_uInt8	fUnknown3:3;
 
         sal_uInt8       nPictureAlignment;
         bool            bPictureTiling;
-    sal_uInt8   nSpecialEffect;
+    sal_uInt8	nSpecialEffect;
 
         bool bAutoSize;
         ::rtl::OUString sImageUrl;
-        com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
+		com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
         sal_Bool Read(SotStorageStream *pS);
 
     using OCX_Control::Import; // to not hide the other two import methods
@@ -591,47 +591,47 @@ public:
     /*sal_uInt8 for sal_uInt8 Word Struct*/
     sal_uInt16 nIdentifier;
     sal_uInt16 nFixedAreaLen;
-    sal_uInt8   pBlockFlags[4];
+    sal_uInt8	pBlockFlags[4];
 
     sal_uInt32  fUnknown1;
 
-    sal_uInt8   fUnknown2:1;
-    sal_uInt8   fEnabled:1;
-    sal_uInt8   fLocked:1;
-    sal_uInt8   fBackStyle:1;
-    sal_uInt8   fUnknown3:4;
+    sal_uInt8	fUnknown2:1;
+    sal_uInt8	fEnabled:1;
+    sal_uInt8	fLocked:1;
+    sal_uInt8	fBackStyle:1;
+    sal_uInt8	fUnknown3:4;
 
-    sal_uInt8   fUnknown4:8;
+    sal_uInt8	fUnknown4:8;
 
-    sal_uInt8   fUnknown5:7;
-    sal_uInt8   fWordWrap:1;
+    sal_uInt8	fUnknown5:7;
+    sal_uInt8	fWordWrap:1;
 
-    sal_uInt8   fUnknown6:4;
-    sal_uInt8   fAutoSize:1;
-    sal_uInt8   fUnknown7:3;
+    sal_uInt8	fUnknown6:4;
+    sal_uInt8	fAutoSize:1;
+    sal_uInt8	fUnknown7:3;
 
-    sal_uInt32  nCaptionLen;
+    sal_uInt32	nCaptionLen;
     sal_uInt16  nVertPos;
     sal_uInt16  nHorzPos;
-    sal_uInt8   nMousePointer;
-    sal_uInt32  nBorderColor;
+    sal_uInt8 	nMousePointer;
+    sal_uInt32	nBorderColor;
     sal_uInt32  fUnknown8;
     sal_uInt32  fUnknown9;
     sal_uInt8   nKeepScrollBarsVisible;
     sal_uInt8   nCycle;
-    sal_uInt16  nBorderStyle;
-    sal_uInt16  nSpecialEffect;
-    sal_uInt16  nPicture;
+    sal_uInt16	nBorderStyle;
+    sal_uInt16	nSpecialEffect;
+    sal_uInt16	nPicture;
     sal_uInt8   nPictureAlignment;
     sal_uInt8   nPictureSizeMode;
     bool        bPictureTiling;
-    sal_uInt16  nAccelerator;
-    sal_uInt16  nIcon;
+    sal_uInt16	nAccelerator;
+    sal_uInt16	nIcon;
 
     char *pCaption;
 
-    sal_uInt32  nScrollWidth;
-    sal_uInt32  nScrollHeight;
+    sal_uInt32 	nScrollWidth;
+    sal_uInt32 	nScrollHeight;
 
 
     sal_uInt8 pIconHeader[20];
@@ -667,53 +667,53 @@ public:
     virtual sal_Bool Import(com::sun::star::uno::Reference<
         com::sun::star::container::XNameContainer>
         &rDialog);
-/*  virtual sal_Bool Import(com::sun::star::uno::Reference<
+/*	virtual sal_Bool Import(com::sun::star::uno::Reference<
         com::sun::star::beans::XPropertySet> &rPropSet);
 */
     /*sal_uInt8 for sal_uInt8 Word Struct*/
     sal_uInt16 nIdentifier;
     sal_uInt16 nFixedAreaLen;
-    sal_uInt8   pBlockFlags[4];
+    sal_uInt8	pBlockFlags[4];
 
     sal_uInt32  fUnknown1;
 
-    sal_uInt8   fUnknown2:1;
-    sal_uInt8   fEnabled:1;
-    sal_uInt8   fLocked:1;
-    sal_uInt8   fBackStyle:1;
-    sal_uInt8   fUnknown3:4;
+    sal_uInt8	fUnknown2:1;
+    sal_uInt8	fEnabled:1;
+    sal_uInt8	fLocked:1;
+    sal_uInt8	fBackStyle:1;
+    sal_uInt8	fUnknown3:4;
 
-    sal_uInt8   fUnknown4:8;
+    sal_uInt8	fUnknown4:8;
 
-    sal_uInt8   fUnknown5:7;
-    sal_uInt8   fWordWrap:1;
+    sal_uInt8	fUnknown5:7;
+    sal_uInt8	fWordWrap:1;
 
-    sal_uInt8   fUnknown6:4;
-    sal_uInt8   fAutoSize:1;
-    sal_uInt8   fUnknown7:3;
+    sal_uInt8	fUnknown6:4;
+    sal_uInt8	fAutoSize:1;
+    sal_uInt8	fUnknown7:3;
 
-    sal_uInt32  nCaptionLen;
+    sal_uInt32	nCaptionLen;
     sal_uInt16  nVertPos;
     sal_uInt16  nHorzPos;
-    sal_uInt8   nMousePointer;
-    sal_uInt32  nBorderColor;
+    sal_uInt8 	nMousePointer;
+    sal_uInt32	nBorderColor;
     sal_uInt32  fUnknown8;
     sal_uInt32  fUnknown9;
     sal_uInt8   nKeepScrollBarsVisible;
     sal_uInt8   nCycle;
-    sal_uInt16  nBorderStyle;
-    sal_uInt16  nSpecialEffect;
-    sal_uInt16  nPicture;
+    sal_uInt16	nBorderStyle;
+    sal_uInt16	nSpecialEffect;
+    sal_uInt16	nPicture;
     sal_uInt8   nPictureAlignment;
     sal_uInt8   nPictureSizeMode;
     bool        bPictureTiling;
-    sal_uInt16  nAccelerator;
-    sal_uInt16  nIcon;
+    sal_uInt16	nAccelerator;
+    sal_uInt16	nIcon;
 
     char *pCaption;
 
-    sal_uInt32  nScrollWidth;
-    sal_uInt32  nScrollHeight;
+    sal_uInt32 	nScrollWidth;
+    sal_uInt32 	nScrollHeight;
 
 
     sal_uInt8 pIconHeader[20];
@@ -750,49 +750,49 @@ public:
     /*sal_uInt8 for sal_uInt8 Word Struct*/
     sal_uInt16 nIdentifier;
     sal_uInt16 nFixedAreaLen;
-    sal_uInt8   pBlockFlags[4];
+    sal_uInt8	pBlockFlags[4];
 
     sal_uInt32  fUnknown1;
 
-    sal_uInt8   fUnknown2:1;
-    sal_uInt8   fEnabled:1;
-    sal_uInt8   fLocked:1;
-    sal_uInt8   fBackStyle:1;
-    sal_uInt8   fUnknown3:4;
+    sal_uInt8	fUnknown2:1;
+    sal_uInt8	fEnabled:1;
+    sal_uInt8	fLocked:1;
+    sal_uInt8	fBackStyle:1;
+    sal_uInt8	fUnknown3:4;
 
-    sal_uInt8   fUnknown4:8;
+    sal_uInt8	fUnknown4:8;
 
-    sal_uInt8   fUnknown5:7;
-    sal_uInt8   fWordWrap:1;
+    sal_uInt8	fUnknown5:7;
+    sal_uInt8	fWordWrap:1;
 
-    sal_uInt8   fUnknown6:4;
-    sal_uInt8   fAutoSize:1;
-    sal_uInt8   fUnknown7:3;
+    sal_uInt8	fUnknown6:4;
+    sal_uInt8	fAutoSize:1;
+    sal_uInt8	fUnknown7:3;
 
-    sal_uInt32  nCaptionLen;
+    sal_uInt32	nCaptionLen;
     sal_uInt16  nVertPos;
     sal_uInt16  nHorzPos;
-    sal_uInt8   nMousePointer;
-    sal_uInt32  nBorderColor;
+    sal_uInt8 	nMousePointer;
+    sal_uInt32	nBorderColor;
     sal_uInt32  fUnknown8;
     sal_uInt32  fUnknown9;
     sal_uInt8   nKeepScrollBarsVisible;
     sal_uInt8   nCycle;
-    sal_uInt16  nBorderStyle;
-    sal_uInt16  nSpecialEffect;
-    sal_uInt16  nPicture;
+    sal_uInt16	nBorderStyle;
+    sal_uInt16	nSpecialEffect;
+    sal_uInt16	nPicture;
     sal_uInt8   nPictureAlignment;
     sal_uInt8   nPictureSizeMode;
     bool        bPictureTiling;
-    sal_uInt16  nAccelerator;
-    sal_uInt16  nIcon;
+    sal_uInt16	nAccelerator;
+    sal_uInt16	nIcon;
 
     char *pCaption;
 
-    sal_uInt32  nScrollWidth;
-    sal_uInt32  nScrollHeight;
-    sal_uInt32  nScrollLeft;
-    sal_uInt32  nScrollTop;
+    sal_uInt32 	nScrollWidth;
+    sal_uInt32 	nScrollHeight;
+    sal_uInt32 	nScrollLeft;
+    sal_uInt32 	nScrollTop;
 
 
     sal_uInt8 pIconHeader[20];
@@ -831,50 +831,50 @@ public:
     /*sal_uInt8 for sal_uInt8 Word Struct*/
     sal_uInt16 nIdentifier;
     sal_uInt16 nFixedAreaLen;
-    sal_uInt8   pBlockFlags[4];
+    sal_uInt8	pBlockFlags[4];
 
     sal_uInt32  nChildrenA;
 
-    sal_uInt8   fUnknown1:1;
-    sal_uInt8   fEnabled:1;
-    sal_uInt8   fLocked:1;
-    sal_uInt8   fBackStyle:1;
-    sal_uInt8   fUnknown2:4;
+    sal_uInt8	fUnknown1:1;
+    sal_uInt8	fEnabled:1;
+    sal_uInt8	fLocked:1;
+    sal_uInt8	fBackStyle:1;
+    sal_uInt8	fUnknown2:4;
 
-    sal_uInt8   fUnknown3:8;
+    sal_uInt8	fUnknown3:8;
 
-    sal_uInt8   fUnknown4:7;
-    sal_uInt8   fWordWrap:1;
+    sal_uInt8	fUnknown4:7;
+    sal_uInt8	fWordWrap:1;
 
-    sal_uInt8   fUnknown5:4;
-    sal_uInt8   fAutoSize:1;
-    sal_uInt8   fUnknown6:3;
+    sal_uInt8	fUnknown5:4;
+    sal_uInt8	fAutoSize:1;
+    sal_uInt8	fUnknown6:3;
 
-    sal_uInt32  nCaptionLen;
+    sal_uInt32	nCaptionLen;
     sal_uInt16  nVertPos;
     sal_uInt16  nHorzPos;
-    sal_uInt8   nMousePointer;
-    sal_uInt32  nBorderColor;
+    sal_uInt8 	nMousePointer;
+    sal_uInt32	nBorderColor;
     sal_uInt32  nDrawBuffer;
     sal_uInt32  nChildrenB;
     sal_uInt8   nKeepScrollBarsVisible;
     sal_uInt8   nCycle;
-    sal_uInt16  nBorderStyle;
-    sal_uInt8   nSpecialEffect;
-    sal_uInt16  nPicture;
+    sal_uInt16	nBorderStyle;
+    sal_uInt8	nSpecialEffect;
+    sal_uInt16	nPicture;
     sal_uInt8   nPictureAlignment;
     sal_uInt8   nPictureSizeMode;
     bool        bPictureTiling;
-    sal_uInt16  nAccelerator;
-    sal_uInt16  nIcon;
-    sal_uInt16  fUnknown7;
+    sal_uInt16	nAccelerator;
+    sal_uInt16	nIcon;
+    sal_uInt16	fUnknown7;
 
     char *pCaption;
 
-    sal_uInt32  nScrollWidth;
-    sal_uInt32  nScrollHeight;
-    sal_uInt32  nScrollLeft;
-    sal_uInt32  nScrollTop;
+    sal_uInt32 	nScrollWidth;
+    sal_uInt32 	nScrollHeight;
+    sal_uInt32 	nScrollLeft;
+    sal_uInt32 	nScrollTop;
 
     sal_uInt8 pIconHeader[20];
     sal_uInt32  nIconLen;
@@ -883,7 +883,7 @@ public:
     sal_uInt8 pPictureHeader[20];
     sal_uInt32  nPictureLen;
     ::rtl::OUString sImageUrl;
-    com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
+	com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
 private:
         com::sun::star::uno::Reference<
                 com::sun::star::uno::XComponentContext> mxCtx;
@@ -922,8 +922,8 @@ public:
     OCX_OptionButton() : OCX_ModernControl(rtl::OUString::createFromAscii("OptionButton"))
     {
         msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.RadioButton");
-        //msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlRadioButtonModel");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.RadioButton");
+		//msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlRadioButtonModel");
+		msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.RadioButton");
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         aFontData.SetHasAlign(TRUE);
@@ -1024,7 +1024,7 @@ class OCX_ComboBox : public OCX_ModernControl
 public:
     OCX_ComboBox() : OCX_ModernControl(rtl::OUString::createFromAscii("ComboBox")){
         msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.ComboBox");
-            msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.ComboBox");
+	        msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.ComboBox");
         mnBackColor = 0x80000005;
         mnForeColor = 0x80000008;
         nBorderColor = 0x80000006;
@@ -1049,8 +1049,8 @@ class OCX_ListBox : public OCX_ModernControl
 public:
     OCX_ListBox() : OCX_ModernControl(rtl::OUString::createFromAscii("ListBox")){
         msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.ListBox");
-        //msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlListBoxModel");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.ListBox");
+		//msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlListBoxModel");
+		msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.ListBox");
         mnBackColor = 0x80000005;
         mnForeColor = 0x80000008;
         nBorderColor = 0x80000006;
@@ -1093,35 +1093,35 @@ public:
     sal_Bool Read(SotStorageStream *pS);
 
     /*sal_uInt8 for sal_uInt8 Word Struct*/
-    sal_uInt16  nIdentifier;
-    sal_uInt16  nFixedAreaLen;
-    sal_uInt8   pBlockFlags[4];
+    sal_uInt16	nIdentifier;
+    sal_uInt16	nFixedAreaLen;
+    sal_uInt8	pBlockFlags[4];
 
 
-    sal_uInt8   fUnknown1:1;
-    sal_uInt8   fEnabled:1;
-    sal_uInt8   fLocked:1;
-    sal_uInt8   fBackStyle:1;
-    sal_uInt8   fUnknown2:4;
+    sal_uInt8	fUnknown1:1;
+    sal_uInt8	fEnabled:1;
+    sal_uInt8	fLocked:1;
+    sal_uInt8	fBackStyle:1;
+    sal_uInt8	fUnknown2:4;
 
-    sal_uInt8   fUnknown3:8;
+    sal_uInt8	fUnknown3:8;
 
-    sal_uInt8   fUnknown4:7;
-    sal_uInt8   fWordWrap:1;
+    sal_uInt8	fUnknown4:7;
+    sal_uInt8	fWordWrap:1;
 
-    sal_uInt8   fUnknown5:4;
-    sal_uInt8   fAutoSize:1;
-    sal_uInt8   fUnknown6:3;
+    sal_uInt8	fUnknown5:4;
+    sal_uInt8	fAutoSize:1;
+    sal_uInt8	fUnknown6:3;
 
-    sal_uInt32  nCaptionLen;
+    sal_uInt32	nCaptionLen;
 
     sal_uInt16  nVertPos;
     sal_uInt16  nHorzPos;
 
-    sal_uInt16  nMousePointer;
-    sal_uInt16  nPicture;
-    sal_uInt16  nAccelerator;
-    sal_uInt16  nIcon;
+    sal_uInt16 	nMousePointer;
+    sal_uInt16	nPicture;
+    sal_uInt16	nAccelerator;
+    sal_uInt16	nIcon;
 
     char *pCaption;
 
@@ -1132,7 +1132,7 @@ public:
     sal_uInt8 pPictureHeader[20];
     sal_uInt32  nPictureLen;
     ::rtl::OUString sImageUrl;
-    com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
+	com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
 
     bool        mbTakeFocus;
 
@@ -1213,34 +1213,34 @@ public:
     /*sal_uInt8 for sal_uInt8 Word Struct*/
     sal_uInt16 nIdentifier;
     sal_uInt16 nFixedAreaLen;
-    sal_uInt8   pBlockFlags[4];
+    sal_uInt8	pBlockFlags[4];
 
 
-    sal_uInt8   fUnknown1:1;
-    sal_uInt8   fEnabled:1;
-    sal_uInt8   fLocked:1;
-    sal_uInt8   fBackStyle:1;
-    sal_uInt8   fUnknown2:4;
+    sal_uInt8	fUnknown1:1;
+    sal_uInt8	fEnabled:1;
+    sal_uInt8	fLocked:1;
+    sal_uInt8	fBackStyle:1;
+    sal_uInt8	fUnknown2:4;
 
-    sal_uInt8   fUnknown3:8;
+    sal_uInt8	fUnknown3:8;
 
-    sal_uInt8   fUnknown4:7;
-    sal_uInt8   fWordWrap:1;
+    sal_uInt8	fUnknown4:7;
+    sal_uInt8	fWordWrap:1;
 
-    sal_uInt8   fUnknown5:4;
-    sal_uInt8   fAutoSize:1;
-    sal_uInt8   fUnknown6:3;
+    sal_uInt8	fUnknown5:4;
+    sal_uInt8	fAutoSize:1;
+    sal_uInt8	fUnknown6:3;
 
-    sal_uInt32  nCaptionLen;
+    sal_uInt32	nCaptionLen;
     sal_uInt16  nVertPos;
     sal_uInt16  nHorzPos;
-    sal_uInt8   nMousePointer;
-    sal_uInt32  nBorderColor;
-    sal_uInt16  nBorderStyle;
-    sal_uInt16  nSpecialEffect;
-    sal_uInt16  nPicture;
-    sal_uInt16  nAccelerator;
-    sal_uInt16  nIcon;
+    sal_uInt8 	nMousePointer;
+    sal_uInt32	nBorderColor;
+    sal_uInt16	nBorderStyle;
+    sal_uInt16	nSpecialEffect;
+    sal_uInt16	nPicture;
+    sal_uInt16	nAccelerator;
+    sal_uInt16	nIcon;
 
     char *pCaption;
 
@@ -1250,7 +1250,7 @@ public:
 
     sal_uInt8 pPictureHeader[20];
     sal_uInt32  nPictureLen;
-    sal_uInt8 *pPicture;
+ 	sal_uInt8 *pPicture;
 
     static OCX_Control *Create() { return new OCX_Label;}
 

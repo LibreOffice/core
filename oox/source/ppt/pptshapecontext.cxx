@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,8 +103,8 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
     switch( aElementToken )
     {
         // nvSpPr CT_ShapeNonVisual begin
-        //  case NMSP_PPT|XML_drElemPr:
-        //      break;
+        //	case NMSP_PPT|XML_drElemPr:
+        //		break;
         case NMSP_PPT|XML_cNvPr:
         {
             AttributeList aAttribs( xAttribs );
@@ -132,34 +132,34 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                         sal_Int32 nSecondPlaceholder = 0;
                         switch( nSubType )
                         {
-                            case XML_ctrTitle :     // slide/layout
+                            case XML_ctrTitle :		// slide/layout
                                   nFirstPlaceholder = XML_ctrTitle;
                                   nSecondPlaceholder = XML_title;
                               break;
 
-                              case XML_subTitle :       // slide/layout
+                              case XML_subTitle :		// slide/layout
                                   nFirstPlaceholder = XML_subTitle;
                                   nSecondPlaceholder = XML_title;
                               break;
 
-                             case XML_obj :         // slide/layout
+                             case XML_obj :			// slide/layout
                                   nFirstPlaceholder = XML_obj;
                                   nSecondPlaceholder = XML_body;
                               break;
 
-                            case XML_dt :           // slide/layout/master/notes/notesmaster/handoutmaster
-                              case XML_sldNum :     // slide/layout/master/notes/notesmaster/handoutmaster
-                              case XML_ftr :            // slide/layout/master/notes/notesmaster/handoutmaster
-                              case XML_hdr :            // notes/notesmaster/handoutmaster
-                              case XML_body :           // slide/layout/master/notes/notesmaster
-                              case XML_title :      // slide/layout/master/
-                              case XML_chart :      // slide/layout
-                              case XML_tbl :            // slide/layout
-                              case XML_clipArt :        // slide/layout
-                              case XML_dgm :            // slide/layout
-                              case XML_media :      // slide/layout
-                              case XML_sldImg :     // notes/notesmaster
-                              case XML_pic :            // slide/layout
+                            case XML_dt :			// slide/layout/master/notes/notesmaster/handoutmaster
+                              case XML_sldNum :		// slide/layout/master/notes/notesmaster/handoutmaster
+                              case XML_ftr :			// slide/layout/master/notes/notesmaster/handoutmaster
+                              case XML_hdr :			// notes/notesmaster/handoutmaster
+                              case XML_body :			// slide/layout/master/notes/notesmaster
+                              case XML_title :		// slide/layout/master/
+                              case XML_chart :		// slide/layout
+                              case XML_tbl :			// slide/layout
+                              case XML_clipArt :		// slide/layout
+                              case XML_dgm :			// slide/layout
+                              case XML_media :		// slide/layout
+                              case XML_sldImg :		// notes/notesmaster
+                              case XML_pic :			// slide/layout
                                   nFirstPlaceholder = nSubType;
                               default:
                                   break;
@@ -167,9 +167,9 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                           if ( nFirstPlaceholder )
                           {
                               oox::drawingml::ShapePtr pPlaceholder;
-                              if ( eShapeLocation == Layout )       // for layout objects the referenced object can be found within the same shape tree
+                              if ( eShapeLocation == Layout )		// for layout objects the referenced object can be found within the same shape tree
                                 pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, -1, mpSlidePersistPtr->getShapes()->getChildren() );
-                              else if ( eShapeLocation == Slide )   // normal slide shapes have to search within the corresponding master tree for referenced objects
+                              else if ( eShapeLocation == Slide )	// normal slide shapes have to search within the corresponding master tree for referenced objects
                               {
                                   SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
                                   if ( pMasterPersist.get() )

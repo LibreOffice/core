@@ -61,10 +61,10 @@
  * Change History
  * 2004-12-26 create this file.
  ************************************************************************/
-#include    "xfparagraph.hxx"
-#include    "ixfstream.hxx"
-#include    "ixfattrlist.hxx"
-#include    "xftextcontent.hxx"
+#include	"xfparagraph.hxx"
+#include	"ixfstream.hxx"
+#include	"ixfattrlist.hxx"
+#include	"xftextcontent.hxx"
 
 XFParagraph::XFParagraph()
 {
@@ -90,15 +90,15 @@ enumXFContent XFParagraph::GetContentType()
 
 /**
  * The paragraph obejct serial function,the ouput will be like:
- *      <text:p>
- *          <text:span text:style-name="T1">text content</text:span>
- *              text.
- *          <text:span text:style-name="T1">text content</text:span>
- *      </text:p>
+ *		<text:p>
+ *			<text:span text:style-name="T1">text content</text:span>
+ *				text.
+ *			<text:span text:style-name="T1">text content</text:span>
+ *		</text:p>
  */
-void    XFParagraph::ToXml(IXFStream *pStrm)
+void	XFParagraph::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     assert(pAttrList);
 

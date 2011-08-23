@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-Mar 2005            Created
+Mar 2005			Created
  ************************************************************************/
 
 #ifndef _LWPPAGELAYOUT_HXX
@@ -97,10 +97,10 @@ protected:
     double GetWidth();
     double GetHeight();
 protected:
-    LwpAtomHolder*  m_pPrinterBinName;
-    sal_uInt16      m_nPrinterBin;
-    sal_Int32       m_nBdroffset;
-    LwpAtomHolder*  m_pPaperName;
+    LwpAtomHolder*	m_pPrinterBinName;
+    sal_uInt16		m_nPrinterBin;
+    sal_Int32		m_nBdroffset;
+    LwpAtomHolder*	m_pPaperName;
     XFPageMaster* m_pXFPageMaster;
 public:
     sal_Bool HasColumns();

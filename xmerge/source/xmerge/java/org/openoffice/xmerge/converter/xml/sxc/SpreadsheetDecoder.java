@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,14 +46,14 @@ public abstract class SpreadsheetDecoder {
      */
     public SpreadsheetDecoder(String name, String password) throws IOException {
     }
-
+    
     /**
      *  Returns the total number of sheets in the WorkBook.
      *
      *  @return  The number of sheets in the WorkBook.
      */
     public abstract int getNumberOfSheets();
-
+    
     /**
      *  Returns an Enumeration to a Vector of <code>NameDefinition</code>.
      *
@@ -62,7 +62,7 @@ public abstract class SpreadsheetDecoder {
     public abstract Enumeration getNameDefinitions();
 
     /**
-     *  Returns an <code>BookSettings</code>
+     *  Returns an <code>BookSettings</code> 
      *
      *  @return  The Enumeration
      */
@@ -74,14 +74,14 @@ public abstract class SpreadsheetDecoder {
      *  @return  The Enumeration
      */
     public abstract Enumeration getColumnRowInfos();
-
+   
     /**
      *  Returns the number of populated rows in the current WorkSheet.
      *
      *  @return  the number of populated rows in the current WorkSheet.
      */
     public abstract int getNumberOfRows();
-
+    
 
     /**
      *  Returns the number of populated columns in the current WorkSheet.
@@ -90,14 +90,14 @@ public abstract class SpreadsheetDecoder {
      */
     public abstract int getNumberOfColumns();
 
-
+    
     /**
      *  Returns the name of the current WorkSheet.
      *
      *  @return  Name of the current WorkSheet.
      */
     public abstract String getSheetName();
-
+    
 
     /**
      *  Returns the number of the active column.
@@ -105,7 +105,7 @@ public abstract class SpreadsheetDecoder {
      *  @return  The number of the active column.
      */
     public abstract int getColNumber();
-
+    
 
     /**
      *  Returns the number of the active row.
@@ -114,16 +114,16 @@ public abstract class SpreadsheetDecoder {
      */
     public abstract int getRowNumber();
 
-
+    
     /**
-     *  Sets the active WorkSheet.
+     *  Sets the active WorkSheet. 
      *
      *  @param  sheetIndex  The index of the sheet to be made active.
      *
      *  @throws  IOException  If any I/O error occurs.
      */
     public abstract void setWorksheet(int sheetIndex) throws IOException;
-
+    
 
     /**
      *  Move on the next populated cell in the current WorkSheet.
@@ -134,7 +134,7 @@ public abstract class SpreadsheetDecoder {
      */
     public abstract boolean goToNextCell() throws IOException;
 
-
+    
     /**
      *  Return the contents of the active cell.
      *
@@ -148,7 +148,7 @@ public abstract class SpreadsheetDecoder {
      *
      *  @return  The cell value.
      */
-    public abstract String getCellValue();
+    public abstract String getCellValue();    
 
     /**
      *  Return the data type of the active cell.
@@ -157,7 +157,7 @@ public abstract class SpreadsheetDecoder {
      */
     public abstract String getCellDataType();
 
-
+    
     /**
      *  Return a <code>Format</code> object describing the active cells
      *  formatting.
@@ -166,7 +166,7 @@ public abstract class SpreadsheetDecoder {
      */
     public abstract Format getCellFormat();
 
-
+    
     /**
      *  Add the contents of a <code>ConvertData</code> to the workbook.
      *

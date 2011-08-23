@@ -1,0 +1,574 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+#include "svxids.hrc"
+#include "fmresids.hrc"
+#include "helpid.hrc"
+
+#define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
+
+String RID_SVXTBX_FORM_FILTER
+{
+    Text [ de ] = "Filterleiste" ;
+    Text [ en-US ] = "Filter bar" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Barra de filtros";
+    Text[ ru ] = "Панель фильтров";
+    Text[ el ] = "Γραμμή φίλτρου";
+    Text[ nl ] = "Filterbalk";
+    Text[ fr ] = "Barre de filtres";
+    Text[ es ] = "Barra de filtros";
+    Text[ fi ] = "Suodatusrivi";
+    Text[ ca ] = "Barra de filtre";
+    Text[ it ] = "Barra dei filtri";
+    Text[ sk ] = "Panel filtra";
+    Text[ da ] = "Filterlinje";
+    Text[ sv ] = "Filterlist";
+    Text[ pl ] = "Pasek filtru";
+    Text[ pt-BR ] = "Barra de filtros";
+    Text[ th ] = "แถบตัวกรอง";
+    Text[ ja ] = "フィルタバー";
+    Text[ ko ] = "필터 도구모음";
+    Text[ zh-CN ] = "筛选栏";
+    Text[ zh-TW ] = "篩選欄";
+    Text[ tr ] = "Filtre çubuğu";
+    Text[ hi-IN ] = "फिल्टर पट्टी";
+    Text[ ar ] = "شريط الفلتر";
+    Text[ he ] = "‮סרגל מסננים‬";
+};
+
+ //------------------------------------------------------------------------
+ // Navigation bar
+ToolBox RID_SVXTBX_FORM_FILTER
+{
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    LineSpacing = TRUE ;
+    Text [ de ] = "Filterleiste" ;
+    Text [ en-US ] = "Filter bar" ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 200 , 16 ) ;
+    ButtonType = BUTTON_SYMBOL ;
+     // die Images stehen in der Ofa-DLL
+    ItemList  =
+    {
+        ToolboxItem
+        {
+            Identifier = SID_FM_FILTER_NAVIGATOR ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_FILTER_EXECUTE ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_FILTER_EXIT ;
+        };
+        /*ToolboxItem
+        {
+            Identifier = SID_FM_FILTER_REMOVE ;
+        };*/
+    };
+    Scroll = TRUE ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Barra de filtros";
+    Text[ ru ] = "Панель фильтров";
+    Text[ el ] = "Γραμμή φίλτρου";
+    Text[ nl ] = "Filterbalk";
+    Text[ fr ] = "Barre de filtres";
+    Text[ es ] = "Barra de filtros";
+    Text[ fi ] = "Suodatusrivi";
+    Text[ ca ] = "Barra de filtre";
+    Text[ it ] = "Barra dei filtri";
+    Text[ sk ] = "Panel filtra";
+    Text[ da ] = "Filterlinje";
+    Text[ sv ] = "Filterlist";
+    Text[ pl ] = "Pasek filtru";
+    Text[ pt-BR ] = "Barra de filtros";
+    Text[ th ] = "แถบตัวกรอง";
+    Text[ ja ] = "フィルタバー";
+    Text[ ko ] = "필터 도구모음";
+    Text[ zh-CN ] = "筛选栏";
+    Text[ zh-TW ] = "篩選欄";
+    Text[ tr ] = "Filtre çubuğu";
+    Text[ hi-IN ] = "फिल्टर पट्टी";
+    Text[ ar ] = "شريط الفلتر";
+    Text[ he ] = "‮סרגל מסננים‬";
+};
+
+String RID_SVXTBX_FORM_NAVIGATION
+{
+    Text [ de ] = "Datenbankleiste" ;
+    Text [ en-US ] = "Database bar" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Barra de ferramentas da base de dados";
+    Text[ ru ] = "Панель базы данных";
+    Text[ el ] = "Γραμμή βάσης δεδομένων";
+    Text[ nl ] = "Databasebalk";
+    Text[ fr ] = "Barre de base de données";
+    Text[ es ] = "Barra de base de datos";
+    Text[ fi ] = "Tietolähdetyökalurivi";
+    Text[ ca ] = "Barra de la base de dades";
+    Text[ it ] = "Barra degli strumenti per database";
+    Text[ sk ] = "Panel databázy";
+    Text[ da ] = "Databaselinje";
+    Text[ sv ] = "Databaslist";
+    Text[ pl ] = "Pasek bazy danych";
+    Text[ pt-BR ] = "Barra do banco de dados";
+    Text[ th ] = "แถบฐานข้อมูล";
+    Text[ ja ] = "データベースバー";
+    Text[ ko ] = "데이터베이스 도구모음";
+    Text[ zh-CN ] = "数据库工具栏";
+    Text[ zh-TW ] = "資料庫工具列";
+    Text[ tr ] = "Veritabanı çubuğu";
+    Text[ hi-IN ] = "लेखासंचय पट्टी";
+    Text[ ar ] = "شريط قاعدة البيانات";
+    Text[ he ] = "‮סרגל מסד נתונים‬";
+};
+
+ //------------------------------------------------------------------------
+ // Navigation bar
+ToolBox RID_SVXTBX_FORM_NAVIGATION
+{
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    LineSpacing = TRUE ;
+    Text [ de ] = "Datenbankleiste" ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 200 , 16 ) ;
+    ButtonType = BUTTON_SYMBOL ;
+     // die Images stehen in der Ofa-DLL
+    ItemList  =
+    {
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_TEXT ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_ABSOLUTE ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_FROM_TEXT ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_TOTAL ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_FIRST ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_PREV ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_NEXT ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_LAST ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_SAVE ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_UNDO ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_NEW ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_DELETE ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_REFRESH ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_SEARCH ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_SORTUP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_SORTDOWN ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_AUTOFILTER ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_FILTER_START ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_ORDERCRIT ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_REMOVE_FILTER_SORT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_VIEW_AS_GRID ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_FORM_FILTERED ;
+        };
+    };
+    Scroll = TRUE ;
+    Text [ en-US ] = "Database Bar" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Barra de base de dados";
+    Text[ ru ] = "Панель базы данных";
+    Text[ el ] = "Γραμμή βάσης δεδομένων";
+    Text[ nl ] = "Databasebalk";
+    Text[ fr ] = "Barre de base de données";
+    Text[ es ] = "Barra de base de datos";
+    Text[ fi ] = "Tietolähdetyökalurivi";
+    Text[ ca ] = "Barra de la base de dades";
+    Text[ it ] = "Barra database";
+    Text[ sk ] = "Panel databázy";
+    Text[ da ] = "Databaselinje";
+    Text[ sv ] = "Databaslist";
+    Text[ pl ] = "Pasek bazy danych";
+    Text[ pt-BR ] = "Barra do Banco de Dados";
+    Text[ th ] = "แถบฐานข้อมูล";
+    Text[ ja ] = "データベースバー";
+    Text[ ko ] = "데이터베이스 도구모음";
+    Text[ zh-CN ] = "数据库工具栏";
+    Text[ zh-TW ] = "資料庫工具列";
+    Text[ tr ] = "Veritabanı çubuğu";
+    Text[ hi-IN ] = "लेखासंचय पट्टी";
+    Text[ ar ] = "شريط قاعدة البيانات";
+    Text[ he ] = "‮סרגל מסד נתונים‬";
+};
+
+ //------------------------------------------------------------------------
+ // Controller fuer controls
+FloatingWindow RID_SVXTBX_FORM
+{
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    HelpId = HID_SVXTBX_FORM;
+    Text [ de ] = "Formularfunktionen" ;
+    ToolBox TBX_FORM
+    {
+        SVLook = TRUE ;
+        LineCount = 2 ;
+        ItemList  =
+        {
+            ToolBoxItem
+            {
+                Identifier = SID_OBJECT_SELECT ;
+                HelpID = SID_OBJECT_SELECT ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_PUSHBUTTON ;
+                HelpID = SID_FM_PUSHBUTTON ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_RADIOBUTTON ;
+                HelpID = SID_FM_RADIOBUTTON ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_CHECKBOX ;
+                HelpID = SID_FM_CHECKBOX ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_FIXEDTEXT ;
+                HelpID = SID_FM_FIXEDTEXT ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_GROUPBOX ;
+                HelpID = SID_FM_GROUPBOX ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_EDIT ;
+                HelpID = SID_FM_EDIT ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_LISTBOX ;
+                HelpID = SID_FM_LISTBOX ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_COMBOBOX ;
+                HelpID = SID_FM_COMBOBOX ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_IMAGEBUTTON ;
+                HelpID = SID_FM_IMAGEBUTTON ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_IMAGECONTROL ;
+                HelpID = SID_FM_IMAGECONTROL ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_FILECONTROL ;
+                HelpID = SID_FM_FILECONTROL ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_DATEFIELD ;
+                HelpID = SID_FM_DATEFIELD ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_TIMEFIELD ;
+                HelpID = SID_FM_TIMEFIELD ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_NUMERICFIELD ;
+                HelpID = SID_FM_NUMERICFIELD ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_FORMATTEDFIELD ;
+                HelpID = SID_FM_FORMATTEDFIELD ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_CURRENCYFIELD ;
+                HelpID = SID_FM_CURRENCYFIELD ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_PATTERNFIELD ;
+                HelpID = SID_FM_PATTERNFIELD ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_DBGRID ;
+                HelpID = SID_FM_DBGRID ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem { Type = TOOLBOXITEM_BREAK ; };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_CTL_PROPERTIES ;
+                HelpID = SID_FM_CTL_PROPERTIES ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_PROPERTIES ;
+                HelpID = SID_FM_PROPERTIES ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_TAB_DIALOG ;
+                HelpID = SID_FM_TAB_DIALOG ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_ADD_FIELD ;
+                HelpID = SID_FM_ADD_FIELD ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_SHOW_FMEXPLORER ;
+                HelpID = SID_FM_SHOW_FMEXPLORER ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_DESIGN_MODE ;
+                HelpID = SID_FM_DESIGN_MODE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_OPEN_READONLY ;
+                HelpID = SID_FM_OPEN_READONLY ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_AUTOCONTROLFOCUS ;
+                HelpID = SID_FM_AUTOCONTROLFOCUS ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_USE_WIZARDS ;
+                HelpID = SID_FM_USE_WIZARDS ;
+            };
+        };
+    };
+    Text [ en-US ] = "Form Functions" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Funções de formulário";
+    Text[ ru ] = "Элементы управления формами";
+    Text[ el ] = "Λειτουργίες φόρμας";
+    Text[ nl ] = "Formulierfuncties";
+    Text[ fr ] = "Fonctions de formulaire";
+    Text[ es ] = "Funciones del formulario";
+    Text[ fi ] = "Lomaketoiminnot";
+    Text[ ca ] = "Funcions del formulari";
+    Text[ it ] = "Funzioni formulario";
+    Text[ sk ] = "Funkcie formulára";
+    Text[ da ] = "Formularfunktioner";
+    Text[ sv ] = "Formulärfunktioner";
+    Text[ pl ] = "Funkcje formularza";
+    Text[ pt-BR ] = "Funções de Formulário";
+    Text[ th ] = "ฟังก์ชั่นแบบฟอร์ม";
+    Text[ ja ] = "フォームの機能";
+    Text[ ko ] = "양식 기능";
+    Text[ zh-CN ] = "表单功能";
+    Text[ zh-TW ] = "表單功能";
+    Text[ tr ] = "Form işlevleri";
+    Text[ hi-IN ] = "फॉर्म् फंक्शन्स";
+    Text[ ar ] = "مهام الاستمارة";
+    Text[ he ] = "‮פונקציות טופס‬";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

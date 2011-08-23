@@ -1,0 +1,110 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#define SCROLL_IMAGE_IDLIST \
+        IdList =                        \
+        {                               \
+            NID_NEXT ;                  \
+            NID_PREV ;                  \
+            NID_TBL ;                   \
+            NID_FRM ;                   \
+            NID_PGE ;                   \
+            NID_DRW ;                   \
+            NID_CTRL ;                  \
+            NID_REG ;                   \
+            NID_BKM ;                   \
+            NID_GRF ;                   \
+            NID_OLE ;                   \
+            NID_OUTL ;                  \
+            NID_SEL ;                   \
+            NID_FTN ;                   \
+            NID_MARK ;                  \
+            NID_POSTIT ;                \
+            NID_SRCH_REP ;              \
+            NID_INDEX_ENTRY;            \
+            NID_TABLE_FORMULA;          \
+            NID_TABLE_FORMULA_ERROR;    \
+        };                              \
+        IdCount = { 20 ; };
+
+/*
+Noch ein paar Reserven
+            ToolBoxItem
+            {
+                                Identifier = NID_NEXT;
+                Text [ de ] = "Vorwärts" ;
+                        };
+            ToolBoxItem
+            {
+                                Identifier = NID_PREV;
+                Text [ de ] = "Rückwärts" ;
+                        };
+            ToolBoxItem
+            {
+                                Identifier = NID_CTRL;
+                Text [ de ] = "Control" ;
+                        };
+            ToolBoxItem
+            {
+                                Identifier = NID_DRW;
+                Text [ de ] = "Zeichenobjekt" ;
+                        };
+
+
+*/
+/***************************************************************
+    Strings fuer die Quickhelp der View-PgUp/Down-Buttons
+***************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

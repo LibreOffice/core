@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,7 +145,7 @@ void FLABridge::startElement(const OUString& str, const Reference<XAttributeList
     OSL_ASSERT(m_rDocumentHandler.is());
     if (active)
     {
-//      SvXMLAttributeList* _attriblist=SvXMLAttributeList::getImplementation(attriblist);
+//		SvXMLAttributeList* _attriblist=SvXMLAttributeList::getImplementation(attriblist);
         const int len=attriblist->getLength();
         SvXMLAttributeList *_newattriblist= new SvXMLAttributeList();
         for(int i=0;i<len;i++)
@@ -173,7 +173,7 @@ void FLABridge::startElement(const OUString& str, const Reference<XAttributeList
     }
     else
     {
-        if (str.compareToAscii("fla:fla.activate")==0)
+        if (str.compareToAscii("fla:fla.activate")==0) 
         {
             active=1;
         }
@@ -567,7 +567,7 @@ sal_Bool XSLTFilter::exporter(
         tsource->setOutputStream(m_rOutputStream);
 
         // we will start receiving events after returning 'true'.
-        // we will start the transformation as soon as we receive the startDocument
+        // we will start the transformation as soon as we receive the startDocument 
         // event.
         return sal_True;
     }
@@ -594,7 +594,7 @@ void XSLTFilter::endDocument() throw (SAXException, RuntimeException){
     if (!m_bError && !m_bTerminated)
     {
         return;
-    } else {
+    } else {        
         throw RuntimeException();
     }
 
@@ -604,7 +604,7 @@ void XSLTFilter::startElement(const OUString& str, const Reference<XAttributeLis
     throw (SAXException, RuntimeException)
 {
     OSL_ASSERT(m_rDocumentHandler.is());
-//  SvXMLAttributeList* _attriblist=SvXMLAttributeList::getImplementation(attriblist);
+//	SvXMLAttributeList* _attriblist=SvXMLAttributeList::getImplementation(attriblist);
     m_rDocumentHandler->startElement(str, attriblist);
 }
 

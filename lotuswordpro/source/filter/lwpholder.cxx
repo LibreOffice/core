@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwpholder.hxx"
@@ -69,7 +69,7 @@ LwpDLVListHeadHolder::LwpDLVListHeadHolder(LwpObjectHeader& objHdr, LwpSvStream*
     : LwpObject(objHdr, pStrm)
 {}
 /**
- * @descr       read LwpDLVListHeadHolder from object stream
+ * @descr		read LwpDLVListHeadHolder from object stream
 */
 void LwpDLVListHeadHolder::Read()
 {
@@ -81,7 +81,7 @@ LwpDLVListHeadTailHolder::LwpDLVListHeadTailHolder(LwpObjectHeader& objHdr, LwpS
     : LwpObject(objHdr, pStrm)
 {}
 /**
- * @descr       read LwpDLVListHeadTailHolder from object stream
+ * @descr		read LwpDLVListHeadTailHolder from object stream
 */
 void LwpDLVListHeadTailHolder::Read()
 {
@@ -93,7 +93,7 @@ LwpObjectHolder::LwpObjectHolder(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     :LwpDLVList(objHdr, pStrm)
 {}
 /**
- * @descr       read LwpObjectHolder from object stream
+ * @descr		read LwpObjectHolder from object stream
 */
 void LwpObjectHolder::Read()
 {
@@ -108,7 +108,7 @@ LwpListList::LwpListList(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     :LwpObjectHolder(objHdr, pStrm)
 {}
 /**
- * @descr       read LwpListList from object stream
+ * @descr		read LwpListList from object stream
 */
 void LwpListList::Read()
 {

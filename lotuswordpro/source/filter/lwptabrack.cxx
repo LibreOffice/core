@@ -61,20 +61,20 @@
  * Change History
  * 2005-01-12 create this file.
  ************************************************************************/
-#include    "lwptabrack.hxx"
-#include    "lwpobjstrm.hxx"
-#include    "lwpslvlist.hxx"
+#include	"lwptabrack.hxx"
+#include	"lwpobjstrm.hxx"
+#include	"lwpslvlist.hxx"
 
 LwpTab::LwpTab()
 {
     m_nX = 0;
-    m_nAlignChar = 0;       //be careful,not quite sure it's 8-bit,perhaps 16-bit.
+    m_nAlignChar = 0;		//be careful,not quite sure it's 8-bit,perhaps 16-bit.
     m_nType = 0;
     m_nLeader = 0;
     m_nRelativeType = 0;
 }
 
-void    LwpTab::Read(LwpObjectStream *pStrm)
+void	LwpTab::Read(LwpObjectStream *pStrm)
 {
     pStrm->QuickRead(&m_nX, sizeof(m_nX));
     pStrm->QuickRead(&m_nType, sizeof(m_nType));
@@ -91,7 +91,7 @@ LwpTabRack::LwpTabRack(LwpObjectHeader objHdr, LwpSvStream* pStrm):LwpObject(obj
 
 void LwpTabRack::Read()
 {
-//  LwpObjectID     m_NextID;
+//	LwpObjectID		m_NextID;
     m_NextID.ReadIndexed(m_pObjStrm);
 
     m_pObjStrm->QuickRead(&m_nNumTabs, sizeof(m_nNumTabs));
@@ -113,7 +113,7 @@ LwpTab* LwpTabRack::Lookup(sal_uInt16 nIndex)
     //return NULL;
     /* It's not in this tabrack, so get it out of our next. */
     if (!GetNext())
-        return NULL;        /* ouch */
+        return NULL;		/* ouch */
 
     return GetNext()->Lookup(nIndex - m_nNumTabs);
 }

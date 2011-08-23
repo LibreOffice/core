@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwppara.hxx"
@@ -105,7 +105,7 @@
  */
 OUString LwpPara::GetContentText(sal_Bool bAllText)
 {
-//  rFont = m_FontID;
+//	rFont = m_FontID;
     if (bAllText)
     {
         m_Fribs.SetPara(this);
@@ -176,7 +176,7 @@ LwpPara* LwpPara::GetParent()
  * @short:   Offer prefix, paranumber and suffix according to position.
  * @param:   nPosition index of wanted paranumbering in the style-list.
  * @param:   pParaNumbering a pointer to the structure which contains prefix, paranumber and
- *       suffix.
+ *		 suffix.
  */
 void LwpPara::GetParaNumber(sal_uInt16 nPosition, ParaNumbering* pParaNumbering)
 {
@@ -222,8 +222,8 @@ void LwpPara::GetParaNumber(sal_uInt16 nPosition, ParaNumbering* pParaNumbering)
                     //get suffix text frib
                     if ( (pFrib = pFrib->GetNext()) )
                     {
-//                      if((pFrib->GetType() == FRIB_TAG_TEXT) &&
-//                          (pFrib->GetModifiers()->aTxtAttrOverride.GetHideLevels() == nHideLevels))
+//						if((pFrib->GetType() == FRIB_TAG_TEXT) &&
+//							(pFrib->GetModifiers()->aTxtAttrOverride.GetHideLevels() == nHideLevels))
                         if( pFrib->GetType() == FRIB_TAG_TEXT )
                         {
                             if ((pFrib->GetNext()->GetType() == FRIB_TAG_TEXT ) ||
@@ -422,7 +422,7 @@ void LwpPara::OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     }
 //add end
 
-//  pParaStyle->ApplyBreaks(pOverStyle, &aFinalBreaks);
+//	pParaStyle->ApplyBreaks(pOverStyle, &aFinalBreaks);
 }
 
 /**
@@ -481,7 +481,7 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
     }
     else
     {
-//      m_pBullOver = pParaStyle->GetBulletOverride();
+//		m_pBullOver = pParaStyle->GetBulletOverride();
         LwpBulletOverride* pBullOver = pParaStyle->GetBulletOverride();
         if (pBullOver)
         {

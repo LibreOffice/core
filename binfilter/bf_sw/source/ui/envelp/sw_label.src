@@ -1,0 +1,92 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include "label.hrc"
+#include "globals.hrc"
+#include "helpid.h"
+// ----- defined strings -----------------------------------------------------
+#define LABEL_STRING									\
+    Text [ de ] = "Etiketten" ;                                \
+    Text [ en-US ] = "Labels" ;                    \
+    Text[ pt ] = "Etiquetas";\
+    Text[ ru ] = "Этикетки";\
+    Text[ el ] = "Ετικέτες";\
+    Text[ nl ] = "Etiketten";\
+    Text[ fr ] = "Étiquettes";\
+    Text[ es ] = "Etiquetas";\
+    Text[ fi ] = "Osoitetarrat";\
+    Text[ ca ] = "Etiquetes";\
+    Text[ it ] = "Etichette";\
+    Text[ sk ] = "Štítky";\
+    Text[ da ] = "Etiketter";\
+    Text[ sv ] = "Etiketter";\
+    Text[ pl ] = "Etykiety";\
+    Text[ pt-BR ] = "Etiquetas";\
+    Text[ th ] = "ป้ายชื่อ";\
+    Text[ ja ] = "ラベル書き";\
+    Text[ ko ] = "레이블";\
+    Text[ zh-CN ] = "标签";\
+    Text[ zh-TW ] = "貼標";\
+    Text[ tr ] = "Etiket";\
+    Text[ hi-IN ] = "लेबिलें";\
+    Text[ ar ] = "بطاقات عنونة";\
+    Text[ he ] = "‮מדבקות‬";\
+
+#define BUSINESS_CARD_STRING \
+    Text [ de ] = "Visitenkarten" ;                			\
+    Text [ en-US ] = "Business Cards";              \
+    Text[ pt ] = "Cartões de visita";\
+    Text[ ru ] = "Визитные карточки";\
+    Text[ el ] = "Επαγγελματικές κάρτες";\
+    Text[ nl ] = "Visitekaartjes";\
+    Text[ fr ] = "Cartes de visite";\
+    Text[ es ] = "Tarjetas de visita";\
+    Text[ fi ] = "Käyntikortit";\
+    Text[ ca ] = "Targetes de visita";\
+    Text[ it ] = "Biglietti da visita";\
+    Text[ sk ] = "Vizitky";\
+    Text[ da ] = "Visitkort";\
+    Text[ sv ] = "Visitkort";\
+    Text[ pl ] = "Wizytówki";\
+    Text[ pt-BR ] = "Cartões de Visita";\
+    Text[ th ] = "นามบัตร";\
+    Text[ ja ] = "名刺";\
+    Text[ ko ] = "명함";\
+    Text[ zh-CN ] = "名片";\
+    Text[ zh-TW ] = "名片";\
+    Text[ tr ] = "Meslek Kartları";\
+    Text[ hi-IN ] = "व्यवहार कार्डस";\
+    Text[ ar ] = "بطاقات الزيارة";\
+    Text[ he ] = "‮כרטיסי ביקור‬";\
+
+ // DLG_LAB ------------------------------------------------------------------
+ // TP_LAB_LAB ---------------------------------------------------------------
+#define WIDTH  100
+#define HEIGHT 16
+ // String *******************************************************************
+/********************************************************************/

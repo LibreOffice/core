@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -660,7 +660,7 @@ const FontEntry::Pointer_t FontTable::getFontEntry(sal_uInt32 nIndex)
 {
     FontEntry::Pointer_t pRet;
     if(m_pImpl->aFontEntries.size() > nIndex)
-    {
+    {        
         pRet.reset(&m_pImpl->aFontEntries[nIndex]);
     }
     return pRet;

@@ -1,0 +1,238 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include "fmresids.hrc"
+#include "taborder.hrc"
+#ifndef _SVX_FMHELP_HRC
+#include "fmhelp.hrc"
+#endif
+
+ModalDialog RID_SVXDLG_TAB_ORDER
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 168 , 158 ) ;
+    Text [ de ] = "Aktivierungsreihenfolge" ;
+    Text [ en-US ] = "Tab Order" ;
+    Text [ x-comment ] = " ";
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    FixedText FT_CONTROLS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ de ] = "Kontrollelemente" ;
+        Text [ en-US ] = "Controls" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Controlos";
+        Text[ ru ] = "Элементы управления";
+        Text[ el ] = "Στοιχεία ελέγχου";
+        Text[ nl ] = "Controle-elementen";
+        Text[ fr ] = "Éléments de contrôle";
+        Text[ es ] = "Elementos de control";
+        Text[ fi ] = "Ohjausobjektit";
+        Text[ ca ] = "Elements de control";
+        Text[ it ] = "Elementi di controllo";
+        Text[ sk ] = "Ovládacie prvky";
+        Text[ da ] = "Kontrolelementer";
+        Text[ sv ] = "Kontrollelement";
+        Text[ pl ] = "Formanty";
+        Text[ pt-BR ] = "Controles";
+        Text[ th ] = "ตัวควบคุม";
+        Text[ ja ] = "コントロール要素";
+        Text[ ko ] = "컨트롤 요소";
+        Text[ zh-CN ] = "控制单元";
+        Text[ zh-TW ] = "控制單元";
+        Text[ tr ] = "Kontroller";
+        Text[ hi-IN ] = "नियंत्रण";
+        Text[ ar ] = "عناصر تحكم";
+        Text[ he ] = "‮פקדים‬";
+    };
+    Control CTRL_TREE
+    {
+        Border				= TRUE;
+        Pos                 = MAP_APPFONT ( 6, 14) ;
+        Size                = MAP_APPFONT ( 90, 136 ) ;
+        TabStop				= TRUE;
+        HelpId				= HID_TABORDER_CONTROLS;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 102 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 102 , 32 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 102 , 50 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_MOVE_UP
+    {
+        Pos = MAP_APPFONT ( 102 , 100 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ de ] = "Index kleiner" ;
+        Text [ en-US ] = "Move Up" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Mover para cima";
+        Text[ ru ] = "Переместить вверх";
+        Text[ el ] = "Ευρετήριο μικρότερο";
+        Text[ nl ] = "Index kleiner";
+        Text[ fr ] = "Index plus petit";
+        Text[ es ] = "Hacia arriba";
+        Text[ fi ] = "Siirrä ylemmäs";
+        Text[ ca ] = "Mou cap amunt";
+        Text[ it ] = "Index minore";
+        Text[ sk ] = "Presunúť nahor";
+        Text[ da ] = "Indeks mindre";
+        Text[ sv ] = "Index mindre";
+        Text[ pl ] = "Przenieś w górę";
+        Text[ pt-BR ] = "Mover para cima";
+        Text[ th ] = "เลื่อนขึ้น";
+        Text[ ja ] = "上へ移動";
+        Text[ ko ] = "위로";
+        Text[ zh-CN ] = "上移";
+        Text[ zh-TW ] = "上移";
+        Text[ tr ] = "Yukarı taşı";
+        Text[ hi-IN ] = "स्थानान्तर ऊपर";
+        Text[ ar ] = "تصغير الفهرس";
+        Text[ he ] = "‮הזז למעלה‬";
+    };
+    PushButton PB_MOVE_DOWN
+    {
+        Pos = MAP_APPFONT ( 102 , 118 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ de ] = "Index größer" ;
+        Text [ en-US ] = "Move Down" ;
+        Text [ x-comment ] = "; RB: Funzioni formulario - Sequenza di attivazione";
+        Text[ pt ] = "Mover para baixo";
+        Text[ ru ] = "Переместить вниз";
+        Text[ el ] = "Μετακίνηση κάτω";
+        Text[ nl ] = "Index groter";
+        Text[ fr ] = "Index plus grand";
+        Text[ es ] = "Hacia abajo";
+        Text[ fi ] = "Siirrä alemmas";
+        Text[ ca ] = "Mou cap avall";
+        Text[ it ] = "Index maggiore";
+        Text[ sk ] = "Presunúť dole";
+        Text[ da ] = "Indeks større";
+        Text[ sv ] = "Index större";
+        Text[ pl ] = "Przenieś w dół";
+        Text[ pt-BR ] = "Mover para baixo";
+        Text[ th ] = "เลื่อนลง";
+        Text[ ja ] = "下へ移動";
+        Text[ ko ] = "아래로";
+        Text[ zh-CN ] = "下移";
+        Text[ zh-TW ] = "下移";
+        Text[ tr ] = "Aşağı taşı";
+        Text[ hi-IN ] = "स्थानान्तर नीचे";
+        Text[ ar ] = "تكبير الفهرس";
+        Text[ he ] = "‮הזז למטה‬";
+    };
+    PushButton PB_AUTO_ORDER
+    {
+        Pos = MAP_APPFONT ( 102 , 136 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ de ] = "Auto Sortierung" ;
+        Text [ en-US ] = "Automatic Sort" ;
+        Text [ x-comment ] = "; RB: es handelt sich um eine Schaltfl?he. Deshalb mu?der Text nicht l?ger als der deutsche sein.";
+        Text[ pt ] = "Ordem autom.";
+        Text[ ru ] = "Автосортировка";
+        Text[ el ] = "Αυτόματη Ταξινόμηση";
+        Text[ nl ] = "AutoSortering";
+        Text[ fr ] = "Tri automatique";
+        Text[ es ] = "Orden automático";
+        Text[ fi ] = "Automaattinen järjestys";
+        Text[ ca ] = "Ordre automàtic";
+        Text[ it ] = "Ordine autom.";
+        Text[ sk ] = "Automaticky zoradiť";
+        Text[ da ] = "Autosortering";
+        Text[ sv ] = "Autosortering";
+        Text[ pl ] = "Sortuj automatycznie";
+        Text[ pt-BR ] = "Ordenação Automática";
+        Text[ th ] = "เรียงอัตโนมัติ";
+        Text[ ja ] = "自動的に並べ替え";
+        Text[ ko ] = "자동 정렬";
+        Text[ zh-CN ] = "自动排序";
+        Text[ zh-TW ] = "自動排序";
+        Text[ tr ] = "Otomatik sıralama";
+        Text[ hi-IN ] = "स्वचालित ढंग से सोर्ट";
+        Text[ ar ] = "فرز تلقائي";
+        Text[ he ] = "‮מיון אוטומטי‬";
+    };
+    Text[ pt ] = "Sequência de activação";
+    Text[ ru ] = "Порядок активирования";
+    Text[ el ] = "Σειρά ενεργοποίησης";
+    Text[ nl ] = "Volgorde van activering";
+    Text[ fr ] = "Séquence d'activation";
+    Text[ es ] = "Secuencia de activación";
+    Text[ fi ] = "Sarkainjärjestys";
+    Text[ ca ] = "Ordre de les pestanyes";
+    Text[ it ] = "Sequenza di attivazione";
+    Text[ sk ] = "Poradie aktivácie";
+    Text[ da ] = "Aktiveringsrækkefølge";
+    Text[ sv ] = "Aktiveringsordningsföljd";
+    Text[ pl ] = "Kolejność aktywacji";
+    Text[ pt-BR ] = "Ordem da Tabulação";
+    Text[ th ] = "ลำดับระยะกั้น";
+    Text[ ja ] = "タブオーダー";
+    Text[ ko ] = "탭 순서";
+    Text[ zh-CN ] = "轮换顺序";
+    Text[ zh-TW ] = "啟動順序";
+    Text[ tr ] = "Etkinleştirme sırası";
+    Text[ hi-IN ] = "टॉब क्रम";
+    Text[ ar ] = "ترتيب التنشيط";
+    Text[ he ] = "‮סדר טאבים‬";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

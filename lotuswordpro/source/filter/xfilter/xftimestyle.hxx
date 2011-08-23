@@ -61,13 +61,13 @@
  * Change History
  * 2005-01-20 create this file.
  ************************************************************************/
-#ifndef     _XFTIMESTYLE_HXX
-#define     _XFTIMESTYLE_HXX
+#ifndef		_XFTIMESTYLE_HXX
+#define		_XFTIMESTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    "ixfproperty.hxx"
-#include    <vector>
+#include	"xfglobal.hxx"
+#include	"xfstyle.hxx"
+#include	"ixfproperty.hxx"
+#include	<vector>
 
 class XFDateTimePart : public XFStyle
 {
@@ -80,16 +80,16 @@ public:
 
     virtual ~XFDateTimePart(){}
 public:
-    void    SetPartType(enumXFDatePart ePart);
+    void	SetPartType(enumXFDatePart ePart);
 
-    void    SetLongFmt(sal_Bool bLongFmt);
+    void	SetLongFmt(sal_Bool bLongFmt);
 
-    void    SetText(rtl::OUString& text);
+    void	SetText(rtl::OUString& text);
 
 protected:
-    enumXFDatePart  m_ePart;
-    sal_Bool        m_bLongFmt;
-    rtl::OUString   m_strText;
+    enumXFDatePart	m_ePart;
+    sal_Bool		m_bLongFmt;
+    rtl::OUString	m_strText;
 };
 
 class XFTimePart : public XFDateTimePart
@@ -99,12 +99,12 @@ public:
 
     virtual ~XFTimePart(){}
 public:
-    void    SetDecimalPos(sal_Int32 pos);
+    void	SetDecimalPos(sal_Int32 pos);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 protected:
-    sal_Int32       m_nDecimalPos;
+    sal_Int32		m_nDecimalPos;
 };
 
 class XFTimeStyle : public XFStyle
@@ -116,89 +116,89 @@ public:
 
 public:
 
-    void    AddHour( sal_Bool bLongFmt = sal_True );
+    void	AddHour( sal_Bool bLongFmt = sal_True );
 
-    void    AddMinute( sal_Bool bLongFmt = sal_True );
+    void	AddMinute( sal_Bool bLongFmt = sal_True );
 
-    void    AddSecond( sal_Bool bLongFmt = sal_True, sal_Int16 nDecimalPos = 2);
+    void	AddSecond( sal_Bool bLongFmt = sal_True, sal_Int16 nDecimalPos = 2);
 
-    void    SetAmPm(sal_Bool bAmPm);
+    void	SetAmPm(sal_Bool bAmPm);
 
-    void    AddText( rtl::OUString part );
+    void	AddText( rtl::OUString part );
 
     virtual enumXFStyle GetStyleFamily();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
-    void    SetTruncate(sal_Bool bTrunc);
+    void 	SetTruncate(sal_Bool bTrunc);
 
 private:
-    sal_Bool    m_bFixed;
-    sal_Bool    m_bAmPm;
-    std::vector<XFTimePart> m_aParts;
-    sal_Bool    m_bTruncate;
+    sal_Bool	m_bFixed;
+    sal_Bool	m_bAmPm;
+    std::vector<XFTimePart>	m_aParts;
+    sal_Bool	m_bTruncate;
 };
 
 
-inline void XFDateTimePart::SetPartType(enumXFDatePart ePart)
+inline void	XFDateTimePart::SetPartType(enumXFDatePart ePart)
 {
     m_ePart = ePart;
 }
 
-inline void XFDateTimePart::SetLongFmt(sal_Bool bLongFmt)
+inline void	XFDateTimePart::SetLongFmt(sal_Bool bLongFmt)
 {
     m_bLongFmt = bLongFmt;
 }
 
-inline void XFDateTimePart::SetText(rtl::OUString& text)
+inline void	XFDateTimePart::SetText(rtl::OUString& text)
 {
     m_strText = text;
 }
 
-inline void XFTimePart::SetDecimalPos(sal_Int32 pos)
+inline void	XFTimePart::SetDecimalPos(sal_Int32 pos)
 {
     m_nDecimalPos = pos;
 }
 
-inline void XFTimeStyle::AddHour( sal_Bool bLongFmt )
+inline void	XFTimeStyle::AddHour( sal_Bool bLongFmt )
 {
-    XFTimePart  part;
+    XFTimePart	part;
     part.SetPartType(enumXFDateHour);
     part.SetLongFmt(bLongFmt);
     m_aParts.push_back(part);
 }
 
-inline void XFTimeStyle::AddMinute( sal_Bool bLongFmt )
+inline void	XFTimeStyle::AddMinute( sal_Bool bLongFmt )
 {
-    XFTimePart  part;
+    XFTimePart	part;
     part.SetPartType(enumXFDateMinute);
     part.SetLongFmt(bLongFmt);
     m_aParts.push_back(part);
 }
 
-inline void XFTimeStyle::AddSecond( sal_Bool bLongFmt, sal_Int16 pos)
+inline void	XFTimeStyle::AddSecond( sal_Bool bLongFmt, sal_Int16 pos)
 {
-    XFTimePart  part;
+    XFTimePart	part;
     part.SetPartType(enumXFDateSecond);
     part.SetLongFmt(bLongFmt);
     part.SetDecimalPos(pos);
     m_aParts.push_back(part);
 }
 
-inline void XFTimeStyle::SetAmPm(sal_Bool bAmPm)
+inline void	XFTimeStyle::SetAmPm(sal_Bool bAmPm)
 {
     m_bAmPm = bAmPm;
 }
 
-inline void XFTimeStyle::AddText( rtl::OUString text )
+inline void	XFTimeStyle::AddText( rtl::OUString text )
 {
-    XFTimePart  part;
+    XFTimePart	part;
     part.SetPartType(enumXFDateText);
     part.SetText(text);
     m_aParts.push_back(part);
 }
 
-inline  void    XFTimeStyle::SetTruncate(sal_Bool bTrunc)
+inline 	void 	XFTimeStyle::SetTruncate(sal_Bool bTrunc)
 {
     m_bTruncate = bTrunc;
 }

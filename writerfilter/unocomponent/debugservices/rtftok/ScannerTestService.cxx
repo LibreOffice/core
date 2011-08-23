@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
     void dest(char* token, char* /*value*/)
     {
         destMap.insert(rtl::OString(token));
-//      printf("{\\*\\%s%s ", token, value);
+//		printf("{\\*\\%s%s ", token, value);
         if (strcmp(token, "objdata")==0)
         {
             binBuffer.clear();
@@ -104,11 +104,11 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
     void ctrl(char*token, char* /*value*/)
     {
         ctrlMap.insert(rtl::OString(token));
-//      printf("\\%s%s ", token, value);
+//		printf("\\%s%s ", token, value);
     }
     void lbrace(void)
     {
-//      printf("{");
+//		printf("{");
     }
     void rbrace(void)
     {
@@ -130,7 +130,7 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
             //assert(binBuffer.size()==o+binLen);
             char buf[100];
             sprintf(buf, "ole%02i.ole", numOfOLEs);
-/*          if 0{
+/*			if 0{
             FILE *f=fopen(buf, "w+b");
             unsigned char *data=binBuffer.begin();
             fwrite(data+o, 1, binLen, f);
@@ -148,8 +148,8 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
                 unsigned char *data0=binBufferStr;
                 memcpy(seq.getArray(), data0+o, binLen);
                 uno::Reference<io::XInputStream> myStream=new comphelper::SequenceInputStream(seq);
-//          uno::Reference<io::XStream> myStream=xFileAccess->openFileReadWrite(absFileUrl);
-//          uno::Reference<io::XStream> myStream(new MyStreamImpl(binBuffer, o));
+//			uno::Reference<io::XStream> myStream=xFileAccess->openFileReadWrite(absFileUrl);
+//			uno::Reference<io::XStream> myStream(new MyStreamImpl(binBuffer, o));
             uno::Sequence< uno::Any > aArgs0( 1 );
             aArgs0[0] <<= myStream;
             uno::Reference< container::XNameContainer > xNameContainer(
@@ -184,7 +184,7 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
             {
                 printf("NOT OK\n");
                 comphelper::ByteSequence seq2(4+binLen);
-                //              memcpy(seq2.getArray(), &binLen, 4); assert(0); //TODO linux
+                //				memcpy(seq2.getArray(), &binLen, 4); assert(0); //TODO linux
                 seq2[0]= sal::static_int_cast<sal_Int8>(binLen&0xFF);
                 seq2[1]= sal::static_int_cast<sal_Int8>((binLen>>8)&0xFF);
                 seq2[2]= sal::static_int_cast<sal_Int8>((binLen>>16)&0xFF);
@@ -221,21 +221,21 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
             numOfOLEs++;
         }
 #endif
-//      printf("}");
+//		printf("}");
     }
     void addSpaces(int /*count*/)
     {
-//      for(int i=0;i<count;i++)
-//          printf(" ");
+//		for(int i=0;i<count;i++)
+//			printf(" ");
 
     }
     void addBinData(unsigned char /*data*/)
     {
-//      printf("%02Xh", data);
+//		printf("%02Xh", data);
     }
     void addChar(char ch)
     {
-//      printf("%c", ch);
+//		printf("%c", ch);
         if (objDataLevel)
         {
             if (numOfOLEChars%2==0)
@@ -258,11 +258,11 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
     }
     void addCharU(sal_Unicode /*ch*/)
     {
-//      printf("\\u%i ", ch);
+//		printf("\\u%i ", ch);
     }
     void addHexChar(char* /*hexch*/)
     {
-//      printf("\'%s ", hexch);
+//		printf("\'%s ", hexch);
     }
 
 
@@ -417,7 +417,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
         TimeValue t2; osl_getSystemTime(&t2);
         printf("time=%" SAL_PRIuUINT32 "s\n", t2.Seconds-t1.Seconds);
 
-//          eventHandler.dump();
+//			eventHandler.dump();
             uno::Reference<embed::XTransactedObject> xTransact(xStorage, uno::UNO_QUERY);
             xTransact->commit();
 

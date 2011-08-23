@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ using namespace ::com::sun::star::lang;
 
 XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, const Reference< XMultiServiceFactory >& rxMSF ) :
     TabPage( pParent, ResId( RID_XML_FILTER_TABPAGE_XSLT, rResMgr ) ),
-
+    
     maFTDocType( this, ResId( FT_XML_DOCTYPE, rResMgr ) ),
     maEDDocType( this, ResId( ED_XML_DOCTYPE, rResMgr ) ),
 
@@ -207,7 +207,7 @@ IMPL_LINK ( XMLFilterTabPageXSLT, ClickBrowseHdl_Impl, PushButton *, pButton )
     // Open Fileopen-Dialog
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
-
+    
     aDlg.SetDisplayDirectory( GetURL( *pURLBox ) );
 
     if ( aDlg.Execute() == ERRCODE_NONE )

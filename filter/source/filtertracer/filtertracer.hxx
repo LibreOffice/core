@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,17 +56,17 @@
 
 // -----------------------------------------------------------------------------
 
-#define NMSP_IO         com::sun::star::io
-#define NMSP_UNO        com::sun::star::uno
+#define NMSP_IO			com::sun::star::io
+#define NMSP_UNO		com::sun::star::uno
 #define NMSP_BEANS      com::sun::star::beans
-#define NMSP_LANG       com::sun::star::lang
-#define NMSP_UTIL       com::sun::star::util
-#define NMSP_SAX        com::sun::star::xml::sax
-#define NMSP_LOGGING    NMSP_UTIL::logging
+#define NMSP_LANG		com::sun::star::lang
+#define NMSP_UTIL		com::sun::star::util
+#define NMSP_SAX		com::sun::star::xml::sax
+#define NMSP_LOGGING	NMSP_UTIL::logging
 
 
 #define REF( _def_Obj )         NMSP_UNO::Reference< _def_Obj >
-#define SEQ( _def_Obj )         NMSP_UNO::Sequence< _def_Obj >
+#define SEQ( _def_Obj )         NMSP_UNO::Sequence< _def_Obj > 
 #define B2UCONST( _def_pChar )  (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(_def_pChar )))
 
 // ----------------
@@ -77,39 +77,39 @@
 /** Some options of the FilterTracer can be initialized
     via XInitialization interface.
 
-    Therefore the first sequence of PropertyValues that
+    Therefore the first sequence of	PropertyValues that 
     is given in the argument list is used.
 
     Following Properties are supported:
 
-    OutputStream    com.sun.star.io.XOutputStream   Defines the output stream. Optional it is possible to provide
+    OutputStream	com.sun.star.io.XOutputStream	Defines the output stream. Optional it is possible to provide
                                                     the URL property, then the corresponding output stream will
                                                     be generated automatically.
 
-    URL             string                          Defines the URL, which is used to create an output stream.
+    URL				string							Defines the URL, which is used to create an output stream.
                                                     This property is used only, if there is no valid
                                                     OutputStream property available.
 
-    DocumentHandler com.sun.star.xml.sax.XDocumentHandler   The output can also be written to a DocumentHandler,
+    DocumentHandler	com.sun.star.xml.sax.XDocumentHandler	The output can also be written to a DocumentHandler,
                                                             then the "characters" method of the handler is used.
 
-    LogLevel        long                            Defines the LogLevel for the FilterTracer.
+    LogLevel		long							Defines the LogLevel for the FilterTracer.
                                                     Using logp with a LogLevel that is higher as the LogLevel
-                                                    for the FilterTracer component will generate no output.
+                                                    for	the FilterTracer component will generate no output.
                                                     LogLevel constants are defined in sun::star::util::logging::LogLevel
                                                     The default LogLevel com::sun::star::logging::LogLevel::ALL
 
-    ClassFilter     string                          This property defines a filter for the SourceClass string of logp.
+    ClassFilter		string							This property defines a filter for the SourceClass string of logp.
                                                     The ClassFilter string can be separated into multiple tokens using
                                                     a semicolon. If one of the ClassFilter token is part of the
                                                     SourceClass string of the logp method then there will be no output.
 
-    MethodFilter    string                          This property defines a filter for the SourceMethod string of logp.
+    MethodFilter	string							This property defines a filter for the SourceMethod string of logp.
                                                     The MethodFilter string can be separated into multiple tokens using
                                                     a semicolon. If one of the MethodFilter token is part of the
                                                     SourceMethod string of the logp method then there will be no output.
 
-    MessageFilter   string                          This property defines a filter for the Message string of logp.
+    MessageFilter	string							This property defines a filter for the Message string of logp.
                                                     The MessageFilter string can be separated into multiple tokens using
                                                     a semicolon. If one of the MessageFilter token is part of the
                                                     Message string of the logp method then there will be no output.
@@ -117,48 +117,48 @@
 */
 
 class FilterTracer : public cppu::WeakImplHelper4
-<
+< 
     NMSP_LOGGING::XLogger,
     NMSP_LANG::XInitialization,
     NMSP_LANG::XServiceInfo,
     NMSP_UTIL::XTextSearch
 >
 {
-    REF( NMSP_LANG::XMultiServiceFactory )  xFact;
-    SvStream*       mpStream;
+    REF( NMSP_LANG::XMultiServiceFactory )	xFact;
+    SvStream*		mpStream;
 
-    sal_Int32       mnLogLevel;
-    rtl::OUString   msClassFilter;
-    rtl::OUString   msMethodFilter;
-    rtl::OUString   msMessageFilter;
-    rtl::OUString   msURL;
+    sal_Int32		mnLogLevel;
+    rtl::OUString	msClassFilter;
+    rtl::OUString	msMethodFilter;
+    rtl::OUString	msMessageFilter;
+    rtl::OUString	msURL;
 
-    REF( NMSP_IO::XOutputStream )       mxOutputStream;
-    REF( NMSP_SAX::XDocumentHandler)    mxDocumentHandler;
+    REF( NMSP_IO::XOutputStream )		mxOutputStream;
+    REF( NMSP_SAX::XDocumentHandler)	mxDocumentHandler;
 
-    REF( NMSP_UTIL::XTextSearch )       mxTextSearch;
-    NMSP_UTIL::SearchOptions            maSearchOptions;
+    REF( NMSP_UTIL::XTextSearch )		mxTextSearch;
+    NMSP_UTIL::SearchOptions			maSearchOptions;
 
-    sal_Bool                ImplFilter( const rtl::OUString& rFilter, const rtl::OUString& rString );
+    sal_Bool				ImplFilter( const rtl::OUString& rFilter, const rtl::OUString& rString );
 
 public:
                             FilterTracer( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr );
-    virtual                 ~FilterTracer();
-
-    // XInterface
-    virtual void SAL_CALL   acquire() throw();
-    virtual void SAL_CALL   release() throw();
-
+    virtual 				~FilterTracer();
+                                            
+    // XInterface							
+    virtual void SAL_CALL	acquire() throw();
+    virtual void SAL_CALL	release() throw();
+    
     // XInitialization
-    virtual void SAL_CALL initialize( const SEQ( NMSP_UNO::Any )& aArguments )
+    virtual void SAL_CALL initialize( const SEQ( NMSP_UNO::Any )& aArguments ) 
         throw ( NMSP_UNO::Exception, NMSP_UNO::RuntimeException );
 
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual rtl::OUString SAL_CALL getImplementationName() 
         throw ( NMSP_UNO::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& rServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& rServiceName ) 
         throw ( NMSP_UNO::RuntimeException );
-    virtual SEQ( rtl::OUString ) SAL_CALL getSupportedServiceNames()
+    virtual SEQ( rtl::OUString ) SAL_CALL getSupportedServiceNames() 
         throw ( NMSP_UNO::RuntimeException );
 
     // XLogger
@@ -181,7 +181,7 @@ rtl::OUString FilterTracer_getImplementationName()
     throw ( NMSP_UNO::RuntimeException );
 sal_Bool SAL_CALL FilterTracer_supportsService( const rtl::OUString& rServiceName )
     throw( NMSP_UNO::RuntimeException );
-SEQ( rtl::OUString ) SAL_CALL FilterTracer_getSupportedServiceNames()
+SEQ( rtl::OUString ) SAL_CALL FilterTracer_getSupportedServiceNames() 
     throw( NMSP_UNO::RuntimeException );
 
 #endif

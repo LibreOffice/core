@@ -1,11 +1,11 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/* TableStyle: Stores (and writes) table-based information that is
+/* TableStyle: Stores (and writes) table-based information that is 
  * needed at the head of an OO document.
  *
  * Copyright (C) 2002-2004 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2004 Net Integration Technologies, Inc. (http://www.net-itech.com)
  * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
- *
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -24,7 +24,7 @@
  *
  */
 
-/* "This product is not manufactured, approved, or supported by
+/* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <math.h>
@@ -64,7 +64,7 @@ void TableCellStyle::write(DocumentHandlerInterface *pHandler) const
         pHandler->startElement("style:table-cell-properties", stylePropList);
     pHandler->endElement("style:table-cell-properties");
 
-    pHandler->endElement("style:style");
+    pHandler->endElement("style:style");	
 }
 
 TableRowStyle::TableRowStyle(const WPXPropertyList &propList, const char *psName) :
@@ -79,7 +79,7 @@ void TableRowStyle::write(DocumentHandlerInterface *pHandler) const
     styleOpen.addAttribute("style:name", getName());
     styleOpen.addAttribute("style:family", "table-row");
     styleOpen.write(pHandler);
-
+    
         TagOpenElement stylePropertiesOpen("style:table-row-properties");
         if (mPropList["style:min-row-height"])
                 stylePropertiesOpen.addAttribute("style:min-row-height", mPropList["style:min-row-height"]->getStr());
@@ -88,12 +88,12 @@ void TableRowStyle::write(DocumentHandlerInterface *pHandler) const
     stylePropertiesOpen.addAttribute("fo:keep-together", "auto");
         stylePropertiesOpen.write(pHandler);
         pHandler->endElement("style:table-row-properties");
-
-    pHandler->endElement("style:style");
+    
+    pHandler->endElement("style:style");		
 }
+    
 
-
-TableStyle::TableStyle(const WPXPropertyList &xPropList, const WPXPropertyListVector &columns, const char *psName) :
+TableStyle::TableStyle(const WPXPropertyList &xPropList, const WPXPropertyListVector &columns, const char *psName) : 
     Style(psName),
         mPropList(xPropList),
         mColumns(columns)
@@ -135,7 +135,7 @@ void TableStyle::write(DocumentHandlerInterface *pHandler) const
     pHandler->endElement("style:table-properties");
 
     pHandler->endElement("style:style");
-
+        
     int i=1;
         WPXPropertyListVector::Iter j(mColumns);
     for (j.rewind(); j.next();)

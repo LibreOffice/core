@@ -61,13 +61,13 @@
  * Change History
  * 2005-03-23 create this file.
  ************************************************************************/
-#ifndef     _XFNUMBERSTYLE_HXX
-#define     _XFNUMBERSTYLE_HXX
+#ifndef		_XFNUMBERSTYLE_HXX
+#define		_XFNUMBERSTYLE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfstylemanager.hxx"
-#include    "xfcolor.hxx"
-#include    <rtl/ustring.hxx>
+#include	"xfstyle.hxx"
+#include	"xfstylemanager.hxx"
+#include	"xfcolor.hxx"
+#include	<rtl/ustring.hxx>
 
 class XFNumberStyle : public XFStyle
 {
@@ -77,26 +77,26 @@ public:
     XFNumberStyle(enumXFNumberType type );
 
 public:
-    void    SetDecimalDigits(sal_Int32 decimal);
+    void	SetDecimalDigits(sal_Int32 decimal);
 
-    void    SetMinInteger(sal_Int32 integer);
+    void	SetMinInteger(sal_Int32 integer);
 
-    void    SetMinExponent(sal_Int32 exponent);
+    void	SetMinExponent(sal_Int32 exponent);
 
-    void    SetGroup(sal_Bool group = sal_True);
+    void	SetGroup(sal_Bool group = sal_True);
 
-    void    SetColor(const XFColor& color);
+    void	SetColor(const XFColor& color);
     XFColor GetColor(){return m_aColor;}//add by ,2005/11/30
 
-    void    SetPrefix(rtl::OUString prefix);
+    void	SetPrefix(rtl::OUString prefix);
 
-    void    SetSurfix(rtl::OUString surfix);
+    void	SetSurfix(rtl::OUString surfix);
 
-    void    SetNegativeStyle(rtl::OUString prefix, rtl::OUString suffix, const XFColor& color=XFColor(255,0,0));
+    void	SetNegativeStyle(rtl::OUString prefix, rtl::OUString suffix, const XFColor& color=XFColor(255,0,0));
 
-    void    SetNumberType(enumXFNumberType type);
+    void	SetNumberType(enumXFNumberType type);
 
-    void    SetCurrencySymbol(sal_Bool post, rtl::OUString symbol, sal_Bool bShowSpace=sal_False);
+    void	SetCurrencySymbol(sal_Bool post, rtl::OUString symbol, sal_Bool bShowSpace=sal_False);
 
     virtual enumXFStyle GetStyleFamily();
 
@@ -105,32 +105,32 @@ public:
     virtual void ToXml(IXFStream *pStrm);
 
 protected:
-    void    ToXml_StartElement(IXFStream *pStrm);
+    void	ToXml_StartElement(IXFStream *pStrm);
 
-    void    ToXml_EndElement(IXFStream *pStrm);
+    void	ToXml_EndElement(IXFStream *pStrm);
 
-    void    ToXml_Normal(IXFStream *pStrm);
+    void	ToXml_Normal(IXFStream *pStrm);
 
-    void    ToXml_Negative(IXFStream *pStrm);
+    void	ToXml_Negative(IXFStream *pStrm);
 
-    void    ToXml_Content(IXFStream *pStrm, sal_Bool nagetive);
+    void	ToXml_Content(IXFStream *pStrm, sal_Bool nagetive);
 
 protected:
-    enumXFNumberType    m_eType;
-    sal_Int32   m_nDecimalDigits;
-    sal_Int32   m_nMinInteger;
-    sal_Int32   m_nMinExponent;
-    sal_Bool    m_bGroup;
-    XFColor     m_aColor;
-    sal_Bool    m_bCurrencySymbolPost;
-    rtl::OUString   m_strCurrencySymbol;
-    rtl::OUString   m_strPrefix;
-    rtl::OUString   m_strSuffix;
+    enumXFNumberType	m_eType;
+    sal_Int32	m_nDecimalDigits;
+    sal_Int32	m_nMinInteger;
+    sal_Int32	m_nMinExponent;
+    sal_Bool	m_bGroup;
+    XFColor		m_aColor;
+    sal_Bool	m_bCurrencySymbolPost;
+    rtl::OUString	m_strCurrencySymbol;
+    rtl::OUString	m_strPrefix;
+    rtl::OUString	m_strSuffix;
 
-    sal_Bool    m_bRedIfNegative;
-    XFColor     m_aNegativeColor;
-    rtl::OUString   m_strNegativePrefix;
-    rtl::OUString   m_strNegativeSuffix;
+    sal_Bool	m_bRedIfNegative;
+    XFColor		m_aNegativeColor;
+    rtl::OUString	m_strNegativePrefix;
+    rtl::OUString	m_strNegativeSuffix;
 };
 
 inline void XFNumberStyle::SetDecimalDigits(sal_Int32 decimal)

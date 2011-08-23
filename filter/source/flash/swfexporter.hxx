@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,32 +67,32 @@ class Writer;
 class ShapeInfo
 {
 public:
-    sal_uInt16      mnID;                   // the character id for the sprite definition of this shape
+    sal_uInt16		mnID;					// the character id for the sprite definition of this shape
+    
+    sal_Int32		mnX;
+    sal_Int32		mnY;
 
-    sal_Int32       mnX;
-    sal_Int32       mnY;
+    sal_Int32		mnWidth;
+    sal_Int32		mnHeight;
 
-    sal_Int32       mnWidth;
-    sal_Int32       mnHeight;
+    ::com::sun::star::presentation::AnimationEffect	meEffect;
+    ::com::sun::star::presentation::AnimationEffect	meTextEffect;
+    ::com::sun::star::presentation::AnimationSpeed	meEffectSpeed;
 
-    ::com::sun::star::presentation::AnimationEffect meEffect;
-    ::com::sun::star::presentation::AnimationEffect meTextEffect;
-    ::com::sun::star::presentation::AnimationSpeed  meEffectSpeed;
+    sal_Int32		mnPresOrder;
 
-    sal_Int32       mnPresOrder;
+    ::com::sun::star::presentation::ClickAction		meClickAction;
+    ::rtl::OUString	maBookmark;
 
-    ::com::sun::star::presentation::ClickAction     meClickAction;
-    ::rtl::OUString maBookmark;
+    sal_Int32		mnDimColor;
+    sal_Bool		mbDimHide;
+    sal_Bool		mbDimPrev;
+    
+    sal_Bool		mbSoundOn;
+    sal_Bool		mbPlayFull;
+    ::rtl::OUString	maSoundURL;
 
-    sal_Int32       mnDimColor;
-    sal_Bool        mbDimHide;
-    sal_Bool        mbDimPrev;
-
-    sal_Bool        mbSoundOn;
-    sal_Bool        mbPlayFull;
-    ::rtl::OUString maSoundURL;
-
-    sal_Int32       mnBlueScreenColor;
+    sal_Int32		mnBlueScreenColor;
 
     ShapeInfo() :
         mnID(0), mnX(0), mnY(0),
@@ -116,7 +116,7 @@ typedef ::std::vector<ShapeInfo*> ShapeInfoVector;
 struct ShapeAnimationInfo
 {
     ShapeInfo* mpShapeInfo;
-    sal_uInt16  mnDepth;
+    sal_uInt16	mnDepth;
 
     ShapeAnimationInfo( ShapeInfo* pShapeInfo, sal_uInt16 nDepth ) : mpShapeInfo( pShapeInfo ), mnDepth( nDepth ) {}
 };
@@ -127,15 +127,15 @@ typedef std::vector<ShapeAnimationInfo> ShapeAnimationInfoVector;
 
 struct PageInfo
 {
-    ::com::sun::star::presentation::FadeEffect      meFadeEffect;
-    ::com::sun::star::presentation::AnimationSpeed  meFadeSpeed;
+    ::com::sun::star::presentation::FadeEffect		meFadeEffect;
+    ::com::sun::star::presentation::AnimationSpeed	meFadeSpeed;
 
-    sal_Int32       mnDuration;
-    sal_Int32       mnChange;
+    sal_Int32		mnDuration;
+    sal_Int32		mnChange;
 
-    sal_uInt16      mnBackgroundID;
-    sal_uInt16      mnObjectsID;
-    sal_uInt16      mnForegroundID;
+    sal_uInt16		mnBackgroundID;
+    sal_uInt16		mnObjectsID;
+    sal_uInt16		mnForegroundID;
 
     sal_Bool mbBackgroundVisible;
     sal_Bool mbBackgroundObjectsVisible;
@@ -165,7 +165,7 @@ public:
 
     void Flush();
 
-    sal_Bool exportAll( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDoc, com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream,    ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator> &xStatusIndicator );
+    sal_Bool exportAll( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDoc, com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream, 	::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator> &xStatusIndicator );
     sal_Bool exportSlides( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage, com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream, sal_uInt16 nPage);
     sal_uInt16 exportBackgrounds( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage, com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream, sal_uInt16 nPage, sal_Bool bExportObjects );
     sal_uInt16 exportBackgrounds( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage, sal_uInt16 nPage, sal_Bool bExportObjects );

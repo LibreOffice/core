@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,25 +27,25 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
-
+ 
 import java.util.Vector;
 
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 import org.openoffice.xmerge.util.Debug;
 
 /**
- * This is the Formula Parser based on an article written by Jack Crenshaw. It is a
+ * This is the Formula Parser based on an article written by Jack Crenshaw. It is a 
  * top down parser with some basic error handling. It handles
- * +,-,*,/,>,<,>=,<=,=,<>, unary + and - as well as functions.
+ * +,-,*,/,>,<,>=,<=,=,<>, unary + and - as well as functions. 
  * The BNF notation for this parser is
  * <pre>
- *  &lt;expression&gt; ::= &lt;unary op&gt; &lt;term&gt; [&lt;addop&gt;|&lt;logop&gt; &lt;term&gt;]
- *  &lt;term&gt;       ::= &lt;factor&gt; [&lt;mulop&gt; &lt;factor&gt;]
- *  &lt;factor&gt;     ::= &lt;number&gt;[%] | &lt;CellRef&gt; | &lt;QuoteString&gt; | &lt;expression&gt;
+ *	&lt;expression&gt; ::= &lt;unary op&gt; &lt;term&gt; [&lt;addop&gt;|&lt;logop&gt; &lt;term&gt;]
+ *	&lt;term&gt;       ::= &lt;factor&gt; [&lt;mulop&gt; &lt;factor&gt;]
+ *	&lt;factor&gt;     ::= &lt;number&gt;[%] | &lt;CellRef&gt; | &lt;QuoteString&gt; | &lt;expression&gt; 
  * </pre>
  */
 public class FormulaParser {
-
+     
     private char look;
     private String formulaStr;
     private int index = 1;
@@ -62,7 +62,7 @@ public class FormulaParser {
         tokenFactory = new TokenFactory();
         tokenVector = new Vector();
     }
-
+        
     /**
      *
      */
@@ -70,7 +70,7 @@ public class FormulaParser {
 
         this.wb = wb;
     }
-
+    
     /**
      * Parse method for parsing from a String to a byte[]
      *
@@ -79,7 +79,7 @@ public class FormulaParser {
      * @return A <code>Vector</code> containing the parsed <code>Token</code>s
      */
     public Vector parse(String formula) throws FormulaParsingException {
-
+    
         index = 1;
         look = ' ';
         tokenVector.clear();
@@ -90,38 +90,38 @@ public class FormulaParser {
             expression();
         } else {
             throw new FormulaParsingException("No equals found!" + makeErrorString());
-        }
+        }     
         return tokenVector;
     }
-
+        
     /**
      * Identify + and - operators
-     *
+     * 
      * @param  c The character which is to be identified
-     * @return A boolean returning the result of the comparison
+     * @return A boolean returning the result of the comparison 
      */
     private boolean isAddOp(char c) {
          return (c == '-') || (c == '+');
      }
-
+    
     /**
      * Determine if the current character is a multiop
      *
-     * @return A boolean returning the result of the comparison
+     * @return A boolean returning the result of the comparison 
      */
     private boolean isMultiOp() {
         return look=='*' || look =='/' || look == '^' || look == '&';
     }
-
+    
     /**
      * Identify <, >, <=, >=, =, <> using the index to find the current character(s)
-     *
-     * @return A boolean returning the result of the comparison
+     * 
+     * @return A boolean returning the result of the comparison 
      */
     private boolean isLogicalOp() {
         if (!isLogicalOpChar(look)) {
             return false;
-        } else if ((index+1) >= formulaStr.length()) {//logical operators in their own right : if at end then return true
+        } else if ((index+1) >= formulaStr.length()) {//logical operators in their own right : if at end then return true 
             return true;
         } else if (!isLogicalOpChar(formulaStr.charAt(index))) { // we have >, < or = on their own
             return true;
@@ -130,7 +130,7 @@ public class FormulaParser {
         } else if ((look == '>')  && (formulaStr.charAt(index) == '=')) { // >=
             return true;
         }
-
+        
         return false;
      }
 
@@ -138,10 +138,10 @@ public class FormulaParser {
      * Identify <, >, <=, >=, =, <>
      *
      * @param  The <code>String</code> which is to be identified
-     * @return A boolean returning the result of the comparison
+     * @return A boolean returning the result of the comparison 
      */
     private boolean isLogicalOp(String op) {
-        return  ((op.compareTo(">") == 0) ||
+        return	((op.compareTo(">") == 0) ||
                  (op.compareTo("<") == 0) ||
                  (op.compareTo(">=") == 0) ||
                  (op.compareTo("<=") == 0) ||
@@ -149,42 +149,42 @@ public class FormulaParser {
                  (op.compareTo("<>") == 0));
     }
 
-
+    
     /**
      * Identify characters that MAY be logical operator characters
-     *
+     * 
      * @param  c The character which is to be identified
-     * @return A boolean returning the result of the comparison
+     * @return A boolean returning the result of the comparison 
      */
     private boolean isLogicalOpChar(char c) {
         return (c == '>') || (c == '<') || (c == '=');
     }
-
+    
      /**
       * Identify special Cell Reference charaters
-     *
+     * 
      * @param  c The character which is to be identified
-     * @return A boolean returning the result of the comparison
+     * @return A boolean returning the result of the comparison 
       */
      private boolean isCellRefSpecialChar(char c) {
          return (c == ':') || (c == '$') || (c == '.');
      }
-
+        
      /**
       * Identify letters
-     *
+     * 
      * @param  c The character which is to be identified
-     * @return A boolean returning the result of the comparison
+     * @return A boolean returning the result of the comparison 
       */
      private boolean isAlpha(char c) {
          return(Character.isLetter(c));
      }
-
+     
      /**
       * Identify numbers
-     *
+     * 
      * @param  c The character which is to be identified
-     * @return A boolean returning the result of the comparison
+     * @return A boolean returning the result of the comparison 
       */
      private boolean isDigit(char c) {
          return(Character.isDigit(c));
@@ -192,19 +192,19 @@ public class FormulaParser {
 
      /**
       * Identify numbers
-     *
+     * 
      * @param  c The character which is to be identified
-     * @return A boolean returning the result of the comparison
+     * @return A boolean returning the result of the comparison 
       */
      private boolean isPercent(char c) {
          return (c == '%');
      }
-
+     
      /**
       * Identify letters or numbers
-     *
+     * 
      * @param  c The character which is to be identified
-     * @return A boolean returning the result of the comparison
+     * @return A boolean returning the result of the comparison 
       */
      private boolean isAlphaNum(char c) {
          return(isAlpha(c) || isDigit(c));
@@ -212,9 +212,9 @@ public class FormulaParser {
 
     /**
       * Identify valid Characters for cell references
-     *
+     * 
      * @param  c The character which is to be identified
-     * @return A boolean returning the result of the comparison
+     * @return A boolean returning the result of the comparison 
       */
      private boolean isCellRefChar(char c) {
          return(isAlpha(c) || isDigit(c) || isCellRefSpecialChar(c));
@@ -226,23 +226,23 @@ public class FormulaParser {
      * @param  c The character which is to be matched
      */
      private void match(char c) throws FormulaParsingException {
-
+         
          if(look==c) {
-            Debug.log(Debug.TRACE,"Operator Found : " + look);
+            Debug.log(Debug.TRACE,"Operator Found : " + look); 			
              getChar();
              skipWhite();
          }
          else
              throw new FormulaParsingException("Unexpected character '" + c + "'" + makeErrorString());
-     }
-
+     }		
+    
     /**
      * Test if current character is a match and move to next character
      *
-     * @param symbol The <code>String</code> to be matched.
+     * @param symbol The <code>String</code> to be matched. 
      */
      private void match(String symbol) throws FormulaParsingException {
-
+    
          int numChars = symbol.length();
         boolean bContinue = true;
         for (int i=0;i<numChars && bContinue; i++) {
@@ -254,28 +254,28 @@ public class FormulaParser {
             }
         }
      }
-
+     
      /**
       * Skip over whitespaces (ie. spaces and tabs)
       */
      private void skipWhite() throws FormulaParsingException {
-
+         
          boolean success = true;
-
+         
          while(Character.isWhitespace(look) && success) {
              success = getChar();
          }
      }
-
+     
      /**
       * This is a factor for multiplication and division operators
       */
      private void factor() throws FormulaParsingException {
-        if(isAddOp(look)) {         // handle unary addop
+        if(isAddOp(look)) {			// handle unary addop
             Character ch = new Character(look);
             match(look);
             tokenVector.add(tokenFactory.getOperatorToken(ch.toString(), 1));
-        }
+        } 
          if(look=='(') {
              match('(');
             tokenVector.add(tokenFactory.getOperatorToken("(", 1));
@@ -288,17 +288,17 @@ public class FormulaParser {
             ident();
          }
      }
-
+     
      /**
       * Pulls the next character from the <code>String</code>
-      *
-      * @return boolean false if the end if the statement
-      *                     is reached otherwise true
+      * 
+      * @return boolean	false if the end if the statement 
+      * 					is reached otherwise true
       */
      private boolean getChar() throws FormulaParsingException {
-
+         
              boolean success = true;
-
+             
              if(index<formulaStr.length()) {
                  look = formulaStr.charAt(index);
                  index++;
@@ -308,22 +308,22 @@ public class FormulaParser {
                  success = false;
              }
              return success;
-     }
-
+     } 	
+     
     /**
      * Parses the number of arguments in a function
-     *
+     * 
      * @return The number of arguments
      */
     private int arguments() throws FormulaParsingException {
         int numArgs;
-
+            
         skipWhite();
         if(look==')')
             numArgs = 0;
         else
             numArgs = 1;
-
+         
         while(look!=')') {
             expression();
             if(look==',') {
@@ -338,7 +338,7 @@ public class FormulaParser {
      /**
       * Test to see if we have come across a cell reference or a Name
      * Definition.
-     */
+     */  
      private boolean isCellRef(String s) {
          char c;
         boolean result = false;
@@ -353,30 +353,30 @@ public class FormulaParser {
 
         // if it is a simple cell reference then there will not be a cell
         // reference 'special char' so we should also look for a digit
-        if(!result) {
+        if(!result) {			
             if(isDigit(s.charAt(1)) || isDigit(s.charAt(2))) {
                 result = true;
             }
         }
         return result;
      }
-
+     
      /**
       * Test to see if we have come across a cell reference or a function and
      * add the resulting toek nto the tokenVector.
      */
      private void ident() throws FormulaParsingException {
-
+             
          String cell = getTokenString();
         if(look=='(') {
             Debug.log(Debug.TRACE,"Found Function : " + cell);
-
+                    
             int index = tokenVector.size();
              match('(');
             tokenVector.add(tokenFactory.getOperatorToken("(", 1));
             int numArgs = arguments();
             match(')');
-            tokenVector.add(tokenFactory.getOperatorToken(")", 1));
+            tokenVector.add(tokenFactory.getOperatorToken(")", 1));                        
             tokenVector.insertElementAt(tokenFactory.getFunctionToken(cell, numArgs), index);
          } else {
 
@@ -396,17 +396,17 @@ public class FormulaParser {
             }
          }
      }
-
+ 
      /**
      * Will keep pulling valid logical operators from the formula and return
      * the resultant <code>String</code>.
-     *
+     * 
      * @return a <code>String<code> representing a logical operator
      */
     private String getLogicalOperator() throws FormulaParsingException {
         String op = new String();
         boolean status;
-
+        
         do {
             op += look;
             status = getChar();
@@ -414,15 +414,15 @@ public class FormulaParser {
          skipWhite();
         return op;
     }
-
+    
      /**
-      * Keeps pulling characters from the statement until we get an
+      * Keeps pulling characters from the statement until we get an 
      * operator and returns the resulting string.
      *
      * @return A <code>String</code>representing the next token
       */
       private String getTokenString() throws FormulaParsingException {
-
+          
          if(!isAlpha(look) && look!='$')
              throw new FormulaParsingException("Expected Cell Reference" + makeErrorString());
          else {
@@ -436,20 +436,20 @@ public class FormulaParser {
                         return cell;
            }
      }
-
+     
      /**
       * Keeps pulling numbers from the statement and add the resulting integer
      * token to the tokenVector.
-      */
+      */ 		
      private void getNum() throws FormulaParsingException {
-
-        Debug.log(Debug.TRACE,"getNum : ");
+         
+        Debug.log(Debug.TRACE,"getNum : ");	
          if(!isDigit(look))
              throw new FormulaParsingException("Expected Integer" + makeErrorString());
          else {
              String num = new String();
              boolean status;
-
+             
              do {
                  num += look;
                 status = getChar();
@@ -459,13 +459,13 @@ public class FormulaParser {
             if(isPercent(look)) {
                 match(look);
                 tokenVector.add(tokenFactory.getOperatorToken("%", 1));
-                Debug.log(Debug.TRACE,"Added Percent token to Vector: ");
+                Debug.log(Debug.TRACE,"Added Percent token to Vector: ");	
             }
-            Debug.log(Debug.TRACE,"Number parsed : " + num);
+            Debug.log(Debug.TRACE,"Number parsed : " + num);	
          }
      }
-
-
+    
+    
     /**
      * Term will parse multiplication/division expressions
      */
@@ -473,15 +473,15 @@ public class FormulaParser {
         factor();
         while(isMultiOp()) {
             multiOp(Character.toString(look));
-        }
+        }	
      }
-
+     
      /**
       * Expression is the entry point for the parser. It is the code
      * that parses addition/subtraction expressions.
       */
      private void expression() throws FormulaParsingException {
-
+         
         if (look == '"') { //Extract a quoted string...
             StringBuffer buff = new StringBuffer();
             boolean success = true;
@@ -490,12 +490,12 @@ public class FormulaParser {
                 buff.append(look);
                 success = getChar();
             }
-
+            
             if (look != '"') { //We've reached the end of the string without getting a closing quote
                 throw new FormulaParsingException("Expected closing quote." + makeErrorString());
             } else {
                 tokenVector.add(tokenFactory.getOperandToken(buff.toString(), "STRING"));
-                getChar();      //Move on to the next character
+                getChar();		//Move on to the next character
             }
         } else {
             term();
@@ -504,10 +504,10 @@ public class FormulaParser {
             if (isAddOp(look)) {
                 addOp(Character.toString(look));
             } else if (isLogicalOp()) {
-                logicalOp();
+                logicalOp();	
             }
-        }
-     }
+        }	
+     } 	
 
     /**
      * Test to see if the next token (represented as a <code>String</code>) is
@@ -520,10 +520,10 @@ public class FormulaParser {
     private void addOp(String op) throws FormulaParsingException {
          match(op);
         tokenVector.add(tokenFactory.getOperatorToken(op, 2));
-         term();
+         term();		
     }
-
-    /**
+    
+    /**	
      * Test to see if the next token (represented as a <code>String</code>) is
      * the same as the String passed in. Move the index along to the end of
      * that String and add that <code>Token</code> to the tokenVector. Then
@@ -536,7 +536,7 @@ public class FormulaParser {
         tokenVector.add(tokenFactory.getOperatorToken(op, 2));
          factor();
     }
-
+    
     /**
      * Pull a logical operator starting at the current index, add a token for
      * that operator to the tokenVector and call <code>term<code> to parse the
@@ -553,7 +553,7 @@ public class FormulaParser {
         for (int i=0; i<index-1; i++) {
             buff.append(' ');
         }
-
+        
         buff.append('^');
         return "\n\t" + formulaStr + "\n\t" + buff.toString();
     }

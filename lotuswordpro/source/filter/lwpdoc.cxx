@@ -86,7 +86,7 @@ LwpDocument::~LwpDocument()
     }
 }
 /**
- * @descr   Read VO_Document from object stream
+ * @descr	Read VO_Document from object stream
  **/
 void LwpDocument::Read()
 {
@@ -138,7 +138,7 @@ void LwpDocument::Read()
 }
 
 /**
- * @descr   Read plug related data from m_pObjStram
+ * @descr	Read plug related data from m_pObjStram
  **/
 void LwpDocument::ReadPlug()
 {
@@ -148,7 +148,7 @@ void LwpDocument::ReadPlug()
 }
 
 /**
- * @descr   Parse obj to IXFStream
+ * @descr	Parse obj to IXFStream
  **/
 void LwpDocument::Parse(IXFStream* pOutputStream)
 {
@@ -245,7 +245,7 @@ void LwpDocument::RegisterTextStyles()
 }
 /**
  * @descr  Register all layouts styles (page master and master page)
- *       All para styles used in master page (header and footer) are registered and then showed
+ * 		 All para styles used in master page (header and footer) are registered and then showed
  */
 void LwpDocument::RegisterLayoutStyles()
 {
@@ -433,7 +433,7 @@ void LwpDocument::ParseMasterDoc(IXFStream* pOutputStream)
     }
 }
 /**
- * @descr    Get the footnoteoptions from the root document
+ * @descr	 Get the footnoteoptions from the root document
  */
 LwpObjectID* LwpDocument::GetValidFootnoteOpts()
 {
@@ -446,7 +446,7 @@ LwpObjectID* LwpDocument::GetValidFootnoteOpts()
 }
 
 /**
- * @descr    Get the endnote type
+ * @descr	 Get the endnote type
  */
 sal_uInt16 LwpDocument::GetEndnoteType()
 {
@@ -463,7 +463,7 @@ sal_uInt16 LwpDocument::GetEndnoteType()
     return FN_DONTCARE;
 }
 /**
- * @descr       Get previous division
+ * @descr	 	Get previous division
  */
 LwpDocument* LwpDocument::GetPreviousDivision()
 {
@@ -475,7 +475,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     return NULL;
 }
 /**
- * @descr    Get next division
+ * @descr	 Get next division
  */
  LwpDocument* LwpDocument::GetNextDivision()
 {
@@ -487,7 +487,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     return NULL;
 }
 /**
- * @descr    Get parent division
+ * @descr	 Get parent division
  */
  LwpDocument* LwpDocument::GetParentDivision()
 {
@@ -499,7 +499,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     return NULL;
 }
 /**
- * @descr    Get previous division in group, copy from lwp source code
+ * @descr	 Get previous division in group, copy from lwp source code
  */
  LwpDocument* LwpDocument::GetPreviousInGroup()
 {
@@ -514,7 +514,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     return NULL;
 }
 /**
- * @descr       Get previous division in group, copy from lwp source code
+ * @descr	 	Get previous division in group, copy from lwp source code
  */
  LwpDocument* LwpDocument::GetNextInGroup()
 {
@@ -530,7 +530,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     return NULL;
 }
 /**
- * @descr    Get previous division which has contents, copy from lwp source code
+ * @descr	 Get previous division which has contents, copy from lwp source code
  */
  LwpDocument* LwpDocument::GetPreviousDivisionWithContents()
 {
@@ -545,7 +545,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     return NULL;
 }
  /**
- * @descr    Get last division which has contents, copy from lwp source code
+ * @descr	 Get last division which has contents, copy from lwp source code
  */
  LwpDocument* LwpDocument::GetLastDivisionWithContents()
 {
@@ -571,7 +571,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     return NULL;
 }
  /**
- * @descr    Get last division in group  which has contents, copy from lwp source code
+ * @descr	 Get last division in group  which has contents, copy from lwp source code
  */
  LwpDocument* LwpDocument::GetLastInGroupWithContents()
 {
@@ -590,7 +590,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     return NULL;
 }
   /**
- * @descr    Get last division
+ * @descr	 Get last division
  */
  LwpDocument* LwpDocument::GetLastDivision()
 {
@@ -601,7 +601,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 }
 
   /**
- * @descr    Get first division
+ * @descr	 Get first division
  */
  LwpDocument* LwpDocument::GetFirstDivision()
 {
@@ -612,7 +612,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 }
 
  /**
- * @descr    Get root document
+ * @descr	 Get root document
  */
  LwpDocument* LwpDocument::GetRootDocument()
 {
@@ -626,7 +626,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     return NULL;
 }
   /**
- * @descr    Get first division with contents that is not ole, copy from lwp-source code
+ * @descr	 Get first division with contents that is not ole, copy from lwp-source code
  */
  LwpDocument* LwpDocument::GetFirstDivisionWithContentsThatIsNotOLE()
 {
@@ -649,7 +649,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     return NULL;
 }
  /**
- * @descr    Get last division that has endnote
+ * @descr	 Get last division that has endnote
  */
  LwpDocument* LwpDocument::GetLastDivisionThatHasEndnote()
 {
@@ -665,7 +665,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 
 }
  /**
- * @descr    Get endnote supertable layout, every division has only one endnote supertable layout.
+ * @descr	 Get endnote supertable layout, every division has only one endnote supertable layout.
  */
  LwpVirtualLayout* LwpDocument::GetEnSuperTableLayout()
 {
@@ -678,7 +678,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 }
 
 /**
- * @descr    Get the numbers of page  before pEndDivision, copy from lwp source code
+ * @descr	 Get the numbers of page  before pEndDivision, copy from lwp source code
  */
  sal_Bool LwpDocument::GetNumberOfPages(LwpDocument* pEndDivision, sal_uInt16& nCount)
 {
@@ -702,7 +702,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     return sal_False;
 }
 /**
- * @descr    Get the numbers of page  before curruent division
+ * @descr	 Get the numbers of page  before curruent division
  */
 sal_uInt16 LwpDocument::GetNumberOfPagesBefore()
 {
@@ -713,7 +713,7 @@ sal_uInt16 LwpDocument::GetNumberOfPagesBefore()
     return nPageNumber;
 }
  /**
- * @descr    Get the numbers of page before this division
+ * @descr	 Get the numbers of page before this division
  */
  sal_uInt16 LwpDocument::GetMaxNumberOfPages()
 {
@@ -722,7 +722,7 @@ sal_uInt16 LwpDocument::GetNumberOfPagesBefore()
     return nPageNumber;
 }
  /**
- * @descr    Get Max number of pages
+ * @descr	 Get Max number of pages
  */
  void  LwpDocument::MaxNumberOfPages(sal_uInt16& nNumPages)
 {
@@ -738,8 +738,8 @@ sal_uInt16 LwpDocument::GetNumberOfPagesBefore()
     }
 }
   /**
- * @descr    Parse the frame which anchor is to page before parse other contents,
- *          This method is called when the document is root document.
+ * @descr	 Parse the frame which anchor is to page before parse other contents,
+ *			This method is called when the document is root document.
  */
 void LwpDocument::ParseFrameInPage(IXFStream * pOutputStream)
 {
@@ -755,7 +755,7 @@ void LwpDocument::ParseFrameInPage(IXFStream * pOutputStream)
     pXFContainer = NULL;
 }
  /**
- * @descr    Parse the frame which anchor is to page in the entire document
+ * @descr	 Parse the frame which anchor is to page in the entire document
  */
 void LwpDocument::XFConvertFrameInPage(XFContentContainer * pCont)
 {
@@ -779,7 +779,7 @@ void LwpDocument::XFConvertFrameInPage(XFContentContainer * pCont)
     }
 }
  /**
- * @descr    change click here to placeholder
+ * @descr	 change click here to placeholder
  */
 void LwpDocument::ChangeStyleName()
 {
@@ -795,7 +795,7 @@ LwpDocSock::LwpDocSock(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
 {}
 
  /**
- * @descr    read VO_DOCSOCK from file
+ * @descr	 read VO_DOCSOCK from file
  */
 void LwpDocSock::Read()
 {
@@ -804,7 +804,7 @@ void LwpDocSock::Read()
     m_pObjStrm->SkipExtra();
 }
  /**
- * @descr    register styles in documents plugged
+ * @descr	 register styles in documents plugged
  */
 void LwpDocSock::RegisterStyle()
 {
@@ -817,7 +817,7 @@ void LwpDocSock::RegisterStyle()
         pDoc->RegisterStyle();
 }
  /**
- * @descr    parse contents of documents plugged
+ * @descr	 parse contents of documents plugged
  */
 void LwpDocSock::Parse(IXFStream* pOutputStream)
 {
