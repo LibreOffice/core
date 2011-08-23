@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,23 +24,23 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_security_XAction_idl__
-#define __com_sun_star_security_XAction_idl__
-
+#ifndef __com_sun_star_security_XAction_idl__ 
+#define __com_sun_star_security_XAction_idl__ 
+ 
 #ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/uno/XInterface.idl> 
 #endif
 #ifndef __com_sun_star_uno_Exception_idl__
-#include <com/sun/star/uno/Exception.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module security {
-
-//=============================================================================
-
+#include <com/sun/star/uno/Exception.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module security {  
+ 
+//============================================================================= 
+ 
 /** Interface for running an action.
 
     @since OOo 1.1.2
@@ -48,7 +48,7 @@ module com {  module sun {  module star {  module security {
 published interface XAction : com::sun::star::uno::XInterface
 {
     /** Action to be done.
-
+        
         @return
                 result
         @throws com::sun::star::uno::Exception
@@ -58,7 +58,7 @@ published interface XAction : com::sun::star::uno::XInterface
         raises (com::sun::star::uno::Exception);
 };
 
-//=============================================================================
+//============================================================================= 
 
 }; }; }; };
 

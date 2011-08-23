@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,16 +54,16 @@ typedef ::cppu::WeakComponentImplHelper1<
 class SingletonFactory : public MutexHolder, public t_impl
 {
     ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > m_vm_access;
-
+    
 protected:
     virtual void SAL_CALL disposing();
-
+    
 public:
     inline SingletonFactory( ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access )
         : t_impl( m_mutex ),
           m_vm_access( vm_access )
         {}
-
+    
     // XSingleComponentFactory impl
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext(
         css::uno::Reference< css::uno::XComponentContext > const & xContext )

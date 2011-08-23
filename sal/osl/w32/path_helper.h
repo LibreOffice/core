@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,19 +39,19 @@ extern "C"
 
 /*******************************************************************
  osl_systemPathEnsureSeparator
- Adds a trailing path separator to the given system path if not
+ Adds a trailing path separator to the given system path if not 
  already there and if the path is not the root path or a logical
  drive alone
  ******************************************************************/
-
+ 
 void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath);
 
 /*******************************************************************
  osl_systemPathRemoveSeparator
- Removes the last separator from the given system path if any and
+ Removes the last separator from the given system path if any and 
  if the path is not the root path '\'
  ******************************************************************/
-
+ 
 void SAL_CALL osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath);
 
 /*******************************************************************
@@ -60,9 +60,9 @@ void SAL_CALL osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath);
  A logical drive pattern is something like "a:\", "c:\".
  No logical drive pattern is something like "c:\test"
  ******************************************************************/
-
+ 
 sal_Int32 osl_systemPathIsLogicalDrivePattern(/*in*/ const rtl_uString* pustrPath);
-
+          
 #ifdef __cplusplus
 }
 #endif

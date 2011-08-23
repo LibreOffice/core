@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,8 +116,8 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstUShort")) == aConstUShort, "test_RegCoreReflection(): error 4i");
     TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstLong")) == aConstLong, "test_RegCoreReflection(): error 4k");
     TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstULong")) == aConstULong, "test_RegCoreReflection(): error 4m");
-//      TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstFloat")) == aConstFloat, "test_RegCoreReflection(): error 4o");
-//      TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstDouble")) == aConstDouble, "test_RegCoreReflection(): error 4q");
+//  	TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstFloat")) == aConstFloat, "test_RegCoreReflection(): error 4o");
+//  	TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstDouble")) == aConstDouble, "test_RegCoreReflection(): error 4q");
 
     // Enums
 
@@ -245,14 +245,14 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     TEST_ENSHURE(aAny.getValueTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("[][]ModuleA.StructA") ), "test_RegCoreReflection(): error 56");
 
-//      xClass = xRefl->forName(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.XIntroTest") ));
+//  	xClass = xRefl->forName(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.XIntroTest") ));
 
-//      TEST_ENSHURE(xClass.is(), "test_RegCoreReflection(): error 58");
-//      TEST_ENSHURE(xClass->getMethod(OUString::createFromAscii("getStrings"))->getReturnType()->getTypeClass() == TypeClass_SEQUENCE, "test_RegCoreReflection(): error 59");
-//      TEST_ENSHURE(xClass->getMethod(OUString::createFromAscii("getStrings"))->getReturnType()->getComponentType()->getName() == OUString::createFromAscii("string"), "test_RegCoreReflection(): error 60");
+//  	TEST_ENSHURE(xClass.is(), "test_RegCoreReflection(): error 58");
+//  	TEST_ENSHURE(xClass->getMethod(OUString::createFromAscii("getStrings"))->getReturnType()->getTypeClass() == TypeClass_SEQUENCE, "test_RegCoreReflection(): error 59");
+//  	TEST_ENSHURE(xClass->getMethod(OUString::createFromAscii("getStrings"))->getReturnType()->getComponentType()->getName() == OUString::createFromAscii("string"), "test_RegCoreReflection(): error 60");
 
-//      xClass->getMethod(OUString::createFromAscii("getStrings"))->getReturnType()->createObject(aAny);
-//      TEST_ENSHURE(aAny.getValueTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("[]string") ),  "test_RegCoreReflection(): error 61");
+//  	xClass->getMethod(OUString::createFromAscii("getStrings"))->getReturnType()->createObject(aAny);
+//  	TEST_ENSHURE(aAny.getValueTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("[]string") ),  "test_RegCoreReflection(): error 61");
 
     TEST_ENSHURE(xRefl->forName(OUString::createFromAscii("[][][]unsigned long"))->getComponentType()->getComponentType()->getComponentType()->getTypeClass() == TypeClass_UNSIGNED_LONG, "test_RegCoreReflection(): error 62");
 
@@ -275,7 +275,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
         Any gulp;
         rField = Reference< XIdlField2 > ( xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString")) , UNO_QUERY);
         rField->set( blup, gulp);
-//          xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString"))->set(blup, gulp);
+//  		xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString"))->set(blup, gulp);
         TEST_ENSHURE(sal_False, "test_RegCoreReflection(): error 64");
         return sal_False;
     }
@@ -372,7 +372,7 @@ SAL_IMPLEMENT_MAIN()
     {
         OUString aLibName( RTL_CONSTASCII_USTRINGPARAM(
                                "reflection.uno" SAL_DLLEXTENSION) );
-
+        
         Reference< XMultiServiceFactory > xMgr(
             createRegistryServiceFactory(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb") ) ) );
@@ -392,7 +392,7 @@ SAL_IMPLEMENT_MAIN()
                         >>= xRefl;
         OSL_ENSURE(
             xRefl.is(), "### CoreReflection singleton not accessable!?" );
-
+        
         bSucc = test_corefl( xRefl );
 
         Reference< XComponent >( xContext, UNO_QUERY )->dispose();

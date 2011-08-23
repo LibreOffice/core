@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 /*****************************************************************************/
 /* osl_createSemaphore */
 /*****************************************************************************/
-oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount)
+oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount) 
 {
     oslSemaphore Semaphore;
 
@@ -52,27 +52,27 @@ oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount)
         Semaphore= 0;
     }
 
-    return Semaphore;
+    return Semaphore;  
 }
 
 /*****************************************************************************/
 /* osl_destroySemaphore */
 /*****************************************************************************/
-void SAL_CALL osl_destroySemaphore(oslSemaphore Semaphore)
+void SAL_CALL osl_destroySemaphore(oslSemaphore Semaphore) 
 {
 
-
-    if(Semaphore != 0)
+    
+    if(Semaphore != 0) 
     {
         CloseHandle((HANDLE)Semaphore);
     }
 
 }
-
+             
 /*****************************************************************************/
 /* osl_acquireSemaphore */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore)
+sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore) 
 {
     OSL_ASSERT(Semaphore != 0);
 
@@ -82,7 +82,7 @@ sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore)
             return sal_True;
 
         default:
-            return (sal_False);
+            return (sal_False);			
     }
 }
 
@@ -99,12 +99,12 @@ sal_Bool SAL_CALL osl_tryToAcquireSemaphore(oslSemaphore Semaphore)
 /*****************************************************************************/
 /* osl_releaseSemaphore */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore)
+sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore) 
 {
     OSL_ASSERT(Semaphore != 0);
 
     /* increase count by one, not interested in previous count */
-    return (sal_Bool)(ReleaseSemaphore((HANDLE)Semaphore, 1, NULL) != FALSE);
+    return (sal_Bool)(ReleaseSemaphore((HANDLE)Semaphore, 1, NULL) != FALSE);			
 }
 
 

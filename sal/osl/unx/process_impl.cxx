@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -330,15 +330,15 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir
 {
     oslProcessError result = osl_Process_E_Unknown;
     char buffer[PATH_MAX];
-
+    
     OSL_PRECOND(ppustrWorkingDir, "osl_getProcessWorkingDir(): Invalid parameter");
 
     if (getcwd (buffer, sizeof(buffer)) != 0)
     {
         rtl_uString* ustrTmp = 0;
 
-        rtl_string2UString(
-            &ustrTmp,
+        rtl_string2UString( 
+            &ustrTmp, 
             buffer, strlen(buffer), osl_getThreadTextEncoding(),
             OSTRING_TO_OUSTRING_CVTFLAGS);
         if (ustrTmp != 0)

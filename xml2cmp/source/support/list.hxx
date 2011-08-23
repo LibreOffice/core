@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,24 +45,24 @@ class List
 
     // OPERATORS
     const XX &          operator[](
-                            unsigned            n) const
+                            unsigned 			n) const
                                                 { return elem(n); }
     XX &                operator[](
-                            unsigned            n)
+                            unsigned 			n)
                                                 { return elem(n); }
     // OPERATIONS
     void                reserve(
-                            unsigned            i_nSize )
+                            unsigned			i_nSize )
                                                 { alloc(i_nSize,true); }
     virtual void        insert(
-                            unsigned            pos,
+                            unsigned 			pos,
                             const XX &          elem );
     void                push_back(
-                            const XX &          elem_)
+                            const XX & 			elem_)
                                                 { insert(size(),elem_); }
 
     virtual void        remove(
-                            unsigned            pos );
+                            unsigned 			pos );
     void                pop_back()              { remove(size()-1); }
     void                erase_all()             { while (size()) remove(size()-1); }
 
@@ -73,7 +73,7 @@ class List
     unsigned            size() const            { return len; }
     unsigned            space() const           { return allocated; }
     bool                is_valid_index(
-                            unsigned            n) const
+                            unsigned			n) const
                                                 { return n < len; }
     // ACCESS
     XX &                front()                 { return elem(0); }
@@ -81,19 +81,19 @@ class List
 
   protected:
     void                checkSize(
-                            unsigned            newLength);
-    void                alloc(
-                            unsigned            newSpace,
+                            unsigned 			newLength);
+    void        		alloc(
+                            unsigned			newSpace,
                             bool                re = false );
 
-    const XX &          elem(
-                            unsigned            n ) const
+    const XX &         	elem(
+                            unsigned 			n ) const
                                                 { return inhalt[n]; }
-    XX &                elem(
-                            unsigned            n )
+    XX &        		elem(
+                            unsigned 			n )
                                                 { return inhalt[n]; }
   // DATA
-    XX *                inhalt;
+    XX *        		inhalt;
     unsigned            len;
     unsigned            allocated;
 
@@ -101,7 +101,7 @@ class List
     // forbidden functions
                         List(const List<XX> & L);
     List<XX> &          operator=(
-                            const List<XX> &    L);
+                            const List<XX> & 	L);
 
 };
 
@@ -112,10 +112,10 @@ class DynamicList : public List<XY*>
     virtual             ~DynamicList();
 
     virtual void        insert(
-                            unsigned            pos,
+                            unsigned 			pos,
                             XY * const &        elem );
     virtual void        remove(
-                            unsigned            pos );
+                            unsigned 			pos );
 };
 
 

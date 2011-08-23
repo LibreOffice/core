@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,13 +67,13 @@ published service OleDragSource
     interface XDragSource;
 
     //-------------------------------------------------------------------------
-    /** The service expects a byte sequence uniquely identifying the machine as
+    /** The service expects a byte sequence uniquely identifying the machine as 
         the first, and only, parameter. This idenifier should be checked to
-        ensure that the window ids used for creating DropTargets are valid for
+        ensure that	the window ids used for creating DropTargets are valid for
         the service, that is, come from the same machine.
 
         <p>TODO: specify how such a machine id should look like.</p>
-
+    
         The second parameter is a window handle of the native windows window.
         Is is passed as an unsigned long.
     */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,28 +32,28 @@
 typedef struct _typelib_TypeDescriptionReference typelib_TypeDescriptionReference;
 
 namespace com
-{
+{     
 namespace sun
-{
+{     
 namespace star
-{
+{     
 namespace uno
-{
+{     
 
 /** Function to acquire a C++ interface.
-
+    
     @param pCppI C++ interface pointer
 */
 inline void SAL_CALL cpp_acquire( void * pCppI )
     SAL_THROW( () );
 /** Function to release a C++ interface.
-
+    
     @param pCppI C++ interface pointer
 */
 inline void SAL_CALL cpp_release( void * pCppI )
     SAL_THROW( () );
 /** Function to query for a C++ interface.
-
+    
     @param pCppI C++ interface pointer
     @param pType demanded interface type
     @return acquired C++ interface pointer or null

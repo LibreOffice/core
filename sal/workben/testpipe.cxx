@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ void fail( const char * pszText, int retval )
     if( Process ) osl_freeProcessHandle( Process );
     exit( retval );
 }
-
+    
 
 
 /*
@@ -73,13 +73,13 @@ int main (int argc, const char *argv[])
     // erzeuge die Pipe
     rtl_uString* ustrPipeName=0;
     rtl_uString* ustrExeName=0;
-
+    
 
     rtl_uString_newFromAscii(&ustrPipeName,pszPipeName);
     rtl_uString_newFromAscii(&ustrExeName, "//./tmp/testpip2.exe");
-
+    
     Pipe = osl_createPipe( ustrPipeName, osl_Pipe_CREATE, 0 );
-
+    
     if( !Pipe )
         fail( "unable to create Pipe.\n",
               osl_getLastPipeError(NULL));
@@ -106,7 +106,7 @@ int main (int argc, const char *argv[])
         fail( "unable to connect to client.\n",
             osl_getLastPipeError( Pipe ));
 
-
+    
     if( argc > 1 )
     {
         cp = argv[1];
@@ -117,14 +117,14 @@ int main (int argc, const char *argv[])
         cp = szTestString;
         n  = sizeof(szTestString);
     }
-
+        
     // sende TestString zum Client
     nChars = osl_sendPipe( C1Pipe, cp, n );
-
+    
     if( nChars < 0 )
         fail( "unable to write on pipe.\n",
               osl_getLastPipeError( Pipe ) );
-
+              
     // empfange Daten vom Server
     nChars = osl_receivePipe( C1Pipe, szBuffer, 256 );
 
@@ -136,23 +136,23 @@ int main (int argc, const char *argv[])
 
     // warte bis das Client-Programm sich beendet
     ProcessError = osl_joinProcess( Process );
-
+    
     if( ProcessError != osl_Process_E_None )
         fail( "unable to wait for client.\n",
               ProcessError );
 
     // ermittle den Rckgabewert des Client-Programms
     ProcessInfo.Size = sizeof( ProcessInfo );
-
+    
     ProcessError = osl_getProcessInfo( Process, osl_Process_EXITCODE, &ProcessInfo );
-
+    
     if( ProcessError != osl_Process_E_None )
         fail( "unable to receive return value of client process.\n",
               ProcessError );
 
     if( ProcessInfo.Code != 0 )
         fail( "client aborted.\n", ProcessInfo.Code );
-
+    
     // gib das Handle fuer den Client-Prozess frei
     osl_freeProcessHandle( Process );
 
@@ -164,5 +164,5 @@ int main (int argc, const char *argv[])
     return 0;
 }
 
-
+  
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,14 +33,14 @@ extern int Cplusplus;
 Nlist *kwdefined;
 char wd[128];
 
-/*
+/* 
     ER: Tabelle extra gross gemacht, da es anscheinend ein Problem mit der
     der Verkettung gibt, irgendwann irgendwo wird mal ein nlist->next
     ueberschrieben, was in eineme SIGSEGV resultiert.
     Den GDB mit watchpoint hab ich aber nach 2 Tagen abgebrochen..
     so loeppt's jedenfalls erstmal..
  */
-#define NLSIZE 15000
+#define	NLSIZE 15000
 
 static Nlist *nlist[NLSIZE];
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,26 +24,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_XMultipleResults_idl__
-#define __com_sun_star_sdbc_XMultipleResults_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_SQLException_idl__
-#include <com/sun/star/sdbc/SQLException.idl>
-#endif
-
- module com {  module sun {  module star {  module sdbc {
-
- published interface XResultSet;
-
-
+#ifndef __com_sun_star_sdbc_XMultipleResults_idl__ 
+#define __com_sun_star_sdbc_XMultipleResults_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_sdbc_SQLException_idl__ 
+#include <com/sun/star/sdbc/SQLException.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module sdbc { 
+ 
+ published interface XResultSet; 
+ 
+ 
 /** is used for inspecting multiple results produced by the execution of a
     SQL statement.
-
-
+    
+    
     <p>
     Under some (uncommon) situations a single SQL statement may return
     multiple result sets and/or update counts.  Normally you can ignore
@@ -56,62 +56,62 @@
     and
     <member scope="com::sun::star::sdbc">XMultipleResults::getUpdateCount()</member>
     let you navigate through multiple results.
-
+    
     </p>
-    @see com::sun::star::sdbc::XStatement
+    @see com::sun::star::sdbc::XStatement 
      @see com::sun::star::sdbc::XPreparedStatement
  */
 published interface XMultipleResults: com::sun::star::uno::XInterface
-{
-
+{ 
+     
     /** returns the current result as a
         <type scope="com::sun::star::sdbc">ResultSet</type>
         object.
         This method should be called only once per result.
         @returns
             the ResultSet object
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    XResultSet getResultSet() raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    XResultSet getResultSet() raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** returns the current result as an update count.
-
-
+        
+        
         <p>
         If the result is a ResultSet or there are no more results, -1
         is returned. This method should be called only once per result.
         </p>
         @returns
             the current result as an update count.
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    long getUpdateCount() raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    long getUpdateCount() raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** moves to a Statement's next result. It returns <TRUE/> if
         this result is a ResultSet.  This method also implicitly
         closes any current ResultSet obtained with getResultSet.
-
+        
         <p>
         There are no more results when <code>(!getMoreResults() &amp;amp;&amp;amp;
         getUpdateCount() == -1)</code>.
-
+        
         </p>
         @returns
             <TRUE/> if there exists more ResultSet objects
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    boolean getMoreResults() raises (SQLException);
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    boolean getMoreResults() raises (SQLException); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

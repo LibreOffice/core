@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,26 +29,26 @@
 
 #ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_configuration_backend_XUpdateHandler_idl__
 #include <com/sun/star/configuration/backend/XUpdateHandler.idl>
-#endif
+#endif 
 
-//=============================================================================
+//============================================================================= 
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
+//============================================================================= 
 
-/**
+/** 
     applies updates to a configuration layer.
 
-    <p> The configuration layer data is read from a <type>XLayer</type>
-    and the changed layer is provided as <type>XLayer</type> again or
+    <p> The configuration layer data is read from a <type>XLayer</type> 
+    and the changed layer is provided as <type>XLayer</type> again or 
     described to a <type>XLayerHandler</type>.
     </p>
-
+  
     @see com::sun::star::configuration::backend::UpdatableLayer
         Service describes a layer and accepts a changed layer..
 
@@ -56,25 +56,25 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service LayerUpdateMerger
 {
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** accepts events describing the changes.
       */
     interface com::sun::star::configuration::backend::XUpdateHandler ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** allows initializing layer data source and target.
 
         <p> Both source and target of the update can be provided by passing a
-            <type>XUpdatableLayer</type> object. Alternatively they can be
+            <type>XUpdatableLayer</type> object. Alternatively they can be 
             provided individually by providing a <type>XLayer</type> object as
-            data source and an <type>XLayerHandler</type> object to receive the
+            data source and an <type>XLayerHandler</type> object to receive the 
             updated data.
-        </p>
-        <p> Implementations can provide more arguments to finetune the behavior.
-            Such arguments are provided as
-            <type scope="com::sun::star::beans">NamedValue</type>.
+        </p> 
+        <p> Implementations can provide more arguments to finetune the behavior. 
+            Such arguments are provided as 
+            <type scope="com::sun::star::beans">NamedValue</type>. 
             Implementations should support the following named arguments:
         <dl>
             <dt><code>Overwrite</code> : <atom>boolean</atom></dt>
@@ -82,8 +82,8 @@ published service LayerUpdateMerger
                 only if the existing layer is empty.
             </dd>
             <dt><code>Truncate</code> : <atom>boolean</atom></dt>
-            <dd>If <TRUE/> requests that changes should not be merged onto
-                existing data, but that the changes should be applied
+            <dd>If <TRUE/> requests that changes should not be merged onto 
+                existing data, but that the changes should be applied  
                 to a layer that is completely empty.
             </dd>
         </dl>
@@ -91,11 +91,11 @@ published service LayerUpdateMerger
       */
     interface com::sun::star::lang::XInitialization ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 } ;
 
-//=============================================================================
+//============================================================================= 
 
-} ; } ; } ; } ; } ;
+} ; } ; } ; } ; } ; 
 
-#endif
+#endif 

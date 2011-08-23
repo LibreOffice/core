@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 /** @HTML */
 
 #ifndef _OSL_MODULE_HXX_
@@ -47,16 +47,16 @@ public:
     }
 
     /** Get module URL from the specified function address in the module.
-
-        Similar to getUrlFromAddress, but use a function address to get URL of the Module.
+    
+        Similar to getUrlFromAddress, but use a function address to get URL of the Module. 
         Use Function pointer as symbol address to conceal type conversion.
-
+       
         @param addr
         [in] function address in oslGenericFunction format.
-
+               
         @param libraryUrl
         [in|out] receives the URL of the module.
-
+           
         @return
         <dl>
         <dt>sal_True</dt>
@@ -64,7 +64,7 @@ public:
         <dt>sal_False</dt>
         <dd>can not get the URL from the specified function address or the parameter is invalid.</dd>
         </dl>
-
+           
         @see getUrlFromAddress
     */
     static sal_Bool getUrlFromAddress( oslGenericFunction addr, ::rtl::OUString & libraryUrl){
@@ -83,7 +83,7 @@ public:
         osl_unloadModule(m_Module);
     }
 
-    sal_Bool SAL_CALL load( const ::rtl::OUString& strModuleName,
+    sal_Bool SAL_CALL load( const ::rtl::OUString& strModuleName, 
         sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT)
     {
         unload();
@@ -112,7 +112,7 @@ public:
 
     sal_Bool SAL_CALL is() const
     {
-           return m_Module != NULL;
+           return m_Module != NULL; 
     }
 
     void* SAL_CALL getSymbol( const ::rtl::OUString& strSymbolName)
@@ -122,12 +122,12 @@ public:
 
     /** Get function address by the function name in the module.
 
-        getFunctionSymbol is an alternative function for getSymbol.
+        getFunctionSymbol is an alternative function for getSymbol. 
         Use Function pointer as symbol address to conceal type conversion.
 
         @param ustrFunctionSymbolName
         [in] Function name to be looked up.
-
+   
         @return
         <dl>
         <dt>oslGenericFunction format function address</dt>
@@ -135,7 +135,7 @@ public:
         <dt>NULL</dt>
         <dd>lookup failed or parameter is somewhat invalid</dd>
         </dl>
-
+   
         @see getSymbol
     */
     oslGenericFunction SAL_CALL getFunctionSymbol( const ::rtl::OUString& ustrFunctionSymbolName )

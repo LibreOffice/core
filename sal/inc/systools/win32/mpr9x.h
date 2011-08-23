@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-#pragma once
+#pragma once 
 
 #ifndef _WINDOWS_
 #include <windows.h>
@@ -37,7 +37,7 @@ extern "C"{
 
 //------------------------------------------------------------------------
 // undefine the macros defined in the winuser.h file in order to avoid
-// warnings because of multiple defines
+// warnings because of multiple defines 
 //------------------------------------------------------------------------
 
 #ifdef WNetGetConnectionW
@@ -55,9 +55,9 @@ extern "C"{
 //------------------------------------------------------------------------
 
 MPR9X_API DWORD (WINAPI *lpfnWNetGetConnectionW)(
-    LPCWSTR lpLocalName,    // pointer to local name
-    LPWSTR  lpRemoteName,   // pointer to buffer for remote name
-    LPDWORD lpnLength       // pointer to buffer size, in characters
+    LPCWSTR	lpLocalName,	// pointer to local name
+    LPWSTR	lpRemoteName,	// pointer to buffer for remote name
+    LPDWORD	lpnLength		// pointer to buffer size, in characters
 );
 
 //------------------------------------------------------------------------
@@ -65,7 +65,7 @@ MPR9X_API DWORD (WINAPI *lpfnWNetGetConnectionW)(
 // all occurrences of this macros with our function pointer
 //------------------------------------------------------------------------
 
-#define WNetGetConnectionW          lpfnWNetGetConnectionW
+#define WNetGetConnectionW			lpfnWNetGetConnectionW
 
 #ifdef __cplusplus
 }

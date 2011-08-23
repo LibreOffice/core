@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 // this file is converted to use with testshl2
 // original was placed in sal/test/textenc.cxx
 
-// fndef    _OSL_DIAGNOSE_H_
+// fndef	_OSL_DIAGNOSE_H_
 // nclude <osl/diagnose.h>
 // #endif
 

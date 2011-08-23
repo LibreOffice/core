@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1872,7 +1872,7 @@ void handleAggregatingType(
     } else {
         if (
              (
-              typeClass == RT_TYPE_STRUCT &&
+              typeClass == RT_TYPE_STRUCT && 
               (
                fields == 0 ||
                (references == 0 ? superTypes > 1 : superTypes != 0)
@@ -3306,7 +3306,7 @@ bool produceType(
     codemaker::GeneratedTypeSet & generated, JavaOptions * options)
 {
     ::rtl::OString typeName = manager.getTypeName(rTypeKey);
-
+    
     OSL_ASSERT(options != 0);
     if (typeName.equals("/")
         || typeName.equals(manager.getBase())

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,14 +101,14 @@ class Bootstrap_MacroExpander : public mutex_holder, public t_uno_impl
 {
 protected:
     virtual void SAL_CALL disposing();
-
+    
 public:
     inline Bootstrap_MacroExpander( Reference< XComponentContext > const & ) SAL_THROW( () )
         : t_uno_impl( m_mutex )
         {}
     virtual ~Bootstrap_MacroExpander()
         SAL_THROW( () );
-
+    
     // XMacroExpander impl
     virtual OUString SAL_CALL expandMacros( OUString const & exp )
         throw (lang::IllegalArgumentException);

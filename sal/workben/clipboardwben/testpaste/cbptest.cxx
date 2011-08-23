@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,33 +51,33 @@
 #define MAX_LOADSTRING 100
 
 // Globale Variablen:
-HINSTANCE           hInst;                      // aktuelle Instanz
-WCHAR               szTitle[MAX_LOADSTRING];            // Text der Titelzeile
-WCHAR               szWindowClass[MAX_LOADSTRING];  // Text der Titelzeile
-ATOM                MyRegisterClass( HINSTANCE hInstance );
-BOOL                InitInstance( HINSTANCE, int );
-LRESULT CALLBACK    WndProc( HWND, UINT, WPARAM, LPARAM );
-LRESULT CALLBACK    About( HWND, UINT, WPARAM, LPARAM );
-void                PasteClipboardData(HWND hwndParent);
-void                PasteClipboardData2(HWND hwndParent);
+HINSTANCE			hInst;						// aktuelle Instanz
+WCHAR				szTitle[MAX_LOADSTRING];			// Text der Titelzeile
+WCHAR				szWindowClass[MAX_LOADSTRING];	// Text der Titelzeile
+ATOM				MyRegisterClass( HINSTANCE hInstance );
+BOOL				InitInstance( HINSTANCE, int );
+LRESULT CALLBACK	WndProc( HWND, UINT, WPARAM, LPARAM );
+LRESULT CALLBACK	About( HWND, UINT, WPARAM, LPARAM );
+void				PasteClipboardData(HWND hwndParent);
+void				PasteClipboardData2(HWND hwndParent);
 
-LPSTREAM            g_pStm    = NULL;
-char*               pTextBuff = NULL;
-DWORD               lData     = 0;
+LPSTREAM			g_pStm    = NULL;
+char*				pTextBuff = NULL;
+DWORD				lData     = 0;
 
 //----------------------------------------------------
 // a thread function
 //----------------------------------------------------
 
 unsigned int _stdcall ThreadProc(LPVOID pParam)
-{
+{	
     IDataObject* pIDataObj = NULL;
     FORMATETC    formatETC;
-    STGMEDIUM    stgMedium;
-    LPVOID       pGlobMem;
-    HWND         hwnd;
-    DWORD        sizeGlobBuff;
-    HRESULT      hr;
+    STGMEDIUM	 stgMedium;
+    LPVOID		 pGlobMem;
+    HWND		 hwnd;
+    DWORD		 sizeGlobBuff;
+    HRESULT		 hr;
 
     hwnd = (HWND)pParam;
 
@@ -86,8 +86,8 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
     hr = OleGetClipboard( &pIDataObj );
 
     hr = CoGetInterfaceAndReleaseStream(
-        g_pStm,
-        __uuidof(IDataObject),
+        g_pStm, 
+        __uuidof(IDataObject), 
         reinterpret_cast<LPVOID*>(&pIDataObj));
 
     formatETC.cfFormat = CF_TEXT;
@@ -155,7 +155,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     MyRegisterClass(hInstance);
 
     // Initialisierung der Anwendung durchführen:
-    if( !InitInstance( hInstance, nCmdShow ) )
+    if( !InitInstance( hInstance, nCmdShow ) ) 
     {
         return FALSE;
     }
@@ -163,9 +163,9 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_TESTWIN32);
 
     // Hauptnachrichtenschleife:
-    while( GetMessage(&msg, NULL, 0, 0) )
+    while( GetMessage(&msg, NULL, 0, 0) ) 
     {
-        if( !TranslateAccelerator (msg.hwnd, hAccelTable, &msg) )
+        if( !TranslateAccelerator (msg.hwnd, hAccelTable, &msg) ) 
         {
             TranslateMessage( &msg );
             DispatchMessage( &msg );
@@ -198,19 +198,19 @@ ATOM MyRegisterClass( HINSTANCE hInstance )
 {
     WNDCLASSEXW wcex;
 
-    wcex.cbSize = sizeof(WNDCLASSEX);
+    wcex.cbSize = sizeof(WNDCLASSEX); 
 
-    wcex.style          = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc    = (WNDPROC)WndProc;
-    wcex.cbClsExtra     = 0;
-    wcex.cbWndExtra     = 0;
-    wcex.hInstance      = hInstance;
-    wcex.hIcon          = LoadIcon(hInstance, (LPCTSTR)IDI_TESTWIN32);
-    wcex.hCursor        = LoadCursor(NULL, IDC_ARROW);
-    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = (LPCWSTR)IDC_TESTWIN32;
-    wcex.lpszClassName  = szWindowClass;
-    wcex.hIconSm        = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
+    wcex.style			= CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc	= (WNDPROC)WndProc;
+    wcex.cbClsExtra		= 0;
+    wcex.cbWndExtra		= 0;
+    wcex.hInstance		= hInstance;
+    wcex.hIcon			= LoadIcon(hInstance, (LPCTSTR)IDI_TESTWIN32);
+    wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
+    wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
+    wcex.lpszMenuName	= (LPCWSTR)IDC_TESTWIN32;
+    wcex.lpszClassName	= szWindowClass;
+    wcex.hIconSm		= LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
 
     return RegisterClassExW(&wcex);
 }
@@ -234,7 +234,7 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
    hWnd = CreateWindowExW(0, szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
-   if( !hWnd )
+   if( !hWnd ) 
    {
       return FALSE;
    }
@@ -250,9 +250,9 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 //
 //  AUFGABE:  Verarbeitet Nachrichten für das Hauptfenster.
 //
-//  WM_COMMAND  - Anwendungsmenü verarbeiten
-//  WM_PAINT    - Hauptfenster darstellen
-//  WM_DESTROY  - Beendigungsnachricht ausgeben und zurückkehren
+//  WM_COMMAND	- Anwendungsmenü verarbeiten
+//  WM_PAINT	- Hauptfenster darstellen
+//  WM_DESTROY	- Beendigungsnachricht ausgeben und zurückkehren
 //
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -262,17 +262,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     PAINTSTRUCT ps;
     HDC         hdc;
     TCHAR       szHello[MAX_LOADSTRING];
-
-
+    
+    
     LoadString(hInst, IDS_HELLO, szHello, MAX_LOADSTRING);
 
-    switch( message )
+    switch( message ) 
     {
         case WM_COMMAND:
-            wmId    = LOWORD(wParam);
-            wmEvent = HIWORD(wParam);
+            wmId    = LOWORD(wParam); 
+            wmEvent = HIWORD(wParam); 
             // Menüauswahlen analysieren:
-            switch( wmId )
+            switch( wmId ) 
             {
                 case IDD_PASTE:
                     //PasteClipboardData(hWnd);
@@ -293,7 +293,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             // ZU ERLEDIGEN: Hier beliebigen Code zum Zeichnen hinzufügen...
             RECT rt;
             GetClientRect( hWnd, &rt );
-
+            
             if ( NULL != pTextBuff )
             {
                 DrawText( hdc, pTextBuff, lData, &rt, DT_CENTER );
@@ -319,16 +319,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void PasteClipboardData2(HWND hwndParent)
 {
     IDataObject* pIDataObject;
-    HRESULT      hr;
+    HRESULT		 hr;
     FORMATETC    formatETC;
-    STGMEDIUM    stgMedium;
-    LPVOID       pGlobMem;
-    HWND         hwnd;
-    DWORD        sizeGlobBuff;
+    STGMEDIUM	 stgMedium;
+    LPVOID		 pGlobMem;
+    HWND		 hwnd;
+    DWORD		 sizeGlobBuff;
 
     hr = MTAGetClipboard( &pIDataObject );
-    if ( SUCCEEDED( hr ) )
-    {
+    if ( SUCCEEDED( hr ) ) 
+    {		
         formatETC.cfFormat = CF_TEXT;
         formatETC.ptd      = NULL;
         formatETC.dwAspect = DVASPECT_CONTENT;
@@ -380,16 +380,16 @@ void PasteClipboardData(HWND hwndParent)
         HRESULT hr = CoMarshalInterThreadInterfaceInStream(
             __uuidof(IDataObject), //The IID of inteface to be marshaled
             pIDataObj,       //The interface pointer
-            &g_pStm          //IStream pointer
+            &g_pStm          //IStream pointer 
             );
 
-        HANDLE hThread = (HANDLE)_beginthreadex(
-                NULL,       //Security
-                0,          //Stack Size
-                ThreadProc, //Start Address
-                NULL,       //Parmeter
-                (unsigned int)hwndParent,   //Creation Flag
-                &dwId       //Thread Id
+        HANDLE hThread = (HANDLE)_beginthreadex( 
+                NULL,		//Security
+                0,			//Stack Size
+                ThreadProc,	//Start Address
+                NULL,	    //Parmeter
+                (unsigned int)hwndParent,	//Creation Flag
+                &dwId		//Thread Id 
                 );
 
         //Wait for the thread to finish execution
@@ -398,13 +398,13 @@ void PasteClipboardData(HWND hwndParent)
         for(;;)
         {
             DWORD dwRet = ::MsgWaitForMultipleObjects(
-                                    1,          //Count of objects
-                                    &hThread,   //pointer to the array of objects
-                                    FALSE,      //Wait for all objects?
-                                    INFINITE,   //Wait How Long?
+                                    1,			//Count of objects
+                                    &hThread,	//pointer to the array of objects
+                                    FALSE,		//Wait for all objects?
+                                    INFINITE,	//Wait How Long?
                                     QS_ALLINPUT //Wait for all messges
                                     );
-
+        
             //This means that the object is signaled
             if ( dwRet != WAIT_OBJECT_0 + 1 )
                 break;

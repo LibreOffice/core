@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,95 +24,95 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XToolkit_idl__
-#define __com_sun_star_awt_XToolkit_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XWindowPeer_idl__
-#include <com/sun/star/awt/XWindowPeer.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Rectangle_idl__
-#include <com/sun/star/awt/Rectangle.idl>
-#endif
-
-#ifndef __com_sun_star_awt_WindowDescriptor_idl__
-#include <com/sun/star/awt/WindowDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XDevice_idl__
-#include <com/sun/star/awt/XDevice.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XRegion_idl__
-#include <com/sun/star/awt/XRegion.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
-/** specifies a factory interface for the window toolkit.
-
+#ifndef __com_sun_star_awt_XToolkit_idl__ 
+#define __com_sun_star_awt_XToolkit_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_XWindowPeer_idl__ 
+#include <com/sun/star/awt/XWindowPeer.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_Rectangle_idl__ 
+#include <com/sun/star/awt/Rectangle.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_WindowDescriptor_idl__ 
+#include <com/sun/star/awt/WindowDescriptor.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
+#include <com/sun/star/lang/IllegalArgumentException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_XDevice_idl__ 
+#include <com/sun/star/awt/XDevice.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_XRegion_idl__ 
+#include <com/sun/star/awt/XRegion.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
+/** specifies a factory interface for the window toolkit. 
+         
     <p>This is similar to the abstract window toolkit (AWT) in Java.</p>
  */
 published interface XToolkit: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** returns the desktop window.
      */
-    com::sun::star::awt::XWindowPeer getDesktopWindow();
-
-    //-------------------------------------------------------------------------
-
+    com::sun::star::awt::XWindowPeer getDesktopWindow(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** returns the complete work area for this toolkit.
      */
-    com::sun::star::awt::Rectangle getWorkArea();
-
-    //-------------------------------------------------------------------------
-
+    com::sun::star::awt::Rectangle getWorkArea(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** creates a new window using the given descriptor.
      */
-    com::sun::star::awt::XWindowPeer createWindow( [in] com::sun::star::awt::WindowDescriptor Descriptor )
-            raises( com::sun::star::lang::IllegalArgumentException );
-
-    //-------------------------------------------------------------------------
-
-    /** returns a sequence of windows which are newly created using the
+    com::sun::star::awt::XWindowPeer createWindow( [in] com::sun::star::awt::WindowDescriptor Descriptor ) 
+            raises( com::sun::star::lang::IllegalArgumentException ); 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** returns a sequence of windows which are newly created using the 
         given descriptors.
      */
-    sequence<com::sun::star::awt::XWindowPeer> createWindows(
-            [in] sequence<com::sun::star::awt::WindowDescriptor> Descriptors )
-        raises( com::sun::star::lang::IllegalArgumentException );
-
-    //-------------------------------------------------------------------------
-
+    sequence<com::sun::star::awt::XWindowPeer> createWindows(  
+            [in] sequence<com::sun::star::awt::WindowDescriptor> Descriptors ) 
+        raises( com::sun::star::lang::IllegalArgumentException ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** creates a virtual device that is compatible with the screen.
      */
-    com::sun::star::awt::XDevice createScreenCompatibleDevice( [in] long Width,
-             [in] long Height );
-
-    //-------------------------------------------------------------------------
-
+    com::sun::star::awt::XDevice createScreenCompatibleDevice( [in] long Width, 
+             [in] long Height ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** creates a region.
      */
-    com::sun::star::awt::XRegion createRegion();
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    com::sun::star::awt::XRegion createRegion(); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

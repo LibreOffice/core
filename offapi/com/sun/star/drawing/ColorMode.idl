@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,56 +24,56 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_ColorMode_idl__
-#define __com_sun_star_drawing_ColorMode_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_ColorMode_idl__ 
+#define __com_sun_star_drawing_ColorMode_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: enum com::sun::star::drawing::ColorMode
 /** The <type>ColorMode</type> defines the output style of colors
     for a graphic.
  */
 published enum ColorMode
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::drawing::ColorMode::STANDARD
     /** the graphic is rendered in the default color style of the output
         device,
      */
-    STANDARD,
-
-    //-------------------------------------------------------------------------
-
+    STANDARD, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::drawing::ColorMode::GREYS
     /** the graphic is rendered in greyscales on the output device,
      */
-    GREYS,
-
-    //-------------------------------------------------------------------------
-
+    GREYS, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::drawing::ColorMode::MONO
     /** the graphic is rendered in black and white only,
      */
-    MONO,
-
-    //-------------------------------------------------------------------------
-
+    MONO, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::drawing::ColorMode::WATERMARK
     /** the graphic is rendered in a watermark like style,
      */
-    WATERMARK
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    WATERMARK 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

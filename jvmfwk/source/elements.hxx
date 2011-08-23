@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,7 +136,7 @@ private:
         (UNO_JAVA_JFW_USER_DATA, UNO_JAVA_JFW_SHARED_DATA,
         UNO_JAVA_JFW_INSTALL_DATA) and m_layer, unless the file already exists
         (see createSettingsDocument).
-
+        
         @return
         JFW_E_CONFIG_READWRITE
     */
@@ -145,7 +145,7 @@ private:
     /** helper function for prepareSettingsDocument.
     */
     void createSettingsDocument() const;
-
+    
     /** returns the system path to the data file which is to be used. The value
         depends on
         the the member m_layer and the bootstrap paramters UNO_JAVA_JFW_USER_DATA,
@@ -154,7 +154,7 @@ private:
     ::rtl::OString getSettingsPath() const;
 
     /** returns the file URL to the data file which is to be used. See getSettingsPath.
-    */
+    */  
     ::rtl::OUString getSettingsURL() const;
 
     /** Verifies if the respective settings file exist. In case UNO_JAVA_JFW_INSTALL_DATA
@@ -162,7 +162,7 @@ private:
         exist and wipe its contents. Then still FILE_DOES_NOT_EXIST is returned.
      */
     jfw::FileStatus checkSettingsFileStatus() const;
-
+    
     /** Determines the layer for which the instance the loads and writes the
         data.
     */
@@ -264,8 +264,8 @@ public:
 };
 
 /** merges the settings for shared, user and installation during construction.
-    The class uses a simple merge mechanism for the javasettings.xml files in share and
-    user. The following elements completly overwrite the corresponding elements
+    The class uses a simple merge mechanism for the javasettings.xml files in share and 
+    user. The following elements completly overwrite the corresponding elements 
     from share:
     /java/enabled
     /java/userClassPath
@@ -299,7 +299,7 @@ private:
     ::std::vector< ::rtl::OUString> m_vmParams;
 
     ::std::vector< ::rtl::OUString> m_JRELocations;
-
+    
     CNodeJavaInfo m_javaInfo;
 
 public:
@@ -357,7 +357,7 @@ public:
     ~VersionInfo();
 
     void addExcludeVersion(const ::rtl::OUString& sVersion);
-
+    
     ::rtl::OUString sMinVersion;
     ::rtl::OUString sMaxVersion;
 
@@ -365,7 +365,7 @@ public:
         does not need to release the strings.
         The array exists as long as this object exists.
     */
-
+    
     rtl_uString** getExcludeVersions();
     sal_Int32 getExcludeVersionSize();
 };

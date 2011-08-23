@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -262,20 +262,20 @@ public:
 
     CPInfoTag       readTag(sal_uInt16 index);
 
-    const sal_Char*     readUTF8NameConstant(sal_uInt16 index);
-    sal_Bool            readBOOLConstant(sal_uInt16 index);
-    sal_uInt8           readBYTEConstant(sal_uInt16 index);
-    sal_Int16           readINT16Constant(sal_uInt16 index);
-    sal_uInt16          readUINT16Constant(sal_uInt16 index);
-    sal_Int32           readINT32Constant(sal_uInt16 index);
-    sal_uInt32          readUINT32Constant(sal_uInt16 index);
-    sal_Int64           readINT64Constant(sal_uInt16 index);
-    sal_uInt64          readUINT64Constant(sal_uInt16 index);
-    float               readFloatConstant(sal_uInt16 index);
-    double              readDoubleConstant(sal_uInt16 index);
+    const sal_Char* 	readUTF8NameConstant(sal_uInt16 index);
+    sal_Bool        	readBOOLConstant(sal_uInt16 index);
+    sal_uInt8       	readBYTEConstant(sal_uInt16 index);
+    sal_Int16       	readINT16Constant(sal_uInt16 index);
+    sal_uInt16      	readUINT16Constant(sal_uInt16 index);
+    sal_Int32       	readINT32Constant(sal_uInt16 index);
+    sal_uInt32      	readUINT32Constant(sal_uInt16 index);
+    sal_Int64       	readINT64Constant(sal_uInt16 index);
+    sal_uInt64      	readUINT64Constant(sal_uInt16 index);
+    float           	readFloatConstant(sal_uInt16 index);
+    double          	readDoubleConstant(sal_uInt16 index);
     const sal_Unicode*  readStringConstant(sal_uInt16 index);
         // throws std::bad_alloc
-    void                readUIK(sal_uInt16 index, RTUik* uik);
+    void            	readUIK(sal_uInt16 index, RTUik* uik);
 };
 
 ConstantPool::~ConstantPool()
@@ -758,10 +758,10 @@ class ReferenceList : public BlopObject
 {
 public:
 
-    sal_uInt16      m_numOfEntries;
-    sal_uInt16      m_numOfReferenceEntries;
-    sal_uInt16      m_REFERENCE_ENTRY_SIZE;
-    ConstantPool*   m_pCP;
+    sal_uInt16		m_numOfEntries;
+    sal_uInt16		m_numOfReferenceEntries;
+    sal_uInt16		m_REFERENCE_ENTRY_SIZE;
+    ConstantPool*	m_pCP;
 
     ReferenceList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
         : BlopObject(buffer, 0, sal_False)
@@ -784,7 +784,7 @@ public:
     const sal_Char* getReferenceName(sal_uInt16 index);
     RTReferenceType getReferenceType(sal_uInt16 index);
     const sal_Char* getReferenceDoku(sal_uInt16 index);
-    RTFieldAccess   getReferenceAccess(sal_uInt16 index);
+    RTFieldAccess 	getReferenceAccess(sal_uInt16 index);
 };
 
 sal_uInt32 ReferenceList::parseIndex()
@@ -850,12 +850,12 @@ class MethodList : public BlopObject
 {
 public:
 
-    sal_uInt16      m_numOfEntries;
-    sal_uInt16      m_numOfMethodEntries;
-    sal_uInt16      m_numOfParamEntries;
-    sal_uInt16      m_PARAM_ENTRY_SIZE;
-    sal_uInt32*     m_pIndex;
-    ConstantPool*   m_pCP;
+    sal_uInt16		m_numOfEntries;
+    sal_uInt16		m_numOfMethodEntries;
+    sal_uInt16		m_numOfParamEntries;
+    sal_uInt16		m_PARAM_ENTRY_SIZE;
+    sal_uInt32*		m_pIndex;
+    ConstantPool*	m_pCP;
 
     MethodList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
         : BlopObject(buffer, 0, sal_False)
@@ -902,8 +902,8 @@ MethodList::~MethodList()
 
 sal_uInt16 MethodList::calcMethodParamIndex( const sal_uInt16 index )
 {
-    return (METHOD_OFFSET_PARAM_COUNT + sizeof(sal_uInt16) + (index * m_PARAM_ENTRY_SIZE));
-}
+    return (METHOD_OFFSET_PARAM_COUNT + sizeof(sal_uInt16) + (index * m_PARAM_ENTRY_SIZE));	
+}	
 
 sal_uInt32 MethodList::parseIndex()
 {
@@ -959,8 +959,8 @@ const sal_Char* MethodList::getMethodParamType(sal_uInt16 index, sal_uInt16 para
 {
     const sal_Char* aName = NULL;
 
-    if ((m_numOfEntries > 0) &&
-        (index <= m_numOfEntries) &&
+    if ((m_numOfEntries > 0) && 
+        (index <= m_numOfEntries) && 
         (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
     {
         aName = m_pCP->readUTF8NameConstant(
@@ -978,7 +978,7 @@ const sal_Char* MethodList::getMethodParamName(sal_uInt16 index, sal_uInt16 para
     const sal_Char* aName = NULL;
 
     if ((m_numOfEntries > 0) &&
-        (index <= m_numOfEntries) &&
+        (index <= m_numOfEntries) && 
         (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
     {
         aName = m_pCP->readUTF8NameConstant(
@@ -996,7 +996,7 @@ RTParamMode MethodList::getMethodParamMode(sal_uInt16 index, sal_uInt16 paramInd
     RTParamMode aMode = RT_PARAM_INVALID;
 
     if ((m_numOfEntries > 0) &&
-        (index <= m_numOfEntries) &&
+        (index <= m_numOfEntries) && 
         (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
     {
         aMode = (RTParamMode) readUINT16(
@@ -1090,8 +1090,8 @@ public:
     MethodList*     m_pMethods;
     ReferenceList*  m_pReferences;
     sal_uInt32      m_refCount;
-    sal_uInt16      m_nSuperTypes;
-    sal_uInt16      m_offset_SUPERTYPES;
+    sal_uInt16		m_nSuperTypes;
+    sal_uInt16		m_offset_SUPERTYPES;
 
     TypeRegistryEntry(
         const sal_uInt8* buffer, sal_uInt32 len, sal_Bool copyBuffer);
@@ -1113,7 +1113,7 @@ TypeRegistryEntry::TypeRegistryEntry(
     sal_uInt16 offset_N_SUPERTYPES = OFFSET_N_ENTRIES + entrySize + (nHeaderEntries * entrySize);
     m_offset_SUPERTYPES = offset_N_SUPERTYPES + entrySize;
     m_nSuperTypes = readUINT16(offset_N_SUPERTYPES);
-
+    
     sal_uInt16 offset_CP_SIZE = m_offset_SUPERTYPES + (m_nSuperTypes * entrySize);
     sal_uInt16 offset_CP = offset_CP_SIZE + entrySize;
 
@@ -1278,13 +1278,13 @@ static void TYPEREG_CALLTYPE getSuperTypeName(TypeReaderImpl hEntry, rtl_uString
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
 
-    if (pEntry == NULL)
+    if (pEntry == NULL)	
     {
         rtl_uString_new(pSuperTypeName);
         return;
     }
 
-    if (pEntry->m_nSuperTypes == 0)
+    if (pEntry->m_nSuperTypes == 0)	
     {
         rtl_uString_new(pSuperTypeName);
         return;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,25 +24,25 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_XPreparedBatchExecution_idl__
-#define __com_sun_star_sdbc_XPreparedBatchExecution_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_SQLException_idl__
-#include <com/sun/star/sdbc/SQLException.idl>
-#endif
-
- module com {  module sun {  module star {  module sdbc {
-
-
+#ifndef __com_sun_star_sdbc_XPreparedBatchExecution_idl__ 
+#define __com_sun_star_sdbc_XPreparedBatchExecution_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_sdbc_SQLException_idl__ 
+#include <com/sun/star/sdbc/SQLException.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module sdbc { 
+ 
+ 
 /** is used for batch execution on PreparedStatements.
-
-
+    
+    
     <p>
-    A
+    A 
     <type scope="com::sun::star::sdbc">PreparedStatement</type>
     uses one precompiled SQL Statement. In batch execution
     it is possible to set collection of parameter settings, which are executed in
@@ -50,37 +50,37 @@
     </p>
  */
 published interface XPreparedBatchExecution: com::sun::star::uno::XInterface
-{
-
+{ 
+     
     /** adds a set of parameters to the batch.
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    void addBatch() raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    void addBatch() raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** makes the set of commands in the current batch empty.
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    void clearBatch() raises (SQLException);
-    //-------------------------------------------------------------------------
-
-    /** submits a batch of commands to the database for execution.
-             @returns
-                an array of update counts containing one element for each
-                 command in the batch. The array is ordered according to the order in
-                which commands were inserted into the batch.
-             @throws SQLException
+    void clearBatch() raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
+    /** submits a batch of commands to the database for execution. 
+             @returns 
+                an array of update counts containing one element for each 
+                 command in the batch. The array is ordered according to the order in 
+                which commands were inserted into the batch. 
+             @throws SQLException 
                 if a database access error occurs.
      */
-    sequence<long> executeBatch() raises (SQLException);
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    sequence<long> executeBatch() raises (SQLException); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

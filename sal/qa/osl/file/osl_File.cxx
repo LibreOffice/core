@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@
 
 // #ifdef WNT
 // #   define UNICODE
-// #    define WIN32_LEAN_AND_MEAN
-// #    include <windows.h>
+// #	define WIN32_LEAN_AND_MEAN
+// #	include <windows.h>
 // #   include <tchar.h>
 // #endif
 
@@ -260,9 +260,9 @@ inline void printTime( TimeValue *tv )
 */
 
 #if ( defined UNX ) || ( defined OS2 )                 //precision of time in Windows is better than UNX
-#   define delta 2000                    //time precision, 2000ms
+#	define delta 2000                    //time precision, 2000ms
 #else
-#   define delta 1800                    //time precision, 1.8s
+#	define delta 1800                    //time precision, 1.8s
 #endif
 
 inline sal_Int64 t_abs64(sal_Int64 _nValue)
@@ -376,7 +376,7 @@ inline void concatURL( ::rtl::OUString & pathname1, const ::rtl::OUString & path
 inline void createTestFile( const ::rtl::OUString filename )
 {
     ::rtl::OUString     aPathURL   = filename.copy( 0 );
-    ::osl::FileBase::RC nError;
+    ::osl::FileBase::RC	nError;
 
     if ( !isURL( filename ) )
         ::osl::FileBase::getFileURLFromSystemPath( filename, aPathURL ); //convert if not full qualified URL
@@ -410,7 +410,7 @@ inline void deleteTestFile( const ::rtl::OUString filename )
 {
     // LLA: t_print("deleteTestFile\n");
     ::rtl::OUString     aPathURL   = filename.copy( 0 );
-    ::osl::FileBase::RC nError;
+    ::osl::FileBase::RC	nError;
 
     if ( !isURL( filename ) )
         ::osl::FileBase::getFileURLFromSystemPath( filename, aPathURL ); //convert if not full qualified URL
@@ -437,7 +437,7 @@ inline void deleteTestFile( const ::rtl::OUString basename, const ::rtl::OUStrin
 inline void createTestDirectory( const ::rtl::OUString dirname )
 {
     ::rtl::OUString     aPathURL   = dirname.copy( 0 );
-    ::osl::FileBase::RC nError;
+    ::osl::FileBase::RC	nError;
 
     if ( !isURL( dirname ) )
         ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); //convert if not full qualified URL
@@ -464,7 +464,7 @@ inline void deleteTestDirectory( const ::rtl::OUString dirname )
 {
     // LLA: t_print("deleteTestDirectory\n");
     ::rtl::OUString     aPathURL   = dirname.copy( 0 );
-    ::osl::FileBase::RC nError;
+    ::osl::FileBase::RC	nError;
     // LLA: printFileName(aPathURL);
     if ( !isURL( dirname ) )
         ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); //convert if not full qualified URL
@@ -524,7 +524,7 @@ inline sal_Bool checkFile( const ::rtl::OUString & str, oslCheckMode nCheckMode 
 {
     ::osl::FileBase::RC   nError1, nError2;
     ::osl::File       testFile( str );
-    sal_Bool        bCheckResult;
+    sal_Bool		bCheckResult;
 
     bCheckResult = sal_False;
     nError1 = testFile.open ( OpenFlag_Read );
@@ -567,10 +567,10 @@ inline sal_Bool checkFile( const ::rtl::OUString & str, oslCheckMode nCheckMode 
 //check if the file exist
 inline sal_Bool ifFileExist( const ::rtl::OUString & str )
 {
-    sal_Bool        bCheckResult = sal_False;
+    sal_Bool		bCheckResult = sal_False;
 
 /*#ifdef WNT
-    ::rtl::OUString     aUStr  = str.copy( 0 );
+    ::rtl::OUString 	aUStr  = str.copy( 0 );
     if ( isURL( str ) )
         ::osl::FileBase::getSystemPathFromFileURL( str, aUStr );
 
@@ -581,7 +581,7 @@ inline sal_Bool ifFileExist( const ::rtl::OUString & str )
 #else*/
     ::rtl::OString aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
     // const char *path = aString.getStr( );
-    ::osl::File testFile( str );
+    ::osl::File	testFile( str );
     bCheckResult = ( osl::FileBase::E_None == testFile.open( OpenFlag_Read ) );
     //if (bCheckResult)
     //t_print("%s exist!\n", path);
@@ -595,10 +595,10 @@ inline sal_Bool ifFileExist( const ::rtl::OUString & str )
 //check if the file can be writen
 inline sal_Bool ifFileCanWrite( const ::rtl::OUString & str )
 {
-    sal_Bool        bCheckResult = sal_False;
+    sal_Bool		bCheckResult = sal_False;
     //on Windows, the file has no write right, but can be written
 #ifdef WNT
-    ::rtl::OUString     aUStr  = str.copy( 0 );
+    ::rtl::OUString 	aUStr  = str.copy( 0 );
     if ( isURL( str ) )
         ::osl::FileBase::getSystemPathFromFileURL( str, aUStr );
 
@@ -608,7 +608,7 @@ inline sal_Bool ifFileCanWrite( const ::rtl::OUString & str )
          bCheckResult = sal_True;
      //on UNX, just test if open success with OpenFlag_Write
 #else
-    ::osl::File testFile( str );
+    ::osl::File	testFile( str );
     bCheckResult = (osl::FileBase::E_None == testFile.open( OpenFlag_Write ));
 #endif
     return bCheckResult;
@@ -616,10 +616,10 @@ inline sal_Bool ifFileCanWrite( const ::rtl::OUString & str )
 
 inline sal_Bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheckMode )
 {
-    rtl::OUString   aUString;
-    DirectoryItem   rItem;
-    FileBase::RC    rc;
-    sal_Bool        bCheckResult= sal_False;
+    rtl::OUString 	aUString;
+    DirectoryItem	rItem;
+    FileBase::RC	rc;
+    sal_Bool		bCheckResult= sal_False;
 
     //::std::auto_ptr<Directory> pDir( new Directory( str ) );
     Directory aDir( str );
@@ -688,11 +688,11 @@ inline ::rtl::OUString outputError( const ::rtl::OUString & returnVal, const ::r
 
 /** Change file mode, two version in UNIX and Windows;.
 */
-#if ( defined UNX ) || ( defined OS2 )         //chmod() method is differ in Windows
+#if ( defined UNX ) || ( defined OS2 )	       //chmod() method is differ in Windows
 inline void changeFileMode( ::rtl::OUString & filepath, sal_Int32 mode )
 {
-    rtl::OString    aString;
-    rtl::OUString   aUStr  = filepath.copy( 0 );
+    rtl::OString 	aString;
+    rtl::OUString 	aUStr  = filepath.copy( 0 );
 
     if ( isURL( filepath ) )
         ::osl::FileBase::getSystemPathFromFileURL( filepath, aUStr );
@@ -731,7 +731,7 @@ namespace osl_FileBase
     {
 
         public:
-        ::osl::FileBase::RC nError;
+        ::osl::FileBase::RC	nError;
 
         void getCanonicalName_001( )
         {
@@ -744,7 +744,7 @@ namespace osl_FileBase
 
         void getCanonicalName_002( )
         {
-            ::rtl::OUString     aUStr_ValidURL;
+            ::rtl::OUString		aUStr_ValidURL;
 
             createTestFile( aCanURL1 );
             nError = ::osl::FileBase::getCanonicalName( aCanURL1, aUStr_ValidURL );
@@ -774,16 +774,16 @@ namespace osl_FileBase
     //---------------------------------------------------------------------
     // testing the method
     // static inline RC getAbsoluteFileURL( const ::rtl::OUString& ustrBaseDirectoryURL,
-    //                                      const ::rtl::OUString& ustrRelativeFileURL,
-    //                                            ::rtl::OUString& ustrAbsoluteFileURL )
+    //										const ::rtl::OUString& ustrRelativeFileURL,
+    //											  ::rtl::OUString& ustrAbsoluteFileURL )
     //---------------------------------------------------------------------
 
     class getAbsoluteFileURL:public CppUnit::TestFixture
     {
-        //::osl::FileBase       aFileBase;
-            ::rtl::OUString     aResultURL1, aResultURL2, aResultURL3, aResultURL4, aResultURL5, aResultURL6;
-            // ::osl::FileBase::RC  nError;
-        sal_Bool        bOk;
+        //::osl::FileBase		aFileBase;
+            ::rtl::OUString		aResultURL1, aResultURL2, aResultURL3, aResultURL4, aResultURL5, aResultURL6;
+            // ::osl::FileBase::RC	nError;
+        sal_Bool		bOk;
 
         public:
 
@@ -874,7 +874,7 @@ namespace osl_FileBase
         }
 
 
-#if ( defined UNX ) || ( defined OS2 )  //Link is not defined in Windows
+#if ( defined UNX ) || ( defined OS2 )	//Link is not defined in Windows
         void getAbsoluteFileURL_002( )
         {
             ::rtl::OUString aUStr_AbsURL, aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
@@ -908,7 +908,7 @@ namespace osl_FileBase
             CPPUNIT_ASSERT_MESSAGE("test for getAbsoluteFileURL function: URL contain link( Solaris version )",
                                      ( ::osl::FileBase::E_None == nError ) && ( sal_True == bOk ) );
         }
-#else       //Windows version
+#else		//Windows version
         void getAbsoluteFileURL_002( )
         {
             CPPUNIT_ASSERT_MESSAGE("test for getAbsoluteFileURL function: URL contain link( Windows version )",
@@ -939,13 +939,13 @@ namespace osl_FileBase
         void getAbsoluteFileURL_004( )
         {
             //create two level directories under $Temp/PID/
-            ::rtl::OUString aUStrUpBase = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/test1");
+            ::rtl::OUString	aUStrUpBase = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/test1");
             createTestDirectory( aUStrUpBase );
-            ::rtl::OUString aUStrBase = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/test1/dir1");
+            ::rtl::OUString	aUStrBase = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/test1/dir1");
             createTestDirectory( aUStrBase );
 
-            ::rtl::OUString aUStrRelar = ::rtl::OUString::createFromAscii("../../mytestfile");
-            ::rtl::OUString aUStr_AbsURL;
+            ::rtl::OUString	aUStrRelar = ::rtl::OUString::createFromAscii("../../mytestfile");
+            ::rtl::OUString	aUStr_AbsURL;
             ::rtl::OUString aResultURL6 = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/mytestfile");
 
             nError = aFileBase.getAbsoluteFileURL( aUStrBase,  aUStrRelar, aUStr_AbsURL );
@@ -1045,7 +1045,7 @@ namespace osl_FileBase
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_002()
   {
-#if ( defined UNX ) || ( defined OS2 )      //Link is not defined in Windows
+#if ( defined UNX ) || ( defined OS2 )		//Link is not defined in Windows
         ::rtl::OUString aUStr_AbsURL, aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
         ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID( ) ) += ::rtl::OUString::createFromAscii("/link.file");
         ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID( ) ) += ::rtl::OUString::createFromAscii("/canonical.name");
@@ -1072,9 +1072,9 @@ namespace osl_FileBase
     void getAbsoluteFileURL::getAbsoluteFileURL_004()
     {
         //create two level directories under $Temp/PID/
-        ::rtl::OUString aUStrUpBase = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/test1");
+        ::rtl::OUString	aUStrUpBase = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/test1");
         createTestDirectory( aUStrUpBase );
-        ::rtl::OUString aUStrBase = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/test1/dir1");
+        ::rtl::OUString	aUStrBase = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/test1/dir1");
         createTestDirectory( aUStrBase );
 
         ::rtl::OUString suAssume = aUserDirectoryURL.concat( ::rtl::OUString::createFromAscii("/mytestfile") );
@@ -1085,7 +1085,7 @@ namespace osl_FileBase
     //---------------------------------------------------------------------
     // testing two methods:
     // static inline RC getSystemPathFromFileURL( const ::rtl::OUString& ustrFileURL,
-    //                ::rtl::OUString& ustrSystemPath )
+    //				  ::rtl::OUString& ustrSystemPath )
         // static RC getFileURLFromSystemPath( const ::rtl::OUString & ustrSystemPath,
         //                                ::rtl::OUString & ustrFileURL );
     //---------------------------------------------------------------------
@@ -1404,7 +1404,7 @@ namespace osl_FileBase
     rtl::OString expResult(home_path);
     expResult += "/tmp";
     checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, expResult );
-    //  checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "\\tmp");
+    //	checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "\\tmp");
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_9()
     {
@@ -1528,8 +1528,8 @@ namespace osl_FileBase
     //---------------------------------------------------------------------
     // testing the method
     // static inline RC searchFileURL(  const ::rtl::OUString& ustrFileName,
-    //                                  const ::rtl::OUString& ustrSearchPath,
-    //                                  ::rtl::OUString& ustrFileURL )
+    // 									const ::rtl::OUString& ustrSearchPath,
+    //									::rtl::OUString& ustrFileURL )
     //---------------------------------------------------------------------
     class searchFileURL:public CppUnit::TestFixture
     {
@@ -1668,10 +1668,10 @@ namespace osl_FileBase
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  static inline RC createTempFile( ::rtl::OUString* pustrDirectoryURL,
-    //                                   oslFileHandle* pHandle,
-    //                                   ::rtl::OUString* pustrTempFileURL)
+    // 	testing the method
+    // 	static inline RC createTempFile( ::rtl::OUString* pustrDirectoryURL,
+    //									 oslFileHandle* pHandle,
+    //									 ::rtl::OUString* pustrTempFileURL)
     //---------------------------------------------------------------------
     class createTempFile:public CppUnit::TestFixture
     {
@@ -1679,9 +1679,9 @@ namespace osl_FileBase
         ::osl::FileBase::RC nError1, nError2;
         sal_Bool bOK;
 
-        oslFileHandle   *pHandle;
-        ::rtl::OUString *pUStr_DirURL;
-        ::rtl::OUString *pUStr_FileURL;
+        oslFileHandle	*pHandle;
+        ::rtl::OUString	*pUStr_DirURL;
+        ::rtl::OUString	*pUStr_FileURL;
 
         public:
 
@@ -1792,8 +1792,8 @@ namespace osl_VolumeDevice
 {
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  VolumeDevice() : _aHandle( NULL )
+    // 	testing the method
+    // 	VolumeDevice() : _aHandle( NULL )
     //---------------------------------------------------------------------
     class  ctors : public CppUnit::TestFixture
     {
@@ -1855,8 +1855,8 @@ namespace osl_VolumeDevice
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC automount()
+    // 	testing the method
+    // 	inline RC automount()
     //---------------------------------------------------------------------
     class  automount : public CppUnit::TestFixture
     {
@@ -1919,8 +1919,8 @@ namespace osl_VolumeInfo
 {
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  VolumeInfo( sal_uInt32 nMask ): _nMask( nMask )
+    // 	testing the method
+    // 	VolumeInfo( sal_uInt32 nMask ): _nMask( nMask )
     //---------------------------------------------------------------------
     class  ctors : public CppUnit::TestFixture
     {
@@ -2015,8 +2015,8 @@ namespace osl_VolumeInfo
 
 
      //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool isValid( sal_uInt32 nMask ) const
+    // 	testing the method
+    // 	inline sal_Bool isValid( sal_uInt32 nMask ) const
     //---------------------------------------------------------------------
     class  isValid : public CppUnit::TestFixture
     {
@@ -2093,8 +2093,8 @@ namespace osl_VolumeInfo
     };// class isValid
 
      //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool getRemoteFlag() const
+    // 	testing the method
+    // 	inline sal_Bool getRemoteFlag() const
     //---------------------------------------------------------------------
     class  getRemoteFlag : public CppUnit::TestFixture
     {
@@ -2116,7 +2116,7 @@ namespace osl_VolumeInfo
                                      ( sal_False == bOk ) );
         }
 
- #if ( defined UNX ) || ( defined OS2 ) //remote Volume is different in Solaris and Windows
+ #if ( defined UNX ) || ( defined OS2 )	//remote Volume is different in Solaris and Windows
         void getRemoteFlag_002( )
         {
             sal_Int32 mask = VolumeInfoMask_Attributes;
@@ -2143,8 +2143,8 @@ namespace osl_VolumeInfo
     };// class getRemoteFlag
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool getRemoveableFlag() const
+    // 	testing the method
+    // 	inline sal_Bool getRemoveableFlag() const
     //---------------------------------------------------------------------
     class  getRemoveableFlag : public CppUnit::TestFixture
     {
@@ -2183,8 +2183,8 @@ namespace osl_VolumeInfo
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool getCompactDiscFlag() const
+    // 	testing the method
+    // 	inline sal_Bool getCompactDiscFlag() const
     //---------------------------------------------------------------------
     class  getCompactDiscFlag : public CppUnit::TestFixture
     {
@@ -2223,8 +2223,8 @@ namespace osl_VolumeInfo
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool getFloppyDiskFlag() const
+    // 	testing the method
+    // 	inline sal_Bool getFloppyDiskFlag() const
     //---------------------------------------------------------------------
     class  getFloppyDiskFlag : public CppUnit::TestFixture
     {
@@ -2263,8 +2263,8 @@ namespace osl_VolumeInfo
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool getFixedDiskFlag() const
+    // 	testing the method
+    // 	inline sal_Bool getFixedDiskFlag() const
     //---------------------------------------------------------------------
     class  getFixedDiskFlag : public CppUnit::TestFixture
     {
@@ -2302,8 +2302,8 @@ namespace osl_VolumeInfo
     };// class getFixedDiskFlag
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool getRAMDiskFlag() const
+    // 	testing the method
+    // 	inline sal_Bool getRAMDiskFlag() const
     //---------------------------------------------------------------------
     class  getRAMDiskFlag : public CppUnit::TestFixture
     {
@@ -2342,8 +2342,8 @@ namespace osl_VolumeInfo
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_uInt64 getTotalSpace() const
+    // 	testing the method
+    // 	inline sal_uInt64 getTotalSpace() const
     //---------------------------------------------------------------------
     class  getTotalSpace : public CppUnit::TestFixture
     {
@@ -2423,8 +2423,8 @@ namespace osl_VolumeInfo
     };// class getTotalSpace
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_uInt64 getFreeSpace() const
+    // 	testing the method
+    // 	inline sal_uInt64 getFreeSpace() const
     //---------------------------------------------------------------------
     class  getFreeSpace : public CppUnit::TestFixture
     {
@@ -2504,8 +2504,8 @@ namespace osl_VolumeInfo
     };// class getFreeSpace
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_uInt64 getUsedSpace() const
+    // 	testing the method
+    // 	inline sal_uInt64 getUsedSpace() const
     //---------------------------------------------------------------------
     class  getUsedSpace : public CppUnit::TestFixture
     {
@@ -2587,8 +2587,8 @@ namespace osl_VolumeInfo
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_uInt32 getMaxNameLength() const
+    // 	testing the method
+    // 	inline sal_uInt32 getMaxNameLength() const
     //---------------------------------------------------------------------
     class  getMaxNameLength : public CppUnit::TestFixture
     {
@@ -2646,8 +2646,8 @@ namespace osl_VolumeInfo
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_uInt32 getMaxPathLength() const
+    // 	testing the method
+    // 	inline sal_uInt32 getMaxPathLength() const
     //---------------------------------------------------------------------
     class  getMaxPathLength : public CppUnit::TestFixture
     {
@@ -2699,8 +2699,8 @@ namespace osl_VolumeInfo
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline ::rtl::OUString getFileSystemName() const
+    // 	testing the method
+    // 	inline ::rtl::OUString getFileSystemName() const
     //---------------------------------------------------------------------
     class  getFileSystemName : public CppUnit::TestFixture
     {
@@ -2759,8 +2759,8 @@ namespace osl_VolumeInfo
     };// class getFileSystemName
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline VolumeDevice getDeviceHandle() const
+    // 	testing the method
+    // 	inline VolumeDevice getDeviceHandle() const
     //---------------------------------------------------------------------
     class  getDeviceHandle : public CppUnit::TestFixture
     {
@@ -2815,8 +2815,8 @@ namespace osl_FileStatus
 {
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  FileStatus( sal_uInt32 nMask ): _nMask( nMask )
+    // 	testing the method
+    // 	FileStatus( sal_uInt32 nMask ): _nMask( nMask )
     //---------------------------------------------------------------------
     class  ctors : public CppUnit::TestFixture
     {
@@ -2886,8 +2886,8 @@ namespace osl_FileStatus
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool isValid( sal_uInt32 nMask ) const
+    // 	testing the method
+    // 	inline sal_Bool isValid( sal_uInt32 nMask ) const
     //---------------------------------------------------------------------
     class  isValid : public CppUnit::TestFixture
     {
@@ -2990,13 +2990,13 @@ namespace osl_FileStatus
 //      only on one.
 //      Second, it's not a bug, if a value is not valid, it's an unhandled feature.
 
-//          sal_Bool bOk = rFileStatus.isValid( mask_file );
+// 			sal_Bool bOk = rFileStatus.isValid( mask_file );
 
                 check_FileStatus(rFileStatus);
             deleteTestFile( aTmpName6 );
 
                 // CPPUNIT_ASSERT_MESSAGE( "test for isValid function: regular file mask fields test, #FileStatusMask_CreationTime# should be valid field for regular file, but feedback is invalid",
-                //                      ( sal_True == bOk ) );
+                // 	 					( sal_True == bOk ) );
         }
 
         //Link is not defined in Windows, and on Linux, we can not get the directory item of the link file
@@ -3066,7 +3066,7 @@ namespace osl_FileStatus
 
                 check_FileStatus(rFileStatus_all);
 // LLA: this is wrong
-//          sal_Bool bOk1 = rFileStatus_all.isValid( mask_file_all );
+//			sal_Bool bOk1 = rFileStatus_all.isValid( mask_file_all );
 
             sal_uInt32 mask_file_val = FileStatusMask_Validate;
              ::osl::FileStatus   rFileStatus_val( mask_file_val );
@@ -3076,7 +3076,7 @@ namespace osl_FileStatus
 
                 check_FileStatus(rFileStatus_val);
                 // CPPUNIT_ASSERT_MESSAGE( "test for isValid function: check for Mask_All and Validate, really not sure what validate used for and how to use it, help me.  did not pass (W32)(UNX).",
-                //                      ( sal_False == bOk1 ) && ( sal_True == bOk2 )  );
+                // 	 					( sal_False == bOk1 ) && ( sal_True == bOk2 )  );
         }
 
 
@@ -3090,8 +3090,8 @@ namespace osl_FileStatus
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline Type getFileType() const
+    // 	testing the method
+    // 	inline Type getFileType() const
     //---------------------------------------------------------------------
     class  getFileType : public CppUnit::TestFixture
     {
@@ -3207,7 +3207,7 @@ namespace osl_FileStatus
 
         void getFileType_004( )
         {
-#if ( defined UNX ) || ( defined OS2 )  //Fifo creation is differ in Windows
+#if ( defined UNX ) || ( defined OS2 )	//Fifo creation is differ in Windows
 
             //create a fifo in $ROOT/tmp/tmpdir, get its DirectoryItem.
           rtl::OString strFifoSys;
@@ -3244,19 +3244,19 @@ namespace osl_FileStatus
  * LLA: removed, m_aSocketItem is wrong initialised.
  */
 
-// LLA:         void getFileType_005( )
-// LLA:         {
-// LLA: #if defined ( SOLARIS ) //Socket file may differ in Windows
+// LLA: 		void getFileType_005( )
+// LLA: 		{
+// LLA: #if defined ( SOLARIS )	//Socket file may differ in Windows
 // LLA:             // nError1 = ::osl::DirectoryItem::get( aTypeURL1, m_aSocketItem );
 // LLA:             nError1 = ::osl::DirectoryItem::get( rtl::OUString::createFromAscii("/dev/null"), m_aSocketItem );
 // LLA:             printError(nError1);
-// LLA:             CPPUNIT_ASSERT_MESSAGE("get Socket type file failed", ::osl::FileBase::E_None == nError1 );
+// LLA: 			CPPUNIT_ASSERT_MESSAGE("get Socket type file failed", ::osl::FileBase::E_None == nError1 );
 // LLA:
-// LLA:             //check for File type
-// LLA:             ::osl::FileStatus   rFileStatus( FileStatusMask_Type );
+// LLA: 			//check for File type
+// LLA:  			::osl::FileStatus   rFileStatus( FileStatusMask_Type );
 // LLA:
 // LLA:             nError1 = m_aSocketItem.getFileStatus( rFileStatus );
-// LLA:             CPPUNIT_ASSERT_MESSAGE("getFileStatus failed", ::osl::FileBase::E_None == nError1 );
+// LLA: 			CPPUNIT_ASSERT_MESSAGE("getFileStatus failed", ::osl::FileBase::E_None == nError1 );
 // LLA:
 // LLA:             if (rFileStatus.isValid( FileStatusMask_Type ))
 // LLA:             {
@@ -3266,11 +3266,11 @@ namespace osl_FileStatus
 // LLA:                                         ( eType == ::osl::FileStatus::Socket ) );
 // LLA:             }
 // LLA: #endif
-// LLA:         }
+// LLA: 		}
 
 
 // deprecated since there is a same case Directory::getNextItem_004
-/*#if defined 0 //( UNX ) //( SOLARIS ) //Link file is not defined in Windows
+/*#if defined 0 //( UNX ) //( SOLARIS )	//Link file is not defined in Windows
         void getFileType_006( )
         {
   nError1 = ::osl::DirectoryItem::get( aTypeURL3, m_aLinkItem );
@@ -3284,11 +3284,11 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT_MESSAGE( "test for getFileType function: Link, UNX version ",
                                      ( ::osl::FileStatus::Link == rFileStatus.getFileType( ) ) );
         }
-#endif  */
+#endif	*/
 
         void getFileType_007( )
         {
-#if defined ( SOLARIS ) //Special file is differ in Windows
+#if defined ( SOLARIS )	//Special file is differ in Windows
                 nError1 = ::osl::DirectoryItem::get( aTypeURL2, m_aSpecialItem );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
@@ -3320,8 +3320,8 @@ namespace osl_FileStatus
     };// class getFileType
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_uInt64 getAttributes() const
+    // 	testing the method
+    // 	inline sal_uInt64 getAttributes() const
     //---------------------------------------------------------------------
     class  getAttributes : public CppUnit::TestFixture
     {
@@ -3413,7 +3413,7 @@ namespace osl_FileStatus
         }
 #endif
 
-#if ( defined UNX ) || ( defined OS2 )  //hidden file definition may different in Windows
+#if ( defined UNX ) || ( defined OS2 )	//hidden file definition may different in Windows
         void getAttributes_004( )
         {
             sal_Int32 test_Attributes = Attribute_Hidden;
@@ -3450,8 +3450,8 @@ namespace osl_FileStatus
     };// class getAttributes
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline TimeValue getAccessTime() const
+    // 	testing the method
+    // 	inline TimeValue getAccessTime() const
     //---------------------------------------------------------------------
     class  getAccessTime : public CppUnit::TestFixture
     {
@@ -3505,8 +3505,8 @@ namespace osl_FileStatus
     };// class getAccessTime
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline TimeValue getModifyTime() const
+    // 	testing the method
+    // 	inline TimeValue getModifyTime() const
     //---------------------------------------------------------------------
     class  getModifyTime : public CppUnit::TestFixture
     {
@@ -3559,8 +3559,8 @@ namespace osl_FileStatus
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_uInt64 getFileSize() const
+    // 	testing the method
+    // 	inline sal_uInt64 getFileSize() const
     //---------------------------------------------------------------------
     class  getFileSize : public CppUnit::TestFixture
     {
@@ -3622,8 +3622,8 @@ namespace osl_FileStatus
     };// class getFileSize
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline ::rtl::OUString getFileName() const
+    // 	testing the method
+    // 	inline ::rtl::OUString getFileName() const
     //---------------------------------------------------------------------
     class  getFileName : public CppUnit::TestFixture
     {
@@ -3666,8 +3666,8 @@ namespace osl_FileStatus
     };// class getFileName
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline ::rtl::OUString getFileURL() const
+    // 	testing the method
+    // 	inline ::rtl::OUString getFileURL() const
     //---------------------------------------------------------------------
     class  getFileURL : public CppUnit::TestFixture
     {
@@ -3708,8 +3708,8 @@ namespace osl_FileStatus
     };// class getFileURL
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline ::rtl::OUString getLinkTargetURL() const
+    // 	testing the method
+    // 	inline ::rtl::OUString getLinkTargetURL() const
     //---------------------------------------------------------------------
     class  getLinkTargetURL : public CppUnit::TestFixture
     {
@@ -3732,7 +3732,7 @@ namespace osl_FileStatus
             deleteTestFile( aTypeURL );
         }
 
-#if ( defined UNX ) || ( defined OS2 )         //Link file is not define in Windows
+#if ( defined UNX ) || ( defined OS2 )	       //Link file is not define in Windows
         void getLinkTargetURL_001( )
         {
             //create a link file;
@@ -3798,8 +3798,8 @@ namespace osl_FileStatus
 namespace osl_File
 {
     //---------------------------------------------------------------------
-    //  testing the method
-    //  File( const ::rtl::OUString& ustrFileURL )
+    // 	testing the method
+    // 	File( const ::rtl::OUString& ustrFileURL )
     //---------------------------------------------------------------------
     class  ctors : public CppUnit::TestFixture
     {
@@ -3853,8 +3853,8 @@ namespace osl_File
     };// class ctors
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC open( sal_uInt32 uFlags )
+    // 	testing the method
+    // 	inline RC open( sal_uInt32 uFlags )
     //---------------------------------------------------------------------
     class  open : public CppUnit::TestFixture
     {
@@ -3974,8 +3974,8 @@ namespace osl_File
     };// class open
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC close()
+    // 	testing the method
+    // 	inline RC close()
     //---------------------------------------------------------------------
     class  close : public CppUnit::TestFixture
     {
@@ -4035,8 +4035,8 @@ namespace osl_File
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC setPos( sal_uInt32 uHow, sal_Int64 uPos )
+    // 	testing the method
+    // 	inline RC setPos( sal_uInt32 uHow, sal_Int64 uPos )
     //---------------------------------------------------------------------
     class  setPos : public CppUnit::TestFixture
     {
@@ -4138,8 +4138,8 @@ namespace osl_File
     };// class setPos
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC getPos( sal_uInt64& uPos )
+    // 	testing the method
+    // 	inline RC getPos( sal_uInt64& uPos )
     //---------------------------------------------------------------------
     class  getPos : public CppUnit::TestFixture
     {
@@ -4203,8 +4203,8 @@ namespace osl_File
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC isEndOfFile( sal_Bool *pIsEOF )
+    // 	testing the method
+    // 	inline RC isEndOfFile( sal_Bool *pIsEOF )
     //---------------------------------------------------------------------
     class  isEndOfFile : public CppUnit::TestFixture
     {
@@ -4297,8 +4297,8 @@ namespace osl_File
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC setSize( sal_uInt64 uSize )
+    // 	testing the method
+    // 	inline RC setSize( sal_uInt64 uSize )
     //---------------------------------------------------------------------
     class  setSize : public CppUnit::TestFixture
     {
@@ -4387,7 +4387,7 @@ namespace osl_File
             CPPUNIT_ASSERT_MESSAGE( "test for setSize function: truncate the file ",
                                      10 == nFilePointer );
         }
-      /*            void setSize_003( )
+      /*	        void setSize_003( )
         {
             ::osl::File   testFile( aTmpName4 );
             // sal_Bool      bEOF  = sal_False;
@@ -4424,8 +4424,8 @@ namespace osl_File
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC read( void *pBuffer, sal_uInt64 uBytesRequested, sal_uInt64& rBytesRead )
+    // 	testing the method
+    // 	inline RC read( void *pBuffer, sal_uInt64 uBytesRequested, sal_uInt64& rBytesRead )
     //---------------------------------------------------------------------
     class  read : public CppUnit::TestFixture
     {
@@ -4512,8 +4512,8 @@ namespace osl_File
     };// class read
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC write(const void *pBuffer, sal_uInt64 uBytesToWrite, sal_uInt64& rBytesWritten)
+    // 	testing the method
+    // 	inline RC write(const void *pBuffer, sal_uInt64 uBytesToWrite, sal_uInt64& rBytesWritten)
     //---------------------------------------------------------------------
     class  write : public CppUnit::TestFixture
     {
@@ -4571,8 +4571,8 @@ namespace osl_File
     };// class write
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC readLine( ::rtl::ByteSequence& aSeq )
+    // 	testing the method
+    // 	inline RC readLine( ::rtl::ByteSequence& aSeq )
     //---------------------------------------------------------------------
     class  readLine : public CppUnit::TestFixture
     {
@@ -4655,8 +4655,8 @@ namespace osl_File
     };// class readLine
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC copy( const ::rtl::OUString& ustrSourceFileURL, const ::rtl::OUString& ustrDestFileURL )
+    // 	testing the method
+    // 	inline static RC copy( const ::rtl::OUString& ustrSourceFileURL, const ::rtl::OUString& ustrDestFileURL )
     //---------------------------------------------------------------------
     class  copy : public CppUnit::TestFixture
     {
@@ -4759,7 +4759,7 @@ namespace osl_File
         File newFile( aTmpName4 );
         newFile.open( OpenFlag_Write | OpenFlag_Read );
         newFile.setPos( Pos_End, 0 );
-        //      CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
+        //		CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
         sal_uInt64     nFilePointer;
         nError1 = newFile.getPos( nFilePointer );
         CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -4789,8 +4789,8 @@ namespace osl_File
     };// class copy
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC move( const ::rtl::OUString& ustrSourceFileURL, const ::rtl::OUString& ustrDestFileURL )
+    // 	testing the method
+    // 	inline static RC move( const ::rtl::OUString& ustrSourceFileURL, const ::rtl::OUString& ustrDestFileURL )
     //---------------------------------------------------------------------
     class  move : public CppUnit::TestFixture
     {
@@ -4944,15 +4944,15 @@ namespace osl_File
         CPPUNIT_TEST( move_005 );
         CPPUNIT_TEST( move_006 );
         CPPUNIT_TEST( move_007 );
-      //      CPPUNIT_TEST( move_008 );
+      //	  CPPUNIT_TEST( move_008 );
       //CPPUNIT_TEST( move_009 );
         CPPUNIT_TEST_SUITE_END( );
     };// class move
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC remove( const ::rtl::OUString& ustrFileURL )
+    // 	testing the method
+    // 	inline static RC remove( const ::rtl::OUString& ustrFileURL )
     //---------------------------------------------------------------------
     class  remove : public CppUnit::TestFixture
     {
@@ -5036,8 +5036,8 @@ namespace osl_File
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC setAttributes( const ::rtl::OUString& ustrFileURL, sal_uInt64 uAttributes )
+    // 	testing the method
+    // 	inline static RC setAttributes( const ::rtl::OUString& ustrFileURL, sal_uInt64 uAttributes )
     //---------------------------------------------------------------------
     class  setAttributes : public CppUnit::TestFixture
     {
@@ -5127,12 +5127,12 @@ namespace osl_File
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC setTime(
-    //         const ::rtl::OUString& ustrFileURL,
-    //         const TimeValue& rCreationTime,
-    //         const TimeValue& rLastAccessTime,
-    //         const TimeValue& rLastWriteTime )
+    // 	testing the method
+    // 	inline static RC setTime(
+    // 	       const ::rtl::OUString& ustrFileURL,
+    // 	       const TimeValue& rCreationTime,
+    // 	       const TimeValue& rLastAccessTime,
+    // 	       const TimeValue& rLastWriteTime )
     //---------------------------------------------------------------------
     class  setTime : public CppUnit::TestFixture
     {
@@ -5214,8 +5214,8 @@ namespace osl_File
     };// class setTime
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC sync()
+    // 	testing the method
+    // 	inline static RC sync()
     //---------------------------------------------------------------------
         class  sync : public CppUnit::TestFixture
     {
@@ -5301,8 +5301,8 @@ namespace osl_File
 namespace osl_DirectoryItem
 {
     //---------------------------------------------------------------------
-    //  testing the method
-    //  DirectoryItem(): _pData( NULL )
+    // 	testing the method
+    // 	DirectoryItem(): _pData( NULL )
     //---------------------------------------------------------------------
     class  ctors : public CppUnit::TestFixture
     {
@@ -5342,8 +5342,8 @@ namespace osl_DirectoryItem
     };// class ctors
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  DirectoryItem( const DirectoryItem& rItem ): _pData( rItem._pData)
+    // 	testing the method
+    // 	DirectoryItem( const DirectoryItem& rItem ): _pData( rItem._pData)
     //---------------------------------------------------------------------
     class  copy_assin_Ctors : public CppUnit::TestFixture
     {
@@ -5404,8 +5404,8 @@ namespace osl_DirectoryItem
     };// class copy_assin_Ctors
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool is()
+    // 	testing the method
+    // 	inline sal_Bool is()
     //---------------------------------------------------------------------
     class  is : public CppUnit::TestFixture
     {
@@ -5452,8 +5452,8 @@ namespace osl_DirectoryItem
     };// class is
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  static inline RC get( const ::rtl::OUString& ustrFileURL, DirectoryItem& rItem )
+    // 	testing the method
+    // 	static inline RC get( const ::rtl::OUString& ustrFileURL, DirectoryItem& rItem )
     //---------------------------------------------------------------------
     class  get : public CppUnit::TestFixture
     {
@@ -5518,8 +5518,8 @@ namespace osl_DirectoryItem
     };// class get
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC getFileStatus( FileStatus& rStatus )
+    // 	testing the method
+    // 	inline RC getFileStatus( FileStatus& rStatus )
     //---------------------------------------------------------------------
     class  getFileStatus : public CppUnit::TestFixture
     {
@@ -5612,8 +5612,8 @@ namespace osl_DirectoryItem
 namespace osl_Directory
 {
     //---------------------------------------------------------------------
-    //  testing the method
-    //  Directory( const ::rtl::OUString& strPath ): _pData( 0 ), _aPath( strPath )
+    // 	testing the method
+    // 	Directory( const ::rtl::OUString& strPath ): _pData( 0 ), _aPath( strPath )
     //---------------------------------------------------------------------
     class  ctors : public CppUnit::TestFixture
     {
@@ -5676,8 +5676,8 @@ namespace osl_Directory
     };// class ctors
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC open()
+    // 	testing the method
+    // 	inline RC open()
     //---------------------------------------------------------------------
     class  open : public CppUnit::TestFixture
     {
@@ -5774,8 +5774,8 @@ namespace osl_Directory
     };// class open
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline sal_Bool isOpen() { return _pData != NULL; };
+    // 	testing the method
+    // 	inline sal_Bool isOpen() { return _pData != NULL; };
     //---------------------------------------------------------------------
     class  isOpen : public CppUnit::TestFixture
     {
@@ -5831,8 +5831,8 @@ namespace osl_Directory
     };// class isOpen
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC close()
+    // 	testing the method
+    // 	inline RC close()
     //---------------------------------------------------------------------
     class  close : public CppUnit::TestFixture
     {
@@ -5887,8 +5887,8 @@ namespace osl_Directory
     };// class close
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC reset()
+    // 	testing the method
+    // 	inline RC reset()
     //---------------------------------------------------------------------
     class  reset : public CppUnit::TestFixture
     {
@@ -5997,8 +5997,8 @@ namespace osl_Directory
     };// class reset
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline RC getNextItem( DirectoryItem& rItem, sal_uInt32 nHint = 0 )
+    // 	testing the method
+    // 	inline RC getNextItem( DirectoryItem& rItem, sal_uInt32 nHint = 0 )
     //---------------------------------------------------------------------
     class  getNextItem : public CppUnit::TestFixture
     {
@@ -6152,8 +6152,8 @@ namespace osl_Directory
     };// class getNextItem
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC getVolumeInfo( const ::rtl::OUString& ustrDirectoryURL, VolumeInfo& rInfo )
+    // 	testing the method
+    // 	inline static RC getVolumeInfo( const ::rtl::OUString& ustrDirectoryURL, VolumeInfo& rInfo )
     //---------------------------------------------------------------------
     class  getVolumeInfo : public CppUnit::TestFixture
     {
@@ -6330,8 +6330,8 @@ namespace osl_Directory
 
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC create( const ::rtl::OUString& ustrDirectoryURL )
+    // 	testing the method
+    // 	inline static RC create( const ::rtl::OUString& ustrDirectoryURL )
     //---------------------------------------------------------------------
     class  create : public CppUnit::TestFixture
     {
@@ -6384,8 +6384,8 @@ namespace osl_Directory
     };// class create
 
     //---------------------------------------------------------------------
-    //  testing the method
-    //  inline static RC remove( const ::rtl::OUString& ustrDirectoryURL )
+    // 	testing the method
+    // 	inline static RC remove( const ::rtl::OUString& ustrDirectoryURL )
     //---------------------------------------------------------------------
     class  remove : public CppUnit::TestFixture
     {

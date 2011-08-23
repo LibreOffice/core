@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ published service DocumentSettings
     /** If this is true, the distance between two paragraphs is
         the sum of ParaTopMargin of the previous and ParaBottomMargin of
         the next paragraph. If false, only the greater of the two is
-        choosen.
+        choosen. 
      */
     [optional, property] boolean ParagraphSummation;
 

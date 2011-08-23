@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,31 +24,31 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_FocusEvent_idl__
-#define __com_sun_star_awt_FocusEvent_idl__
-
-#ifndef __com_sun_star_lang_EventObject_idl__
-#include <com/sun/star/lang/EventObject.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+#ifndef __com_sun_star_awt_FocusEvent_idl__ 
+#define __com_sun_star_awt_FocusEvent_idl__ 
+ 
+#ifndef __com_sun_star_lang_EventObject_idl__ 
+#include <com/sun/star/lang/EventObject.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** specifies a keyboard focus event.
-
+            
     <p>There are two levels of focus change events: permanent and temporary.
     Permanent focus change events occur when focus is directly moved
     from one component to another, such as through calls to requestFocus()
     or as the user uses the Tab key to traverse components.
-    Temporary focus change events occur when focus is
+    Temporary focus change events occur when focus is 
     gained or lost for a component as the indirect result of another
     operation, such as window deactivation or a scrollbar drag.  In this
     case, the original focus state will automatically be restored once
@@ -59,32 +59,32 @@
     method.</p>
  */
 published struct FocusEvent: com::sun::star::lang::EventObject
-{
-    //-------------------------------------------------------------------------
-
-    /** specifies the reason for the focus change as an arithmentic-or
+{ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies the reason for the focus change as an arithmentic-or 
         combination of <type>FocusChangeReason</type>.
 
         @see FocusChangeReason
      */
-    short FocusFlags;
-
-    //-------------------------------------------------------------------------
-
+    short FocusFlags; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** contains the window which gets the focus on a lose focus event.
      */
-    com::sun::star::uno::XInterface NextFocus;
-
-    //-------------------------------------------------------------------------
-
+    com::sun::star::uno::XInterface NextFocus; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies if this focus change event is a temporary change.
      */
-    boolean Temporary;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    boolean Temporary; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

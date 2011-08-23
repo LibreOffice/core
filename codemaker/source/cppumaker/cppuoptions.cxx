@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_codemaker.hxx"
-#include <stdio.h>
+#include <stdio.h> 
 #include <string.h>
 
 #include "cppuoptions.hxx"
@@ -36,16 +36,16 @@
 
 using namespace rtl;
 
-sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
+sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile) 
     throw( IllegalArgument )
 {
-    sal_Bool    ret = sal_True;
-    sal_uInt16  i=0;
+    sal_Bool 	ret = sal_True;
+    sal_uInt16	i=0;
 
     if (!bCmdFile)
     {
         bCmdFile = sal_True;
-
+        
         m_program = av[0];
 
         if (ac < 2)
@@ -60,7 +60,7 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
         i = 0;
     }
 
-    char    *s=NULL;
+    char	*s=NULL;
     for( ; i < ac; i++)
     {
         if (av[i][0] == '-')
@@ -81,14 +81,14 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             {
                                 tmp += " your input '" + OString(av[i+1]) + "'";
                             }
-
+                            
                             throw IllegalArgument(tmp);
                         }
                     } else
                     {
                         s = av[i] + 2;
                     }
-
+                    
                     m_options["-O"] = OString(s);
                     break;
                 case 'B':
@@ -105,14 +105,14 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             {
                                 tmp += " your input '" + OString(av[i+1]) + "'";
                             }
-
+                            
                             throw IllegalArgument(tmp);
                         }
                     } else
                     {
                         s = av[i] + 2;
                     }
-
+                    
                     m_options["-B"] = OString(s);
                     break;
                 case 'T':
@@ -129,14 +129,14 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             {
                                 tmp += " your input '" + OString(av[i+1]) + "'";
                             }
-
+                            
                             throw IllegalArgument(tmp);
                         }
                     } else
                     {
                         s = av[i] + 2;
                     }
-
+                    
                     if (m_options.count("-T") > 0)
                     {
                         OString tmp(m_options["-T"]);
@@ -158,7 +158,7 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                         throw IllegalArgument(tmp);
                     }
-
+                    
                     if (isValid("-C") || isValid("-CS"))
                     {
                         OString tmp("'-L' could not be combined with '-C' or '-CS' option");
@@ -198,7 +198,7 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                         throw IllegalArgument(tmp);
                     }
-
+                    
                     if (isValid("-L") || isValid("-CS"))
                     {
                         OString tmp("'-C' could not be combined with '-L' or '-CS' option");
@@ -233,9 +233,9 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                         throw IllegalArgument(tmp);
                     }
-
+                    
                     m_options["-G"] = OString("");
-                    break;
+                    break;                    
                 case 'X': // support for eXtra type rdbs
                 {
                     if (av[i][2] == '\0')
@@ -251,18 +251,18 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             {
                                 tmp += " your input '" + OString(av[i+1]) + "'";
                             }
-
+                            
                             throw IllegalArgument(tmp);
                         }
                     } else
                     {
                         s = av[i] + 2;
                     }
-
+                    
                     m_extra_input_files.push_back( s );
                     break;
                 }
-
+                
                 default:
                     throw IllegalArgument("the option is unknown" + OString(av[i]));
             }
@@ -287,14 +287,14 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         rargc++;
                     }
                     fclose(cmdFile);
-
+                    
                     ret = initOptions(rargc, rargv, bCmdFile);
-
-                    for (long j=0; j < rargc; j++)
+                    
+                    for (long j=0; j < rargc; j++) 
                     {
                         free(rargv[j]);
                     }
-                }
+                }		
             } else
             {
                 if (bCmdFile)
@@ -310,14 +310,14 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     }
                     m_inputFiles.push_back(OUStringToOString(system_filepath, osl_getThreadTextEncoding()));
                 }
-            }
+            }		
         }
     }
+    
+    return ret;	
+}	
 
-    return ret;
-}
-
-OString CppuOptions::prepareHelp()
+OString	CppuOptions::prepareHelp()
 {
     OString help("\nusing: ");
     help += m_program + " [-options] file_1 ... file_n\nOptions:\n";
@@ -326,7 +326,7 @@ OString CppuOptions::prepareHelp()
     help += "    -T<name>   = name specifies a type or a list of types. The output for this\n";
     help += "      [t1;...]   type is generated. If no '-T' option is specified,\n";
     help += "                 then output for all types is generated.\n";
-    help += "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n";
+    help += "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n";		
     help += "    -B<name>   = name specifies the base node. All types are searched under this\n";
     help += "                 node. Default is the root '/' of the registry files.\n";
     help += "    -L         = UNO type functions are generated lightweight, that means only\n";
@@ -340,16 +340,16 @@ OString CppuOptions::prepareHelp()
     help += "    -Gc        = generate only target files which content will be changed.\n";
     help += "    -X<file>   = extra types which will not be taken into account for generation.\n";
     help += prepareVersion();
-
+    
     return help;
-}
+}	
 
-OString CppuOptions::prepareVersion()
+OString	CppuOptions::prepareVersion()
 {
     OString version("\nSun Microsystems (R) ");
     version += m_program + " Version 2.0\n\n";
 
     return version;
-}
+}	
 
-
+    

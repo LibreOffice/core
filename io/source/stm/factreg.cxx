@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ static struct ImplementationEntry g_entries[] =
     {
         ODataInputStream_CreateInstance, ODataInputStream_getImplementationName,
         ODataInputStream_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt, 0
+        &g_moduleCount.modCnt, 0 
     },
     {
         ODataOutputStream_CreateInstance, ODataOutputStream_getImplementationName,
@@ -74,7 +74,7 @@ static struct ImplementationEntry g_entries[] =
     {
         OObjectInputStream_CreateInstance, OObjectInputStream_getImplementationName,
         OObjectInputStream_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt, 0
+        &g_moduleCount.modCnt, 0 
     },
     {
         OObjectOutputStream_CreateInstance, OObjectOutputStream_getImplementationName,
@@ -84,15 +84,15 @@ static struct ImplementationEntry g_entries[] =
     {
         OMarkableInputStream_CreateInstance, OMarkableInputStream_getImplementationName,
         OMarkableInputStream_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt, 0
+        &g_moduleCount.modCnt, 0 
     },
     {
         OMarkableOutputStream_CreateInstance, OMarkableOutputStream_getImplementationName,
         OMarkableOutputStream_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt, 0
+        &g_moduleCount.modCnt, 0 
     },
     { 0, 0, 0, 0, 0, 0 }
-
+    
 };
 
 extern "C"
@@ -102,7 +102,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 {
     return g_moduleCount.canUnload( &g_moduleCount , pTime );
 }
-
+    
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )

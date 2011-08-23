@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ namespace
 
     /* p = sp - 512; new sp will be p - 16, but we don't change sp
      * at this time to avoid breaking ABI--not sure whether changing sp will break
-     * references to local variables. For the same reason, we use abosulte value.
+     * references to local variables. For the same reason, we use abosulte value. 
      */
     __asm__ __volatile__ (
         "addiu $2,$29,-512\n\t"
@@ -96,10 +96,10 @@ namespace
         :"=r"(p): : "$2","$29" );
 
 #ifdef BRDEBUG
-     if (nStackLongs * 4 > 512 )
-         fprintf(stderr,"too many arguments");
+     if (nStackLongs * 4 > 512 ) 
+         fprintf(stderr,"too many arguments"); 
 #endif
-
+    
     // now begin to load the C++ function arguments into storage
     nw = 0;
 
@@ -129,13 +129,13 @@ namespace
         case 'D':                   /* type is double */
           /* treat the same as long long */
         case 'H':                /* type is long long */
-          if (nw & 1) nw++;     /* note even elements gpr[] will map to
+          if (nw & 1) nw++; 	/* note even elements gpr[] will map to
                                odd registers*/
           if (nw < 4) {
             gpr[nw++] = *pStackLongs;
             gpr[nw++] = *(pStackLongs+1);
           } else {
-            if (((long) p) & 4)
+            if (((long) p) & 4)          
               p++;
             *p++ = *pStackLongs;
             *p++ = *(pStackLongs+1);
@@ -174,12 +174,12 @@ namespace
     }
 
     /* figure out the address of the function we need to invoke */
-    off = nVtableIndex;
+    off = nVtableIndex; 
     off = off * 4;                         // 4 bytes per slot
     mfunc = *((unsigned long **)pAdjustedThisPtr);    // get the address of the vtable
-    mfunc = (unsigned long *)((char *)mfunc + off); // get the address from the vtable entry at offset
+    mfunc = (unsigned long *)((char *)mfunc + off); // get the address from the vtable entry at offset 
     mfunc = *((unsigned long **)mfunc);                 // the function is stored at the address
-    ptr = (void (*)())mfunc;
+    ptr = (void (*)())mfunc;   
 
 #ifdef BRDEBUG
     fprintf(stderr,"calling function %p\n",mfunc);
@@ -188,10 +188,10 @@ namespace
     /* Set up the machine registers and invoke the function */
 
     __asm__ __volatile__ (
-        "lw $4, 0(%0)\n\t"
-        "lw $5, 4(%0)\n\t"
-        "lw $6, 8(%0)\n\t"
-        "lw $7, 12(%0)\n\t"
+        "lw	$4,	0(%0)\n\t"
+        "lw	$5,	4(%0)\n\t"
+        "lw	$6,	8(%0)\n\t"
+        "lw	$7,	12(%0)\n\t"
         : : "r" (gpr)
         : "$4", "$5", "$6", "$7"
         );
@@ -207,13 +207,13 @@ namespace
         "sw $3,%1 \n\t"
         : "=m" (iret), "=m" (iret2) : );
     register float fret asm("$f0");
-    register double dret asm("$f0");
+    register double	dret asm("$f0");
 
     switch( eReturnType )
     {
       case typelib_TypeClass_HYPER:
       case typelib_TypeClass_UNSIGNED_HYPER:
-          ((long*)pRegisterReturn)[1] = iret2;  // fall through
+          ((long*)pRegisterReturn)[1] = iret2;	// fall through
       case typelib_TypeClass_LONG:
       case typelib_TypeClass_UNSIGNED_LONG:
       case typelib_TypeClass_ENUM:
@@ -240,7 +240,7 @@ namespace
   }
 
 
-  //==================================================================================================
+  //================================================================================================== 
   static void cpp_call(
       bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
       bridges::cpp_uno::shared::VtableSlot  aVtableSlot,
@@ -249,9 +249,9 @@ namespace
       void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc )
   {
     // max space for: [complex ret ptr], values|ptr ...
-    char * pCppStack        =
+    char * pCppStack		=
       (char *)alloca( sizeof(sal_Int32) + ((nParams+2) * sizeof(sal_Int64)) );
-    char * pCppStackStart   = pCppStack;
+    char * pCppStackStart	= pCppStack;
 
     // need to know parameter types for callVirtualMethod so generate a signature string
     char * pParamType = (char *) alloca(nParams+2);
@@ -277,7 +277,7 @@ namespace
       else
       {
         // complex return via ptr
-        pCppReturn = *(void **)pCppStack =
+        pCppReturn = *(void **)pCppStack = 
           (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
            ? alloca( pReturnTypeDescr->nSize ): pUnoReturn); // direct way
         *pPT++ = 'I'; //signify that a complex return type on stack
@@ -375,7 +375,7 @@ namespace
         {
           uno_copyAndConvertData(
               *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
-              pUnoArgs[nPos], pParamTypeDescr,
+              pUnoArgs[nPos], pParamTypeDescr, 
               pThis->getBridge()->getUno2Cpp() );
 
           pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
@@ -444,7 +444,7 @@ namespace
     catch (...)
     {
       // fill uno exception
-      fillUnoException( CPPU_CURRENT_NAMESPACE::__cxa_get_globals()->caughtExceptions,
+      fillUnoException( CPPU_CURRENT_NAMESPACE::__cxa_get_globals()->caughtExceptions, 
           *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
 
       // temporary params
@@ -506,8 +506,8 @@ void unoInterfaceProxyDispatch(
           typelib_MethodParameter aParam;
           aParam.pTypeRef =
             ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef;
-          aParam.bIn        = sal_True;
-          aParam.bOut       = sal_False;
+          aParam.bIn		= sal_True;
+          aParam.bOut		= sal_False;
 
           typelib_TypeDescriptionReference * pReturnTypeRef = 0;
           OUString aVoidName( RTL_CONSTASCII_USTRINGPARAM("void") );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ module com { module sun { module star { module text {
 
 //=============================================================================
 /** is an object which can be anchored in a text, like instances of
-    <type>TextFrame</type> or <type>TextField</type>.
+    <type>TextFrame</type> or <type>TextField</type>. 
 
     <p>If the concrete <type>TextContent</type> has a textual
     representation which fades into the surrounding text, then

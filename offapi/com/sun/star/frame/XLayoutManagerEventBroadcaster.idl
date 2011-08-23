@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,11 +53,11 @@ interface XLayoutManagerEventBroadcaster : com::sun::star::uno::XInterface
      */
     void addLayoutManagerEventListener( [in] XLayoutManagerListener aLayoutManagerListener );
 
-    /** removes a layout manager event listener from the object's listener
+    /** removes a layout manager event listener from the object's listener 
         list.
 
         @param aLayoutManagerListener
-            a listener that don't want to receive events regarding user
+            a listener that don't want to receive events regarding user 
             interface elements that are controlled by a layout manager.
      */
     void removeLayoutManagerEventListener( [in] XLayoutManagerListener aLayoutManagerListener );

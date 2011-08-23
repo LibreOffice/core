@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@
 
 namespace typereg { class Writer; }
 
-#define OP_NONE         0x0000
-#define OP_ONEWAY       0x0001
+#define OP_NONE			0x0000
+#define OP_ONEWAY		0x0001
 
 class AstType;
 
@@ -67,9 +67,9 @@ public:
     // scope management
     virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl);
 private:
-    sal_uInt32  m_flags;
-    AstType*    m_pReturnType;
-    DeclList    m_exceptions;
+    sal_uInt32 	m_flags;
+    AstType*	m_pReturnType;
+    DeclList	m_exceptions;
 };
 
 #endif // _IDLC_ASTOPERATION_HXX_

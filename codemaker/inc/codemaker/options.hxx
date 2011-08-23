@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,20 +33,20 @@
 #include <codemaker/global.hxx>
 
 #if defined( _MSC_VER ) && ( _MSC_VER < 1200 )
-typedef ::std::__hash_map__
-<
-    ::rtl::OString,
-    ::rtl::OString,
-    HashString,
-    EqualString,
+typedef	::std::__hash_map__
+<	
+    ::rtl::OString, 
+    ::rtl::OString, 
+    HashString, 
+    EqualString, 
     NewAlloc
 > OptionMap;
 #else
-typedef ::std::hash_map
-<
-    ::rtl::OString,
-    ::rtl::OString,
-    HashString,
+typedef	::std::hash_map
+<	
+    ::rtl::OString, 
+    ::rtl::OString, 
+    HashString, 
     EqualString
 > OptionMap;
 #endif
@@ -57,7 +57,7 @@ public:
     IllegalArgument(const ::rtl::OString& msg)
         : m_message(msg) {}
 
-    ::rtl::OString  m_message;
+    ::rtl::OString	m_message;	
 };
 
 class Options
@@ -66,33 +66,33 @@ public:
     Options();
     virtual ~Options();
 
-    virtual sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
+    virtual sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False) 
         throw( IllegalArgument ) = 0;
 
-    virtual ::rtl::OString  prepareHelp() = 0;
+    virtual ::rtl::OString	prepareHelp() = 0;
 
-    const ::rtl::OString&   getProgramName() const;
-    sal_Bool                isValid(const ::rtl::OString& option);
-    const ::rtl::OString    getOption(const ::rtl::OString& option)
+    const ::rtl::OString&	getProgramName() const;
+    sal_Bool				isValid(const ::rtl::OString& option);
+    const ::rtl::OString	getOption(const ::rtl::OString& option)
         throw( IllegalArgument );
-    const OptionMap&        getOptions();
+    const OptionMap& 		getOptions();
 
-    const ::rtl::OString    getInputFile(sal_uInt16 index)
+    const ::rtl::OString 	getInputFile(sal_uInt16 index)
         throw( IllegalArgument );
 
     const StringVector& getInputFiles();
 
     ::rtl::OString getExtraInputFile(sal_uInt16 index) const throw( IllegalArgument );
     inline sal_uInt16 getNumberOfExtraInputFiles() const
-        { return (sal_uInt16)m_extra_input_files.size(); }
+        { return (sal_uInt16)m_extra_input_files.size(); }	
     inline const StringVector& getExtraInputFiles() const
         { return m_extra_input_files; }
 protected:
-    ::rtl::OString  m_program;
-    StringVector    m_inputFiles;
+    ::rtl::OString 	m_program;
+    StringVector	m_inputFiles;
     StringVector    m_extra_input_files;
-    OptionMap       m_options;
+    OptionMap		m_options;
 };
-
+    
 #endif // INCLUDED_CODEMAKER_OPTIONS_HXX
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@
 #include <tools/prewin.h>
 #   define UNICODE
 #   define _UNICODE
-#   define WIN32_LEAN_AND_MEAN
-// #    include <windows.h>
+#	define WIN32_LEAN_AND_MEAN
+// #	include <windows.h>
 #   include <tchar.h>
 #include <tools/postwin.h>
 #else
-#   include <unistd.h>
+#	include <unistd.h>
 #endif
 
 #include <stdio.h>
@@ -61,7 +61,7 @@
 
 //########################################
 void wait_for_seconds(char* time)
-{
+{    
     SLEEP(atoi(time));
 }
 
@@ -76,36 +76,36 @@ void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
 }
 //########################################
     void dump_env(char* file_path)
-    {
+    {        
         LPTSTR env = reinterpret_cast<LPTSTR>(
             GetEnvironmentStrings());
         LPTSTR p   = env;
 
         std::ofstream file(file_path);
-
-        char buffer[32767];
+            
+        char buffer[32767];        
         while (size_t l = _tcslen(reinterpret_cast<wchar_t*>(p)))
-        {
-            w_to_a(p, buffer, sizeof(buffer));
-            file << buffer << std::endl;
-            p += l + 1;
-        }
-        FreeEnvironmentStrings(env);
-    }
+        {      
+            w_to_a(p, buffer, sizeof(buffer));            
+            file << buffer << std::endl;                
+            p += l + 1;    
+        }        
+        FreeEnvironmentStrings(env);                 
+    }    
 #else
     extern char** environ;
-
+    
     void dump_env(char* file_path)
-    {
-        std::ofstream file(file_path);
-        for (int i = 0; NULL != environ[i]; i++)
-            file << environ[i] << std::endl;
-    }
+    {                
+        std::ofstream file(file_path);             
+        for (int i = 0; NULL != environ[i]; i++)        
+            file << environ[i] << std::endl;        
+    }    
 #endif
 
 //########################################
 int main(int argc, char* argv[])
-{
+{   
     rtl::OUString s;
 
     //t_print("Parameter: ");
@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
     for (int i = 1; i < argc; i++)
         printf("%s ", argv[i]);
     printf("\n");
-
+                        
     if (argc > 2)
     {
         if (0 == strcmp("-join", argv[1]))
@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
         else if (0 == strcmp("-env", argv[1]))
         {
             dump_env(argv[2]);
-        }
+        }        
     }
 
     return (0);

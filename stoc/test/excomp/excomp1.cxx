@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,14 +48,14 @@ using namespace osl;
 using namespace rtl;
 
 #define SERVICENAME1 "example.ExampleComponent1"
-#define IMPLNAME1   "example.ExampleComponent1.Impl"
+#define IMPLNAME1	"example.ExampleComponent1.Impl"
 
 namespace excomp_impl {
 
 //*************************************************************************
 // ExampleComponent1Impl
 //*************************************************************************
-class ExampleComponent1Impl : public WeakImplHelper2< XTest, XServiceInfo >
+class ExampleComponent1Impl	: public WeakImplHelper2< XTest, XServiceInfo >
 {
 public:
     ExampleComponent1Impl( const Reference<XMultiServiceFactory> & rXSMgr );
@@ -72,7 +72,7 @@ public:
     virtual OUString SAL_CALL getMessage() throw(RuntimeException);
 
 protected:
-    Mutex       m_mutex;
+    Mutex		m_mutex;
 
     Reference<XMultiServiceFactory> m_xSMgr;
 };
@@ -81,7 +81,7 @@ protected:
 ExampleComponent1Impl::ExampleComponent1Impl( const Reference<XMultiServiceFactory> & rXSMgr )
     : m_xSMgr(rXSMgr)
 {
-}
+}	
 
 //*************************************************************************
 ExampleComponent1Impl::~ExampleComponent1Impl()
@@ -89,15 +89,15 @@ ExampleComponent1Impl::~ExampleComponent1Impl()
 }
 
 //*************************************************************************
-OUString SAL_CALL ExampleComponent1Impl::getImplementationName(  )
+OUString SAL_CALL ExampleComponent1Impl::getImplementationName(  ) 
     throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
     return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME1) );
-}
+}	
 
 //*************************************************************************
-sal_Bool SAL_CALL ExampleComponent1Impl::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL ExampleComponent1Impl::supportsService( const OUString& ServiceName ) 
     throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
@@ -107,29 +107,29 @@ sal_Bool SAL_CALL ExampleComponent1Impl::supportsService( const OUString& Servic
         if( pArray[i] == ServiceName )
             return sal_True;
     return sal_False;
-}
+}	
 
 //*************************************************************************
-Sequence<OUString> SAL_CALL ExampleComponent1Impl::getSupportedServiceNames(  )
+Sequence<OUString> SAL_CALL ExampleComponent1Impl::getSupportedServiceNames(  ) 
     throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
     return getSupportedServiceNames_Static();
-}
+}	
 
 //*************************************************************************
-Sequence<OUString> SAL_CALL ExampleComponent1Impl::getSupportedServiceNames_Static(  )
+Sequence<OUString> SAL_CALL ExampleComponent1Impl::getSupportedServiceNames_Static(  ) 
 {
     OUString aName( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1) );
     return Sequence< OUString >( &aName, 1 );
-}
+}	
 
 //*************************************************************************
 OUString SAL_CALL ExampleComponent1Impl::getMessage() throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
     return OUString::createFromAscii("Lalelu nur der Mann im Mond schaut zu ...");
-}
+}	
 
 
 //*************************************************************************
@@ -142,8 +142,8 @@ Reference<XInterface> SAL_CALL ExampleComponent1_CreateInstance( const Reference
     if (pXTest)
     {
         xRet = Reference< XInterface >::query(pXTest);
-    }
-
+    }	
+    
     return xRet;
 }
 
@@ -170,7 +170,7 @@ sal_Bool SAL_CALL component_writeInfo(
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME1 "/UNO/SERVICES") ) ) );
-
+            
             const Sequence< OUString > & rSNL =
                 ::excomp_impl::ExampleComponent1Impl::getSupportedServiceNames_Static();
             const OUString * pArray = rSNL.getConstArray();
@@ -191,7 +191,7 @@ void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = 0;
-
+    
     if (rtl_str_compare( pImplName, IMPLNAME1 ) == 0)
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
@@ -199,14 +199,14 @@ void * SAL_CALL component_getFactory(
             OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME1) ),
             ::excomp_impl::ExampleComponent1_CreateInstance,
             ::excomp_impl::ExampleComponent1Impl::getSupportedServiceNames_Static() ) );
-
+        
         if (xFactory.is())
         {
             xFactory->acquire();
             pRet = xFactory.get();
         }
     }
-
+    
     return pRet;
 }
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ import com.sun.star.uno.UnoRuntime;
 
 /** Factory helper class supporting com.sun.star.lang.XServiceInfo and
     com.sun.star.lang.XSingleComponentFactory.
-
+    
     @attention
     This factory implementation does not support lang.XSingleServiceFactory.
 */
@@ -46,11 +46,11 @@ public class Factory
     implements XSingleComponentFactory, XServiceInfo
 {
     private static final boolean DEBUG = false;
-
+    
     /** Creates an object factory supporting interfaces
         com.sun.star.lang.XSingleComponentFactory and
         com.sun.star.lang.XServiceInfo
-
+        
         @param impl_class
                implementation class
         @param supported_services
@@ -65,7 +65,7 @@ public class Factory
         return new Factory( impl_class, supported_services );
     }
     /** Writes component's implementation info to given registry key.
-
+        
         @param impl_name
                name of implementation
         @param supported_services
@@ -98,14 +98,14 @@ public class Factory
           }
         return false;
     }
-
+    
     //==============================================================================================
     private String m_impl_name;
     private String [] m_supported_services;
     private Class m_impl_class;
     private java.lang.reflect.Method m_method;
     private java.lang.reflect.Constructor m_ctor;
-
+    
     // ctor
     private Factory( Class impl_class, String supported_services [] )
         throws com.sun.star.uno.RuntimeException
@@ -115,9 +115,9 @@ public class Factory
         m_impl_class = impl_class;
         m_method = null;
         m_ctor = null;
-
+        
         Class params [] = new Class [] { XComponentContext.class };
-
+        
         try
         {
             // seeking for "public static Object __create( XComponentContext )"
@@ -133,7 +133,7 @@ public class Factory
         catch (Exception exc)
         {
         }
-
+        
         if (null == m_method)
         {
             try
@@ -147,7 +147,7 @@ public class Factory
             }
         }
     }
-
+    
     //______________________________________________________________________________________________
     private final Object instantiate( XComponentContext xContext )
         throws com.sun.star.uno.Exception
@@ -218,7 +218,7 @@ public class Factory
         xInit.initialize( arguments );
         return inst;
     }
-
+    
     // XServiceInfo impl
     //______________________________________________________________________________________________
     public final String getImplementationName()

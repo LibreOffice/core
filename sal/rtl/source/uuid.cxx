@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ static  void write_v3( sal_uInt8 *pUuid  )
     SWAP_NETWORK_TO_INT32( uuid.time_low );
     SWAP_NETWORK_TO_INT16( uuid.time_mid );
     SWAP_NETWORK_TO_INT16( uuid.time_hi_and_version );
-
+    
     /* put in the variant and version bits */
     uuid.time_hi_and_version       &= 0x0FFF;
     uuid.time_hi_and_version       |= (3 << 12);
@@ -139,8 +139,8 @@ extern "C" void SAL_CALL rtl_createNamedUuid( sal_uInt8  *pTargetUUID,
 
     rtl_digest_getMD5( digest, pTargetUUID , 16 );
     rtl_digest_destroyMD5 (digest);
-
-    write_v3(pTargetUUID);
+    
+    write_v3(pTargetUUID);	
 }
 
 
@@ -176,5 +176,5 @@ extern "C" sal_Int32 SAL_CALL rtl_compareUuid( const sal_uInt8 *pUUID1 , const s
     }
     return 0;
 
-}
+}	
 

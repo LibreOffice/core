@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@
 */
 typedef struct _typelib_Uik
 {
-    sal_uInt32  m_Data1;
-    sal_uInt16  m_Data2;
-    sal_uInt16  m_Data3;
-    sal_uInt32  m_Data4;
-    sal_uInt32  m_Data5;
+    sal_uInt32	m_Data1;
+    sal_uInt16	m_Data2;
+    sal_uInt16	m_Data3;
+    sal_uInt32	m_Data4;
+    sal_uInt32	m_Data5;
 } typelib_Uik;
 
 #if defined( SAL_W32) ||  defined(SAL_OS2)
-#   pragma pack(pop)
+#	pragma pack(pop)
 #endif
 
 #endif

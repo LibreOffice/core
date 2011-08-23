@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef __com_sun_star_logging_XCsvLogFormatter_idl__
 #define __com_sun_star_logging_XCsvLogFormatter_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
+#ifndef __com_sun_star_uno_XInterface_idl__ 
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
@@ -38,15 +38,15 @@
 
 //=============================================================================
 
-module com { module sun { module star { module logging {
+module com { module sun { module star { module logging { 
 
 //=============================================================================
 
-/** specifies the interface used for formatting log records for RFC4180 csv
+/** specifies the interface used for formatting log records for RFC4180 csv 
     output
 
     @see XLogFormatter, XLogHandler
-
+ 
     @since OOo 3.0
 */
 interface XCsvLogFormatter : XLogFormatter
@@ -59,14 +59,14 @@ interface XCsvLogFormatter : XLogFormatter
     [attribute] boolean LogTimestamp;
     /** Defines if the Source should be logged */
     [attribute] boolean LogSource;
-    /** Defines the names of the additional columns
+    /** Defines the names of the additional columns 
         this defaults to only one row titled "message".
-        if this is set to more than one column, the
+        if this is set to more than one column, the 
         messages need to be preformatted using
         <code>formatMultiColumn</code>*/
     [attribute] sequence< string >  Columnnames;
     /** if the CsvLogFormatter is set to have more than one
-        column, any logged infomation has to be send through this
+        column, any logged infomation has to be send through this 
         method before calling log(). E.g.:
 
         <code>XLoggerInstance.log(1000, XCsvLogFormatterInstance.formatMultiColumn(column_data))</code>
@@ -76,7 +76,7 @@ interface XCsvLogFormatter : XLogFormatter
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 //=============================================================================
 

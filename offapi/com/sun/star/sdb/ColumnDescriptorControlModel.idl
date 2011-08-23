@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,71 +24,71 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_ColumnDescriptorControlModel_idl__
-#define __com_sun_star_sdb_ColumnDescriptorControlModel_idl__
+#ifndef __com_sun_star_sdb_ColumnDescriptorControlModel_idl__ 
+#define __com_sun_star_sdb_ColumnDescriptorControlModel_idl__ 
+ 
+#ifndef __com_sun_star_awt_UnoControlModel_idl__ 
+#include <com/sun/star/awt/UnoControlModel.idl> 
+#endif 
 
-#ifndef __com_sun_star_awt_UnoControlModel_idl__
-#include <com/sun/star/awt/UnoControlModel.idl>
-#endif
 
-
-//=============================================================================
- module com {  module sun {  module star {
-    module sdbc {
+//============================================================================= 
+ module com {  module sun {  module star {  
+    module sdbc {  
         interface XConnection;
     };
-     module beans {
+     module beans {  
         interface XPropertySet;
  };};};};
 
- module com {  module sun {  module star {  module sdb {
-
-//=============================================================================
-
+ module com {  module sun {  module star {  module sdb {  
+ 
+//============================================================================= 
+ 
 /** specifies the standard model of an <type>ColumnDescriptorControl</type>.
  */
 service ColumnDescriptorControlModel
-{
-    service com::sun::star::awt::UnoControlModel;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies the border style of the control.
-
+{ 
+    service com::sun::star::awt::UnoControlModel; 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies the border style of the control. 
+                
         <pre>
         0: No border
         1: 3D border
         2: simple border
         </pre>
      */
-    [property] short Border;
-
-    //-------------------------------------------------------------------------
-
+    [property] short Border; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** determines whether the control is enabled or disabled.
      */
-    [property] boolean Enabled;
-
-
-    //-------------------------------------------------------------------------
-
+    [property] boolean Enabled; 
+ 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies that the control can be reached with the TAB key.
      */
-    [property] boolean Tabstop;
+    [property] boolean Tabstop; 
 
     /** specifies the column descriptor where the values will be stored in.
      */
-    [property] ::com::sun::star::beans::XPropertySet Column;
+    [property] ::com::sun::star::beans::XPropertySet Column; 
 
     /** specifies the connection to a database.
      */
     [property] ::com::sun::star::sdbc::XConnection ActiveConnection;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

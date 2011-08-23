@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,51 +24,51 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XMouseMotionListener_idl__
-#define __com_sun_star_awt_XMouseMotionListener_idl__
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_awt_MouseEvent_idl__
-#include <com/sun/star/awt/MouseEvent.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+#ifndef __com_sun_star_awt_XMouseMotionListener_idl__ 
+#define __com_sun_star_awt_XMouseMotionListener_idl__ 
+ 
+#ifndef __com_sun_star_lang_XEventListener_idl__ 
+#include <com/sun/star/lang/XEventListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_MouseEvent_idl__ 
+#include <com/sun/star/awt/MouseEvent.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** makes it possible to receive mouse motion events on a window.
  */
 published interface XMouseMotionListener: com::sun::star::lang::XEventListener
-{
-    //-------------------------------------------------------------------------
-
-    /** is invoked when a mouse button is pressed on a window and then
-        dragged.
-
+{ 
+    //------------------------------------------------------------------------- 
+     
+    /** is invoked when a mouse button is pressed on a window and then 
+        dragged.  
+                        
         <p>Mouse drag events will continue to be delivered to
         the window where the first event originated until the mouse button is
         released (regardless of whether the mouse position is within the
         bounds of the window).</p>
      */
-    void mouseDragged( [in] com::sun::star::awt::MouseEvent e );
-
-    //-------------------------------------------------------------------------
-
+    void mouseDragged( [in] com::sun::star::awt::MouseEvent e ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when the mouse button has been moved on a window
         (with no buttons down).
      */
-    void mouseMoved( [in] com::sun::star::awt::MouseEvent e );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void mouseMoved( [in] com::sun::star::awt::MouseEvent e ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

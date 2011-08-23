@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,9 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
-    inline OUString str_ac_singleton()
-    {
-        return OUSTR("/singletons/com.sun.star.security.theAccessController");
+    inline OUString str_ac_singleton() 
+    { 
+        return OUSTR("/singletons/com.sun.star.security.theAccessController"); 
     }
 }
 
@@ -109,11 +109,11 @@ inline void __checkPermission(
     __permission perm;
     perm.m_str1 = str1;
     perm.m_str2 = str2;
-
+    
     uno_Any a;
     a.pType = type.getTypeLibType();
     a.pData = &perm;
-
+    
     xController->checkPermission( * static_cast< Any * >( &a ) );
 }
 //__________________________________________________________________________________________________

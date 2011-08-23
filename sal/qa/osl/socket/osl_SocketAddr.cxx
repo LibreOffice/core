@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
     if you are not including ws2_32.lib in makefile.mk,  the including format will be like this:
 
     .IF "$(GUI)" == "WNT"
-    SHL1STDLIBS +=  $(SOLARLIBDIR)$/cppunit.lib
+    SHL1STDLIBS +=	$(SOLARLIBDIR)$/cppunit.lib
     SHL1STDLIBS +=  ws2_32.lib
     .ENDIF
 
@@ -72,11 +72,11 @@ using namespace rtl;
 #define IP_PORT_HTTP1  80
 #define IP_PORT_HTTP2  8080
 
-#define IP_PORT_MYPORT  8881    //8888
-#define IP_PORT_MYPORT2  8883   //8890
-#define IP_PORT_MYPORT3  8884   //8891
+#define IP_PORT_MYPORT  8881 	//8888
+#define IP_PORT_MYPORT2  8883	//8890
+#define IP_PORT_MYPORT3  8884	//8891
 #define IP_PORT_INVAL  99999
-#define IP_PORT_MYPORT4  8885   //8892
+#define IP_PORT_MYPORT4  8885	//8892
 #define IP_PORT_NETBIOS_DGM  138
 
 
@@ -506,7 +506,7 @@ namespace osl_SocketAddr
             sal_Bool bOK = sal_False;
 
             // if ( ( bsSocketAddr[0] == 127 ) && ( bsSocketAddr[1] == 0 ) && ( bsSocketAddr[2] == 0 ) && ( bsSocketAddr[3] == 1 ) )
-            //  bOK = sal_True;
+            // 	bOK = sal_True;
             bOK = ifIpv4is( bsSocketAddr, 127, 0, 0, 1 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for setAddr() function: construct Addr with  \"129.158.217.202\", set it to \"127.0.0.1\",  and check the correctness ",
@@ -537,7 +537,7 @@ namespace osl_SocketAddr
             sal_Bool bOK = sal_False;
 
             //if ( ( osl_Socket_Ok == SocketResult ) &&( bsSocketAddr[0] == 127 ) && ( bsSocketAddr[1] == 0 ) &&( bsSocketAddr[2] == 0 ) && ( bsSocketAddr[3] == 1 ) )
-            //  bOK = sal_True;
+            // 	bOK = sal_True;
             bOK = ifIpv4is( bsSocketAddr, 127, 0, 0, 1 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getAddr() function: construct a socketaddr with IP assigned, get the address to check correctness.Caught unknown exception on (Win32)",

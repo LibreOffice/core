@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,11 +44,11 @@ module com { module sun { module star { module accessibility {
     <type>XAccessibleContext</type> interface of this service exposes
     methods that provide access to the actual object's content.  This can be
     the object's role, name, description, and so on.</p>
-
+    
     @see XAccessibleContext
 
     @since OOo 1.1.2
-*/
+*/    
 published service AccessibleContext
 {
     interface XAccessibleContext;
@@ -59,9 +59,9 @@ published service AccessibleContext
         @see AccessibleEventObject
         @see AccessibleEventId
     */
-    [optional] interface XAccessibleEventBroadcaster;
+    [optional] interface XAccessibleEventBroadcaster; 
 };
-
+          
 }; }; }; };
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,98 +24,98 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XDockableWindowListener_idl__
-#define __com_sun_star_awt_XDockableWindowListener_idl__
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
-#endif
-#ifndef __com_sun_star_awt_DockingData_idl__
+#ifndef __com_sun_star_awt_XDockableWindowListener_idl__ 
+#define __com_sun_star_awt_XDockableWindowListener_idl__ 
+ 
+#ifndef __com_sun_star_lang_XEventListener_idl__ 
+#include <com/sun/star/lang/XEventListener.idl> 
+#endif 
+#ifndef __com_sun_star_awt_DockingData_idl__ 
 #include <com/sun/star/awt/DockingData.idl>
-#endif
-#ifndef __com_sun_star_awt_EndDockingEvent_idl__
+#endif 
+#ifndef __com_sun_star_awt_EndDockingEvent_idl__ 
 #include <com/sun/star/awt/EndDockingEvent.idl>
 #endif
-#ifndef __com_sun_star_awt_DockingEvent_idl__
+#ifndef __com_sun_star_awt_DockingEvent_idl__ 
 #include <com/sun/star/awt/DockingEvent.idl>
 #endif
-#ifndef __com_sun_star_awt_EndPopupModeEvent_idl__
+#ifndef __com_sun_star_awt_EndPopupModeEvent_idl__ 
 #include <com/sun/star/awt/EndPopupModeEvent.idl>
 #endif
-#ifndef __com_sun_star_lang_EventObject_idl__
-#include <com/sun/star/lang/EventObject.idl>
-#endif
-
-//=============================================================================
-
-module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+#ifndef __com_sun_star_lang_EventObject_idl__ 
+#include <com/sun/star/lang/EventObject.idl> 
+#endif 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** makes it possible to receive docking events.
  */
 interface XDockableWindowListener: com::sun::star::lang::XEventListener
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when the docking procedure starts.
      */
-    void startDocking( [in] com::sun::star::awt::DockingEvent e );
-
-    //-------------------------------------------------------------------------
-
+    void startDocking( [in] com::sun::star::awt::DockingEvent e ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked during the docking procedure when the window has been moved.
 
         on return the DockingData must contain either the old tracking rectangle
         or a changed rectangle if required, additionally it must indicate if
         the window should be docked or floating
 
-        Note: the tracking rectangle indicates to the user where the window would
+        Note: the tracking rectangle indicates to the user where the window would 
             be placed if he releases the mouse.
 
      */
     DockingData docking( [in] com::sun::star::awt::DockingEvent e );
-
-    //-------------------------------------------------------------------------
-
+ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when the docking procedure ends.
         aWindowRect contains the new position and size of the window
      */
     void endDocking( [in] com::sun::star::awt::EndDockingEvent e );
-
-    //-------------------------------------------------------------------------
-
+ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when the floating mode is about to be changed between
             floating and docked or vice versa
-
+        
         if returned FALSE the floating mode will not be changed
      */
-    boolean prepareToggleFloatingMode( [in] com::sun::star::lang::EventObject e );
-
-    //-------------------------------------------------------------------------
-
+    boolean prepareToggleFloatingMode( [in] com::sun::star::lang::EventObject e ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when the floating mode is changed between
             floating and docked or vice versa
      */
-    void toggleFloatingMode( [in] com::sun::star::lang::EventObject e );
-
-    //-------------------------------------------------------------------------
-
+    void toggleFloatingMode( [in] com::sun::star::lang::EventObject e ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when the window was actively closed
      */
-    void closed( [in] com::sun::star::lang::EventObject e );
-
-    //-------------------------------------------------------------------------
-
-    /** is invoked when the window currently is in popupmode and wants to be undocked
+    void closed( [in] com::sun::star::lang::EventObject e ); 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** is invoked when the window currently is in popupmode and wants to be undocked 
         or closed
      */
-    void endPopupMode( [in] com::sun::star::awt::EndPopupModeEvent e );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void endPopupMode( [in] com::sun::star::awt::EndPopupModeEvent e ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

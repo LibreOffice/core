@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -191,9 +191,9 @@ void test_merge()
     REG_ENSURE(!myRegistry->create(OUString::createFromAscii("mergetest.rdb")), "testMerge error 1");
     REG_ENSURE(myRegistry->getName().equals(OUString::createFromAscii("mergetest.rdb")), "testMerge error 1.a)");
     REG_ENSURE(!myRegistry->openRootKey(rootKey), "testMerge error 2");
-    REG_ENSURE(!myRegistry->loadKey(rootKey, OUString::createFromAscii("/stardiv/IchbineinMergeKey"),
+    REG_ENSURE(!myRegistry->loadKey(rootKey, OUString::createFromAscii("/stardiv/IchbineinMergeKey"), 
                 OUString::createFromAscii("merge1.rdb")), "testMerge error 3");
-    REG_ENSURE(!myRegistry->mergeKey(rootKey, OUString::createFromAscii("/stardiv/IchbineinMergeKey"),
+    REG_ENSURE(!myRegistry->mergeKey(rootKey, OUString::createFromAscii("/stardiv/IchbineinMergeKey"), 
                 OUString::createFromAscii("merge2.rdb")), "testMerge error 4");
 
     ///////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,28 +27,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_chart_XDiagramPositioning_idl__
-#define __com_sun_star_chart_XDiagramPositioning_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_chart_XDiagramPositioning_idl__ 
+#define __com_sun_star_chart_XDiagramPositioning_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 #ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
-
-//=============================================================================
-
- module com {  module sun {  module star {  module chart {
-
-//=============================================================================
-
+#endif 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module chart {  
+ 
+//============================================================================= 
+ 
 /** allow for different positioning options for a diagram
 
     @see Diagram
  */
 interface XDiagramPositioning : com::sun::star::uno::XInterface
-{
+{ 
     /** the diagram will be placed automtically
     */
     void setAutomaticDiagramPositioning();
@@ -98,10 +98,10 @@ interface XDiagramPositioning : com::sun::star::uno::XInterface
         It might be necessary to calculate the positioning so this method can be expensive and the result may depend on different other settings.
     */
     com::sun::star::awt::Rectangle calculateDiagramPositionIncludingAxesAndAxisTitles();
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

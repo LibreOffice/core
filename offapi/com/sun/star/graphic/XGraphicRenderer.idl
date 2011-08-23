@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,21 +34,21 @@
 module com { module sun { module star { module graphic
 {
 
-/** This interfaces exposes just one method to render
+/** This interfaces exposes just one method to render 
     a <type>XGraphic</type> container
   */
 interface XGraphicRenderer : ::com::sun::star::uno::XInterface
 {
     /** Renders the <type>XGraphic</type> container
-
+    
         @param Graphic
             The graphic container to be rendered
-
+        
         @see XGraphic
     */
     void render( [in] ::com::sun::star::graphic::XGraphic Graphic );
 };
 
-} ; } ; } ; } ;
+} ; } ; } ; } ; 
 
 #endif

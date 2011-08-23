@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,15 +137,15 @@ protected:
      * in the createInstance and createInstanceWithArguments methods.
      * @return the newly created instance. Do not return a previous (one instance) instance.
      */
-    virtual Reference<XInterface >  createInstanceEveryTime(
+    virtual Reference<XInterface >	createInstanceEveryTime(
         Reference< XComponentContext > const & xContext )
         throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     Reference<XMultiServiceFactory > xSMgr;
-    ComponentInstantiation           pCreateFunction;
+    ComponentInstantiation			 pCreateFunction;
     ComponentFactoryFunc             m_fptr;
-    Sequence< OUString >             aServiceNames;
-    OUString                         aImplementationName;
+    Sequence< OUString >			 aServiceNames;
+    OUString						 aImplementationName;
 };
 OSingleFactoryHelper::~OSingleFactoryHelper()
 {
@@ -274,7 +274,7 @@ Sequence< OUString > OSingleFactoryHelper::getSupportedServiceNames(void)
 //----------------------------------------------------------------------
 struct OFactoryComponentHelper_Mutex
 {
-    Mutex   aMutex;
+    Mutex	aMutex;
 };
 
 class OFactoryComponentHelper
@@ -375,9 +375,9 @@ public:
     void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 
 private:
-    Reference<XInterface >  xTheInstance;
-    sal_Bool                bOneInstance;
-    rtl_ModuleCount *       pModuleCount;
+    Reference<XInterface >	xTheInstance;
+    sal_Bool				bOneInstance;
+    rtl_ModuleCount	*		pModuleCount;
 protected:
     // needed for implementing XUnloadingPreference in inheriting classes
     sal_Bool isOneInstance() {return bOneInstance;}
@@ -550,7 +550,7 @@ sal_Bool SAL_CALL OFactoryComponentHelper::releaseOnNotification() throw(::com::
 //-----------------------------------------------------------------------------
 class ORegistryFactoryHelper : public OFactoryComponentHelper,
                                public OPropertySetHelper
-
+    
 {
 public:
     ORegistryFactoryHelper(
@@ -563,7 +563,7 @@ public:
               OPropertySetHelper( OComponentHelper::rBHelper ),
               xImplementationKey( xImplementationKey_ )
         {}
-
+    
     // XInterface
     virtual Any SAL_CALL queryInterface( Type const & type )
         throw (RuntimeException);
@@ -588,7 +588,7 @@ public:
     using OPropertySetHelper::getFastPropertyValue;
     virtual void SAL_CALL getFastPropertyValue(
         Any & rValue, sal_Int32 nHandle ) const;
-
+    
     // OSingleFactoryHelper
     Reference<XInterface > createInstanceEveryTime(
         Reference< XComponentContext > const & xContext )
@@ -616,10 +616,10 @@ private:
         throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     /** The registry key of the implementation section */
-    Reference<XRegistryKey >    xImplementationKey;
+    Reference<XRegistryKey >	xImplementationKey;
     /** The factory created with the loader. */
-    Reference<XSingleComponentFactory > xModuleFactory;
-    Reference<XSingleServiceFactory >   xModuleFactoryDepr;
+    Reference<XSingleComponentFactory >	xModuleFactory;
+    Reference<XSingleServiceFactory >	xModuleFactoryDepr;
     Reference< beans::XPropertySetInfo > m_xInfo;
     ::std::auto_ptr< IPropertyArrayHelper > m_property_array_helper;
 protected:
@@ -881,7 +881,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
         }
     }
 
-    Reference< XInterface > xFactory;
+    Reference< XInterface >	xFactory;
     if( aActivatorName.getLength() != 0 )
     {
         Reference<XInterface > x = xSMgr->createInstance( aActivatorName );
@@ -962,7 +962,7 @@ sal_Bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification() throw(::com::s
 class OFactoryProxyHelper : public WeakImplHelper3< XServiceInfo, XSingleServiceFactory,
                                                     XUnloadingPreference >
 {
-    Reference<XSingleServiceFactory >   xFactory;
+    Reference<XSingleServiceFactory >	xFactory;
 
 public:
 
@@ -1086,8 +1086,8 @@ Reference<XSingleServiceFactory > SAL_CALL createOneInstanceFactory(
 {
     return new OFactoryComponentHelper(
         rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, pModCount, sal_True );
-//  return new OFactoryUnloadableComponentHelper(
-//      rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, pModCount, sal_True );
+//	return new OFactoryUnloadableComponentHelper(
+//		rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, pModCount, sal_True );
 }
 
 // global function

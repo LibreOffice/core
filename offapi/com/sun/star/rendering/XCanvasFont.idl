@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,12 +27,12 @@
 #ifndef __com_sun_star_rendering_XCanvasFont_idl__
 #define __com_sun_star_rendering_XCanvasFont_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
+#endif 
 #ifndef __com_sun_star_geometry_RealRectangle2D_idl__
 #include <com/sun/star/geometry/RealRectangle2D.idl>
 #endif
@@ -44,10 +44,10 @@
 #endif
 #ifndef __com_sun_star_rendering_RenderState_idl__
 #include <com/sun/star/rendering/RenderState.idl>
-#endif
+#endif 
 #ifndef __com_sun_star_rendering_ViewState_idl__
 #include <com/sun/star/rendering/ViewState.idl>
-#endif
+#endif 
 #ifndef __com_sun_star_rendering_StringContext_idl__
 #include <com/sun/star/rendering/StringContext.idl>
 #endif
@@ -87,13 +87,13 @@ interface XCanvasFont : ::com::sun::star::uno::XInterface
         @param nRandomSeed
         Optional random seed for OpenType glyph variations.
      */
-    XTextLayout                                         createTextLayout( [in] StringContext aText, [in] byte nDirection, [in] hyper nRandomSeed );
+    XTextLayout											createTextLayout( [in] StringContext aText, [in] byte nDirection, [in] hyper nRandomSeed );
 
     //-------------------------------------------------------------------------
 
     /** Query the FontRequest that was used to generate this object.
      */
-    FontRequest                                         getFontRequest();
+    FontRequest											getFontRequest();
 
     //-------------------------------------------------------------------------
 
@@ -106,7 +106,7 @@ interface XCanvasFont : ::com::sun::star::uno::XInterface
         cell size of 20 units, the metrics returned are calculated
         relative to this size.
      */
-    FontMetrics                                         getFontMetrics();
+    FontMetrics											getFontMetrics();
 
     //-------------------------------------------------------------------------
 
@@ -122,13 +122,13 @@ interface XCanvasFont : ::com::sun::star::uno::XInterface
         contained in the list returned by this method can lead to
         visible disturbances.<p>
      */
-    sequence< double >                                  getAvailableSizes();
+    sequence< double > 									getAvailableSizes();
 
     //-------------------------------------------------------------------------
 
     /** Query the list of additional font properties.<p>
      */
-    sequence< ::com::sun::star::beans::PropertyValue >  getExtraFontProperties();
+    sequence< ::com::sun::star::beans::PropertyValue >	getExtraFontProperties();
 
     //-------------------------------------------------------------------------
 

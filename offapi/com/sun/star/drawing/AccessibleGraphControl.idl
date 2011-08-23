@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,15 +45,15 @@ module com {  module sun {  module star {  module drawing {
 /** The service describes the accessible graph controls that are used in the
     image map of the Draw and Impress applications and the contour dialog of
     the Writer application.
-
+    
     <p>The children of graph controls are shapes that define contrours.</p>
 
      @since OOo 1.1.2
  */
 published service AccessibleGraphControl
 {
-    /** Base interface for being accessible.  It gives access to the
-        <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
+    /** Base interface for being accessible.  It gives access to the 
+        <type scope="::com::sun::star::accessibility">XAccessibleContext</type> 
         interface.
     */
     interface ::com::sun::star::accessibility::XAccessible;
@@ -62,7 +62,7 @@ published service AccessibleGraphControl
     */
     interface ::com::sun::star::accessibility::XAccessibleContext;
 
-    /** This interface describes the graphical representation of an image
+    /** This interface describes the graphical representation of an image 
           bullet.
      */
     interface ::com::sun::star::accessibility::XAccessibleComponent;

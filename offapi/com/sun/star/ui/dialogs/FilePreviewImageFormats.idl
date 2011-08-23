@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 module com { module sun { module star { module ui { module dialogs {
 
 //=============================================================================
-/** These constants are used to specify image formats supported by an implementation
+/**	These constants are used to specify image formats supported by an implementation
     of the interface <type scope="com::sun::star::ui::dialogs">XFilePreview</type>.
  */
 
@@ -44,7 +44,7 @@ published constants FilePreviewImageFormats
         The bitmap data should be provided as a sequence of sal_Int8.
     */
     const short BITMAP     = 1;
-};
+};	
 
 //=============================================================================
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef UDKSERVICE_XML_CDFF_HXX
-#define UDKSERVICE_XML_CDFF_HXX
+#ifndef	UDKSERVICE_XML_CDFF_HXX
+#define	UDKSERVICE_XML_CDFF_HXX
 
 
 #include <tools/string.hxx>
@@ -35,7 +35,7 @@
 class ComponentDescriptionImpl;
 
 
-/** @descr
+/**	@descr
     Is able to parse an XML file with Component descriptions. Gives access
     to the parsed data.
 
@@ -55,7 +55,7 @@ class ComponentDescriptionImpl;
         in xml_cd.hxx .
 
         It is possible to parse more than one time. Then the old data
-        are discarded.
+        are discarded. 
 **/
 class CompDescrsFromAnXmlFile
 {
@@ -69,30 +69,30 @@ class CompDescrsFromAnXmlFile
         no_tag_found_in_file
     };
 
-    //  LIFECYCLE
+    // 	LIFECYCLE
                         CompDescrsFromAnXmlFile();
                         ~CompDescrsFromAnXmlFile();
 
-    //  OPERATIONS
-    BOOL                Parse(
-                            const UniString &   i_sXmlFilePath );
+    //	OPERATIONS
+    BOOL				Parse(
+                            const UniString &	i_sXmlFilePath );
 
-    //  INQUIRY
-    INT32               NrOfDescriptions() const;
+    //	INQUIRY
+    INT32				NrOfDescriptions() const;
     const ComponentDescription &
-                        operator[](             /// @return an empty description, if index does not exist.
-                            INT32               i_nIndex ) const;
+                        operator[](				/// @return an empty description, if index does not exist.
+                            INT32				i_nIndex ) const;
     CompDescrsFromAnXmlFile::E_Status
                         Status() const;
 
   private:
     // PRIVATE SERVICES
-    void                Empty();
+    void				Empty();
 
     // DATA
-    std::vector< ComponentDescriptionImpl* >    *
+    std::vector< ComponentDescriptionImpl* >	*
                         dpDescriptions;
-    E_Status            eStatus;
+    E_Status			eStatus;
 };
 
 

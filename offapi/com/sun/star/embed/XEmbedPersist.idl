@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ published interface XEmbedPersist: XCommonEmbedPersist
 {
     //------------------------------------------------------------------------
     /** provides object with a parent storage and a name for object's entry.
-
+        
         <p>
         An entry with the specified name should be created/opened inside
         provided storage. It can be a storage or a stream. For example,
@@ -84,7 +84,7 @@ published interface XEmbedPersist: XCommonEmbedPersist
         The linked object can be initialized by factory in different way
         ( internally ).
         </p>
-
+        
         <p>
         It is also possible to switch object persistent representation through
         this call. Actually this is the way, this call can be used by user
@@ -232,7 +232,7 @@ published interface XEmbedPersist: XCommonEmbedPersist
         @param bUseNew
             <TRUE/> the new storage should be used
             <FALSE/> the old one
-
+            
         @throws com::sun::star::embed::WrongStateException
             the object is in wrong state
 

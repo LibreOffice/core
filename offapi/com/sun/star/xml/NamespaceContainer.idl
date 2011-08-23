@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,10 @@
 
 //=============================================================================
 
-module com { module sun { module star { module xml {
+module com { module sun { module star { module xml { 
 
 //=============================================================================
-/** This service describes a container for XML namespaces.
+/** This service describes a container for XML namespaces. 
 
     <p>Each namespace is accessed with its prefix and the URL is stored as a string.
 */
@@ -47,6 +47,6 @@ published service NamespaceContainer
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,21 +68,21 @@ void produce(
 }
 
 void produceAllTypes(RegistryKey& rTypeKey, bool bIsExtraType,
-                         TypeManager const & typeMgr,
+                         TypeManager const & typeMgr, 
                          codemaker::GeneratedTypeSet & generated,
                          CppuOptions* pOptions,
                          sal_Bool bFullScope)
     throw( CannotDumpException )
 {
     OString typeName = typeMgr.getTypeName(rTypeKey);
-
+    
     produce(rTypeKey, bIsExtraType, typeMgr, generated, pOptions);
 
     RegistryKeyList typeKeys = typeMgr.getTypeKeys(typeName);
     RegistryKeyList::const_iterator iter = typeKeys.begin();
     RegistryKey key, subKey;
     RegistryKeyArray subKeys;
-
+    
     while (iter != typeKeys.end())
     {
         key = (*iter).first;
@@ -102,19 +102,19 @@ void produceAllTypes(RegistryKey& rTypeKey, bool bIsExtraType,
                             typeMgr, generated, pOptions);
                 }
             }
-        }
+        }      
 
         ++iter;
     }
 }
 
 void produceAllTypes(const OString& typeName,
-                     TypeManager const & typeMgr,
+                     TypeManager const & typeMgr, 
                      codemaker::GeneratedTypeSet & generated,
                      CppuOptions* pOptions,
                      sal_Bool bFullScope)
     throw( CannotDumpException )
-{
+{   
     produce(typeName, typeMgr, generated, pOptions);
 
     RegistryKeyList typeKeys = typeMgr.getTypeKeys(typeName);
@@ -140,8 +140,8 @@ void produceAllTypes(const OString& typeName,
                             typeMgr, generated, pOptions);
                 }
             }
-        }
-
+        }      
+        
         ++iter;
     }
 }
@@ -152,7 +152,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     CppuOptions options;
 
-    try
+    try 
     {
         if (!options.initOptions(argc, argv))
         {
@@ -166,7 +166,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
 
     RegistryTypeManager typeMgr;
-
+    
     if (!typeMgr.init(options.getInputFiles(), options.getExtraInputFiles()))
     {
         fprintf(stderr, "%s : init registries failed, check your registry files.\n", options.getProgramName().getStr());
@@ -179,7 +179,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
 
     codemaker::GeneratedTypeSet generated;
-    try
+    try 
     {
         if (options.isValid("-T"))
         {
@@ -202,7 +202,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     } else
                     {
                         tmpName = typeName.copy(0, typeName.lastIndexOf('.')).replace('.', '/');
-                        if (tmpName.getLength() == 0)
+                        if (tmpName.getLength() == 0) 
                             tmpName = "/";
                         else
                             tmpName.replace('.', '/');
@@ -232,8 +232,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     catch( CannotDumpException& e)
     {
-        fprintf(stderr, "%s ERROR: %s\n",
-                options.getProgramName().getStr(),
+        fprintf(stderr, "%s ERROR: %s\n", 
+                options.getProgramName().getStr(), 
                 e.m_message.getStr());
         exit(99);
     }

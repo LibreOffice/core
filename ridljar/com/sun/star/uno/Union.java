@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,24 +27,24 @@
 
 package com.sun.star.uno;
 
-/**
- * The Union class is the base class for all classes generated
+/** 
+ * The Union class is the base class for all classes generated 
  * as java binding for the IDL type union.
  * <p>
  * Note: The idl type <code>union<code> is currently not fully
  * integrated into the UNO framework, so don't use it.
- *
- * @version     $Revision: 1.5 $ $ $Date: 2008-04-11 11:15:07 $
+ * 
+ * @version 	$Revision: 1.5 $ $ $Date: 2008-04-11 11:15:07 $
  */
 public class Union {
     /**
      * Get the value in the union.
      * The representation of the value is an any.
      * <p>
-     *  @return the any value.
+     *	@return the any value.
      */
     public final Object getValue() {
-        return m_value;
+        return m_value;	
     }
 
     protected Object m_value;

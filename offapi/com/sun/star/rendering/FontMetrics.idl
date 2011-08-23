@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,18 +53,18 @@ module com { module sun { module star { module rendering {
  */
 struct FontMetrics
 {
-    /// Ascent (above the baseline) part of the font.
-    double      Ascent;
+    /// Ascent (above the baseline) part of the font. 
+    double		Ascent;
 
     //-------------------------------------------------------------------------
 
     /// Descent (below the baseline) part of the font.
-    double      Descent;
+    double		Descent; 
 
     //-------------------------------------------------------------------------
 
     /// Extra space above ascent
-    double      InternalLeading;
+    double		InternalLeading; 
 
     //-------------------------------------------------------------------------
 
@@ -73,7 +73,7 @@ struct FontMetrics
         It should not contain ink marks and is typically used
         by the font designer to modify the line distance.<p>
      */
-    double      ExternalLeading;
+    double		ExternalLeading;
 
     //-------------------------------------------------------------------------
 
@@ -84,21 +84,21 @@ struct FontMetrics
         characters, and if one needs a font with double character
         width, the referenceCharSize should be doubled.<p>
      */
-    double      ReferenceCharSize;
+    double 		ReferenceCharSize;
 
     //-------------------------------------------------------------------------
 
     /** Specifies the offset to be added to the baseline when drawing
         underlined text.
      */
-    double      UnderlineOffset;
+    double 		UnderlineOffset;
 
     //-------------------------------------------------------------------------
 
     /** Specifies the offset to be added to the baseline when striking
         through the text.
      */
-    double      StrikeThroughOffset;
+    double		StrikeThroughOffset;
 
 };
 

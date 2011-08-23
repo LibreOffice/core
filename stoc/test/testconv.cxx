@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,10 +52,10 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::registry;
 
-const double MIN_DOUBLE     = -DBL_MAX;
-const double MAX_DOUBLE     = DBL_MAX;
-const double MIN_FLOAT      = -FLT_MAX;
-const double MAX_FLOAT      = FLT_MAX;
+const double MIN_DOUBLE		= -DBL_MAX;
+const double MAX_DOUBLE		= DBL_MAX;
+const double MIN_FLOAT		= -FLT_MAX;
+const double MAX_FLOAT		= FLT_MAX;
 
 //==================================================================================================
 static void printValue( const Any & rVal )
@@ -274,10 +274,10 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
 //==================================================================================================
 typedef struct _ConvBlock
 {
-    Any         _value;
-    sal_Bool    _toString, _toDouble, _toFloat;
-    sal_Bool    _toUINT32, _toINT32, _toUINT16, _toINT16, _toBYTE, _toBOOL, _toChar;
-    sal_Bool    _toTypeClass, _toSeqINT16, _toSeqAny;
+    Any			_value;
+    sal_Bool	_toString, _toDouble, _toFloat;
+    sal_Bool	_toUINT32, _toINT32, _toUINT16, _toINT16, _toBYTE, _toBOOL, _toChar;
+    sal_Bool	_toTypeClass, _toSeqINT16, _toSeqAny;
 
     _ConvBlock()
     {
@@ -583,36 +583,36 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     // ==SEQ of INT==
     Sequence< sal_Int32 > aINT32Seq( 3 ), aINT32Seq2( 3 );
     sal_Int32 * pINT32Seq = aINT32Seq.getArray();
-    pINT32Seq[0]     = -32768;
-    pINT32Seq[1]     = 0;
-    pINT32Seq[2]     = 32767;
+    pINT32Seq[0]	 = -32768;
+    pINT32Seq[1]	 = 0;
+    pINT32Seq[2]	 = 32767;
     aVal <<= aINT32Seq;
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     pINT32Seq = aINT32Seq2.getArray();
-    pINT32Seq[0]     = -32768;
-    pINT32Seq[1]     = -32769;
-    pINT32Seq[2]     = 32767;
+    pINT32Seq[0]	 = -32768;
+    pINT32Seq[1]	 = -32769;
+    pINT32Seq[2]	 = 32767;
     aVal <<= aINT32Seq2;
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     // ==SEQ of ANY==
     Sequence< Any > aAnySeq( 2 ), aAnySeq2( 2 ), aAnySeq3( 2 );
-    Any * pAnySeq    = aAnySeq.getArray();
-    pAnySeq[0]       = makeAny( aINT32Seq );
-    pAnySeq[1]       = makeAny( OUString::createFromAscii("lala") );
+    Any * pAnySeq	 = aAnySeq.getArray();
+    pAnySeq[0]		 = makeAny( aINT32Seq );
+    pAnySeq[1]		 = makeAny( OUString::createFromAscii("lala") );
     aVal <<= aAnySeq;
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     pAnySeq = aAnySeq2.getArray();
-    pAnySeq[0]       <<= (sal_Int32)4711;
-    pAnySeq[1]       <<= OUString::createFromAscii("0815");
+    pAnySeq[0]		 <<= (sal_Int32)4711;
+    pAnySeq[1]		 <<= OUString::createFromAscii("0815");
     aVal <<= aAnySeq2;
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     pAnySeq = aAnySeq3.getArray();
-    pAnySeq[0]       <<= OUString::createFromAscii("TypeClass_UNION");
-    pAnySeq[1]       <<= OUString::createFromAscii("TypeClass_ENUM");
+    pAnySeq[0]		 <<= OUString::createFromAscii("TypeClass_UNION");
+    pAnySeq[1]		 <<= OUString::createFromAscii("TypeClass_ENUM");
     aVal <<= aAnySeq3;
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
@@ -634,7 +634,7 @@ static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
     while (nPos--)
     {
         const ConvBlock& rBlock = pTestBlocks[nPos];
-        const Any & rVal        = rBlock._value;
+        const Any & rVal		= rBlock._value;
 
         convertTo( ::getCppuType( (const OUString *)0 ), rVal, rBlock._toString );
         convertTo( ::getCppuType( (const float *)0 ), rVal, rBlock._toFloat );
@@ -682,7 +682,7 @@ SAL_IMPLEMENT_MAIN()
         Reference< XImplementationRegistration > xImplReg(
             xMgr->createInstance( OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration") ), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
-
+        
         OUString aLibName(
             RTL_CONSTASCII_USTRINGPARAM("stocservices.uno" SAL_DLLEXTENSION) );
         xImplReg->registerImplementation(

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,14 +24,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_FieldUnit_idl__
-#define __com_sun_star_awt_FieldUnit_idl__
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
+#ifndef __com_sun_star_awt_FieldUnit_idl__ 
+#define __com_sun_star_awt_FieldUnit_idl__ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
 
 /** specifies attributes for the MetricField map units.
 
@@ -55,9 +55,9 @@ constants FieldUnit
     const short FUNIT_PERCENT = 12;
     const short FUNIT_100TH_MM = 13;
 };
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

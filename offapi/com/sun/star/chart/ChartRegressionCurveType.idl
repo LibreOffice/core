@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,75 +24,75 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_chart_ChartRegressionCurveType_idl__
-#define __com_sun_star_chart_ChartRegressionCurveType_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module chart {
-
-//=============================================================================
-
+#ifndef __com_sun_star_chart_ChartRegressionCurveType_idl__ 
+#define __com_sun_star_chart_ChartRegressionCurveType_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module chart {  
+ 
+//============================================================================= 
+ 
 /** specifiest the type of the regression curve to be displayed.
  */
 published enum ChartRegressionCurveType
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** displays no regression curve.
      */
-    NONE,
-
-    //-------------------------------------------------------------------------
-
+    NONE, 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** displays a linear regression curve.
 
         <p>The values of the series are approximated using the model
         <i>y</i> = <i>A</i>&middot;<i>x</i> + <i>B</i>.</p>
      */
-    LINEAR,
-
-    //-------------------------------------------------------------------------
-
+    LINEAR, 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** displays a linear logarithmic regression curve.
 
         <p>The values of the series are approximated using the model
         <i>y</i> = <i>A</i>&middot;log(<i>x</i>) + <i>B</i>.</p>
      */
-    LOGARITHM,
-
-    //-------------------------------------------------------------------------
-
+    LOGARITHM, 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** displays an exponential regression curve.
 
         <p>The values of the series are approximated using the model
         <i>y</i> = <i>A</i>&middot;e<sup><i>B</i>&middot;<i>x</i></sup>.</p>
 
     */
-    EXPONENTIAL,
-
-    //-------------------------------------------------------------------------
-
+    EXPONENTIAL, 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** displays a polynomial regression curve.
 
         @deprecated
     */
-    POLYNOMIAL,
-
-    //-------------------------------------------------------------------------
-
+    POLYNOMIAL, 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** displays a regression curve using a power function.
-
+        
         <p>The values of the series are approximated using the model
         <i>y</i> = <i>A&middot;<i>x</i><sup>B</sup></i>.</p>
      */
-    POWER
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    POWER 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

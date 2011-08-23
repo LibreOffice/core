@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 module com { module sun { module star { module datatransfer {
 
 //=============================================================================
-/** Interface to be implemented by objects used to provide data for a data
+/** Interface to be implemented by objects used to provide data for a data 
     transfer operation.
 
     @see com::sun::star::datatransfer::DataFlavor
@@ -58,20 +58,20 @@ module com { module sun { module star { module datatransfer {
 published interface XTransferable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** Called by a data consumer to obtain data from the source in a specified
+    /** Called by a data consumer to obtain data from the source in a specified 
         format.
-
+        
         @param aFlavor
-        Describes the requested data format
+        Describes the requested data format 
 
         @returns
         The data in the specified <type>DataFlavor</type>.
 
-        @throws com::sun::star::io::IOException
+        @throws com::sun::star::io::IOException 
         if the data is no longer available in the requested flavor.
-
+            
         @throws com::sun::star::datatransfer::UnsupportedFlavorException
-        if the requested <type>DataFlavor</type> is not supported.
+        if the requested <type>DataFlavor</type> is not supported.		
     */
     any getTransferData( [in] DataFlavor aFlavor )
         raises ( UnsupportedFlavorException, com::sun::star::io::IOException );
@@ -89,22 +89,22 @@ published interface XTransferable: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** Checks if the data object supports the specified data flavor.
 
-        @param aFlavor
+        @param aFlavor 
         Describes the format that should be checked
 
         @returns
         A value of <TRUE/> if the <type>DataFlavor</type> is supported by the transfer source.
         <p>A value of <FALSE/> if the <type>DataFlavor</type> is unsupported by the transfer source.</p>
-
+        
         <br/><br/><p><strong>Note: </strong>This method is only for analogy with the JAVA Clipboard interface. To
-        avoid many calls, the caller should instead use
-        <member scope="com::sun::star::datatransfer">XTransferable::getTransferDataFlavors()</member>.
+        avoid many calls, the caller should instead use 
+        <member scope="com::sun::star::datatransfer">XTransferable::getTransferDataFlavors()</member>.		
     */
     boolean isDataFlavorSupported( [in] DataFlavor aFlavor );
 };
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif

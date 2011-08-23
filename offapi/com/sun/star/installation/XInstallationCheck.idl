@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,91 +24,91 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_installation_XInstallationCheck_idl__
-#define __com_sun_star_installation_XInstallationCheck_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module installation {
-
-//=============================================================================
-
+#ifndef __com_sun_star_installation_XInstallationCheck_idl__ 
+#define __com_sun_star_installation_XInstallationCheck_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module installation {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: interface com::sun::star::installation::XInstallationCheck
 /** a flag called "suppressed", changes the action of check and checkWithDialog
     @see com::sun::star::uno::XInterface
     @deprecated
  */
 published interface XInstallationCheck: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::installation::XInstallationCheck::check
     /** checks if something of the installation is missing.
-
+        
         <p>If missing parts are detected, check should try to automatically repair/
         reinstall these parts. Only if this is not possible, return <FALSE/>.
-
+        
         </p>@see resetSuppressed
      */
-    boolean check( [in] boolean bForce );
-
-    //-------------------------------------------------------------------------
-
+    boolean check( [in] boolean bForce ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::installation::XInstallationCheck::checkWithDialog
     /** same as check, but additionally shows a dialog if result is <FALSE/>.
-
+        
         <p>The dialog shows which parts of the installation are missing and
         can't be repaired/reinstalled automatically. It also contains some
         hints for the user to reinstall the missing parts on his own.
-        </p>@see check
+        </p>@see check 
                 @see resetSuppressed
      */
-    boolean checkWithDialog( [in] boolean bForce );
-
-    //-------------------------------------------------------------------------
-
+    boolean checkWithDialog( [in] boolean bForce ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::installation::XInstallationCheck::executeDialog
     /** shows a dialog if something of the installation is missing.
-
+        
         <p>The dialog shows which part(s) is (are) missing, and has a checkbox
         that represents the state of the flag suppressed. This dialog is
         the only way to set the flag suppressed to <TRUE/>. This method is
         not affected by the value of the flag suppressed.
         </p>@see resetSuppressed
      */
-    boolean executeDialog();
-
-    //-------------------------------------------------------------------------
-
+    boolean executeDialog(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::installation::XInstallationCheck::getSuppressed
     /** gets the status of flag suppressed
-
+                
         <p>The flag suppressed is stored in the OfficeRegistry. If suppressed is
         <FALSE/>, the methods check and checkWithDialog ignore the parameter
-        bForce.
+        bForce. 
         If suppressed is <TRUE/>, check and checkWithDialog only
         perform an action if their parameter bForce is <TRUE/>; otherwise,
-        they return TRUE.
+        they return TRUE.		
         </p>
      */
-    boolean getSuppressed();
-
-    //-------------------------------------------------------------------------
-
+    boolean getSuppressed(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::installation::XInstallationCheck::setSuppressed
     /** set status of flag "suppressed".
      */
-    void setSuppressed( [in] boolean bSuppress );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void setSuppressed( [in] boolean bSuppress ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

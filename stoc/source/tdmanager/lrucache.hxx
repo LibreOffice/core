@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,22 +45,22 @@ class LRU_Cache
 {
     struct CacheEntry
     {
-        t_Key               aKey;
-        t_Val               aVal;
-        CacheEntry *        pPred;
-        CacheEntry *        pSucc;
+        t_Key				aKey;
+        t_Val				aVal;
+        CacheEntry *		pPred;
+        CacheEntry *		pSucc;
     };
     typedef ::std::hash_map< t_Key, CacheEntry *, t_KeyHash, t_KeyEqual > t_Key2Element;
-
-    mutable ::osl::Mutex        _aCacheMutex;
-    sal_Int32                   _nCachedElements;
-    t_Key2Element               _aKey2Element;
-
-    CacheEntry *                _pBlock;
-    mutable CacheEntry *        _pHead;
-    mutable CacheEntry *        _pTail;
+    
+    mutable ::osl::Mutex		_aCacheMutex;
+    sal_Int32					_nCachedElements;
+    t_Key2Element				_aKey2Element;
+    
+    CacheEntry *				_pBlock;
+    mutable CacheEntry *		_pHead;
+    mutable CacheEntry *		_pTail;
     inline void toFront( CacheEntry * pEntry ) const;
-
+    
 public:
     /** Constructor:
         <br>
@@ -71,7 +71,7 @@ public:
         <br>
     */
     inline ~LRU_Cache();
-
+    
     /** Retrieves a value from the cache. Returns default constructed value,
         if none was found.
         <br>
@@ -109,8 +109,8 @@ inline LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::LRU_Cache( sal_Int32 nC
     if (_nCachedElements > 0)
     {
         _pBlock = new CacheEntry[_nCachedElements];
-        _pHead  = _pBlock;
-        _pTail  = _pBlock + _nCachedElements -1;
+        _pHead	= _pBlock;
+        _pTail	= _pBlock + _nCachedElements -1;
         for ( sal_Int32 nPos = _nCachedElements; nPos--; )
         {
             _pBlock[nPos].pPred = _pBlock + nPos -1;
@@ -144,7 +144,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::toFront(
         // push to front
         _pHead->pPred = pEntry;
         pEntry->pSucc = _pHead;
-        _pHead        = pEntry;
+        _pHead		  = pEntry;
     }
 }
 //__________________________________________________________________________________________________
@@ -185,7 +185,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
     {
         ::osl::MutexGuard aGuard( _aCacheMutex );
         typename t_Key2Element::const_iterator const iFind( _aKey2Element.find( rKey ) );
-
+        
         CacheEntry * pEntry;
         if (iFind == _aKey2Element.end())
         {

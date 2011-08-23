@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ static sal_Bool SAL_CALL test_rtl_OUString_ctor_002(
                            kEncodingRTLTextUSASCII,
                            kConvertFlagsOStringToOUString
                            );
-
+      
     return
         (
             c_rtl_tres_state
@@ -115,7 +115,7 @@ static sal_Bool SAL_CALL test_rtl_OUString_ctor_003(
     rtl_uString  *rtlUStr =NULL ;
     rtl_uString_newFromAscii( &rtlUStr, kTestStr1 );
     ::rtl::OUString aUStr( rtlUStr );
-
+    
     return
         (
             c_rtl_tres_state
@@ -162,9 +162,9 @@ static sal_Bool test_rtl_OUString_ctor_005( hTestResult hRtlTestResult )
                 "ctor_004"
                 )
             );
-
+    
 }
-
+    
 
 //------------------------------------------------------------------------
 
@@ -185,11 +185,11 @@ static sal_Bool test_rtl_OUString_ctor_006( hTestResult hRtlTestResult )
             );
 }
 
-extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_ctors(
+extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_ctors( 
     hTestResult hRtlTestResult )
 {
     c_rtl_tres_state_start( hRtlTestResult, "ctors");
-    sal_Bool DCState = test_ini_uString();
+    sal_Bool DCState = test_ini_uString();      
     (void)DCState;
     sal_Bool bTSState = test_rtl_OUString_ctor_001( hRtlTestResult );
     bTSState &= test_rtl_OUString_ctor_002( hRtlTestResult);
@@ -197,7 +197,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_ctors(
     bTSState &= test_rtl_OUString_ctor_004( hRtlTestResult);
     bTSState &= test_rtl_OUString_ctor_005( hRtlTestResult);
     bTSState &= test_rtl_OUString_ctor_006( hRtlTestResult);
-    c_rtl_tres_state_end( hRtlTestResult, "ctors");
+    c_rtl_tres_state_end( hRtlTestResult, "ctors");     
 //    return( bTSState );
 }
 
@@ -216,31 +216,31 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_getLength(
 
     typedef struct TestCase
     {
-        sal_Char*       comments;
-        sal_Int32       expVal;
+        sal_Char*		comments;
+        sal_Int32 		expVal;
         OUString*        input;
-        ~TestCase()     { delete input;}
+        ~TestCase() 	{ delete input;}
     } TestCase;
 
     TestCase arrTestCase[]={
 
-        {"length of ascii string", kTestStr1Len,
+        {"length of ascii string", kTestStr1Len, 
          new OUString( kTestStr1,
                        kTestStr1Len,
                        kEncodingRTLTextUSASCII,
                        kConvertFlagsOStringToOUString)},
-        {"length of ascci string of size 1", 1,
+        {"length of ascci string of size 1", 1, 
          new OUString( "1",
                        1,
                        kEncodingRTLTextUSASCII,
                        kConvertFlagsOStringToOUString)},
         {"length of empty string (default constructor)", 0, new OUString()},
-        {"length of empty string (empty ascii string arg)",0,
+        {"length of empty string (empty ascii string arg)",0, 
          new OUString( "",
                        0,
                        kEncodingRTLTextUSASCII,
                        kConvertFlagsOStringToOUString)},
-        {"length of empty string (string arg = '\\0')", 0,
+        {"length of empty string (string arg = '\\0')", 0, 
          new OUString( "\0",
                        0,
                        kEncodingRTLTextUSASCII,
@@ -281,11 +281,11 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equals(
 
     typedef struct TestCase
     {
-        sal_Char*       comments;
+        sal_Char*		comments;
         sal_Bool         expVal;
         OUString*        input1;
         OUString*        input2;
-        ~TestCase()     { delete input1;delete input2;}
+        ~TestCase()		{ delete input1;delete input2;}
     } TestCase;
 
     TestCase arrTestCase[]={
@@ -303,28 +303,28 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equals(
         {"empty(def.constructor) and non empty", sal_False, new OUString(),
          new OUString(aUStr2)
         },
-        {"non empty and empty(def. constructor)", sal_False,
+        {"non empty and empty(def. constructor)", sal_False, 
          new OUString(aUStr1),
          new OUString()
         },
-        {"two empty strings(string arg = '\\0')", sal_True,
+        {"two empty strings(string arg = '\\0')", sal_True, 
          new OUString( "",
                        0,
                        kEncodingRTLTextUSASCII,
-                       kConvertFlagsOStringToOUString),
+                       kConvertFlagsOStringToOUString), 
          new OUString( "",
                        0,
                        kEncodingRTLTextUSASCII,
                        kConvertFlagsOStringToOUString)
         },
-        {"empty(string arg = '\\0') and non empty", sal_False,
+        {"empty(string arg = '\\0') and non empty", sal_False, 
          new OUString( "",
                        0,
                        kEncodingRTLTextUSASCII,
                        kConvertFlagsOStringToOUString),
          new OUString(aUStr2)
         },
-        {"non empty and empty(string arg = '\\0')", sal_False,
+        {"non empty and empty(string arg = '\\0')", sal_False, 
          new OUString(aUStr1),
          new OUString( "",
                        0,
@@ -339,7 +339,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equals(
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         sal_Bool lastRes =
-            ( arrTestCase[i].input1->equals(*(arrTestCase[i].input2)) ==
+            ( arrTestCase[i].input1->equals(*(arrTestCase[i].input2)) ==  
               arrTestCase[i].expVal );
 
         c_rtl_tres_state
@@ -352,7 +352,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equals(
 
         res &= lastRes;
     }
-    c_rtl_tres_state_end( hRtlTestResult, "equals");
+    c_rtl_tres_state_end( hRtlTestResult, "equals"); 
 //    return (res);
 }
 
@@ -369,34 +369,34 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsIgnoreAsciiCase(
 
     typedef struct TestCase
     {
-        sal_Char*       comments;
+        sal_Char*		comments;
         sal_Bool         expVal;
         OUString*        input1;
         OUString*        input2;
-        ~TestCase()     { delete input1;delete input2;}
+        ~TestCase()		{ delete input1;delete input2;}
     } TestCase;
 
     TestCase arrTestCase[]={
-        {"same strings but different cases",sal_True,new OUString(aUStr4),
+        {"same strings but different cases",sal_True,new OUString(aUStr4), 
          new OUString(aUStr5)
         },
-        {"same strings",sal_True,new OUString(aUStr4),
+        {"same strings",sal_True,new OUString(aUStr4), 
          new OUString(aUStr4)},
-        {"with equal beginning",sal_False,new OUString(aUStr2),
+        {"with equal beginning",sal_False,new OUString(aUStr2), 
          new OUString(aUStr4)
         },
-        {"empty(def.constructor) and non empty",sal_False,new OUString(),
+        {"empty(def.constructor) and non empty",sal_False,new OUString(), 
          new OUString(aUStr5)
         },
         {"non empty and empty(def.constructor)",sal_False,
-         new OUString(aUStr4),
+         new OUString(aUStr4), 
          new OUString()
         },
-        {"two empty strings(def.constructor)",sal_True,new OUString(),
+        {"two empty strings(def.constructor)",sal_True,new OUString(), 
          new OUString()
         },
         {"different strings with equal length",sal_False,
-         new OUString(aUStr10),
+         new OUString(aUStr10), 
          new OUString(aUStr11)
         }
     };
@@ -407,7 +407,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsIgnoreAsciiCase(
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         sal_Bool lastRes =
-            (arrTestCase[i].input1->equalsIgnoreAsciiCase(*arrTestCase[i].input2) ==
+            (arrTestCase[i].input1->equalsIgnoreAsciiCase(*arrTestCase[i].input2) == 
              arrTestCase[i].expVal);
 
         c_rtl_tres_state
@@ -433,55 +433,55 @@ static sal_Bool SAL_CALL test_rtl_OUString_compareTo_001(
 
     typedef struct TestCase
     {
-        sal_Char*       comments;
+        sal_Char*		comments;
         sal_Int32         expVal;
         OUString*        input1;
         OUString*        input2;
-        ~TestCase()     { delete input1;delete input2;}
+        ~TestCase()		{ delete input1;delete input2;}
     } TestCase;
 
     TestCase arrTestCase[]={
 
-        {"simple compare, str1 to str5",-1,new OUString(aUStr1),
+        {"simple compare, str1 to str5",-1,new OUString(aUStr1), 
          new OUString(aUStr5)
         },
-        {"simple compare, str2 to str5",-1,new OUString(aUStr2),
+        {"simple compare, str2 to str5",-1,new OUString(aUStr2), 
          new OUString(aUStr5)
         },
-        {"simple compare, str1 to str9",-1,new OUString(aUStr1),
+        {"simple compare, str1 to str9",-1,new OUString(aUStr1), 
          new OUString(aUStr9)
         },
-        {"simple compare, str1 to str2",-1,new OUString(aUStr1),
+        {"simple compare, str1 to str2",-1,new OUString(aUStr1), 
          new OUString(aUStr2)
         },
-        {"simple compare, str4 to str5",-1,new OUString(aUStr4),
+        {"simple compare, str4 to str5",-1,new OUString(aUStr4), 
          new OUString(aUStr5)
         },
-        {"simple compare, str1 to str3",-1,new OUString(aUStr1),
+        {"simple compare, str1 to str3",-1,new OUString(aUStr1), 
          new OUString(aUStr3)
         },
-        {"simple compare, str5 to str1",+1,new OUString(aUStr5),
+        {"simple compare, str5 to str1",+1,new OUString(aUStr5), 
          new OUString(aUStr1)
         },
-        {"simple compare, str2 to str1",+1,new OUString(aUStr2),
+        {"simple compare, str2 to str1",+1,new OUString(aUStr2), 
          new OUString(aUStr1)
         },
-        {"simple compare, str9 to str5",+1,new OUString(aUStr9),
+        {"simple compare, str9 to str5",+1,new OUString(aUStr9), 
          new OUString(aUStr5)
         },
-        {"simple compare, str5 to str4",+1,new OUString(aUStr5),
+        {"simple compare, str5 to str4",+1,new OUString(aUStr5), 
          new OUString(aUStr4)
         },
-        {"simple compare, str1 to str1",0,new OUString(aUStr1),
+        {"simple compare, str1 to str1",0,new OUString(aUStr1), 
          new OUString(aUStr1)
         },
-        {"simple compare, nullString to nullString",0,new OUString(),
+        {"simple compare, nullString to nullString",0,new OUString(), 
          new OUString()
         },
-        {"simple compare, nullString to str2",-1,new OUString(),
+        {"simple compare, nullString to str2",-1,new OUString(), 
          new OUString(aUStr2)
         },
-        {"simple compare, str1 to nullString",+1,new OUString(aUStr1),
+        {"simple compare, str1 to nullString",+1,new OUString(aUStr1), 
          new OUString()
         }
     };
@@ -496,7 +496,7 @@ static sal_Bool SAL_CALL test_rtl_OUString_compareTo_001(
         cmpRes = ( cmpRes == 0 ) ? 0 : ( cmpRes > 0 ) ? +1 : -1 ;
         sal_Bool lastRes = ( cmpRes == arrTestCase[i].expVal);
 
-
+    
         c_rtl_tres_state
             (
                 hRtlTestResult,
@@ -523,12 +523,12 @@ static sal_Bool SAL_CALL test_rtl_OUString_compareTo_002(
 
     typedef struct TestCase
     {
-        sal_Char*       comments;
-        sal_Int32       expVal;
-        sal_Int32       maxLength;
-           OUString*        input1;
-        OUString*       input2;
-        ~TestCase()     { delete input1;delete input2;}
+        sal_Char*		comments;
+        sal_Int32		expVal;
+        sal_Int32		maxLength;
+           OUString*		input1;
+        OUString*		input2;
+        ~TestCase()		{ delete input1;delete input2;}
     } TestCase;
 
     TestCase arrTestCase[] =
@@ -599,11 +599,11 @@ static sal_Bool SAL_CALL test_rtl_OUString_match_001(
 
     typedef struct TestCase
     {
-        sal_Char*       comments;
+        sal_Char*		comments;
         sal_Bool         expVal;
         OUString*        input1;
         OUString*        input2;
-        ~TestCase()     { delete input1;delete input2;}
+        ~TestCase() 	{ delete input1;delete input2;}
     } TestCase;
 
     TestCase arrTestCase[]={
@@ -617,9 +617,9 @@ static sal_Bool SAL_CALL test_rtl_OUString_match_001(
         {"null and aUStr1", sal_False, new OUString( "",
                                                      0,
                                                      kEncodingRTLTextUSASCII,
-                                                     kConvertFlagsOStringToOUString),
+                                                     kConvertFlagsOStringToOUString), 
          new OUString(aUStr1)}
-
+    
     };
 
     sal_Bool res = sal_True;
@@ -652,23 +652,23 @@ static sal_Bool SAL_CALL test_rtl_OUString_match_002(
 
     typedef struct TestCase
     {
-        sal_Char*       comments;
+        sal_Char*		comments;
         sal_Bool         expVal;
-        sal_Int32       fromIndex;
-        OUString*       input1;
-        OUString*       input2;
-        ~TestCase()     { delete input1;delete input2;}
+        sal_Int32		fromIndex;
+        OUString*		input1;
+        OUString*		input2;
+        ~TestCase()		{ delete input1;delete input2;}
     } TestCase;
 
     TestCase arrTestCase[]={
 
-        {"aUStr2 from 17 and aUStr6", sal_True, 17,
+        {"aUStr2 from 17 and aUStr6", sal_True, 17, 
          new OUString(aUStr2),new OUString(aUStr6)},
-        {"aUStr2 from 5 and aUStr6", sal_False, 5,
+        {"aUStr2 from 5 and aUStr6", sal_False, 5, 
          new OUString(aUStr2),new OUString(aUStr6)},
-        {"aUStr2 from 0 and aUStr1", sal_True, 0,
+        {"aUStr2 from 0 and aUStr1", sal_True, 0, 
          new OUString(aUStr2),new OUString(aUStr1)},
-        {"aUStr1 from 16 and null", sal_True, 16,
+        {"aUStr1 from 16 and null", sal_True, 16, 
          new OUString(aUStr1),
          new OUString( "",
                        0,
@@ -676,7 +676,7 @@ static sal_Bool SAL_CALL test_rtl_OUString_match_002(
                        kConvertFlagsOStringToOUString
                        )
         },
-        {"aUStr1 from 5 and null", sal_True, 5,
+        {"aUStr1 from 5 and null", sal_True, 5, 
          new OUString(aUStr1),
          new OUString( "",
                        0,
@@ -684,11 +684,11 @@ static sal_Bool SAL_CALL test_rtl_OUString_match_002(
                        kConvertFlagsOStringToOUString
                        )
         },
-        {"aUStr2 from -1 and aUStr1", sal_False, -1,
+        {"aUStr2 from -1 and aUStr1", sal_False, -1, 
          new OUString(aUStr2),new OUString(aUStr1)},
-        {"aUStr5 from 2 and aUStr4", sal_False, 2,
+        {"aUStr5 from 2 and aUStr4", sal_False, 2, 
          new OUString(aUStr5),new OUString(aUStr4)},
-        {"aUStr2 from 18 and aUStr1", sal_False, 18,
+        {"aUStr2 from 18 and aUStr1", sal_False, 18, 
          new OUString(aUStr2),new OUString(aUStr1)}
     };
 
@@ -698,7 +698,7 @@ static sal_Bool SAL_CALL test_rtl_OUString_match_002(
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         sal_Bool lastRes = ( arrTestCase[i].input1->match
-                             (*(arrTestCase[i].input2),arrTestCase[i].fromIndex) ==
+                             (*(arrTestCase[i].input2),arrTestCase[i].fromIndex) == 
                              arrTestCase[i].expVal );
 
         c_rtl_tres_state
@@ -706,9 +706,9 @@ static sal_Bool SAL_CALL test_rtl_OUString_match_002(
                 hRtlTestResult,
                 lastRes,
                 arrTestCase[i].comments,
-                createName( pMeth,
-                            "match(const OUString & str,sal_Int32 fromIndex = 0)", i  )
-
+                createName( pMeth, 
+                            "match(const OUString & str,sal_Int32 fromIndex = 0)", i  )  
+                                
                 );
 
         res &= lastRes;
@@ -724,7 +724,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_match(
     res &= test_rtl_OUString_match_002(hRtlTestResult);
     c_rtl_tres_state_end( hRtlTestResult, "match");
 //    return (res);
-}
+}                    
 
 //------------------------------------------------------------------------
 // testing the operator +=
@@ -738,26 +738,26 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_op_eq(
 
     typedef struct TestCase
     {
-        sal_Char*       comments;
+        sal_Char*		comments;
            OUString*        input1;
         OUString*        input2;
-        ~TestCase()     { delete input1; delete input2;}
+        ~TestCase() 	{ delete input1; delete input2;}
     } TestCase;
 
     TestCase arrTestCase[]={
         {"null and Ustr1", new OUString, new OUString(aUStr1)},
-        {"Ustr2 and Ustr1", new OUString(aUStr2),
+        {"Ustr2 and Ustr1", new OUString(aUStr2), 
          new OUString(aUStr1)},
-        {""" and Ustr1 from bit charactor buffer",
+        {""" and Ustr1 from bit charactor buffer",  
          new OUString(aUStr1),
          new OUString( "",
                        0,
                        kEncodingRTLTextUSASCII,
                        kConvertFlagsOStringToOUString
                        )},
-        {"Ustr1 and Ustr2 from value and length",
-         new OUString( aUStr2, kTestStr2Len ),
-         new OUString(aUStr1)}
+        {"Ustr1 and Ustr2 from value and length",   
+         new OUString( aUStr2, kTestStr2Len ), 
+         new OUString(aUStr1)} 
     };
 
 
@@ -795,11 +795,11 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_op_peq(
 
     typedef struct TestCase
     {
-        sal_Char*       comments;
-        OUString*       expVal;
+        sal_Char*		comments;
+        OUString*		expVal;
            OUString*        input1;
         OUString*        input2;
-        ~TestCase()     { delete input1; delete input2;}
+        ~TestCase() 	{ delete input1; delete input2;}
     } TestCase;
 
     TestCase arrTestCase[]={
@@ -828,7 +828,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_op_peq(
            )*/
          new OUString(),
          new OUString(aUStr1)},
-        {"Ustr1PlusUStr6 = Ustr1 += Ustr6",
+        {"Ustr1PlusUStr6 = Ustr1 += Ustr6",  
          new OUString(aUStr1PlusUStr6), new OUString(aUStr1),
          new OUString(aUStr6)},
     };
@@ -838,9 +838,9 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_op_peq(
     sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
-    {
+    {   
         *(arrTestCase[i].input1) += *(arrTestCase[i].input2);
-        sal_Bool lastRes = (*(arrTestCase[i].expVal) ==
+        sal_Bool lastRes = (*(arrTestCase[i].expVal) == 
                             *(arrTestCase[i].input1));
         c_rtl_tres_state
             (
@@ -872,23 +872,23 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_csuc(
     sal_Int32 tmpLen=(sal_Int32) kTestStr1Len;
     // sal_Int32 cmpLen = 0;
 
-    rtl_string2UString( &tmpUstring, tmpStr,  tmpLen,
+    rtl_string2UString( &tmpUstring, tmpStr,  tmpLen,                                
                         osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
     OSL_ASSERT(tmpUstring != NULL);
 
 
     typedef struct TestCase
     {
-        sal_Char*               comments;
-        const sal_Unicode*      expVal;
-        sal_Int32               cmpLen;
+        sal_Char*				comments;
+        const sal_Unicode*		expVal;
+        sal_Int32				cmpLen;
         OUString*                input1;
         ~TestCase() {  delete input1;}
      } TestCase;
 
     TestCase arrTestCase[] =
     {
-          {"test normal ustring",(*tmpUstring).buffer,kTestStr1Len,
+          {"test normal ustring",(*tmpUstring).buffer,kTestStr1Len, 
          new OUString(aUStr1)},
         {"test empty ustring",&tmpUC, 1, new OUString()}
     };
@@ -929,23 +929,23 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_getStr(
     sal_Int32 tmpLen=(sal_Int32) kTestStr1Len;
     // sal_Int32 cmpLen = 0;
 
-    rtl_string2UString( &tmpUstring, tmpStr,  tmpLen,
+    rtl_string2UString( &tmpUstring, tmpStr,  tmpLen,                                
                         osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
     OSL_ASSERT(tmpUstring != NULL);
 
 
     typedef struct TestCase
     {
-        sal_Char*               comments;
-        const sal_Unicode*      expVal;
-        sal_Int32               cmpLen;
+        sal_Char*				comments;
+        const sal_Unicode*		expVal;
+        sal_Int32				cmpLen;
         OUString*                input1;
         ~TestCase() {  delete input1;}
      } TestCase;
 
     TestCase arrTestCase[] =
     {
-          {"test normal ustring",(*tmpUstring).buffer,kTestStr1Len,
+          {"test normal ustring",(*tmpUstring).buffer,kTestStr1Len, 
          new OUString(aUStr1)},
         {"test empty ustring",&tmpUC, 1, new OUString()}
     };
@@ -983,43 +983,43 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_reverseCompareTo(
 
     typedef struct TestCase
     {
-        sal_Char*       comments;
+        sal_Char*		comments;
         sal_Int32         expVal;
         OUString*        input1;
         OUString*        input2;
-        ~TestCase()     { delete input1;delete input2;}
+        ~TestCase()		{ delete input1;delete input2;}
     } TestCase;
 
     TestCase arrTestCase[]={
 
-        {"simple compare, str1 to str5",-1,new OUString(aUStr1),
+        {"simple compare, str1 to str5",-1,new OUString(aUStr1), 
          new OUString(aUStr5)
         },
-        {"simple compare, str2 to str5",1,new OUString(aUStr2),
+        {"simple compare, str2 to str5",1,new OUString(aUStr2), 
          new OUString(aUStr5)
         },
-        {"simple compare, str1 to str9",-1,new OUString(aUStr1),
+        {"simple compare, str1 to str9",-1,new OUString(aUStr1), 
          new OUString(aUStr9)
         },
-        {"simple compare, str4 to str5",-1,new OUString(aUStr4),
+        {"simple compare, str4 to str5",-1,new OUString(aUStr4), 
          new OUString(aUStr5)
         },
-        {"simple compare, str5 to str1",+1,new OUString(aUStr5),
+        {"simple compare, str5 to str1",+1,new OUString(aUStr5), 
          new OUString(aUStr1)
         },
-        {"simple compare, str2 to str1",+1,new OUString(aUStr2),
+        {"simple compare, str2 to str1",+1,new OUString(aUStr2), 
          new OUString(aUStr1)
         },
-        {"simple compare, str1 to str1",0,new OUString(aUStr1),
+        {"simple compare, str1 to str1",0,new OUString(aUStr1), 
          new OUString(aUStr1)
         },
-        {"simple compare, nullString to nullString",0,new OUString(),
+        {"simple compare, nullString to nullString",0,new OUString(), 
          new OUString()
         },
-        {"simple compare, nullString to str2",-1,new OUString(),
+        {"simple compare, nullString to str2",-1,new OUString(), 
          new OUString(aUStr2)
         },
-        {"simple compare, str1 to nullString",+1,new OUString(aUStr1),
+        {"simple compare, str1 to nullString",+1,new OUString(aUStr1), 
          new OUString()
         }
     };
@@ -1034,7 +1034,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_reverseCompareTo(
         cmpRes = ( cmpRes == 0 ) ? 0 : ( cmpRes > 0 ) ? +1 : -1 ;
         sal_Bool lastRes = ( cmpRes == arrTestCase[i].expVal);
 
-
+    
         c_rtl_tres_state
             (
                 hRtlTestResult,
@@ -1061,16 +1061,16 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsAscii(
 
     const sal_Char *tmpAstr1="Sun Microsystems\0";
     const sal_Char *tmpAstr2="\0";
-
-
+   
+    
 
     typedef struct TestCase
     {
-        sal_Char*        comments;
-        sal_Bool         expVal;
+        sal_Char*		 comments;
+        sal_Bool		 expVal;
            OUString*         input1;
         const sal_Char*    input2;
-        ~TestCase()     { delete input1;}
+        ~TestCase() 	{ delete input1;}
     } TestCase;
 
     TestCase arrTestCase[]={
@@ -1083,7 +1083,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsAscii(
                                                     kTestStr2Len,
                                                     kEncodingRTLTextUSASCII,
                                                     kConvertFlagsOStringToOUString
-                                                    ), tmpAstr1},
+                                                    ), tmpAstr1},	
         {"null with str1  ", sal_False, new OUString(), tmpAstr1},
         {"null with '' ", sal_True, new OUString(), tmpAstr2},
         {"'' with ''", sal_True, new OUString( "",
@@ -1092,7 +1092,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsAscii(
                                                kConvertFlagsOStringToOUString
                                                ),
          tmpAstr2}
-
+           
     };
 
 
@@ -1100,9 +1100,9 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsAscii(
     sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
-    {
-
-        sal_Bool lastRes = (arrTestCase[i].expVal ==
+    {   
+    
+        sal_Bool lastRes = (arrTestCase[i].expVal == 
                             arrTestCase[i].input1->equalsAscii(arrTestCase[i].input2));
         c_rtl_tres_state
             (
@@ -1121,8 +1121,8 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsAscii(
 
 
 //------------------------------------------------------------------------
-//       testing the method sal_Bool equalsAsciiL(
-//                          const sal_Char* asciiStr, sal_Int32 asciiStrLength )
+//       testing the method sal_Bool equalsAsciiL( 
+//							const sal_Char* asciiStr, sal_Int32 asciiStrLength )
 //------------------------------------------------------------------------
 extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsAsciiL(
     hTestResult hRtlTestResult)
@@ -1134,17 +1134,17 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsAsciiL(
     const sal_Char *tmpAstr1="Sun Microsystems\0";
     const sal_Char *tmpAstr2="\0";
     const sal_Char *tmpAstr3="Sun Microsystems Java Technology\0";
-
-
+   
+    
 
     typedef struct TestCase
     {
-        sal_Char*        comments;
-        sal_Bool         expVal;
+        sal_Char*		 comments;
+        sal_Bool		 expVal;
            OUString*         input1;
         const sal_Char*    input2;
         sal_Int32          cmpLen;
-        ~TestCase()     { delete input1;}
+        ~TestCase() 	{ delete input1;}
     } TestCase;
 
     TestCase arrTestCase[]={
@@ -1157,12 +1157,12 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsAsciiL(
                                                            kTestStr2Len,
                                                            kEncodingRTLTextUSASCII,
                                                            kConvertFlagsOStringToOUString
-                                                           ), tmpAstr1, kTestStr1Len},
+                                                           ), tmpAstr1, kTestStr1Len},	
         {"str1 with str2,str1Len", sal_True,new OUString( kTestStr1,
                                                           kTestStr1Len,
                                                           kEncodingRTLTextUSASCII,
                                                           kConvertFlagsOStringToOUString
-                                                          ), tmpAstr3, kTestStr1Len},
+                                                          ), tmpAstr3, kTestStr1Len},                    
         {"null with str1,1  ", sal_False, new OUString(), tmpAstr1, 1},
         {"null with '',1 ", sal_False, new OUString(), tmpAstr2, 1},
         {"'' with '', 1", sal_False, new OUString( "",
@@ -1171,7 +1171,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsAsciiL(
                                                    kConvertFlagsOStringToOUString
                                                    ),
          tmpAstr2, 1}
-
+           
     };
 
 
@@ -1179,9 +1179,9 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsAsciiL(
     sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
-    {
-
-        sal_Bool lastRes = (arrTestCase[i].expVal ==
+    {   
+        
+        sal_Bool lastRes = (arrTestCase[i].expVal == 
                             arrTestCase[i].input1->equalsAsciiL(arrTestCase[i].input2,
                                                                 arrTestCase[i].cmpLen)
                             );
@@ -1213,15 +1213,15 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_compareToAscii(
     const sal_Char *tmpAstr2="\0";
     const sal_Char *tmpAstr3="sun microsystems java technology\0";
     const sal_Char *tmpAstr4="Sun Microsystems Java Technology\0";
-
+    
 
     typedef struct TestCase
     {
-        sal_Char*        comments;
-        sal_Int32        expVal;
+        sal_Char*		 comments;
+        sal_Int32		 expVal;
            OUString*         input1;
         const sal_Char*    input2;
-        ~TestCase()     { delete input1;}
+        ~TestCase() 	{ delete input1;}
     } TestCase;
 
     TestCase arrTestCase[]={
@@ -1234,7 +1234,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_compareToAscii(
                                             kTestStr1Len,
                                             kEncodingRTLTextUSASCII,
                                             kConvertFlagsOStringToOUString
-                                            ), tmpAstr2},
+                                            ), tmpAstr2},	
         {"null with str1  ", -83 , new OUString(), tmpAstr1},
         {"null with '' ", 0, new OUString(), tmpAstr2},
         {"str1 with str9", -32, new OUString( kTestStr1,
@@ -1249,7 +1249,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_compareToAscii(
                                               kConvertFlagsOStringToOUString
                                               ),
          tmpAstr4}
-
+           
     };
 
 
@@ -1257,10 +1257,10 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_compareToAscii(
     sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
-    {
-        sal_Bool lastRes = (arrTestCase[i].expVal ==
+    {   
+        sal_Bool lastRes = (arrTestCase[i].expVal == 
                             arrTestCase[i].input1->compareToAscii(arrTestCase[i].input2));
-
+        
         c_rtl_tres_state
             (
                 hRtlTestResult,
@@ -1291,7 +1291,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_valueOf_sal_Bool(
         sal_Char*       comments;
         OUString*       expVal;
         sal_Bool        input1;
-
+        
         ~TestCase()     {delete expVal;}
     }TestCase;
 
@@ -1327,7 +1327,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_valueOf_sal_Bool(
 
         res &= lastRes;
     }
-    c_rtl_tres_state_end( hRtlTestResult, "Bool");
+    c_rtl_tres_state_end( hRtlTestResult, "Bool");   
 //    return(res);
 }
 
@@ -1350,7 +1350,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_valueOf_sal_Unicode(
         sal_Char*       comments;
         OUString*       expVal;
         sal_Unicode     input1;
-
+        
         ~TestCase()     {delete expVal;}
     }TestCase;
 
@@ -1372,7 +1372,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_valueOf_sal_Unicode(
          new OUString(&tmpchar5,1),tmpchar5
         }
     };
-
+    
     sal_Bool    res=sal_True;
     sal_uInt32   i;
 
@@ -1380,7 +1380,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_valueOf_sal_Unicode(
     {
         sal_Bool lastRes=(*(arrTestCase[i].expVal)==
                           OUString::valueOf(arrTestCase[i].input1));
-
+       
         c_rtl_tres_state(hRtlTestResult,
                          lastRes,
                          arrTestCase[i].comments,
@@ -1389,7 +1389,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_valueOf_sal_Unicode(
 
         res &= lastRes;
     }
-    c_rtl_tres_state_end( hRtlTestResult, "Unicode");
+    c_rtl_tres_state_end( hRtlTestResult, "Unicode");   
 //    return(res);
 }
 
@@ -1422,7 +1422,7 @@ sal_Bool test_valueOf( const char** resArray, int n, sal_Int16 radix,
     for (i = 0; i < n; i++)
     {
         ::rtl::OUString aStr1;
-
+        
         OSL_ENSURE( i < 50, "ERROR: leave aUchar bound");
 
 //        AStringToUStringCopy(aUchar,resArray[i]);
@@ -1449,7 +1449,7 @@ sal_Bool test_valueOf( const char** resArray, int n, sal_Int16 radix,
                     aStr2 = aStr3;
                     aStr2 += aStr4;
                 }
-
+                                 
             }
             aStr1 = ::rtl::OUString::valueOf((T)inArray[i], radix);
         }
@@ -1555,7 +1555,7 @@ sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int32_Bounderies(
         (
             hRtlTestResult,
             test_valueOf_Int32((const char**)kBinaryMaxNumsStr,
-                               kInt32MaxNumsCount, kRadixBinary,
+                               kInt32MaxNumsCount, kRadixBinary, 
                                hRtlTestResult, kInt32MaxNums),
             "kRadixBinary",
             "valueOf(salInt32, radix 2) Bounderies"
@@ -1565,7 +1565,7 @@ sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int32_Bounderies(
         (
             hRtlTestResult,
             test_valueOf_Int32((const char**)kOctolMaxNumsStr,
-                               kInt32MaxNumsCount, kRadixOctol,
+                               kInt32MaxNumsCount, kRadixOctol, 
                                hRtlTestResult, kInt32MaxNums),
             "kRadixOctol",
             "valueOf(salInt32, radix 8) Bounderies"
@@ -1706,7 +1706,7 @@ sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int32_WrongRadix(
 //------------------------------------------------------------------------
 static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int32_defaultParam(
     hTestResult hRtlTestResult )
-{
+{    
     sal_Char     methName[MAXBUFLENGTH];
     sal_Char*    pMeth = methName;
 
@@ -1742,7 +1742,7 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int32_defaultParam(
          new OUString(newUChar4,10,kEncodingRTLTextUSASCII,
                       kConvertFlagsOStringToOUString)
         },
-        {"input Int32 -2147483648 and return OUString -2147483648",
+        {"input Int32 -2147483648 and return OUString -2147483648", 
          SAL_MIN_INT32 /* 2-2147483648 */,
          new OUString(newUChar5,11,kEncodingRTLTextUSASCII,
                       kConvertFlagsOStringToOUString)
@@ -1760,13 +1760,13 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int32_defaultParam(
         c_rtl_tres_state(hRtlTestResult,
                          lastRes,
                          arrTestCase[i].comments,
-                         createName( pMeth,
+                         createName( pMeth, 
                                      "valueOf( sal_Int32 i, sal_Int16 radix = 10 )", i )
                          );
 
         res &= lastRes;
     }
-
+    
     return(res);
 
 }
@@ -2002,10 +2002,10 @@ sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_WrongRadix(
 //------------------------------------------------------------------------
 static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
     hTestResult hRtlTestResult )
-{
+{    
     sal_Char     methName[MAXBUFLENGTH];
     sal_Char*    pMeth = methName;
-
+    
     sal_Char*    newUChar1="15";
     sal_Char*    newUChar2="0";
     sal_Char*    newUChar3="-15";
@@ -2057,13 +2057,13 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
         c_rtl_tres_state(hRtlTestResult,
                          lastRes,
                          arrTestCase[i].comments,
-                         createName( pMeth,
+                         createName( pMeth, 
                                      "valueOf( sal_Int64 i, sal_Int16 radix = 10 )", i )
                          );
 
         res &= lastRes;
     }
-
+    
     return(res);
 
 }
@@ -2075,17 +2075,17 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
 // LLA: {
 // LLA:     sal_Char methName[MAXBUFLENGTH];
 // LLA:     sal_Char* pMeth =methName;
-// LLA:
+// LLA: 
 // LLA:     typedef struct TestCase
-// LLA:     {
+// LLA: 	{
 // LLA:         sal_Char*                    comments;
 // LLA:         float                         input1;
 // LLA:         OUString*                     expVal;
-// LLA:
+// LLA: 
 // LLA:         ~TestCase() {delete expVal;}
-// LLA:     } TestCase;
-// LLA:
-// LLA:     TestCase arrTestCase[] =
+// LLA: 	} TestCase;
+// LLA: 
+// LLA: 	TestCase arrTestCase[] =
 // LLA:     {
 // LLA:         { "3.0", 3.0, new OUString("3.0",3,kEncodingRTLTextUSASCII,
 // LLA:                                    kConvertFlagsOStringToOUString) },
@@ -2102,16 +2102,16 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
 // LLA:         { "3.0039062", 3.00390625f, new OUString("3.0039062",9,
 // LLA:                                                  kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) }
 // LLA:     };
-// LLA:
+// LLA: 
 // LLA:     sal_Bool res = sal_True;
 // LLA:     sal_Int32 i;
-// LLA:
+// LLA: 
 // LLA:     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
 // LLA:     {
 // LLA:         ::rtl::OUString aStr1;
 // LLA:         aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
 // LLA:         sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
-// LLA:
+// LLA: 
 // LLA:         c_rtl_tres_state
 // LLA:             (
 // LLA:                 hRtlTestResult,
@@ -2119,11 +2119,11 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
 // LLA:                 arrTestCase[i].comments,
 // LLA:                 createName( pMeth, "valueof_float", i)
 // LLA:                 );
-// LLA:
+// LLA: 
 // LLA:         res &= lastRes;
-// LLA:
+// LLA: 
 // LLA:     }
-// LLA:
+// LLA: 
 // LLA:     return ( res );
 // LLA: }
 
@@ -2135,17 +2135,17 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
 // LLA: {
 // LLA:     sal_Char methName[MAXBUFLENGTH];
 // LLA:     sal_Char* pMeth =methName;
-// LLA:
+// LLA: 
 // LLA:     typedef struct TestCase
-// LLA:     {
+// LLA: 	{
 // LLA:         sal_Char*                    comments;
 // LLA:         float                         input1;
 // LLA:         OUString*                     expVal;
-// LLA:
+// LLA: 
 // LLA:         ~TestCase() {delete expVal;}
-// LLA:     } TestCase;
-// LLA:
-// LLA:     TestCase arrTestCase[] =
+// LLA: 	} TestCase;
+// LLA: 
+// LLA: 	TestCase arrTestCase[] =
 // LLA:     {
 // LLA:         { "-3.0", -3.0, new OUString("-3.0",4,kEncodingRTLTextUSASCII,
 // LLA:                                      kConvertFlagsOStringToOUString) },
@@ -2162,16 +2162,16 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
 // LLA:         { "-3.0039062", -3.00390625f, new OUString("-3.0039062",10,
 // LLA:                                                    kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) }
 // LLA:     };
-// LLA:
+// LLA: 
 // LLA:     sal_Bool res = sal_True;
 // LLA:     sal_Int32 i;
-// LLA:
+// LLA: 
 // LLA:     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
 // LLA:     {
 // LLA:         ::rtl::OUString aStr1;
 // LLA:         aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
 // LLA:         sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
-// LLA:
+// LLA: 
 // LLA:         c_rtl_tres_state
 // LLA:             (
 // LLA:                 hRtlTestResult,
@@ -2179,11 +2179,11 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
 // LLA:                 arrTestCase[i].comments,
 // LLA:                 createName( pMeth, "valueof_negative float", i)
 // LLA:                 );
-// LLA:
+// LLA: 
 // LLA:         res &= lastRes;
-// LLA:
+// LLA: 
 // LLA:     }
-// LLA:
+// LLA: 
 // LLA:     return ( res );
 // LLA: }
 
@@ -2195,17 +2195,17 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
 // LLA: {
 // LLA:     sal_Char methName[MAXBUFLENGTH];
 // LLA:     sal_Char* pMeth =methName;
-// LLA:
+// LLA: 
 // LLA:     typedef struct TestCase
 // LLA:     {
 // LLA:         sal_Char*       comments;
 // LLA:         double          input1;
 // LLA:         OUString*       expVal;
-// LLA:
+// LLA: 
 // LLA:         ~TestCase() {delete expVal;}
 // LLA:     } TestCase;
-// LLA:
-// LLA:     TestCase arrTestCase[] =
+// LLA: 
+// LLA: 	TestCase arrTestCase[] =
 // LLA:     {
 // LLA:         {"3.0", 3.0, new OUString("3.0",3,kEncodingRTLTextUSASCII,
 // LLA:                                   kConvertFlagsOStringToOUString)},
@@ -2215,29 +2215,29 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
 // LLA:                                         kConvertFlagsOStringToOUString)},
 // LLA:         {"3.1415926535", 3.1415926535, new OUString("3.1415926535",12,
 // LLA:                                                     kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString)},
-// LLA:         {"3.1415926535897931", 3.141592653589793,
+// LLA:         {"3.1415926535897931", 3.141592653589793, 
 // LLA:          new OUString("3.1415926535897931",18,kEncodingRTLTextUSASCII,
 // LLA:                       kConvertFlagsOStringToOUString)},
-// LLA:         {"3.1415926535897931", 3.1415926535897932,
+// LLA:         {"3.1415926535897931", 3.1415926535897932, 
 // LLA:          new OUString("3.1415926535897931",18,kEncodingRTLTextUSASCII,
 // LLA:                       kConvertFlagsOStringToOUString)},
-// LLA:         {"3.1415926535897931", 3.14159265358979323,
+// LLA:         {"3.1415926535897931", 3.14159265358979323, 
 // LLA:          new OUString("3.1415926535897931",18,kEncodingRTLTextUSASCII,
 // LLA:                       kConvertFlagsOStringToOUString)},
 // LLA:         {"3.1415926535897931", 3.141592653589793238462643,
 // LLA:          new OUString("3.1415926535897931",18,kEncodingRTLTextUSASCII,
 // LLA:                       kConvertFlagsOStringToOUString)}
 // LLA:     };
-// LLA:
+// LLA: 
 // LLA:     sal_Bool res = sal_True;
 // LLA:     sal_Int32 i;
-// LLA:
+// LLA: 
 // LLA:     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
 // LLA:     {
 // LLA:         ::rtl::OUString aStr1;
 // LLA:         aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
 // LLA:         sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
-// LLA:
+// LLA: 
 // LLA:         c_rtl_tres_state
 // LLA:             (
 // LLA:                 hRtlTestResult,
@@ -2245,11 +2245,11 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
 // LLA:                 arrTestCase[i].comments,
 // LLA:                 createName( pMeth, "valueof_double", i)
 // LLA:                 );
-// LLA:
+// LLA: 
 // LLA:         res &= lastRes;
-// LLA:
+// LLA: 
 // LLA:     }
-// LLA:
+// LLA: 
 // LLA:     return ( res );
 // LLA: }
 
@@ -2262,17 +2262,17 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
 // LLA: {
 // LLA:     sal_Char methName[MAXBUFLENGTH];
 // LLA:     sal_Char* pMeth =methName;
-// LLA:
+// LLA: 
 // LLA:     typedef struct TestCase
-// LLA:     {
+// LLA: 	{
 // LLA:         sal_Char*        comments;
 // LLA:         double           input1;
 // LLA:         OUString*        expVal;
-// LLA:
+// LLA: 
 // LLA:         ~TestCase() {delete expVal;}
-// LLA:     } TestCase;
-// LLA:
-// LLA:     TestCase arrTestCase[] =
+// LLA: 	} TestCase;
+// LLA: 
+// LLA: 	TestCase arrTestCase[] =
 // LLA:     {
 // LLA:         {"-3.0", -3.0, new OUString("-3.0",4,kEncodingRTLTextUSASCII,
 // LLA:                                     kConvertFlagsOStringToOUString)},
@@ -2280,32 +2280,32 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
 // LLA:                                     kConvertFlagsOStringToOUString)},
 // LLA:         {"-3.0625", -3.0625, new OUString("-3.0625",7,kEncodingRTLTextUSASCII,
 // LLA:                                           kConvertFlagsOStringToOUString)},
-// LLA:         {"-3.1415926535", -3.1415926535,
+// LLA:         {"-3.1415926535", -3.1415926535, 
 // LLA:          new OUString("-3.1415926535",13,kEncodingRTLTextUSASCII,
 // LLA:                       kConvertFlagsOStringToOUString)},
-// LLA:         {"-3.1415926535897931", -3.141592653589793,
+// LLA:         {"-3.1415926535897931", -3.141592653589793, 
 // LLA:          new OUString("-3.1415926535897931",19,kEncodingRTLTextUSASCII,
 // LLA:                       kConvertFlagsOStringToOUString)},
-// LLA:         {"-3.1415926535897931", -3.1415926535897932,
+// LLA:         {"-3.1415926535897931", -3.1415926535897932, 
 // LLA:          new OUString("-3.1415926535897931",19,kEncodingRTLTextUSASCII,
 // LLA:                       kConvertFlagsOStringToOUString)},
-// LLA:         {"-3.1415926535897931", -3.14159265358979323,
+// LLA:         {"-3.1415926535897931", -3.14159265358979323, 
 // LLA:          new OUString("-3.1415926535897931",19,kEncodingRTLTextUSASCII,
 // LLA:                       kConvertFlagsOStringToOUString)},
-// LLA:         {"-3.1415926535897931", -3.141592653589793238462643,
+// LLA:         {"-3.1415926535897931", -3.141592653589793238462643, 
 // LLA:          new OUString("-3.1415926535897931",19,kEncodingRTLTextUSASCII,
 // LLA:                       kConvertFlagsOStringToOUString)}
 // LLA:     };
-// LLA:
+// LLA: 
 // LLA:     sal_Bool res = sal_True;
 // LLA:     sal_Int32 i;
-// LLA:
+// LLA: 
 // LLA:     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
 // LLA:     {
 // LLA:         ::rtl::OUString aStr1;
 // LLA:         aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
 // LLA:         sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
-// LLA:
+// LLA: 
 // LLA:         c_rtl_tres_state
 // LLA:             (
 // LLA:                 hRtlTestResult,
@@ -2313,11 +2313,11 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
 // LLA:                 arrTestCase[i].comments,
 // LLA:                 createName( pMeth, "valueof_nagative double", i)
 // LLA:                 );
-// LLA:
+// LLA: 
 // LLA:         res &= lastRes;
-// LLA:
+// LLA: 
 // LLA:     }
-// LLA:
+// LLA: 
 // LLA:     return ( res );
 // LLA: }
 
@@ -2349,7 +2349,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_valueOf(
 //    return ( bTState );
 }
 //------------------------------------------------------------------------
-//    this is my testing code
+//    this is my testing code 
 //    testing the method createFromAscii( const sal_Char * value )
 //------------------------------------------------------------------------
 
@@ -2359,8 +2359,8 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_createFromAscii(
     c_rtl_tres_state_start( hRtlTestResult, "createFromAscii");
     sal_Char     methName[MAXBUFLENGTH];
     sal_Char*    pMeth = methName;
-
-
+    
+    
     typedef struct TestCase
     {
         sal_Char*       comments;
@@ -2372,7 +2372,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_createFromAscii(
 
     TestCase arrTestCase[]=
     {
-
+                            
         {   "create OUString from sal_Char" ,kTestStr1,
             new OUString(kTestStr1,kTestStr1Len,kEncodingRTLTextUSASCII,
                          kConvertFlagsOStringToOUString)
@@ -2386,18 +2386,18 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_createFromAscii(
             new OUString("",0,kEncodingRTLTextUSASCII,
                          kConvertFlagsOStringToOUString)
         }
-
+       
     };
-
+    
     sal_Bool    res;
     sal_uInt32   i;
-
+ 
     for(i=0;i<(sizeof(arrTestCase))/(sizeof(TestCase));i++)
     {
         sal_Bool lastRes=(*(arrTestCase[i].expVal)==
                           OUString::createFromAscii(arrTestCase[i].input1));
-
-
+        
+        
     {
         c_rtl_tres_state(hRtlTestResult,
                          lastRes,
@@ -2405,11 +2405,11 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_createFromAscii(
                          createName( pMeth, "createFromAscii", i )
                          );
     }
-
+        
     res&=lastRes;
 
     }
-
+    
     c_rtl_tres_state_end( hRtlTestResult, "createFromAscii");
 //    return(res);
 }
@@ -2426,28 +2426,28 @@ sal_Bool test_index( const T* input1, int num,const sal_Int32* input2,
     sal_Char*   pMeth=methName;
     sal_Int32   i;
     sal_Bool    lastRes=sal_False;
-
+    
     for(i=0;i<num;i++)
     {
         OUString str(aUStr2);
-
+        
         if(base==0)
         {
             lastRes=(str.indexOf(input1[i])==expVal[i]);
             meth="indexOf_001";
         }
         if(base==1)
-        {
+        {	
             lastRes=(str.indexOf(input1[i],input2[i])==expVal[i]);
             meth="indexOf_002";
         }
-// LLA:         if(base==2)
-// LLA:         {
+// LLA: 		if(base==2)
+// LLA: 		{
 // LLA:             lastRes=(str.lastIndexOf(input1[i])==expVal[i]);
 // LLA:             meth="lastIndexOf_001(sal_Unicode)";
 // LLA:         }
-// LLA:         if(base==3)
-// LLA:         {
+// LLA: 		if(base==3)
+// LLA: 		{
 // LLA: /*
 // LLA:             OUString s4(&input1[i]);
 // LLA:             rtl::OString sStr;
@@ -2456,11 +2456,11 @@ sal_Bool test_index( const T* input1, int num,const sal_Int32* input2,
 // LLA:             rtl::OString sInput1;
 // LLA:             sInput1 <<= s4; // rtl::OUString((sal_Unicode*)input1[i]);
 // LLA:             t_print("%d = lastIndexOf(\"%s\", %d) =? %d\n", str.lastIndexOf(input1[i], input2[i]), sInput1.getStr(), input2[i], expVal[i]);
-// LLA: */
+// LLA: */            
 // LLA:             lastRes=(str.lastIndexOf(input1[i],input2[i])==expVal[i]);
 // LLA:             meth="lastIndexOf_002(sal_Unicode , sal_Int32 )";
-// LLA:         }
-
+// LLA:         }	
+            
         c_rtl_tres_state
             (
                 hRtlTestResult,
@@ -2484,11 +2484,11 @@ sal_Bool test_indexStr( const T** input1, int num,const sal_Int32* input2,
     sal_Char*   pMeth=methName;
     sal_Int32   i;
     sal_Bool    lastRes=sal_False;
-
+    
     for(i=0;i<num;i++)
     {
         OUString str(aUStr2);
-
+        
 
         if(base==0)
         {
@@ -2497,32 +2497,32 @@ sal_Bool test_indexStr( const T** input1, int num,const sal_Int32* input2,
             meth="indexOf_003";
         }
         if(base==1)
-        {
+        {	
             OUString s2(input1[i]);
             lastRes=(str.indexOf(s2,input2[i])==expVal[i]);
             meth="indexOf_004";
         }
-// LLA:         if(base==2)
-// LLA:         {
+// LLA: 		if(base==2)
+// LLA: 		{
 // LLA:             OUString s3(input1[i]);
 // LLA:             lastRes=(str.lastIndexOf(s3)==expVal[i]);
 // LLA:             meth="lastIndexOf_003(const OUString)";
 // LLA:         }
-// LLA:         if(base==3)
-// LLA:         {
+// LLA: 		if(base==3)
+// LLA: 		{
 // LLA:             OUString s4(input1[i]);
-// LLA:
+// LLA: 
 // LLA:             rtl::OString sStr;
 // LLA:             sStr <<= str;
 // LLA:             t_print("str = \"%s\"\n", sStr.getStr());
 // LLA:             rtl::OString sInput1;
 // LLA:             sInput1 <<= s4; // rtl::OUString((sal_Unicode*)input1[i]);
 // LLA:             t_print("%d = lastIndexOf(\"%s\", %d) =? %d\n", str.lastIndexOf(input1[i], input2[i]), sInput1.getStr(), input2[i], expVal[i]);
-// LLA:
+// LLA:             
 // LLA:             lastRes=(str.lastIndexOf(s4,input2[i])==expVal[i]);
 // LLA:             meth="lastIndexOf_004(const OUString,sal_Int32)";
-// LLA:         }
-
+// LLA:         }	
+            
         c_rtl_tres_state
             (
                 hRtlTestResult,
@@ -2543,7 +2543,7 @@ sal_Bool SAL_CALL test_rtl_OUString_indexOf_001(
     hTestResult hRtlTestResult )
 {
     sal_Bool bRes=sal_False;
-
+    
     bRes=c_rtl_tres_state
         (
               hRtlTestResult,
@@ -2553,7 +2553,7 @@ sal_Bool SAL_CALL test_rtl_OUString_indexOf_001(
               "index",
               "indexDefault(sal_Unicode ch, sal_Int32 fromIndex = 0)"
               );
-
+              
     return ( bRes );
 }
 //------------------------------------------------------------------------
@@ -2563,7 +2563,7 @@ sal_Bool SAL_CALL test_rtl_OUString_indexOf_002(
     hTestResult hRtlTestResult )
 {
     sal_Bool bRes=sal_False;
-
+    
     bRes=c_rtl_tres_state
         (
               hRtlTestResult,
@@ -2573,9 +2573,9 @@ sal_Bool SAL_CALL test_rtl_OUString_indexOf_002(
               "index",
               "indexNormal(sal_Unicode ch, sal_Int32 fromIndex)"
               );
-
+              
     return ( bRes );
-}
+}		
 //------------------------------------------------------------------------
 // testing the method indexOf(  OUString ch, sal_Int32 fromIndex = 0 )
 //------------------------------------------------------------------------
@@ -2583,7 +2583,7 @@ sal_Bool SAL_CALL test_rtl_OUString_indexOf_003(
     hTestResult hRtlTestResult )
 {
     sal_Bool bRes=sal_False;
-
+    
     bRes=c_rtl_tres_state
         (
               hRtlTestResult,
@@ -2593,7 +2593,7 @@ sal_Bool SAL_CALL test_rtl_OUString_indexOf_003(
               "index",
               "indexDefault(OUString ch, sal_Int32 fromIndex = 0)"
               );
-
+              
     return ( bRes );
 }
 //------------------------------------------------------------------------
@@ -2603,7 +2603,7 @@ sal_Bool SAL_CALL test_rtl_OUString_indexOf_004(
     hTestResult hRtlTestResult )
 {
     sal_Bool bRes=sal_False;
-
+    
     bRes=c_rtl_tres_state
         (
               hRtlTestResult,
@@ -2613,27 +2613,27 @@ sal_Bool SAL_CALL test_rtl_OUString_indexOf_004(
               "indexOf",
               "indexOf(OUString ch, sal_Int32 fromIndex)"
               );
-
+              
     return ( bRes );
-}
+}		
 // LLA: //------------------------------------------------------------------------
 // LLA: // testing the method lastIndexOf( sal_Unicode ch )
 // LLA: //------------------------------------------------------------------------
 // LLA: sal_Bool SAL_CALL test_rtl_OUString_lastIndexOf_001(
 // LLA:     hTestResult hRtlTestResult )
 // LLA: {
-// LLA:     sal_Bool bRes=sal_False;
-// LLA:
-// LLA:     bRes=c_rtl_tres_state
+// LLA: 	sal_Bool bRes=sal_False;
+// LLA: 	
+// LLA: 	bRes=c_rtl_tres_state
 // LLA:         (
-// LLA:             hRtlTestResult,
-// LLA:             test_index<sal_Unicode>((const sal_Unicode*)input1lastDefault,
+// LLA: 	      	hRtlTestResult,
+// LLA: 	      	test_index<sal_Unicode>((const sal_Unicode*)input1lastDefault,
 // LLA:                                     nlastDefaultCount,input2lastDefault,
 // LLA:                                     expVallastDefault,2,hRtlTestResult),
-// LLA:             "lastIndex",
-// LLA:             "lastIndexDefault(sal_Unicode ch)"
-// LLA:             );
-// LLA:
+// LLA: 	      	"lastIndex",
+// LLA: 	      	"lastIndexDefault(sal_Unicode ch)"
+// LLA: 	      	);
+// LLA: 	      	
 // LLA:     return ( bRes );
 // LLA: }
 // LLA: //------------------------------------------------------------------------
@@ -2642,18 +2642,18 @@ sal_Bool SAL_CALL test_rtl_OUString_indexOf_004(
 // LLA: sal_Bool SAL_CALL test_rtl_OUString_lastIndexOf_002(
 // LLA:     hTestResult hRtlTestResult )
 // LLA: {
-// LLA:     sal_Bool bRes=sal_False;
-// LLA:
-// LLA:     bRes=c_rtl_tres_state
+// LLA: 	sal_Bool bRes=sal_False;
+// LLA: 	
+// LLA: 	bRes=c_rtl_tres_state
 // LLA:         (
-// LLA:             hRtlTestResult,
-// LLA:             test_index<sal_Unicode>((const sal_Unicode*)input1lastNormal,
+// LLA: 	      	hRtlTestResult,
+// LLA: 	      	test_index<sal_Unicode>((const sal_Unicode*)input1lastNormal,
 // LLA:                                     nlastNormalCount,input2lastNormal,
 // LLA:                                     expVallastNormal,3,hRtlTestResult),
-// LLA:             "lastIndex",
-// LLA:             "lastIndexNormal(sal_Unicode ch, sal_Int32 fromIndex)"
-// LLA:             );
-// LLA:
+// LLA: 	      	"lastIndex",
+// LLA: 	      	"lastIndexNormal(sal_Unicode ch, sal_Int32 fromIndex)"
+// LLA: 	      	);
+// LLA: 	      	
 // LLA:     return ( bRes );
 // LLA: }
 // LLA: //------------------------------------------------------------------------
@@ -2662,18 +2662,18 @@ sal_Bool SAL_CALL test_rtl_OUString_indexOf_004(
 // LLA: sal_Bool SAL_CALL test_rtl_OUString_lastIndexOf_003(
 // LLA:     hTestResult hRtlTestResult )
 // LLA: {
-// LLA:     sal_Bool bRes=sal_False;
-// LLA:
-// LLA:     bRes=c_rtl_tres_state
+// LLA: 	sal_Bool bRes=sal_False;
+// LLA: 	
+// LLA: 	bRes=c_rtl_tres_state
 // LLA:         (
-// LLA:             hRtlTestResult,
-// LLA:             test_indexStr<sal_Unicode>((const sal_Unicode**)input1StrLastDefault,
+// LLA: 	      	hRtlTestResult,
+// LLA: 	      	test_indexStr<sal_Unicode>((const sal_Unicode**)input1StrLastDefault,
 // LLA:                                        nStrLastDefaultCount,input2StrLastDefault,
 // LLA:                                        expValStrLastDefault,2,hRtlTestResult),
-// LLA:             "lastIndexOf",
-// LLA:             "lastIndexOf(OUString ch)"
-// LLA:             );
-// LLA:
+// LLA: 	      	"lastIndexOf",
+// LLA: 	      	"lastIndexOf(OUString ch)"
+// LLA: 	      	);
+// LLA: 	      	
 // LLA:     return ( bRes );
 // LLA: }
 // LLA: //------------------------------------------------------------------------
@@ -2682,24 +2682,24 @@ sal_Bool SAL_CALL test_rtl_OUString_indexOf_004(
 // LLA: sal_Bool SAL_CALL test_rtl_OUString_lastIndexOf_004(
 // LLA:     hTestResult hRtlTestResult )
 // LLA: {
-// LLA:     sal_Bool bRes=sal_False;
-// LLA:
+// LLA: 	sal_Bool bRes=sal_False;
+// LLA: 	
 // LLA:     for (int i=0;i<nStrLastNormalCount;i++)
 // LLA:     {
 // LLA:         rtl::OUString aStr = rtl::OUString(input1StrLastNormal[i]);
 // LLA:         volatile int dummy = 0;
 // LLA:     }
-// LLA:
-// LLA:     bRes=c_rtl_tres_state
+// LLA:     
+// LLA: 	bRes=c_rtl_tres_state
 // LLA:         (
-// LLA:             hRtlTestResult,
-// LLA:             test_indexStr<sal_Unicode>((const sal_Unicode**)input1StrLastNormal,
+// LLA: 	      	hRtlTestResult,
+// LLA: 	      	test_indexStr<sal_Unicode>((const sal_Unicode**)input1StrLastNormal,
 // LLA:                                        nStrLastNormalCount,input2StrLastNormal,
 // LLA:                                        expValStrLastNormal,3,hRtlTestResult),
-// LLA:             "lastIndexOf",
-// LLA:             "lastIndexOf(OUString ch, sal_Int32 fromIndex)"
-// LLA:             );
-// LLA:
+// LLA: 	      	"lastIndexOf",
+// LLA: 	      	"lastIndexOf(OUString ch, sal_Int32 fromIndex)"
+// LLA: 	      	);
+// LLA: 	      	
 // LLA:     return ( bRes );
 // LLA: }
 //------------------------------------------------------------------------
@@ -2708,10 +2708,10 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_indexOf(
 {
     c_rtl_tres_state_start( hRtlTestResult, "indexOf");
     sal_Bool res = test_rtl_OUString_indexOf_001(hRtlTestResult);
-    res &= test_rtl_OUString_indexOf_002(hRtlTestResult);
+    res &= test_rtl_OUString_indexOf_002(hRtlTestResult);    
     res &= test_rtl_OUString_indexOf_003(hRtlTestResult);
     res &= test_rtl_OUString_indexOf_004(hRtlTestResult);
-    c_rtl_tres_state_end( hRtlTestResult, "indexOf");
+    c_rtl_tres_state_end( hRtlTestResult, "indexOf");   
 //    return ( res );
 }
 //------------------------------------------------------------------------
@@ -2758,7 +2758,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_concat(
         {"concatenates two empty ustrings",new OUString("",0,
                                                         kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString),
          new OUString("",0,
-                      kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString),
+                      kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString), 
          new OUString("",0,
                       kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString)},
         {"concatenates ustring constructed by default constructor",
@@ -2828,12 +2828,12 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_replaceAt(
         { "navigate index", new OUString(aUStr2), new OUString(aUStr22),
           new OUString(aUStr2), -64, 64 },
 
-        { "null ustring",
+        { "null ustring", 
           new OUString("",0,
                        kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString),
           new OUString(aUStr14),
           new OUString("",0,
-                       kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString),
+                       kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString), 
           0, kTestStr14Len }
     };
 
@@ -2895,7 +2895,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_replace(
         {"ustring must be empty", new OUString(),
          new OUString("",0,
                       kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString),83,23},
-        {"same ustring, no replace ", new OUString(aUStr22),
+        {"same ustring, no replace ", new OUString(aUStr22), 
          new OUString(aUStr22),42,56}
     };
 
@@ -2989,7 +2989,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_toAsciiLowerCase(
     }
     c_rtl_tres_state_end( hRtlTestResult, "toAsciiLowerCase");
 //    return ( res );
-}
+} 
 //------------------------------------------------------------------------
 // testing the method toAsciiUpperCase()
 //------------------------------------------------------------------------
@@ -3034,7 +3034,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_toAsciiUpperCase(
     {
         OUString str = arrTestCase[i].input1->toAsciiUpperCase();
         if(i<=5)
-        {
+        { 
             lastRes = (str == *arrTestCase[i].expVal);
 
             c_rtl_tres_state
@@ -3061,8 +3061,8 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_toAsciiUpperCase(
     c_rtl_tres_state_end( hRtlTestResult, "toAsciiUpperCase");
 //    return ( res );
 }
-
-//------------------------------------------------------------------------
+ 
+//------------------------------------------------------------------------ 
 // testing the method trim()
 //------------------------------------------------------------------------
 extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_trim(
@@ -3100,7 +3100,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_trim(
          new OUString(aUStr16)},
         {"removes several spaces from the front and end",
          new OUString(aUStr1),
-         new OUString(aUStr17)},
+         new OUString(aUStr17)}, 
         {"removes characters that have codes <= 32",new OUString(aUStr30),
          new OUString("\1\3\5\7\11\13\15\17sun\21\23\25\27\31\33\50",
                       18,kEncodingRTLTextUSASCII,
@@ -3143,10 +3143,10 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_trim(
     c_rtl_tres_state_end( hRtlTestResult, "trim");
 //    return ( res );
 }
-//------------------------------------------------------------------------
+//------------------------------------------------------------------------ 
 //    testing the method toData()
 //------------------------------------------------------------------------
-
+                                              
 template <class T>
 sal_Bool test_toData( const char** input, int num, sal_Int16 radix,
                       const T* expVal,int base,
@@ -3159,18 +3159,18 @@ sal_Bool test_toData( const char** input, int num, sal_Int16 radix,
     sal_Char    *meth = '\0';
     sal_Char*   pMeth=methName;
     sal_Int32   i;
-//  static      sal_Unicode aUchar[60]={0x00};
+// 	static      sal_Unicode aUchar[60]={0x00};
     T           intRes;
     sal_Bool    lastRes=sal_False;
-
+    
     for(i=0;i<num;i++)
     {
         OSL_ENSURE( i < 60, "ERROR: leave aUchar bound");
 
 // LLA: stored for the posterity
 //      AStringToUStringCopy(aUchar,input[i]);
-//      OUString str(aUchar);
-
+// 		OUString str(aUchar);
+        
         OUString str;
         str = OUString::createFromAscii(input[i]);
 
@@ -3182,7 +3182,7 @@ sal_Bool test_toData( const char** input, int num, sal_Int16 radix,
             meth="toInt32default";
         }
         if(base==1)
-        {
+        {	
             intRes=static_cast<T>(str.toInt32(radix));
             lastRes=(intRes==expVal[i]);
             meth="toInt32normal";
@@ -3200,16 +3200,16 @@ sal_Bool test_toData( const char** input, int num, sal_Int16 radix,
             meth="toInt64normal";
         }
 // LLA: does no longer exist, moved to rtl/oustring
-// LLA:         if(base==4)
-// LLA:         {
+// LLA: 		if(base==4)
+// LLA: 		{
 // LLA:             intRes=str.toDouble();
 // LLA:             lastRes=(fabs(intRes-expVal[i])<=1e-35);
 // LLA:             meth="toDouble";
 // LLA:         }
 
 // LLA: dt:20040802 create compile problems within wntmsci10
-//      if(base==5)
-//      {
+//		if(base==5) 
+//		{	
 //            intRes=str.toFloat();
 //            T nPrec = _fPrecision[i];
 //            lastRes=(fabs((T)(intRes-expVal[i])) <= nPrec /* 1e-35 */ );
@@ -3220,15 +3220,15 @@ sal_Bool test_toData( const char** input, int num, sal_Int16 radix,
             intRes=str.toChar();
             lastRes=(intRes==expVal[i]);
             meth="toChar";
-        }
-
+        }		
+            
         char buf[MAXBUFLENGTH];
         buf[0] = '\'';
         cpynstr( buf + 1, input[i], MAXBUFLENGTH );
         int length = AStringLen( input[i] );
         buf[length + 1] = '\'';
         buf[length + 2] = 0;
-
+            
         c_rtl_tres_state
             (
                 hRtlTestResult,
@@ -3250,19 +3250,19 @@ sal_Bool test_toData( const char** input, int num, sal_Int16 radix,
 // LLA:     hTestResult hRtlTestResult )
 // LLA: {
 // LLA:     c_rtl_tres_state_start( hRtlTestResult, "toDouble");
-// LLA:     sal_Bool bRes=sal_False;
-// LLA:
-// LLA:     bRes=c_rtl_tres_state
+// LLA: 	sal_Bool bRes=sal_False;
+// LLA: 	
+// LLA: 	bRes=c_rtl_tres_state
 // LLA:         (
-// LLA:             hRtlTestResult,
-// LLA:             test_toData<double>((const char**)inputDouble,nDoubleCount,10,
+// LLA: 	      	hRtlTestResult,
+// LLA: 	      	test_toData<double>((const char**)inputDouble,nDoubleCount,10,
 // LLA:                                 expValDouble,4,hRtlTestResult),
-// LLA:             "toDouble",
-// LLA:             "toDouble()"
-// LLA:             );
-// LLA:     c_rtl_tres_state_end( hRtlTestResult, "toDouble");
-// LLA: //   return ( bRes );
-// LLA: }
+// LLA: 	      	"toDouble",
+// LLA: 	      	"toDouble()"
+// LLA: 	      	);
+// LLA: 	c_rtl_tres_state_end( hRtlTestResult, "toDouble");      	
+// LLA: //	 return ( bRes );
+// LLA: }		
 
 //------------------------------------------------------------------------
 //    testing the method toFloat()
@@ -3272,26 +3272,26 @@ sal_Bool test_toData( const char** input, int num, sal_Int16 radix,
 // LLA:     hTestResult hRtlTestResult )
 // LLA: {
 // LLA:     c_rtl_tres_state_start( hRtlTestResult, "toFloat");
-// LLA:     sal_Bool bRes=sal_False;
-// LLA:
-// LLA:     bRes=c_rtl_tres_state
+// LLA: 	sal_Bool bRes=sal_False;
+// LLA: 	
+// LLA: 	bRes=c_rtl_tres_state
 // LLA:         (
-// LLA:             hRtlTestResult,
-// LLA:             test_toData<float>((const char**)inputFloat,
+// LLA: 	      	hRtlTestResult,
+// LLA: 	      	test_toData<float>((const char**)inputFloat,
 // LLA:                                nFloatCount,
 // LLA:                                10, /* radix */
 // LLA:                                expValFloat,
 // LLA:                                5,  /* float */
 // LLA:                                fPrecision,
 // LLA:                                hRtlTestResult),
-// LLA:             "toFloat",
-// LLA:             "toFloat()"
-// LLA:             );
-// LLA:
+// LLA: 	      	"toFloat",
+// LLA: 	      	"toFloat()"
+// LLA: 	      	);
+// LLA: 	      	
 // LLA:     c_rtl_tres_state_end( hRtlTestResult, "toFloat");
-// LLA: //   return ( bRes );
-// LLA:
-// LLA: }
+// LLA: //	 return ( bRes ); 
+// LLA: 		
+// LLA: } 
 //------------------------------------------------------------------------
 //    testing the method toChar()
 //------------------------------------------------------------------------
@@ -3300,7 +3300,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_toChar(
 {
     c_rtl_tres_state_start( hRtlTestResult, "toChar");
     sal_Bool bRes=sal_False;
-
+    
     bRes=c_rtl_tres_state
         (
               hRtlTestResult,
@@ -3309,11 +3309,11 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_toChar(
               "toChar",
               "toChar()"
               );
-
+              
     c_rtl_tres_state_end( hRtlTestResult, "toChar");
-//   return ( bRes );
-
-}
+//	 return ( bRes ); 
+        
+} 
 //------------------------------------------------------------------------
 //    testing the method toBoolean()
 //------------------------------------------------------------------------
@@ -3380,7 +3380,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
     sal_Bool res = c_rtl_tres_state
         (
             hRtlTestResult,
-            test_toData<sal_Int32>( kBinaryNumsStr,kBinaryNumsCount,
+            test_toData<sal_Int32>( kBinaryNumsStr,kBinaryNumsCount, 
                                     kRadixBinary,expValues,1,NULL,hRtlTestResult ),
             "kBinaryNumsStr",
             "toInt32( radix 2 )"
@@ -3388,7 +3388,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
     res &= c_rtl_tres_state
         (
             hRtlTestResult,
-            test_toData<sal_Int32>( kBinaryMaxNumsStr,kInt32MaxNumsCount,
+            test_toData<sal_Int32>( kBinaryMaxNumsStr,kInt32MaxNumsCount, 
                                     kRadixBinary,kInt32MaxNums,1,NULL,hRtlTestResult ),
             "kBinaryMaxNumsStr",
             "toInt32_Boundaries( radix 2 )"
@@ -3397,7 +3397,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
     res &= c_rtl_tres_state
         (
             hRtlTestResult,
-            test_toData<sal_Int32>( kOctolNumsStr,kOctolNumsCount,
+            test_toData<sal_Int32>( kOctolNumsStr,kOctolNumsCount, 
                                     kRadixOctol,expValues,1,NULL,hRtlTestResult ),
             "kOctolNumsStr",
             "toInt32( radix 8 )"
@@ -3406,7 +3406,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
     res &= c_rtl_tres_state
         (
             hRtlTestResult,
-            test_toData<sal_Int32>( kOctolMaxNumsStr,kInt32MaxNumsCount,
+            test_toData<sal_Int32>( kOctolMaxNumsStr,kInt32MaxNumsCount, 
                                     kRadixOctol,(sal_Int32*)kInt32MaxNums,1,NULL,hRtlTestResult ),
             "kOctolMaxNumsStr",
             "toInt32_Boundaries( radix 8 )"
@@ -3424,7 +3424,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
     res &= c_rtl_tres_state
         (
             hRtlTestResult,
-            test_toData<sal_Int32>( kDecimalMaxNumsStr,kInt32MaxNumsCount,
+            test_toData<sal_Int32>( kDecimalMaxNumsStr,kInt32MaxNumsCount, 
                                     kRadixDecimal,(sal_Int32*)kInt32MaxNums,1,NULL,hRtlTestResult ),
             "kDecimalMaxNumsStr",
             "toInt32_Boundaries( radix 10 )"
@@ -3535,7 +3535,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_defaultParam(
     res &= c_rtl_tres_state
         (
             hRtlTestResult,
-            test_toData<sal_Int32>( kDecimalMaxNumsStr,kInt32MaxNumsCount,
+            test_toData<sal_Int32>( kDecimalMaxNumsStr,kInt32MaxNumsCount, 
                                     kRadixDecimal,(sal_Int32*)kInt32MaxNums,0,NULL,hRtlTestResult ),
             "kDecimalMaxNumsStr",
             "toInt32_Boundaries( radix 10 )"
@@ -3599,17 +3599,17 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_normal(
     sal_Bool res = c_rtl_tres_state
         (
             hRtlTestResult,
-            test_toData<sal_Int64>( kBinaryNumsStr,kBinaryNumsCount,
+            test_toData<sal_Int64>( kBinaryNumsStr,kBinaryNumsCount, 
                                     kRadixBinary,expValues,3,NULL,hRtlTestResult ),
             "kBinaryNumsStr",
             "toInt64( radix 2 )"
             );
-
+    
 /* LLA: does not work within wntmsci8.pro
    res &= c_rtl_tres_state
    (
    hRtlTestResult,
-   test_toData<sal_Int64>( kBinaryMaxNumsStr,kInt64MaxNumsCount,
+   test_toData<sal_Int64>( kBinaryMaxNumsStr,kInt64MaxNumsCount, 
    kRadixBinary,kInt64MaxNums,3,hRtlTestResult ),
    "kBinaryMaxNumsStr",
    "toInt64_Boundaries( radix 2 )"
@@ -3619,7 +3619,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_normal(
     res &= c_rtl_tres_state
         (
             hRtlTestResult,
-            test_toData<sal_Int64>( kOctolNumsStr,kOctolNumsCount,
+            test_toData<sal_Int64>( kOctolNumsStr,kOctolNumsCount, 
                                     kRadixOctol,expValues,3,NULL,hRtlTestResult ),
             "kOctolNumsStr",
             "toInt64( radix 8 )"
@@ -3628,7 +3628,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_normal(
     res &= c_rtl_tres_state
         (
             hRtlTestResult,
-            test_toData<sal_Int64>( kOctolMaxNumsStr,kInt64MaxNumsCount,
+            test_toData<sal_Int64>( kOctolMaxNumsStr,kInt64MaxNumsCount, 
                                     kRadixOctol,(sal_Int64*)kInt64MaxNums,3,NULL,hRtlTestResult ),
             "kOctolMaxNumsStr",
             "toInt64_Boundaries( radix 8 )"
@@ -3646,7 +3646,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_normal(
     res &= c_rtl_tres_state
         (
             hRtlTestResult,
-            test_toData<sal_Int64>( kDecimalMaxNumsStr,kInt64MaxNumsCount,
+            test_toData<sal_Int64>( kDecimalMaxNumsStr,kInt64MaxNumsCount, 
                                     kRadixDecimal,(sal_Int64*)kInt64MaxNums,3,NULL,hRtlTestResult ),
             "kDecimalMaxNumsStr",
             "toInt64_Boundaries( radix 10 )"
@@ -3731,7 +3731,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_wrongRadix(
 
     return (
         c_rtl_tres_state
-        (
+        ( 
             hRtlTestResult,
             iRes == 0,
             "wrong radix -1",
@@ -3759,7 +3759,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_defaultParam(
     res &= c_rtl_tres_state
         (
             hRtlTestResult,
-            test_toData<sal_Int64>( kDecimalMaxNumsStr,kInt64MaxNumsCount,
+            test_toData<sal_Int64>( kDecimalMaxNumsStr,kInt64MaxNumsCount, 
                                     kRadixDecimal,(sal_Int64*)kInt64MaxNums,2,NULL,hRtlTestResult ),
             "kDecimalMaxNumsStr",
             "toInt64_Boundaries( radix 10 )"

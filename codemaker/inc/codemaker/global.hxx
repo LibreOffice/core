@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,9 +67,9 @@ typedef ::std::new_alloc NewAlloc;
 #endif
 
 
-typedef ::std::list< ::rtl::OString >               StringList;
-typedef ::std::vector< ::rtl::OString >             StringVector;
-typedef ::std::set< ::rtl::OString, LessString >    StringSet;
+typedef ::std::list< ::rtl::OString > 				StringList;
+typedef ::std::vector< ::rtl::OString > 			StringVector;
+typedef ::std::set< ::rtl::OString, LessString > 	StringSet;
 
 //*************************************************************************
 // FileStream
@@ -86,16 +86,16 @@ class FileStream
 {
 public:
     FileStream();
-    FileStream(const ::rtl::OString& name, FileAccessMode nMode = FAM_READWRITE);
+    FileStream(const ::rtl::OString& name, FileAccessMode nMode = FAM_READWRITE);	
     virtual ~FileStream();
-
+    
     sal_Bool isValid();
 
     void open(const ::rtl::OString& name, FileAccessMode nMode = FAM_READWRITE);
     void createTempFile(const ::rtl::OString& sPath);
     void close();
 
-    ::rtl::OString  getName() { return m_name; }
+    ::rtl::OString 	getName() { return m_name; }
 
     bool write(void const * buffer, sal_uInt64 size);
 
@@ -111,7 +111,7 @@ private:
     sal_uInt32 checkAccessMode(FileAccessMode mode);
 
     oslFileHandle m_file;
-    ::rtl::OString  m_name;
+    ::rtl::OString  m_name;    
 };
 
 
@@ -120,8 +120,8 @@ private:
 //*************************************************************************
 ::rtl::OString getTempDir(const ::rtl::OString& sFileName);
 
-::rtl::OString createFileNameFromType(const ::rtl::OString& destination,
-                                      const ::rtl::OString type,
+::rtl::OString createFileNameFromType(const ::rtl::OString& destination, 
+                                      const ::rtl::OString type, 
                                       const ::rtl::OString postfix,
                                       sal_Bool bLowerCase=sal_False,
                                       const ::rtl::OString prefix="");
@@ -143,7 +143,7 @@ public:
     CannotDumpException(const ::rtl::OString& msg)
         : m_message(msg) {}
 
-    ::rtl::OString  m_message;
+    ::rtl::OString	m_message;	
 };
 
 

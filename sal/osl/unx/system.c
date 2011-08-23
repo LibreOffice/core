@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int 
         ndir= strlen(res->pw_dir)+1;
 
         if (nname+npasswd+nclass+ngecos
-                +ndir+strlen(res->pw_shell) < size)
+                +ndir+strlen(res->pw_shell) < size) 
         {
             memcpy(s, res, sizeof(struct passwd));
 
@@ -78,11 +78,11 @@ struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int 
               s->pw_shell = buffer;
 
                res = s;
-        }
-        else
+        } 
+        else 
             res = 0;
-    }
-
+    }  	
+      
     pthread_mutex_unlock(&getrtl_mutex);
 
         return(res);
@@ -214,8 +214,8 @@ struct spwd *getspnam_r(const char *name, struct spwd* s, char* buffer, int size
               s->sp_pwdp = buffer;
 
                res = s;
-        }
-        else
+        } 
+        else 
             res = 0;
     }
 
@@ -243,7 +243,7 @@ struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int 
         ndir= strlen(res->pw_dir)+1;
 
         if (nname+npasswd+nage+ncomment+ngecos+ndir
-                +strlen(res->pw_shell) < size)
+                +strlen(res->pw_shell) < size) 
         {
             memcpy(s, res, sizeof(struct passwd));
 
@@ -275,11 +275,11 @@ struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int 
               s->pw_shell = buffer;
 
                res = s;
-        }
-        else
+        } 
+        else 
             res = 0;
-    }
-
+    }  	
+      
     pthread_mutex_unlock(&getrtl_mutex);
 
       return res;
@@ -293,13 +293,13 @@ extern int h_errno;
 struct hostent *gethostbyname_r(const char *name, struct hostent *result,
                                 char *buffer, int buflen, int *h_errnop)
 {
-    /* buffer layout:   name\0
-     *                  array_of_pointer_to_aliases
-     *                  NULL
-     *                  alias1\0...aliasn\0
+    /* buffer layout: 	name\0
+     *					array_of_pointer_to_aliases
+     *					NULL
+     *					alias1\0...aliasn\0
      *                  array_of_pointer_to_addresses
-     *                  NULL
-     *                  addr1addr2addr3...addrn
+     * 					NULL
+     * 					addr1addr2addr3...addrn
      */
       struct hostent* res;
 
@@ -309,7 +309,7 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
       {
         int nname, naliases, naddr_list, naliasesdata, n;
         char **p, **parray, *data;
-
+        
         /* Check buffer size before copying, we want to leave the
          * buffers unmodified in case something goes wrong.
          *
@@ -327,11 +327,11 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
 
         for ( p = res->h_addr_list; *p != NULL; p++)
             naddr_list++;
-
+            
         if ( nname
              + (naliases+1)*sizeof(char*) + naliasesdata
              + (naddr_list+1)*sizeof(char*) + naddr_list*res->h_length
-             <= buflen )
+             <= buflen ) 
         {
             memcpy(result, res, sizeof(struct hostent));
 
@@ -361,7 +361,7 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
             *parray = NULL;
 
                res = result;
-        }
+        } 
         else
         {
             errno = ERANGE;
@@ -372,7 +372,7 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
     {
         *h_errnop = h_errno;
     }
-
+      
     pthread_mutex_unlock(&getrtl_mutex);
 
       return res;
@@ -391,7 +391,7 @@ int macxp_resolveAlias(char *path, int buflen)
   Boolean bFolder;
   Boolean bAliased;
   char *unprocessedPath = path;
-
+  
   if ( *unprocessedPath == '/' )
     unprocessedPath++;
 
@@ -401,7 +401,7 @@ int macxp_resolveAlias(char *path, int buflen)
       unprocessedPath = strchr( unprocessedPath, '/' );
       if ( unprocessedPath )
     *unprocessedPath = '\0';
-
+      
       nErr = noErr;
       bFolder = FALSE;
       bAliased = FALSE;
@@ -442,11 +442,11 @@ int macxp_resolveAlias(char *path, int buflen)
         }
         }
     }
-
+      
       if ( unprocessedPath )
     *unprocessedPath++ = '/';
     }
-
+  
   return nRet;
 }
 
@@ -477,7 +477,7 @@ pid_t getpid(void)
 {
     if (pid == -1)
         savePid();
-
+    
     return (pid);
 }
 #endif /*  (defined (LINUX) && (GLIBC >= 2)) */
@@ -556,31 +556,31 @@ char *fcvt(double value, int ndigit, int *decpt, int *sign)
   static char ret[256];
   char buf[256],zahl[256],format[256]="%";
   char *v1,*v2;
-
+ 
   if (value==0.0) value=1e-30;
-
+  
   if (value<0.0) *sign=1; else *sign=0;
-
-  if (value<1.0)
+ 
+  if (value<1.0) 
   {
-    *decpt=(int)log10(value);
+    *decpt=(int)log10(value); 
     value*=pow(10.0,1-*decpt);
     ndigit+=*decpt-1;
     if (ndigit<0) ndigit=0;
   }
-  else
+  else 
   {
     *decpt=(int)log10(value)+1;
   }
-
+  
   sprintf(zahl,"%d",ndigit);
   strcat(format,zahl);
   strcat(format,".");
   strcat(format,zahl);
   strcat(format,"f");
-
+  
   sprintf(buf,format,value);
-
+  
   if (ndigit!=0)
   {
     v1=strtok(buf,".");
@@ -592,7 +592,7 @@ char *fcvt(double value, int ndigit, int *decpt, int *sign)
   {
     strcpy(ret,buf);
   }
-
+    
   return(ret);
 }
 

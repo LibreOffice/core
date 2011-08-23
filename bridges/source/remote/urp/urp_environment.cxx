@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,18 +72,18 @@ rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
 //  static void dumpProperties( struct Properties *p )
 //  {
-//      fprintf( stderr , "FlushBlockSize     : %d\n" , p->nFlushBlockSize );
-//      fprintf( stderr , "OnewayTimeoutMUSEC : %d\n" , p->nOnewayTimeoutMUSEC );
-//      fprintf( stderr , "OidCacheSize       : %d\n" , p->nOidCacheSize );
-//      fprintf( stderr , "TypeCacheSize      : %d\n" , p->nTypeCacheSize );
-//      fprintf( stderr , "TidCacheSize       : %d\n" , p->nTidCacheSize );
-//      OString o = OUStringToOString( p->sSupportedVersions , RTL_TEXTENCODING_ASCII_US );
-//      fprintf( stderr , "SupportedVersions  : %s\n" , o.pData->buffer );
-//      o = OUStringToOString( p->sVersion , RTL_TEXTENCODING_ASCII_US );
-//      fprintf( stderr , "Version : %s\n" , o.pData->buffer );
-//      fprintf( stderr , "SupportsMultipleSynchronous : %d\n" , p->bSupportsMultipleSynchronous );
-//      fprintf( stderr , "SupportsMustReply   : %d\n" , p->bSupportsMustReply );
-//      fprintf( stderr , "SupportsSynchronous : %d\n" , p->bSupportsSynchronous );
+//  	fprintf( stderr , "FlushBlockSize     : %d\n" , p->nFlushBlockSize );
+//  	fprintf( stderr , "OnewayTimeoutMUSEC : %d\n" , p->nOnewayTimeoutMUSEC );
+//  	fprintf( stderr , "OidCacheSize       : %d\n" , p->nOidCacheSize );
+//  	fprintf( stderr , "TypeCacheSize      : %d\n" , p->nTypeCacheSize );
+//  	fprintf( stderr , "TidCacheSize       : %d\n" , p->nTidCacheSize );
+//  	OString o = OUStringToOString( p->sSupportedVersions , RTL_TEXTENCODING_ASCII_US );
+//  	fprintf( stderr , "SupportedVersions  : %s\n" , o.pData->buffer );
+//  	o = OUStringToOString( p->sVersion , RTL_TEXTENCODING_ASCII_US );
+//  	fprintf( stderr , "Version : %s\n" , o.pData->buffer );
+//  	fprintf( stderr , "SupportsMultipleSynchronous : %d\n" , p->bSupportsMultipleSynchronous );
+//  	fprintf( stderr , "SupportsMustReply   : %d\n" , p->bSupportsMustReply );
+//  	fprintf( stderr , "SupportsSynchronous : %d\n" , p->bSupportsSynchronous );
 //  }
 
 // PropertySetterThread

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,25 +73,25 @@ using namespace ::com::sun::star::test::performance;
 void doPerformanceTest( const Reference < XPerformanceTest > & /* xBench */)
 {
     printf( "not implemented\n" );
-//      sal_Int32 i,nLoop = 2000;
-//      sal_Int32 tStart, tEnd , tEnd2;
-//      //------------------------------------
-//      // oneway calls
-//      i = nLoop;
-//      tStart = GetTickCount();
-//      while (i--)
-//          xBench->async();
-//      tEnd = GetTickCount();
-//      xBench->sync();
-//      tEnd2 = GetTickCount();
-//      printf( "%d %d %d\n" , nLoop, tEnd - tStart , tEnd2 -tStart );
-//      // synchron calls
-//      i = nLoop;
-//      tStart = GetTickCount();
-//      while (i--)
-//          xBench->sync();
-//      tEnd = GetTickCount();
-//      printf( "%d %d \n" , nLoop, tEnd - tStart );
+//  	sal_Int32 i,nLoop = 2000;
+//  	sal_Int32 tStart, tEnd , tEnd2;
+//  	//------------------------------------
+//  	// oneway calls
+//  	i = nLoop;
+//  	tStart = GetTickCount();
+//  	while (i--)
+//  		xBench->async();
+//  	tEnd = GetTickCount();
+//    	xBench->sync();
+//  	tEnd2 = GetTickCount();
+//  	printf( "%d %d %d\n" , nLoop, tEnd - tStart , tEnd2 -tStart );
+//  	// synchron calls
+//  	i = nLoop;
+//  	tStart = GetTickCount();
+//  	while (i--)
+//  		xBench->sync();
+//  	tEnd = GetTickCount();
+//  	printf( "%d %d \n" , nLoop, tEnd - tStart );
 
 }
 
@@ -192,7 +192,7 @@ int main( int argc, char *argv[] )
                         }
 
 
-                        Reference < XInterface > rInitialObject = rBridge->getInstance(
+                        Reference < XInterface > rInitialObject	= rBridge->getInstance(
                             OUString( RTL_CONSTASCII_USTRINGPARAM("bridges-testobject")) );
 
                         if( rInitialObject.is() )
@@ -200,19 +200,19 @@ int main( int argc, char *argv[] )
                             printf( "got the remote object\n" );
                             if( ! bReverse )
                             {
-  //                                Reference < XComponent > rPerfTest( rInitialObject , UNO_QUERY );
-//                                  if( rPerfTest.is() )
-//                                  {
-//  //                                      doPerformanceTest( rPerfTest );
-//                                  }
-//                                  else
-//                                  {
+  //    							Reference < XComponent > rPerfTest( rInitialObject , UNO_QUERY );
+//        							if( rPerfTest.is() )
+//        							{
+//  //      								doPerformanceTest( rPerfTest );
+//        							}
+//        							else
+//        							{
                                     testRemote( rInitialObject );
-//                                  }
+//        							}
                             }
                         }
-//                          Reference < XComponent > rComp( rBridge , UNO_QUERY );
-//                          rComp->dispose();
+//    						Reference < XComponent > rComp( rBridge , UNO_QUERY );
+//    						rComp->dispose();
 
                         rInitialObject = Reference < XInterface > ();
                         printf( "Waiting...\n" );
@@ -222,7 +222,7 @@ int main( int argc, char *argv[] )
                     }
 
                     Reference < XBridge > rBridge = rFactory->getBridge( OUString( RTL_CONSTASCII_USTRINGPARAM("bla blub")) );
-//                      OSL_ASSERT( ! rBridge.is() );
+//      				OSL_ASSERT( ! rBridge.is() );
                 }
 
             }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,60 +24,60 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_XShapeMirror_idl__
-#define __com_sun_star_drawing_XShapeMirror_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XShapes_idl__
-#include <com/sun/star/drawing/XShapes.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_MirrorAxis_idl__
-#include <com/sun/star/drawing/MirrorAxis.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XShape_idl__
-#include <com/sun/star/drawing/XShape.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_XShapeMirror_idl__ 
+#define __com_sun_star_drawing_XShapeMirror_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_drawing_XShapes_idl__ 
+#include <com/sun/star/drawing/XShapes.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_drawing_MirrorAxis_idl__ 
+#include <com/sun/star/drawing/MirrorAxis.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_drawing_XShape_idl__ 
+#include <com/sun/star/drawing/XShape.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 /** Objects implementing this interface can be used to mirror
     <type>Shape</type>s.
 
     @deprecated
  */
 published interface XShapeMirror: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** mirrors the given <type>Shape</type>s
         at the given axis.
      */
-    void mirror( [inout] com::sun::star::drawing::XShapes aShapes,
-             [in] com::sun::star::drawing::MirrorAxis eAxis );
-
-    //-------------------------------------------------------------------------
-
+    void mirror( [inout] com::sun::star::drawing::XShapes aShapes, 
+             [in] com::sun::star::drawing::MirrorAxis eAxis ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** mirrors the given <type>Shape</type>s at
         the given axis.
      */
-    void mirrorAtAxis( [inout] com::sun::star::drawing::XShapes aShapes,
-             [in] com::sun::star::drawing::XShape aLine );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void mirrorAtAxis( [inout] com::sun::star::drawing::XShapes aShapes, 
+             [in] com::sun::star::drawing::XShape aLine ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

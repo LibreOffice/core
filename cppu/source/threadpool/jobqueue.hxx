@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,25 +37,25 @@
 namespace cppu_threadpool
 {
     extern "C" typedef void (SAL_CALL RequestFun)(void *);
-
+    
     struct Job
     {
         void *pThreadSpecificData;
         RequestFun * doRequest;
     };
+    
+    typedef	::std::list	< struct Job > JobList;
 
-    typedef ::std::list < struct Job > JobList;
-
-    typedef ::std::list < sal_Int64 > CallStackList;
+    typedef	::std::list	< sal_Int64 > CallStackList;
 
     class JobQueue
     {
     public:
         JobQueue();
         ~JobQueue();
-
+        
         void add( void *pThreadSpecificData, RequestFun * doRequest );
-
+        
         void *enter( sal_Int64 nDisposeId , sal_Bool bReturnWhenNoJob = sal_False );
         void dispose( sal_Int64 nDisposeId );
 
@@ -65,7 +65,7 @@ namespace cppu_threadpool
         sal_Bool isEmpty();
         sal_Bool isCallstackEmpty();
         sal_Bool isBusy();
-
+    
     private:
         ::osl::Mutex m_mutex;
         JobList      m_lstJob;
@@ -76,4 +76,4 @@ namespace cppu_threadpool
     };
 }
 
-#endif
+#endif 

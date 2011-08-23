@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module i18n {
 /**
     One number format code and its attributes, returned in a sequence by
     <member>XLocaleData::getAllFormats()</member>.
-
+    
     <p> Contains raw data defined in the XML locale data files. </p>
 
     @see XLocaleData

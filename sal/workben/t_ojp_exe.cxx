@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,10 @@
 
 
 #ifdef WNT
-#   define WIN32_LEAN_AND_MEAN
-#   include <windows.h>
+#	define WIN32_LEAN_AND_MEAN
+#	include <windows.h>
 #else
-#   include <unistd.h>
+#	include <unistd.h>
 #endif
 
 #include <stdio.h>
@@ -41,8 +41,8 @@
 int main(int argc, char* argv[])
 {
     printf("osl process test executable started:\n");
-
-#ifdef WNT
+    
+#ifdef WNT	
     Sleep(5000);
 #else
     sleep(5);

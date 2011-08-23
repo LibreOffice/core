@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,11 +114,11 @@ Simstr
 Simstr::operator+(const Simstr & S) const
 {
    Simstr ret = sz;
-   ret.push_back(S);
+   ret.push_back(S);                                         
    return ret;
 }
 
-Simstr &
+Simstr &     
 Simstr::operator+=(const Simstr & S)
 {
    push_back(S);
@@ -136,20 +136,20 @@ bool
 Simstr::operator!=(const Simstr & S) const
 { return strcmp(sz,S.sz) ? true : false; }
 
-bool
-Simstr::operator<(const Simstr & S) const
+bool  
+Simstr::operator<(const Simstr & S) const 
 { return (strcmp(sz,S.sz) < 0) ? true : false; }
 
-bool
-Simstr::operator>(const Simstr & S) const
+bool  
+Simstr::operator>(const Simstr & S) const 
 { return (strcmp(sz,S.sz) > 0) ? true : false; }
 
 bool
-Simstr::operator<=(const Simstr & S) const
+Simstr::operator<=(const Simstr & S) const 
 { return (strcmp(sz,S.sz) <= 0) ? true : false; }
 
-bool
-Simstr::operator>=(const Simstr & S) const
+bool  
+Simstr::operator>=(const Simstr & S) const 
 { return (strcmp(sz,S.sz) >= 0) ? true : false; }
 
 
@@ -172,7 +172,7 @@ Simstr::push_front(char c)
    len++;
 }
 
-void
+void 
 Simstr::push_back(char c)
 {
    char * result = new char[len+2];
@@ -215,7 +215,7 @@ Simstr::push_back(const Simstr & S)
 
 // Remove
 
-void
+void 
 Simstr::remove(int  pos, int  anzahl)
 {
    if (pos >= len || pos < 0 || anzahl < 1)
@@ -269,7 +269,7 @@ Simstr::pos_last(char c) const
 
 bool
 Simstr::is_no_text() const
-{
+{ 
    if (!len)
       return true;
 

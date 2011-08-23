@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,8 +60,8 @@ protected:
     AstUnionBranch* lookupEnum(AstUnionBranch* pBranch);
 
 private:
-    AstType*    m_pDiscriminantType;
-    ExprType    m_discExprType;
+    AstType* 	m_pDiscriminantType;
+    ExprType	m_discExprType;
 };
 
 #endif // _IDLC_ASTUNION_HXX_

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,12 @@
 #include "precompiled_codemaker.hxx"
 
 #include <stdio.h>
-#include    <rtl/alloc.h>
-#include    <rtl/ustring.hxx>
-#include    <rtl/strbuf.hxx>
+#include	<rtl/alloc.h>
+#include	<rtl/ustring.hxx>
+#include	<rtl/strbuf.hxx>
 
-#include    "corbatype.hxx"
-#include    "corbaoptions.hxx"
+#include	"corbatype.hxx"
+#include	"corbaoptions.hxx"
 
 #include <hash_set>
 #include <list>
@@ -47,8 +47,8 @@ using namespace rtl;
 //*************************************************************************
 CorbaType::CorbaType(TypeReader& typeReader,
         const OString& typeName,
-        const TypeManager& typeMgr,
-        const TypeDependency& typeDependencies,
+        const TypeManager& typeMgr, 
+        const TypeDependency& typeDependencies, 
         TypeSet* generatedConversions)
     : m_inheritedMemberCount(0)
     , m_indentLength(0)
@@ -64,8 +64,8 @@ CorbaType::CorbaType(TypeReader& typeReader,
 
 CorbaType::~CorbaType()
 {
-
-}
+    
+}	
 
 sal_Bool CorbaType::isNestedTypeByName(const ::rtl::OString& type)
 {
@@ -89,14 +89,14 @@ sal_Bool CorbaType::dump(CorbaOptions* pOptions, FileStream& o, TypeSet* allread
 
     ret = dumpConversionFunctions(o, allreadyDumped);
 
-    return ret;
+    return ret; 
 }
 
 sal_Bool CorbaType::dumpDependedTypes(CorbaOptions* pOptions, FileStream& o, TypeSet* allreadyDumped)
     throw( CannotDumpException )
 {
     sal_Bool ret = sal_True;
-
+    
     TypeUsingSet usingSet(m_dependencies.getDependencies(m_typeName));
 
     TypeUsingSet::const_iterator iter = usingSet.begin();
@@ -107,7 +107,7 @@ sal_Bool CorbaType::dumpDependedTypes(CorbaOptions* pOptions, FileStream& o, Typ
         typeName = (*iter).m_type;
         if ((index = typeName.lastIndexOf(']')) > 0)
             typeName = typeName.copy(index + 1);
-
+        
         if (getUnoBaseType(typeName).getLength() == 0)
         {
             if (!produceType(typeName,
@@ -116,23 +116,23 @@ sal_Bool CorbaType::dumpDependedTypes(CorbaOptions* pOptions, FileStream& o, Typ
                 pOptions,
                 o, allreadyDumped, m_generatedConversions))
             {
-    fprintf(stderr, "%s ERROR: %s\n",
-            pOptions->getProgramName().getStr(),
+    fprintf(stderr, "%s ERROR: %s\n", 
+            pOptions->getProgramName().getStr(), 
             OString("cannot dump Type '" + typeName + "'").getStr());
     exit(99);
             }
         }
         ++iter;
-    }
+    }		
 
-    return ret;
+    return ret; 
 }
 
 sal_Bool CorbaType::dumpConversionFunctions(FileStream& o, TypeSet* allreadyDumped)
     throw( CannotDumpException )
 {
     if (m_typeName.lastIndexOf(']') < 0)
-    {
+    { 
         dumpInclude(o, allreadyDumped, m_typeName, "hpp", sal_False);
         dumpDepIncludes(o, allreadyDumped, m_typeName, "hpp");
 
@@ -147,43 +147,43 @@ void CorbaType::dumpDefaultHxxIncludes(FileStream& o)
 {
     o << "#ifndef _OSL_MUTEX_HXX_\n"
       << "#include <osl/mutex.hxx>\n"
-      << "#endif\n\n";
+      << "#endif\n\n";		
 
     o << "#ifndef _RTL_USTRING_HXX_\n"
       << "#include <rtl/ustring.hxx>\n"
-      << "#endif\n\n";
+      << "#endif\n\n";		
 
     o << "#ifndef _COM_SUN_STAR_UNO_TYPE_HXX_\n"
       << "#include <com/sun/star/uno/Type.hxx>\n"
-      << "#endif\n";
+      << "#endif\n";		
 
     o << "#ifndef _COM_SUN_STAR_UNO_ANY_HXX_\n"
       << "#include <com/sun/star/uno/Any.hxx>\n"
-      << "#endif\n";
+      << "#endif\n";		
 
     o << "#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_\n"
       << "#include <com/sun/star/uno/Reference.hxx>\n"
-      << "#endif\n";
+      << "#endif\n";		
 
     o << "#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_\n"
       << "#include <com/sun/star/uno/XInterface.hpp>\n"
-      << "#endif\n";
+      << "#endif\n";		
 
     o << "#ifndef _BONOBO_NULLINTERFACE_HPP_\n"
       << "#include <Bonobo/NullInterface.hpp>\n"
-      << "#endif\n";
+      << "#endif\n";		
 
     o << "#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_\n"
       << "#include <com/sun/star/uno/Exception.hpp>\n"
-      << "#endif\n";
+      << "#endif\n";		
 
     o << "#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_\n"
       << "#include <com/sun/star/uno/RuntimeException.hpp>\n"
-      << "#endif\n";
+      << "#endif\n";		
 
     o << "#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_\n"
       << "#include <com/sun/star/uno/Sequence.hxx>\n"
-      << "#endif\n";
+      << "#endif\n";		
 }
 
 
@@ -201,45 +201,45 @@ void CorbaType::dumpInclude(FileStream& o, TypeSet* allreadyDumped, const OStrin
         !realTypeName.equals("com/sun/star/uno/RuntimeException"))
     {
         TypeSet::const_iterator iter = allreadyDumped->find(realTypeName);
-
+        
         if (iter == allreadyDumped->end())
         {
             allreadyDumped->insert(realTypeName);
 
             sal_uInt32 length = 3+ m_typeName.getLength() + strlen(prefix);
-
-            if (bExtended)
+        
+            if (bExtended) 
                 length += m_name.getLength() + 1;
-
+            
             OStringBuffer tmpBuf(length);
-
+            
             tmpBuf.append('_');
             tmpBuf.append(typeName);
-            tmpBuf.append('_');
+            tmpBuf.append('_');	
             if (bExtended)
             {
                 tmpBuf.append(m_name);
-                tmpBuf.append('_');
+                tmpBuf.append('_');	
             }
             tmpBuf.append(prefix);
-            tmpBuf.append('_');
-
+            tmpBuf.append('_');	
+            
             OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toAsciiUpperCase());
-
+            
             length = 1 + typeName.getLength() + strlen(prefix);
             if (bExtended)
                 length += m_name.getLength() + 1;
-
+            
             tmpBuf.ensureCapacity(length);
             tmpBuf.append(typeName);
             if (bExtended)
             {
-                tmpBuf.append('/');
+                tmpBuf.append('/');	
                 tmpBuf.append(m_name);
             }
-            tmpBuf.append('.');
+            tmpBuf.append('.');	
             tmpBuf.append(prefix);
-
+            
             o << "#ifndef " << tmp << "\n#include <";
             if (bCaseSensitive)
             {
@@ -286,9 +286,9 @@ void CorbaType::dumpInclude(FileStream& o, TypeSet* allreadyDumped, const OStrin
                 for (sal_uInt32 i = 0; i < nestedTypeNames.getLength(); i++)
                 {
                     OString nTypeName(OUStringToOString(nestedTypeNames.getElement(i), RTL_TEXTENCODING_UTF8));
-
+                    
                     nTypeName = checkRealBaseType(nTypeName.copy(5));
-
+                    
                     if (BT_INVALID == isBaseType(nTypeName))
                     {
                         allreadyDumped->insert(nTypeName);
@@ -303,7 +303,7 @@ void CorbaType::dumpInclude(FileStream& o, TypeSet* allreadyDumped, const OStrin
                 }
                 else
                 {
-                    realTypeName = "";
+                    realTypeName = "";	
                 }
             }
             while (realTypeName.getLength() > 0);
@@ -311,20 +311,20 @@ void CorbaType::dumpInclude(FileStream& o, TypeSet* allreadyDumped, const OStrin
             o << "}; // namespace bonobobridge\n";
         }
     }
-}
+}	
 
 void CorbaType::dumpDepIncludes(FileStream& o, TypeSet* allreadyDumped, const OString& typeName, sal_Char* prefix)
 {
     TypeUsingSet usingSet(m_dependencies.getDependencies(typeName));
-
+    
     TypeUsingSet::const_iterator iter = usingSet.begin();
 
-    OString     sPrefix(OString(prefix).toAsciiUpperCase());
-    sal_Bool    bSequenceDumped = sal_False;
-    sal_Bool    bInterfaceDumped = sal_False;
-    sal_uInt32  index = 0;
-    sal_uInt32  seqNum = 0;
-    OString     relType;
+    OString 	sPrefix(OString(prefix).toAsciiUpperCase());
+    sal_Bool 	bSequenceDumped = sal_False;
+    sal_Bool 	bInterfaceDumped = sal_False;
+    sal_uInt32 	index = 0;
+    sal_uInt32 	seqNum = 0;
+    OString 	relType;
     while (iter != usingSet.end())
     {
         index = (*iter).m_type.lastIndexOf(']');
@@ -344,7 +344,7 @@ void CorbaType::dumpDepIncludes(FileStream& o, TypeSet* allreadyDumped, const OS
             {
                 bSequenceDumped = sal_True;
             }
-
+            
             if (getUnoBaseType(relType).getLength() == 0 &&
                 m_typeName != relType)
             {
@@ -355,7 +355,7 @@ void CorbaType::dumpDepIncludes(FileStream& o, TypeSet* allreadyDumped, const OS
                     {
                         bInterfaceDumped = sal_True;
                     }
-
+                    
                     if (!((*iter).m_use & TYPEUSE_SUPER))
                     {
                         o << "\n";
@@ -371,31 +371,31 @@ void CorbaType::dumpDepIncludes(FileStream& o, TypeSet* allreadyDumped, const OS
                 {
                     dumpInclude(o, allreadyDumped, relType, prefix);
                 }
-            }
+            } 
         }
         ++iter;
-    }
-}
+    }		
+}	
 
 void CorbaType::dumpNameSpace(FileStream& o, sal_Bool bOpen, sal_Bool bFull, const OString& type)
 {
     OString typeName(type);
-    sal_Bool bOneLine = sal_True;
+    sal_Bool bOneLine = sal_True; 
     if (typeName.getLength() == 0)
     {
         typeName = m_typeName;
         bOneLine = sal_False;
     }
-
+    
     if (typeName == "/")
         return;
 
     if (typeName.indexOf( '/' ) == -1 && !bFull)
-        return;
-
+        return;		
+    
     if (!bFull)
         typeName = typeName.copy( 0, typeName.lastIndexOf( '/' ) );
-
+    
     if (bOpen)
     {
         sal_Int32 nIndex = 0;
@@ -428,18 +428,18 @@ void CorbaType::dumpNameSpace(FileStream& o, sal_Bool bOpen, sal_Bool bFull, con
 sal_uInt32 CorbaType::getMemberCount()
 {
     sal_uInt32 count = m_reader.getMethodCount();
-
+    
     sal_uInt32 fieldCount = m_reader.getFieldCount();
     RTFieldAccess access = RT_ACCESS_INVALID;
     for (sal_uInt16 i=0; i < fieldCount; i++)
     {
         access = m_reader.getFieldAccess(i);
-
+        
         if (access != RT_ACCESS_CONST && access != RT_ACCESS_INVALID)
             count++;
-    }
+    }		
     return count;
-}
+}	
 
 sal_uInt32 CorbaType::checkInheritedMemberCount(const TypeReader* pReader)
 {
@@ -457,7 +457,7 @@ sal_uInt32 CorbaType::checkInheritedMemberCount(const TypeReader* pReader)
         TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
         if ( aSuperReader.isValid() )
         {
-            count = checkInheritedMemberCount(&aSuperReader);
+            count = checkInheritedMemberCount(&aSuperReader);		
         }
     }
 
@@ -469,29 +469,29 @@ sal_uInt32 CorbaType::checkInheritedMemberCount(const TypeReader* pReader)
         for (sal_uInt16 i=0; i < fieldCount; i++)
         {
             access = pReader->getFieldAccess(i);
-
+            
             if (access != RT_ACCESS_CONST && access != RT_ACCESS_INVALID)
                 count++;
-        }
+        }	
     }
 
     return count;
-}
+}	
 
 sal_uInt32 CorbaType::getInheritedMemberCount()
 {
     if (m_inheritedMemberCount == 0)
     {
-        m_inheritedMemberCount = checkInheritedMemberCount(0);
+        m_inheritedMemberCount = checkInheritedMemberCount(0);	
     }
-
+    
     return m_inheritedMemberCount;
-}
+}	
 
-OString CorbaType::getTypeClass(const OString& type, sal_Bool bCStyle)
+OString	CorbaType::getTypeClass(const OString& type, sal_Bool bCStyle)
 {
-    OString     typeName = (type.getLength() > 0 ? type : m_typeName);
-    RTTypeClass rtTypeClass = RT_TYPE_INVALID;
+    OString 	typeName = (type.getLength() > 0 ? type : m_typeName);
+    RTTypeClass	rtTypeClass = RT_TYPE_INVALID;
 
     if (type.getLength() > 0)
     {
@@ -528,7 +528,7 @@ OString CorbaType::getTypeClass(const OString& type, sal_Bool bCStyle)
     OString realType = checkRealBaseType( typeName );
     return getTypeClass( realType, bCStyle );
             }
-//          return bCStyle ? "typelib_TypeClass_TYPEDEF" : "::com::sun::star::uno::TypeClass_TYPEDEF";
+//			return bCStyle ? "typelib_TypeClass_TYPEDEF" : "::com::sun::star::uno::TypeClass_TYPEDEF";
             break;
         case RT_TYPE_SERVICE:
             return bCStyle ? "typelib_TypeClass_SERVICE" : "::com::sun::star::uno::TypeClass_SERVICE";
@@ -568,9 +568,9 @@ OString CorbaType::getTypeClass(const OString& type, sal_Bool bCStyle)
             }
             break;
     }
-
+    
     return bCStyle ? "typelib_TypeClass_UNKNOWN" : "::com::sun::star::uno::TypeClass_UNKNOWN";
-}
+}	
 
 OString CorbaType::printUnoType(const OString& type, sal_Bool bConst, sal_Bool bRef, sal_Bool bNative)
     throw( CannotDumpException )
@@ -579,7 +579,7 @@ OString CorbaType::printUnoType(const OString& type, sal_Bool bConst, sal_Bool b
     OString sType(checkRealBaseType(type, sal_True));
     sal_uInt32 index = sType.lastIndexOf(']');
     sal_uInt32 seqNum = (index > 0 ? ((index+1) / 2) : 0);
-
+    
     OString relType = (index > 0 ? (sType).copy(index+1) : type);
 
     RTTypeClass typeClass = m_typeMgr.getTypeClass(relType);
@@ -591,7 +591,7 @@ OString CorbaType::printUnoType(const OString& type, sal_Bool bConst, sal_Bool b
     {
         ret.append("::com::sun::star::uno::Sequence< ");
     }
-
+    
     switch (typeClass)
     {
     case RT_TYPE_INTERFACE:
@@ -625,15 +625,15 @@ OString CorbaType::printUnoType(const OString& type, sal_Bool bConst, sal_Bool b
 
     if (bRef) ret.append("&");
     return ret.makeStringAndClear();
-}
+}	
 
-void CorbaType::dumpUnoType(FileStream& o, const OString& type,
+void CorbaType::dumpUnoType(FileStream& o, const OString& type, 
             sal_Bool bConst, sal_Bool bRef, sal_Bool bNative)
     throw( CannotDumpException )
 {
     OString ret = printUnoType(type, bConst, bRef, bNative);
     o << ret;
-}
+}	
 
 OString CorbaType::printCorbaType(const OString& type, sal_Bool bConst, sal_Bool bRef)
     throw( CannotDumpException )
@@ -644,7 +644,7 @@ OString CorbaType::printCorbaType(const OString& type, sal_Bool bConst, sal_Bool
 
     sal_uInt32 index = sType.lastIndexOf(']');
     sal_uInt32 seqNum = (index > 0 ? ((index+1) / 2) : 0);
-
+    
     OString relType = (index > 0 ? (sType).copy(index+1) : type);
 
     RTTypeClass typeClass = m_typeMgr.getTypeClass(relType);
@@ -669,7 +669,7 @@ OString CorbaType::printCorbaType(const OString& type, sal_Bool bConst, sal_Bool
     {
         ret.append("CORBA_sequence_");
     }
-
+    
     switch (typeClass)
     {
     case RT_TYPE_INTERFACE:
@@ -691,11 +691,11 @@ OString CorbaType::printCorbaType(const OString& type, sal_Bool bConst, sal_Bool
         ret.append(relType.replace('/', '_'));
         break;
     }
-
+    
     if (bRef) ret.append("&");
-
+    
     return ret.makeStringAndClear();
-}
+}	
 
 sal_Bool CorbaType::isPassedAsPointer(const OString& type)
 {
@@ -705,7 +705,7 @@ sal_Bool CorbaType::isPassedAsPointer(const OString& type)
 
     sal_Int32 index = sType.lastIndexOf(']');
     sal_Int32 seqNum = (index > 0 ? ((index+1) / 2) : 0);
-
+    
     OString relType = (index > 0 ? (sType).copy(index+1) : type);
 
     if (index > 0)
@@ -719,7 +719,7 @@ sal_Bool CorbaType::isPassedAsPointer(const OString& type)
             fakeTest = "_faked_array_"+sType;
 
         TypeReader fakeTestReader = m_typeMgr.getTypeReader(fakeTest);
-
+        
         if (fakeTestReader.isValid())
             ret = sal_False;
         else
@@ -746,7 +746,7 @@ sal_Bool CorbaType::isPassedAsPointer(const OString& type)
             break;
         }
     }
-
+    
     return ret;
 }
 
@@ -779,7 +779,7 @@ sal_Bool CorbaType::isArray(const OString& type)
 
     sal_Int32 index = sType.lastIndexOf(']');
     sal_Int32 seqNum = (index > 0 ? ((index+1) / 2) : 0);
-
+    
     OString relType = (index > 0 ? (sType).copy(index+1) : type);
 
     if (index > 0)
@@ -793,11 +793,11 @@ sal_Bool CorbaType::isArray(const OString& type)
             fakeTest = "_faked_array_"+sType;
 
         TypeReader fakeTestReader = m_typeMgr.getTypeReader(fakeTest);
-
+        
         if (fakeTestReader.isValid())
             ret = sal_True;
     }
-
+    
     return ret;
 }
 
@@ -809,7 +809,7 @@ OString CorbaType::printCorbaParameter(const OString& type, sal_Bool bOut)
     OString sType(type);
     sal_Int32 index = sType.lastIndexOf(']');
     sal_Int32 seqNum = (index > 0 ? ((index+1) / 2) : 0);
-
+    
     OString relType = (index > 0 ? (sType).copy(index+1) : type);
 
     RTTypeClass typeClass = m_typeMgr.getTypeClass(relType);
@@ -859,17 +859,17 @@ OString CorbaType::printCorbaParameter(const OString& type, sal_Bool bOut)
     }
 
     return ret.makeStringAndClear();
-}
+}	
 
-void CorbaType::dumpCorbaType(FileStream& o, const OString& type,
+void CorbaType::dumpCorbaType(FileStream& o, const OString& type, 
             sal_Bool bConst, sal_Bool bRef)
     throw( CannotDumpException )
 {
     OString ret = printCorbaType(type, bConst, bRef);
     o << ret;
-}
+}	
 
-OString CorbaType::getUnoBaseType(const OString& type)
+OString	CorbaType::getUnoBaseType(const OString& type)
 {
     if (type.equals("long"))
         return "sal_Int32";
@@ -905,9 +905,9 @@ OString CorbaType::getUnoBaseType(const OString& type)
         return "sal_uInt64";
 
     return OString();
-}
+}	
 
-OString CorbaType::getCorbaBaseType(const OString& type)
+OString	CorbaType::getCorbaBaseType(const OString& type)
 {
     if (type.equals("long"))
         return "CORBA_long";
@@ -943,7 +943,7 @@ OString CorbaType::getCorbaBaseType(const OString& type)
         return "CORBA_unsigned_long_long";
 
     return OString();
-}
+}	
 
 
 void CorbaType::dumpTypeInit(FileStream& o, const OString& typeName)
@@ -951,7 +951,7 @@ void CorbaType::dumpTypeInit(FileStream& o, const OString& typeName)
     OString type(checkSpecialCorbaType(typeName));
 
     BASETYPE baseType = isBaseType(type);
-
+    
     switch (baseType)
     {
         case BT_BOOLEAN:
@@ -970,7 +970,7 @@ void CorbaType::dumpTypeInit(FileStream& o, const OString& typeName)
             dumpUnoType(o, type);
             o << ")" << "0)";
             return;
-    }
+    }	
 
     RTTypeClass typeClass = m_typeMgr.getTypeClass(type);
 
@@ -981,7 +981,7 @@ void CorbaType::dumpTypeInit(FileStream& o, const OString& typeName)
         if (aReaderLoader.isLoaded())
         {
             TypeReader reader(m_typeMgr.getTypeReader(type));
-
+            
             if ( reader.isValid() )
             {
                 sal_Int32 nPos = type.lastIndexOf( '/' );
@@ -992,9 +992,9 @@ void CorbaType::dumpTypeInit(FileStream& o, const OString& typeName)
             }
         }
     }
-
-    o << "()";
-}
+    
+    o << "()";	
+}	
 
 BASETYPE CorbaType::isBaseType(const OString& type)
 {
@@ -1026,28 +1026,28 @@ BASETYPE CorbaType::isBaseType(const OString& type)
         return BT_UNSIGNED_SHORT;
     if (type.equals("unsigned hyper"))
         return BT_UNSIGNED_HYPER;
-
+    
     return BT_INVALID;
-}
+}	
 
 OString CorbaType::typeToIdentifier(const OString& type)
 {
     sal_uInt32 index = type.lastIndexOf(']');
     sal_uInt32 seqNum = (index > 0 ? ((index+1) / 2) : 0);
-
+    
     OString relType = (index > 0 ? ((OString)type).copy(index+1) : type);
     OString sIdentifier;
-
+    
     while( seqNum > 0 )
     {
         sIdentifier += OString("seq");
 
         if ( --seqNum == 0 )
         {
-            sIdentifier += OString("_");
+            sIdentifier += OString("_");		
         }
     }
-
+    
     if ( isBaseType(relType) )
     {
         sIdentifier += relType.replace(' ', '_');
@@ -1056,21 +1056,21 @@ OString CorbaType::typeToIdentifier(const OString& type)
         sIdentifier += relType.replace('/', '_');
     }
 
-
+    
     return sIdentifier;
-}
+}	
 
-OString CorbaType::checkSpecialCorbaType(const OString& type)
+OString	CorbaType::checkSpecialCorbaType(const OString& type)
 {
     OString baseType(type);
 
     RegistryTypeReaderLoader & rReaderLoader = getRegistryTypeReaderLoader();
 
-    RegistryKey     key;
-    sal_uInt8*      pBuffer=NULL;
-    RTTypeClass     typeClass;
-    sal_Bool        isTypeDef = (m_typeMgr.getTypeClass(baseType) == RT_TYPE_TYPEDEF);
-    TypeReader      reader;
+    RegistryKey 	key;
+    sal_uInt8*		pBuffer=NULL;
+    RTTypeClass 	typeClass;
+    sal_Bool 		isTypeDef = (m_typeMgr.getTypeClass(baseType) == RT_TYPE_TYPEDEF);
+    TypeReader		reader;
 
     while (isTypeDef)
     {
@@ -1079,7 +1079,7 @@ OString CorbaType::checkSpecialCorbaType(const OString& type)
         if (reader.isValid())
         {
             typeClass = reader.getTypeClass();
-
+        
             if (typeClass == RT_TYPE_TYPEDEF)
                 baseType = reader.getSuperTypeName();
             else
@@ -1087,11 +1087,11 @@ OString CorbaType::checkSpecialCorbaType(const OString& type)
         } else
             break;
     }
-
+    
     return baseType;
-}
+}	
 
-OString CorbaType::checkRealBaseType(const OString& type, sal_Bool bResolveTypeOnly)
+OString	CorbaType::checkRealBaseType(const OString& type, sal_Bool bResolveTypeOnly)
 {
     sal_uInt32 index = type.lastIndexOf(']');
     OString baseType = (index > 0 ? ((OString)type).copy(index+1) : type);
@@ -1099,20 +1099,20 @@ OString CorbaType::checkRealBaseType(const OString& type, sal_Bool bResolveTypeO
 
     RegistryTypeReaderLoader & rReaderLoader = getRegistryTypeReaderLoader();
 
-    RegistryKey     key;
-    sal_uInt8*      pBuffer=NULL;
-    RTTypeClass     typeClass;
-    sal_Bool        mustBeChecked = (m_typeMgr.getTypeClass(baseType) == RT_TYPE_TYPEDEF);
-    TypeReader      reader;
-
+    RegistryKey 	key;
+    sal_uInt8*		pBuffer=NULL;
+    RTTypeClass 	typeClass;
+    sal_Bool 		mustBeChecked = (m_typeMgr.getTypeClass(baseType) == RT_TYPE_TYPEDEF);
+    TypeReader		reader;
+    
     while (mustBeChecked)
     {
         reader = m_typeMgr.getTypeReader(baseType);
-
+    
         if (reader.isValid())
         {
             typeClass = reader.getTypeClass();
-
+        
             if (typeClass == RT_TYPE_TYPEDEF)
             {
                 baseType = reader.getSuperTypeName();
@@ -1127,26 +1127,26 @@ OString CorbaType::checkRealBaseType(const OString& type, sal_Bool bResolveTypeO
         } else
             break;
     }
-
+    
     if ( bResolveTypeOnly )
         baseType = seqPrefix + baseType;
-
+        
     return baseType;
-}
+}	
 
 
 void CorbaType::inc(sal_uInt32 num)
 {
-    m_indentLength += num;
-}
+    m_indentLength += num;		
+}	
 
 void CorbaType::dec(sal_uInt32 num)
 {
     if (m_indentLength - num < 0)
         m_indentLength = 0;
     else
-        m_indentLength -= num;
-}
+        m_indentLength -= num;		
+}	
 
 OString CorbaType::indent()
 {
@@ -1157,9 +1157,9 @@ OString CorbaType::indent()
         tmp.append(' ');
     }
     return tmp.makeStringAndClear();
-}
+}	
 
-OString CorbaType::indent(sal_uInt32 num)
+OString	CorbaType::indent(sal_uInt32 num)
 {
     OStringBuffer tmp(m_indentLength + num);
 
@@ -1168,33 +1168,33 @@ OString CorbaType::indent(sal_uInt32 num)
         tmp.append(' ');
     }
     return tmp.makeStringAndClear();
-}
+}	
 
 //*************************************************************************
 // InterfaceType
 //*************************************************************************
 InterfaceType::InterfaceType(TypeReader& typeReader,
                                 const OString& typeName,
-                                const TypeManager& typeMgr,
-                                const TypeDependency& typeDependencies,
+                                const TypeManager& typeMgr, 
+                                const TypeDependency& typeDependencies, 
                                 TypeSet* generatedConversions)
     : CorbaType(typeReader, typeName, typeMgr, typeDependencies, generatedConversions)
 {
-    m_inheritedMemberCount = 0;
+    m_inheritedMemberCount = 0;	
     m_hasAttributes = sal_False;
     m_hasMethods = sal_False;
 }
 
 InterfaceType::~InterfaceType()
 {
-
+    
 }
 
 
 void InterfaceType::dumpUnoMethods(FileStream& o, sal_Bool bDeclOnly, sal_Bool bDelegateToSuper)
 {
     OString superName(m_reader.getSuperTypeName());
-    if (bDeclOnly &&
+    if (bDeclOnly && 
         !superName.equals("Bonobo/NullInterface") &&
         !superName.equals("com/sun/star/uno/XInterface"))
     {
@@ -1207,11 +1207,11 @@ void InterfaceType::dumpUnoMethods(FileStream& o, sal_Bool bDeclOnly, sal_Bool b
     sal_uInt32 methodCount = m_reader.getMethodCount();
     sal_Bool first=sal_True;
 
-    OString methodName, returnType, paramType, paramName;
+    OString methodName, returnType, paramType, paramName;	
     sal_uInt32 paramCount = 0;
     sal_uInt32 excCount = 0;
     RTMethodMode methodMode = RT_MODE_INVALID;
-    RTParamMode  paramMode = RT_PARAM_INVALID;
+    RTParamMode	 paramMode = RT_PARAM_INVALID;
 
     sal_Bool bRef = sal_False;
     sal_Bool bConst = sal_False;
@@ -1227,13 +1227,13 @@ void InterfaceType::dumpUnoMethods(FileStream& o, sal_Bool bDeclOnly, sal_Bool b
 
         if ( methodName.equals("acquire") || methodName.equals("release") )
             bWithRunTimeExcp = sal_False;
-
+            
         if (first)
         {
             first = sal_False;
             o << "\n" << indent() << "// Methods\n";
-        }
-
+        }	
+        
         o << indent();
         if (bDeclOnly)
             o << "virtual ";
@@ -1251,10 +1251,10 @@ void InterfaceType::dumpUnoMethods(FileStream& o, sal_Bool bDeclOnly, sal_Bool b
         sal_uInt16 j;
         for (j=0; j < paramCount; j++)
         {
-            paramName = m_reader.getMethodParamName(i, j);
-            paramType = m_reader.getMethodParamType(i, j);
+            paramName =	m_reader.getMethodParamName(i, j);
+            paramType =	m_reader.getMethodParamType(i, j);
             paramMode = m_reader.getMethodParamMode(i, j);
-
+            
             switch (paramMode)
             {
             case RT_PARAM_IN:
@@ -1277,16 +1277,16 @@ void InterfaceType::dumpUnoMethods(FileStream& o, sal_Bool bDeclOnly, sal_Bool b
                 bConst = sal_False;
                 bRef = sal_True;
                 break;
-            }
-
-            dumpUnoType(o, paramType, bConst, bRef);
+            }	
+            
+            dumpUnoType(o, paramType, bConst, bRef); 
             o << " " << paramName;
-
+            
             if (j+1 < paramCount) o << ", ";
         }
-        o << "  )";
-
-        o << "   throw(";
+        o << " 	)";
+        
+        o << "	 throw(";
         OString excpName;
         for (j=0; j < excCount; j++)
         {
@@ -1296,10 +1296,10 @@ void InterfaceType::dumpUnoMethods(FileStream& o, sal_Bool bDeclOnly, sal_Bool b
             if (bWithRunTimeExcp)
                 o << ", ";
         }
-
+        
         if ( bWithRunTimeExcp )
         {
-            o << "  ::com::sun::star::uno::RuntimeException";
+            o << "	::com::sun::star::uno::RuntimeException"; 
         }
 
         if (bDeclOnly && bDelegateToSuper)
@@ -1314,7 +1314,7 @@ void InterfaceType::dumpUnoMethods(FileStream& o, sal_Bool bDeclOnly, sal_Bool b
             o << "::" << methodName << "( ";
             for (j = 0; j < paramCount; j++)
             {
-                paramName = m_reader.getMethodParamName(i, j);
+                paramName =	m_reader.getMethodParamName(i, j);
                 o << paramName;
                 if (j < (paramCount-1))
                     o << ", ";
@@ -1357,8 +1357,8 @@ void InterfaceType::dumpUnoMethods(FileStream& o, sal_Bool bDeclOnly, sal_Bool b
 
             for (j=0; j < paramCount; j++)
             {
-                paramName = m_reader.getMethodParamName(i, j);
-                paramType = m_reader.getMethodParamType(i, j);
+                paramName =	m_reader.getMethodParamName(i, j);
+                paramType =	m_reader.getMethodParamType(i, j);
                 paramMode = m_reader.getMethodParamMode(i, j);
 
                 preBuffer.append("    ");
@@ -1489,9 +1489,9 @@ void InterfaceType::dumpUnoMethods(FileStream& o, sal_Bool bDeclOnly, sal_Bool b
             o << indent() << "}\n";
         }
         else
-            o << "  );\n";
+            o << "	);\n";
     }
-}
+}	
 
 void InterfaceType::dumpCorbaMethods(FileStream& o, sal_Bool bDeclOnly)
 {
@@ -1499,11 +1499,11 @@ void InterfaceType::dumpCorbaMethods(FileStream& o, sal_Bool bDeclOnly)
 
     sal_uInt32 methodCount = m_reader.getMethodCount();
 
-    OString methodName, returnType, paramType, paramName;
+    OString methodName, returnType, paramType, paramName;	
     sal_uInt32 paramCount = 0;
     sal_uInt32 excCount = 0;
     RTMethodMode methodMode = RT_MODE_INVALID;
-    RTParamMode  paramMode = RT_PARAM_INVALID;
+    RTParamMode	 paramMode = RT_PARAM_INVALID;
 
     sal_Bool bRef = sal_False;
     sal_Bool bConst = sal_False;
@@ -1531,8 +1531,8 @@ void InterfaceType::dumpCorbaMethods(FileStream& o, sal_Bool bDeclOnly)
         sal_uInt16 j;
         for (j=0; j < paramCount; j++)
         {
-            paramName = m_reader.getMethodParamName(i, j);
-            paramType = m_reader.getMethodParamType(i, j);
+            paramName =	m_reader.getMethodParamName(i, j);
+            paramType =	m_reader.getMethodParamType(i, j);
             paramMode = m_reader.getMethodParamMode(i, j);
 
             if ((isPassedAsPointer(paramType) || paramType.equals("string") || isArray(paramType)) &&
@@ -1545,7 +1545,7 @@ void InterfaceType::dumpCorbaMethods(FileStream& o, sal_Bool bDeclOnly)
             {
                 if (paramMode == RT_PARAM_OUT)
                     o << "**";
-                else
+                else 
                     o << "*";
             }
             else
@@ -1554,7 +1554,7 @@ void InterfaceType::dumpCorbaMethods(FileStream& o, sal_Bool bDeclOnly)
                     o << "*";
             }
 
-
+            
             o << " " << paramName << ", ";
         }
 
@@ -1605,8 +1605,8 @@ void InterfaceType::dumpCorbaMethods(FileStream& o, sal_Bool bDeclOnly)
 
             for (j=0; j < paramCount; j++)
             {
-                paramName = m_reader.getMethodParamName(i, j);
-                paramType = m_reader.getMethodParamType(i, j);
+                paramName =	m_reader.getMethodParamName(i, j);
+                paramType =	m_reader.getMethodParamType(i, j);
                 paramMode = m_reader.getMethodParamMode(i, j);
 
                 preBuffer.append("    ");
@@ -1655,7 +1655,7 @@ void InterfaceType::dumpCorbaMethods(FileStream& o, sal_Bool bDeclOnly)
                             preBuffer.append("*");
                         preBuffer.append(paramName);
                         preBuffer.append(", ((bonobobridge::UNO_POA_com_sun_star_uno_XInterface*)_servant)->pThis->getBridge());\n");
-
+                        
                         postBuffer.append("    cpp_convert_u2b(");
                         if (isPassedAsPointer(paramType))
                             postBuffer.append("*");
@@ -1709,7 +1709,7 @@ void InterfaceType::dumpCorbaMethods(FileStream& o, sal_Bool bDeclOnly)
             o << "}\n";
         }
     }
-}
+}	
 
 void InterfaceType::dumpFunctions(FileStream& o)
 {
@@ -1724,7 +1724,7 @@ void InterfaceType::dumpFunctions(FileStream& o)
     /* bonobo implementation class */
     o << "class BonoboWrapper_";
     dumpCorbaType(o, m_typeName, sal_False, sal_False);
-
+    
     OString superName(m_reader.getSuperTypeName());
     o << " : public BonoboWrapper< BonoboWrapper_";
     dumpCorbaType(o, superName, sal_False, sal_False);
@@ -1732,12 +1732,12 @@ void InterfaceType::dumpFunctions(FileStream& o)
     dumpUnoType(o, m_typeName, sal_False, sal_False, sal_True);
     o << " > {\n";
 
-    o << "public:   \n"
+    o << "public:	\n"
       << "    BonoboWrapper_";
     dumpCorbaType(o, m_typeName, sal_False, sal_False);
     o << "(";
     dumpCorbaType(o, m_typeName, sal_False, sal_False);
-    o << " corbaObject,"
+    o << " corbaObject," 
       << "const vos::ORef<bonobobridge::Bridge>& bridge)\n";
 
     o << "      : BonoboWrapper< "
@@ -1769,7 +1769,7 @@ void InterfaceType::dumpFunctions(FileStream& o)
         dumpUnoType(o, m_typeName, sal_False, sal_False, sal_True);
         o << "*)this);\n";
     }
-    o   << "    }\n";
+    o	<< "    }\n";
     inc();
     dumpUnoMethods(o, sal_True, sal_False);
     dec();
@@ -1797,7 +1797,7 @@ void InterfaceType::dumpFunctions(FileStream& o)
     o << "(_b, bridge);\n"
       << "  return ret;\n";
 
-    o   << "}\n\n";
+    o	<< "}\n\n";
 
     /* POA implementation class */
     dumpCorbaMethods(o, sal_True);
@@ -1806,8 +1806,8 @@ void InterfaceType::dumpFunctions(FileStream& o)
     o << "__epv bonobobridge_";
     dumpCorbaType(o, m_typeName, sal_False, sal_False);
     o << "_epv = {\n";
-    sal_uInt32      methodCount = m_reader.getMethodCount();
-    OString         methodName;
+    sal_uInt32 		methodCount = m_reader.getMethodCount();
+    OString 		methodName;	
 
     o << "    NULL,\n";
 
@@ -1834,7 +1834,7 @@ void InterfaceType::dumpFunctions(FileStream& o)
         {
             superName = "";
         }
-        else
+        else 
         {
             if (superName.equals("com/sun/star/uno/XInterface"))
             {
@@ -1896,8 +1896,8 @@ void InterfaceType::dumpFunctions(FileStream& o)
 
     /* convert function uno to bonobo */
     o << "static sal_Bool convert_u2b_" << m_typeName.replace('/', '_')
-            << "(void* pOut, const void* pIn,   const ::com::sun::star::uno::Type& type,    const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n";
-    o   << "  sal_Bool ret = sal_True;\n  const ";
+            << "(void* pOut, const void* pIn,	const ::com::sun::star::uno::Type& type,	const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n";
+    o	<< "  sal_Bool ret = sal_True;\n  const ";
     dumpUnoType(o, m_typeName, sal_False, sal_False);
     o << "& _u = *(const ";
     dumpUnoType(o, m_typeName, sal_False, sal_False);
@@ -1913,24 +1913,24 @@ void InterfaceType::dumpFunctions(FileStream& o)
       << "    POA_";
     dumpCorbaType(o, m_typeName, sal_False, sal_False);
     o << " *poa;\n"
-      << "          CORBA_Environment ev;\n"
+      << "  		CORBA_Environment ev;\n"
       << "    CORBA_exception_init (&ev);\n"
-      << "          uno_servant = new bonobobridge::UnoServant_";
+      << " 			uno_servant = new bonobobridge::UnoServant_";
     dumpCorbaType(o, m_typeName, sal_False, sal_False);
     o << "(_u.get(), bridge, &ev, sal_True);\n"
       << "    poa = (POA_";
     dumpCorbaType(o, m_typeName, sal_False, sal_False);
     o << "*)uno_servant->getPOA();\n"
       << "    if (ev._major != CORBA_NO_EXCEPTION) {\n"
-      << "      delete uno_servant;\n"
-      << "          CORBA_exception_free (&ev);\n"
-      << "          _b = CORBA_OBJECT_NIL;\n"
-      << "          ret = sal_False;\n"
+      << "  	delete uno_servant;\n"
+      << "			CORBA_exception_free (&ev);\n"
+      << "			_b = CORBA_OBJECT_NIL;\n"
+      << "			ret = sal_False;\n"
       << "    }\n"
-      << "  else {\n"
+      << "	else {\n"
       << "      CORBA_free(PortableServer_POA_activate_object(bridge->getPOA(), poa, &ev));\n"
-      << "          _b = PortableServer_POA_servant_to_reference (bridge->getPOA(), poa, &ev);\n"
-      << "          uno_servant->corbaObjectRegistered(_b, getCppuType((";
+      << "			_b = PortableServer_POA_servant_to_reference (bridge->getPOA(), poa, &ev);\n"
+      << "			uno_servant->corbaObjectRegistered(_b, getCppuType((";
     dumpUnoType(o, m_typeName, sal_False, sal_False);
     o << "*)NULL)";
 
@@ -1939,16 +1939,16 @@ void InterfaceType::dumpFunctions(FileStream& o)
 
     o << ");\n"
       << "    }\n"
-      << "  CORBA_exception_free (&ev);\n"
+      << "	CORBA_exception_free (&ev);\n"
       << "  }\n"
       << "  return ret;\n"
       << "}\n\n";
-
+    
     o << "inline sal_Bool bonobobridge::cpp_convert_b2u(";
     dumpUnoType(o, m_typeName, sal_False, sal_True);
     o << " u, ";
     dumpCorbaType(o, m_typeName, sal_True, sal_True);
-    o << " b, const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"
+    o << " b, const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"	
       << "  return bridge->convertB2U(&u, &b, ::getCppuType(&u));\n"
       << "};\n\n";
 
@@ -1956,7 +1956,7 @@ void InterfaceType::dumpFunctions(FileStream& o)
     dumpCorbaType(o, m_typeName, sal_False, sal_True);
     o << " b, ";
     dumpUnoType(o, m_typeName, sal_True, sal_True);
-    o << " u, const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"
+    o << " u, const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"	
       << "  return bridge->convertU2B(&b, &u, ::getCppuType(&u));\n"
       << "};\n\n";
 
@@ -1971,22 +1971,22 @@ sal_uInt32 InterfaceType::getMemberCount()
     sal_uInt32 count = m_reader.getMethodCount();
 
     if (count)
-        m_hasMethods = sal_True;
-
+        m_hasMethods = sal_True;		
+    
     sal_uInt32 fieldCount = m_reader.getFieldCount();
     RTFieldAccess access = RT_ACCESS_INVALID;
     for (sal_uInt16 i=0; i < fieldCount; i++)
     {
         access = m_reader.getFieldAccess(i);
-
+        
         if (access != RT_ACCESS_CONST && access != RT_ACCESS_INVALID)
         {
             m_hasAttributes = sal_True;
             count++;
         }
-    }
+    }		
     return count;
-}
+}	
 
 sal_uInt32 InterfaceType::checkInheritedMemberCount(const TypeReader* pReader)
 {
@@ -2005,7 +2005,7 @@ sal_uInt32 InterfaceType::checkInheritedMemberCount(const TypeReader* pReader)
         TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
         if (aSuperReader.isValid())
         {
-            count = checkInheritedMemberCount(&aSuperReader);
+            count = checkInheritedMemberCount(&aSuperReader);		
         }
     }
 
@@ -2017,24 +2017,24 @@ sal_uInt32 InterfaceType::checkInheritedMemberCount(const TypeReader* pReader)
         for (sal_uInt16 i=0; i < fieldCount; i++)
         {
             access = pReader->getFieldAccess(i);
-
+            
             if (access != RT_ACCESS_CONST && access != RT_ACCESS_INVALID)
                 count++;
-        }
+        }	
     }
 
     return count;
-}
+}	
 
 sal_uInt32 InterfaceType::getInheritedMemberCount()
 {
     if (m_inheritedMemberCount == 0)
     {
-        m_inheritedMemberCount = checkInheritedMemberCount(0);
+        m_inheritedMemberCount = checkInheritedMemberCount(0);	
     }
-
+    
     return m_inheritedMemberCount;
-}
+}	
 
 
 
@@ -2044,8 +2044,8 @@ sal_uInt32 InterfaceType::getInheritedMemberCount()
 //*************************************************************************
 ModuleType::ModuleType(TypeReader& typeReader,
                                 const OString& typeName,
-                                const TypeManager& typeMgr,
-                                const TypeDependency& typeDependencies,
+                                const TypeManager& typeMgr, 
+                                const TypeDependency& typeDependencies, 
                                 TypeSet* generatedConversions)
     : CorbaType(typeReader, typeName, typeMgr, typeDependencies, generatedConversions)
 {
@@ -2053,25 +2053,25 @@ ModuleType::ModuleType(TypeReader& typeReader,
 
 ModuleType::~ModuleType()
 {
-
-}
+    
+}	
 
 
 sal_Bool ModuleType::hasConstants()
 {
-    sal_uInt32      fieldCount = m_reader.getFieldCount();
-    RTFieldAccess   access = RT_ACCESS_INVALID;
+    sal_uInt32 		fieldCount = m_reader.getFieldCount();
+    RTFieldAccess 	access = RT_ACCESS_INVALID;
 
     for (sal_uInt16 i=0; i < fieldCount; i++)
     {
         access = m_reader.getFieldAccess(i);
-
+        
         if (access == RT_ACCESS_CONST)
             return sal_True;
     }
-
+    
     return sal_False;
-}
+}	
 
 void ModuleType::dumpFunctions(FileStream& o)
 {
@@ -2097,8 +2097,8 @@ sal_Bool ModuleType::dumpConversionFunctions(FileStream& o, TypeSet* allreadyDum
 //*************************************************************************
 ConstantsType::ConstantsType(TypeReader& typeReader,
                                 const OString& typeName,
-                                const TypeManager& typeMgr,
-                                const TypeDependency& typeDependencies,
+                                const TypeManager& typeMgr, 
+                                const TypeDependency& typeDependencies, 
                                 TypeSet* generatedConversions)
     : ModuleType(typeReader, typeName, typeMgr, typeDependencies, generatedConversions)
 {
@@ -2106,8 +2106,8 @@ ConstantsType::ConstantsType(TypeReader& typeReader,
 
 ConstantsType::~ConstantsType()
 {
-
-}
+    
+}	
 
 void ConstantsType::dumpFunctions(FileStream& o)
 {
@@ -2118,8 +2118,8 @@ void ConstantsType::dumpFunctions(FileStream& o)
 //*************************************************************************
 StructureType::StructureType(TypeReader& typeReader,
                                 const OString& typeName,
-                                const TypeManager& typeMgr,
-                                const TypeDependency& typeDependencies,
+                                const TypeManager& typeMgr, 
+                                const TypeDependency& typeDependencies, 
                                 TypeSet* generatedConversions)
     : CorbaType(typeReader, typeName, typeMgr, typeDependencies, generatedConversions)
 {
@@ -2127,8 +2127,8 @@ StructureType::StructureType(TypeReader& typeReader,
 
 StructureType::~StructureType()
 {
-
-}
+    
+}	
 
 void StructureType::dumpFunctions(FileStream& o)
 {
@@ -2148,12 +2148,12 @@ void StructureType::dumpFunctions(FileStream& o)
     dumpCorbaType(o, m_typeName, sal_False, sal_False);
     o << "*) pIn;\n\n";
 
-    sal_uInt32      fieldCount = m_reader.getFieldCount();
-    OString         fieldName;
-    OString         fieldType;
-    sal_uInt16      i=0;
-    sal_Int32       cIndex;
-    OString         corbaFieldName;
+    sal_uInt32 		fieldCount = m_reader.getFieldCount();
+    OString 		fieldName;
+    OString 		fieldType;	
+    sal_uInt16 		i=0;
+    sal_Int32    	cIndex;
+    OString      	corbaFieldName;
 
     sal_Bool bIsUnion = sal_False;
 
@@ -2190,12 +2190,12 @@ void StructureType::dumpFunctions(FileStream& o)
                 o << "  // fix me: no conversion of array types!\n";
             else
                 o << "  if (ret)\n"
-                  << "    ret = bonobobridge::cpp_convert_b2u("
-                  << "_u." << fieldName.getStr()
-                  << "  , _b." << corbaFieldName.getStr()
+                  << "    ret = bonobobridge::cpp_convert_b2u(" 
+                  << "_u." << fieldName.getStr() 
+                  << "	, _b." << corbaFieldName.getStr()
                   << ", bridge);\n";
-        }
-    }
+        }		
+    }  
     o << "  return ret;\n"
       << "}\n\n"
       << "static sal_Bool convert_u2b_" << m_typeName.replace('/', '_')
@@ -2227,7 +2227,7 @@ void StructureType::dumpFunctions(FileStream& o)
         {
             fieldName = m_reader.getFieldName(i);
             fieldType = m_reader.getFieldType(i);
-
+            
             cIndex = fieldName.indexOf("_reserved_identifier_");
 
             if (cIndex == 0)
@@ -2239,31 +2239,31 @@ void StructureType::dumpFunctions(FileStream& o)
                 o << "  // fix me: no conversion of array types!\n";
             else
                 o << "  if (ret)\n"
-                  << "    ret = bonobobridge::cpp_convert_u2b("
-                  << "_b." << corbaFieldName.getStr()
+                  << "    ret = bonobobridge::cpp_convert_u2b(" 
+                  << "_b." << corbaFieldName.getStr() 
                   << ", _u." << fieldName.getStr()
                   << ", bridge);\n";
-        }
+        }		
     }
 
-    o   << "  return ret;\n"
+    o	<< "  return ret;\n"
         << "}\n\n";
 
     o << "inline sal_Bool bonobobridge::cpp_convert_b2u(";
     dumpUnoType(o, m_typeName, sal_False, sal_True);
-    o << " u    , ";
+    o << " u	, ";
     dumpCorbaType(o, m_typeName, sal_True, sal_True);
-    o << " b,   const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"
-      << "  return convert_b2u_" << m_typeName.replace('/', '_')
+    o << " b,	const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"
+      << "  return convert_b2u_" << m_typeName.replace('/', '_') 
       << "(&u, &b, ::getCppuType(&u), bridge);\n"
       << "};\n\n";
-
+    
     o << "inline sal_Bool bonobobridge::cpp_convert_u2b(";
     dumpCorbaType(o, m_typeName, sal_False, sal_True);
     o << " b, ";
     dumpUnoType(o, m_typeName, sal_True, sal_True);
-    o << " u,   const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"
-      << "  return convert_u2b_" << m_typeName.replace('/', '_')
+    o << " u,	const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"	
+      << "  return convert_u2b_" << m_typeName.replace('/', '_') 
       << "(&b, &u, ::getCppuType(&u), bridge);\n"
       << "};\n\n";
 }
@@ -2275,26 +2275,26 @@ sal_Bool StructureType::dumpSuperMember(FileStream& o, const OString& superType,
     if (superType.getLength() > 0)
     {
         TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
-
+        
         if (aSuperReader.isValid())
         {
             hasMember = dumpSuperMember(o, aSuperReader.getSuperTypeName(), bWithType);
 
-            sal_uInt32      fieldCount = aSuperReader.getFieldCount();
-            RTFieldAccess   access = RT_ACCESS_INVALID;
-            OString         fieldName;
-            OString         fieldType;
+            sal_uInt32 		fieldCount = aSuperReader.getFieldCount();
+            RTFieldAccess 	access = RT_ACCESS_INVALID;
+            OString 		fieldName;
+            OString 		fieldType;	
             for (sal_uInt16 i=0; i < fieldCount; i++)
             {
                 access = aSuperReader.getFieldAccess(i);
-
+                
                 if (access == RT_ACCESS_CONST || access == RT_ACCESS_INVALID)
                     continue;
 
                 fieldName = aSuperReader.getFieldName(i);
                 fieldType = aSuperReader.getFieldType(i);
-
-                if (hasMember)
+                        
+                if (hasMember) 
                 {
                     o << ", ";
                 } else
@@ -2304,24 +2304,24 @@ sal_Bool StructureType::dumpSuperMember(FileStream& o, const OString& superType,
 
                 if (bWithType)
                 {
-                    dumpUnoType(o, fieldType, sal_True, sal_True);
+                    dumpUnoType(o, fieldType, sal_True, sal_True);	
                     o << " ";
-                }
+                }		
                 o << "__" << fieldName;
             }
         }
     }
-
+    
     return hasMember;
-}
+}	
 
 //*************************************************************************
 // ExceptionType
 //*************************************************************************
 ExceptionType::ExceptionType(TypeReader& typeReader,
                                 const OString& typeName,
-                                const TypeManager& typeMgr,
-                                const TypeDependency& typeDependencies,
+                                const TypeManager& typeMgr, 
+                                const TypeDependency& typeDependencies, 
                                 TypeSet* generatedConversions)
     : CorbaType(typeReader, typeName, typeMgr, typeDependencies, generatedConversions)
 {
@@ -2329,7 +2329,7 @@ ExceptionType::ExceptionType(TypeReader& typeReader,
 
 ExceptionType::~ExceptionType()
 {
-
+    
 }
 
 void ExceptionType::dumpFunctions(FileStream& o)
@@ -2356,10 +2356,10 @@ void ExceptionType::dumpFunctions(FileStream& o)
     dumpCorbaType(o, m_typeName, sal_False, sal_False);
     o << "*) pIn;\n\n";
 
-    sal_uInt32      fieldCount = m_reader.getFieldCount();
-    OString         fieldName;
-    OString         fieldType;
-    sal_uInt16      i=0;
+    sal_uInt32 		fieldCount = m_reader.getFieldCount();
+    OString 		fieldName;
+    OString 		fieldType;	
+    sal_uInt16 		i=0;
     sal_Int32    cIndex;
     OString      corbaFieldName;
 
@@ -2382,22 +2382,22 @@ void ExceptionType::dumpFunctions(FileStream& o)
             corbaFieldName = fieldName.copy(OString("_reserved_identifier_").getLength());
         else
             corbaFieldName = fieldName;
-
+            
         if (isArray(fieldType))
             o << "  // fix me: no conversion of array types!\n";
         else
             o << "  if (ret)\n"
-              << "    ret = bonobobridge::cpp_convert_b2u("
-              << "_u." << fieldName.getStr()
+              << "    ret = bonobobridge::cpp_convert_b2u(" 
+              << "_u." << fieldName.getStr() 
               << ", _b." << corbaFieldName.getStr()
               << ", bridge);\n";
-    }
+    }  
     o << "  return ret;\n"
       << "}\n\n";
 
 
     o << "static sal_Bool convert_u2b_" << m_typeName.replace('/', '_')
-      << "(void* pOut, const void* pIn, const ::com::sun::star::uno::Type& type, const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"
+      << "(void* pOut, const void* pIn,	const ::com::sun::star::uno::Type& type, const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"
       << "  sal_Bool ret = sal_True;\n  const ";
     dumpUnoType(o, m_typeName, sal_False, sal_False);
     o << "& _u = *(const ";
@@ -2416,12 +2416,12 @@ void ExceptionType::dumpFunctions(FileStream& o)
         dumpUnoType(o, superType, sal_False, sal_False);
         o << "&) _b, bridge);\n";
     }
-
+    
     for (i=0; i < fieldCount; i++)
     {
         fieldName = m_reader.getFieldName(i);
         fieldType = m_reader.getFieldType(i);
-
+        
         cIndex = fieldName.indexOf("_reserved_identifier_");
 
         if (cIndex == 0)
@@ -2433,30 +2433,30 @@ void ExceptionType::dumpFunctions(FileStream& o)
             o << "  // fix me: no conversion of array types!\n";
         else
             o << "  if (ret)\n"
-              << "    ret = bonobobridge::cpp_convert_u2b("
-              << "_b." << corbaFieldName.getStr()
+              << "    ret = bonobobridge::cpp_convert_u2b(" 
+              << "_b." << corbaFieldName.getStr() 
               << ", _u." << fieldName.getStr()
               << ", bridge);\n";
-    }
+    }		
 
-    o   << "  return ret;\n"
+    o	<< "  return ret;\n"
         << "}\n\n";
 
     o << "inline sal_Bool bonobobridge::cpp_convert_b2u(";
     dumpUnoType(o, m_typeName, sal_False, sal_True);
-    o << " u    , ";
+    o << " u	, ";
     dumpCorbaType(o, m_typeName, sal_True, sal_True);
-    o << " b,   const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"
-      << "  return convert_b2u_" << m_typeName.replace('/', '_')
+    o << " b,	const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"
+      << "  return convert_b2u_" << m_typeName.replace('/', '_') 
       << "(&u, &b, ::getCppuType(&u), bridge);\n"
       << "};\n\n";
-
+    
     o << "inline sal_Bool bonobobridge::cpp_convert_u2b(";
     dumpCorbaType(o, m_typeName, sal_False, sal_True);
     o << " b, ";
     dumpUnoType(o, m_typeName, sal_True, sal_True);
-    o << " u,   const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"
-      << "  return convert_u2b_" << m_typeName.replace('/', '_')
+    o << " u,	const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"	
+      << "  return convert_u2b_" << m_typeName.replace('/', '_') 
       << "(&b, &u, ::getCppuType(&u), bridge);\n"
       << "};\n\n";
 }
@@ -2470,26 +2470,26 @@ sal_Bool ExceptionType::dumpSuperMember(FileStream& o, const OString& superType,
     if (superType.getLength() > 0)
     {
         TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
-
+        
         if (aSuperReader.isValid())
         {
             hasMember = dumpSuperMember(o, aSuperReader.getSuperTypeName(), bWithType);
 
-            sal_uInt32      fieldCount = aSuperReader.getFieldCount();
-            RTFieldAccess   access = RT_ACCESS_INVALID;
-            OString         fieldName;
-            OString         fieldType;
+            sal_uInt32 		fieldCount = aSuperReader.getFieldCount();
+            RTFieldAccess 	access = RT_ACCESS_INVALID;
+            OString 		fieldName;
+            OString 		fieldType;	
             for (sal_uInt16 i=0; i < fieldCount; i++)
             {
                 access = aSuperReader.getFieldAccess(i);
-
+                
                 if (access == RT_ACCESS_CONST || access == RT_ACCESS_INVALID)
                     continue;
 
                 fieldName = aSuperReader.getFieldName(i);
                 fieldType = aSuperReader.getFieldType(i);
-
-                if (hasMember)
+                        
+                if (hasMember) 
                 {
                     o << ", ";
                 } else
@@ -2499,24 +2499,24 @@ sal_Bool ExceptionType::dumpSuperMember(FileStream& o, const OString& superType,
 
                 if (bWithType)
                 {
-                    dumpUnoType(o, fieldType, sal_True, sal_True);
+                    dumpUnoType(o, fieldType, sal_True, sal_True);	
                     o << " ";
-                }
+                }		
                 o << "__" << fieldName;
             }
         }
     }
-
+    
     return hasMember;
-}
+}	
 
 //*************************************************************************
 // EnumType
 //*************************************************************************
 EnumType::EnumType(TypeReader& typeReader,
                             const OString& typeName,
-                            const TypeManager& typeMgr,
-                            const TypeDependency& typeDependencies,
+                            const TypeManager& typeMgr, 
+                            const TypeDependency& typeDependencies, 
                             TypeSet* generatedConversions)
     : CorbaType(typeReader, typeName, typeMgr, typeDependencies, generatedConversions)
 {
@@ -2524,7 +2524,7 @@ EnumType::EnumType(TypeReader& typeReader,
 
 EnumType::~EnumType()
 {
-
+    
 }
 
 void EnumType::dumpFunctions(FileStream& o)
@@ -2560,19 +2560,19 @@ void EnumType::dumpFunctions(FileStream& o)
 
     o << "inline sal_Bool bonobobridge::cpp_convert_b2u(";
     dumpUnoType(o, m_typeName, sal_False, sal_True);
-    o << " u    , ";
+    o << " u	, ";
     dumpCorbaType(o, m_typeName, sal_True, sal_True);
-    o << " b,   const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"
-      << "  return convert_b2u_" << m_typeName.replace('/', '_')
+    o << " b,	const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"
+      << "  return convert_b2u_" << m_typeName.replace('/', '_') 
       << "(&u, &b, ::getCppuType(&u), bridge);\n"
       << "};\n\n";
-
+    
     o << "inline sal_Bool bonobobridge::cpp_convert_u2b(";
     dumpCorbaType(o, m_typeName, sal_False, sal_True);
     o << " b, ";
     dumpUnoType(o, m_typeName, sal_True, sal_True);
-    o << " u,   const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"
-      << "  return convert_u2b_" << m_typeName.replace('/', '_')
+    o << " u,	const ::vos::ORef< ::bonobobridge::Bridge >& bridge) {\n"	
+      << "  return convert_u2b_" << m_typeName.replace('/', '_') 
       << "(&b, &u, ::getCppuType(&u), bridge);\n"
       << "};\n\n";
 
@@ -2585,8 +2585,8 @@ void EnumType::dumpFunctions(FileStream& o)
 //*************************************************************************
 TypeDefType::TypeDefType(TypeReader& typeReader,
                             const OString& typeName,
-                            const TypeManager& typeMgr,
-                            const TypeDependency& typeDependencies,
+                            const TypeManager& typeMgr, 
+                            const TypeDependency& typeDependencies, 
                             TypeSet* generatedConversions)
     : CorbaType(typeReader, typeName, typeMgr, typeDependencies, generatedConversions)
 {
@@ -2594,7 +2594,7 @@ TypeDefType::TypeDefType(TypeReader& typeReader,
 
 TypeDefType::~TypeDefType()
 {
-
+    
 }
 
 void TypeDefType::dumpFunctions(FileStream& o)
@@ -2607,10 +2607,10 @@ void TypeDefType::dumpFunctions(FileStream& o)
 // produceType
 //*************************************************************************
 sal_Bool produceType(const OString& typeName,
-                        TypeManager& typeMgr,
+                        TypeManager& typeMgr, 
                         TypeDependency& typeDependencies,
                         CorbaOptions* pOptions,
-                        FileStream& o, TypeSet* allreadyDumped,
+                        FileStream& o, TypeSet* allreadyDumped, 
                         TypeSet* generatedConversions)
     throw( CannotDumpException )
 {
@@ -2630,11 +2630,11 @@ sal_Bool produceType(const OString& typeName,
 
         if( ret && !checkTypeDependencies(typeMgr, typeDependencies, typeName))
             ret = sal_False;
-
+  
         if (ret)
         {
             RTTypeClass typeClass = reader.getTypeClass();
-
+        
             switch (typeClass)
             {
                 case RT_TYPE_INTERFACE:
@@ -2715,7 +2715,7 @@ sal_Bool produceType(const OString& typeName,
 
     if (bNewTypeSet)
         delete allreadyDumped;
-
+    
     return ret;
 }
 
@@ -2739,9 +2739,9 @@ OString scopedName(const OString& scope, const OString& type,
         tmpBuf.append("::");
         tmpBuf.append(type.getToken(0, '/', nPos));
     } while( nPos != -1 );
-
+    
     return tmpBuf.makeStringAndClear();
-}
+}	
 
 //*************************************************************************
 // shortScopedName
@@ -2761,22 +2761,22 @@ OString shortScopedName(const OString& scope, const OString& type,
     {
         OString tmpScp(scope.copy(0, scope.lastIndexOf('/')));
         OString tmpScp2(type.copy(0, nPos));
-
+        
         if (tmpScp == tmpScp2)
             return OString();
     }
 
     OString aScope( type.copy( 0, nPos ) );
     OStringBuffer tmpBuf(aScope.getLength()*2);
-
+    
     nPos = 0;
     do
     {
         tmpBuf.append("::");
         tmpBuf.append(aScope.getToken(0, '/', nPos));
     } while( nPos != -1 );
-
+    
     return tmpBuf.makeStringAndClear();
-}
+}	
 
 

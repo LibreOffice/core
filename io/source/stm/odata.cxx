@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,19 +84,19 @@ public:
     ~ODataInputStream();
 public: // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-                                                            throw ( NotConnectedException,
+                                                            throw (	NotConnectedException,
                                                                         BufferSizeExceededException,
                                                                         RuntimeException);
     virtual sal_Int32 SAL_CALL readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
-                                                            throw ( NotConnectedException,
+                                                            throw (	NotConnectedException,
                                                                         BufferSizeExceededException,
                                                                         RuntimeException);
-    virtual void SAL_CALL skipBytes(sal_Int32 nBytesToSkip)                 throw ( NotConnectedException,
+    virtual void SAL_CALL skipBytes(sal_Int32 nBytesToSkip) 				throw (	NotConnectedException,
                                                                         BufferSizeExceededException,
                                                                         RuntimeException);
-    virtual sal_Int32 SAL_CALL available(void)                          throw ( NotConnectedException,
+    virtual sal_Int32 SAL_CALL available(void) 							throw (	NotConnectedException,
                                                                         RuntimeException);
-    virtual void SAL_CALL closeInput(void)                          throw ( NotConnectedException,
+    virtual void SAL_CALL closeInput(void) 							throw (	NotConnectedException,
                                                                         RuntimeException);
 
 public: // XDataInputStream
@@ -131,9 +131,9 @@ public: // XServiceInfo
 
 protected:
 
-    Reference < XConnectable >  m_pred;
-    Reference < XConnectable >  m_succ;
-    Reference < XInputStream >  m_input;
+    Reference < XConnectable > 	m_pred;
+    Reference < XConnectable > 	m_succ;
+    Reference < XInputStream > 	m_input;
     sal_Bool m_bValidStream;
 };
 
@@ -144,7 +144,7 @@ ODataInputStream::~ODataInputStream()
 
 // XInputStream
 sal_Int32 ODataInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-    throw ( NotConnectedException,
+    throw (	NotConnectedException,
             BufferSizeExceededException,
             RuntimeException)
 {
@@ -163,7 +163,7 @@ sal_Int32 ODataInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBy
 }
 
 sal_Int32 ODataInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
-    throw ( NotConnectedException,
+    throw (	NotConnectedException,
             BufferSizeExceededException,
             RuntimeException)
 {
@@ -178,7 +178,7 @@ sal_Int32 ODataInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32
      return nRead;
 }
 void ODataInputStream::skipBytes(sal_Int32 nBytesToSkip)
-    throw ( NotConnectedException,
+    throw (	NotConnectedException,
             BufferSizeExceededException,
             RuntimeException)
 {
@@ -193,7 +193,7 @@ void ODataInputStream::skipBytes(sal_Int32 nBytesToSkip)
 
 
 sal_Int32 ODataInputStream::available(void)
-    throw ( NotConnectedException,
+    throw (	NotConnectedException,
             RuntimeException)
 {
      sal_Int32 nAvail;
@@ -210,7 +210,7 @@ sal_Int32 ODataInputStream::available(void)
 }
 
 void ODataInputStream::closeInput(void )
-    throw ( NotConnectedException,
+    throw (	NotConnectedException,
             RuntimeException)
 {
      if( m_bValidStream ) {
@@ -237,7 +237,7 @@ sal_Int8 ODataInputStream::readBoolean(void) throw (IOException, RuntimeExceptio
     return readByte();
 }
 
-sal_Int8 ODataInputStream::readByte(void)    throw (IOException, RuntimeException)
+sal_Int8 ODataInputStream::readByte(void)	 throw (IOException, RuntimeException)
 {
     Sequence<sal_Int8> aTmp(1);
     if( 1 != readBytes( aTmp, 1 ) )
@@ -333,8 +333,8 @@ double ODataInputStream::readDouble(void) throw (IOException, RuntimeException)
 
 OUString ODataInputStream::readUTF(void) throw (IOException, RuntimeException)
 {
-    sal_uInt16              nShortLen = (sal_uInt16)readShort();
-    sal_Int32               nUTFLen;
+    sal_uInt16				nShortLen = (sal_uInt16)readShort();
+    sal_Int32				nUTFLen;
 
     if( ((sal_uInt16)0xffff) == nShortLen )
     {
@@ -347,8 +347,8 @@ OUString ODataInputStream::readUTF(void) throw (IOException, RuntimeException)
         nUTFLen = ( sal_Int32 ) nShortLen;
     }
 
-    Sequence<sal_Unicode>   aBuffer( nUTFLen );
-    sal_Unicode *           pStr = aBuffer.getArray();
+    Sequence<sal_Unicode>	aBuffer( nUTFLen );
+    sal_Unicode *			pStr = aBuffer.getArray();
 
     sal_Int32 nCount = 0;
     sal_Int32 nStrLen = 0;
@@ -542,15 +542,15 @@ public:
 
 public: // XOutputStream
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
-        throw ( NotConnectedException,
+        throw (	NotConnectedException,
                 BufferSizeExceededException,
                 RuntimeException);
     virtual void SAL_CALL flush(void)
-        throw ( NotConnectedException,
+        throw (	NotConnectedException,
                 BufferSizeExceededException,
                 RuntimeException);
     virtual void SAL_CALL closeOutput(void)
-        throw ( NotConnectedException,
+        throw (	NotConnectedException,
                 BufferSizeExceededException,
                 RuntimeException);
 
@@ -586,8 +586,8 @@ public: // XServiceInfo
     sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) throw ();
 
 protected:
-    Reference < XConnectable >  m_succ;
-    Reference < XConnectable >  m_pred;
+    Reference < XConnectable > 	m_succ;
+    Reference < XConnectable >	m_pred;
     Reference<  XOutputStream > m_output;
     sal_Bool m_bValidStream;
 };
@@ -600,7 +600,7 @@ ODataOutputStream::~ODataOutputStream()
 
 // XOutputStream
 void ODataOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
-    throw ( NotConnectedException,
+    throw (	NotConnectedException,
             BufferSizeExceededException,
             RuntimeException)
 {
@@ -614,7 +614,7 @@ void ODataOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
 }
 
 void ODataOutputStream::flush(void)
-    throw ( NotConnectedException,
+    throw (	NotConnectedException,
             BufferSizeExceededException,
             RuntimeException)
 {
@@ -631,7 +631,7 @@ void ODataOutputStream::flush(void)
 
 
 void ODataOutputStream::closeOutput(void)
-    throw ( NotConnectedException,
+    throw (	NotConnectedException,
             BufferSizeExceededException,
             RuntimeException)
 {
@@ -650,7 +650,7 @@ void ODataOutputStream::closeOutput(void)
 
 // XDataOutputStream
 void ODataOutputStream::writeBoolean(sal_Bool Value)
-    throw ( IOException,
+    throw (	IOException,
             RuntimeException)
 {
     if( Value )
@@ -665,7 +665,7 @@ void ODataOutputStream::writeBoolean(sal_Bool Value)
 
 
 void ODataOutputStream::writeByte(sal_Int8 Value)
-    throw ( IOException,
+    throw (	IOException,
             RuntimeException)
 {
     Sequence<sal_Int8> aTmp( 1 );
@@ -674,7 +674,7 @@ void ODataOutputStream::writeByte(sal_Int8 Value)
 }
 
 void ODataOutputStream::writeChar(sal_Unicode Value)
-    throw ( IOException,
+    throw (	IOException,
             RuntimeException)
 {
     Sequence<sal_Int8> aTmp( 2 );
@@ -686,7 +686,7 @@ void ODataOutputStream::writeChar(sal_Unicode Value)
 
 
 void ODataOutputStream::writeShort(sal_Int16 Value)
-    throw ( IOException,
+    throw (	IOException,
             RuntimeException)
 {
     Sequence<sal_Int8> aTmp( 2 );
@@ -697,7 +697,7 @@ void ODataOutputStream::writeShort(sal_Int16 Value)
 }
 
 void ODataOutputStream::writeLong(sal_Int32 Value)
-    throw ( IOException,
+    throw (	IOException,
             RuntimeException)
 {
     Sequence<sal_Int8> aTmp( 4 );
@@ -710,7 +710,7 @@ void ODataOutputStream::writeLong(sal_Int32 Value)
 }
 
 void ODataOutputStream::writeHyper(sal_Int64 Value)
-    throw ( IOException,
+    throw (	IOException,
             RuntimeException)
 {
     Sequence<sal_Int8> aTmp( 8 );
@@ -728,7 +728,7 @@ void ODataOutputStream::writeHyper(sal_Int64 Value)
 
 
 void ODataOutputStream::writeFloat(float Value)
-    throw ( IOException,
+    throw (	IOException,
             RuntimeException)
 {
     union { float f; sal_uInt32 n; } a;
@@ -737,7 +737,7 @@ void ODataOutputStream::writeFloat(float Value)
 }
 
 void ODataOutputStream::writeDouble(double Value)
-    throw ( IOException,
+    throw (	IOException,
             RuntimeException)
 {
     sal_uInt32 n = 1;
@@ -758,7 +758,7 @@ void ODataOutputStream::writeDouble(double Value)
 }
 
 void ODataOutputStream::writeUTF(const OUString& Value)
-    throw ( IOException,
+    throw (	IOException,
             RuntimeException)
 {
     sal_Int32 nStrLen = Value.getLength();
@@ -859,14 +859,14 @@ void ODataOutputStream::setSuccessor( const Reference < XConnectable > &r )
          }
      }
 }
-Reference < XConnectable > ODataOutputStream::getSuccessor()    throw (RuntimeException)
+Reference < XConnectable > ODataOutputStream::getSuccessor()	throw (RuntimeException)
 {
     return m_succ;
 }
 
 
 // XDataSource
-void ODataOutputStream::setPredecessor( const Reference < XConnectable > &r )   throw (RuntimeException)
+void ODataOutputStream::setPredecessor( const Reference < XConnectable > &r )	throw (RuntimeException)
 {
     if( r != m_pred ) {
         m_pred = r;
@@ -876,7 +876,7 @@ void ODataOutputStream::setPredecessor( const Reference < XConnectable > &r )   
         }
     }
 }
-Reference < XConnectable > ODataOutputStream::getPredecessor()  throw (RuntimeException)
+Reference < XConnectable > ODataOutputStream::getPredecessor()	throw (RuntimeException)
 {
     return m_pred;
 }
@@ -987,19 +987,19 @@ public:
 public:
     // XOutputStream
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
-        throw ( NotConnectedException,
+        throw (	NotConnectedException,
                 BufferSizeExceededException,
                 RuntimeException)
         { ODataOutputStream::writeBytes( aData ); }
 
     virtual void SAL_CALL flush(void)
-        throw ( NotConnectedException,
+        throw (	NotConnectedException,
                 BufferSizeExceededException,
                 RuntimeException)
         { ODataOutputStream::flush(); }
 
     virtual void SAL_CALL closeOutput(void)
-        throw ( NotConnectedException,
+        throw (	NotConnectedException,
                 BufferSizeExceededException,
                 RuntimeException)
         { ODataOutputStream::closeOutput(); }
@@ -1029,10 +1029,10 @@ public:
         virtual void SAL_CALL writeObject( const Reference< XPersistObject > & r ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
 public: // XMarkableStream
-    virtual sal_Int32 SAL_CALL createMark(void)                 throw (IOException, RuntimeException);
-    virtual void SAL_CALL deleteMark(sal_Int32 Mark)            throw (IOException, IllegalArgumentException, RuntimeException);
-    virtual void SAL_CALL jumpToMark(sal_Int32 nMark)       throw (IOException, IllegalArgumentException, RuntimeException);
-    virtual void SAL_CALL jumpToFurthest(void)          throw (IOException, RuntimeException);
+    virtual sal_Int32 SAL_CALL createMark(void) 				throw (IOException, RuntimeException);
+    virtual void SAL_CALL deleteMark(sal_Int32 Mark)			throw (IOException, IllegalArgumentException, RuntimeException);
+    virtual void SAL_CALL jumpToMark(sal_Int32 nMark) 		throw (IOException, IllegalArgumentException, RuntimeException);
+    virtual void SAL_CALL jumpToFurthest(void) 			throw (IOException, RuntimeException);
     virtual sal_Int32 SAL_CALL offsetToMark(sal_Int32 nMark)
         throw (IOException, IllegalArgumentException, RuntimeException);
 
@@ -1050,10 +1050,10 @@ public: // XServiceInfo
 private:
     void connectToMarkable();
 private:
-    ObjectContainer_Impl                m_mapObject;
-    sal_Int32                           m_nMaxId;
-    Reference< XMarkableStream >        m_rMarkable;
-    sal_Bool                            m_bValidMarkable;
+    ObjectContainer_Impl	            m_mapObject;
+    sal_Int32							m_nMaxId;
+    Reference< XMarkableStream > 		m_rMarkable;
+    sal_Bool 							m_bValidMarkable;
 };
 
 OObjectOutputStream::~OObjectOutputStream()
@@ -1174,7 +1174,7 @@ void OObjectOutputStream::connectToMarkable(void)
 sal_Int32 OObjectOutputStream::createMark(void)
     throw (IOException, RuntimeException)
 {
-    connectToMarkable();    // throws an exception, if a markable is not connected !
+    connectToMarkable();	// throws an exception, if a markable is not connected !
 
     return m_rMarkable->createMark();
 }
@@ -1324,30 +1324,30 @@ public:
 
 public: // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-        throw ( NotConnectedException,
+        throw (	NotConnectedException,
                 BufferSizeExceededException,
                 RuntimeException)
         { return ODataInputStream::readBytes( aData , nBytesToRead ); }
 
     virtual sal_Int32 SAL_CALL readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
-        throw ( NotConnectedException,
+        throw (	NotConnectedException,
                 BufferSizeExceededException,
                 RuntimeException)
         { return ODataInputStream::readSomeBytes( aData, nMaxBytesToRead ); }
 
     virtual void SAL_CALL skipBytes(sal_Int32 nBytesToSkip)
-        throw ( NotConnectedException,
+        throw (	NotConnectedException,
                 BufferSizeExceededException,
                 RuntimeException)
         { ODataInputStream::skipBytes( nBytesToSkip ); }
 
     virtual sal_Int32 SAL_CALL available(void)
-        throw ( NotConnectedException,
+        throw (	NotConnectedException,
                 RuntimeException)
         { return ODataInputStream::available(); }
 
     virtual void SAL_CALL closeInput(void)
-        throw ( NotConnectedException,
+        throw (	NotConnectedException,
                 RuntimeException)
         { ODataInputStream::closeInput(); }
 
@@ -1377,9 +1377,9 @@ public: // XObjectInputStream
 public: // XMarkableStream
     virtual sal_Int32 SAL_CALL createMark(void)
         throw (IOException, RuntimeException);
-    virtual void SAL_CALL deleteMark(sal_Int32 Mark)            throw (IOException, IllegalArgumentException, RuntimeException);
-    virtual void SAL_CALL jumpToMark(sal_Int32 nMark)       throw (IOException, IllegalArgumentException, RuntimeException);
-    virtual void SAL_CALL jumpToFurthest(void)          throw (IOException, RuntimeException);
+    virtual void SAL_CALL deleteMark(sal_Int32 Mark)			throw (IOException, IllegalArgumentException, RuntimeException);
+    virtual void SAL_CALL jumpToMark(sal_Int32 nMark) 		throw (IOException, IllegalArgumentException, RuntimeException);
+    virtual void SAL_CALL jumpToFurthest(void) 			throw (IOException, RuntimeException);
     virtual sal_Int32 SAL_CALL offsetToMark(sal_Int32 nMark)
         throw (IOException, IllegalArgumentException, RuntimeException);
 
@@ -1399,7 +1399,7 @@ private:
 private:
     Reference < XMultiComponentFactory > m_rSMgr;
     Reference < XComponentContext >     m_rCxt;
-    sal_Bool                m_bValidMarkable;
+    sal_Bool 				m_bValidMarkable;
     Reference < XMarkableStream > m_rMarkable;
     vector < Reference<  XPersistObject > > m_aPersistVector;
 
@@ -1540,14 +1540,14 @@ void OObjectInputStream::connectToMarkable()
     }
 }
 
-sal_Int32 OObjectInputStream::createMark(void)              throw (IOException, RuntimeException)
+sal_Int32 OObjectInputStream::createMark(void) 				throw (IOException, RuntimeException)
 {
-    connectToMarkable();    // throws an exception, if a markable is not connected !
+    connectToMarkable();	// throws an exception, if a markable is not connected !
 
     return m_rMarkable->createMark();
 }
 
-void OObjectInputStream::deleteMark(sal_Int32 Mark)         throw (IOException, IllegalArgumentException, RuntimeException)
+void OObjectInputStream::deleteMark(sal_Int32 Mark)			throw (IOException, IllegalArgumentException, RuntimeException)
 {
     if( ! m_bValidMarkable )
     {
@@ -1556,7 +1556,7 @@ void OObjectInputStream::deleteMark(sal_Int32 Mark)         throw (IOException, 
     m_rMarkable->deleteMark( Mark );
 }
 
-void OObjectInputStream::jumpToMark(sal_Int32 nMark)        throw (IOException, IllegalArgumentException, RuntimeException)
+void OObjectInputStream::jumpToMark(sal_Int32 nMark) 		throw (IOException, IllegalArgumentException, RuntimeException)
 {
     if( ! m_bValidMarkable )
     {
@@ -1564,7 +1564,7 @@ void OObjectInputStream::jumpToMark(sal_Int32 nMark)        throw (IOException, 
     }
     m_rMarkable->jumpToMark( nMark );
 }
-void OObjectInputStream::jumpToFurthest(void)           throw (IOException, RuntimeException)
+void OObjectInputStream::jumpToFurthest(void) 			throw (IOException, RuntimeException)
 {
     connectToMarkable();
     m_rMarkable->jumpToFurthest();

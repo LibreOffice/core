@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@
 #endif
 
 #ifndef _WIN32_WINNT
-#   define _WIN32_WINNT 0x0400
-#   define _CTYPE_DISABLE_MACROS /* wg. dynamischer C-Runtime MH */
+#	define _WIN32_WINNT 0x0400
+#	define _CTYPE_DISABLE_MACROS /* wg. dynamischer C-Runtime MH */
 #endif
 
 #include <stdio.h>
@@ -84,13 +84,13 @@
     #pragma warning(pop)
 #endif
 
-#define _MAX_CMD    4096    /* maximum length of commandline     */
-/* #define _MAX_ENV 4096     maximum length of environment var (isn't used anywhere) */
+#define _MAX_CMD	4096	/* maximum length of commandline     */
+/* #define _MAX_ENV	4096	 maximum length of environment var (isn't used anywhere) */
 
 #ifdef GCC
-    #   ifndef SA_FAMILY_DECL
-    #       define SA_FAMILY_DECL short sa_family
-    #   endif
+    #	ifndef SA_FAMILY_DECL
+    #		define SA_FAMILY_DECL short sa_family
+    #	endif
 
     typedef struct sockaddr_ipx {
         SA_FAMILY_DECL;
@@ -99,9 +99,9 @@
         unsigned short sa_socket;
     } SOCKADDR_IPX;
 
-    #   define NSPROTO_IPX      1000
-    #   define NSPROTO_SPX      1256
-    #   define NSPROTO_SPXII    1257
+    #	define NSPROTO_IPX		1000
+    #	define NSPROTO_SPX		1256
+    #	define NSPROTO_SPXII	1257
 #endif // #ifdef GCC
 
 #ifdef _DLL_

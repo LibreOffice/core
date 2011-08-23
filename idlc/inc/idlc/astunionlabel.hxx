@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,10 +27,10 @@
 #ifndef _IDLC_ASTUNIONLABEL_HXX_
 #define _IDLC_ASTUNIONLABEL_HXX_
 
-enum UnionLabel
+enum UnionLabel 
 {
-    UL_default,     // Label is "default"
-    UL_label        // Regular label
+    UL_default,		// Label is "default"
+    UL_label		// Regular label
 };
 
 class AstUnionLabel
@@ -44,8 +44,8 @@ public:
     AstExpression* getLabelValue()
         { return m_pLabelValue; }
 private:
-    UnionLabel      m_label;
-    AstExpression*  m_pLabelValue;
+    UnionLabel 		m_label;
+    AstExpression*	m_pLabelValue;
 };
 
 #endif // _IDLC_ASTUNIONLABEL_HXX_

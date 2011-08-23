@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@ public:
 
     AstService* getRealService()
         { return m_pRealService; }
-    sal_Bool isOptional()
+    sal_Bool isOptional() 
         { return ((m_flags & AF_OPTIONAL) == AF_OPTIONAL); }
 private:
-    const sal_uInt32    m_flags;
-    AstService*         m_pRealService;
+    const sal_uInt32	m_flags;
+    AstService*			m_pRealService;
 };
 
 #endif // _IDLC_ASTSERVICEMEMBER_HXX_

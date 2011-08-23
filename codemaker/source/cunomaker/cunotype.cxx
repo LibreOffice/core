@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,12 @@
 #include "precompiled_codemaker.hxx"
 
 #include <stdio.h>
-#include    <rtl/alloc.h>
-#include    <rtl/ustring.hxx>
-#include    <rtl/strbuf.hxx>
+#include	<rtl/alloc.h>
+#include	<rtl/ustring.hxx>
+#include	<rtl/strbuf.hxx>
 
-#include    "cunotype.hxx"
-#include    "cunooptions.hxx"
+#include	"cunotype.hxx"
+#include	"cunooptions.hxx"
 
 using namespace rtl;
 
@@ -51,7 +51,7 @@ CunoType::CunoType(TypeReader& typeReader,
     , m_cunoTypeDynamic(sal_True)
     , m_indentLength(0)
     , m_typeName(typeName)
-//  , m_name(typeName.getToken(typeName.getTokenCount('/') - 1, '/'))
+//	, m_name(typeName.getToken(typeName.getTokenCount('/') - 1, '/'))
     , m_name(typeName.replace('/', '_'))
     , m_reader(typeReader)
     , m_typeMgr((TypeManager&)typeMgr)
@@ -141,7 +141,7 @@ sal_Bool CunoType::dump(CunoOptions* pOptions)
 
     if ( bFileExists && pOptions->isValid("-Gc") )
     {
-        tmpFileName  = createFileNameFromType(outPath, m_typeName, ".tmh");
+        tmpFileName	 = createFileNameFromType(outPath, m_typeName, ".tmh");
         bFileCheck = sal_True;
     }
 
@@ -190,7 +190,7 @@ sal_Bool CunoType::dump(CunoOptions* pOptions)
 
         if ( bFileExists && pOptions->isValid("-Gc") )
         {
-            tmpFileName  = createFileNameFromType(outPath, m_typeName, ".tmc");
+            tmpFileName	 = createFileNameFromType(outPath, m_typeName, ".tmc");
             bFileCheck = sal_True;
         }
 
@@ -365,11 +365,11 @@ void CunoType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
 
     TypeUsingSet::const_iterator iter = usingSet.begin();
 
-    OString     sPrefix(OString(prefix).toAsciiUpperCase());
-    sal_Bool    bSequenceDumped = sal_False;
-    sal_uInt32  index = 0;
-    sal_uInt32  seqNum = 0;
-    OString     relType;
+    OString 	sPrefix(OString(prefix).toAsciiUpperCase());
+    sal_Bool 	bSequenceDumped = sal_False;
+    sal_uInt32 	index = 0;
+    sal_uInt32 	seqNum = 0;
+    OString 	relType;
     while (iter != usingSet.end())
     {
         sal_Bool bDumpThisType = sal_True;
@@ -415,15 +415,15 @@ void CunoType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
                             iLastS = outerNamespace.lastIndexOf('/');
                             OString outerClass(outerNamespace.copy(iLastS+1));
 
-//                          o << "\n";
-//                          dumpNameSpace(o, sal_True, sal_False, outerNamespace);
-//                          o << "\nclass " << outerClass << "::" << innerClass << ";\n";
-//                          dumpNameSpace(o, sal_False, sal_False, outerNamespace);
-//                          o << "\n\n";
+//							o << "\n";
+//							dumpNameSpace(o, sal_True, sal_False, outerNamespace);
+//							o << "\nclass " << outerClass << "::" << innerClass << ";\n";
+//							dumpNameSpace(o, sal_False, sal_False, outerNamespace);
+//							o << "\n\n";
                         }
                         else
                         {
-//                          dumpInclude(o, relType, prefix);
+//							dumpInclude(o, relType, prefix);
                             OString type(relType.replace('/', '_'));
                             o << "\n#ifndef " << type.toAsciiUpperCase() << "\n";
                             o << "#define " << type.toAsciiUpperCase() << "\n";
@@ -611,14 +611,14 @@ void CunoType::dumpGetCunoType(FileStream& o)
 
         if (count)
         {
-            sal_uInt32      fieldCount = m_reader.getFieldCount();
-            RTFieldAccess   access = RT_ACCESS_INVALID;
-            OString         fieldType, fieldName;
-            OString         scope = m_typeName.replace('/', '.');
-            sal_Bool        bWithScope = sal_True;
-            OString         modFieldType;
-            StringSet       generatedTypeSet;
-            StringSet::iterator findIter;
+            sal_uInt32 		fieldCount = m_reader.getFieldCount();
+            RTFieldAccess 	access = RT_ACCESS_INVALID;
+            OString 		fieldType, fieldName;
+            OString			scope = m_typeName.replace('/', '.');
+            sal_Bool		bWithScope = sal_True;
+            OString			modFieldType;
+            StringSet		generatedTypeSet;
+            StringSet::iterator	findIter;
 
             for (sal_uInt16 i=0; i < fieldCount; i++)
             {
@@ -630,7 +630,7 @@ void CunoType::dumpGetCunoType(FileStream& o)
                 fieldName = m_reader.getFieldName(i);
                 fieldType = checkRealBaseType(m_reader.getFieldType(i), sal_True);
 
-//              modFieldType = typeToIdentifier(fieldType);
+//				modFieldType = typeToIdentifier(fieldType);
 
                 findIter = generatedTypeSet.find(fieldType);
                 if ( findIter == generatedTypeSet.end() )
@@ -710,9 +710,9 @@ void CunoType::dumpCGetCunoType(FileStream& o)
     if (superType.getLength() > 0)
         o << indent() << "typelib_TypeDescriptionReference * pSuperType = 0;\n";
 
-    sal_uInt32      count = getMemberCount();
-    sal_uInt32      fieldCount = m_reader.getFieldCount();
-    RTFieldAccess   access = RT_ACCESS_INVALID;
+    sal_uInt32 		count = getMemberCount();
+    sal_uInt32 		fieldCount = m_reader.getFieldCount();
+    RTFieldAccess 	access = RT_ACCESS_INVALID;
     if (count)
     {
         o << indent() << "typelib_CompoundMember_Init aMembers["
@@ -742,8 +742,8 @@ void CunoType::dumpCGetCunoType(FileStream& o)
 
     if (count)
     {
-        OString         fieldType, fieldName;
-        OString         scope = m_typeName.replace('/', '.');
+        OString 		fieldType, fieldName;
+        OString			scope = m_typeName.replace('/', '.');
 
         for (sal_uInt16 i=0; i < fieldCount; i++)
         {
@@ -820,8 +820,8 @@ void CunoType::dumpCGetCunoType(FileStream& o)
 
 void CunoType::dumpCppuGetTypeMemberDecl(FileStream& o, CunoTypeDecl eDeclFlag)
 {
-    sal_uInt32      fieldCount = m_reader.getFieldCount();
-    RTFieldAccess   access = RT_ACCESS_INVALID;
+    sal_uInt32 		fieldCount = m_reader.getFieldCount();
+    RTFieldAccess 	access = RT_ACCESS_INVALID;
 
     if ( fieldCount )
     {
@@ -940,10 +940,10 @@ void CunoType::dumpInheritedMembers(FileStream& o, rtl::OString& superType)
     }
 }
 
-OString CunoType::getTypeClass(const OString& type, sal_Bool bCStyle)
+OString	CunoType::getTypeClass(const OString& type, sal_Bool bCStyle)
 {
-    OString     typeName = (type.getLength() > 0 ? type : m_typeName);
-    RTTypeClass rtTypeClass = RT_TYPE_INVALID;
+    OString 	typeName = (type.getLength() > 0 ? type : m_typeName);
+    RTTypeClass	rtTypeClass = RT_TYPE_INVALID;
 
     if (type.getLength() > 0)
     {
@@ -980,7 +980,7 @@ OString CunoType::getTypeClass(const OString& type, sal_Bool bCStyle)
                 OString realType = checkRealBaseType( typeName );
                 return getTypeClass( realType, bCStyle );
             }
-//          return bCStyle ? "typelib_TypeClass_TYPEDEF" : "::com::sun::star::uno::TypeClass_TYPEDEF";
+//			return bCStyle ? "typelib_TypeClass_TYPEDEF" : "::com::sun::star::uno::TypeClass_TYPEDEF";
             break;
         case RT_TYPE_SERVICE:
             return bCStyle ? "typelib_TypeClass_SERVICE" : "::com::sun::star::uno::TypeClass_SERVICE";
@@ -1036,7 +1036,7 @@ void CunoType::dumpType(FileStream& o, const OString& type,
 
     RTTypeClass typeClass = m_typeMgr.getTypeClass(relType);
 
-//  if (bConst) o << "const ";
+//	if (bConst) o << "const ";
 
     if ( seqNum )
     {
@@ -1086,7 +1086,7 @@ void CunoType::dumpType(FileStream& o, const OString& type,
     if (bPointer) o << "*";
 }
 
-OString CunoType::getBaseType(const OString& type)
+OString	CunoType::getBaseType(const OString& type)
 {
     if (type.equals("long"))
         return "sal_Int32";
@@ -1284,17 +1284,17 @@ OString CunoType::typeToIdentifier(const OString& type)
     return sIdentifier;
 }
 
-OString CunoType::checkSpecialCunoType(const OString& type)
+OString	CunoType::checkSpecialCunoType(const OString& type)
 {
     OString baseType(type);
 
     RegistryTypeReaderLoader & rReaderLoader = getRegistryTypeReaderLoader();
 
-    RegistryKey     key;
-    sal_uInt8*      pBuffer=NULL;
-    RTTypeClass     typeClass;
-    sal_Bool        isTypeDef = (m_typeMgr.getTypeClass(baseType) == RT_TYPE_TYPEDEF);
-    TypeReader      reader;
+    RegistryKey 	key;
+    sal_uInt8*		pBuffer=NULL;
+    RTTypeClass 	typeClass;
+    sal_Bool 		isTypeDef = (m_typeMgr.getTypeClass(baseType) == RT_TYPE_TYPEDEF);
+    TypeReader		reader;
 
     while (isTypeDef)
     {
@@ -1349,7 +1349,7 @@ sal_Bool CunoType::isArrayType(const OString& type, OString& baseType, OString& 
     return sal_False;
 }
 
-OString CunoType::checkRealBaseType(const OString& type, sal_Bool bResolveTypeOnly)
+OString	CunoType::checkRealBaseType(const OString& type, sal_Bool bResolveTypeOnly)
 {
     OString realType;
     OString baseType;
@@ -1362,11 +1362,11 @@ OString CunoType::checkRealBaseType(const OString& type, sal_Bool bResolveTypeOn
 
     RegistryTypeReaderLoader & rReaderLoader = getRegistryTypeReaderLoader();
 
-    RegistryKey     key;
-    sal_uInt8*      pBuffer=NULL;
-    RTTypeClass     typeClass;
-    sal_Bool        mustBeChecked = (m_typeMgr.getTypeClass(baseType) == RT_TYPE_TYPEDEF);
-    TypeReader      reader;
+    RegistryKey 	key;
+    sal_uInt8*		pBuffer=NULL;
+    RTTypeClass 	typeClass;
+    sal_Bool 		mustBeChecked = (m_typeMgr.getTypeClass(baseType) == RT_TYPE_TYPEDEF);
+    TypeReader		reader;
     while (mustBeChecked)
     {
         reader = m_typeMgr.getTypeReader(baseType);
@@ -1490,7 +1490,7 @@ OString CunoType::indent()
     return tmp.makeStringAndClear();
 }
 
-OString CunoType::indent(sal_uInt32 num)
+OString	CunoType::indent(sal_uInt32 num)
 {
     OStringBuffer tmp(m_indentLength + num);
 
@@ -1796,7 +1796,7 @@ void InterfaceType::dumpMethods(FileStream& o, const OString& interfaceType, Typ
     sal_uInt32 paramCount = 0;
     sal_uInt32 excCount = 0;
     RTMethodMode methodMode = RT_MODE_INVALID;
-    RTParamMode  paramMode = RT_PARAM_INVALID;
+    RTParamMode	 paramMode = RT_PARAM_INVALID;
 
     sal_Bool bPointer = sal_False;
     sal_Bool bParam = sal_False;
@@ -1845,8 +1845,8 @@ void InterfaceType::dumpMethods(FileStream& o, const OString& interfaceType, Typ
         sal_uInt16 j;
         for (j=0; j < paramCount; j++)
         {
-            paramName = reader.getMethodParamName(i, j);
-            paramType = reader.getMethodParamType(i, j);
+            paramName =	reader.getMethodParamName(i, j);
+            paramType =	reader.getMethodParamType(i, j);
             paramMode = reader.getMethodParamMode(i, j);
 
             if (j < (sal_uInt16)paramCount) o << ", ";
@@ -2059,9 +2059,9 @@ void InterfaceType::dumpCGetCunoType(FileStream& o)
       << "typelib_TypeClass_INTERFACE, (typelib_TypeDescription*)pTD);\n\n";
 
     o << indent() << "typelib_TypeDescriptionReference ** ppTypeRef = 0;\n";
-    StringSet   aTypes;
+    StringSet 	aTypes;
     // type for RuntimeException is always needed
-    OString     sRunTimeExceptionType("com/sun/star/uno/RuntimeException");
+    OString 	sRunTimeExceptionType("com/sun/star/uno/RuntimeException");
     aTypes.insert(sRunTimeExceptionType);
     dumpCppuGetType(o, sRunTimeExceptionType, sal_True, CUNOTYPEDECL_ALLTYPES);
 
@@ -2115,7 +2115,7 @@ void InterfaceType::dumpCUnoAttributeTypeNames(FileStream&o, sal_Bool bRelease)
 
 void InterfaceType::dumpCUnoMethodTypeNames(FileStream&o, sal_Bool bRelease)
 {
-    sal_uInt32  methodCount = m_reader.getMethodCount();
+    sal_uInt32 	methodCount = m_reader.getMethodCount();
 
     for (sal_uInt16 i = 0; i < methodCount; i++)
     {
@@ -2134,7 +2134,7 @@ void InterfaceType::dumpCUnoAttributeRefs(FileStream& o, sal_uInt32& index)
     sal_uInt32 fieldCount = m_reader.getFieldCount();
     RTFieldAccess access = RT_ACCESS_INVALID;
     OString fieldName;
-    OString scope = m_typeName.replace('/', '.');
+    OString	scope = m_typeName.replace('/', '.');
 
     for (sal_uInt16 i=0; i < fieldCount; i++)
     {
@@ -2157,9 +2157,9 @@ void InterfaceType::dumpCUnoAttributeRefs(FileStream& o, sal_uInt32& index)
 
 void InterfaceType::dumpCUnoMethodRefs(FileStream& o, sal_uInt32& index)
 {
-    sal_uInt32  methodCount = m_reader.getMethodCount();
-    OString     methodName; //, returnType, paramType, paramName;
-    OString     scope = m_typeName.replace('/', '.');
+    sal_uInt32 	methodCount = m_reader.getMethodCount();
+    OString    	methodName; //, returnType, paramType, paramName;
+    OString	   	scope = m_typeName.replace('/', '.');
 
     for (sal_uInt16 i = 0; i < methodCount; i++)
     {
@@ -2294,13 +2294,13 @@ void InterfaceType::dumpCUnoAttributes(FileStream& o, sal_uInt32& index)
 
 void InterfaceType::dumpCUnoMethods(FileStream& o, sal_uInt32& index)
 {
-    sal_uInt32      methodCount = m_reader.getMethodCount();
-    OString         methodName, returnType, paramType, paramName;
-    sal_uInt32      paramCount = 0;
-    sal_uInt32      excCount = 0;
-    RTMethodMode    methodMode = RT_MODE_INVALID;
-    RTParamMode     paramMode = RT_PARAM_INVALID;
-    sal_Bool        bWithRuntimeException = sal_True;
+    sal_uInt32 		methodCount = m_reader.getMethodCount();
+    OString 		methodName, returnType, paramType, paramName;
+    sal_uInt32 		paramCount = 0;
+    sal_uInt32 		excCount = 0;
+    RTMethodMode 	methodMode = RT_MODE_INVALID;
+    RTParamMode	 	paramMode = RT_PARAM_INVALID;
+    sal_Bool 		bWithRuntimeException = sal_True;
 
     sal_uInt32 absoluteIndex = index;
 
@@ -2350,8 +2350,8 @@ void InterfaceType::dumpCUnoMethods(FileStream& o, sal_uInt32& index)
             }
             for (j=0; j < paramCount; j++)
             {
-                paramName = m_reader.getMethodParamName(i, j);
-                paramType = checkRealBaseType(m_reader.getMethodParamType(i, j), sal_True);
+                paramName =	m_reader.getMethodParamName(i, j);
+                paramType =	checkRealBaseType(m_reader.getMethodParamType(i, j), sal_True);
                 paramMode = m_reader.getMethodParamMode(i, j);
                 o << indent() << "rtl_uString_newFromAscii( &pParamName" << j << ", \""
                   << paramName << "\" );\n";
@@ -2467,10 +2467,10 @@ void InterfaceType::dumpAttributesCppuDecl(FileStream& o, StringSet* pFinishedTy
 
 void InterfaceType::dumpMethodsCppuDecl(FileStream& o, StringSet* pFinishedTypes, CunoTypeDecl eDeclFlag)
 {
-    sal_uInt32      methodCount = m_reader.getMethodCount();
-    OString         returnType, paramType, excType;
-    sal_uInt32      paramCount = 0;
-    sal_uInt32      excCount = 0;
+    sal_uInt32 		methodCount = m_reader.getMethodCount();
+    OString 		returnType, paramType, excType;
+    sal_uInt32 		paramCount = 0;
+    sal_uInt32 		excCount = 0;
 
     for (sal_uInt16 i=0; i < methodCount; i++)
     {
@@ -2486,7 +2486,7 @@ void InterfaceType::dumpMethodsCppuDecl(FileStream& o, StringSet* pFinishedTypes
         sal_uInt16 j;
         for (j=0; j < paramCount; j++)
         {
-            paramType = m_reader.getMethodParamType(i, j);
+            paramType =	m_reader.getMethodParamType(i, j);
 
             if (pFinishedTypes->count(paramType) == 0)
             {
@@ -2540,7 +2540,7 @@ sal_Bool ModuleType::dump(CunoOptions* pOptions)
     if (tmpName.equals("/"))
         tmpName = "global";
     else
-//      tmpName += "/" + m_typeName.getToken(m_typeName.getTokenCount('/') - 1, '/');
+//		tmpName += "/" + m_typeName.getToken(m_typeName.getTokenCount('/') - 1, '/');
         tmpName += "/" + m_name;
 
     OString tmpFileName;
@@ -2557,7 +2557,7 @@ sal_Bool ModuleType::dump(CunoOptions* pOptions)
 
     if ( bFileExists && pOptions->isValid("-Gc") )
     {
-        tmpFileName  = createFileNameFromType(outPath, m_typeName, ".tml");
+        tmpFileName	 = createFileNameFromType(outPath, m_typeName, ".tml");
         bFileCheck = sal_True;
     }
 
@@ -2598,7 +2598,7 @@ sal_Bool ModuleType::dump(CunoOptions* pOptions)
 
     if ( bFileExists && pOptions->isValid("-Gc") )
     {
-        tmpFileName  = createFileNameFromType(outPath, m_typeName, ".tmc");
+        tmpFileName	 = createFileNameFromType(outPath, m_typeName, ".tmc");
         bFileCheck = sal_True;
     }
 
@@ -2662,10 +2662,10 @@ sal_Bool ModuleType::dumpHFile(FileStream& o)
 sal_Bool ModuleType::dumpDeclaration(FileStream& o)
     throw( CannotDumpException )
 {
-    sal_uInt32      fieldCount = m_reader.getFieldCount();
-    RTFieldAccess   access = RT_ACCESS_INVALID;
-    OString         fieldName;
-    OString         fieldType;
+    sal_uInt32 		fieldCount = m_reader.getFieldCount();
+    RTFieldAccess 	access = RT_ACCESS_INVALID;
+    OString 		fieldName;
+    OString 		fieldType;
     for (sal_uInt16 i=0; i < fieldCount; i++)
     {
         access = m_reader.getFieldAccess(i);
@@ -2688,8 +2688,8 @@ sal_Bool ModuleType::dumpDeclaration(FileStream& o)
 
 sal_Bool ModuleType::hasConstants()
 {
-    sal_uInt32      fieldCount = m_reader.getFieldCount();
-    RTFieldAccess   access = RT_ACCESS_INVALID;
+    sal_uInt32 		fieldCount = m_reader.getFieldCount();
+    RTFieldAccess 	access = RT_ACCESS_INVALID;
 
     for (sal_uInt16 i=0; i < fieldCount; i++)
     {
@@ -2750,7 +2750,7 @@ sal_Bool ConstantsType::dump(CunoOptions* pOptions)
 
     if ( bFileExists && pOptions->isValid("-Gc") )
     {
-        tmpFileName  = createFileNameFromType(outPath, m_typeName, ".tmh");
+        tmpFileName	 = createFileNameFromType(outPath, m_typeName, ".tmh");
         bFileCheck = sal_True;
     }
 
@@ -2791,7 +2791,7 @@ sal_Bool ConstantsType::dump(CunoOptions* pOptions)
 
     if ( bFileExists && pOptions->isValid("-Gc") )
     {
-        tmpFileName  = createFileNameFromType(outPath, m_typeName, ".tmc");
+        tmpFileName	 = createFileNameFromType(outPath, m_typeName, ".tmc");
         bFileCheck = sal_True;
     }
 
@@ -2885,11 +2885,11 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
         o << indent() << superType.replace('/', '_').getStr() << " _Base;\n";
         //dumpInheritedMembers(o, superType);
 
-    sal_uInt32      fieldCount = m_reader.getFieldCount();
-    RTFieldAccess   access = RT_ACCESS_INVALID;
-    OString         fieldName;
-    OString         fieldType;
-    sal_uInt16      i=0;
+    sal_uInt32 		fieldCount = m_reader.getFieldCount();
+    RTFieldAccess 	access = RT_ACCESS_INVALID;
+    OString 		fieldName;
+    OString 		fieldType;
+    sal_uInt16 		i=0;
 
     for (i=0; i < fieldCount; i++)
     {
@@ -2995,11 +2995,11 @@ sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
         o << indent() << superType.replace('/', '_').getStr() << " _Base;\n";
         //dumpInheritedMembers(o, superType);
 
-    sal_uInt32      fieldCount = m_reader.getFieldCount();
-    RTFieldAccess   access = RT_ACCESS_INVALID;
-    OString         fieldName;
-    OString         fieldType;
-    sal_uInt16      i = 0;
+    sal_uInt32 		fieldCount = m_reader.getFieldCount();
+    RTFieldAccess 	access = RT_ACCESS_INVALID;
+    OString 		fieldName;
+    OString 		fieldType;
+    sal_uInt16 		i = 0;
 
     for (i=0; i < fieldCount; i++)
     {
@@ -3092,11 +3092,11 @@ sal_Bool EnumType::dumpDeclaration(FileStream& o)
     o << "\ntypedef enum _" << m_name << "\n{\n";
     inc();
 
-    sal_uInt32      fieldCount = m_reader.getFieldCount();
-    RTFieldAccess   access = RT_ACCESS_INVALID;
-    RTConstValue    constValue;
-    OString         fieldName;
-    sal_Int32       value=0;
+    sal_uInt32 		fieldCount = m_reader.getFieldCount();
+    RTFieldAccess 	access = RT_ACCESS_INVALID;
+    RTConstValue	constValue;
+    OString 		fieldName;
+    sal_Int32		value=0;
     for (sal_uInt16 i=0; i < fieldCount; i++)
     {
         access = m_reader.getFieldAccess(i);
@@ -3226,8 +3226,8 @@ void EnumType::dumpCGetCunoType(FileStream& o)
         o << indent() << "enumValueNames[" << i << "] = pEnumValue" << i << ";\n";
     }
 
-    RTConstValue    constValue;
-    sal_Int32       value=0;
+    RTConstValue 	constValue;
+    sal_Int32 		value=0;
     for (i = 0; i < count; i++)
     {
         o << indent() << "enumValues[" << i << "] = ";
@@ -3388,7 +3388,7 @@ sal_Bool produceType(const OString& typeName,
         return sal_False;
 
     RTTypeClass typeClass = reader.getTypeClass();
-    sal_Bool    ret = sal_False;
+    sal_Bool 	ret = sal_False;
     switch (typeClass)
     {
         case RT_TYPE_INTERFACE:
@@ -3406,7 +3406,7 @@ sal_Bool produceType(const OString& typeName,
                 {
                     ret = mType.dump(pOptions);
                     if (ret) typeDependencies.setGenerated(typeName);
-//                  ret = mType.dumpDependedTypes(pOptions);
+//					ret = mType.dumpDependedTypes(pOptions);
                 } else
                 {
                     typeDependencies.setGenerated(typeName);
@@ -3453,7 +3453,7 @@ sal_Bool produceType(const OString& typeName,
                 {
                     ret = cType.dump(pOptions);
                     if (ret) typeDependencies.setGenerated(typeName);
-//                  ret = cType.dumpDependedTypes(pOptions);
+//					ret = cType.dumpDependedTypes(pOptions);
                 } else
                 {
                     typeDependencies.setGenerated(typeName);

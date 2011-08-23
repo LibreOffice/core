@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,54 +24,54 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_WritingMode_idl__
-#define __com_sun_star_text_WritingMode_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module text {
-
-//=============================================================================
-
+#ifndef __com_sun_star_text_WritingMode_idl__ 
+#define __com_sun_star_text_WritingMode_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module text { 
+ 
+//============================================================================= 
+ 
 /** this enum covers the different writing directions
 
     @deprecated
         Use WritingMode2 instead
  */
 published enum WritingMode
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** text within lines is written left-to-right. lines and blocks are placed
         top-to-bottom.
         <p>
         Typically, this is the writing mode for normal "alphabetic" text.
      */
-    LR_TB,
-
-    //-------------------------------------------------------------------------
-
+    LR_TB, 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** text within a line are written right-to-left. Lines and blocks are
         placed top-to-bottom.
         <p>
         Typically, this writing mode is used in Arabic and Hebrew text.
      */
     RL_TB,
-
-    //-------------------------------------------------------------------------
-
+ 
+    //------------------------------------------------------------------------- 
+     
     /** text within a line is written top-to-bottom. Lines and blocks are
         placed right-to-left.
         <p>
         Typically, this writing mode is used in Chinese and Japanese text.
      */
     TB_RL
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
 
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+#endif 

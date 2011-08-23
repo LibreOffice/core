@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace bridges_urp
     // methods for accessing marshaling buffer
     inline void Marshal::finish( sal_Int32 nMessageCount )
     {
-        sal_Int32 nSize = getSize() - 2*sizeof( sal_Int32 );
+        sal_Int32 nSize = getSize() - 2*sizeof( sal_Int32 ); 
 
         // save the state
         sal_Int8 *pos = m_pos;
@@ -52,7 +52,7 @@ namespace bridges_urp
         // reset the state
         m_pos = pos;
     }
-
+    
     inline void Marshal::restart()
     {
         m_pos = m_base + 2*sizeof( sal_Int32 );
@@ -62,7 +62,7 @@ namespace bridges_urp
     {
         return m_base;
     }
-
+    
     inline sal_Bool Marshal::empty() const
     {
         return ( m_pos - m_base ) == 2*sizeof( sal_Int32 );
@@ -72,7 +72,7 @@ namespace bridges_urp
     {
         return ((sal_Int32) (m_pos - m_base));
     }
-
+    
     inline void Marshal::ensureAdditionalMem( sal_Int32 nMemToAdd )
     {
         sal_Int32 nDiff = m_pos - m_base;
@@ -81,7 +81,7 @@ namespace bridges_urp
             m_nBufferSize = m_nBufferSize * 2 > nDiff + nMemToAdd ?
                 m_nBufferSize* 2 :
                 nDiff + nMemToAdd;
-
+            
             m_base = ( sal_Int8 * ) rtl_reallocateMemory( m_base , m_nBufferSize );
             m_pos = m_base + nDiff;
         }
@@ -114,12 +114,12 @@ namespace bridges_urp
     inline void Marshal::packByteSequence( sal_Int8 *pData , sal_Int32 nLength )
     {
         packCompressedSize( nLength );
-
+        
         ensureAdditionalMem( nLength );
         memcpy( m_pos , pData , nLength );
         m_pos += nLength;
     }
-
+    
     inline void Marshal::packString( void *pSource )
     {
         rtl_uString *p = *( rtl_uString ** ) pSource;
@@ -129,9 +129,9 @@ namespace bridges_urp
         ::rtl::OString o = ::rtl::OUStringToOString( p , RTL_TEXTENCODING_UTF8 );
         sal_Int32 nLength = o.pData->length;
         packCompressedSize( nLength );
-
+        
         ensureAdditionalMem( nLength );
-
+        
         memcpy( m_pos , o.pData->buffer , nLength  );
         m_pos += nLength;
     }
@@ -261,7 +261,7 @@ namespace bridges_urp
             m_pos += 8;
             break;
         }
-
+        
         case typelib_TypeClass_STRING:
         {
             packString( pSource );
@@ -292,7 +292,7 @@ namespace bridges_urp
             if( pRemoteI )
             {
                 m_callback( pRemoteI , &(sOid.pData) );
-
+            
                 nIndex = m_pBridgeImpl->m_oidCacheOut.seek( sOid );
                 if( 0xffff == nIndex )
                 {

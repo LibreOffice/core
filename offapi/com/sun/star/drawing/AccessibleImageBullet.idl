@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,13 +55,13 @@ service AccessibleImageBullet
     /** This interface gives access to an image bullet within a text
           paragraph fragment that is at least partially visible on the
           screen.
-
+        
         <ul>
-            <li>The parent returned by
+            <li>The parent returned by 
                 <method scope="::com::sun::star::accessibility"
                 >XAccessibleContext::getAccessibleParent</method>
                 is the accessible object of a text paragraph.
-            <li>There are no children returned by
+            <li>There are no children returned by 
                 <method scope="::com::sun::star::accessibility"
                 >XAccessibleContext::getAccessibleChild</method>.
             <li>The role is <const scope="::com::sun::star::accessibility"
@@ -69,12 +69,12 @@ service AccessibleImageBullet
             <li>The name is "image bullet" (or the equivalent term
                 in application's language).
             <li>The description contains the term "image bullet" (or the equivalent
-                term in application's language) and the number of the paragraph
-                within this bullet appears.
+                term in application's language) and the number of the paragraph 
+                within this bullet appears.  
             <li>There are no relations.
-            <li>The following states are supported by the
+            <li>The following states are supported by the 
                 <type scope="::com::sun::star::accessibility"
-                >XAccessibleStateSet</type> returned by
+                >XAccessibleStateSet</type> returned by 
                 <method scope="::com::sun::star::accessibility"
                 >XAccessibleContext::getAccessibleStateSet</method>.
                 <ul>
@@ -83,7 +83,7 @@ service AccessibleImageBullet
                         the document window has been closed or the image bullet
                         is not existing any longer).
                     <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::ENABLED</const> (always
+                        >AccessibleStateType::ENABLED</const> (always 
                         contained)
                     <li><const scope="::com::sun::star::accessibility"
                         >AccessibleStateType::SHOWING</const>
@@ -97,7 +97,7 @@ service AccessibleImageBullet
      */
     interface ::com::sun::star::accessibility::XAccessibleContext;
 
-    /** This interface describes the graphical representation of an image
+    /** This interface describes the graphical representation of an image 
           bullet.
      */
     interface ::com::sun::star::accessibility::XAccessibleComponent;

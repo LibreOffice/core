@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 #endif
 #endif
 
-static oslSecurityError SAL_CALL
+static oslSecurityError SAL_CALL 
 osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                   oslSecurity* pSecurity);
 sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
@@ -147,9 +147,9 @@ oslSecurity SAL_CALL osl_getCurrentSecurity()
 /*
  *
  * osl Routines for Pluggable Authentication Modules (PAM)
- * tested with Linux-PAM 0.66 on Redhat-6.0 and
+ * tested with Linux-PAM 0.66 on Redhat-6.0 and 
  * Linux-PAM 0.64 on RedHat-5.2,
- * XXX Will probably not run on PAM 0.59 or prior, since
+ * XXX Will probably not run on PAM 0.59 or prior, since 
  *     number of pam_response* responses has changed
  *
  */
@@ -171,28 +171,28 @@ typedef struct {
 } sal_PamModule;
 
 /*
- * Implement a pam-conversation callback-routine,
+ * Implement a pam-conversation callback-routine, 
  * it just supply name and password instead of prompting the user.
  * I guess that echo-off means 'ask for password' and echo-on means
  * 'ask for user-name'. In fact I've never been asked anything else
- * than the password
- * XXX Please notice that if a pam-module does ask anything else, we
+ * than the password 
+ * XXX Please notice that if a pam-module does ask anything else, we 
  *     are completely lost, and a pam-module is free to do so
  * XXX
  */
 
-static int
+static int 
 osl_PamConversation (int num_msg, const struct pam_message **msgm,
                      struct pam_response **response, void *appdata_ptr)
 {
-    int         i;
-    sal_Bool    error;
+    int	  		i;
+    sal_Bool	error;
     sal_PamData         *pam_data;
     struct pam_response *p_reply;
 
     /* resource initialization */
     pam_data = (sal_PamData*) appdata_ptr;
-    p_reply  = (struct pam_response *) calloc( num_msg,
+    p_reply  = (struct pam_response *) calloc( num_msg, 
                                                sizeof(struct pam_response));
     if ( p_reply == NULL || pam_data == NULL )
     {
@@ -208,23 +208,23 @@ osl_PamConversation (int num_msg, const struct pam_message **msgm,
     {
         switch ( msgm[ i ]->msg_style )
         {
-            case PAM_PROMPT_ECHO_OFF:
+            case PAM_PROMPT_ECHO_OFF: 
                 p_reply[ i ].resp_retcode = 0;
-                p_reply[ i ].resp         = strdup( pam_data->password );
+                p_reply[ i ].resp 		  = strdup( pam_data->password );
                  break;
-            case PAM_PROMPT_ECHO_ON:
+            case PAM_PROMPT_ECHO_ON:  
                 p_reply[ i ].resp_retcode = 0;
-                p_reply[ i ].resp       = strdup( pam_data->name );
+                p_reply[ i ].resp 		= strdup( pam_data->name );
                 break;
             case PAM_ERROR_MSG:
             case PAM_TEXT_INFO:
              case PAM_BINARY_PROMPT:
             case PAM_BINARY_MSG:
-                p_reply[ i ].resp_retcode   = 0;
-                p_reply[ i ].resp           = NULL;
+                p_reply[ i ].resp_retcode 	= 0;
+                p_reply[ i ].resp 			= NULL;
                 break;
             default:
-                error = sal_True;
+                error = sal_True; 
                 break;
         }
     }
@@ -235,8 +235,8 @@ osl_PamConversation (int num_msg, const struct pam_message **msgm,
         for ( i = 0; i < num_msg ; i++ )
             if ( p_reply[ i ].resp )
             {
-                memset ( p_reply[ i ].resp, 0,
-                         strlen( p_reply[ i ].resp ) );
+                memset ( p_reply[ i ].resp, 0, 
+                         strlen( p_reply[ i ].resp ) );  
                 free   ( p_reply[ i ].resp );
             }
         free ( p_reply );
@@ -253,8 +253,8 @@ osl_PamConversation (int num_msg, const struct pam_message **msgm,
 #ifndef PAM_LINK
 /*
  * avoid linking against libpam.so, since it is not available on all systems,
- * instead load-on-call, returns structure which holds pointer to
- * pam-functions,
+ * instead load-on-call, returns structure which holds pointer to 
+ * pam-functions, 
  * library is never closed in case of success
  */
 
@@ -265,30 +265,30 @@ static sal_PamModule* osl_getPAM()
 
     if ( !load_once )
     {
-        /* get library-handle. cannot use osl-module, since
-            RTLD_GLOBAL is required for PAM-0.64 RH 5.2
+        /* get library-handle. cannot use osl-module, since 
+            RTLD_GLOBAL is required for PAM-0.64 RH 5.2 
            (but not for PAM-0.66 RH 6.0) */
         void *pam_hdl;
-
-        pam_hdl = dlopen( "libpam.so.0", RTLD_GLOBAL | RTLD_LAZY );
-
+        
+        pam_hdl = dlopen( "libpam.so.0", RTLD_GLOBAL | RTLD_LAZY );  
+        
         if ( pam_hdl != NULL )
             pam_module = (sal_PamModule*)calloc( 1, sizeof(sal_PamModule) );
-
+        
         /* load functions */
         if ( pam_module  != NULL )
         {
             pam_module->pam_acct_mgmt = (int (*)(pam_handle_t *, int)) dlsym ( pam_hdl, "pam_acct_mgmt" );
-            pam_module->pam_authenticate
+            pam_module->pam_authenticate 
                                       = (int (*)(pam_handle_t *, int)) dlsym ( pam_hdl, "pam_authenticate" );
             pam_module->pam_end       = (int (*)(pam_handle_t *, int)) dlsym ( pam_hdl, "pam_end" );
             pam_module->pam_start     = (int (*)(const char *, const char *, const struct pam_conv *, pam_handle_t **)) dlsym ( pam_hdl, "pam_start" );
 
             /* free resources, if not completely successful */
-            if (   (pam_module->pam_start        == NULL)
-                || (pam_module->pam_end          == NULL)
-                || (pam_module->pam_authenticate == NULL)
-                || (pam_module->pam_acct_mgmt    == NULL) )
+            if (   (pam_module->pam_start 		 == NULL) 
+                || (pam_module->pam_end 		 == NULL)  
+                || (pam_module->pam_authenticate == NULL) 
+                || (pam_module->pam_acct_mgmt 	 == NULL) )
             {
                 free( pam_module );
                 pam_module = NULL;
@@ -300,7 +300,7 @@ static sal_PamModule* osl_getPAM()
         load_once = sal_True;
     }
 
-    return pam_module;
+    return pam_module;	
 }
 #endif
 
@@ -324,28 +324,28 @@ osl_PamAuthentification( const sal_Char* name, const sal_Char* password )
         struct pam_conv pam_conversation;
         sal_PamData     pam_data;
 
-        int             return_value;
+        int				return_value;
 
         pam_data.name     = (char*) name;
-        pam_data.password = (char*) password;
-
-        pam_conversation.conv        = osl_PamConversation;
-        pam_conversation.appdata_ptr = (void*)(&pam_data);
+        pam_data.password = (char*) password; 
+    
+        pam_conversation.conv 		 = osl_PamConversation;
+        pam_conversation.appdata_ptr = (void*)(&pam_data); 
 
 #ifndef PAM_LINK
-          return_value = pam_module->pam_start( "su", name,
+          return_value = pam_module->pam_start( "su", name, 
             &pam_conversation, &pam_handle);
 #else
-          return_value = pam_start( "su", name,
+          return_value = pam_start( "su", name, 
             &pam_conversation, &pam_handle);
 #endif
-        if (return_value == PAM_SUCCESS )
+        if (return_value == PAM_SUCCESS ) 
 #ifndef PAM_LINK
             return_value = pam_module->pam_authenticate(pam_handle, 0);
 #else
             return_value = pam_authenticate(pam_handle, 0);
 #endif
-          if (return_value == PAM_SUCCESS )
+          if (return_value == PAM_SUCCESS ) 
 #ifndef PAM_LINK
             return_value = pam_module->pam_acct_mgmt(pam_handle, 0);
         pam_module->pam_end( pam_handle, return_value );
@@ -353,7 +353,7 @@ osl_PamAuthentification( const sal_Char* name, const sal_Char* password )
             return_value = pam_acct_mgmt(pam_handle, 0);
         pam_end( pam_handle, return_value );
 #endif
-
+    
         success = (sal_Bool)(return_value == PAM_SUCCESS);
 #ifndef PAM_LINK
     }
@@ -364,7 +364,7 @@ osl_PamAuthentification( const sal_Char* name, const sal_Char* password )
 
 
 #ifndef CRYPT_LINK
-/* dummy crypt, matches the interface of
+/* dummy crypt, matches the interface of 
    crypt() but does not encrypt at all */
 static const sal_Char* SAL_CALL
 osl_noCrypt ( const sal_Char *key, const sal_Char *salt )
@@ -393,12 +393,12 @@ osl_getCrypt()
         load_once = sal_True;
     }
 
-    return (void*)crypt_sym;
+    return (void*)crypt_sym;	
 }
 
-/* replacement for crypt function for password encryption, uses either
-   strong encryption of dlopen'ed libcrypt.so.1 or dummy implementation
-   with no encryption. Objective target is to avoid linking against
+/* replacement for crypt function for password encryption, uses either 
+   strong encryption of dlopen'ed libcrypt.so.1 or dummy implementation 
+   with no encryption. Objective target is to avoid linking against 
    libcrypt (not available on caldera open linux 2.2 #63822#) */
 static sal_Char* SAL_CALL
 osl_dynamicCrypt ( const sal_Char *key, const sal_Char *salt )
@@ -415,7 +415,7 @@ osl_dynamicCrypt ( const sal_Char *key, const sal_Char *salt )
  * compare an encrypted and an unencrypted password for equality
  * returns true if passwords are equal, false otherwise
  * Note: uses crypt() and a mutex instead of crypt_r() since crypt_r needs
- * more than 128KByte of external buffer for struct crypt_data
+ * more than 128KByte of external buffer for struct crypt_data 
  */
 
 static sal_Bool SAL_CALL
@@ -424,13 +424,13 @@ osl_equalPasswords ( const sal_Char *pEncryptedPassword, const sal_Char *pPlainP
     static pthread_mutex_t crypt_mutex = PTHREAD_MUTEX_INITIALIZER;
 
     sal_Bool  success;
-    sal_Char  salt[3];
+    sal_Char  salt[3]; 
     sal_Char *encrypted_plain;
 
     salt[0] = pEncryptedPassword[0];
     salt[1] = pEncryptedPassword[1];
     salt[2] = '\0';
-
+    
     pthread_mutex_lock(&crypt_mutex);
 
 #ifndef CRYPT_LINK
@@ -439,9 +439,9 @@ osl_equalPasswords ( const sal_Char *pEncryptedPassword, const sal_Char *pPlainP
     encrypted_plain = (sal_Char *)crypt( pPlainPassword, salt );
 #endif
     success = (sal_Bool) (strcmp(pEncryptedPassword, encrypted_plain) == 0);
-
+    
     pthread_mutex_unlock(&crypt_mutex);
-
+    
     return success;
 }
 
@@ -457,10 +457,10 @@ oslSecurityError SAL_CALL osl_loginUser(
     rtl_String* strPassword=0;
     sal_Char* pszUserName=0;
     sal_Char* pszPassword=0;
-
+    
     if ( ustrUserName != 0 )
     {
-
+        
         rtl_uString2String( &strUserName,
                             rtl_uString_getStr(ustrUserName),
                             rtl_uString_getLength(ustrUserName),
@@ -468,7 +468,7 @@ oslSecurityError SAL_CALL osl_loginUser(
                             OUSTRING_TO_OSTRING_CVTFLAGS );
         pszUserName = rtl_string_getStr(strUserName);
     }
-
+    
 
     if ( ustrPassword != 0 )
     {
@@ -476,29 +476,29 @@ oslSecurityError SAL_CALL osl_loginUser(
                             rtl_uString_getStr(ustrPassword),
                             rtl_uString_getLength(ustrPassword),
                             RTL_TEXTENCODING_UTF8,
-                            OUSTRING_TO_OSTRING_CVTFLAGS );
+                            OUSTRING_TO_OSTRING_CVTFLAGS );    
         pszPassword = rtl_string_getStr(strPassword);
     }
-
-
+    
+    
     Error=osl_psz_loginUser(pszUserName,pszPassword,pSecurity);
 
     if ( strUserName != 0 )
-    {
+    {    
         rtl_string_release(strUserName);
     }
-
+    
     if ( strPassword)
     {
         rtl_string_release(strPassword);
     }
-
-
+    
+    
     return Error;
 }
 
-
-static oslSecurityError SAL_CALL
+    
+static oslSecurityError SAL_CALL 
 osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                oslSecurity* pSecurity)
 {
@@ -616,7 +616,7 @@ osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                             nError = osl_Security_E_None;
                         }
                     } else {
-                        nError = osl_Security_E_WrongPassword;
+                        nError = osl_Security_E_WrongPassword;      
                     }
                 }
 #endif
@@ -645,7 +645,7 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(
     (void) strPasswd; /* unused */
     (void) strFileServer; /* unused */
     (void) pSecurity; /* unused */
-    return osl_Security_E_UserUnknown;
+    return osl_Security_E_UserUnknown;   
 }
 
 
@@ -655,13 +655,13 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent
     sal_Char pszIdent[1024];
 
     pszIdent[0] = '\0';
-
+    
     bRet = osl_psz_getUserIdent(Security,pszIdent,sizeof(pszIdent));
 
     rtl_string2UString( ustrIdent, pszIdent, rtl_str_getLength( pszIdent ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
     OSL_ASSERT(*ustrIdent != NULL);
-
-    return bRet;
+    
+    return bRet;    
 }
 
 
@@ -690,17 +690,17 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
     sal_Char pszName[1024];
 
     pszName[0] = '\0';
-
+    
     bRet = osl_psz_getUserName(Security,pszName,sizeof(pszName));
-
+    
     rtl_string2UString( ustrName, pszName, rtl_str_getLength( pszName ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
     OSL_ASSERT(*ustrName != NULL);
-
+    
     return bRet;
 }
 
 
-
+ 
 static sal_Bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax)
 {
     oslSecurityImpl *pSecImpl = (oslSecurityImpl *)Security;
@@ -719,7 +719,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
     sal_Char pszDirectory[PATH_MAX];
 
     pszDirectory[0] = '\0';
-
+    
     bRet = osl_psz_getHomeDir(Security,pszDirectory,sizeof(pszDirectory));
 
     if ( bRet == sal_True )
@@ -728,7 +728,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
         OSL_ASSERT(*pustrDirectory != NULL);
         osl_getFileURLFromSystemPath( *pustrDirectory, pustrDirectory );
     }
-
+    
     return bRet;
 }
 
@@ -745,7 +745,7 @@ static sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszD
     {
         sal_Char *pStr = NULL;
 #ifdef SOLARIS
-        char    buffer[8192];
+        char	buffer[8192];
 
         struct passwd pwd;
         struct passwd *ppwd;
@@ -781,7 +781,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
     sal_Char pszDirectory[PATH_MAX];
 
     pszDirectory[0] = '\0';
-
+    
     bRet = osl_psz_getConfigDir(Security,pszDirectory,sizeof(pszDirectory));
 
     if ( bRet == sal_True )
@@ -799,7 +799,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
 static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
     sal_Char *pStr = getenv("XDG_CONFIG_HOME");
-
+    
     if ((pStr == NULL) || (strlen(pStr) == 0) ||
         (access(pStr, 0) != 0))
         return (osl_psz_getHomeDir(Security, pszDirectory, nMax));
@@ -816,7 +816,7 @@ static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* ps
  * as soon as we can bumb the baseline to Tiger (for NSApplicationSupportDirectory) and have
  * support for Objective-C in the build environment
  */
-
+ 
 #define MACOSX_CONFIG_DIR "/Library/Application Support"
 static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
@@ -825,7 +825,7 @@ static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* ps
         strcat( pszDirectory, MACOSX_CONFIG_DIR );
         return sal_True;
     }
-
+    
     return sal_False;
 }
 

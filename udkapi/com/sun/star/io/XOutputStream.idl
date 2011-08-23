@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,28 +24,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_io_XOutputStream_idl__
-#define __com_sun_star_io_XOutputStream_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_io_NotConnectedException_idl__
-#include <com/sun/star/io/NotConnectedException.idl>
-#endif
-
-#ifndef __com_sun_star_io_BufferSizeExceededException_idl__
-#include <com/sun/star/io/BufferSizeExceededException.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module io {
-
-//=============================================================================
-
+#ifndef __com_sun_star_io_XOutputStream_idl__ 
+#define __com_sun_star_io_XOutputStream_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_io_NotConnectedException_idl__ 
+#include <com/sun/star/io/NotConnectedException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_io_BufferSizeExceededException_idl__ 
+#include <com/sun/star/io/BufferSizeExceededException.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module io {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: interface com::sun::star::io::XOutputStream
 /** This is the basic interface to write data to a stream.
     <p>
@@ -53,19 +53,19 @@ module com {  module sun {  module star {  module io {
     streaming document</a> for further information on chaining and piping streams.
  */
 published interface XOutputStream: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::io::XOutputStream::writeBytes
     /** writes the whole sequence to the stream. (blocking call)
      */
-    void writeBytes( [in] sequence<byte> aData )
-            raises( com::sun::star::io::NotConnectedException,
-                    com::sun::star::io::BufferSizeExceededException,
-                    com::sun::star::io::IOException);
-
-    //-------------------------------------------------------------------------
-
+    void writeBytes( [in] sequence<byte> aData ) 
+            raises( com::sun::star::io::NotConnectedException, 
+                    com::sun::star::io::BufferSizeExceededException, 
+                    com::sun::star::io::IOException); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::io::XOutputStream::flush
     /** flushes out of the stream any data that may exist in buffers.
 
@@ -74,32 +74,32 @@ published interface XOutputStream: com::sun::star::uno::XInterface
         XAsyncOutputMonitor::waitForCompletion</member> for a similar method
         with very specific semantics, that is useful in certain scenarios.</p>
      */
-    void flush()
-            raises( com::sun::star::io::NotConnectedException,
-                    com::sun::star::io::BufferSizeExceededException,
-                    com::sun::star::io::IOException);
-
-    //-------------------------------------------------------------------------
-
+    void flush() 
+            raises( com::sun::star::io::NotConnectedException, 
+                    com::sun::star::io::BufferSizeExceededException, 
+                    com::sun::star::io::IOException); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::io::XOutputStream::closeOutput
-    /** gets called to indicate that all data has been written.
-
-        <p>If this method has not yet been called, no attached
+    /** gets called to indicate that all data has been written. 
+        
+        <p>If this method has not yet been called, no attached 
         <type>XInputStream</type> receives an EOF signal. No further
         bytes may be written after this method has been called.</p>
      */
-    void closeOutput()
-            raises( com::sun::star::io::NotConnectedException,
-                    com::sun::star::io::BufferSizeExceededException,
-                    com::sun::star::io::IOException);
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    void closeOutput() 
+            raises( com::sun::star::io::NotConnectedException, 
+                    com::sun::star::io::BufferSizeExceededException, 
+                    com::sun::star::io::IOException); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

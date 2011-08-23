@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,13 +71,13 @@ namespace stoc_bootstrap
 
     //defaultregistry
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL NestedRegistry_CreateInstance(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& ) 
     throw( ::com::sun::star::uno::Exception);
     ::com::sun::star::uno::Sequence< ::rtl::OUString > defreg_getSupportedServiceNames();
     ::rtl::OUString defreg_getImplementationName();
 
     //simpleregistry
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SimpleRegistry_CreateInstance(
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SimpleRegistry_CreateInstance( 
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
     ::com::sun::star::uno::Sequence< ::rtl::OUString > simreg_getSupportedServiceNames();
     ::rtl::OUString simreg_getImplementationName();
@@ -89,8 +89,8 @@ namespace stoc_bootstrap
     ::rtl::OUString impreg_getImplementationName();
 
     //loader
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DllComponentLoader_CreateInstance(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& )
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DllComponentLoader_CreateInstance( 
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& ) 
     throw(::com::sun::star::uno::Exception);
     ::com::sun::star::uno::Sequence< ::rtl::OUString > loader_getSupportedServiceNames();
     ::rtl::OUString loader_getImplementationName();

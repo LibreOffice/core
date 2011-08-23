@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,11 +88,11 @@ interface XTableAlteration
             the table to be altered
         @param descriptor
             the descriptor which should be serve to append a new object
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
         @see com::sun::star::sdbcx::XAppend
      */
-    void addColumn([in] com::sun::star::beans::XPropertySet table,[in]com::sun::star::beans::XPropertySet descriptor)
+    void addColumn([in] com::sun::star::beans::XPropertySet table,[in]com::sun::star::beans::XPropertySet descriptor) 
         raises (com::sun::star::sdbc::SQLException);
 
     /** drops an object of the related container identified by its name.
@@ -100,12 +100,12 @@ interface XTableAlteration
             the table to be altered
         @param columnName
             the name of the column to be dropped
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
         @see com::sun::star::sdbcx::XDrop
      */
-    void dropColumn([in] com::sun::star::beans::XPropertySet table,[in]string columnName)
-        raises ( com::sun::star::sdbc::SQLException);
+    void dropColumn([in] com::sun::star::beans::XPropertySet table,[in]string columnName) 
+        raises ( com::sun::star::sdbc::SQLException); 
 };
 //=============================================================================
 }; }; }; }; };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,30 +24,30 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_grid_XGridSelection_idl__
-#define __com_sun_star_awt_grid_XGridSelection_idl__
+#ifndef __com_sun_star_awt_grid_XGridSelection_idl__ 
+#define __com_sun_star_awt_grid_XGridSelection_idl__ 
+ 
+#include <com/sun/star/uno/XInterface.idl> 
+#include <com/sun/star/awt/grid/XGridSelectionListener.idl> 
+#include <com/sun/star/view/SelectionType.idl> 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module awt { module grid {  
+ 
+//============================================================================= 
 
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/awt/grid/XGridSelectionListener.idl>
-#include <com/sun/star/view/SelectionType.idl>
-
-//=============================================================================
-
-module com {  module sun {  module star {  module awt { module grid {
-
-//=============================================================================
-
-/** This interfaces provides access to the selection of row for <type>UnoControlGrid</type>.
- */
+/** This interfaces provides access to the selection of row for <type>UnoControlGrid</type>. 
+ */     
 interface XGridSelection
-{
-    /** Returns the lowest index of the selection.
+{ 
+    /** Returns the lowest index of the selection. 
         @returns
             the lowest index.
     */
     long getMinSelectionIndex();
 
-    /** Returns the highest index of the selection.
+    /** Returns the highest index of the selection. 
         @returns
             the highest index.
     */
@@ -106,22 +106,22 @@ interface XGridSelection
     /** Adds a listener for the <type>GridSelectionEvent</type> posted after the grid changes.
         @param listener
             the listener to add.
-    */
-    [oneway] void addSelectionListener( [in] XGridSelectionListener  listener);
-
-    //-------------------------------------------------------------------------
+    */    
+    [oneway] void addSelectionListener( [in] XGridSelectionListener  listener); 
+ 
+    //------------------------------------------------------------------------- 
 
     /** Removes a listener previously added with <method>addSelectionListener()</method>.
         @param listener
             the listener to remove.
-    */
-    [oneway] void removeSelectionListener( [in] XGridSelectionListener listener);
+    */   
+    [oneway] void removeSelectionListener( [in] XGridSelectionListener listener); 
+ 
 
-
-};
-
-//=============================================================================
-
+}; 
+ 
+//============================================================================= 
+ 
 }; }; }; }; };
-
-#endif
+ 
+#endif 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ extern "C" {
 
 /** @file
     <p>This library can operate in two modes, application mode and direct mode.</p>
-
+    
 
     <h2>Application Mode</h2>
     In application mode the Java related settings are stored in files.
@@ -67,7 +67,7 @@ extern "C" {
     <dd>The file contains settings valid for all users. If a user changes a setting
     then it takes precedence over the setting from UNO_JAVA_JFW_SHARED_DATA.
     The content of this file is an implementation detail and may change in the future.</dd>
-
+    
     <dt>UNO_JAVA_JFW_INSTALL_DATA</dt>
     <dd><b>DEPRECATED. Support for this variable will soon be removed.</b><br>
     The file contains settings for all users. A user cannot override these settings.
@@ -78,7 +78,7 @@ extern "C" {
     default one hour. This value can be overridden by the bootstrap parameter
     UNO_JAVA_JFW_INSTALL_EXPIRE (<b>DEPRECATED</b>). Setting this variable to 1000 means
     the settings file is only valid for 1000 seconds.
-
+    
     <p>If one would not use UNO_JAVA_JFW_INSTALL_DATA during setup then most probably
     a user installation directory would be created in the home directory of root. This is
     because, java settings are determined and stored on behalf of the current user. In other
@@ -88,11 +88,11 @@ extern "C" {
     only people with root rights can install OOo. Then one has to take care that the
     installer removes this file when uninstalling.
     </p>
-
+    
 
     The content of this file is an implementation detail and may change in the future.</dd>
     </dl>
-
+    
     <p>The values for these parameters must be file URLs and include the file name, for
     example:<br>
     file:///d:/MyApp/javavendors.xml<br>
@@ -117,7 +117,7 @@ extern "C" {
     the bootrap parameter UNO_JAVA_JFW_CLASSPATH_URLS. The value contains of file URLs
     which must be separated by spaces.</p>
 
-
+    
     <h2>Direct Mode</h2>
 
     <p>The direct mode is intended for a scenario where no configuration files
@@ -127,7 +127,7 @@ extern "C" {
     For example, tools, such as regcomp, may use this  framework in a build
     environment. Then one would want to use settings which have been specified
     by the build environment. The framework would automatically use the
-    current settings when they change in the environment.
+    current settings when they change in the environment. 
     </p>
 
     <p> Here are examples how regcomp could be invoked using bootstrap parameters:
@@ -173,7 +173,7 @@ extern "C" {
     causes the framework to use the
     environment variable CLASSPATH. If this variable and UNO_JAVA_JFW_CLASSPATH are
     set then the class path is composed from UNO_JAVA_JFW_CLASSPATH and the environment
-    variable CLASSPATH.</dd>
+    variable CLASSPATH.</dd>    
     <dt>UNO_JAVA_JFW_PLUGIN</dt>
     <dd>Specified a file URL to a plugin library. If this variable is provided
     then a javavendors.xml is ignored. It must be provided if no
@@ -188,22 +188,22 @@ extern "C" {
     escape characters. Thats why the Windows path contain double back-slashes.
     One should also take into account that a console may have also special
     escape characters.</p>
-
+    
     <h2>What mode is used</h2>
     <p>
     The default mode is application mode. If at least one bootstrap parameter
     for the direct mode is provided then direct mode is used. </p>
 
-    <p>
+    <p>    
     All settings made by this API are done for the current user if not
-    mentioned differently.</p>
+    mentioned differently.</p>   
 
     <h2>Other bootstrap variables</h2>
     <dl>
     <dt>JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY</dt>
-    <dd>This is a unofficial variable which was introduced to workaround external issues.
-    It may be removed in the future. By setting it to 1, the framework will not try to
-    find out if the system is configured to use accessibility tools or if a JRE has an
+    <dd>This is a unofficial variable which was introduced to workaround external issues. 
+    It may be removed in the future. By setting it to 1, the framework will not try to 
+    find out if the system is configured to use accessibility tools or if a JRE has an 
     accessibiliy bridge installed</dd>
     </dl>
 */
@@ -332,7 +332,7 @@ sal_Bool SAL_CALL jfw_areEqualJavaInfo(
     JavaInfo const * pInfoA,JavaInfo const * pInfoB);
 
 /** determines if a Java Virtual Machine is already running.
-
+    
     <p>As long as the the office and the JREs only support one
     Virtual Machine per process the Java settings, particulary the
     selected Java, are not effective immediatly after changing when
@@ -399,7 +399,7 @@ javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning);
     the first <code>JavaInfo</code> object from the list obtained by the
     first plug-in is used. If this plug-in does not find any JREs then the
     next plug-in is used, and so on.</p>
-
+    
     @param ppInfo
     [out] a <code>JavaInfo</code> pointer, representing the selected JRE.
     The caller has to free it by calling <code>jfw_freeJavaInfo<code>. The
@@ -461,13 +461,13 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(
    The functions only checks if a JRE exists but does not modify any settings.
    To make the found JRE the &quot;selected JRE&quot; one has
    to call <code>jfw_setSelectedJRE</code>.</p>
-
+   
    @param pPath
    [in] a file URL to a directory.
    @param pInfo
    [out] the <code>JavaInfo</code> object which represents a JRE found at the
    location specified by <code>pPath</code>
-
+   
    @return
    JFW_E_NONE function ran successfully.<br/>
    JFW_E_INVALID_ARG at least on of the parameters was NULL<br/>
@@ -521,7 +521,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     [out] the <code>JavaVM</code> pointer.
     @param ppEnv
     [out] the <code>JNIenv</code> pointer.
-
+    
     @return
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_INVALID_ARG <code>ppVM</code>, <code>ppEnv</code> are NULL or
@@ -644,14 +644,14 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled);
 javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled);
 
 /** determines parameters which are passed to VM during its creation.
-
+    
     <p>The strings must be exactly as they are passed on the command line.
     For example, one could pass<br/>
     -Xdebug <br/>
     -Xrunjdw:transport=dt_socket,server=y,address=8000<br/>
     in order to enable debugging support.
     </p>
-
+    
     @param arParameters
     [in] contains the arguments. It can be NULL if nSize is 0.
     @param nSize
@@ -669,7 +669,7 @@ javaFrameworkError SAL_CALL jfw_setVMParameters(
     rtl_uString **  arArgs, sal_Int32 nSize);
 
 /** obtains the currently used start parameters.
-
+   
     <p>The caller needs to free the returned array with
     <code>rtl_freeMemory</code>. The contained strings must be released with
     <code>rtl_uString_release</code>.
@@ -681,7 +681,7 @@ javaFrameworkError SAL_CALL jfw_setVMParameters(
     @param pSize
     [out] on return contains the size of array returned in
     <code>parParameters</code>
-
+    
     @return
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_INVALIDARG parParameters or pSize are  NULL<br/>
@@ -703,7 +703,7 @@ javaFrameworkError SAL_CALL jfw_getVMParameters(
 
    @param pCP
    [in] the user class path.
-
+   
    @return
    JFW_E_NONE function ran successfully.<br/>
    JFW_E_INVALIDARG pCP is NULL.<br/>
@@ -717,7 +717,7 @@ javaFrameworkError SAL_CALL jfw_setUserClassPath(rtl_uString * pCP);
 
    <p>The function returns an empty string if no user class path is set.
    </p>
-
+   
    @param ppCP
    [out] contains the user class path on return. If <code>*ppCP</code> was
    not NULL then the value is overwritten. No attempt at freeing that string
@@ -747,7 +747,7 @@ javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP);
     </p>
     <p>
     Adding a path that is already stored causes no error.</p>
-
+    
     @param sLocation
     [in] file URL to a directory which contains a JRE.
 
@@ -801,7 +801,7 @@ javaFrameworkError SAL_CALL jfw_setJRELocations(
     [out] on return it contains the array of paths.
     @param pSize
     [out] on return it contains the size of the array <code>parLocations</code>.
-
+    
     @return
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_INVALIDARG parLocation is NULL or pSize is NULL.<br/>
@@ -825,7 +825,7 @@ javaFrameworkError SAL_CALL jfw_getJRELocations(
     @param pp_exist
         [out] the parameter is set to either sal_True or sal_False. The value is
         only valid if the function returns JFW_E_NONE.
-
+    
    @return
     JFW_E_NONE the function ran successfully.</br>
     JFW_E_ERROR an error occurred during execution.</br>
@@ -856,7 +856,7 @@ void SAL_CALL jfw_lock();
     <p>This function is called after <code>jfw_lock</code>. It allows other
     threads to use this API concurrently.</p>
 */
-void SAL_CALL jfw_unlock();
+void SAL_CALL jfw_unlock(); 
 
 
 #ifdef __cplusplus

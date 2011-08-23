@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ public:
     static void SAL_CALL thisRemoveDisposingListener( remote_Context *, remote_DisposingListener *);
     static void SAL_CALL thisDispose( remote_Context *);
 public:
-    oslInterlockedCount m_nRef;
+    oslInterlockedCount	m_nRef;
     sal_Bool m_bDisposed;
     list < remote_DisposingListener * > m_lstListener;
     Mutex m_mutex;

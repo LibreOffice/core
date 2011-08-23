@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,7 +129,7 @@ static sal_Bool __rtl_random_initPool (RandomPool_Impl *pImpl)
         double              seed;
 
         /* The use of uninitialized stack variables as a way to
-         * enhance the entropy of the random pool triggers
+         * enhance the entropy of the random pool triggers 
          * memory checkers like purify and valgrind.
          */
 

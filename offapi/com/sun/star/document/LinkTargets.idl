@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,35 +24,35 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_document_LinkTargets_idl__
-#define __com_sun_star_document_LinkTargets_idl__
-
-#ifndef __com_sun_star_container_XNameAccess_idl__
-#include <com/sun/star/container/XNameAccess.idl>
-#endif
-
-
-//=============================================================================
-
-module com {   module sun {   module star {   module document {
-
-//=============================================================================
-
+#ifndef __com_sun_star_document_LinkTargets_idl__  
+#define __com_sun_star_document_LinkTargets_idl__  
+  
+#ifndef __com_sun_star_container_XNameAccess_idl__  
+#include <com/sun/star/container/XNameAccess.idl>  
+#endif  
+  
+  
+//=============================================================================  
+  
+module com {   module sun {   module star {   module document {   
+  
+//=============================================================================  
+  
 /** This service gives access to a collection of names that are child links
     of the parent object that supplied this service.
-
+    
     <p>The <type scope="com::sun::star::container">XNameAccess</type> returns elements
     of <type scope="com::sun::star::beans">XPropertySet</type> that implement
     the service <type>LinkTarget</type>.  </p>
  */
 published service LinkTargets
-{
-    interface com::sun::star::container::XNameAccess;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+{  
+    interface com::sun::star::container::XNameAccess;  
+  
+};  
+  
+//=============================================================================  
+  
+}; }; }; };   
+  
+#endif  

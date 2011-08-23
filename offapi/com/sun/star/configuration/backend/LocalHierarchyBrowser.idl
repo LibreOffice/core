@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,52 +29,52 @@
 
 #ifndef __com_sun_star_configuration_backend_HierarchyBrowser_idl__
 #include <com/sun/star/configuration/backend/HierarchyBrowser.idl>
-#endif
+#endif 
 
-//=============================================================================
+//============================================================================= 
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
+//============================================================================= 
 
 /**
-    is a <type>HierarchyBrowser</type>, that browses a configuration database
+    is a <type>HierarchyBrowser</type>, that browses a configuration database 
     stored in the local file system.
-
+  
     @see com::sun::star::configuration::backend::LocalSingleBackend
 
     @since OOo 1.1.2
 */
-published service LocalHierarchyBrowser
+published service LocalHierarchyBrowser 
 {
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /** allows browsing a configuration hierarchy for components.
+    /** allows browsing a configuration hierarchy for components. 
 
-        <p> Either a schema repository or a layer directory can be browsed.
+        <p> Either a schema repository or a layer directory can be browsed. 
             Components can be retrieved either as component names or as
             file URLs.
         </p>
 
         <p> The following additional arguments are supported for
-            <member scope="com::sun::star::task">XJob::execute()</member>:<BR/>
+            <member scope="com::sun::star::task">XJob::execute()</member>:<BR/> 
 
         <dl>
             <dt><code>SchemaDataUrl</code> : <atom>string</atom></dt>
-            <dd>Base directory to search for schema files.
-                If this is specified, schema files will be browsed,
+            <dd>Base directory to search for schema files. 
+                If this is specified, schema files will be browsed, 
                 so argument <code>LayerDataUrl</code> should not be specified.
             </dd>
             <dt><code>LayerDataUrl</code> : <atom>string</atom></dt>
-            <dd>Base directory to search for layer files.
-                If this is specified, layer files will be browsed,
+            <dd>Base directory to search for layer files. 
+                If this is specified, layer files will be browsed, 
                 so argument <code>SchemaDataUrl</code> should not be specified.
             </dd>
             <dt><code>FetchComponentNames</code> : <atom>boolean</atom></dt>
             <dd><ul><li>if <TRUE/> components will be returned as component names,</li>
                     <li>if <FALSE/> components will be returned as fileURLs,</li>
-                    <li>if this argument is not provided, the default is to
-                        retrieve names when browsing schemas and URLs when
+                    <li>if this argument is not provided, the default is to 
+                        retrieve names when browsing schemas and URLs when 
                         browsing layers.</li>
             </dd>
         </dl>
@@ -82,11 +82,11 @@ published service LocalHierarchyBrowser
       */
     service HierarchyBrowser ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 } ;
 
-//=============================================================================
+//============================================================================= 
 
-} ; } ; } ; } ; } ;
+} ; } ; } ; } ; } ; 
 
-#endif
+#endif 

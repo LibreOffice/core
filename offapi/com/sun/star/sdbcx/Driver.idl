@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,21 +24,21 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbcx_Driver_idl__
-#define __com_sun_star_sdbcx_Driver_idl__
-
-#ifndef __com_sun_star_sdbc_Driver_idl__
-#include <com/sun/star/sdbc/Driver.idl>
-#endif
-
- module com {  module sun {  module star {  module sdbcx {
-
- published interface XDataDefinitionSupplier;
- published interface XCreateCatalog;
- published interface XDropCatalog;
-
-
-/** extends the service
+#ifndef __com_sun_star_sdbcx_Driver_idl__ 
+#define __com_sun_star_sdbcx_Driver_idl__ 
+ 
+#ifndef __com_sun_star_sdbc_Driver_idl__ 
+#include <com/sun/star/sdbc/Driver.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module sdbcx { 
+ 
+ published interface XDataDefinitionSupplier; 
+ published interface XCreateCatalog; 
+ published interface XDropCatalog; 
+ 
+ 
+/** extends the service 
     <type scope="com::sun::star::sdbc">Driver</type>
     by beans for data definition.
 <p>
@@ -53,26 +53,26 @@
 </p>
  */
 published service Driver
-{
-    service com::sun::star::sdbc::Driver;
-
+{ 
+    service com::sun::star::sdbc::Driver; 
+    
     /** used to get access to the catalog.
         @see Catalog
     */
-    interface XDataDefinitionSupplier;
-
-
+    interface XDataDefinitionSupplier; 
+ 
+     
     /** is optional for implementation.
      */
-    [optional] interface XCreateCatalog;
-
+    [optional] interface XCreateCatalog; 
+     
     /** is optional for implementation.
      */
-    [optional] interface XDropCatalog;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    [optional] interface XDropCatalog; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+#endif 

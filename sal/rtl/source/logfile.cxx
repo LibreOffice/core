@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,9 +62,9 @@ namespace {
 static oslFileHandle g_aFile = 0;
 static sal_Bool g_bHasBeenCalled = sal_False;
 static const sal_Int32 g_BUFFERSIZE = 4096;
-static sal_Char *g_buffer = 0;
-
-class   LoggerGuard
+static sal_Char *g_buffer = 0;	
+    
+class	LoggerGuard
 {
 public:
     ~LoggerGuard();
@@ -80,7 +80,7 @@ LoggerGuard::~LoggerGuard()
             osl_writeFile( g_aFile, g_buffer, nConverted, (sal_uInt64 *)&nWritten );
         osl_closeFile( g_aFile );
         g_aFile = 0;
-
+        
         rtl_freeMemory( g_buffer );
         g_buffer = 0;
         g_bHasBeenCalled = sal_False;
@@ -132,17 +132,17 @@ void init() {
             OUString value;
             if( rtl_bootstrap_get( name.pData, &value.pData, 0 ) )
             {
-                //  Obtain process id.
+                //	Obtain process id.
                 oslProcessIdentifier aProcessId = 0;
                 oslProcessInfo info;
                 info.Size = sizeof (oslProcessInfo);
                 if (osl_getProcessInfo (0, osl_Process_IDENTIFIER, &info) == osl_Process_E_None)
                     aProcessId = info.Ident;
-
-                //  Construct name of log file and open the file.
+                
+                //	Construct name of log file and open the file.
                 OUStringBuffer buf( 128 );
                 buf.append( value );
-
+                
                 // if the filename ends with .nopid, the incoming filename is not modified
                 if( value.getLength() < 6 /* ".nopid" */ ||
                     rtl_ustr_ascii_compare_WithLength(
@@ -177,7 +177,7 @@ void init() {
                             osl_writeFile( g_aFile, g_buffer, nConverted , (sal_uInt64 *)&nWritten );
                         }
                     }
-
+                    
                     nConverted = sprintf (g_buffer, "Process id is %" SAL_PRIuUINT32 "\n", aProcessId);
                     if( nConverted )
                     {
@@ -197,7 +197,7 @@ void init() {
 
 }
 
-extern "C" void SAL_CALL rtl_logfile_trace  ( const char *pszFormat, ... )
+extern "C" void	SAL_CALL rtl_logfile_trace	( const char *pszFormat, ... )
 {
     init();
     if( g_buffer )

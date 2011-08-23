@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,42 +24,42 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_ElementChange_idl__
-#define __com_sun_star_util_ElementChange_idl__
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module util {
-
-//=============================================================================
-
+#ifndef __com_sun_star_util_ElementChange_idl__ 
+#define __com_sun_star_util_ElementChange_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module util {  
+ 
+//============================================================================= 
+ 
 /** This structure describes a single change that is part of a batch of changes.
  */
 published struct ElementChange
 {
     /** This contains the accessor to the element which changed.
-
+        
         <p>The type and the value of the accessor depends on the service.</p>
      */
-    any Accessor;
-
-    //-------------------------------------------------------------------------
-
+    any Accessor; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** This contains the element that was inserted or changed.
      */
-    any Element;
-
-    //-------------------------------------------------------------------------
-
+    any Element; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** This contains the element that was replaced or removed.
      */
-    any ReplacedElement;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    any ReplacedElement; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

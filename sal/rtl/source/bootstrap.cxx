@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -318,18 +318,18 @@ struct Bootstrap_Impl
 {
     sal_Int32 _nRefCount;
     Bootstrap_Impl * _base_ini;
-
+    
     NameValueList _nameValueList;
     OUString      _iniName;
-
+    
     explicit Bootstrap_Impl (OUString const & rIniName);
     ~Bootstrap_Impl();
-
+    
     static void * operator new (std::size_t n) SAL_THROW(())
         { return rtl_allocateMemory (sal_uInt32(n)); }
     static void operator delete (void * p , std::size_t) SAL_THROW(())
         { rtl_freeMemory (p); }
-
+    
     bool getValue(
         rtl::OUString const & key, rtl_uString ** value,
         rtl_uString * defaultValue, LookupMode mode, bool override,
@@ -367,8 +367,8 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
                 rtl_bootstrap_args_open( base_ini.pData ) );
         }
     }
-
-#if OSL_DEBUG_LEVEL > 1
+    
+#if OSL_DEBUG_LEVEL > 1    
     OString sFile = OUStringToOString(_iniName, RTL_TEXTENCODING_ASCII_US);
     OSL_TRACE(__FILE__" -- Bootstrap_Impl() - %s\n", sFile.getStr());
 #endif /* OSL_DEBUG_LEVEL > 1 */
@@ -660,7 +660,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
         return 0;
     }
     iniName = status.getFileURL();
-
+    
     Bootstrap_Impl * that;
     osl::ResettableMutexGuard guard( osl::Mutex::getGlobalMutex() );
     bootstrap_map::t* p_bootstrap_map = bootstrap_map::get();
@@ -707,7 +707,7 @@ void SAL_CALL rtl_bootstrap_args_close (
     if (handle == 0)
         return;
     Bootstrap_Impl * that = static_cast< Bootstrap_Impl * >( handle );
-
+    
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
     bootstrap_map::t* p_bootstrap_map = bootstrap_map::get();
     OSL_ASSERT(
@@ -774,7 +774,7 @@ void SAL_CALL rtl_bootstrap_get_iniName_from_handle (
         }
         else
         {
-            const OUString & iniName = getIniFileName_Impl();
+            const OUString & iniName = getIniFileName_Impl();       
             rtl_uString_assign(ppIniName, iniName.pData);
         }
     }
@@ -881,7 +881,7 @@ namespace {
 
 int hex(sal_Unicode c) {
     return
-        c >= '0' && c <= '9' ? c - '0' :
+        c >= '0' && c <= '9' ? c - '0' : 
         c >= 'A' && c <= 'F' ? c - 'A' + 10 :
         c >= 'a' && c <= 'f' ? c - 'a' + 10 : -1;
 }

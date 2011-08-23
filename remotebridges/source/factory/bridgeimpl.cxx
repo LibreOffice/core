@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace remotebridges_factory {
         m_pContext( pContext )
     {
         g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-
+        
         remote_DisposingListener::acquire = thisAcquire;
         remote_DisposingListener::release = thisRelease;
         remote_DisposingListener::disposing = thisDisposing;
@@ -70,8 +70,8 @@ namespace remotebridges_factory {
         {
             return a;
         }
-
-        return OComponentHelper::queryInterface( aType );
+        
+        return OComponentHelper::queryInterface( aType );		
     }
 
     void OBridge::disposing()
@@ -104,7 +104,7 @@ namespace remotebridges_factory {
             m_pContext = 0;
         }
     }
-
+        
 
     Reference< XInterface > OBridge::getInstance( const ::rtl::OUString& sInstanceName )
             throw(::com::sun::star::uno::RuntimeException)
@@ -138,11 +138,11 @@ namespace remotebridges_factory {
             }
 
             Type type = getCppuType( (Reference < XInterface > * ) 0 );
-
+        
             remote_Interface *pRemoteI = 0;
             uno_Any exception;
             uno_Any *pException = &exception;
-
+            
             pContext->getRemoteInstance(
                 pEnvRemote,
                 &pRemoteI,
@@ -201,11 +201,11 @@ namespace remotebridges_factory {
 
     ::rtl::OUString SAL_CALL OBridge::getName(  )
                 throw(::com::sun::star::uno::RuntimeException)
-
+    
     {
         return OUString( m_pContext->m_pName );
     }
-
+    
     ::rtl::OUString OBridge::getDescription(  )
             throw(::com::sun::star::uno::RuntimeException)
     {
@@ -228,10 +228,10 @@ namespace remotebridges_factory {
                 pCollection = &collection;
             }
         }
-
+        
         return (*pCollection).getTypes();
     }
-
+    
     Sequence< sal_Int8 > SAL_CALL OBridge::getImplementationId(  ) throw( RuntimeException)
     {
         static OImplementationId *pId = 0;
@@ -246,7 +246,7 @@ namespace remotebridges_factory {
         }
         return (*pId).getImplementationId();
     }
-
+    
     //----------------------
     // static methods
     //----------------------

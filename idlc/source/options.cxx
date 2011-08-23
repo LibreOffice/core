@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,37 +36,37 @@ using namespace rtl;
 
 Options::Options(): m_stdin(false), m_verbose(false), m_quiet(false)
 {
-}
+}	
 
 Options::~Options()
 {
 }
 
-sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
+sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile) 
     throw( IllegalArgument )
 {
-    sal_Bool    ret = sal_True;
-    sal_uInt16  j=0;
-
+    sal_Bool 	ret = sal_True;
+    sal_uInt16	j=0;
+    
     if (!bCmdFile)
     {
         bCmdFile = sal_True;
-
+        
         m_program = av[0];
-
+        
         if (ac < 2)
         {
             fprintf(stderr, "%s", prepareHelp().getStr());
             ret = sal_False;
         }
-
+        
         j = 1;
     } else
     {
         j = 0;
     }
-
-    char    *s=NULL;
+    
+    char	*s=NULL;
     for (; j < ac; j++)
     {
         if (av[j][0] == '-')
@@ -87,14 +87,14 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         {
                             tmp += " your input '" + OString(av[j+1]) + "'";
                         }
-
+                        
                         throw IllegalArgument(tmp);
                     }
                 } else
                 {
                     s = av[j] + 2;
                 }
-
+                
                 m_options["-O"] = OString(s);
                 break;
             case 'I':
@@ -112,14 +112,14 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         {
                             tmp += " your input '" + OString(av[j+1]) + "'";
                         }
-
+                        
                         throw IllegalArgument(tmp);
                     }
                 } else
                 {
                     s = av[j] + 2;
                 }
-
+                
                 OString inc(s);
                 if ( inc.indexOf(';') > 0 )
                 {
@@ -129,7 +129,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     do inc = inc + " -I\"" + tmp.getToken( 0, ';', nIndex ) +"\""; while( nIndex != -1 );
                 } else
                     inc = OString("-I\"") + s + "\"";
-
+                
                 if (m_options.count("-I") > 0)
                 {
                     OString tmp(m_options["-I"]);
@@ -155,14 +155,14 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         {
                             tmp += " your input '" + OString(av[j+1]) + "'";
                         }
-
+                        
                         throw IllegalArgument(tmp);
                     }
                 } else
                 {
                     s = av[j];
                 }
-
+                
                 if (m_options.count("-D") > 0)
                 {
                     OString tmp(m_options["-D"]);
@@ -175,7 +175,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 if (av[j][2] != '\0')
                 {
                     throw IllegalArgument(OString(av[j]) + ", please check your input");
-                }
+                } 				
                 if (m_options.count("-C") == 0)
                     m_options["-C"] = OString(av[j]);
                 break;
@@ -208,12 +208,12 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     if (m_options.count("-we") == 0)
                         m_options["-we"] = OString(av[j]);
                 } else {
-                    if (av[j][2] == '\0') {
+                    if (av[j][2] == '\0') { 
                         if (m_options.count("-w") == 0)
                             m_options["-w"] = OString(av[j]);
                     } else
                         throw IllegalArgument(OString(av[j]) + ", please check your input");
-                }
+                }                    
                 break;
             case 'h':
             case '?':
@@ -224,7 +224,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 {
                     fprintf(stdout, "%s", prepareHelp().getStr());
                     exit(0);
-                }
+                }					
             case 's':
                 if (/*MSVC trouble: std::*/strcmp(&av[j][2], "tdin") == 0)
                 {
@@ -266,7 +266,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             if (c!=13 && c!=10) {
                                 if (found || c!=' ') {
                                     buffer[i++]=c;
-                                    continue;
+                                    continue;                
                                 }
                             }
                             if (i==0)
@@ -285,33 +285,33 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         rargc++;
                     }
                     fclose(cmdFile);
-
+                    
                     ret = initOptions(rargc, rargv, bCmdFile);
-
+                    
                     long ii = 0;
-                    for (ii=0; ii < rargc; ii++)
+                    for (ii=0; ii < rargc; ii++) 
                     {
                         free(rargv[ii]);
                     }
-                }
+                }		
             } else
             {
                 OString name(av[j]);
                 name = name.toAsciiLowerCase();
                 if ( name.lastIndexOf(".idl") != (name.getLength() - 4) )
                 {
-                    throw IllegalArgument("'" + OString(av[j]) +
+                    throw IllegalArgument("'" + OString(av[j]) + 
                         "' is not a valid input file, only '*.idl' files will be accepted");
                 }
                 m_inputFiles.push_back(av[j]);
-            }
+            }		
         }
     }
+    
+    return ret;	
+}	
 
-    return ret;
-}
-
-OString Options::prepareHelp()
+OString	Options::prepareHelp()
 {
     OString help("\nusing: ");
     help += m_program
@@ -337,26 +337,26 @@ OString Options::prepareHelp()
     help += "    -we         = treat warnings as errors.\n";
     help += "    -h|-?       = print this help message and exit.\n";
     help += prepareVersion();
-
+    
     return help;
-}
+}	
 
-OString Options::prepareVersion()
+OString	Options::prepareVersion()
 {
     OString version("\nSun Microsystems (R) ");
     version += m_program + " Version 1.1\n\n";
     return version;
-}
+}	
 
 const OString& Options::getProgramName() const
 {
     return m_program;
-}
+}	
 
 sal_Bool Options::isValid(const OString& option)
 {
-    return (m_options.count(option) > 0);
-}
+    return (m_options.count(option) > 0);	
+}	
 
 const OString Options::getOption(const OString& option)
     throw( IllegalArgument )

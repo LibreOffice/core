@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 module com { module sun { module star { module system {
 
 //=============================================================================
-/** Different settings for the <type>SystemShellExecute</type> service.
+/**	Different settings for the <type>SystemShellExecute</type> service.
  */
 
 published constants SystemShellExecuteFlags
@@ -40,14 +40,14 @@ published constants SystemShellExecuteFlags
     //---------------------------------------------------------------------
     /** Uses the default settings for executing commands.
     */
-    const long DEFAULTS                = 0;
+    const long DEFAULTS				   = 0;
 
     //---------------------------------------------------------------------
-    /** Prevents the display of system error message boxes if the
+    /** Prevents the display of system error message boxes if the 
         method <member scope="com::sun::star::system">XSystemShellExecute::execute()</member> fails.
      */
     const long NO_SYSTEM_ERROR_MESSAGE = 1;
-};
+};	
 
 //=============================================================================
 

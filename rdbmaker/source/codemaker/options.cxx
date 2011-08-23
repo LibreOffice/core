@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,28 +25,28 @@
  *
  ************************************************************************/
 
-#include    <codemaker/options.hxx>
+#include	<codemaker/options.hxx>
 
 using namespace rtl;
 
 Options::Options()
 {
-}
+}	
 
 Options::~Options()
 {
-
+    
 }
 
 const OString& Options::getProgramName() const
 {
     return m_program;
-}
+}	
 
 sal_Bool Options::isValid(const OString& option)
 {
-    return (m_options.count(option) > 0);
-}
+    return (m_options.count(option) > 0);	
+}	
 
 const OString Options::getOption(const OString& option)
     throw( IllegalArgument )
@@ -62,6 +62,6 @@ const OString Options::getOption(const OString& option)
 
 const StringVector& Options::getInputFiles()
 {
-    return m_inputFiles;
-}
-
+    return m_inputFiles;	
+}	
+    

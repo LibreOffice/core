@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "remote_types.hxx"
 
 namespace bridges_remote {
-
+    
 sal_Bool SAL_CALL remote_relatesToInterface2( typelib_TypeDescription * pTypeDescr )
 {
     switch (pTypeDescr->eTypeClass)
@@ -92,5 +92,5 @@ sal_Bool SAL_CALL remote_relatesToInterface2( typelib_TypeDescription * pTypeDes
     }
     return sal_False;
 }
-
+    
 }

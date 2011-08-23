@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,34 +24,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_GroupShape_idl__
-#define __com_sun_star_drawing_GroupShape_idl__
+#ifndef __com_sun_star_drawing_GroupShape_idl__ 
+#define __com_sun_star_drawing_GroupShape_idl__ 
+ 
+#ifndef __com_sun_star_drawing_XShapeGroup_idl__ 
+#include <com/sun/star/drawing/XShapeGroup.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_drawing_XShapes_idl__ 
+#include <com/sun/star/drawing/XShapes.idl> 
+#endif 
 
-#ifndef __com_sun_star_drawing_XShapeGroup_idl__
-#include <com/sun/star/drawing/XShapeGroup.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XShapes_idl__
-#include <com/sun/star/drawing/XShapes.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_Shape_idl__
-#include <com/sun/star/drawing/Shape.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_Shape_idl__ 
+#include <com/sun/star/drawing/Shape.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 /** This service is for a group of <type>Shape</type>s.
-        @see XShapeGroup
-        @see XShapes
+        @see XShapeGroup 
+        @see XShapes 
  */
 published service GroupShape
-{
+{ 
     /** Since a GroupShape is also a shape, it has to support this service
     */
     service com::sun::star::drawing::Shape;
@@ -59,18 +59,18 @@ published service GroupShape
     /** this is a ui feature for entering and leaving the group for
         editing.
     */
-    interface com::sun::star::drawing::XShapeGroup;
-
-
+    interface com::sun::star::drawing::XShapeGroup; 
+ 
+     
     /** lets you access the <type>Shape</type>s in this Group.
      */
-    interface com::sun::star::drawing::XShapes;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    interface com::sun::star::drawing::XShapes; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

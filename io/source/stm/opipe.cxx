@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ using namespace ::com::sun::star::lang;
 #include "streamhelper.hxx"
 
 // Implementation and service names
-#define IMPLEMENTATION_NAME "com.sun.star.comp.io.stm.Pipe"
+#define IMPLEMENTATION_NAME	"com.sun.star.comp.io.stm.Pipe"
 #define SERVICE_NAME "com.sun.star.io.Pipe"
 
 namespace io_stm{
@@ -70,7 +70,7 @@ public:
 
 public: // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-        throw(  NotConnectedException,
+        throw(	NotConnectedException,
                 BufferSizeExceededException,
                 RuntimeException );
     virtual sal_Int32 SAL_CALL readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
@@ -122,8 +122,8 @@ private:
     // DEBUG
     inline void checkInvariant();
 
-    Reference < XConnectable >  m_succ;
-    Reference < XConnectable >  m_pred;
+    Reference < XConnectable > 	m_succ;
+    Reference < XConnectable > 	m_pred;
 
     sal_Int32 m_nBytesToSkip;
 
@@ -134,7 +134,7 @@ private:
 
     oslCondition m_conditionBytesAvail;
     Mutex     m_mutexAccess;
-    IFIFO       *m_pFIFO;
+    IFIFO		*m_pFIFO;
 };
 
 
@@ -144,8 +144,8 @@ OPipeImpl::OPipeImpl()
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     m_nBytesToSkip  = 0;
 
-    m_bOutputStreamClosed   = sal_False;
-    m_bInputStreamClosed    = sal_False;
+    m_bOutputStreamClosed 	= sal_False;
+    m_bInputStreamClosed 	= sal_False;
 
     m_pFIFO = new MemFIFO;
     m_conditionBytesAvail = osl_createCondition();
@@ -405,7 +405,7 @@ void OPipeImpl::setSuccessor( const Reference < XConnectable >  &r )
      }
 }
 
-Reference < XConnectable > OPipeImpl::getSuccessor()    throw( RuntimeException )
+Reference < XConnectable > OPipeImpl::getSuccessor() 	throw( RuntimeException )
 {
     return m_succ;
 }
@@ -476,7 +476,7 @@ Reference < XInterface > SAL_CALL OPipeImpl_CreateInstance(
 }
 
 
-OUString    OPipeImpl_getImplementationName()
+OUString 	OPipeImpl_getImplementationName()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace cli_uno
 public __gc class UnoInterfaceInfo
 {
 public:
-    UnoInterfaceInfo(Bridge const * bridge, uno_Interface* unoI,
+    UnoInterfaceInfo(Bridge const * bridge, uno_Interface* unoI, 
                      typelib_InterfaceTypeDescription* td);
     ~UnoInterfaceInfo();
     uno_Interface * m_unoI; // wrapped interface
@@ -75,7 +75,7 @@ public __gc class  UnoInterfaceProxy: public srrp::RealProxy,
     sc::ArrayList* m_listIfaces;
     /** The number of UNO interfaces this proxy represents. It corresponds
         to the the number of elements in m_listIfaces.
-    */
+    */    
     int m_numUnoIfaces;
     /** The list is filled with additional UnoInterfaceProxy object due
         to aggregation via bridges.  Though the latter is strongly
@@ -83,12 +83,12 @@ public __gc class  UnoInterfaceProxy: public srrp::RealProxy,
     */
     sc::ArrayList* m_listAdditionalProxies;
     int m_nlistAdditionalProxies;
-
+    
     UnoInterfaceInfo * findInfo( ::System::Type * type );
 
     Bridge const* m_bridge;
      System::String* m_oid;
-
+    
 #if OSL_DEBUG_LEVEL >= 2
     /** The string contains all names of UNO interfaces which are
         represented by this proxy. It is used to print out the interfaces
@@ -100,7 +100,7 @@ public __gc class  UnoInterfaceProxy: public srrp::RealProxy,
 //      */
     int _numInterfaces;
 #endif
-
+    
 public:
 
     /** Creates a proxy and registers it on the dot NET side.
@@ -139,7 +139,7 @@ public:
         m_sTypeName = name;
     }
 
-
+    
 private:
     UnoInterfaceProxy(
         Bridge * bridge,
@@ -169,7 +169,7 @@ private:
     static System::String* m_ToString_String = new System::String("ToString");
 
 protected:
-     srrm::IMessage* invokeObject(sc::IDictionary* properties,
+     srrm::IMessage* invokeObject(sc::IDictionary* properties,                    
                                   srrm::LogicalCallContext* context,
                                   srrm::IMethodCallMessage* mcm);
 };
@@ -228,17 +228,17 @@ struct CliProxy: public uno_Interface
 
         That is the real Uno position has to be deducted by 3. Then
         arUnoPosToCliPos[pos] contains the index for m_arMethodInfos.
-
+        
      */
     gcroot<System::Int32[]> m_arUnoPosToCliPos;
 
     /** Count of inherited interfaces of the cli interface.
      */
     int m_nInheritedInterfaces;
-    /** Contains the number of methods of each interface.
+    /** Contains the number of methods of each interface. 
      */
     gcroot<System::Int32[]> m_arInterfaceMethodCount;
-
+    
     CliProxy( Bridge const* bridge, System::Object* cliI,
                  typelib_TypeDescription const* pTD,
                  const rtl::OUString& usOid);
@@ -277,16 +277,16 @@ struct CliProxy: public uno_Interface
        The implementation assumes that the order of interface methods as
        provided by InterfaceMapping.InterfaceMethods corresponds to the order
        of methods in the interface declaration.
-
+      
        @param nUnoFunctionPos
        Position of the method in the uno interface.
      */
     sr::MethodInfo* getMethodInfo(int nUnoFunctionPos,
                                   const rtl::OUString & usMethodName,
                                   MethodKind mk);
-
+    
     void SAL_CALL uno_DispatchMethod(
-        struct _uno_Interface * pUnoI,
+        struct _uno_Interface * pUnoI, 
         const struct _typelib_TypeDescription * pMemberType,
         void * pReturn,
         void * pArgs[],

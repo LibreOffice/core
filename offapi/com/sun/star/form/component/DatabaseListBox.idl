@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,28 +24,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_component_DatabaseListBox_idl__
-#define __com_sun_star_form_component_DatabaseListBox_idl__
-
-#ifndef __com_sun_star_form_component_ListBox_idl__
-#include <com/sun/star/form/component/ListBox.idl>
-#endif
-
-#ifndef __com_sun_star_form_DataAwareControlModel_idl__
-#include <com/sun/star/form/DataAwareControlModel.idl>
-#endif
-
-#ifndef __com_sun_star_form_ListSourceType_idl__
-#include <com/sun/star/form/ListSourceType.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module form {  module component {
-
-//=============================================================================
-
+#ifndef __com_sun_star_form_component_DatabaseListBox_idl__ 
+#define __com_sun_star_form_component_DatabaseListBox_idl__ 
+ 
+#ifndef __com_sun_star_form_component_ListBox_idl__ 
+#include <com/sun/star/form/component/ListBox.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_form_DataAwareControlModel_idl__ 
+#include <com/sun/star/form/DataAwareControlModel.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_form_ListSourceType_idl__ 
+#include <com/sun/star/form/ListSourceType.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module form {  module component {  
+ 
+//============================================================================= 
+ 
 /** This service specifies a data-aware list box control model.
 
     <p>The base service for list boxes (<type>ListBox</type>) offers only
@@ -72,13 +72,13 @@
 
  */
 published service DatabaseListBox
-{
-    service com::sun::star::form::component::ListBox;
-
-    service com::sun::star::form::DataAwareControlModel;
-
-    //-------------------------------------------------------------------------
-
+{ 
+    service com::sun::star::form::component::ListBox; 
+    
+    service com::sun::star::form::DataAwareControlModel; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies which column of the list result set should be used for data exchange.
 
         <p>When you make a selection from a list box, the "BoundColumn"
@@ -87,7 +87,7 @@ published service DatabaseListBox
         to a database field, the column value is stored in the
         database field identified by the property
         <member scope="com::sun::star::form">DataAwareControlModel::DataField</member>.
-
+        
         <dl>
             <dt>0</dt>
             <dd>The selected (displayed) list box string is stored in
@@ -107,10 +107,10 @@ published service DatabaseListBox
         Otherwise the property is ignored, as there is no result set from which to
         get the column values.</p>
     */
-    [property] short BoundColumn;
-
-    //-------------------------------------------------------------------------
-
+    [property] short BoundColumn; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** describes the kind of list source used.
 
         <p>Depending on the value of this property, the way the value of <member>ListBox::ListSource</member>
@@ -148,12 +148,12 @@ published service DatabaseListBox
         </p>
 
      */
-    [property] com::sun::star::form::ListSourceType ListSourceType;
-
-};
-
-//=============================================================================
-
-}; }; }; }; };
-
-#endif
+    [property] com::sun::star::form::ListSourceType ListSourceType; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; };  
+ 
+#endif 

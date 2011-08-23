@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,263 +24,263 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_XResultSetMetaData_idl__
-#define __com_sun_star_sdbc_XResultSetMetaData_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_SQLException_idl__
-#include <com/sun/star/sdbc/SQLException.idl>
-#endif
-
- module com {  module sun {  module star {  module sdbc {
-
-
+#ifndef __com_sun_star_sdbc_XResultSetMetaData_idl__ 
+#define __com_sun_star_sdbc_XResultSetMetaData_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_sdbc_SQLException_idl__ 
+#include <com/sun/star/sdbc/SQLException.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module sdbc { 
+ 
+ 
 /** can be used to find out about the types and properties
     of the columns in a ResultSet.
  */
 published interface XResultSetMetaData: com::sun::star::uno::XInterface
-{
-
+{ 
+     
     /** returns the number of columns in this ResultSet.
         @returns
             the column count
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    long getColumnCount() raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    long getColumnCount() raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** indicates whether the column is automatically numbered, thus read-only.
         @param column
             the first column is 1, the second is 2,
         @returns
             <TRUE/> if so
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    boolean isAutoIncrement([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    boolean isAutoIncrement([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** indicates whether a column's case matters.
         @param column
             the first column is 1, the second is 2,
         @returns
             <TRUE/> if so
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    boolean isCaseSensitive([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    boolean isCaseSensitive([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** indicates whether the column can be used in a where clause.
         @param column
             the first column is 1, the second is 2,
         @returns
             <TRUE/> if so
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    boolean isSearchable([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    boolean isSearchable([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** indicates whether the column is a cash value.
         @param column
             the first column is 1, the second is 2,
         @returns
             <TRUE/> if so
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    boolean isCurrency([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    boolean isCurrency([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** indicates the nullability of values in the designated column.@see com::sun::star::sdbc::ColumnValue
         @param column
             the first column is 1, the second is 2,
         @returns
             <TRUE/> if so
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    long isNullable([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    long isNullable([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** indicates whether values in the column are signed numbers.
         @param column
             the first column is 1, the second is 2,
         @returns
             <TRUE/> if so
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    boolean isSigned([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    boolean isSigned([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** indicates the column's normal max width in chars.
         @param column
             the first column is 1, the second is 2,
         @returns
             the normal maximum number of characters allowed as the width of the designated column
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    long getColumnDisplaySize([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    long getColumnDisplaySize([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the suggested column title for use in printouts and
         displays.
         @param column
             the first column is 1, the second is 2,
         @returns
             the suggested column title
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    string getColumnLabel([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    string getColumnLabel([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets a column's name.
         @param column
             the first column is 1, the second is 2,
         @returns
             the column name
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    string getColumnName([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    string getColumnName([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets a column's table's schema.
         @param column
             the first column is 1, the second is 2,
         @returns
             the schema name
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    string getSchemaName([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    string getSchemaName([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets a column's number of decimal digits.
         @param column
             the first column is 1, the second is 2,
         @returns
             precision
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    long getPrecision([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    long getPrecision([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets a column's number of digits to right of the decimal point.
         @param column
             the first column is 1, the second is 2,
         @returns
             scale
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    long getScale([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    long getScale([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets a column's table name.
         @param column
             the first column is 1, the second is 2,
         @returns
             the table name
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    string getTableName([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    string getTableName([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets a column's table's catalog name.
         @param column
             the first column is 1, the second is 2,
         @returns
             the catalog name
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    string getCatalogName([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    string getCatalogName([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** retrieves a column's SQL type.
         @param column
             the first column is 1, the second is 2,
         @returns
             the column type
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    long getColumnType([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    long getColumnType([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** retrieves a column's database-specific type name.
         @param column
             the first column is 1, the second is 2,
         @returns
             the type name
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    string getColumnTypeName([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    string getColumnTypeName([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** indicates whether a column is definitely not writable.
         @param column
             the first column is 1, the second is 2,
         @returns
             <TRUE/> if so
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    boolean isReadOnly([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    boolean isReadOnly([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** indicates whether it is possible for a write on the column to succeed.
         @param column
             the first column is 1, the second is 2,
         @returns
             <TRUE/> if so
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    boolean isWritable([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    boolean isWritable([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** indicates whether a write on the column will definitely succeed.
         @param column
             the first column is 1, the second is 2,
         @returns
             <TRUE/> if so
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    boolean isDefinitelyWritable([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    boolean isDefinitelyWritable([in]long column) raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** returns the fully-qualified name of the service whose instances
-        are manufactured if the method
+        are manufactured if the method 
         <member scope="com::sun::star::sdbc">XResultSet::.getObject()</member>
         is called to retrieve a value from the column.
         @param column
             the first column is 1, the second is 2,
         @returns
             the service name
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    string getColumnServiceName([in]long column) raises (SQLException);
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    string getColumnServiceName([in]long column) raises (SQLException); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

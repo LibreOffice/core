@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ OString userRegEnv("STAR_USER_REGISTRY=");
 
 OUString getExePath()
 {
-    OUString        exe;
+    OUString 		exe;
     OSL_VERIFY( osl_getExecutableFile( &exe.pData ) == osl_Process_E_None);
 #if defined(WIN32) || defined(__OS2__) || defined(WNT)
     exe = exe.copy(0, exe.getLength() - 16);
@@ -145,7 +145,7 @@ void setLinkInDefaultRegistry(const OUString& linkName, const OUString& linkTarg
 
     OUString appReg = getExePath();
     appReg += OUString::createFromAscii("stoctest.rdb");
-
+    
     TEST_ENSHURE(!myRegistry->open(appReg, REG_READWRITE), "setLinkInDefaultRegistry error 1");
     TEST_ENSHURE(!myRegistry->openRootKey(rootKey), "setLinkInDefaultRegistry error 2");
 
@@ -155,7 +155,7 @@ void setLinkInDefaultRegistry(const OUString& linkName, const OUString& linkTarg
     TEST_ENSHURE(!myRegistry->close(), "setLinkInDefaultRegistry error 5");
 
     delete myRegistry;
-}
+}	
 
 
 void test_SimpleRegistry(
@@ -168,13 +168,13 @@ void test_SimpleRegistry(
 
     OUString dllName(
         RTL_CONSTASCII_USTRINGPARAM("simplereg.uno" SAL_DLLEXTENSION) );
-
+    
     if (module.load(dllName))
     {
         // try to get provider from module
         component_getFactoryFunc pCompFactoryFunc = (component_getFactoryFunc)
             module.getFunctionSymbol( OUString::createFromAscii(COMPONENT_GETFACTORY) );
-
+        
         if (pCompFactoryFunc)
         {
             XSingleServiceFactory * pRet = (XSingleServiceFactory *)
@@ -195,7 +195,7 @@ void test_SimpleRegistry(
 
     TEST_ENSHURE( xFactory.is(), "testloader error11");
 
-    Reference<XInterface> xIFace2 = xFactory->createInstance();
+    Reference<XInterface> xIFace2 = xFactory->createInstance();	
     xFactory.clear();
 
     TEST_ENSHURE( xIFace2.is(), "testloader error12");
@@ -217,7 +217,7 @@ void test_SimpleRegistry(
     try
     {
         xReg->open(testreg, sal_False, sal_True);
-
+        
         TEST_ENSHURE( xReg->isValid() != sal_False, "test_SimpleRegistry error 7" );
         TEST_ENSHURE( xReg->isReadOnly() == sal_False, "test_SimpleRegistry error 8" );
 
@@ -228,10 +228,10 @@ void test_SimpleRegistry(
 
         Reference<XRegistryKey> xSubKey = xKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM("FirstSubKey") ));
         xSubKey->setLongValue(123456789);
-
+        
         xSubKey = xKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM("SecondSubKey") ));
         xSubKey->setAsciiValue(OUString( RTL_CONSTASCII_USTRINGPARAM("ich bin ein acsii value") ));
-
+        
         xSubKey = xKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM("ThirdSubKey") ));
         xSubKey->setStringValue(OUString( RTL_CONSTASCII_USTRINGPARAM("ich bin ein unicode value") ));
 
@@ -239,7 +239,7 @@ void test_SimpleRegistry(
         Sequence<sal_Int8> aSeq((sal_Int8*)"ich bin ein binary value", 25);
         xSubKey->setBinaryValue(aSeq);
 
-        Sequence<OUString> seqNames = xKey->getKeyNames();
+        Sequence<OUString> seqNames = xKey->getKeyNames(); 
         Sequence< Reference<XRegistryKey> > seqKeys = xKey->openKeys();
 
         OUString name;
@@ -247,20 +247,20 @@ void test_SimpleRegistry(
         {
             name = seqNames.getArray()[i];
             xSubKey = seqKeys.getArray()[i];
-
+            
             if (name == OUString( RTL_CONSTASCII_USTRINGPARAM("/FirstKey/FirstSubKey") ))
             {
-                TEST_ENSHURE( xSubKey->getLongValue() == 123456789,
+                TEST_ENSHURE( xSubKey->getLongValue() == 123456789, 
                             "test_SimpleRegistry error 10" );
             } else
             if (name == OUString( RTL_CONSTASCII_USTRINGPARAM("/FirstKey/SecondSubKey") ))
             {
-                TEST_ENSHURE( xSubKey->getAsciiValue() == OUString( RTL_CONSTASCII_USTRINGPARAM("ich bin ein acsii value") ),
+                TEST_ENSHURE( xSubKey->getAsciiValue() == OUString( RTL_CONSTASCII_USTRINGPARAM("ich bin ein acsii value") ), 
                             "test_SimpleRegistry error 11" );
             } else
             if (name == OUString( RTL_CONSTASCII_USTRINGPARAM("/FirstKey/ThirdSubKey") ))
             {
-                TEST_ENSHURE( xSubKey->getStringValue() == OUString( RTL_CONSTASCII_USTRINGPARAM("ich bin ein unicode value") ),
+                TEST_ENSHURE( xSubKey->getStringValue() == OUString( RTL_CONSTASCII_USTRINGPARAM("ich bin ein unicode value") ), 
                             "test_SimpleRegistry error 12" );
             } else
             if (name == OUString( RTL_CONSTASCII_USTRINGPARAM("/FirstKey/FourthSubKey") ))
@@ -363,7 +363,7 @@ void test_SimpleRegistry(
             xRootKey->getKeyType( OUString( RTL_CONSTASCII_USTRINGPARAM("LinkTest") ) ) ==
             registry::RegistryKeyType_LINK,
             "test_SimpleRegistry error 1214" );
-
+        
         xKey = xRootKey->openKey(OUString( RTL_CONSTASCII_USTRINGPARAM("FirstKey/SecondSubKey") ));
         TEST_ENSHURE( !xKey.is(), "test_SimpleRegistry error 27" );
 
@@ -379,12 +379,12 @@ void test_SimpleRegistry(
         xKey->createLink(OUString( RTL_CONSTASCII_USTRINGPARAM("/WithSubSubKey/MyFourthLink") ),
                          OUString( RTL_CONSTASCII_USTRINGPARAM("/FourthKey/MySecondLink") ));
 
-        TEST_ENSHURE( xKey->getLinkTarget(OUString( RTL_CONSTASCII_USTRINGPARAM("/WithSubSubKey/MyFourthLink") ))
+        TEST_ENSHURE( xKey->getLinkTarget(OUString( RTL_CONSTASCII_USTRINGPARAM("/WithSubSubKey/MyFourthLink") )) 
                      == OUString( RTL_CONSTASCII_USTRINGPARAM("/FourthKey/MySecondLink") ), "test_SimpleRegistry error 29" );
 
         try
         {
-            TEST_ENSHURE( xKey->getResolvedName(OUString( RTL_CONSTASCII_USTRINGPARAM("/WithSubSubKey/MyFourthLink/BlaBlaBla") ))
+            TEST_ENSHURE( xKey->getResolvedName(OUString( RTL_CONSTASCII_USTRINGPARAM("/WithSubSubKey/MyFourthLink/BlaBlaBla") )) 
                          == OUString( RTL_CONSTASCII_USTRINGPARAM("/FourthKey/MySecondLink/BlaBlaBla") ), "test_SimpleRegistry error 30" );
         }
         catch(InvalidRegistryException&)
@@ -398,7 +398,7 @@ void test_SimpleRegistry(
                          OUString( RTL_CONSTASCII_USTRINGPARAM("/FourthKey/MySecondLink") ));
 
         xKey = xRootKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM("/SixthKey/SixthSubKey") ));
-
+        
         try
         {
             xRootKey->openKey(OUString( RTL_CONSTASCII_USTRINGPARAM("/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink") ));
@@ -407,7 +407,7 @@ void test_SimpleRegistry(
         {
         }
 
-        TEST_ENSHURE( xRootKey->getLinkTarget(OUString( RTL_CONSTASCII_USTRINGPARAM("/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink") ))
+        TEST_ENSHURE( xRootKey->getLinkTarget(OUString( RTL_CONSTASCII_USTRINGPARAM("/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink") )) 
                      == OUString( RTL_CONSTASCII_USTRINGPARAM("/FourthKey/MySecondLink") ), "test_SimpleRegistry error 31" );
 
         xRootKey->deleteLink(OUString( RTL_CONSTASCII_USTRINGPARAM("/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink") ));
@@ -416,7 +416,7 @@ void test_SimpleRegistry(
                              OUString( RTL_CONSTASCII_USTRINGPARAM("/ThirdKey/FirstSubKey/WithSubSubKey") ));
 
         xKey = xRootKey->openKey(OUString( RTL_CONSTASCII_USTRINGPARAM("SixthKey") ));
-        seqNames = xKey->getKeyNames();
+        seqNames = xKey->getKeyNames(); 
         seqKeys = xKey->openKeys();
 
         TEST_ENSHURE( seqNames.getArray()[0] == OUString( RTL_CONSTASCII_USTRINGPARAM("/SixthKey/SixthSubKey") ),
@@ -443,8 +443,8 @@ void test_SimpleRegistry(
 
     xReg.clear();
 
-    printf("Test SimpleRegistry, OK!\n");
-}
+    printf("Test SimpleRegistry, OK!\n");	
+}	
 
 
 void test_DefaultRegistry(
@@ -466,7 +466,7 @@ void test_DefaultRegistry(
     Reference< XPropertySet > xPropSet( rSMgr, UNO_QUERY);
     TEST_ENSHURE( xPropSet.is(), "test_DefaultRegistry error0");
 
-    Any aPropertyAny( xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Registry")) ) );
+    Any	aPropertyAny( xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Registry")) ) ); 
     TEST_ENSHURE( aPropertyAny.hasValue(), "test_DefaultRegistry error1");
 
     Reference<XSimpleRegistry> xReg;
@@ -490,7 +490,7 @@ void test_DefaultRegistry(
 
         Reference<XRegistryKey> xKey = xRootKey->openKey(OUString( RTL_CONSTASCII_USTRINGPARAM("/UCR/com/sun/star/registry/XSimpleRegistry") ));
 
-        TEST_ENSHURE( xKey->getKeyName() == OUString( RTL_CONSTASCII_USTRINGPARAM("/UCR/com/sun/star/registry/XSimpleRegistry") ),
+        TEST_ENSHURE( xKey->getKeyName() == OUString( RTL_CONSTASCII_USTRINGPARAM("/UCR/com/sun/star/registry/XSimpleRegistry") ), 
                      "test_DefaultRegistry error 7" );
 
         if (bMergeDifferently)
@@ -513,7 +513,7 @@ void test_DefaultRegistry(
         if (xKey.is())
         {
             xKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM("SecondSubSubKey") ));
-
+        
             Sequence<OUString> seqNames = xKey->getKeyNames();
 
             TEST_ENSHURE( seqNames.getLength() == 2, "test_DefaultRegistry error 8" );
@@ -549,7 +549,7 @@ void test_DefaultRegistry(
             TEST_ENSHURE( seqLongValue.getArray()[1] == 4567, "test_DefaultRegistry error 16" );
             TEST_ENSHURE( seqLongValue.getArray()[2] == 7890, "test_DefaultRegistry error 17" );
         }
-
+        
         // Test Links
         xKey = xRootKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM("/Test/FifthKey") ));
         xKey->createLink(OUString( RTL_CONSTASCII_USTRINGPARAM("MyFirstLink") ),
@@ -563,13 +563,13 @@ void test_DefaultRegistry(
         xKey->createLink(OUString( RTL_CONSTASCII_USTRINGPARAM("/WithSubSubKey/MyFourthLink") ),
                          OUString( RTL_CONSTASCII_USTRINGPARAM("/Test/FourthKey/MySecondLink") ));
 
-        TEST_ENSHURE( xKey->getLinkTarget(OUString( RTL_CONSTASCII_USTRINGPARAM("/WithSubSubKey/MyFourthLink") ))
+        TEST_ENSHURE( xKey->getLinkTarget(OUString( RTL_CONSTASCII_USTRINGPARAM("/WithSubSubKey/MyFourthLink") )) 
                      == OUString( RTL_CONSTASCII_USTRINGPARAM("/Test/FourthKey/MySecondLink") ),
                       "test_DefaultRegistry error 20" );
 
         try
         {
-            TEST_ENSHURE( xKey->getResolvedName(OUString( RTL_CONSTASCII_USTRINGPARAM("/WithSubSubKey/MyFourthLink/BlaBlaBla") ))
+            TEST_ENSHURE( xKey->getResolvedName(OUString( RTL_CONSTASCII_USTRINGPARAM("/WithSubSubKey/MyFourthLink/BlaBlaBla") )) 
                           == OUString( RTL_CONSTASCII_USTRINGPARAM("/Test/FourthKey/MySecondLink/BlaBlaBla") ),
                           "test_DefaultRegistry error 21" );
         }
@@ -592,7 +592,7 @@ void test_DefaultRegistry(
             printf("test InvalidRegistryExcption OK!\n");
         }
 
-        TEST_ENSHURE( xRootKey->getLinkTarget(OUString( RTL_CONSTASCII_USTRINGPARAM("/Test/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink") ))
+        TEST_ENSHURE( xRootKey->getLinkTarget(OUString( RTL_CONSTASCII_USTRINGPARAM("/Test/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink") )) 
                      == OUString( RTL_CONSTASCII_USTRINGPARAM("/Test/FourthKey/MySecondLink") ),
                       "test_DefaultRegistry error 22" );
 
@@ -607,11 +607,11 @@ void test_DefaultRegistry(
         if (xKey.is())
         {
             TEST_ENSHURE( xKey->getKeyName() == OUString( RTL_CONSTASCII_USTRINGPARAM("/Test/ThirdKey/FirstSubKey/ThirdSubSubKey") ),
-                          "test_DefaultRegistry error 24" );
+                          "test_DefaultRegistry error 24" );		
         }
 
         xKey = xRootKey->openKey(OUString( RTL_CONSTASCII_USTRINGPARAM("Test") ));
-        TEST_ENSHURE( xKey->isValid(), "test_DefaultRegistry error 25" );
+        TEST_ENSHURE( xKey->isValid(), "test_DefaultRegistry error 25" );		
 
         xRootKey->deleteKey(OUString( RTL_CONSTASCII_USTRINGPARAM("Test") ));
 
@@ -652,7 +652,7 @@ void test_DefaultRegistry(
         (void)e;
         TEST_ENSHURE(0, OUStringToOString(e.Message,RTL_TEXTENCODING_ASCII_US).getStr());
     }
-
+    
 
     xReg.clear();
 
@@ -660,22 +660,22 @@ void test_DefaultRegistry(
     Reference< ::com::sun::star::lang::XComponent > xComp( rSMgr, UNO_QUERY );
     OSL_ENSURE( xComp.is(), "### serivce manager has to implement XComponent!" );
     xComp->dispose();
-
-    printf("Test DefaultRegistry, OK!\n");
-}
+    
+    printf("Test DefaultRegistry, OK!\n");	
+}	
 
 
 SAL_IMPLEMENT_MAIN()
 {
-//  setStarUserRegistry();
-     setLinkInDefaultRegistry(OUString::createFromAscii("/Test/DefaultLink"),
+//	setStarUserRegistry();
+     setLinkInDefaultRegistry(OUString::createFromAscii("/Test/DefaultLink"), 
                               OUString::createFromAscii("/Test/FifthKey/MyFirstLink"));
 
     OUString reg1( RTL_CONSTASCII_USTRINGPARAM("testreg1.rdb") );
     OUString reg2( RTL_CONSTASCII_USTRINGPARAM("testreg2.rdb") );
     OUString areg1( RTL_CONSTASCII_USTRINGPARAM("atestreg1.rdb") );
     OUString areg2( RTL_CONSTASCII_USTRINGPARAM("atestreg2.rdb") );
-
+    
       test_SimpleRegistry( reg1, reg2 );
       test_DefaultRegistry( reg1, reg2 );
       test_SimpleRegistry( areg1, areg2, true ); // use different merge

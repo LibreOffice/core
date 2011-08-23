@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -740,9 +740,9 @@ double SAL_CALL rtl_str_toDouble( const sal_Char * str ) SAL_THROW_EXTERN_C();
 /* ======================================================================= */
 
 #ifdef SAL_W32
-#   pragma pack(push, 8)
+#	pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#   pragma pack(push, 4)
+#	pragma pack(push, 4)
 #endif
 
 /** The implementation of a byte string.

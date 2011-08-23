@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,17 +67,17 @@ static Property * getPropertyTable1()
         if( ! pTable ) {
             static Property aTable[] =
             {
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("a") ), 0, getCppuType( (OUString *)0) ,
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("a") ), 0, getCppuType( (OUString *)0) , 
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //OUString
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("b") ), 1, getCppuCharType( ) ,
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("b") ), 1, getCppuCharType( ) , 
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //Char
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("c") ), 2, getCppuType( (sal_Int32*)0) ,
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("c") ), 2, getCppuType( (sal_Int32*)0) , 
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //sal_Int32
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("d") ), 5, getCppuType( (double*)0)     ,
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("d") ), 5, getCppuType( (double*)0) 	, 
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //double
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("e") ), 7, getCppuBooleanType()         ,
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("e") ), 7, getCppuBooleanType() 		, 
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //BOOL
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("f") ), 8, getCppuType( (Any*)0)        ,
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("f") ), 8, getCppuType( (Any*)0)		, 
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )  //Any
             };
             pTable = aTable;
@@ -96,18 +96,18 @@ static Property * getPropertyTable2()
         if( ! pTable ) {
             static Property aTable[] =
             {
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("f") ), 8, getCppuType( (Any *)0)   ,
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Any
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("b") ), 1, getCppuCharType( ),
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Char
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("a") ), 0, getCppuType( (OUString*)0),
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // OUString
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("d") ), 5, getCppuType( (double*)0) ,
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Double
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("c") ), 2, getCppuType( (sal_Int32*)0),
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // sal_Int32
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("e") ), 7, getCppuBooleanType()         ,
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    // Bool
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("f") ), 8, getCppuType( (Any *)0)	, 
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),	// Any
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("b") ), 1, getCppuCharType( ), 
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),	// Char
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("a") ), 0, getCppuType( (OUString*)0), 
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),	// OUString
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("d") ), 5, getCppuType( (double*)0)	, 
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),	// Double
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("c") ), 2, getCppuType( (sal_Int32*)0), 
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),	// sal_Int32
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("e") ), 7, getCppuBooleanType() 		, 
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )	// Bool
             };
             pTable = aTable;
         }
@@ -124,12 +124,12 @@ static Property * getPropertyTable3()
         if( ! pTable ) {
             static Property aTable[] =
             {
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("b") ), 1, getCppuCharType( ),
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Char
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("f") ), 8, getCppuType( (Any *)0)   ,
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // any
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("a") ), 0, getCppuType( (OUString*)0),
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    // OUString
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("b") ), 1, getCppuCharType( ), 
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),	// Char
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("f") ), 8, getCppuType( (Any *)0)	, 
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),	// any
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("a") ), 0, getCppuType( (OUString*)0), 
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )	// OUString
             };
             pTable = aTable;
         }
@@ -147,12 +147,12 @@ static Property * getPropertyTable4()
         if( ! pTable ) {
             static Property aTable[] =
             {
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("a") ), 0, getCppuType( (OUString*)0),
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // OUString
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("b") ), 1, getCppuCharType( ),
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("a") ), 0, getCppuType( (OUString*)0), 
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),	// OUString
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("b") ), 1, getCppuCharType( ), 
                                      PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), // Char
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("f") ), 2, getCppuType( (Any *)0)   ,
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    // Any
+                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("f") ), 2, getCppuType( (Any *)0)	, 
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )	// Any
             };
             pTable = aTable;
         }
@@ -180,9 +180,9 @@ void test_PropertyArrayHelper()
         OSL_ENSURE( 6 == aProps.getLength(), "getProperties() gives not all properties" );
         for( int i = 0; i < 6; i++ )
         {
-            OSL_ENSURE( pP[i].Name      == getPropertyTable1()[i].Name , "Name not correct" );
-            OSL_ENSURE( pP[i].Handle        == getPropertyTable1()[i].Handle, "Handle not correct" );
-            OSL_ENSURE( pP[i].Attributes    == getPropertyTable1()[i].Attributes, "Attributes not correct" );
+            OSL_ENSURE( pP[i].Name 		== getPropertyTable1()[i].Name , "Name not correct" );
+            OSL_ENSURE( pP[i].Handle 		== getPropertyTable1()[i].Handle, "Handle not correct" );
+            OSL_ENSURE( pP[i].Attributes 	== getPropertyTable1()[i].Attributes, "Attributes not correct" );
             OSL_ENSURE( pP[i].Type == getPropertyTable1()[i].Type, "Type not correct" );
         }
     }
@@ -257,14 +257,14 @@ void test_PropertyArrayHelper()
         sal_Int32 Handle = a1.getHandleByName( OUString( RTL_CONSTASCII_USTRINGPARAM("asdaf") ) );
         OSL_ENSURE( Handle == -1, "Handle not correct" );
     }
-
+    
     // Test fillPropertyMembersByHandle
     {
         OPropertyArrayHelper a1( getPropertyTable1(), 6 );
         int i;
         for( i = 0; i < 6; i++ )
         {
-            sal_Int16   nAttributes;
+            sal_Int16	nAttributes;
             OUString aPropName;
             sal_Bool b = a1.fillPropertyMembersByHandle( &aPropName, &nAttributes, getPropertyTable1()[i].Handle );
             OSL_ENSURE( b, "fillPropertyMembersByHandle: handle not found" );
@@ -276,7 +276,7 @@ void test_PropertyArrayHelper()
         OPropertyArrayHelper a4( getPropertyTable4(), 3 );
         for( i = 0; i < 3; i++ )
         {
-            sal_Int16   nAttributes;
+            sal_Int16	nAttributes;
             OUString aPropName;
             sal_Bool b = a1.fillPropertyMembersByHandle( &aPropName, &nAttributes, getPropertyTable4()[i].Handle );
             OSL_ENSURE( b, "fillPropertyMembersByHandle: handle not found" );
@@ -309,28 +309,28 @@ void test_PropertyArrayHelper()
 
 
 //----------------------------------------------------
-//  test_OPropertySetHelper
+//	test_OPropertySetHelper
 //----------------------------------------------------
 struct MutexContainer
 {
     Mutex aMutex;
 };
-class test_OPropertySetHelper :
+class test_OPropertySetHelper : 
             public MutexContainer,
-            public OBroadcastHelper ,
+            public OBroadcastHelper , 
             public OPropertySetHelper,
             public OWeakObject
 {
 public:
 
-                    test_OPropertySetHelper( Property * p, sal_Int32    n )
-                        : MutexContainer()
+                    test_OPropertySetHelper( Property * p, sal_Int32	n )
+                        : MutexContainer() 
                         , OBroadcastHelper( ((MutexContainer *)this)->aMutex )
-//                      , OPropertySetHelper( *SAL_STATIC_CAST(OBroadcastHelper *,this))
-                        // MSCI 4 bug ! :
-                        //      OBroadcastHelper == OBroadcastHelperVar<OMultiTypeInterfaceContainerHelper>
-                        , OPropertySetHelper(
-                                *SAL_STATIC_CAST(OBroadcastHelper *,this))
+//						, OPropertySetHelper( *SAL_STATIC_CAST(OBroadcastHelper *,this)) 
+                        // MSCI 4 bug !	: 
+                        //		OBroadcastHelper == OBroadcastHelperVar<OMultiTypeInterfaceContainerHelper>
+                        , OPropertySetHelper( 
+                                *SAL_STATIC_CAST(OBroadcastHelper *,this)) 
                         , bBOOL( sal_False )
                         , nINT16( 0 )
                         , nINT32( 0 )
@@ -338,7 +338,7 @@ public:
                         , nPropCount( n )
                     {
                     }
-
+    
 
                     ~test_OPropertySetHelper()
                     {
@@ -361,7 +361,7 @@ public:
                             disposing();
                             EventObject aEvt;
                             aEvt.Source = Reference < XInterface > ( SAL_STATIC_CAST( OWeakObject * ,this) );
-
+                            
                             rBHelper.aLC.disposeAndClear( aEvt );
                             rBHelper.bDisposed = sal_True;
                             rBHelper.bInDispose = sal_False;
@@ -369,14 +369,14 @@ public:
                     }
 
     // XInterface
-    Any             SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(RuntimeException)
-                    {
+    Any				SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(RuntimeException)
+                    { 
                         Any aRet( OPropertySetHelper::queryInterface( rType ) );
                         return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
                     }
-    void            SAL_CALL acquire() throw()
+    void			SAL_CALL acquire() throw()
                             { OWeakObject::acquire(); }
-    void            SAL_CALL release() throw()
+    void			SAL_CALL release() throw()
                             { OWeakObject::release(); }
 
     // XPropertySet
@@ -384,15 +384,15 @@ public:
 
     using OPropertySetHelper::getFastPropertyValue;
 
-    sal_Bool                    bBOOL;
-    sal_Int16                   nINT16;
-    sal_Int32                   nINT32;
+    sal_Bool					bBOOL;
+    sal_Int16					nINT16;
+    sal_Int32					nINT32;
     Property *                  pBasicProps;
-    sal_Int32                   nPropCount;
+    sal_Int32					nPropCount;
 protected:
     IPropertyArrayHelper & SAL_CALL getInfoHelper() throw(RuntimeException);
     sal_Bool SAL_CALL convertFastPropertyValue(
-        Any & rConvertedValue, Any & rOldValue,
+        Any & rConvertedValue, Any & rOldValue, 
         sal_Int32 nHandle, const Any& rValue )
         throw(IllegalArgumentException);
     void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw(RuntimeException);
@@ -403,12 +403,12 @@ protected:
 //------ The Properties of this implementation -------------------------
 //----------------------------------------------------------------------
 // Id must be the index into the array
-#define PROPERTY_BOOL       0
-#define PROPERTY_INT16      1
-#define PROPERTY_INT32      2
+#define PROPERTY_BOOL		0
+#define PROPERTY_INT16		1
+#define PROPERTY_INT32		2
 
 // Max number of properties
-#define PROPERTY_COUNT                      4
+#define PROPERTY_COUNT						4
 // Names of Properties
 /**
  * All Properties of this implementation. Must be sorted by name.
@@ -423,11 +423,11 @@ Property * getBasicProps()
 
             static Property aBasicProps[PROPERTY_COUNT] =
             {
-                 Property( OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") )  , PROPERTY_BOOL , getCppuBooleanType(), PropertyAttribute::READONLY ),
-                 Property( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ) , PROPERTY_INT16,
-                                 getCppuType( (sal_Int16*)0 ),  PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
-                 Property( OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ) , PROPERTY_INT32, getCppuType( (sal_Int32*)0 ), PropertyAttribute::BOUND ),
-                 Property( OUString( RTL_CONSTASCII_USTRINGPARAM("TEST") )  , 55            , getCppuType( (sal_Int32*)0),  PropertyAttribute::BOUND )
+                 Property( OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") )	, PROPERTY_BOOL	, getCppuBooleanType(),	PropertyAttribute::READONLY ),
+                 Property( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") )	, PROPERTY_INT16, 
+                                 getCppuType( (sal_Int16*)0 ), 	PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
+                 Property( OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") )	, PROPERTY_INT32, getCppuType( (sal_Int32*)0 ), PropertyAttribute::BOUND ),
+                 Property( OUString( RTL_CONSTASCII_USTRINGPARAM("TEST") )	, 55			, getCppuType( (sal_Int32*)0), 	PropertyAttribute::BOUND )
             };
             pTable = aBasicProps;
         }
@@ -437,17 +437,17 @@ Property * getBasicProps()
 
 
 //----------------------------------------------------
-//  test_OPropertySetHelper_Listener
+//	test_OPropertySetHelper_Listener
 //----------------------------------------------------
 class test_OPropertySetHelper_Listener
     : public WeakImplHelper3< XPropertyChangeListener, XPropertiesChangeListener, XVetoableChangeListener >
 {
 public:
-    sal_Int32           nDisposing;
-    Mutex               aMutex;
-    Any *               pExceptedListenerValues;
-    sal_Int32           nCount;
-    sal_Int32           nCurrent;
+    sal_Int32			nDisposing;
+    Mutex				aMutex;
+    Any *				pExceptedListenerValues;
+    sal_Int32			nCount;
+    sal_Int32			nCurrent;
 
                     test_OPropertySetHelper_Listener( Any * p = 0, sal_Int32 n = 0 )
                         : nDisposing( 0 )
@@ -459,19 +459,19 @@ public:
                     ~test_OPropertySetHelper_Listener()
                     {
                     }
-
-    sal_Int32   getRefCount()
+    
+    sal_Int32	getRefCount() 
         { return m_refCount; }
 
     // XEventListener
-    void SAL_CALL disposing(const EventObject& /*evt*/) throw ( RuntimeException)
+    void SAL_CALL disposing(const EventObject& /*evt*/) throw ( RuntimeException) 
     {
         MutexGuard aGuard( aMutex );
         nDisposing++;
     }
 
     // XPropertyChangeListener
-    void SAL_CALL propertyChange(const PropertyChangeEvent& evt) throw (RuntimeException)
+    void SAL_CALL propertyChange(const PropertyChangeEvent& evt) throw (RuntimeException) 
     {
         if( !pExceptedListenerValues )
             return;
@@ -482,7 +482,7 @@ public:
         {
             case PROPERTY_BOOL:
                 {
-                OSL_ENSURE( sal_False           , "PropertySetHelper: BOOL cannot change" );
+                OSL_ENSURE( sal_False			, "PropertySetHelper: BOOL cannot change" );
                 OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ), "PropertySetHelper: wrong name" );
                 }
             break;
@@ -490,35 +490,35 @@ public:
             case PROPERTY_INT16:
                 {
                 OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), "PropertySetHelper: wrong name" );
-
+                
                 OSL_ENSURE( pExceptedListenerValues[nCurrent].getValueType().getTypeClass() == TypeClass_SHORT ,
                             "PropertySetHelper: wrong data type" );
-
+                
                 sal_Int16 nInt16, nOldInt16;
-                pExceptedListenerValues[nCurrent]   >>= nInt16;
-                evt.OldValue                        >>= nOldInt16;
+                pExceptedListenerValues[nCurrent] 	>>= nInt16;
+                evt.OldValue 						>>= nOldInt16;
                 OSL_ENSURE( nInt16 == nOldInt16, "PropertySetHelper: wrong old value" );
 
-
+                
                 pExceptedListenerValues[nCurrent+1] >>= nInt16;
-                evt.NewValue                        >>= nOldInt16;
-                OSL_ENSURE( nInt16 == nOldInt16 ,   "PropertySetHelper: wrong new value" );
+                evt.NewValue 						>>= nOldInt16;
+                OSL_ENSURE( nInt16 == nOldInt16 ,	"PropertySetHelper: wrong new value" );
                 }
             break;
 
             case PROPERTY_INT32:
                 {
                     OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
-
-                    sal_Int32 nInt32,nOldInt32;
-
+    
+                    sal_Int32 nInt32,nOldInt32; 
+                    
                     pExceptedListenerValues[nCurrent] >>= nInt32;
                     evt.OldValue >>= nOldInt32;
-                    OSL_ENSURE( nInt32 == nOldInt32 ,   "PropertySetHelper: wrong old value" );
-
+                    OSL_ENSURE( nInt32 == nOldInt32 ,	"PropertySetHelper: wrong old value" );
+                                    
                     pExceptedListenerValues[nCurrent+1] >>= nInt32;
                     evt.NewValue >>= nOldInt32;
-                    OSL_ENSURE( nInt32 == nOldInt32 ,   "PropertySetHelper: wrong new value" );
+                    OSL_ENSURE( nInt32 == nOldInt32 ,	"PropertySetHelper: wrong new value" );
                 }
             break;
 
@@ -540,7 +540,7 @@ public:
         {
             case PROPERTY_BOOL:
                 {
-                    OSL_ENSURE( sal_False   , "PropertySetHelper: BOOL cannot change" );
+                    OSL_ENSURE( sal_False	, "PropertySetHelper: BOOL cannot change" );
                     OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ), "PropertySetHelper: wrong name" );
                 }
             break;
@@ -548,17 +548,17 @@ public:
             case PROPERTY_INT16:
                 {
                     OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), "PropertySetHelper: wrong name" );
-
+    
                     sal_Int16 nInt16, nOldInt16;
-                    pExceptedListenerValues[nCurrent]   >>= nInt16;
-                    evt.OldValue                        >>= nOldInt16;
-
+                    pExceptedListenerValues[nCurrent] 	>>= nInt16;
+                    evt.OldValue 						>>= nOldInt16;
+    
                     OSL_ENSURE( nInt16 == nOldInt16,"PropertySetHelper: wrong old value" );
-
-                    pExceptedListenerValues[nCurrent+1]     >>= nInt16;
-                    evt.NewValue                            >>= nOldInt16;
-                    OSL_ENSURE( nInt16 == nOldInt16 ,   "PropertySetHelper: wrong new value" );
-
+    
+                    pExceptedListenerValues[nCurrent+1] 	>>= nInt16;
+                    evt.NewValue 							>>= nOldInt16;
+                    OSL_ENSURE( nInt16 == nOldInt16 ,	"PropertySetHelper: wrong new value" );
+    
                     if( nOldInt16 == 100 )
                     {
                         nCurrent += 2;
@@ -570,12 +570,12 @@ public:
             case PROPERTY_INT32:
                 {
                     OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
-
-                    sal_Int32 nInt32,nOldInt32;
+                    
+                    sal_Int32 nInt32,nOldInt32; 
                     pExceptedListenerValues[nCurrent] >>= nInt32;
                     evt.OldValue >>= nOldInt32;
                     OSL_ENSURE( nInt32 == nOldInt32 , "PropertySetHelper: wrong old value" );
-
+    
                     pExceptedListenerValues[nCurrent+1] >>= nInt32;
                     evt.NewValue >>= nOldInt32;
                     OSL_ENSURE( nInt32 == nOldInt32 , "PropertySetHelper: wrong new value" );
@@ -613,13 +613,13 @@ public:
                     OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), "PropertySetHelper: wrong name" );
 
                     sal_Int16 nInt16, nOldInt16;
-                    pExceptedListenerValues[nCurrent]   >>= nInt16;
-                    evt.OldValue                        >>= nOldInt16;
+                    pExceptedListenerValues[nCurrent] 	>>= nInt16;
+                    evt.OldValue 						>>= nOldInt16;
                     OSL_ENSURE( nInt16 == nOldInt16 , "PropertySetHelper: wrong old value" );
+                                
 
-
-                    pExceptedListenerValues[nCurrent+1] >>= nInt16;
-                    evt.NewValue                        >>= nOldInt16;
+                    pExceptedListenerValues[nCurrent+1]	>>= nInt16;
+                    evt.NewValue 						>>= nOldInt16;
                     OSL_ENSURE( nInt16 == nOldInt16 , "PropertySetHelper: wrong new value" );
                     }
                 break;
@@ -628,15 +628,15 @@ public:
                     {
                     OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
 
-
-                    sal_Int32 nInt32,nOldInt32;
+                    
+                    sal_Int32 nInt32,nOldInt32; 
                     pExceptedListenerValues[nCurrent] >>= nInt32;
                     evt.OldValue >>= nOldInt32;
                     OSL_ENSURE( nInt32 == nOldInt32 , "PropertySetHelper: wrong old value" );
-
+                    
                     pExceptedListenerValues[nCurrent+1] >>= nInt32;
                     evt.NewValue >>= nOldInt32;
-                    OSL_ENSURE( nInt32 == nOldInt32 ,   "PropertySetHelper: wrong new value" );
+                    OSL_ENSURE( nInt32 == nOldInt32 ,	"PropertySetHelper: wrong new value" );
                     }
                 break;
 
@@ -670,9 +670,9 @@ Reference < XPropertySetInfo >  test_OPropertySetHelper::getPropertySetInfo()
 // Return sal_True, value changed
 sal_Bool test_OPropertySetHelper::convertFastPropertyValue
 (
-    Any & rConvertedValue,
-    Any & rOldValue,
-    sal_Int32 nHandle,
+    Any & rConvertedValue, 
+    Any & rOldValue, 
+    sal_Int32 nHandle, 
     const Any& rValue
 )throw(IllegalArgumentException)
 {
@@ -683,8 +683,8 @@ sal_Bool test_OPropertySetHelper::convertFastPropertyValue
             sal_Bool b;
             convertPropertyValue( b , rValue );
             if( b != bBOOL )
-            {
-
+            {				
+                
                 rConvertedValue.setValue( &b , ::getCppuBooleanType()  );
                 rOldValue.setValue( & bBOOL , ::getCppuBooleanType() );
                 return sal_True;
@@ -697,11 +697,11 @@ sal_Bool test_OPropertySetHelper::convertFastPropertyValue
             {
             sal_Int16 n16;
             convertPropertyValue( n16 , rValue );
-
+            
             if( n16 != nINT16 )
             {
-                rConvertedValue <<=  n16;
-                rOldValue       <<= nINT16;
+                rConvertedValue	<<=	 n16;
+                rOldValue		<<= nINT16;
                 return sal_True;
             }
             else
@@ -715,7 +715,7 @@ sal_Bool test_OPropertySetHelper::convertFastPropertyValue
             if( n32 != nINT32 )
             {
                 rConvertedValue <<= n32;
-                rOldValue       <<= nINT32;
+                rOldValue		<<= nINT32;
                 return sal_True;
             }
             else
@@ -728,12 +728,12 @@ sal_Bool test_OPropertySetHelper::convertFastPropertyValue
     }
 }
 
-/**
+/** 
  * only set the value.
  */
 void test_OPropertySetHelper::setFastPropertyValue_NoBroadcast
 (
-    sal_Int32 nHandle,
+    sal_Int32 nHandle, 
     const Any& rValue
 )throw(RuntimeException)
 {
@@ -801,24 +801,24 @@ void test_PropertySetHelper()
         // first test getBasicProps() Handles are { 0, 1, 2 }
         xPS = pPS = new test_OPropertySetHelper( getBasicProps(), PROPERTY_COUNT - z );
         xPS_L = static_cast< XPropertyChangeListener * >( pPS_L = new test_OPropertySetHelper_Listener() );
-
+        
         // Test queryInterface
         Reference < XPropertySet > rProp( xPS , UNO_QUERY );
         OSL_ENSURE( rProp.is() , "PropertySetHelper: XPropertySet nor supported" );
-
+        
         Reference < XMultiPropertySet > rMulti( xPS , UNO_QUERY );
         OSL_ENSURE( rMulti.is() , "PropertySetHelper: XMultiPropertySet nor supported" );
-
+        
         Reference < XFastPropertySet > rFast( xPS , UNO_QUERY );
         OSL_ENSURE( rFast.is() , "PropertySetHelper: XFastPropertySet nor supported" );
 
         x = Reference < XInterface > ();
-
+    
         // Test add-remove listener
         {
-            Reference < XPropertiesChangeListener >     x1( xPS_L, UNO_QUERY );
-            Reference < XVetoableChangeListener >       x2( xPS_L, UNO_QUERY );
-
+            Reference < XPropertiesChangeListener >  	x1( xPS_L, UNO_QUERY );
+            Reference < XVetoableChangeListener >  		x2( xPS_L, UNO_QUERY );
+        
             xPS->addPropertyChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), xPS_L );
             Sequence<OUString> szPN( 3 );
             szPN.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") );
@@ -829,7 +829,7 @@ void test_PropertySetHelper()
             szPN = Sequence<OUString>();
             pPS->addPropertiesChangeListener( szPN, x1 );
             pPS->addVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), x2 );
-
+        
             xPS->removePropertyChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), xPS_L );
             pPS->removePropertiesChangeListener( x1 );
             pPS->removePropertiesChangeListener( x1 );
@@ -843,9 +843,9 @@ void test_PropertySetHelper()
             }
             catch( UnknownPropertyException & /*e*/ )
             {
-
+                
             }
-
+            
             try
             {
                 xPS->addVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ), x2 );
@@ -853,17 +853,17 @@ void test_PropertySetHelper()
             }
             catch( UnknownPropertyException & /*e*/ )
             {
-
+                
             }
-
+    
         }
         OSL_ENSURE( pPS_L->getRefCount() == 1, "PropertySetHelper: wrong reference count" );
-
+    
         // Test disposing
         {
             Reference < XPropertiesChangeListener >  x1( xPS_L, UNO_QUERY );
-            Reference < XVetoableChangeListener >    x2( xPS_L, UNO_QUERY );
-
+            Reference < XVetoableChangeListener > 	 x2( xPS_L, UNO_QUERY );
+        
             xPS->addPropertyChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), xPS_L );
             Sequence<OUString> szPN( 2 );
             szPN.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") );
@@ -874,11 +874,11 @@ void test_PropertySetHelper()
             pPS->addVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), x2 );
             pPS->dispose();
         }
-        OSL_ENSURE( pPS_L->nDisposing == 4      , "PropertySetHelper: wrong disposing count" );
-        OSL_ENSURE( pPS_L->getRefCount() == 1   , "PropertySetHelper: wrong reference count" );
+        OSL_ENSURE( pPS_L->nDisposing == 4		, "PropertySetHelper: wrong disposing count" );
+        OSL_ENSURE( pPS_L->getRefCount() == 1	, "PropertySetHelper: wrong reference count" );
         pPS_L->nDisposing = 0;
         xPS = pPS = new test_OPropertySetHelper( getBasicProps(), PROPERTY_COUNT - z );
-
+    
         // Test set- and get- (Fast) propertyValue
         {
             // set read only property
@@ -908,7 +908,7 @@ void test_PropertySetHelper()
             catch( PropertyVetoException & /*e*/ )
             {
             }
-
+        
             // set unknown property
             try
             {
@@ -933,7 +933,7 @@ void test_PropertySetHelper()
             catch( UnknownPropertyException & /*e*/ )
             {
             }
-
+        
             // get unknown property
             try
             {
@@ -944,8 +944,8 @@ void test_PropertySetHelper()
             catch( UnknownPropertyException & /*e*/ )
             {
             }
-
-            try
+        
+            try			
             {
                 Any aBool;
                 aBool = ((XFastPropertySet *)pPS)->getFastPropertyValue( 3 );
@@ -954,7 +954,7 @@ void test_PropertySetHelper()
             catch( UnknownPropertyException & /*e*/ )
             {
             }
-
+        
             // set property with invalid type
             try
             {
@@ -975,7 +975,7 @@ void test_PropertySetHelper()
             catch( IllegalArgumentException & /*e*/ )
             {
             }
-
+        
             // narrowing conversion is not allowed!
             try
             {
@@ -1000,7 +1000,7 @@ void test_PropertySetHelper()
             {
             }
 
-
+        
             Any aValue;
             aValue = xPS->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ) );
             sal_Bool b = *( (sal_Bool*)aValue.getValue());
@@ -1009,7 +1009,7 @@ void test_PropertySetHelper()
 
             b = *((sal_Bool*)aValue.getValue());
             OSL_ENSURE( !b, "PropertySetHelper: wrong BOOL value" );
-
+        
             sal_Int16 n16;
             aValue <<=(sal_Int16)22;
             xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), aValue );
@@ -1022,7 +1022,7 @@ void test_PropertySetHelper()
             aValue = ((XFastPropertySet *)pPS)->getFastPropertyValue( PROPERTY_INT16 );
             aValue >>= n16;
             OSL_ENSURE( 44 == n16, "PropertySetHelper: wrong INT16 value" );
-
+        
             // widening conversion
             aValue <<= (sal_Int16)55;
             xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), aValue );
@@ -1035,28 +1035,28 @@ void test_PropertySetHelper()
             aValue = ((XFastPropertySet *)pPS)->getFastPropertyValue( PROPERTY_INT32 );
             aValue >>= n32;
             OSL_ENSURE( 66 == n32, "PropertySetHelper: wrong INT32 value" );
-
+        
             Sequence< OUString >valueNames = Sequence<OUString>( 3 );
             valueNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") );
             valueNames.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") );
             valueNames.getArray()[2] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") );
             Sequence< Any > aValues = pPS->getPropertyValues( valueNames );
-
+    
             b = *((sal_Bool*)aValues.getConstArray()[0].getValue());
             aValues.getConstArray()[1] >>= n16;
             aValues.getConstArray()[2] >>= n32;
-
+            
             OSL_ENSURE( !b, "PropertySetHelper: wrong BOOL value" );
             OSL_ENSURE( 44 == n16, "PropertySetHelper: wrong INT16 value" );
             OSL_ENSURE( 66 == n32, "PropertySetHelper: wrong INT32 value" );
         }
         pPS->nINT32 = 0;
         pPS->nINT16 = 0;
-
+    
         // Test add-remove listener
         {
             Reference < XVetoableChangeListener >  x2( xPS_L, UNO_QUERY );
-
+        
             xPS->addPropertyChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), xPS_L );
             pPS->addVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), x2 );
 
@@ -1066,17 +1066,17 @@ void test_PropertySetHelper()
 
             pPS_L->pExceptedListenerValues = aSeq.getArray();
 
-            pPS_L->pExceptedListenerValues[0] <<= (sal_Int16) 0; // old value   vetoable
-            pPS_L->pExceptedListenerValues[1] <<= (sal_Int16) 22; // new value  vetoable
-            pPS_L->pExceptedListenerValues[2] <<= (sal_Int16) 0; // old value   bound
-            pPS_L->pExceptedListenerValues[3] <<= (sal_Int16) 22; // new value  bound
-            pPS_L->pExceptedListenerValues[4] <<= (sal_Int16) 22; // old value  vetoable
-            pPS_L->pExceptedListenerValues[5] <<= (sal_Int16) 44; // new value  vetoable
-            pPS_L->pExceptedListenerValues[6] <<= (sal_Int16) 22; // old value  bound
-            pPS_L->pExceptedListenerValues[7] <<= (sal_Int16) 44; // new value  bound
-            pPS_L->pExceptedListenerValues[8] <<= (sal_Int16) 44; // old value  vetoable
-            pPS_L->pExceptedListenerValues[9] <<= (sal_Int16) 100; // new value vetoable exception
-
+            pPS_L->pExceptedListenerValues[0] <<= (sal_Int16) 0; // old value	vetoable
+            pPS_L->pExceptedListenerValues[1] <<= (sal_Int16) 22; // new value	vetoable
+            pPS_L->pExceptedListenerValues[2] <<= (sal_Int16) 0; // old value	bound
+            pPS_L->pExceptedListenerValues[3] <<= (sal_Int16) 22; // new value	bound
+            pPS_L->pExceptedListenerValues[4] <<= (sal_Int16) 22; // old value	vetoable
+            pPS_L->pExceptedListenerValues[5] <<= (sal_Int16) 44; // new value	vetoable
+            pPS_L->pExceptedListenerValues[6] <<= (sal_Int16) 22; // old value	bound
+            pPS_L->pExceptedListenerValues[7] <<= (sal_Int16) 44; // new value	bound
+            pPS_L->pExceptedListenerValues[8] <<= (sal_Int16) 44; // old value	vetoable
+            pPS_L->pExceptedListenerValues[9] <<= (sal_Int16) 100; // new value	vetoable exception
+        
             Any aValue;
             aValue <<= (sal_Int16)22;
             xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), aValue );
@@ -1102,12 +1102,12 @@ void test_PropertySetHelper()
             xPS->removePropertyChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), xPS_L );
             pPS->removeVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), x2 );
         }
-
+        
         // Test multi property set listener
         {
             Reference < XPropertiesChangeListener > x1( xPS_L, UNO_QUERY );
             Reference < XVetoableChangeListener >  x2( xPS_L, UNO_QUERY );
-
+        
             pPS->addVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ) , x2 );
             Sequence<OUString> szPN( 4 );
             szPN.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") );
@@ -1115,19 +1115,19 @@ void test_PropertySetHelper()
             szPN.getArray()[2] = OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ); // must ne ignored by the addPropertiesChangeListener method
             szPN.getArray()[3] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") );
             pPS->addPropertiesChangeListener( szPN, x1 );
-
+        
             pPS_L->nCount = 6;
             Sequence< Any > aSeq( pPS_L->nCount );
             pPS_L->nCurrent = 0;
             pPS_L->pExceptedListenerValues = aSeq.getArray();
-            pPS_L->pExceptedListenerValues[0] <<= (sal_Int16) 0; // old value   vetoable
-            pPS_L->pExceptedListenerValues[1] <<= (sal_Int16 ) 22; // new value vetoable
+            pPS_L->pExceptedListenerValues[0] <<= (sal_Int16) 0; // old value	vetoable
+            pPS_L->pExceptedListenerValues[1] <<= (sal_Int16 ) 22; // new value	vetoable
             // INT32 is not constrained
-            pPS_L->pExceptedListenerValues[2] <<= (sal_Int16) 0; // old value   bound
-            pPS_L->pExceptedListenerValues[3] <<= (sal_Int16) 22; // new value  bound
-            pPS_L->pExceptedListenerValues[4] <<= (sal_Int32) 0; // old value   bound
-            pPS_L->pExceptedListenerValues[5] <<= (sal_Int32) 44; // new value  bound
-
+            pPS_L->pExceptedListenerValues[2] <<= (sal_Int16) 0; // old value	bound
+            pPS_L->pExceptedListenerValues[3] <<= (sal_Int16) 22; // new value	bound
+            pPS_L->pExceptedListenerValues[4] <<= (sal_Int32) 0; // old value	bound
+            pPS_L->pExceptedListenerValues[5] <<= (sal_Int32) 44; // new value	bound
+        
             szPN = Sequence<OUString>( 2 );
             szPN.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") );
             szPN.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") );
@@ -1136,7 +1136,7 @@ void test_PropertySetHelper()
             aValues.getArray()[1] <<= (sal_Int16) 44;
             pPS->setPropertyValues( szPN, aValues );
             OSL_ENSURE( pPS_L->nCount == pPS_L->nCurrent, "not all listeners called" );
-
+        
             //firePropertiesChangeEvent
             pPS->nINT16 = 8;
             pPS->nINT32 = 5;
@@ -1148,20 +1148,20 @@ void test_PropertySetHelper()
             pPS_L->pExceptedListenerValues[3] <<= (sal_Int32) 5; // new value
             pPS->firePropertiesChangeEvent( szPN, pPS_L );
             OSL_ENSURE( pPS_L->nCount == pPS_L->nCurrent, "not all listeners called" );
-
-
-            //vetoable exception with multible
+        
+        
+            //vetoable exception with multible 
             szPN.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") );
             szPN.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") );
             pPS->nINT32 = 0;
             pPS->nINT16 = 0;
             pPS_L->nCount = 4;
             pPS_L->nCurrent = 0;
-            pPS_L->pExceptedListenerValues[0] <<= (sal_Int16) 0; // old value   vetoable
-            pPS_L->pExceptedListenerValues[1] <<= (sal_Int16) 44; // new value  vetoable
-            pPS_L->pExceptedListenerValues[2] <<= (sal_Int16) 0; // old value   vetoable
-            pPS_L->pExceptedListenerValues[3] <<= (sal_Int16) 100; // new value vetoable
-
+            pPS_L->pExceptedListenerValues[0] <<= (sal_Int16) 0; // old value	vetoable
+            pPS_L->pExceptedListenerValues[1] <<= (sal_Int16) 44; // new value	vetoable
+            pPS_L->pExceptedListenerValues[2] <<= (sal_Int16) 0; // old value	vetoable
+            pPS_L->pExceptedListenerValues[3] <<= (sal_Int16) 100; // new value	vetoable
+        
             try
             {
                 aValues.getArray()[0] <<= (sal_Int16)44;

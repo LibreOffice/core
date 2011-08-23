@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,112 +24,112 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_WindowAttribute_idl__
-#define __com_sun_star_awt_WindowAttribute_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+#ifndef __com_sun_star_awt_WindowAttribute_idl__ 
+#define __com_sun_star_awt_WindowAttribute_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** These values are used to specify the decorations of a window.
 
     <p><b>IMPORTANT:</b> These constands have to be disjunct with
     constants in <type>VclWindowPeerAttribute</type>.</p>
  */
 published constants WindowAttribute
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies that the window is initially visible.
      */
-    const long SHOW = 1;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies that the window fills the complete desktop area.
-
+    const long SHOW = 1; 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies that the window fills the complete desktop area. 
+                 
         <p>This applies only to top windows.</p>
      */
-    const long FULLSIZE = 2;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies that the window is optimum size.
-
+    const long FULLSIZE = 2; 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies that the window is optimum size. 
+                 
         <p>This applies only to top windows.</p>
      */
-    const long OPTIMUMSIZE = 4;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies that the window is minimum size.
-
+    const long OPTIMUMSIZE = 4; 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies that the window is minimum size. 
+                 
         <p>This applies only to top windows.</p>
      */
-    const long MINSIZE = 8;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies that the window has visible borders.
-
+    const long MINSIZE = 8; 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies that the window has visible borders. 
+                 
         <p>This applies only to top windows.</p>
      */
-    const long BORDER = 16;
+    const long BORDER = 16; 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies that the size of the window can be changed by the user. 
 
-    //-------------------------------------------------------------------------
-
-    /** specifies that the size of the window can be changed by the user.
-
-        <p>This applies only to top windows.</p>
+        <p>This applies only to top windows.</p>    
      */
-    const long SIZEABLE = 32;
+    const long SIZEABLE = 32; 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies that the window can be moved by the user. 
 
-    //-------------------------------------------------------------------------
-
-    /** specifies that the window can be moved by the user.
-
-        <p>This applies only to top windows.</p>
+        <p>This applies only to top windows.</p>    
      */
-    const long MOVEABLE = 64;
+    const long MOVEABLE = 64; 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies that the window can be closed by the user. 
 
-    //-------------------------------------------------------------------------
-
-    /** specifies that the window can be closed by the user.
-
-        <p>This applies only to top windows.</p>
+        <p>This applies only to top windows.</p>    
      */
-    const long CLOSEABLE = 128;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies that the window should support the
+    const long CLOSEABLE = 128; 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies that the window should support the 
         <type scope="com::sun::star::awt::">XSystemDependentWindowPeer</type>
-        interface.
-
-        <p>This flag may be ignored, but in this case no system-dependent
+        interface.  
+                 
+        <p>This flag may be ignored, but in this case no system-dependent  
         extension works.</p>
-
-        @see XSystemDependentWindowPeer
+                 
+        @see XSystemDependentWindowPeer 
         @see com::sun::star::lang::SystemDependent
 
         @deprecated
             conflicts with <member>VclWindowPeerAttribute::HSCROLL</member>
      */
-    const long SYSTEMDEPENDENT = 256;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies that the window should have no decoration.
+    const long SYSTEMDEPENDENT = 256; 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies that the window should have no decoration. 
      */
     const long NODECORATION = 512;
 
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

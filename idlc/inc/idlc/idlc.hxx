@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,12 +74,12 @@ public:
     void setRealFileName(const ::rtl::OString& realFileName)
         { m_realFileName = realFileName; }
     const ::rtl::OString& getDocumentation()
-        {
+        { 
             m_bIsDocValid = sal_False;
-            return m_documentation;
+            return m_documentation; 
         }
     void setDocumentation(const ::rtl::OString& documentation)
-        {
+        { 
             m_documentation = documentation;
             m_bIsDocValid = sal_True;
         }
@@ -102,6 +102,12 @@ public:
         { m_warningCount++; }
     sal_uInt32 getLineNumber()
         { return m_lineNumber; }
+    sal_uInt32 getOffsetStart()
+        { return m_offsetStart; }
+    sal_uInt32 getOffsetEnd()
+        { return m_offsetEnd; }
+    void setOffset( sal_uInt32 start, sal_uInt32 end)
+        { m_offsetStart = start; m_offsetEnd = end; }
     void setLineNumber(sal_uInt32 lineNumber)
         { m_lineNumber = lineNumber; }
     void incLineNumber()
@@ -121,23 +127,25 @@ public:
 
     void reset();
 private:
-    Options*            m_pOptions;
-    AstStack*           m_pScopes;
-    AstModule*          m_pRoot;
-    ErrorHandler*       m_pErrorHandler;
-    ::rtl::OString      m_fileName;
-    ::rtl::OString      m_mainFileName;
-    ::rtl::OString      m_realFileName;
-    ::rtl::OString      m_documentation;
-    sal_Bool            m_bIsDocValid;
-    sal_Bool            m_bGenerateDoc;
-    sal_Bool            m_bIsInMainfile;
+    Options*			m_pOptions;
+    AstStack*			m_pScopes;
+    AstModule*			m_pRoot;
+    ErrorHandler*		m_pErrorHandler;
+    ::rtl::OString		m_fileName;
+    ::rtl::OString		m_mainFileName;
+    ::rtl::OString		m_realFileName;
+    ::rtl::OString		m_documentation;
+    sal_Bool			m_bIsDocValid;
+    sal_Bool			m_bGenerateDoc;
+    sal_Bool			m_bIsInMainfile;
     bool                m_published;
-    sal_uInt32          m_errorCount;
-    sal_uInt32          m_warningCount;
-    sal_uInt32          m_lineNumber;
-    ParseState          m_parseState;
-    StringSet           m_includes;
+    sal_uInt32			m_errorCount;
+    sal_uInt32			m_warningCount;
+    sal_uInt32			m_lineNumber;
+    sal_uInt32			m_offsetStart;
+    sal_uInt32			m_offsetEnd;
+    ParseState			m_parseState;
+    StringSet			m_includes;
 };
 
 sal_Int32 compileFile(const ::rtl::OString * pathname);

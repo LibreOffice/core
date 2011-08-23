@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ using namespace ::com::sun::star::uno;
 
 namespace bridges_urp {
 
-static int g_nDetectLittleEndian = 1;
+static int g_nDetectLittleEndian = 1;	
 char g_bMarshalSystemIsLittleEndian = ((char*)&g_nDetectLittleEndian)[0];
-
+    
 Marshal::Marshal( urp_BridgeImpl *pBridgeImpl,
                   sal_Int32 nBufferSize,
                   urp_extractOidCallback callback) :
@@ -95,7 +95,7 @@ void Marshal::packTid( const ByteSequence & threadId, sal_Bool bIgnoreCache )
     {
         nIndex = m_pBridgeImpl->m_tidCacheOut.seek( threadId );
     }
-
+    
     if( 0xffff == nIndex )
     {
         if( ! bIgnoreCache )
@@ -116,11 +116,11 @@ void Marshal::packType( void *pSource )
 {
     typelib_TypeDescriptionReference *pRef =
         *(typelib_TypeDescriptionReference ** ) pSource;
-
+    
     OSL_ASSERT( pRef );
-
+    
     sal_uInt8 nTypeClass = ( sal_uInt8 ) pRef->eTypeClass;
-
+    
     if( nTypeClass <= /* any*/ 14 )
     {
         packInt8( (sal_Int8*)&nTypeClass );
@@ -129,7 +129,7 @@ void Marshal::packType( void *pSource )
     {
         OUString sTypeName;
         sal_uInt16 nIndex = 0xffff;
-
+        
         nIndex = m_pBridgeImpl->m_typeCacheOut.seek( *(Type*)&pRef );
         if( 0xffff == nIndex )
         {
@@ -154,7 +154,7 @@ sal_Bool Marshal::packRecursive( void *pSource , typelib_TypeDescription *pType 
     {
     case typelib_TypeClass_EXCEPTION:
     case typelib_TypeClass_STRUCT:
-    {
+    {		
         typelib_CompoundTypeDescription * pCompType = (typelib_CompoundTypeDescription*)pType;
 
         if (pCompType->pBaseTypeDescription)
@@ -166,7 +166,7 @@ sal_Bool Marshal::packRecursive( void *pSource , typelib_TypeDescription *pType 
         typelib_TypeDescriptionReference ** ppTypeRefs = pCompType->ppTypeRefs;
         sal_Int32 * pMemberOffsets = pCompType->pMemberOffsets;
         sal_Int32 nDescr = pCompType->nMembers;
-
+        
         for ( sal_Int32 nPos = 0; nPos < nDescr; ++nPos )
         {
               typelib_TypeDescription * pMemberType = 0;
@@ -191,10 +191,10 @@ sal_Bool Marshal::packRecursive( void *pSource , typelib_TypeDescription *pType 
     {
         typelib_IndirectTypeDescription *pIndirectType =
             ( typelib_IndirectTypeDescription* ) pType;
-
-        const sal_Int32 nElements        = (*(uno_Sequence **)pSource)->nElements;
-        char * pSourceElements   = (char *)(*(uno_Sequence **)pSource)->elements;
-
+        
+        const sal_Int32 nElements		 = (*(uno_Sequence **)pSource)->nElements;
+        char * pSourceElements	 = (char *)(*(uno_Sequence **)pSource)->elements;
+            
         if( typelib_TypeClass_BYTE == pIndirectType->pType->eTypeClass )
         {
             // Byte sequences are optimized
@@ -206,8 +206,8 @@ sal_Bool Marshal::packRecursive( void *pSource , typelib_TypeDescription *pType 
             TYPELIB_DANGER_GET( &pElementType, pIndirectType->pType );
             if( pElementType )
             {
-                const sal_Int32 nElementSize     = pElementType->nSize;
-
+                const sal_Int32 nElementSize	 = pElementType->nSize;
+                
                 packCompressedSize( nElements );
                 for ( sal_Int32 i = 0 ; i < nElements; i++ )
                 {

@@ -11,10 +11,10 @@ exception bla
 
 service IdlTest
 {
-//  [property] bla p0;
+//	[property] bla p0;
     [property] short p1;
     [optional, property] unsigned short p2;
-
+    
     [maybevoid, property] long p3;
     [bound, property] unsigned long p4;
 

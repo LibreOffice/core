@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,14 +24,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_animations_AnimationRestart_idl__
-#define __com_sun_star_animations_AnimationRestart_idl__
+#ifndef __com_sun_star_animations_AnimationRestart_idl__ 
+#define __com_sun_star_animations_AnimationRestart_idl__ 
 
-//=============================================================================
-
- module com {  module sun {  module star {  module animations {
-
-//=============================================================================
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module animations {  
+ 
+//============================================================================= 
 
 /** defines the restart behaviour
 
@@ -56,20 +56,20 @@ constants AnimationRestart
     /** The element can be restarted at any time.
     */
     const short ALWAYS = 1;
-
+    
     /** The element can only be restarted when it is not active (i.e. it can be restarted after the active end).
         Attempts to restart the element during its active duration are ignored.
     */
     const short WHEN_NOT_ACTIVE = 2;
-
+    
     /** The element cannot be restarted for the remainder of the current simple
         duration of the parent time container.
     */
     const short NEVER = 3;
 };
 
-//=============================================================================
-
-}; }; }; };
+//============================================================================= 
+ 
+}; }; }; };  
 
 #endif
