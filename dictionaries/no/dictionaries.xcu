@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Linguistic" oor:package="org.openoffice.Office">
+ <node oor:name="ServiceManager">
+    <node oor:name="Dictionaries">
+        <node oor:name="HunSpellDic_nb-NO" oor:op="fuse">
+            <prop oor:name="Locations" oor:type="oor:string-list">
+                <value>%origin%/nb_NO.aff %origin%/nb_NO.dic</value>
+            </prop>
+            <prop oor:name="Format" oor:type="xs:string">
+                <value>DICT_SPELL</value>
+            </prop>
+            <prop oor:name="Locales" oor:type="oor:string-list">
+                <value>nb-NO</value>
+            </prop>
+        </node>
+        <node oor:name="HyphDic_nb-NO" oor:op="fuse">
+            <prop oor:name="Locations" oor:type="oor:string-list">
+                <value>%origin%/hyph_nb_NO.dic</value>
+            </prop>
+            <prop oor:name="Format" oor:type="xs:string">
+                <value>DICT_HYPH</value>
+            </prop>
+            <prop oor:name="Locales" oor:type="oor:string-list">
+                <value>nb-NO</value>
+            </prop>
+        </node>
+        <node oor:name="ThesDic_nb-NO" oor:op="fuse">
+            <prop oor:name="Locations" oor:type="oor:string-list">
+                <value>%origin%/th_nb_NO_v2.dat</value>
+            </prop>
+            <prop oor:name="Format" oor:type="xs:string">
+                <value>DICT_THES</value>
+            </prop>
+            <prop oor:name="Locales" oor:type="oor:string-list">
+                <value>nb-NO</value>
+            </prop>
+        </node>
+
+        <node oor:name="HunSpellDic_nn-NO" oor:op="fuse">
+            <prop oor:name="Locations" oor:type="oor:string-list">
+                <value>%origin%/nn_NO.aff %origin%/nn_NO.dic</value>
+            </prop>
+            <prop oor:name="Format" oor:type="xs:string">
+                <value>DICT_SPELL</value>
+            </prop>
+            <prop oor:name="Locales" oor:type="oor:string-list">
+                <value>nn-NO</value>
+            </prop>
+        </node>
+        <node oor:name="HyphDic_nn-NO" oor:op="fuse">
+            <prop oor:name="Locations" oor:type="oor:string-list">
+                <value>%origin%/hyph_nn_NO.dic</value>
+            </prop>
+            <prop oor:name="Format" oor:type="xs:string">
+                <value>DICT_HYPH</value>
+            </prop>
+            <prop oor:name="Locales" oor:type="oor:string-list">
+                <value>nn-NO</value>
+            </prop>
+        </node>
+        <node oor:name="ThesDic_nn-NO" oor:op="fuse">
+            <prop oor:name="Locations" oor:type="oor:string-list">
+                <value>%origin%/th_nn_NO_v2.dat</value>
+            </prop>
+            <prop oor:name="Format" oor:type="xs:string">
+                <value>DICT_THES</value>
+            </prop>
+            <prop oor:name="Locales" oor:type="oor:string-list">
+                <value>nn-NO</value>
+            </prop>
+        </node>
+
+    </node>
+ </node>
+</oor:component-data>
+
+

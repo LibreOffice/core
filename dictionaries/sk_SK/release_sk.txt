@@ -1,0 +1,11 @@
+Slovenský slovník pre kontrolu pravopisu (preklepov), delenie slov a slovník synoným
+
+Toto je aktualizácia k 09.02.2010
+- boli opravené chyby v affix kompresií kontroly preklepov
+- boli doplnené ďalšie slová do kontroly preklepov a synonymického slovníka
+
+Do rozširovania synonymického slovníka sa môžete zapojiť aj Vy na stránke:
+http://sk-spell.sk.cx/thesaurus
+
+***
+

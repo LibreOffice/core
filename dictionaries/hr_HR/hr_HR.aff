@@ -1,0 +1,106 @@
+SET ISO8859-2
+
+TRY ABCDEFGHIJKLMNOPQRSTUVWXYæÆèÈðÐ¾®abcdefghijklmnopqrstuvwxy
+
+SFX A Y 13
+SFX A 0 a [^aeiou]
+SFX A 0 u [^aeiou]
+SFX A 0 e [^aeiou]
+SFX A 0 om [^aeiou]
+SFX A a e a
+SFX A a i a
+SFX A a om a
+SFX A o a o
+SFX A o u o
+SFX A o om o
+SFX A e a e
+SFX A e u e
+SFX A e em e
+
+
+SFX B Y 5
+SFX B ti m ti
+SFX B ti ¹ ti
+SFX B ti mo ti
+SFX B ti te ti
+SFX B ti u ti
+
+SFX C Y 4
+SFX C ti h ti
+SFX C ti smo ti
+SFX C ti ste ti
+SFX C ti ¹e ti
+
+SFX D Y 5
+SFX D ti h ti
+SFX D ti ¹e ti
+SFX D ti smo ti
+SFX D ti ste ti
+SFX D ti hu ti
+
+SFX E Y 3
+SFX E ti o ti
+SFX E ti li ti
+SFX E ti la ti
+
+
+
+SFX F Y 5
+SFX F ti h ti
+SFX F ti ¹e ti
+SFX F ti smo ti
+SFX F ti ste ti
+SFX F iti hu ti
+
+SFX G Y 5
+SFX G ti m ti
+SFX G ti ¹ ti
+SFX G ti mo ti
+SFX G ti te ti
+SFX G iti e iti
+
+
+
+SFX H Y 6
+SFX H 0 a .
+SFX H 0 u .
+SFX H 0 i .
+SFX H 0 ih .
+SFX H 0 im .
+SFX H 0 e .
+
+SFX I Y 6
+SFX I 0 a .
+SFX I 0 u .
+SFX I 0 i .
+SFX I 0 ih .
+SFX I 0 ima .
+SFX I 0 e .
+
+SFX J Y 6
+SFX J 0 a .
+SFX J 0 u .
+SFX J 0 i .
+SFX J 0 ih .
+SFX J 0 im .
+SFX J 0 o .
+
+
+SFX K Y 6
+SFX K 0 a .
+SFX K 0 u .
+SFX K 0 i .
+SFX K 0 ih .
+SFX K 0 ima .
+SFX K 0 o .
+
+
+SFX L Y 2
+SFX L 0 oj .
+SFX L 0 om .
+
+SFX M Y 4
+SFX M a e a
+SFX M a i a
+SFX M a o a
+SFX M a u a

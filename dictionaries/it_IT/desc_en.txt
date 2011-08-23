@@ -1,0 +1,2 @@
+This extension contains the Italian dictionary, thesaurus and hyphenation patterns contributed by volunteers and packaged by the Italian Native-Lang Project, PLIO http://www.plio.it
+

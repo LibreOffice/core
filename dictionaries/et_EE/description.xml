@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="2008.07.01" />
+    <identifier value="org.openoffice.et.hunspell.dictionaries" />
+    <display-name>
+        <name lang="en">Estonian spelling and hyphenation dictionaries</name>
+    </display-name>
+    <platform value="all" />
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+    </dependencies>
+</description>
+

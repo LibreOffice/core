@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+<version value="1.0.-RC1" />
+<identifier value="org.no.openoffice.dictionary.no-NO" />
+<display-name>
+<name lang="en">
+Norwegian dictionaries (Nynorsk and Bokmål)
+</name>
+<name lang="nb">
+Norske ordlister (Nynorsk og Bokmål)
+</name>
+<name lang="nn">
+Norske ordlister (Nynorsk og Bokmål)
+</name>
+<name lang="no">
+Norske ordlister (Nynorsk og Bokmål)
+</name>
+
+</display-name>
+<platform value="all" />
+<dependencies>
+<OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+
+</dependencies>
+<publisher>
+<name xlink:href="http://no.openoffice.org">
+Åpne kontorprogram på norsk
+</name>
+
+</publisher>
+
+</description>

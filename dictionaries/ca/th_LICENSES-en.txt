@@ -1,0 +1,4 @@
+﻿License :
+Thesaurus with GPL/LGPL license
+
+Copyright (C) 2009 Joan Montané <joan@montane.cat> --- Softcatalà

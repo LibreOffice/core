@@ -1,0 +1,95 @@
+DNW 20/11/2008
+
+Removed un-Australian -ize variants of words from ths list.
+
+DNW 27/9/08
+
+A short list of Australian slang terms was added. 
+Added same new words like 'cellphone' from various online new word lists.
+
+DNW 25/9/2008 
+
+Version packaged as English Australian Dictionary Extension version 1 for OpenOffice version 3.
+
+-- Notes for 2.1.1 --
+
+- Made some modifications as this dictionary is specifically aimed at Mozilla products and online users.
+
+My modifications:
+
+blog/RDGMS
+Bugzilla/M
+caffeinate/D
+Camino/M
+ChatZilla/M
+eBay/M
+Firefox/M
+Flock/M
+-gauge/DaGS
+gauge/aBDGMS
+Google/M
+google/SGD
+HTML/M
+https
+inline/D
+-install/7NRn
+install/7NRnSUGMB
+-Internet/M
+internet/M
+JavaScript/M
+Mozilla/M
+phish/RG
+-plug-in
+plug-in/SM
+plugin/SM
+podcast/MSRG
+PowerPoint/M
+screenshot/S
+SeaMonkey/M
+Songbird/M
+-spam/DG
+spam/DGM
+-spammer
+spammer/MRS
+subdomain/SM
+Sunbird/M
+Thunderbird/M
+toolbar/S
+unsubscribe/D
+webmaster/MS
+webmistress/MS
+XULRunner/M
+
+-- Notes for 2.1 -- (Not released)
+Based on en_AU_V2.1.zip from http://www.justlocal.com.au/
+
+- Removed words with spaces
+- Removed trailing spaces from words
+- Change accented characters in words where this was valid according to the 
+  Macquarie English dictionary.
+- Removed U.S. spellings of the words with ize so only ise and variants remain.
+- Fixed error in affix file on line 1068 from SFZ to SFX.
+
+-- Notes for 0.2 -- 2006-08-03
+Gah! A typo in the extension name? New version pronto!
+
+
+-- Notes for 0.1 -- 2006-08-03
+
+I, Cameron, downloaded the en-AU dictionary file from http://lingucomponent.openoffice.org/spell_dic.html in order to package it correctly for use in Mozilla applications and distribution through addons.mozilla.org. It was last modified on 2003-03-29. I received no reply after emailing the author, and such have decided to make my own fork (is it still a fork if the previous one isn't maintained?) for Mozilla :) I have also decided to change the license to the GNU General Public License - as per section 3 of the LGPL. 
+
+The en_AU dictionary is credited to Kelvin Eldridge (previous maintainer) <audictionary@onlineconnections.com.au>, Jean Hollis Weber and David Wilson (originally licensed under the LGPL.)
+
+Their changes:
+- Words incorrect in Australian English removed
+- a list from the previously removed words with corrected spelling was added
+- a list of major rivers was added
+- a list of place names was added
+- a list of Australian mammals was added 
+- a list of Aboriginal/Koori words commonly used was added
+
+This dictionary was based on the en_GB dictionary, edited by David Bartlett, Brian Kelk and Andrew Brown - (originally licensed under the LGPL.)
+
+Which was in turn initially based on a subset of the original English wordlist created by Kevin Atkinson for Pspell and Aspell - (originally licensed under the LGPL.)
+
+Original affix file created completely from scratch by David Bartlett and Andrew Brown, based on the published rules for MySpell - (originally licensed under the LGPL.)

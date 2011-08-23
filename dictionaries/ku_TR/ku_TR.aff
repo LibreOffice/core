@@ -1,0 +1,234 @@
+SET UTF-8
+TRY eianrêdkbîtwûmylvjsuhoxgzpsşçcKDEBLJfHAMqTNGSPRWÇXCYZOÎÛŞSIVÊQFU
+
+# ku.aff  dosyaya affix ji bo kurdî
+#
+#---------------------------------------------------------------------
+#  Prefix: D-,E-,V-
+#
+#    D: nêrinî, emîr û emîr nêrinî
+#       di- dibe na-, bi-, ne-; xxdi- dibe xxna-, xx-, xxne-
+#       xx=ber-, çê-, da-, der-, ra-, ve-; çêbi-, dabi- û hwd. tune!
+#       Mînak:
+#         dike/D > nake, bike, neke
+#         dadikeve/D > danakeve, dakeve, danekeve
+#
+#    E: di- û ne di dema borî de
+#      Mînak: çû/E > diçû, neçû
+#
+#    V: çêdi- , çêne û hwd. di dema borî de
+#      Mînak: çêkir/V > çêdikir, çênekir
+#             (çê, der, da, ra, ve)
+#---------------------------------------------------------------------
+#  Suffix: -d,-e,-n,-m,-r
+#
+#    d: lêker, dema niha
+#       -e dibe -im, -î, -in
+#       Mînak:
+#         dike/d > dikim, dikî, dikin
+#         dixwîne/d > dixwînim, dixwînî, dixwînin
+#
+#    e: lêker, di dema borî de -im, -î, -in, -bûm, -bûyî, -bû, -bûn
+#       Mînak:
+#         stand/e > standim, standî, standin, 
+#                   standibûm, standibû, standibûyî, standibûn
+#
+#    n: navê nêr
+#       Mînak:
+#         kevir/n > kevirê, kevirî, kevirên, keviran, 
+#                   kevirek, kevirekî
+#         mele/n  > meleyê, meleyî, meleyên, meleyan,
+#                   meleyek, meleyekî
+#
+#    m: navê mê
+#       Mînak:
+#         jin/m  > jina, jinê, jinên, jinan,
+#                  jinek, jineke, jinekê
+#              hevî/m > heviya, heviyê, heviyên, heviyan, 
+#                       heviyek, heviyeke, heviyekê
+#
+#    r: rengdêr
+#       Mînak: kevn/r > kevntir, kevntirîn
+#
+#---------------------------------------------------------------------
+#
+# Copyright 2004 Erdal Ronahi <erdal.ronahi@gmx.net>
+#                Kevin P. Scannell <scannell@slu.edu>
+# 
+#  this program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+# 
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+# 
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+#---------------------------------------------------------------------
+
+PFX D Y 21
+PFX D di na di
+PFX D di bi di
+PFX D di ne di
+PFX D berdi berna berdi
+PFX D berdi ber berdi
+PFX D berdi berne berdi
+PFX D çêdi çêna çêdi
+PFX D çêdi çê çêdi
+PFX D çêdi çêne çêdi
+PFX D dadi dana dadi
+PFX D dadi da dadi
+PFX D dadi dane dadi
+PFX D derdi derna derdi
+PFX D derdi der derdi
+PFX D derdi derne derdi
+PFX D vedi vena vedi
+PFX D vedi ve vedi
+PFX D vedi vene vedi
+PFX D radi rana radi
+PFX D radi ra radi
+PFX D radi rane radi
+
+PFX E Y 2
+PFX E 0 di .
+PFX E 0 ne .
+
+PFX V Y 10
+PFX V çê çêdi çê
+PFX V çê çêne çê
+PFX V da dadi da
+PFX V da dane da
+PFX V der derdi der
+PFX V der derne der
+PFX V ve vedi ve
+PFX V ve vene ve
+PFX V ra radi ra
+PFX V ra rane ra
+
+SFX m Y 21
+SFX m 0 a [^aeêiîouû]   
+SFX m 0 ê [^aeêiîouû]  
+SFX m 0 ên [^aeêiîouû]  
+SFX m 0 an [^aeêiîouû] 
+SFX m 0 ek [^aeêiîouû]  
+SFX m 0 eke [^aeêiîouû] 
+SFX m 0 ekê [^aeêiîouû] 
+SFX m 0 ya [aeêiouû]  
+SFX m 0 yê [aeêiouû]    
+SFX m 0 yên [aeêiouû] 
+SFX m 0 yan [aeêiouû]  
+SFX m 0 yek [aeêiouû]   
+SFX m 0 yeke [aeêiouû] 
+SFX m 0 yekê [aeêiouû] 
+SFX m î iya î          
+SFX m î iyê î         
+SFX m î iyên î     
+SFX m î iyan î       
+SFX m î iyek î      
+SFX m î iyeke î   
+SFX m î iyekê î   
+
+SFX n Y 18
+SFX n 0 ê [^aeêiîouû]  
+SFX n 0 î [^aeêiîouû]  
+SFX n 0 ên [^aeêiîouû]  
+SFX n 0 an [^aeêiîouû]  
+SFX n 0 ek [^aeêiîouû]  
+SFX n 0 ekî [^aeêiîouû] 
+SFX n 0 yê [aeêiouû]   
+SFX n 0 yî [aeêiouû]    
+SFX n 0 yên [aeêiouû]   
+SFX n 0 yan [aeêiouû]  
+SFX n 0 yek [aeêiouû]   
+SFX n 0 yekî [aeêiouû]
+SFX n î iyê î          
+SFX n î iyî î         
+SFX n î iyên î     
+SFX n î iyan î       
+SFX n î iyek î      
+SFX n î iyekî î     
+
+SFX r Y 4
+SFX r 0 tir [^t]   
+SFX r 0 tirîn [^t] 
+SFX r 0 ir t      
+SFX r 0 irîn t   
+
+SFX d Y 6
+SFX d e im e
+SFX d e î e
+SFX d e in e
+SFX d 0 m [oê]
+SFX d 0 yî [oê]
+SFX d 0 n [oê]
+
+SFX e Y 26
+SFX e 0 im [^aîû] 
+SFX e 0 î [^aîû] 
+SFX e 0 in [^aîû]
+SFX e 0 ibûm [^aîû] 
+SFX e 0 ibûyî [^aîû] 
+SFX e 0 ibû [^aîû] 
+SFX e 0 ibûn [^aîû] 
+SFX e 0 iye [^aîû] 
+SFX e 0 ine [^aîû]
+SFX e 0 m [aîû]    
+SFX e 0 yî [aû]
+SFX e 0 ye [aû]
+SFX e 0 n [aîû]
+SFX e 0 me [aîû]
+SFX e 0 yine [aû]   
+SFX e 0 ne [aîû]
+SFX e 0 bûm [aîû]    
+SFX e 0 bûyî [aîû]
+SFX e 0 bû [aîû]
+SFX e 0 bûn [aîû]
+SFX e 0 bûye [aîû]
+SFX e 0 bûne [aîû]
+SFX e 0 me [aîû]
+SFX e î yî î
+SFX e î ye î
+SFX e î yine î
+
+REP 36
+REP e ê
+REP ê e
+REP i e
+REP e i
+REP i î
+REP î i
+REP u i
+REP i u
+REP u û
+REP û u
+REP o u
+REP u o
+REP o û
+REP û o
+REP k q
+REP q k
+REP c ç
+REP ch ç
+REP s ş
+REP sh ş
+REP rr r
+REP ll l
+REP dd d
+REP kk k
+REP ý i
+REP ih î
+REP î ih
+REP hê ê
+REP ê hê
+REP a ê
+REP ê a
+REP eh ê
+REP ê eh
+REP t d
+REP d t
+REP îy iy

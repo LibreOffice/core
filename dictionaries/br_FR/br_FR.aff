@@ -1,0 +1,76 @@
+# Copyright (c) 2001-2011 Korvigelloù An Drouizig
+#
+# Kit e darempred ganeomp : drouizig@drouizig.org - http://www.drouizig.org	
+#
+# PEP GWIR MIRET STRIZH - KORVIGELLOÙ AN DROUIZIG
+
+SET UTF-8
+TRY esiaùnñrtolcdugmphbyfvkwzESIAÙNÑRTOLCDUGMPHBYFVKWZ'
+
+# Permet à l'utilitaire en ligne de commande hunspell de fonctionner avec les mots contenant des quotes (lec'hienn, ...)
+WORDCHARS '
+
+FLAG long
+
+AF 3
+AF a0
+AF a1
+AF a0a1
+
+PFX a0 Y 10
+PFX a0 0 m' [aehiou]
+PFX a0 0 t' [aehiou]
+PFX a0 0 n' [aehiou]
+PFX a0 0 d' [aehiou]
+PFX a0 0 p' [aehiou]
+PFX a0 0 M' [aehiou]
+PFX a0 0 T' [aehiou]
+PFX a0 0 N' [aehiou]
+PFX a0 0 D' [aehiou]
+PFX a0 0 P' [aehiou]
+
+# Conjugaisons
+SFX a1 Y 42
+SFX a1 0 an .
+SFX a1 0 as .
+SFX a1 0 e .
+SFX a1 0 ec'h .
+SFX a1 0 ed .
+SFX a1 0 emp .
+SFX a1 0 en .
+SFX a1 0 ent .
+SFX a1 0 er .
+SFX a1 0 es .
+SFX a1 0 et .
+SFX a1 0 ez .
+SFX a1 0 fe .
+SFX a1 0 fec'h .
+SFX a1 0 fed .
+SFX a1 0 femp .
+SFX a1 0 fen .
+SFX a1 0 fent .
+SFX a1 0 fes .
+SFX a1 0 i .
+SFX a1 0 imp .
+SFX a1 0 in .
+SFX a1 0 int .
+SFX a1 0 is .
+SFX a1 0 it .
+SFX a1 0 je .
+SFX a1 0 jec'h .
+SFX a1 0 jed .
+SFX a1 0 jemp .
+SFX a1 0 jen .
+SFX a1 0 jent .
+SFX a1 0 jes .
+SFX a1 0 joc'h .
+SFX a1 0 jod .
+SFX a1 0 jomp .
+SFX a1 0 jont .
+SFX a1 0 jout .
+SFX a1 0 o .
+SFX a1 0 omp .
+SFX a1 0 ont .
+SFX a1 0 or .
+SFX a1 0 ot .
+
