@@ -46,8 +46,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::uno::XInterface >& xControl,
         const css::uno::Reference< css::frame::XModel >& xModel,
-        ov::AbstractGeometryAttributes* pGeomHelper,
-        const css::uno::Reference< css::awt::XControl >& xDialog );
+        ov::AbstractGeometryAttributes* pGeomHelper);
 
    // Attributes
     virtual sal_Int32 SAL_CALL getValue() throw (css::uno::RuntimeException);

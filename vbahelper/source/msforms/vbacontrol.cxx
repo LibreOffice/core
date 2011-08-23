@@ -581,7 +581,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlScrollBarModel") ) ) )
         xVBAControl.set( new ScVbaScrollBar( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoMultiPageModel") ) ) )
-        xVBAControl.set( new ScVbaMultiPage( xVbaParent, xContext, xControl, xModel, xGeoHelper.release(), xDialog ) );
+        xVBAControl.set( new ScVbaMultiPage( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlSpinButtonModel") ) ) )
         xVBAControl.set( new ScVbaSpinButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.custom.awt.UnoControlSystemAXContainerModel") ) ) )
