@@ -4,7 +4,7 @@
  #*************************************************************************
  #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ close LOGFILE;
 
 sub process_diff
 {
-#   $_[0] =~ tr/A-Z/a-z/;
+#	$_[0] =~ tr/A-Z/a-z/;
 
     # chdir to the output directory so the temporary files created by
     # the java programs are put in the right place.
@@ -88,45 +88,45 @@ sub process_diff
         #
         `cp $compare_home/dtd/* $xml_new`;
 
-#       $cmd = "java -classpath $classpath_val XmlWrapper $xml_orig/$_[0].sxw $xml_new/$_[0].sxw";
+#		$cmd = "java -classpath $classpath_val XmlWrapper $xml_orig/$_[0].sxw $xml_new/$_[0].sxw";
         $cmd = "java -classpath $classpath_val XmlWrapper $xml_orig/$_[0] $xml_new/$_[0]";
         print "Executing: $cmd\n";
         $val = system($cmd)/256;
         if ($val == 2)
         {
-#           print LOGFILE "$_[0]|TRUE|$xml_orig/$_[0].sxw|$xml_new/$_[0].sxw\n";
+#			print LOGFILE "$_[0]|TRUE|$xml_orig/$_[0].sxw|$xml_new/$_[0].sxw\n";
             print LOGFILE "$_[0]|TRUE|$xml_orig/$_[0]|$xml_new/$_[0]\n";
         }
         elsif($val == 3)
         {
-#           print LOGFILE "$_[0]|FALSE|$xml_orig/$_[0].sxw|$xml_new/$_[0].sxw\n";
+#			print LOGFILE "$_[0]|FALSE|$xml_orig/$_[0].sxw|$xml_new/$_[0].sxw\n";
             print LOGFILE "$_[0]|FALSE|$xml_orig/$_[0]|$xml_new/$_[0]\n";
         }
         else
         {
-#           print LOGFILE "$_[0]|ERROR|$xml_orig/$_[0].sxw|$xml_new/$_[0].sxw\n";
+#			print LOGFILE "$_[0]|ERROR|$xml_orig/$_[0].sxw|$xml_new/$_[0].sxw\n";
             print LOGFILE "$_[0]|ERROR|$xml_orig/$_[0]|$xml_new/$_[0]\n";
         }
     }
     elsif ($diff_type eq "pdb")
     {
-#       $cmd = "java -classpath $classpath_val SimplePdbCompare $pdb_orig/$_[0].pdb $pdb_new/$_[0].pdb\n";
+#		$cmd = "java -classpath $classpath_val SimplePdbCompare $pdb_orig/$_[0].pdb $pdb_new/$_[0].pdb\n";
         $cmd = "java -classpath $classpath_val SimplePdbCompare $pdb_orig/$_[0] $pdb_new/$_[0]\n";
         print "Executing: $cmd\n";
         $val = system($cmd)/256;
         if ($val == 2)
         {
-#           print LOGFILE "$_[0]|TRUE|$pdb_orig/$_[0].pdb|$pdb_new/$_[0].pdb\n";
+#			print LOGFILE "$_[0]|TRUE|$pdb_orig/$_[0].pdb|$pdb_new/$_[0].pdb\n";
             print LOGFILE "$_[0]|TRUE|$pdb_orig/$_[0]|$pdb_new/$_[0]\n";
         }
         elsif($val == 3)
         {
-#           print LOGFILE "$_[0]|FALSE|$pdb_orig/$_[0].pdb|$pdb_new/$_[0].pdb\n";
+#			print LOGFILE "$_[0]|FALSE|$pdb_orig/$_[0].pdb|$pdb_new/$_[0].pdb\n";
             print LOGFILE "$_[0]|FALSE|$pdb_orig/$_[0]|$pdb_new/$_[0]\n";
         }
         else
         {
-#           print LOGFILE "$_[0]|ERROR|$pdb_orig/$_[0].pdb|$pdb_new/$_[0].pdb\n";
+#			print LOGFILE "$_[0]|ERROR|$pdb_orig/$_[0].pdb|$pdb_new/$_[0].pdb\n";
             print LOGFILE "$_[0]|ERROR|$pdb_orig/$_[0]|$pdb_new/$_[0]\n";
         }
     }
@@ -142,7 +142,7 @@ sub process_cmdline
     {
         @arg= split('=', $i);
         @arg[0] =~ tr/A-Z/a-z/;
-
+        
         if (@arg[0] eq "-pdb-orig")
         {
             $pdb_orig=$arg[1];
@@ -191,7 +191,7 @@ sub process_cmdline
 sub set_env_from_props
 {
     open(PROPSFILE, $_[0]) || die "Could not open properties file";
-
+    
     while (<PROPSFILE>)
     {
         chomp $_;
@@ -219,7 +219,7 @@ sub set_env_from_props
         {
             $xml_new=$arg[1];
         }
-
+        
     }
     close PROPSFILE;
 }
@@ -228,8 +228,8 @@ sub print_usage
 {
     print "Usage : compartor.pl - compare Office or pdb files\n";
     print "\t-one=<file> :\t\t individual test case file to run\n";
-    print "\t-list=<file> :\t\t list of test case files\n";
-    print "\t-env=<file> :\t\t Properites like file defining env\n";
+    print "\t-list=<file> :\t\t list of test case files\n"; 
+    print "\t-env=<file> :\t\t Properites like file defining env\n"; 
     print "\t-pdb-orig=<path> :\t directory to hold original pdb files\n";
     print "\t-pdb-new=<path> :\t directory to hold new pdb files\n";
     print "\t-xml-orig=<path> :\t directory to hold original office documents\n";
@@ -252,6 +252,6 @@ sub get_file_title
     @paths = split('\/', $_[0]);
     $len = @paths;
     return @paths[$len-1];
-#   @names = split('\.', @paths[$len-1]);
-#   return $names[0];
+#	@names = split('\.', @paths[$len-1]);
+#	return $names[0];
 }

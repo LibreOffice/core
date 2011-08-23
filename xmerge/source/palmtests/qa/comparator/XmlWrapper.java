@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,14 +31,14 @@ import java.util.zip.*;
 
 public class XmlWrapper
 {
-    public static void main(String args[]) throws IOException
+    public static void main(String args[]) throws IOException 
     {
         System.out.println("args.length is " + args.length);
         if (args.length < 2) {
             System.out.println("Usage: java XmlWrapper [<zipfile1> <zipfile2>].");
             //return;
              System.exit(-1);
-
+            
         }
 
         XmlWrapper w = new XmlWrapper();
@@ -120,7 +120,7 @@ public class XmlWrapper
                same = xmldiff.diff();
            }
         }
-        catch (Exception ex)
+        catch (Exception ex) 
         {
          System.out.println("XmlDiff failed");
          System.out.println("Exception: " + ex.toString());
@@ -130,7 +130,7 @@ public class XmlWrapper
          System.exit(-1);
         }
 
-        System.out.println("Diff result: " + same);
+        System.out.println("Diff result: " + same); 
         if (same)
         {
           System.out.println("XMLDIFFRESULT:PASSED");

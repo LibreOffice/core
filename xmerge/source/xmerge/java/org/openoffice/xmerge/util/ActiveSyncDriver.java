@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,19 +44,19 @@ public class ActiveSyncDriver {
         if (args.length != 4) {
             return;
         }
-
+            
         ActiveSyncDriver asd = new ActiveSyncDriver();
-
+        
         try {
             // At the moment can't really signal back to the calling DLL
             asd.Convert(args[0], args[1], args[2], args[3]);
-        }
+        } 
         catch (Exception e) {
             return;
         }
     }
-
-
+    
+    
     private boolean Convert(String srcMime, String dstMime, String srcFile, String dstFile) throws Exception {
         /*
          * The classpath passed in by XMergeSync.dll should contain all of the
@@ -65,24 +65,24 @@ public class ActiveSyncDriver {
          * the Pocket Word and Pocket Excel plugins.
          */
         String ooClassDir = null;
-        String strClassPath = System.getProperty("java.class.path");
-
+        String strClassPath = System.getProperty("java.class.path");      
+        
         StringTokenizer st = new StringTokenizer(strClassPath, ";");
-
+        
         // There should be at least one element, but just in case
         while (st.hasMoreTokens()) {
             String s = st.nextToken();
-
+            
             if (s.endsWith("xmerge.jar")) {
                 ooClassDir = s.substring(0, s.indexOf("xmerge.jar"));
             }
         }
-
+        
         if (ooClassDir == null) {
             return true;
         }
-
-
+        
+        
         /*
          * The XMergeSync.dll should will have checked for the presence of the
          * jars at the same location already.
@@ -99,24 +99,24 @@ public class ActiveSyncDriver {
         {
             pluginJar = new File(ooClassDir + "pexcel.jar");
         }
-
-        ConverterInfoReader cirPlugin = new ConverterInfoReader(pluginJar.toURL().toString(), false);
-
+               
+        ConverterInfoReader cirPlugin = new ConverterInfoReader(pluginJar.toURL().toString(), false);     
+        
         ConverterInfoMgr.addPlugIn(cirPlugin.getConverterInfoEnumeration());
-
+        
         ConverterFactory cf = new ConverterFactory();
         Convert conv = cf.getConverter(srcMime, dstMime);
-
+                
         if (conv == null) {
             return false;
         }
-
+        
         // Everything is registered so do the conversion
         FileInputStream fis = new FileInputStream(srcFile);
         FileOutputStream fos = new FileOutputStream(dstFile);
-
+        
         conv.addInputStream(srcFile, fis);
-
+        
         ConvertData dataOut;
         try {
             dataOut = conv.convert();
@@ -124,21 +124,21 @@ public class ActiveSyncDriver {
         catch (Exception e) {
             return false;
         }
-
+        
         if (dataOut == null) {
             return false;
         }
 
         // Get the document and write it out.
-        Document doc = (Document)dataOut.getDocumentEnumeration().nextElement();
+        Document doc = (Document)dataOut.getDocumentEnumeration().nextElement();      
         if (doc == null) {
             return false;
         }
-
+        
         doc.write(fos);
         fos.flush();
         fos.close();
-
-        return true;
+        
+        return true;         
     }
 }

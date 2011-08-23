@@ -53,11 +53,11 @@
  *
  *
  ************************************************************************/
-#include    "xftextboxstyle.hxx"
-#include    "xfcolumns.hxx"
-#include    "xfborders.hxx"
-#include    "xfshadow.hxx"
-#include    "xfbgimage.hxx"
+#include	"xftextboxstyle.hxx"
+#include	"xfcolumns.hxx"
+#include	"xfborders.hxx"
+#include	"xfshadow.hxx"
+#include	"xfbgimage.hxx"
 
 XFTextBoxStyle::XFTextBoxStyle()
 {
@@ -67,12 +67,12 @@ XFTextBoxStyle::~XFTextBoxStyle()
 {
 }
 
-enumXFStyle XFTextBoxStyle::GetStyleFamily()
+enumXFStyle	XFTextBoxStyle::GetStyleFamily()
 {
     return enumXFStyleGraphics;
 }
 
-void    XFTextBoxStyle::ToXml(IXFStream *pStrm)
+void	XFTextBoxStyle::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 

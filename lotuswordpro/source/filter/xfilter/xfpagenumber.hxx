@@ -61,12 +61,12 @@
  * Change History
  * 2005-01-31 create this file.
  ************************************************************************/
-#ifndef     _XFPAGENUMBER_HXX
-#define     _XFPAGENUMBER_HXX
+#ifndef		_XFPAGENUMBER_HXX
+#define		_XFPAGENUMBER_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
-#include    "xfnumfmt.hxx"
+#include	"xfglobal.hxx"
+#include	"xfcontent.hxx"
+#include	"xfnumfmt.hxx"
 
 /**
  * @brief
@@ -75,22 +75,22 @@
 class XFPageNumber : public XFContent
 {
 public:
-    void    SetNumFmt(rtl::OUString fmt);
+    void	SetNumFmt(rtl::OUString fmt);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    XFNumFmt    m_aNumFmt;
+    XFNumFmt	m_aNumFmt;
 };
 
-inline void XFPageNumber::SetNumFmt(rtl::OUString fmt)
+inline void	XFPageNumber::SetNumFmt(rtl::OUString fmt)
 {
     m_aNumFmt.SetFormat(fmt);
 }
 
 inline void XFPageNumber::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     m_aNumFmt.ToXml(pStrm);

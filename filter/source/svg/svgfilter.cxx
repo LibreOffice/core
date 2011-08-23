@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,12 +74,12 @@ SVGFilter::~SVGFilter()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
+sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor ) 
     throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
     Window*     pFocusWindow = Application::GetFocusWindow();
-    sal_Int16   nCurrentPageNumber = -1;
+    sal_Int16 	nCurrentPageNumber = -1;
     sal_Bool    bRet;
 
     if( pFocusWindow )
@@ -90,24 +90,24 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     else
     if( mxSrcDoc.is() )
     {
-        uno::Reference< frame::XDesktop > xDesktop( mxMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
+        uno::Reference< frame::XDesktop > xDesktop( mxMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), 
                                                     uno::UNO_QUERY);
         if( xDesktop.is() )
         {
             uno::Reference< frame::XFrame > xFrame( xDesktop->getCurrentFrame() );
-
+            
             if( xFrame.is() )
             {
                 uno::Reference< frame::XController > xController( xFrame->getController() );
-
+                
                 if( xController.is() )
                 {
                     uno::Reference< drawing::XDrawView > xDrawView( xController, uno::UNO_QUERY );
-
+                    
                     if( xDrawView.is() )
                     {
                         uno::Reference< drawing::XDrawPage > xDrawPage( xDrawView->getCurrentPage() );
-
+                        
                         if( xDrawPage.is() )
                         {
                             uno::Reference< beans::XPropertySet >( xDrawPage, uno::UNO_QUERY )->
@@ -117,18 +117,18 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                 }
             }
         }
-
+        
         Sequence< PropertyValue > aNewDescritor( rDescriptor );
-
+        
         if( nCurrentPageNumber > 0 )
         {
-            const sal_uInt32    nOldLength = rDescriptor.getLength();
-
+            const sal_uInt32	nOldLength = rDescriptor.getLength();
+            
             aNewDescritor.realloc( nOldLength + 1 );
             aNewDescritor[ nOldLength ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PagePos" ) );
             aNewDescritor[ nOldLength ].Value <<= static_cast< sal_Int16 >( nCurrentPageNumber - 1 );
         }
-
+        
         bRet = implExport( aNewDescritor );
     }
     else
@@ -148,7 +148,7 @@ void SAL_CALL SVGFilter::cancel( ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc )
+void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc ) 
     throw (IllegalArgumentException, RuntimeException)
 {
     mxSrcDoc = xDoc;
@@ -156,7 +156,7 @@ void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc 
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc )
+void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc ) 
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     mxDstDoc = xDoc;

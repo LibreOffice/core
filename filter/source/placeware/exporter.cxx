@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ using com::sun::star::task::XStatusIndicator;
 // -----------------------------------------------------------------------------
 
 PlaceWareExporter::PlaceWareExporter(const Reference< XMultiServiceFactory > &rxMSF)
-:   mxMSF( rxMSF )
+:	mxMSF( rxMSF )
 {
 }
 
@@ -139,7 +139,7 @@ static void encodeFile( osl::File& rSourceFile, Reference< XOutputStream >& xOut
         if( osl::File::E_None != nRC )
             throw IOException();
 
-        sal_Int32 nBufferSize = 3*1024; // !!! buffer size must be a factor of 3 for base64 to work
+        sal_Int32 nBufferSize = 3*1024;	// !!! buffer size must be a factor of 3 for base64 to work
         Sequence< sal_Int8 > aInBuffer( nBufferSize < nLen ? nBufferSize : nLen );
         void* pInBuffer = aInBuffer.getArray();
 
@@ -329,7 +329,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
     osl::File aTempFile( aURL );
     nRC = aTempFile.open( osl_File_OpenFlag_Create|osl_File_OpenFlag_Write|osl_File_OpenFlag_Read );
 #endif
-
+    
     if( osl::File::E_None != nRC )
         return sal_False;
 

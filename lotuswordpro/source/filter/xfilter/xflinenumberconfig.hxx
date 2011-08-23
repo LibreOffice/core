@@ -61,10 +61,10 @@
  * Change History
  * 2005-03-23 create this file.
  ************************************************************************/
-#ifndef     _XFLINENUMBERCONFIG_HXX
-#define     _XFLINENUMBERCONFIG_HXX
+#ifndef		_XFLINENUMBERCONFIG_HXX
+#define		_XFLINENUMBERCONFIG_HXX
 
-#include    "xfstyle.hxx"
+#include	"xfstyle.hxx"
 
 class XFLineNumberConfig : public XFStyle
 {
@@ -72,37 +72,37 @@ public:
     XFLineNumberConfig();
 
 public:
-    void    SetNumberOffset(double offset);
+    void	SetNumberOffset(double offset);
 
-    void    SetNumberPosition(enumXFLineNumberPos pos);
+    void	SetNumberPosition(enumXFLineNumberPos pos);
 
-    void    SetNumberIncrement(sal_Int32 increment);
+    void	SetNumberIncrement(sal_Int32 increment);
 
-    void    SetSeperator(sal_Int32 increment, rtl::OUString seperator);
+    void	SetSeperator(sal_Int32 increment, rtl::OUString seperator);
 
-    void    SetNumberFormat(rtl::OUString numfmt = A2OUSTR("1"));
+    void	SetNumberFormat(rtl::OUString numfmt = A2OUSTR("1"));
 
-    void    SetTextStyle(rtl::OUString style);
+    void	SetTextStyle(rtl::OUString style);
 
-    void    SetRestartOnPage(sal_Bool restart = sal_True);
+    void	SetRestartOnPage(sal_Bool restart = sal_True);
 
-    void    SetCountEmptyLines(sal_Bool empty = sal_True);
+    void	SetCountEmptyLines(sal_Bool empty = sal_True);
 
-    void    SetCountFrameLines(sal_Bool frame = sal_True);
+    void	SetCountFrameLines(sal_Bool frame = sal_True);
 
     virtual void ToXml(IXFStream *pStrm);
 
 private:
-    enumXFLineNumberPos m_ePosition;
-    double      m_fOffset;
-    sal_Int32   m_nIncrement;
-    sal_Int32   m_nSepIncrement;
-    rtl::OUString   m_strSeparator;
-    rtl::OUString   m_strNumFmt;
-    rtl::OUString   m_strTextStyle;
-    sal_Bool    m_bRestartOnPage;
-    sal_Bool    m_bCountEmptyLines;
-    sal_Bool    m_bCountFrameLines;
+    enumXFLineNumberPos	m_ePosition;
+    double		m_fOffset;
+    sal_Int32	m_nIncrement;
+    sal_Int32	m_nSepIncrement;
+    rtl::OUString	m_strSeparator;
+    rtl::OUString	m_strNumFmt;
+    rtl::OUString	m_strTextStyle;
+    sal_Bool	m_bRestartOnPage;
+    sal_Bool	m_bCountEmptyLines;
+    sal_Bool	m_bCountFrameLines;
 };
 
 inline XFLineNumberConfig::XFLineNumberConfig()
@@ -120,7 +120,7 @@ inline void XFLineNumberConfig::SetNumberOffset(double offset)
     m_fOffset = offset;
 }
 
-inline void XFLineNumberConfig::SetNumberPosition(enumXFLineNumberPos   position)
+inline void XFLineNumberConfig::SetNumberPosition(enumXFLineNumberPos	position)
 {
     m_ePosition = position;
 }

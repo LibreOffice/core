@@ -1,0 +1,9 @@
+UDK_3_0_0 {
+    global:
+        legacysmgr_component_writeInfo;
+        legacysmgr_component_getFactory;
+        __1cRlegacy_binfiltersbEgetLegacyProcessServiceFactory6F_rknDcomDsunEstarDunoJReference4n0DElangUXMultiServiceFactory____;
+        legcy_setBinfilterInitState;
+    local:
+    *;
+};

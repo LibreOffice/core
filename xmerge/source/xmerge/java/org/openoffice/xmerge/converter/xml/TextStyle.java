@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ import org.openoffice.xmerge.util.Debug;
  *  @author   David Proulx
  */
 public class TextStyle extends Style implements Cloneable {
-
+    
     final protected static int FIRST_ATTR = 0x01;
     /** Indicates <i>bold</i> text. */
     final public static int BOLD        = 0x01;
@@ -60,12 +60,12 @@ public class TextStyle extends Style implements Cloneable {
     final public static int SUBSCRIPT   = 0x20;
     /** Indicates the last attribute. */
     final protected static int LAST_ATTR = 0x20;
-
+    
     /** Values of text attributes. */
     protected int values = 0;
     /** Bitwise mask of text attributes. */
     protected int mask = 0;
-
+    
     /** Font size in points. */
     protected int sizeInPoints = 0;
     /** Font name. */
@@ -74,7 +74,7 @@ public class TextStyle extends Style implements Cloneable {
     protected Color fontColor = null;
     /** Background <code>Color</code>. */
     protected Color bgColor = null;
-
+    
     /**
      *  Constructor for use when going from DOM to client device format.
      *
@@ -86,7 +86,7 @@ public class TextStyle extends Style implements Cloneable {
      */
     public TextStyle(Node node, StyleCatalog sc) {
         super(node, sc);
-
+        
         // Run through the attributes of this node, saving
         // the ones we're interested in.
         NamedNodeMap attrNodes = node.getAttributes();
@@ -97,7 +97,7 @@ public class TextStyle extends Style implements Cloneable {
                 handleAttribute(attr.getNodeName(), attr.getNodeValue());
             }
         }
-
+        
         // Look for children.  Only ones we care about are "style:properties"
         // nodes.  If any are found, recursively traverse them, passing
         // along the style element to add properties to.
@@ -121,8 +121,8 @@ public class TextStyle extends Style implements Cloneable {
             }
         }
     }
-
-
+    
+    
     /**
      *  Constructor for use when going from client device format to DOM
      *
@@ -186,7 +186,7 @@ public class TextStyle extends Style implements Cloneable {
         }
         return new Color(red, green, blue);
     }
-
+    
 
     /**
      *  Set an attribute.
@@ -195,32 +195,32 @@ public class TextStyle extends Style implements Cloneable {
      *  @param  value  The attribute value to set.
      */
     private void handleAttribute(String attr, String value) {
-
+        
         if (attr.equals("fo:font-weight")) {
             if (value.equals("bold")) turnAttributesOn(BOLD);
             else if (value.equals("normal")) turnAttributesOff(BOLD);
         }
-
+        
         else if (attr.equals("fo:font-style")) {
             if (value.equals("italic")) turnAttributesOn(ITALIC);
             else if (value.equals("oblique")) turnAttributesOn(ITALIC);
             else if (value.equals("normal")) turnAttributesOff(ITALIC);
         }
-
+        
         else if (attr.equals("style:text-underline")) {
             if (value.equals("none"))
                 turnAttributesOff(UNDERLINE);
             else
                 turnAttributesOn(UNDERLINE);
         }
-
+        
         else if (attr.equals("style:text-crossing-out")) {
             if (value.equals("none"))
                 turnAttributesOff(STRIKETHRU);
             else
                 turnAttributesOn(STRIKETHRU);
         }
-
+        
         else if (attr.equals("style:text-position")) {
             if (value.startsWith("super "))
                 turnAttributesOn(SUPERSCRIPT);
@@ -244,17 +244,17 @@ public class TextStyle extends Style implements Cloneable {
                 }
             }
         }
-
+        
         else if (attr.equals("fo:font-size")) {
             if (value.endsWith("pt")) {
                 String num = value.substring(0, value.length() - 2);
                 sizeInPoints = Integer.parseInt(num);
             }
         }
-
+        
         else if (attr.equals("style:font-name"))
             fontName = value;
-
+        
         else if (attr.equals("fo:color"))
             fontColor = parseColorString(value);
 
@@ -262,13 +262,13 @@ public class TextStyle extends Style implements Cloneable {
             bgColor = parseColorString(value);
 
         else if (isIgnored(attr)) {}
-
+        
         else {
             Debug.log(Debug.INFO, "TextStyle Unhandled: " + attr + "=" + value);
         }
     }
-
-
+    
+    
     /**
      *  Return true if text <code>attribute</code> is set in this
      *  <code>Style</code>.  An attribute that is set may have a
@@ -283,24 +283,24 @@ public class TextStyle extends Style implements Cloneable {
     public boolean isSet(int attribute) {
         return (!((mask & attribute) == 0));
     }
-
-
+    
+    
     /**
      *  Return true if the <code>attribute</code> is set to <i>on</i>
      *
      *  @param  attribute  Attribute to check ({@link #BOLD},
      *                     {@link #ITALIC}, etc.)
      *
-     *  @return  true if <code>attribute</code> is set to <i>on</i>,
+     *  @return  true if <code>attribute</code> is set to <i>on</i>, 
      *           otherwise false.
      */
     public boolean getAttribute(int attribute) {
-        if ((mask & attribute) == 0)
+        if ((mask & attribute) == 0) 
             return false;
         return (!((values & attribute) == 0));
     }
-
-
+    
+    
     /**
      *  Return the font size for this <code>Style</code>.
      *
@@ -309,8 +309,8 @@ public class TextStyle extends Style implements Cloneable {
     public int getFontSize() {
         return sizeInPoints;
     }
-
-
+    
+    
     /**
      *  Return the name of the font for this <code>Style</code>.
      *
@@ -320,7 +320,7 @@ public class TextStyle extends Style implements Cloneable {
     public String getFontName() {
         return fontName;
     }
-
+    
 
     /**
      *  Return the font <code>Color</code> for this <code>Style</code>.
@@ -354,15 +354,15 @@ public class TextStyle extends Style implements Cloneable {
      *  @param  backgroundColor  The background <code>Color</code> to set.
      */
     public void setColors(Color fontColor, Color backgroundColor) {
-        if (fontColor != null)
+        if (fontColor != null) 
             this.fontColor = fontColor;
         if (backgroundColor != null)
             this.bgColor = backgroundColor;
     }
 
-
+    
     /**
-     *  Return a <code>Style</code> object corresponding to this one,
+     *  Return a <code>Style</code> object corresponding to this one, 
      *  but with all of the inherited information from parent
      *  <code>Style</code> objects filled in.  The object returned will
      *  be a new object, not a reference to this object, even if it does
@@ -379,7 +379,7 @@ public class TextStyle extends Style implements Cloneable {
         } catch (Exception e) {
             Debug.log(Debug.ERROR, "Can't clone", e);
         }
-
+        
         // Look up the parentStyle.  (If there is no style catalog
         // specified, we can't do any lookups.)
         TextStyle parentStyle = null;
@@ -398,12 +398,12 @@ public class TextStyle extends Style implements Cloneable {
                     null, this.getClass());
             }
         }
-
+        
         // If we found a parent, for any attributes which we don't have
         // set, try to get the values from the parent.
         if (parentStyle != null) {
             parentStyle = (TextStyle)parentStyle.getResolved();
-
+            
             if ((sizeInPoints == 0) && (parentStyle.sizeInPoints != 0))
                 resolved.sizeInPoints = parentStyle.sizeInPoints;
             if ((fontName == null) && (parentStyle.fontName != null))
@@ -418,12 +418,12 @@ public class TextStyle extends Style implements Cloneable {
                     resolved.values |= (parentStyle.mask & m);
                 }
             }
-
+            
         }
         return resolved;
     }
-
-
+    
+    
     /**
      *  Set one or more text attributes to <i>on</i>.
      *
@@ -433,8 +433,8 @@ public class TextStyle extends Style implements Cloneable {
         mask |= flags;
         values |= flags;
     }
-
-
+    
+    
     /**
      *  Set one or more text attributes to <i>off</i>.
      *
@@ -444,7 +444,7 @@ public class TextStyle extends Style implements Cloneable {
         mask |= flags;
         values &= ~flags;
     }
-
+    
 
     /**
      *  Private function to return the value as an element in
@@ -460,8 +460,8 @@ public class TextStyle extends Style implements Cloneable {
         else
             return "\"\",";
     }
-
-
+    
+    
     /**
      *  Private function to return the value as a last element in
      *  a Comma Separated Value (CSV) format.
@@ -476,8 +476,8 @@ public class TextStyle extends Style implements Cloneable {
         else
             return "\"\"";
     }
-
-
+    
+    
     /**
      *  Print a Comma Separated Value (CSV) header line for the
      *  spreadsheet dump.
@@ -488,8 +488,8 @@ public class TextStyle extends Style implements Cloneable {
         + toCSV("Bold") + toCSV("Italic") + toCSV("Underline")
         + toCSV("Strikethru") + toCSV("Superscript") + toLastCSV("Subscript"));
     }
-
-
+    
+    
     /**
      *  Dump this <code>Style</code> as a Comma Separated Value (CSV) line.
      */
@@ -503,8 +503,8 @@ public class TextStyle extends Style implements Cloneable {
         System.out.println(toCSV(name) + toCSV(family) + toCSV(parent)
         + toCSV(fontName) + toCSV("" + sizeInPoints) + attributes + toLastCSV(null));
     }
-
-
+    
+    
     /**
      *  Create a new <code>Node</code> in the <code>Document</code>, and
      *  write this <code>Style</code> to it.
@@ -521,10 +521,10 @@ public class TextStyle extends Style implements Cloneable {
         writeAttributes(node);
         return node;
     }
-
-
+    
+    
     /**
-     *  Return true if <code>style</code> specifies as much or less
+     *  Return true if <code>style</code> specifies as much or less 
      *  than this <code>Style</code>, and nothing it specifies
      *  contradicts this <code>Style</code>.
      *
@@ -534,43 +534,43 @@ public class TextStyle extends Style implements Cloneable {
      *           otherwise.
      */
     public boolean isSubset(Style style) {
-        if (style.getClass() != this.getClass())
+        if (style.getClass() != this.getClass()) 
                 return false;
         TextStyle tStyle = (TextStyle)style;
-
-        if (tStyle.values != values)
+        
+        if (tStyle.values != values) 
                 return false;
-
+        
         if (tStyle.sizeInPoints != 0) {
-            if (sizeInPoints != tStyle.sizeInPoints)
+            if (sizeInPoints != tStyle.sizeInPoints) 
                 return false;
         }
 
         if (tStyle.fontName != null) {
-            if (fontName == null)
+            if (fontName == null) 
                 return false;
-            if (!fontName.equals(tStyle.fontName))
+            if (!fontName.equals(tStyle.fontName)) 
                 return false;
         }
 
         if (tStyle.fontColor != null) {
-            if (fontColor == null)
+            if (fontColor == null) 
                 return false;
-            if (!fontColor.equals(tStyle.fontColor))
+            if (!fontColor.equals(tStyle.fontColor)) 
                 return false;
         }
 
         if (tStyle.bgColor != null) {
-            if (bgColor == null)
+            if (bgColor == null) 
                 return false;
-            if (!bgColor.equals(tStyle.bgColor))
+            if (!bgColor.equals(tStyle.bgColor)) 
                 return false;
         }
 
         return true;
     }
-
-
+    
+    
     /**
      *  Write this <code>Style</code> object's attributes to a
      *  <code>Node</code> in the <code>Document</code>.
@@ -579,44 +579,44 @@ public class TextStyle extends Style implements Cloneable {
      *                attributes.
      */
     public void writeAttributes(Element node) {
-
+        
         if ((mask & BOLD) != 0)
             if ((values & BOLD) != 0)
                 node.setAttribute("fo:font-weight", "bold");
-
+        
         if ((mask & ITALIC) != 0)
             if ((values & ITALIC) != 0)
                 node.setAttribute("fo:font-style", "italic");
-
+        
         if ((mask & UNDERLINE) != 0)
             if ((values & UNDERLINE) != 0)
                 node.setAttribute("style:text-underline", "single");
-
+        
         if ((mask & STRIKETHRU) != 0)
             if ((values & STRIKETHRU) != 0)
                 node.setAttribute("style:text-crossing-out", "single-line");
-
+        
         if ((mask & SUPERSCRIPT) != 0)
             if ((values & SUPERSCRIPT) != 0)
                 node.setAttribute("style:text-position", "super 58%");
-
+        
         if ((mask & SUBSCRIPT) != 0)
             if ((values & SUBSCRIPT) != 0)
                 node.setAttribute("style:text-position", "sub 58%");
-
+        
         if (sizeInPoints != 0) {
             Integer fs = new Integer(sizeInPoints);
             node.setAttribute("fo:font-size", fs.toString() + "pt");
         }
-
+        
         if (fontName != null)
             node.setAttribute("style:font-name", fontName);
-
+            
         if (fontColor != null)
             node.setAttribute("fo:color", buildColorString(fontColor));
 
         if (bgColor != null)
-            node.setAttribute("style:text-background-color",
+            node.setAttribute("style:text-background-color", 
                               buildColorString(bgColor));
     }
 
@@ -637,14 +637,14 @@ public class TextStyle extends Style implements Cloneable {
         String colorString = new String("#");
         for (int i = 0; i <= 2; i++) {
             String xx = Integer.toHexString(v[i]);
-            if (xx.length() < 2)
+            if (xx.length() < 2) 
         xx = "0" + xx;
             colorString += xx;
     }
         return colorString;
     }
-
-
+         
+    
     private static String[] ignored = {
         "style:text-autospace",  "style:text-underline-color",
         "fo:margin-left", "fo:margin-right", "fo:text-indent",
@@ -670,7 +670,7 @@ public class TextStyle extends Style implements Cloneable {
      */
     private boolean isIgnored(String attribute) {
         for (int i = 0; i < ignored.length; i++) {
-            if (ignored[i].equals(attribute))
+            if (ignored[i].equals(attribute)) 
                 return true;
         }
         return false;

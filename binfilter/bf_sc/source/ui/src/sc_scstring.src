@@ -1,0 +1,1708 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include "bf_sc.hrc" // -> #include <sfx.hrc>
+
+ // Strings fuer Interface-Namen ------------------------------------------
+
+String SCSTR_APPLICATION
+{
+    Text [ de ] = "%PRODUCTNAME Calc 6.0" ;
+    Text [ en-US ] = "%PRODUCTNAME Calc 6.0";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "%PRODUCTNAME Calc 6.0";
+    Text[ ru ] = "%PRODUCTNAME Calc 6.0";
+    Text[ el ] = "%PRODUCTNAME Calc 6.0";
+    Text[ nl ] = "%PRODUCTNAME Calc 6.0";
+    Text[ fr ] = "%PRODUCTNAME Calc 6.0";
+    Text[ es ] = "%PRODUCTNAME Calc 6.0";
+    Text[ fi ] = "%PRODUCTNAME Calc 6.0";
+    Text[ ca ] = "%PRODUCTNAME Calc 6.0";
+    Text[ it ] = "%PRODUCTNAME Calc 6.0";
+    Text[ da ] = "%PRODUCTNAME Calc 6.0";
+    Text[ sv ] = "%PRODUCTNAME Calc 6.0";
+    Text[ pl ] = "%PRODUCTNAME Calc 6.0";
+    Text[ pt-BR ] = "%PRODUCTNAME Calc 6.0";
+    Text[ th ] = "%PRODUCTNAME Calc 6.0";
+    Text[ ja ] = "%PRODUCTNAME Calc 6.0";
+    Text[ ko ] = "%PRODUCTNAME Calc 6.0";
+    Text[ zh-CN ] = "%PRODUCTNAME Calc 6.0";
+    Text[ zh-TW ] = "%PRODUCTNAME Calc 6.0";
+    Text[ tr ] = "%PRODUCTNAME Calc 6.0";
+    Text[ hi-IN ] = "%PRODUCTNAME गणना 6.0";
+    Text[ ar ] = "%PRODUCTNAME Calc 6.0";
+    Text[ he ] = "%PRODUCTNAME Calc 6.0";
+};
+String SCSTR_50_APPLICATION
+{
+    Text [ de ] = "StarCalc 5.0" ;
+    Text [ en-US ] = "StarCalc  5.0" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "StarCalc 5.0";
+    Text[ ru ] = "StarCalc 5.0";
+    Text[ el ] = "StarCalc 5.0";
+    Text[ nl ] = "StarCalc 5.0";
+    Text[ fr ] = "StarCalc 5.0";
+    Text[ es ] = "StarCalc 5.0";
+    Text[ fi ] = "StarCalc 5.0";
+    Text[ ca ] = "StarCalc 5.0";
+    Text[ it ] = "StarCalc 5.0";
+    Text[ da ] = "StarCalc 5.0";
+    Text[ sv ] = "StarCalc 5.0";
+    Text[ pl ] = "StarCalc 5.0";
+    Text[ pt-BR ] = "StarCalc 5.0";
+    Text[ th ] = "StarCalc  5.0";
+    Text[ ja ] = "StarCalc 5.0";
+    Text[ ko ] = "StarCalc 5.0";
+    Text[ zh-CN ] = "StarCalc 5.0";
+    Text[ zh-TW ] = "StarCalc 5.0";
+    Text[ tr ] = "StarCalc 5.0";
+    Text[ hi-IN ] = "StarCalc  5.0";
+    Text[ ar ] = "StarCalc 5.0";
+    Text[ he ] = "StarCalc 5.0";
+};
+String SCSTR_40_APPLICATION
+{
+    Text [ de ] = "StarCalc 4.0" ;
+    Text [ en-US ] = "StarCalc 4.0" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "StarCalc 4.0";
+    Text[ ru ] = "StarCalc 4.0";
+    Text[ el ] = "StarCalc 4.0";
+    Text[ nl ] = "Star Calc 4.0";
+    Text[ fr ] = "StarCalc 4.0";
+    Text[ es ] = "StarCalc 4.0";
+    Text[ fi ] = "StarCalc 4.0";
+    Text[ ca ] = "StarCalc 4.0";
+    Text[ it ] = "StarCalc 4.0";
+    Text[ da ] = "StarCalc 4.0";
+    Text[ sv ] = "StarCalc 4.0";
+    Text[ pl ] = "StarCalc 4.0";
+    Text[ pt-BR ] = "StarCalc 4.0";
+    Text[ th ] = "StarCalc 4.0";
+    Text[ ja ] = "StarCalc 4.0";
+    Text[ ko ] = "StarCalc 4.0";
+    Text[ zh-CN ] = "StarCalc 4.0";
+    Text[ zh-TW ] = "StarCalc 4.0";
+    Text[ tr ] = "StarCalc 4.0";
+    Text[ hi-IN ] = "StarCalc 4.0";
+    Text[ ar ] = "Star Calc 4.0";
+    Text[ he ] = "StarCalc 4.0";
+};
+String SCSTR_30_APPLICATION
+{
+    Text [ de ] = "StarCalc 3.0" ;
+    Text [ en-US ] = "StarCalc 3.0" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "StarCalc 3.0";
+    Text[ ru ] = "StarCalc 3.0";
+    Text[ el ] = "Star Calc 3.0";
+    Text[ nl ] = "StarCalc 3.0";
+    Text[ fr ] = "StarCalc 3.0";
+    Text[ es ] = "StarCalc 3.0";
+    Text[ fi ] = "StarCalc 3.0";
+    Text[ ca ] = "StarCalc 3.0";
+    Text[ it ] = "StarCalc 3.0";
+    Text[ da ] = "StarCalc 3.0";
+    Text[ sv ] = "StarCalc 3.0";
+    Text[ pl ] = "StarCalc 3.0";
+    Text[ pt-BR ] = "StarCalc 3.0";
+    Text[ th ] = "StarCalc 3.0";
+    Text[ ja ] = "StarCalc 3.0";
+    Text[ ko ] = "StarCalc 3.0";
+    Text[ zh-CN ] = "StarCalc 3.0";
+    Text[ zh-TW ] = "StarCalc 3.0";
+    Text[ tr ] = "StarCalc 3.0";
+    Text[ hi-IN ] = "StarCalc 3.0";
+    Text[ ar ] = "Star Calc 3.0";
+    Text[ he ] = "StarCalc 3.0";
+};
+String SCSTR_LONG_SCDOC_NAME
+{
+    Text [ de ] = "%PRODUCTNAME 6.0 Tabelle" ;
+    Text [ en-US ] = "%PRODUCTNAME 6.0 Spreadsheet";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "%PRODUCTNAME 6.0 Folha de cálculo";
+    Text[ ru ] = "Электронная таблица %PRODUCTNAME 6.0";
+    Text[ el ] = "%PRODUCTNAME 6.0 Πίνακας";
+    Text[ nl ] = "%PRODUCTNAME 6.0 werkblad";
+    Text[ fr ] = "%PRODUCTNAME 6.0 Classeur";
+    Text[ es ] = "%PRODUCTNAME 6.0 Hoja de cálculo";
+    Text[ fi ] = "%PRODUCTNAME 6.0 -laskentataulukko";
+    Text[ ca ] = "%PRODUCTNAME 6.0 Full de càlcul";
+    Text[ it ] = "Tabella %PRODUCTNAME 6.0";
+    Text[ da ] = "%PRODUCTNAME 6.0-tabel";
+    Text[ sv ] = "%PRODUCTNAME 6.0 tabell";
+    Text[ pl ] = "%PRODUCTNAME 6.0 - Arkusz kalkulacyjny";
+    Text[ pt-BR ] = "Planilha de Cálculo %PRODUCTNAME 6.0";
+    Text[ th ] = "กระดาษคำนวณ %PRODUCTNAME 6.0 ";
+    Text[ ja ] = "%PRODUCTNAME 6.0 表計算";
+    Text[ ko ] = "%PRODUCTNAME 6.0 스프레드시트";
+    Text[ zh-CN ] = "%PRODUCTNAME 6.0 工作表";
+    Text[ zh-TW ] = "%PRODUCTNAME 6.0 工作表";
+    Text[ tr ] = "%PRODUCTNAME 6.0 Hesap Tablosu";
+    Text[ hi-IN ] = "%PRODUCTNAME 6.0 स्प्रेडशीट्";
+    Text[ ar ] = "جدول %PRODUCTNAME 6.0";
+    Text[ he ] = "%PRODUCTNAME 6.0 Tabelle";
+};
+String SCSTR_50_LONG_DOCNAME
+{
+    Text [ de ] = "%PRODUCTNAME 5.0 Tabelle" ;
+    Text [ en-US ] = "%PRODUCTNAME 5.0 Spreadsheet" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "%PRODUCTNAME 5.0 Folha de cálculo";
+    Text[ ru ] = "Электронная таблица %PRODUCTNAME 5.0";
+    Text[ el ] = "%PRODUCTNAME 5.0 - Πίνακας";
+    Text[ nl ] = "%PRODUCTNAME 5.0 werkblad";
+    Text[ fr ] = "%PRODUCTNAME 5.0 Classeur";
+    Text[ es ] = "%PRODUCTNAME 5.0 - Hoja de cálculo";
+    Text[ fi ] = "%PRODUCTNAME 5.0 -laskentataulukko";
+    Text[ ca ] = "%PRODUCTNAME 5.0 Full de càlcul";
+    Text[ it ] = "Tabella %PRODUCTNAME 5.0";
+    Text[ da ] = "%PRODUCTNAME 5.0-tabel";
+    Text[ sv ] = "%PRODUCTNAME 5.0 tabell";
+    Text[ pl ] = "%PRODUCTNAME 5.0 - Arkusz kalkulacyjny";
+    Text[ pt-BR ] = "Planilha de Cálculo %PRODUCTNAME 5.0";
+    Text[ th ] = "กระดาษคำนวณ %PRODUCTNAME 5.0 ";
+    Text[ ja ] = "%PRODUCTNAME 5.0 表計算";
+    Text[ ko ] = "%PRODUCTNAME Calc 5.0 스프레드시트";
+    Text[ zh-CN ] = "%PRODUCTNAME 5.0 工作表";
+    Text[ zh-TW ] = "%PRODUCTNAME 5.0 工作表";
+    Text[ tr ] = "%PRODUCTNAME 5.0 Hesap Tablosu";
+    Text[ hi-IN ] = "%PRODUCTNAME 5.0 स्प्रेडशीट्";
+    Text[ ar ] = "جدول %PRODUCTNAME 5.0";
+    Text[ he ] = "%PRODUCTNAME 5.0 Tabelle";
+};
+String SCSTR_40_LONG_DOCNAME
+{
+    Text [ de ] = "%PRODUCTNAME 4.0 Tabelle" ;
+    Text [ en-US ] = "%PRODUCTNAME 4.0 Spreadsheet" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "%PRODUCTNAME 4.0 Folha de cálculo";
+    Text[ ru ] = "Электронная таблица %PRODUCTNAME 4.0";
+    Text[ el ] = "%PRODUCTNAME 4.0 - Πίνακας";
+    Text[ nl ] = "%PRODUCTNAME 4.0 Werkblad";
+    Text[ fr ] = "%PRODUCTNAME 4.0 Classeur";
+    Text[ es ] = "%PRODUCTNAME 4.0 - Hoja de cálculo";
+    Text[ fi ] = "%PRODUCTNAME 4.0 -laskentataulukko";
+    Text[ ca ] = "%PRODUCTNAME 4.0 Full de càlcul";
+    Text[ it ] = "Foglio elettronico %PRODUCTNAME 4.0";
+    Text[ da ] = "StarCalc 4.0 regneark";
+    Text[ sv ] = "%PRODUCTNAME 4.0 tabell";
+    Text[ pl ] = "%PRODUCTNAME 4.0 - Arkusz kalkulacyjny";
+    Text[ pt-BR ] = "Planilha de cálculo %PRODUCTNAME 4.0";
+    Text[ th ] = "กระดาษคำนวณ %PRODUCTNAME 4.0 ";
+    Text[ ja ] = "%PRODUCTNAME 4.0 表計算";
+    Text[ ko ] = "%PRODUCTNAME 4.0 스프레드시트";
+    Text[ zh-CN ] = "%PRODUCTNAME 4.0 工作表";
+    Text[ zh-TW ] = "%PRODUCTNAME 4.0 工作表";
+    Text[ tr ] = "%PRODUCTNAME 4.0 Hesap Tablosu";
+    Text[ hi-IN ] = "%PRODUCTNAME 4.0 स्प्रेडशीट्";
+    Text[ ar ] = "جدول %PRODUCTNAME 4.0";
+    Text[ he ] = "%PRODUCTNAME 4.0 Tabelle";
+};
+String SCSTR_30_LONG_DOCNAME
+{
+    Text [ de ] = "StarCalc 3.0 Tabelle" ;
+    Text [ en-US ] = "StarCalc 3.0 Spreadsheet" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "StarCalc 3.0 - Folha de cálculo";
+    Text[ ru ] = "Электронная таблица StarCalc 3.0";
+    Text[ el ] = "StarCalc 3.0 - Πίνακας";
+    Text[ nl ] = "StarCalc 3.0 werkblad";
+    Text[ fr ] = "StarCalc 3.0 Classeur";
+    Text[ es ] = "StarCalc 3.0 - Hoja de cálculo";
+    Text[ fi ] = "StarCalc 3.0 -laskentataulukko";
+    Text[ ca ] = "Full de càlcul StarCalc 3.0";
+    Text[ it ] = "Foglio elettronico StarCalc 3.0";
+    Text[ da ] = "StarCalc 3.0 regneark";
+    Text[ sv ] = "StarCalc 3.0 tabell";
+    Text[ pl ] = "Arkusz kalkulacyjny StarCalc 3.0";
+    Text[ pt-BR ] = "StarCalc 3.0 Planilha de Cálculo";
+    Text[ th ] = "กระดาษคำนวณ StarCalc 3.0 ";
+    Text[ ja ] = "StarCalc 3.0 表計算";
+    Text[ ko ] = "StarCalc 3.0 스프레드시트";
+    Text[ zh-CN ] = "StaCalc 3.0 工作表";
+    Text[ zh-TW ] = "StarCalc 3.0 工作表";
+    Text[ tr ] = "StarCalc 3.0 Hesap Tablosu";
+    Text[ hi-IN ] = "StarCalc 3.0 स्प्रेडशीट्";
+    Text[ ar ] = "جدول Star Calc 3.0";
+    Text[ he ] = "StarCalc 3.0 Tabelle";
+};
+String SCSTR_SHORT_SCDOC_NAME
+{
+    Text [ de ] = "Tabelle" ;
+    Text [ en-US ] = "Spreadsheet" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Folha de cálculo";
+    Text[ ru ] = "Электронная таблица";
+    Text[ el ] = "Πίνακας";
+    Text[ nl ] = "Werkblad";
+    Text[ fr ] = "Feuille de calcul";
+    Text[ es ] = "Hoja de cálculo";
+    Text[ fi ] = "Laskentataulukko";
+    Text[ ca ] = "Full de càlcul";
+    Text[ it ] = "Foglio di calcolo";
+    Text[ da ] = "Regneark";
+    Text[ sv ] = "Tabell";
+    Text[ pl ] = "Arkusz kalkulacyjny";
+    Text[ pt-BR ] = "Planilha de Cálculo";
+    Text[ th ] = "กระดาษคำนวณ";
+    Text[ ja ] = "表";
+    Text[ ko ] = "스프레드시트";
+    Text[ zh-CN ] = "工作表";
+    Text[ zh-TW ] = "工作表";
+    Text[ tr ] = "Gesap Tablosu";
+    Text[ hi-IN ] = "स्प्रेडशीट्";
+    Text[ ar ] = "الجدول";
+    Text[ he ] = "‮גליון אלקטרוני‬";
+};
+String SCSTR_HUMAN_SCDOC_NAME
+{
+    Text [ de ] = "Tabelle" ;
+    Text [ en-US ] = "Spreadsheet" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Folha de cálculo";
+    Text[ ru ] = "Электронная таблица";
+    Text[ el ] = "Πίνακας";
+    Text[ nl ] = "Werkblad";
+    Text[ fr ] = "Feuille de calcul";
+    Text[ es ] = "Hoja de cálculo";
+    Text[ fi ] = "Laskentataulukko";
+    Text[ ca ] = "Full de càlcul";
+    Text[ it ] = "Foglio di calcolo";
+    Text[ da ] = "Regneark";
+    Text[ sv ] = "Tabell";
+    Text[ pl ] = "Arkusz kalkulacyjny";
+    Text[ pt-BR ] = "Planilha de Cálculo";
+    Text[ th ] = "กระดาษคำนวณ";
+    Text[ ja ] = "表";
+    Text[ ko ] = "스프레드시트";
+    Text[ zh-CN ] = "工作表";
+    Text[ zh-TW ] = "工作表";
+    Text[ tr ] = "Hesap Tablosu";
+    Text[ hi-IN ] = "स्प्रेडशीट्";
+    Text[ ar ] = "الجدول";
+    Text[ he ] = "‮גליון אלקטרוני‬";
+};
+
+String SCSTR_DOCSHELL
+{
+    Text [ de ] = "Tabelle" ;
+    Text [ en-US ] = "Sheet" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Folha";
+    Text[ ru ] = "Лист";
+    Text[ el ] = "Φύλλο";
+    Text[ nl ] = "Werkblad";
+    Text[ fr ] = "Feuille";
+    Text[ es ] = "Hoja";
+    Text[ fi ] = "Taulukko";
+    Text[ ca ] = "Full";
+    Text[ it ] = "Tabella";
+    Text[ da ] = "Ark";
+    Text[ sv ] = "Tabell";
+    Text[ pl ] = "Arkusz";
+    Text[ pt-BR ] = "Planilha";
+    Text[ th ] = "แผ่นงาน";
+    Text[ ja ] = "表";
+    Text[ ko ] = "시트";
+    Text[ zh-CN ] = "工作表";
+    Text[ zh-TW ] = "工作表";
+    Text[ tr ] = "Tablo";
+    Text[ hi-IN ] = "शीट्";
+    Text[ ar ] = "الجدول";
+    Text[ he ] = "Tabelle";
+};
+
+String SCSTR_TABVIEWSHELL
+{
+    Text [ de ] = "Zellen" ;
+    Text [ en-US ] = "Cells" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Células";
+    Text[ ru ] = "Ячейки";
+    Text[ el ] = "Κελιά";
+    Text[ nl ] = "Cellen";
+    Text[ fr ] = "Cellules";
+    Text[ es ] = "Celdas";
+    Text[ fi ] = "Solut";
+    Text[ ca ] = "Cel.les";
+    Text[ it ] = "Celle";
+    Text[ da ] = "Celler";
+    Text[ sv ] = "Celler";
+    Text[ pl ] = "Komórki";
+    Text[ pt-BR ] = "Células";
+    Text[ th ] = "เซลล์";
+    Text[ ja ] = "セル";
+    Text[ ko ] = "셀";
+    Text[ zh-CN ] = "单元格";
+    Text[ zh-TW ] = "儲存格";
+    Text[ tr ] = "Hücre";
+    Text[ hi-IN ] = "कोष्ठें";
+    Text[ ar ] = "الخلايا";
+    Text[ he ] = "Zellen";
+};
+
+String SCSTR_CELLSHELL
+{
+    Text [ de ] = "Zellfunktionen" ;
+    Text [ en-US ] = "Functions for Cells";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Funções de células";
+    Text[ ru ] = "Функции ячеек";
+    Text[ el ] = "Λειτουργίες κελιών";
+    Text[ nl ] = "Celfuncties";
+    Text[ fr ] = "Fonctions de cellule";
+    Text[ es ] = "Funciones de celda";
+    Text[ fi ] = "Solujen funktiot";
+    Text[ ca ] = "Funcions de cel.la";
+    Text[ it ] = "Funzione delle celle";
+    Text[ da ] = "Cellefunktioner";
+    Text[ sv ] = "Cellfunktioner";
+    Text[ pl ] = "Funkcje komórek";
+    Text[ pt-BR ] = "Funções para células";
+    Text[ th ] = "ฟังก์ชั่นสำหรับเซลล์";
+    Text[ ja ] = "セルの関数";
+    Text[ ko ] = "셀 기능";
+    Text[ zh-CN ] = "单元格函数";
+    Text[ zh-TW ] = "儲存格功能";
+    Text[ tr ] = "Hücre işlevi";
+    Text[ hi-IN ] = "कोष्ठों केलिए फ़ंक्शन्स";
+    Text[ ar ] = "مهام الخلايا";
+    Text[ he ] = "Zellfunktionen";
+};
+
+String SCSTR_FORMATSHELL
+{
+    Text [ de ] = "Zellformate" ;
+    Text [ en-US ] = "Formats for Cells";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Formatos de células";
+    Text[ ru ] = "Форматы ячеек";
+    Text[ el ] = "Μορφές κελιών";
+    Text[ nl ] = "Celformaten";
+    Text[ fr ] = "Formats de cellule";
+    Text[ es ] = "Formatos de celda";
+    Text[ fi ] = "Solujen muodot";
+    Text[ ca ] = "Formats de les cel.les";
+    Text[ it ] = "Formato delle celle";
+    Text[ da ] = "Celleformater";
+    Text[ sv ] = "Cellformat";
+    Text[ pl ] = "Formaty komórek";
+    Text[ pt-BR ] = "Formatos para Células";
+    Text[ th ] = "รูปแบบสำหรับเซลล์";
+    Text[ ja ] = "セルの書式";
+    Text[ ko ] = "셀 서식";
+    Text[ zh-CN ] = "单元格格式";
+    Text[ zh-TW ] = "儲存格格式";
+    Text[ tr ] = "Hücre formatı";
+    Text[ hi-IN ] = "कोष्ठों केलिए रचना";
+    Text[ ar ] = "تنسيقات الخلايا";
+    Text[ he ] = "Zellformate";
+};
+
+
+String SCSTR_DRAWSHELL
+{
+    Text [ de ] = "Grafikobjekte" ;
+    Text [ en-US ] = "Graphics objects" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Objectos gráficos";
+    Text[ ru ] = "Графические объекты";
+    Text[ el ] = "Αντικείμενα γραφικών";
+    Text[ nl ] = "Grafische objecten";
+    Text[ fr ] = "Objets graphiques";
+    Text[ es ] = "Objetos gráficos";
+    Text[ fi ] = "Grafiikkaobjektit";
+    Text[ ca ] = "Objectes gràfics";
+    Text[ it ] = "Oggetti grafici";
+    Text[ da ] = "Grafiske objekter";
+    Text[ sv ] = "Grafikobjekt";
+    Text[ pl ] = "Obiekty graficzne";
+    Text[ pt-BR ] = "Objetos de figuras";
+    Text[ th ] = "วัตถุกราฟิค";
+    Text[ ja ] = "図形描画オブジェクト";
+    Text[ ko ] = "그림 개체";
+    Text[ zh-CN ] = "图形对象";
+    Text[ zh-TW ] = "圖形物件";
+    Text[ tr ] = "Grafik nesnesi";
+    Text[ hi-IN ] = "सुचित्र वस्तु";
+    Text[ ar ] = "كائنات صورة";
+    Text[ he ] = "Grafikobjekte";
+};
+
+String SCSTR_DRAWTEXTSHELL
+{
+    Text [ de ] = "Textobjekte" ;
+    Text [ en-US ] = "Text objects" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Objectos de texto";
+    Text[ ru ] = "Текстовые объекты";
+    Text[ el ] = "Αντικείμενα κειμένου";
+    Text[ nl ] = "Tekstobjecten";
+    Text[ fr ] = "Objets de texte";
+    Text[ es ] = "Objetos de texto";
+    Text[ fi ] = "Tekstiobjektit";
+    Text[ ca ] = "Objectes de text";
+    Text[ it ] = "Oggetti di testo";
+    Text[ da ] = "Tekstobjekter";
+    Text[ sv ] = "Textobjekt";
+    Text[ pl ] = "Obiekty tekstowe";
+    Text[ pt-BR ] = "Objetos de texto";
+    Text[ th ] = "วัตถุข้อความ";
+    Text[ ja ] = "テキストオブジェクト";
+    Text[ ko ] = "텍스트 개체";
+    Text[ zh-CN ] = "文字对象";
+    Text[ zh-TW ] = "文字物件";
+    Text[ tr ] = "Metin nesnesi";
+    Text[ hi-IN ] = "टेक्स्ट् वस्तु";
+    Text[ ar ] = "كائنات النص";
+    Text[ he ] = "Textobjekte";
+};
+
+String SCSTR_DRAWFORMSHELL
+{
+    Text [ de ] = "Formularobjekte" ;
+    Text [ en-US ] = "Form objects";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Objectos de formulário";
+    Text[ ru ] = "Объекты форм";
+    Text[ el ] = "Αντικείμενα φόρμας";
+    Text[ nl ] = "Formulierobjecten";
+    Text[ fr ] = "Objets de formulaire";
+    Text[ es ] = "Objetos de formulario";
+    Text[ fi ] = "Lomakeobjektit";
+    Text[ ca ] = "Objectes del formulari";
+    Text[ it ] = "Oggetti per formulario";
+    Text[ da ] = "Formularobjekter";
+    Text[ sv ] = "Formulärobjekt";
+    Text[ pl ] = "Obiekty formularza";
+    Text[ pt-BR ] = "Objetos de formulário";
+    Text[ th ] = "จากวัตถุ";
+    Text[ ja ] = "フォームオブジェクト";
+    Text[ ko ] = "양식 개체";
+    Text[ zh-CN ] = "表单对象";
+    Text[ zh-TW ] = "表單物件";
+    Text[ tr ] = "Form nesnesi";
+    Text[ hi-IN ] = "फ़ॉर्म वस्तु";
+    Text[ ar ] = "كائنات الاستمارة";
+    Text[ he ] = "Formularobjekte";
+};
+
+String SCSTR_CHARTSHELL
+{
+    Text [ de ] = "Chart-Objekte" ;
+    Text [ en-US ] = "Chart objects";
+    Text[ pt ] = "Objectos de gráficos";
+    Text[ ru ] = "Объекты диаграммы";
+    Text[ el ] = "Αντικείμενα διαγράμματος";
+    Text[ nl ] = "Chart-objecten";
+    Text[ fr ] = "Objets de diagramme";
+    Text[ es ] = "Objetos de diagrama";
+    Text[ fi ] = "Kaavio-objektit";
+    Text[ ca ] = "Objectes del diagrama";
+    Text[ it ] = "Diagrammi";
+    Text[ da ] = "Diagram-objekter";
+    Text[ sv ] = "Chart-objekt";
+    Text[ pl ] = "Obiekty wykresu";
+    Text[ pt-BR ] = "Objetos de gráficos";
+    Text[ th ] = "วัตถุแผนภูมิ";
+    Text[ ja ] = "グラフオブジェクト";
+    Text[ ko ] = "차트 개체";
+    Text[ zh-CN ] = "图表对象";
+    Text[ zh-TW ] = "圖表物件";
+    Text[ tr ] = "Şema nesnesi";
+    Text[ hi-IN ] = "चार्ट वस्तु";
+    Text[ ar ] = "كائنات الرسم البياني";
+    Text[ he ] = "Chart-Objekte";
+};
+
+String SCSTR_OLEOBJECTSHELL
+{
+    Text [ de ] = "OLE-Objekte" ;
+    Text [ en-US ] = "OLE objects";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Objectos OLE";
+    Text[ ru ] = "OLE объекты";
+    Text[ el ] = "Αντικείμενα OLE";
+    Text[ nl ] = "OLE-objecten";
+    Text[ fr ] = "Objets OLE";
+    Text[ es ] = "Objetos OLE";
+    Text[ fi ] = "OLE-objektit";
+    Text[ ca ] = "Objectes OLE";
+    Text[ it ] = "Oggetti OLE";
+    Text[ da ] = "OLE-objekter";
+    Text[ sv ] = "OLE-objekt";
+    Text[ pl ] = "Obiekty OLE";
+    Text[ pt-BR ] = "Objetos OLE";
+    Text[ th ] = "วัตถุ OLE ";
+    Text[ ja ] = "OLE オブジェクト";
+    Text[ ko ] = "OLE 개체";
+    Text[ zh-CN ] = "OLE 对象";
+    Text[ zh-TW ] = "OLE 物价";
+    Text[ tr ] = "OLE nesnesi";
+    Text[ hi-IN ] = "OLE वस्तु";
+    Text[ ar ] = "كائنات OLE";
+    Text[ he ] = "OLE-Objekte";
+};
+
+String SCSTR_GRAPHICSHELL
+{
+    Text [ de ] = "Grafik" ;
+    Text [ en-US ] = "Graphics";
+    Text[ pt ] = "Imagem";
+    Text[ ru ] = "Графические объекты";
+    Text[ el ] = "Γραφικό";
+    Text[ nl ] = "Afbeeldingen";
+    Text[ fr ] = "Image";
+    Text[ es ] = "Imagen";
+    Text[ fi ] = "Grafiikka";
+    Text[ ca ] = "Gràfics";
+    Text[ it ] = "Immagine";
+    Text[ da ] = "Grafik";
+    Text[ sv ] = "Grafik";
+    Text[ pl ] = "Grafika";
+    Text[ pt-BR ] = "Figuras";
+    Text[ th ] = "กราฟิค";
+    Text[ ja ] = "図";
+    Text[ ko ] = "그림";
+    Text[ zh-CN ] = "图形";
+    Text[ zh-TW ] = "圖形";
+    Text[ tr ] = "Grafik";
+    Text[ hi-IN ] = "सुचित्र";
+    Text[ ar ] = "صورة";
+    Text[ he ] = "‮גרפיקה‬";
+};
+String SCSTR_PAGEBREAKSHELL
+{
+    Text [ de ] = "Seitenumbruch" ;
+    Text [ en-US ] = "Pagebreak";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Quebra de página";
+    Text[ ru ] = "Разрыв страницы";
+    Text[ el ] = "Αλλαγή σελίδας";
+    Text[ nl ] = "Pagina-einde";
+    Text[ fr ] = "Saut de page";
+    Text[ es ] = "Salto de página";
+    Text[ fi ] = "Sivunvaihto";
+    Text[ ca ] = "Salt de pàgina";
+    Text[ it ] = "Interruzione di pagina";
+    Text[ da ] = "Sideskift";
+    Text[ sv ] = "Sidbrytning";
+    Text[ pl ] = "Podział strony";
+    Text[ pt-BR ] = "Quebra de página";
+    Text[ th ] = "ตัวแบ่งหน้า";
+    Text[ ja ] = "改ページ";
+    Text[ ko ] = "페이지 나누기";
+    Text[ zh-CN ] = "换页";
+    Text[ zh-TW ] = "換頁";
+    Text[ tr ] = "Sayfa sonu";
+    Text[ hi-IN ] = "पृष्ठ खण्डन";
+    Text[ ar ] = "فاصل صفحات";
+    Text[ he ] = "Seitenumbruch";
+};
+
+String SCSTR_EDITSHELL
+{
+    Text [ de ] = "Textbearbeitung" ;
+    Text [ en-US ] = "Text editing" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Edição de texto";
+    Text[ ru ] = "Редактирование текста";
+    Text[ el ] = "Επεξεργασία κειμένου";
+    Text[ nl ] = "Tekstbewerking";
+    Text[ fr ] = "Édition de texte";
+    Text[ es ] = "Edición de texto";
+    Text[ fi ] = "Tekstin muokkaus";
+    Text[ ca ] = "Edició del text";
+    Text[ it ] = "Modifica testo";
+    Text[ da ] = "Tekstredigering";
+    Text[ sv ] = "Textredigering";
+    Text[ pl ] = "Edytowanie tekstu";
+    Text[ pt-BR ] = "Edição de texto";
+    Text[ th ] = "แก้ไขข้อความ";
+    Text[ ja ] = "テキストの編集";
+    Text[ ko ] = "텍스트 편집";
+    Text[ zh-CN ] = "文字编辑";
+    Text[ zh-TW ] = "文字編輯";
+    Text[ tr ] = "Metin düzenleme";
+    Text[ hi-IN ] = "टेक्स्ट् संपादन";
+    Text[ ar ] = "تحرير النص";
+    Text[ he ] = "Textbearbeitung";
+};
+
+String SCSTR_PREVIEWSHELL
+{
+    Text [ de ] = "Druckvorschau" ;
+    Text [ en-US ] = "Print Preview" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Visualizar impressão";
+    Text[ ru ] = "Предварительный просмотр печати";
+    Text[ el ] = "Προεπισκόπηση εκτύπωσης";
+    Text[ nl ] = "Afdrukvoorbeeld";
+    Text[ fr ] = "Aperçu";
+    Text[ es ] = "Presentación preliminar";
+    Text[ fi ] = "Tulostuksen esikatselu";
+    Text[ ca ] = "Exemple d'impressió";
+    Text[ it ] = "Anteprima stampa";
+    Text[ da ] = "Udskriftsvisning";
+    Text[ sv ] = "Skärmutskrift";
+    Text[ pl ] = "Podgląd wydruku";
+    Text[ pt-BR ] = "Visualizar Impressão";
+    Text[ th ] = "แสดงตัวอย่างก่อนพิมพ์";
+    Text[ ja ] = "印刷プレビュー";
+    Text[ ko ] = "인쇄 미리 보기";
+    Text[ zh-CN ] = "打印预览";
+    Text[ zh-TW ] = "列印檢視";
+    Text[ tr ] = "Yazıcı önizleme";
+    Text[ hi-IN ] = "छपाई पूर्वदृश्य";
+    Text[ ar ] = "معاينة قبل الطباعة";
+    Text[ he ] = "Druckvorschau";
+};
+
+String SCSTR_PIVOTSHELL
+{
+    Text [ de ] = "Datenpilot-Tabellen" ;
+    Text [ en-US ] = "Data Pilot Tables" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Tabelas do Piloto de Dados";
+    Text[ ru ] = "Листы сводной таблицы";
+    Text[ el ] = "Πίνακες πιλότου δεδομένων";
+    Text[ nl ] = "DataPiloot-tabellen";
+    Text[ fr ] = "Tables du pilote de données";
+    Text[ es ] = "Tablas del piloto de datos";
+    Text[ fi ] = "Tietotaulukoiden ohjaus";
+    Text[ ca ] = "Taules del DataPilot";
+    Text[ it ] = "Tabelle DataPilot";
+    Text[ da ] = "DataPilot-tabeller";
+    Text[ sv ] = "Datapilottabeller";
+    Text[ pl ] = "Tabele Pilota danych";
+    Text[ pt-BR ] = "Tabelas Dinâmicas";
+    Text[ th ] = "ตาราง Data Pilot";
+    Text[ ja ] = "データパイロットの表";
+    Text[ ko ] = "데이터 파일럿 표";
+    Text[ zh-CN ] = "数据助理工作表";
+    Text[ zh-TW ] = "資料助理工作表";
+    Text[ tr ] = "Veri pilotu tablosu";
+    Text[ hi-IN ] = "ड़ॉटा पैलट् सारणी";
+    Text[ ar ] = "جداول مرشد البيانات";
+    Text[ he ] = "Datenpilot-Tabellen";
+};
+
+String SCSTR_AUDITSHELL
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Detektiv-F�ll-Modus : Detektiv-F�ll-Modus */
+    Text [ de ] = "Detektiv-Füll-Modus" ;
+    Text [ en-US ] = "Detective Fill Mode" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Modo preenchimento de auditoria";
+    Text[ ru ] = "Режим заливки зависимостей";
+    Text[ el ] = "Κατάσταση γεμίσματος ανιχνευτή";
+    Text[ nl ] = "Detective opvulmodus";
+    Text[ fr ] = "Mode Remplissage d'audit";
+    Text[ es ] = "Modo Detective de relleno";
+    Text[ fi ] = "Jäljityksen täyttötila";
+    Text[ ca ] = "Mode d'emplenament Detective";
+    Text[ it ] = "Modo di riempimento detective";
+    Text[ da ] = "Detektiv-fyldmodus";
+    Text[ sv ] = "Detektiv-fyllningsläge";
+    Text[ pl ] = "Tryb wypełniania detektywa";
+    Text[ pt-BR ] = "Modo de Preenchimento do Auditor";
+    Text[ th ] = "โหมดเติมแบบตรวจหา";
+    Text[ ja ] = "トレース実行モード";
+    Text[ ko ] = "추적 채우기 모드";
+    Text[ zh-CN ] = "侦探-充填模式";
+    Text[ zh-TW ] = "偵探-填入模式";
+    Text[ tr ] = "Dedektif doldurma kipi";
+    Text[ hi-IN ] = "डिटेक्टिव भरने का प्रकार";
+    Text[ ar ] = "وضع تعبئة المخبر";
+    Text[ he ] = "Detektiv-Füll-Modus";
+};
+
+ // -----------------------------------------------------------------------
+
+String STR_OPT_ROWHEIGHT
+{
+    Text [ de ] = "Extra" ;
+    Text [ en-US ] = "Add" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Adicionar";
+    Text[ ru ] = "Добавить";
+    Text[ el ] = "Πρόσθετα";
+    Text[ nl ] = "Extra";
+    Text[ fr ] = "Extra";
+    Text[ es ] = "Añadir";
+    Text[ fi ] = "Lisää";
+    Text[ ca ] = "Afegeix";
+    Text[ it ] = "Extra";
+    Text[ da ] = "Tilføj";
+    Text[ sv ] = "Extra";
+    Text[ pl ] = "Dodaj";
+    Text[ pt-BR ] = "Adicionar";
+    Text[ th ] = "เพิ่ม";
+    Text[ ja ] = "詳細設定";
+    Text[ ko ] = "추가";
+    Text[ zh-CN ] = "附加";
+    Text[ zh-TW ] = "附加";
+    Text[ tr ] = "Ekle";
+    Text[ hi-IN ] = "जोड़ो";
+    Text[ ar ] = "إضافي";
+    Text[ he ] = "‮הוספה‬";
+};
+String STR_ROWHEIGHT_TITLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Zeilenh�he : Zeilenh�he */
+    Text [ de ] = "Zeilenhöhe" ;
+    Text [ en-US ] = "Row Height" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Altura da linha";
+    Text[ ru ] = "Высота строки";
+    Text[ el ] = "Ύψος γραμμής";
+    Text[ nl ] = "Rijhoogte";
+    Text[ fr ] = "Hauteur de ligne";
+    Text[ es ] = "Altura de fila";
+    Text[ fi ] = "Rivin korkeus";
+    Text[ ca ] = "Alçada de la fila";
+    Text[ it ] = "Altezza riga";
+    Text[ da ] = "Rækkehøjde";
+    Text[ sv ] = "Radhöjd";
+    Text[ pl ] = "Wysokość wierszy";
+    Text[ pt-BR ] = "Altura da Linha";
+    Text[ th ] = "ความยาวแถว";
+    Text[ ja ] = "行の高さ";
+    Text[ ko ] = "행 높이";
+    Text[ zh-CN ] = "行高";
+    Text[ zh-TW ] = "列高";
+    Text[ tr ] = "Satır yüksekliği";
+    Text[ hi-IN ] = "पंक्ति ऊँचाई";
+    Text[ ar ] = "ارتفاع الصف";
+    Text[ he ] = "‮גובה שורה‬";
+};
+String STR_OPT_ROWHEIGHT_TITLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Optimale Zeilenh�he : Optimale Zeilenh�he */
+    Text [ de ] = "Optimale Zeilenhöhe" ;
+    Text [ en-US ] = "Optimal Row Height" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Optimizar altura da linha";
+    Text[ ru ] = "Оптимальная высота строки";
+    Text[ el ] = "Βέλτιστο ύψος γραμμής";
+    Text[ nl ] = "Optimale rijhoogte";
+    Text[ fr ] = "Hauteur de ligne optimale";
+    Text[ es ] = "Altura óptima de fila";
+    Text[ fi ] = "Optimaalinen rivikorkeus";
+    Text[ ca ] = "Alçada òptima de la fila";
+    Text[ it ] = "Altezza riga ottimale";
+    Text[ da ] = "Optimal rækkehøjde";
+    Text[ sv ] = "Optimal radhöjd";
+    Text[ pl ] = "Optymalna wysokość wierszy";
+    Text[ pt-BR ] = "Otimizar Altura da Linha";
+    Text[ th ] = "ความยาวแถวที่เหมาะที่สุด";
+    Text[ ja ] = "最適な行の高さ";
+    Text[ ko ] = "최적의 행 높이";
+    Text[ zh-CN ] = "最佳行高";
+    Text[ zh-TW ] = "最適列高";
+    Text[ tr ] = "En uygun satır yüksekliği";
+    Text[ hi-IN ] = "Optimal Row Height";
+    Text[ ar ] = "الارتفاع الأمثل للصف";
+    Text[ he ] = "‮גובה שורה מיטבי‬";
+};
+String STR_COLWIDTH
+{
+    Text [ de ] = "Breite" ;
+    Text [ en-US ] = "Width" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Largura";
+    Text[ ru ] = "Ширина";
+    Text[ el ] = "Πλάτος";
+    Text[ nl ] = "Breedte";
+    Text[ fr ] = "Largeur";
+    Text[ es ] = "Ancho";
+    Text[ fi ] = "Leveys";
+    Text[ ca ] = "Amplada";
+    Text[ it ] = "Larghezza";
+    Text[ da ] = "Bredde";
+    Text[ sv ] = "Bredd";
+    Text[ pl ] = "Szerokość";
+    Text[ pt-BR ] = "Largura";
+    Text[ th ] = "ความกว้าง";
+    Text[ ja ] = "幅";
+    Text[ ko ] = "너비";
+    Text[ zh-CN ] = "宽度";
+    Text[ zh-TW ] = "寬度";
+    Text[ tr ] = "Genişlik";
+    Text[ hi-IN ] = "चौड़ाई";
+    Text[ ar ] = "العرض";
+    Text[ he ] = "‮רוחב‬";
+};
+String STR_OPT_COLWIDTH
+{
+    Text [ de ] = "Extra" ;
+    Text [ en-US ] = "Add" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Adicionar";
+    Text[ ru ] = "Добавить";
+    Text[ el ] = "Πρόσθετα";
+    Text[ nl ] = "Extra";
+    Text[ fr ] = "Extra";
+    Text[ es ] = "Añadir";
+    Text[ fi ] = "Lisää";
+    Text[ ca ] = "Afegeix";
+    Text[ it ] = "Extra";
+    Text[ da ] = "Tilføj";
+    Text[ sv ] = "Extra";
+    Text[ pl ] = "Dodaj";
+    Text[ pt-BR ] = "Adicionar";
+    Text[ th ] = "เพิ่ม";
+    Text[ ja ] = "詳細設定";
+    Text[ ko ] = "추가";
+    Text[ zh-CN ] = "附加";
+    Text[ zh-TW ] = "附加";
+    Text[ tr ] = "Ekle";
+    Text[ hi-IN ] = "जोड़ो";
+    Text[ ar ] = "إضافي";
+    Text[ he ] = "‮הוספה‬";
+};
+String STR_COLWIDTH_TITLE
+{
+    Text [ de ] = "Spaltenbreite" ;
+    Text [ en-US ] = "Column Width" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Largura da coluna";
+    Text[ ru ] = "Ширина столбца";
+    Text[ el ] = "Πλάτος στήλης";
+    Text[ nl ] = "Kolombreedte";
+    Text[ fr ] = "Largeur de colonne";
+    Text[ es ] = "Ancho de columna";
+    Text[ fi ] = "Sarakkeen leveys";
+    Text[ ca ] = "Amplada de la columna";
+    Text[ it ] = "Larghezza colonna";
+    Text[ da ] = "Kolonnebredde";
+    Text[ sv ] = "Kolumnbredd";
+    Text[ pl ] = "Szerokość kolumny";
+    Text[ pt-BR ] = "Largura da Coluna";
+    Text[ th ] = "ความกว้างคอลัมน์";
+    Text[ ja ] = "列幅";
+    Text[ ko ] = "열 너비";
+    Text[ zh-CN ] = "列宽";
+    Text[ zh-TW ] = "欄寬";
+    Text[ tr ] = "Sütun genişliği";
+    Text[ hi-IN ] = "स्तंभ चौड़ाई";
+    Text[ ar ] = "عرض الأعمدة";
+    Text[ he ] = "Spaltenbreite";
+};
+String STR_OPT_COLWIDTH_TITLE
+{
+    Text [ de ] = "Optimale Spaltenbreite" ;
+    Text [ en-US ] = "Optimal Column Width" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Optimizar largura da coluna";
+    Text[ ru ] = "Оптимальная ширина колонки";
+    Text[ el ] = "Βέλτιστο πλάτος στήλης";
+    Text[ nl ] = "Optimale kolombreedte";
+    Text[ fr ] = "Largeur de colonne optimale";
+    Text[ es ] = "Ancho de columna óptimo";
+    Text[ fi ] = "Optimaalinen palstaleveys";
+    Text[ ca ] = "Amplada òptima de la columna";
+    Text[ it ] = "Larghezza colonna ottimale";
+    Text[ da ] = "Optimal kolonnebredde";
+    Text[ sv ] = "Optimal kolumnbredd";
+    Text[ pl ] = "Optymalna szerokość kolumn";
+    Text[ pt-BR ] = "Otimizar Largura da Coluna";
+    Text[ th ] = "ความกว้างคอลัมน์ที่เหมาะที่สุด";
+    Text[ ja ] = "最適な列幅";
+    Text[ ko ] = "최적의 열 너비";
+    Text[ zh-CN ] = "最佳列宽";
+    Text[ zh-TW ] = "最適欄寬";
+    Text[ tr ] = "En uygun sütun genişliği";
+    Text[ hi-IN ] = "योग्य स्तंभ चौड़ाई";
+    Text[ ar ] = "العرض الأمثل للأعمدة";
+    Text[ he ] = "‮רוחב טור מיטבי‬";
+};
+String SCSTR_NONAME
+{
+    Text [ de ] = "unbenannt" ;
+    Text [ en-US ] = "unnamed" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "sem nome";
+    Text[ ru ] = "без имени";
+    Text[ el ] = "Δίχως όνομα";
+    Text[ nl ] = "naamloos";
+    Text[ fr ] = "Sans nom";
+    Text[ es ] = "Sin nombre";
+    Text[ fi ] = "nimetön";
+    Text[ ca ] = "sense nom";
+    Text[ it ] = "Senza nome";
+    Text[ da ] = "ikke-navngivet";
+    Text[ sv ] = "namnlös";
+    Text[ pl ] = "bez nazwy";
+    Text[ pt-BR ] = "sem nome";
+    Text[ th ] = "ไม่มีชื่อ";
+    Text[ ja ] = "無題";
+    Text[ ko ] = "이름 없음";
+    Text[ zh-CN ] = "未命名";
+    Text[ zh-TW ] = "未命名";
+    Text[ tr ] = "bilinmeyen";
+    Text[ hi-IN ] = "नाम रहित";
+    Text[ ar ] = "بدون عنوان";
+    Text[ he ] = "unbenannt";
+};
+
+
+String SCSTR_SHOWTABLE
+{
+    Text [ de ] = "Tabelle einblenden" ;
+    Text [ en-US ] = "Show Sheet" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Mostrar folha";
+    Text[ ru ] = "Показать лист";
+    Text[ el ] = "Εμφάνιση πίνακα";
+    Text[ nl ] = "Werkblad weergeven";
+    Text[ fr ] = "Afficher la feuille";
+    Text[ es ] = "Mostrar hoja";
+    Text[ fi ] = "Näytä taulukko";
+    Text[ ca ] = "Mostra el full";
+    Text[ it ] = "Mostra tabella";
+    Text[ da ] = "Vis ark";
+    Text[ sv ] = "Visa tabell";
+    Text[ pl ] = "Pokaż arkusz";
+    Text[ pt-BR ] = "Mostrar Planilha";
+    Text[ th ] = "แสดงแผ่นงาน";
+    Text[ ja ] = "表の表示";
+    Text[ ko ] = "시트 표시";
+    Text[ zh-CN ] = "显示工作表";
+    Text[ zh-TW ] = "顯示工作表";
+    Text[ tr ] = "Tabloyu görüntüle";
+    Text[ hi-IN ] = "शीट् को दिखाओ";
+    Text[ ar ] = "إظهار الجدول";
+    Text[ he ] = "Tabelle einblenden";
+};
+String SCSTR_HIDDENTABLES
+{
+    Text [ de ] = "Ausgeblendete Tabellen" ;
+    Text [ en-US ] = "Hidden Sheets" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Folhas de cálculo ocultas";
+    Text[ ru ] = "Скрытые листы";
+    Text[ el ] = "Κρυφοί πίνακες";
+    Text[ nl ] = "Verborgen werkbladen";
+    Text[ fr ] = "Feuilles masquées";
+    Text[ es ] = "Hojas ocultas";
+    Text[ fi ] = "Piilotetut taulukot";
+    Text[ ca ] = "Fulls ocults";
+    Text[ it ] = "Tabelle nascoste";
+    Text[ da ] = "Skjulte ark";
+    Text[ sv ] = "Dolda tabeller";
+    Text[ pl ] = "Ukryte arkusze";
+    Text[ pt-BR ] = "Planilhas Ocultas";
+    Text[ th ] = "ซ่อนแผ่นงาน";
+    Text[ ja ] = "非表示の表";
+    Text[ ko ] = "숨겨진 시트";
+    Text[ zh-CN ] = "隐入的工作表";
+    Text[ zh-TW ] = "隱入的工作表";
+    Text[ tr ] = "Gizlenmiş tablolar";
+    Text[ hi-IN ] = "छिपाया हुआ शीट्";
+    Text[ ar ] = "الجداول المخفية";
+    Text[ he ] = "Ausgeblendete Tabellen";
+};
+String SCSTR_TABLE
+{
+    Text [ de ] = "Tabelle" ;
+    Text [ en-US ] = "Sheet" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Folha";
+    Text[ ru ] = "Лист";
+    Text[ el ] = "Φύλλο";
+    Text[ nl ] = "Werkblad";
+    Text[ fr ] = "Feuille";
+    Text[ es ] = "Hoja";
+    Text[ fi ] = "Taulukko";
+    Text[ ca ] = "Full";
+    Text[ it ] = "Tabella";
+    Text[ da ] = "Ark";
+    Text[ sv ] = "Tabell";
+    Text[ pl ] = "Arkusz";
+    Text[ pt-BR ] = "Planilha";
+    Text[ th ] = "แผ่นงาน";
+    Text[ ja ] = "表";
+    Text[ ko ] = "시트";
+    Text[ zh-CN ] = "工作表";
+    Text[ zh-TW ] = "工作表";
+    Text[ tr ] = "Tablo";
+    Text[ hi-IN ] = "शीट्";
+    Text[ ar ] = "الجدول";
+    Text[ he ] = "Tabelle";
+};
+String SCSTR_INSTABLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Tabelle einf�gen : Tabelle einf�gen */
+    Text [ de ] = "Tabelle einfügen" ;
+    Text [ en-US ] = "Insert Sheet" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Inserir folha";
+    Text[ ru ] = "Вставить лист";
+    Text[ el ] = "Εισαγωγή πίνακα";
+    Text[ nl ] = "Werkblad invoegen";
+    Text[ fr ] = "Insérer des feuilles";
+    Text[ es ] = "Insertar hoja";
+    Text[ fi ] = "Lisää taulukko";
+    Text[ ca ] = "Insereix un full";
+    Text[ it ] = "Inserisci tabella";
+    Text[ da ] = "Indsæt ark";
+    Text[ sv ] = "Infoga tabell";
+    Text[ pl ] = "Wstaw arkusz";
+    Text[ pt-BR ] = "Inserir Planilha";
+    Text[ th ] = "แทรกแผ่นงาน";
+    Text[ ja ] = "表の挿入";
+    Text[ ko ] = "시트 삽입";
+    Text[ zh-CN ] = "插入工作表";
+    Text[ zh-TW ] = "插入工作表";
+    Text[ tr ] = "Tablo ekle";
+    Text[ hi-IN ] = "शीट् जोड़ो";
+    Text[ ar ] = "إدراج جدول";
+    Text[ he ] = "Tabelle einfügen";
+};
+
+ //      Attribute
+
+String SCSTR_HOR_JUSTIFY_LEFT
+{
+    Text [ de ] = "Ausrichtung nach links" ;
+    Text [ en-US ] = "Align left" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Ajustar à esquerda";
+    Text[ ru ] = "Выравнивание по левому краю";
+    Text[ el ] = "Στοίχιση αριστερά";
+    Text[ nl ] = "Linkslijnend";
+    Text[ fr ] = "Alignement à gauche";
+    Text[ es ] = "Alinear a la izquierda";
+    Text[ fi ] = "Tasaa vasemmalle";
+    Text[ ca ] = "Alinea a l'esquerra";
+    Text[ it ] = "Allinea a sinistra";
+    Text[ da ] = "Venstrejusteret";
+    Text[ sv ] = "Vänsterjustera";
+    Text[ pl ] = "Wyrównaj do lewej";
+    Text[ pt-BR ] = "Alinhar à esquerda";
+    Text[ th ] = "จัดตำแหน่งซ้าย";
+    Text[ ja ] = "左揃え";
+    Text[ ko ] = "왼쪽 맞춤";
+    Text[ zh-CN ] = "向左对齐";
+    Text[ zh-TW ] = "向左對齊";
+    Text[ tr ] = "Sola hizala";
+    Text[ hi-IN ] = "बायाँ ओर पंक्तिकरण";
+    Text[ ar ] = "محاذاة إلى اليسار";
+    Text[ he ] = "Ausrichtung nach links";
+};
+String SCSTR_HOR_JUSTIFY_CENTER
+{
+    Text [ de ] = "Horizontal zentriert" ;
+    Text [ en-US ] = "Centered horizontally" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Centrado na horizontal";
+    Text[ ru ] = "Горизонтально по центру";
+    Text[ el ] = "Κεντραρισμένα οριζόντια";
+    Text[ nl ] = "Horizontaal gecentreerd";
+    Text[ fr ] = "Centré horizontalement";
+    Text[ es ] = "Centrado horizontalmente";
+    Text[ fi ] = "Keskitetty vaakataso";
+    Text[ ca ] = "Centrat horitzontalment";
+    Text[ it ] = "Centra in senso orizzontale";
+    Text[ da ] = "Vandret centreret";
+    Text[ sv ] = "Horisontellt centrerad";
+    Text[ pl ] = "Pośrodku w poziomie";
+    Text[ pt-BR ] = "Centralizado na horizontal";
+    Text[ th ] = "แนวนอนตรงกลาง";
+    Text[ ja ] = "横位置に中央揃え";
+    Text[ ko ] = "수평으로 가운데";
+    Text[ zh-CN ] = "水平居中";
+    Text[ zh-TW ] = "水平置中";
+    Text[ tr ] = "Yatay ortala";
+    Text[ hi-IN ] = "समतल प्रकार से केन्द्रित";
+    Text[ ar ] = "موسط أفقيا";
+    Text[ he ] = "Horizontal zentriert";
+};
+String SCSTR_HOR_JUSTIFY_RIGHT
+{
+    Text [ de ] = "Ausrichtung nach rechts" ;
+    Text [ en-US ] = "Align right" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Ajustar à direita";
+    Text[ ru ] = "Выравнивание по правому краю";
+    Text[ el ] = "Στοίχιση δεξιά";
+    Text[ nl ] = "Rechtslijnend";
+    Text[ fr ] = "Aligner à droite";
+    Text[ es ] = "Alinear a la derecha";
+    Text[ fi ] = "Tasaa oikealle";
+    Text[ ca ] = "Alinea a la dreta";
+    Text[ it ] = "Allinea a destra";
+    Text[ da ] = "Højrejusteret";
+    Text[ sv ] = "Högerjustera";
+    Text[ pl ] = "Wyrównaj do prawej";
+    Text[ pt-BR ] = "Alinhar à direita";
+    Text[ th ] = "จัดตำแหน่งขวา";
+    Text[ ja ] = "右揃え";
+    Text[ ko ] = "오른쪽 맞춤";
+    Text[ zh-CN ] = "向右对齐";
+    Text[ zh-TW ] = "向右對齊";
+    Text[ tr ] = "Sağa hizala";
+    Text[ hi-IN ] = "दाहिनी ओर पंक्तिकरण";
+    Text[ ar ] = "محاذاة إلى اليمين";
+    Text[ he ] = "Ausrichtung nach rechts";
+};
+String SCSTR_HOR_JUSTIFY_BLOCK
+{
+    Text [ de ] = "Blockausrichtung" ;
+    Text [ en-US ] = "Justify" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Justificar";
+    Text[ ru ] = "По ширине";
+    Text[ el ] = "Πλήρης στοίχιση";
+    Text[ nl ] = "Uitgevuld";
+    Text[ fr ] = "Justifier";
+    Text[ es ] = "Justificado";
+    Text[ fi ] = "Tasaa";
+    Text[ ca ] = "Justifica";
+    Text[ it ] = "Giustificato";
+    Text[ da ] = "Lige margener";
+    Text[ sv ] = "Marginaljustering";
+    Text[ pl ] = "Do lewej i prawej";
+    Text[ pt-BR ] = "Justificar";
+    Text[ th ] = "ชิดขอบ";
+    Text[ ja ] = "両端揃え";
+    Text[ ko ] = "양쪽 맞춤";
+    Text[ zh-CN ] = "左右对齐";
+    Text[ zh-TW ] = "左右對齊";
+    Text[ tr ] = "İki yana yasla";
+    Text[ hi-IN ] = "व्यवस्था करो";
+    Text[ ar ] = "ضبط";
+    Text[ he ] = "Blockausrichtung";
+};
+String SCSTR_HOR_JUSTIFY_REPEAT
+{
+    Text [ de ] = "Ausrichtung wiederholen" ;
+    Text [ en-US ] = "Repeat alignment" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Repetir alinhamento";
+    Text[ ru ] = "Повторить выравнивание";
+    Text[ el ] = "Επανάληψη στοίχισης";
+    Text[ nl ] = "Uitlijnen herhalen";
+    Text[ fr ] = "Répéter l'alignement";
+    Text[ es ] = "Repetir alineación";
+    Text[ fi ] = "Toista tasaus";
+    Text[ ca ] = "Repeteix l'alineació";
+    Text[ it ] = "Ripeti allineamento";
+    Text[ da ] = "Gentag justeringen";
+    Text[ sv ] = "Upprepa justering";
+    Text[ pl ] = "Powtórz wyrównanie";
+    Text[ pt-BR ] = "Repetir alinhamento";
+    Text[ th ] = "จัดตำแหน่งซ้ำ";
+    Text[ ja ] = "配置のリピート";
+    Text[ ko ] = "맞춤 반복";
+    Text[ zh-CN ] = "重新对齐";
+    Text[ zh-TW ] = "重新對齊";
+    Text[ tr ] = "Hizalamayı yinele";
+    Text[ hi-IN ] = "पंक्तिकरण दुहराना";
+    Text[ ar ] = "تكراØ� المحاذاة";
+    Text[ he ] = "Ausrichtung wiederholen";
+};
+String SCSTR_HOR_JUSTIFY_STANDARD
+{
+    Text [ de ] = "Horizontale Ausrichtung Standard" ;
+    Text [ en-US ] = "Horizontal alignment default" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Ajuste padrão na horizontal";
+    Text[ ru ] = "Горизонтальное выравнивание (стандарт)";
+    Text[ el ] = "Προεπιλογή: Οριζόντια στοίχιση";
+    Text[ nl ] = "Standaard horizontaal uitlijnen";
+    Text[ fr ] = "Alignement horizontal par défaut";
+    Text[ es ] = "Alineación horizontal preterminada";
+    Text[ fi ] = "Vaakatasaus oletuksena";
+    Text[ ca ] = "Alineament horitzontal per defecte";
+    Text[ it ] = "Allineamento standard orizzontale";
+    Text[ da ] = "Standard vandret justering";
+    Text[ sv ] = "Horisontell justering standard";
+    Text[ pl ] = "Domyślne wyrównanie w poziomie";
+    Text[ pt-BR ] = "Alinhamento horizontal padrão";
+    Text[ th ] = "ค่าเริ่มต้นการจัดตำแหน่งแนวนอน";
+    Text[ ja ] = "標準横位置";
+    Text[ ko ] = "기본 수평 맞춤";
+    Text[ zh-CN ] = "水平对齐 标准";
+    Text[ zh-TW ] = "水平對齊 標準";
+    Text[ tr ] = "Standart yatay hizalama";
+    Text[ hi-IN ] = "अनुपस्थिति में समतल पंक्तिकरण";
+    Text[ ar ] = "محاذاة أفقية افتراضية";
+    Text[ he ] = "Horizontale Ausrichtung Standard";
+};
+String SCSTR_VER_JUSTIFY_TOP
+{
+    Text [ de ] = "Ausrichtung nach oben" ;
+    Text [ en-US ] = "Align to top" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Ajustar para cima";
+    Text[ ru ] = "Выравнивание по верхнему краю";
+    Text[ el ] = "Στοίχιση πάνω";
+    Text[ nl ] = "Op bovenkant uitlijnen";
+    Text[ fr ] = "Alignement au bord supérieur";
+    Text[ es ] = "Alinear hacia arriba";
+    Text[ fi ] = "Tasaa ylös";
+    Text[ ca ] = "Alinea a la part superior";
+    Text[ it ] = "Allinea in alto";
+    Text[ da ] = "Juster opad";
+    Text[ sv ] = "Justera uppåt";
+    Text[ pl ] = "Wyrównaj do góry";
+    Text[ pt-BR ] = "Alinhar por cima";
+    Text[ th ] = "จัดตำแหน่งชิดด้านบน";
+    Text[ ja ] = "上揃え";
+    Text[ ko ] = "위에 맞춤";
+    Text[ zh-CN ] = "向上对齐";
+    Text[ zh-TW ] = "向上對齊";
+    Text[ tr ] = "Yukarı hizala";
+    Text[ hi-IN ] = "ऊपर केलिए पंक्तिकरण";
+    Text[ ar ] = "محاذاة إلى أعلى";
+    Text[ he ] = "Ausrichtung nach oben";
+};
+String SCSTR_VER_JUSTIFY_CENTER
+{
+    Text [ de ] = "Vertikal zentriert" ;
+    Text [ en-US ] = "Centered vertically" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Centrado na vertical";
+    Text[ ru ] = "Вертикально по центру";
+    Text[ el ] = "Κεντραρισμένα κατακόρυφα";
+    Text[ nl ] = "Verticaal gecentreerd";
+    Text[ fr ] = "Centré verticalement";
+    Text[ es ] = "Centrado verticalmente";
+    Text[ fi ] = "Keskitetty pystytasossa";
+    Text[ ca ] = "Centrat verticalment";
+    Text[ it ] = "Centra in verticale";
+    Text[ da ] = "Lodret centreret";
+    Text[ sv ] = "Vertikalt centrerad";
+    Text[ pl ] = "Pośrodku w pionie";
+    Text[ pt-BR ] = "Centralizado na vertical";
+    Text[ th ] = "แนวตั้งตรงกลาง";
+    Text[ ja ] = "上下に中央揃え";
+    Text[ ko ] = "수직으로 가운데";
+    Text[ zh-CN ] = "垂直居中";
+    Text[ zh-TW ] = "垂直置中";
+    Text[ tr ] = "Dikey ortala";
+    Text[ hi-IN ] = "लंबरूप प्रकार से केन्द्रित";
+    Text[ ar ] = "موسط عموديا";
+    Text[ he ] = "Vertikal zentriert";
+};
+String SCSTR_VER_JUSTIFY_BOTTOM
+{
+    Text [ de ] = "Ausrichtung nach unten" ;
+    Text [ en-US ] = "Align to bottom" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Ajustar para baixo";
+    Text[ ru ] = "Выравнивание по нижнему краю";
+    Text[ el ] = "Στοίχιση προς τα κάτω";
+    Text[ nl ] = "Op onderkant uitlijnen";
+    Text[ fr ] = "Alignement en bas";
+    Text[ es ] = "Alinear hacia abajo";
+    Text[ fi ] = "Tasaa alareunaan";
+    Text[ ca ] = "Alinea a la part inferior";
+    Text[ it ] = "Allinea in basso";
+    Text[ da ] = "Juster nedad";
+    Text[ sv ] = "Justera nedåt";
+    Text[ pl ] = "Wyrównaj do dołu";
+    Text[ pt-BR ] = "Alinhar por baixo";
+    Text[ th ] = "จัดตำแหน่งชิดด้านล่าง";
+    Text[ ja ] = "下揃え";
+    Text[ ko ] = "아래 맞춤";
+    Text[ zh-CN ] = "向下对齐";
+    Text[ zh-TW ] = "向下對齊";
+    Text[ tr ] = "Aşağı hizala";
+    Text[ hi-IN ] = "तल केलिए पंक्तिकरण";
+    Text[ ar ] = "محاذاة إلى أسفل";
+    Text[ he ] = "Ausrichtung nach unten";
+};
+String SCSTR_VER_JUSTIFY_STANDARD
+{
+    Text [ de ] = "Vertikale Ausrichtung Standard" ;
+    Text [ en-US ] = "Vertical alignment default" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Ajustar padrão na vertical";
+    Text[ ru ] = "Выравнивание по вертикали (стандарт)";
+    Text[ el ] = "Προεπιλογή: Κατακόρυφη στοίχιση";
+    Text[ nl ] = "Standaard verticaal uitlijnen";
+    Text[ fr ] = "Alignement vertical par défaut";
+    Text[ es ] = "Alineación vertical predeterminada";
+    Text[ fi ] = "Pystytasaus oletuksena";
+    Text[ ca ] = "Alineament vertical per defecte";
+    Text[ it ] = "Allineamento verticale standard";
+    Text[ da ] = "Standard lodret justering";
+    Text[ sv ] = "Vertikal justering standard";
+    Text[ pl ] = "Domyślne wyrównanie w pionie";
+    Text[ pt-BR ] = "Alinhamento vertical padrão";
+    Text[ th ] = "ค่าเริ่มต้นการจัดตำแหน่งแนวตั้ง";
+    Text[ ja ] = "標準上下揃え";
+    Text[ ko ] = "기본 수직 맞춤";
+    Text[ zh-CN ] = "垂直对齐 标准";
+    Text[ zh-TW ] = "垂直對齊 標準";
+    Text[ tr ] = "Standart dikey hizalama";
+    Text[ hi-IN ] = "अनुपस्थिति में लंबरूप पंक्तिकरण";
+    Text[ ar ] = "محاذاة رأسية افتراضية";
+    Text[ he ] = "Vertikale Ausrichtung Standard";
+};
+
+
+String SCSTR_WRONGPASSWORD
+{
+    Text [ de ] = "Falsches Kennwort" ;
+    Text [ en-US ] = "Incorrect Password" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Senha incorrecta";
+    Text[ ru ] = "Неправильный пароль";
+    Text[ el ] = "Εσφαλμένος κωδικός πρόσβασης";
+    Text[ nl ] = "Dit wachtwoord is niet correct.";
+    Text[ fr ] = "Mot de passe incorrect";
+    Text[ es ] = "Contraseña incorrecta";
+    Text[ fi ] = "Väärä salasana";
+    Text[ ca ] = "Contrasenya incorrecta";
+    Text[ it ] = "Password errata";
+    Text[ da ] = "Forkert adgangskode";
+    Text[ sv ] = "Felaktigt lösenord";
+    Text[ pl ] = "Nieprawidłowe hasło";
+    Text[ pt-BR ] = "Senha Incorreta";
+    Text[ th ] = "รหัสผ่านไม่ภูกต้อง";
+    Text[ ja ] = "正しくないパスワード";
+    Text[ ko ] = "옳지 않은 암호";
+    Text[ zh-CN ] = "密码无效";
+    Text[ zh-TW ] = "密碼無效";
+    Text[ tr ] = "Şifre yanlış";
+    Text[ hi-IN ] = "गलत कूटशब्द";
+    Text[ ar ] = "كلمة سر غير صحيحة";
+    Text[ he ] = "Falsches Kennwort";
+};
+
+
+
+
+String SCSTR_CHAR_ATTRS
+{
+    Text [ de ] = "Zeichenattribute" ;
+    Text [ en-US ] = "Font Attributes" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Atributos de caracteres";
+    Text[ ru ] = "Атрибуты шрифта";
+    Text[ el ] = "Ιδιότητες χαρακτήρων";
+    Text[ nl ] = "Schriftteken-attributen";
+    Text[ fr ] = "Attributs de caractères";
+    Text[ es ] = "Atributos de caracteres";
+    Text[ fi ] = "Fonttimääritteet";
+    Text[ ca ] = "Atributs de la lletra";
+    Text[ it ] = "Attributi carattere";
+    Text[ da ] = "Tegnattributter";
+    Text[ sv ] = "Teckenattribut";
+    Text[ pl ] = "Atrybuty czcionki";
+    Text[ pt-BR ] = "Atributos da Fonte";
+    Text[ th ] = "คุณลักษณะตัวอักษร";
+    Text[ ja ] = "文字の属性";
+    Text[ ko ] = "글꼴 속성";
+    Text[ zh-CN ] = "字符属性";
+    Text[ zh-TW ] = "字元屬性";
+    Text[ tr ] = "Yazıtipi öznitelikleri";
+    Text[ hi-IN ] = "फ़ॉन्ट ऐट्रिब्यूट्स";
+    Text[ ar ] = "سمات الخط";
+    Text[ he ] = "Zeichenattribute";
+};
+
+
+
+String SCSTR_CFG_APP
+{
+    Text [ de ] = "Systemoptionen" ;
+    Text [ en-US ] = "System Options" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Opções do sistema";
+    Text[ ru ] = "Параметры системы";
+    Text[ el ] = "Επιλογές συστήματος";
+    Text[ nl ] = "Systeemopties";
+    Text[ fr ] = "Options de système";
+    Text[ es ] = "Opciones del sistema";
+    Text[ fi ] = "Järjestelmäasetukset";
+    Text[ ca ] = "Opcions del sistema";
+    Text[ it ] = "Opzioni di sistema";
+    Text[ da ] = "Systemindstillinger";
+    Text[ sv ] = "Systemalternativ";
+    Text[ pl ] = "Opcje systemu";
+    Text[ pt-BR ] = "Opções do Sistema";
+    Text[ th ] = "ตัวเลือกระบบ";
+    Text[ ja ] = "システムオプション";
+    Text[ ko ] = "시스템 옵션";
+    Text[ zh-CN ] = "系统选项";
+    Text[ zh-TW ] = "系統選項";
+    Text[ tr ] = "Sistem seçenekleri";
+    Text[ hi-IN ] = "सिस्टम विकल्प";
+    Text[ ar ] = "خيارات النظام";
+    Text[ he ] = "Systemoptionen";
+};
+
+String SCSTR_CFG_DOC
+{
+    Text [ de ] = "Dokumentoptionen" ;
+    Text [ en-US ] = "Document Options" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Opções do documento";
+    Text[ ru ] = "Параметры документа";
+    Text[ el ] = "Επιλογές εγγράφου";
+    Text[ nl ] = "Documentopties";
+    Text[ fr ] = "Options de document";
+    Text[ es ] = "Opciones del documento";
+    Text[ fi ] = "Asiakirja-asetukset";
+    Text[ ca ] = "Opcions del document";
+    Text[ it ] = "Opzioni di documento";
+    Text[ da ] = "Dokumentindstillinger";
+    Text[ sv ] = "Dokumentalternativ";
+    Text[ pl ] = "Opcje dokumentu";
+    Text[ pt-BR ] = "Opções do Documento";
+    Text[ th ] = "ตัวเลือกเอกสาร";
+    Text[ ja ] = "ドキュメントオプション";
+    Text[ ko ] = "문서 옵션";
+    Text[ zh-CN ] = "文档选项";
+    Text[ zh-TW ] = "文件選項";
+    Text[ tr ] = "Belge seçenekleri";
+    Text[ hi-IN ] = "लेखपत्र विकल्प";
+    Text[ ar ] = "خيارات المستند";
+    Text[ he ] = "Dokumentoptionen";
+};
+
+String SCSTR_CFG_VIEW
+{
+    Text [ de ] = "Ansichtoptionen" ;
+    Text [ en-US ] = "View Options" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Opções de visualização";
+    Text[ ru ] = "Параметры вида";
+    Text[ el ] = "Επιλογές προβολής";
+    Text[ nl ] = "Beeldschermopties";
+    Text[ fr ] = "Options d'affichage";
+    Text[ es ] = "Opciones de visualización";
+    Text[ fi ] = "Näyttöasetukset";
+    Text[ ca ] = "Opcions de visualització";
+    Text[ it ] = "Opzioni vista";
+    Text[ da ] = "Visningsindstillinger";
+    Text[ sv ] = "Vyalternativ";
+    Text[ pl ] = "Opcje widoku";
+    Text[ pt-BR ] = "Opções de Visualização";
+    Text[ th ] = "ตัวเลือกมุมมอง";
+    Text[ ja ] = "表示オプション";
+    Text[ ko ] = "보기 옵션";
+    Text[ zh-CN ] = "视图选项";
+    Text[ zh-TW ] = "檢視選項";
+    Text[ tr ] = "Görünüm seçenekleri";
+    Text[ hi-IN ] = "दृश्य विकल्प";
+    Text[ ar ] = "خيارات العرض";
+    Text[ he ] = "Ansichtoptionen";
+};
+
+String SCSTR_CFG_INPUT
+{
+    Text [ de ] = "Eingabeoptionen" ;
+    Text [ en-US ] = "Input Options" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Opções de entrada";
+    Text[ ru ] = "Параметры ввода";
+    Text[ el ] = "Επιλογές εισαγωγής";
+    Text[ nl ] = "Invoeropties";
+    Text[ fr ] = "Options de saisie";
+    Text[ es ] = "Opciones de entrada";
+    Text[ fi ] = "Syöttöasetukset";
+    Text[ ca ] = "Opcions d'entrada";
+    Text[ it ] = "Opzioni di digitazione";
+    Text[ da ] = "Inputindstillinger";
+    Text[ sv ] = "Inmatningsalternativ";
+    Text[ pl ] = "Opcje wejścia";
+    Text[ pt-BR ] = "Opções de Entrada";
+    Text[ th ] = "ตัวเลือกข้อมูลเข้า";
+    Text[ ja ] = "入力オプション";
+    Text[ ko ] = "입력 옵션";
+    Text[ zh-CN ] = "输入选项";
+    Text[ zh-TW ] = "輸入選項";
+    Text[ tr ] = "Giriş seçenekleri";
+    Text[ hi-IN ] = "इनपुट विकल्प";
+    Text[ ar ] = "خصائص الإدخال";
+    Text[ he ] = "Eingabeoptionen";
+};
+
+String SCSTR_CFG_SPELLCHECK
+{
+    Text [ de ] = "Rechtschreiboptionen" ;
+    Text [ en-US ] = "Spelling Options" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Opções de ortografia";
+    Text[ ru ] = "Параметры орфографии";
+    Text[ el ] = "Επιλογές ορθογραφίας";
+    Text[ nl ] = "Spellingopties";
+    Text[ fr ] = "Options Orthographe";
+    Text[ es ] = "Opciones de ortografía";
+    Text[ fi ] = "Oikeinkirjoituksen asetukset";
+    Text[ ca ] = "Opcions de la verificació ortogràfica";
+    Text[ it ] = "Opzioni controllo ortografico";
+    Text[ da ] = "Stavekontrol-indstillinger";
+    Text[ sv ] = "Rättstavningsalternativ";
+    Text[ pl ] = "Opcje pisowni";
+    Text[ pt-BR ] = "Opções de Ortografia";
+    Text[ th ] = "ตัวเลือกการสะกด";
+    Text[ ja ] = "スペルチェックのオプション";
+    Text[ ko ] = "맞춤법 옵션";
+    Text[ zh-CN ] = "拼写检查选项";
+    Text[ zh-TW ] = "拼寫檢查選項";
+    Text[ tr ] = "Yazım seçenekleri";
+    Text[ hi-IN ] = "अक्षर विकल्प";
+    Text[ ar ] = "خيارات التدقيق الإملائي";
+    Text[ he ] = "Rechtschreiboptionen";
+};
+
+String SCSTR_CFG_PRINT
+{
+    Text [ de ] = "Druckoptionen" ;
+    Text [ en-US ] = "Print Options" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Opções de impressão";
+    Text[ ru ] = "Параметры печати";
+    Text[ el ] = "Επιλογές εκτύπωσης";
+    Text[ nl ] = "Afdrukopties";
+    Text[ fr ] = "Options d'impression";
+    Text[ es ] = "Opciones de impresión";
+    Text[ fi ] = "Tulostusasetukset";
+    Text[ ca ] = "Opcions d'impressió";
+    Text[ it ] = "Opzioni di stampa";
+    Text[ da ] = "Udskriftsindstillinger";
+    Text[ sv ] = "Utskriftsalternativ";
+    Text[ pl ] = "Opcje wydruku";
+    Text[ pt-BR ] = "Opções de Impressão";
+    Text[ th ] = "ตัวเลือกการพิมพ์";
+    Text[ ja ] = "印刷オプション";
+    Text[ ko ] = "인쇄 옵션";
+    Text[ zh-CN ] = "打印选项";
+    Text[ zh-TW ] = "列印選項";
+    Text[ tr ] = "Yazdırma seçenekleri";
+    Text[ hi-IN ] = "छपाई विकल्प";
+    Text[ ar ] = "خيارات الطباعة";
+    Text[ he ] = "Druckoptionen";
+};
+
+String SCSTR_CFG_NAVIPI
+{
+    Text [ de ] = "Navigator-Einstellungen" ;
+    Text [ en-US ] = "Navigator Settings" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Parâmetros - Navegador";
+    Text[ ru ] = "Настройки Навигатора";
+    Text[ el ] = "Ρυθμίσεις Navigator";
+    Text[ nl ] = "Navigator-instellingen";
+    Text[ fr ] = "Paramètres du Navigateur";
+    Text[ es ] = "Configuración del Navegador";
+    Text[ fi ] = "Etsimen asetukset";
+    Text[ ca ] = "Paràmetres del navegador";
+    Text[ it ] = "Impostazioni navigatore";
+    Text[ da ] = "Navigator-indstillinger";
+    Text[ sv ] = "Navigatorinställningar";
+    Text[ pl ] = "Ustawienia nawigatora";
+    Text[ pt-BR ] = "Configurações do Navegador";
+    Text[ th ] = "ตั้งค่าตัวนำทาง";
+    Text[ ja ] = "ナビゲータの設定";
+    Text[ ko ] = "네비게이터 설정";
+    Text[ zh-CN ] = "设定助手";
+    Text[ zh-TW ] = "設定助手";
+    Text[ tr ] = "Taratıcı  ayarları";
+    Text[ hi-IN ] = "नॉविगेटर निर्धारण";
+    Text[ ar ] = "إعدادات النافيجيتور";
+    Text[ he ] = "Navigator-Einstellungen";
+};
+
+
+ //	fuer Dialoge:
+
+
+
+
+
+
+//!	the graphics filter error strings should be moved to svx or offapp!
+
+
+// #98185#
+
+// Select tables dialog title
+
+// Select tables dialog listbox
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

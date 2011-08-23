@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class ClrMap
 public:
 
     sal_Bool getColorMap( sal_Int32& nClrToken );
-    void     setColorMap( sal_Int32 nClrToken, sal_Int32 nMappedClrToken );
+    void	 setColorMap( sal_Int32 nClrToken, sal_Int32 nMappedClrToken );
 };
 
 typedef boost::shared_ptr< ClrMap > ClrMapPtr;
@@ -59,7 +59,7 @@ public:
     ~ClrScheme();
 
     sal_Bool getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) const;
-    void     setColor( sal_Int32 nSchemeClrToken, sal_Int32 nColor );
+    void	 setColor( sal_Int32 nSchemeClrToken, sal_Int32 nColor );
 };
 
 typedef boost::shared_ptr< ClrScheme > ClrSchemePtr;

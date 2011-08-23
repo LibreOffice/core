@@ -61,10 +61,10 @@
  * Change History
  * 2004-2-18 create this file.
  ************************************************************************/
-#ifndef     _XFRECT_HXX
-#define     _XFRECT_HXX
+#ifndef		_XFRECT_HXX
+#define		_XFRECT_HXX
 
-#include    "xfpoint.hxx"
+#include	"xfpoint.hxx"
 
 class XFRect
 {
@@ -81,61 +81,61 @@ public:
     }
 
 public:
-    void    SetX(double x)
+    void	SetX(double x)
     {
         m_aPoint.SetX(x);
     }
 
-    double  GetX() const
+    double	GetX() const
     {
         return m_aPoint.GetX();
     }
 
-    void    SetY(double y)
+    void	SetY(double y)
     {
         m_aPoint.SetY(y);
     }
 
-    double  GetY() const
+    double	GetY() const
     {
         return m_aPoint.GetY();
     }
 
-    void    SetWidth(double width)
+    void	SetWidth(double width)
     {
         m_fWidth = width;
     }
 
-    double  GetWidth() const
+    double	GetWidth() const
     {
         return m_fWidth;
     }
 
-    void    SetHeight(double height)
+    void	SetHeight(double height)
     {
         m_fHeight = height;
     }
 
-    double  GetHeight() const
+    double	GetHeight() const
     {
         return m_fHeight;
     }
 
-    void    SetStartPoint(XFPoint pt)
+    void	SetStartPoint(XFPoint pt)
     {
         m_aPoint = pt;
     }
 
-    void    SetSize(double width, double height)
+    void	SetSize(double width, double height)
     {
         m_fWidth = width;
         m_fHeight = height;
     }
 
 public:
-    XFPoint m_aPoint;
-    double  m_fWidth;
-    double  m_fHeight;
+    XFPoint	m_aPoint;
+    double	m_fWidth;
+    double	m_fHeight;
 };
 
 #endif

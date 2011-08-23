@@ -60,9 +60,9 @@
 /*************************************************************************
  * Change History
  * 2004-2-17 create this file.
- * 2005-4-1 revise for rotate.
+ * 2005-4-1	revise for rotate.
  ************************************************************************/
-#include    "xfdrawobj.hxx"
+#include	"xfdrawobj.hxx"
 
 XFDrawObject::XFDrawObject()
 {
@@ -82,12 +82,12 @@ void XFDrawObject::ContentToXml(IXFStream *pStrm)
 
 void XFDrawObject::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     if( GetStyleName().getLength() )
         pAttrList->AddAttribute( A2OUSTR("draw:style-name"), GetStyleName() );
 
-    assert(m_strName.getLength()>0);    //name should not be null.
+    assert(m_strName.getLength()>0);	//name should not be null.
     if( m_strName.getLength() )
         pAttrList->AddAttribute( A2OUSTR("draw:name"), m_strName );
     //anchor type:
@@ -119,7 +119,7 @@ void XFDrawObject::ToXml(IXFStream *pStrm)
     pAttrList->AddAttribute( A2OUSTR("svg:height"), DoubleToOUString(m_aRect.GetHeight()) + A2OUSTR("cm") );
 
     //transform
-    rtl::OUString   strTransform;
+    rtl::OUString	strTransform;
     if( m_nFlag&XFDRAWOBJECT_FLAG_ROTATE )
         strTransform = A2OUSTR("rotate (") + DoubleToOUString(m_fRotate) + A2OUSTR(") ");
     if( m_nFlag&XFDRAWOBJECT_FLAG_TRANLATE )

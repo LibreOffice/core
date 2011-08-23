@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ using namespace com::sun::star::xml::dom::events;
 
 namespace DOM { namespace events
 {
-
+    
     class  CTestListener
         : public ::cppu::WeakImplHelper3< com::sun::star::xml::dom::events::XEventListener, XInitialization, XServiceInfo >
     {
@@ -71,7 +71,7 @@ namespace DOM { namespace events
         OUString m_type;
         sal_Bool m_capture;
         OUString m_name;
-
+        
     public:
 
         // static helpers for service info and component management

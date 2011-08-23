@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-Jan 2005        Created
+Jan 2005		Created
  ************************************************************************/
 #include "lwpfribsection.hxx"
 #include "lwpfribbreaks.hxx"
@@ -88,7 +88,7 @@ LwpFribSection::~LwpFribSection()
 }
 
 /**
- * @descr:  Read section frib information
+ * @descr:	Read section frib information
  *
  */
 void LwpFribSection::Read(LwpObjectStream *pObjStrm, sal_uInt16 /*len*/)
@@ -97,7 +97,7 @@ void LwpFribSection::Read(LwpObjectStream *pObjStrm, sal_uInt16 /*len*/)
 }
 
 /**
- * @descr:  Get section pointer
+ * @descr:	Get section pointer
  *
  */
 LwpSection* LwpFribSection::GetSection()
@@ -106,7 +106,7 @@ LwpSection* LwpFribSection::GetSection()
 }
 
 /**
- * @descr:  Register section style
+ * @descr:	Register section style
  *
  */
 void LwpFribSection::RegisterSectionStyle()
@@ -120,7 +120,7 @@ void LwpFribSection::RegisterSectionStyle()
 }
 
 /**
- * @descr:  Register section style
+ * @descr:	Register section style
  *
  */
 void LwpFribSection::SetSectionName()
@@ -134,7 +134,7 @@ void LwpFribSection::SetSectionName()
 }
 
 /**
- * @descr:  Get page layout that current section points
+ * @descr:	Get page layout that current section points
  *
  */
 LwpPageLayout* LwpFribSection::GetPageLayout()
@@ -145,7 +145,7 @@ LwpPageLayout* LwpFribSection::GetPageLayout()
 }
 
 /**
- * @descr:  XFConvert section
+ * @descr:	XFConvert section
  *
  */
 void LwpFribSection::ParseSection()
@@ -253,7 +253,7 @@ LwpMasterPage::LwpMasterPage(LwpPara* pPara, LwpPageLayout* pLayout)
 }
 
 /**
- * @descr:  Register master page style for para style and register section style if necessary
+ * @descr:	Register master page style for para style and register section style if necessary
  *
  */
 sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
@@ -288,8 +288,8 @@ sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
             //bSectionColumns = sal_True;
             break;
         }
-        case LwpLayout::StartOnNextPage:    //fall throught
-        case LwpLayout::StartOnOddPage: //fall throught
+        case LwpLayout::StartOnNextPage:	//fall throught
+        case LwpLayout::StartOnOddPage:	//fall throught
         case LwpLayout::StartOnEvenPage:
         {
             LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
@@ -343,7 +343,7 @@ sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
 }
 
 /**
- * @descr:  Whether it need create a new section
+ * @descr:	Whether it need create a new section
  *
  */
 sal_Bool LwpMasterPage::IsNeedSection()
@@ -360,7 +360,7 @@ sal_Bool LwpMasterPage::IsNeedSection()
 }
 
 /**
- * @descr:  Create XFSection if necessary
+ * @descr:	Create XFSection if necessary
  *
  */
 XFSection* LwpMasterPage::CreateXFSection()
@@ -376,7 +376,7 @@ XFSection* LwpMasterPage::CreateXFSection()
 }
 
 /**
- * @descr:  Parse section
+ * @descr:	Parse section
  *
  */
 void LwpMasterPage::ParseSection(LwpFrib* pFrib)
@@ -433,7 +433,7 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
 }
 
 /**
- * @descr:  Register filler page text style
+ * @descr:	Register filler page text style
  *
  */
 void LwpMasterPage::RegisterFillerPageStyle()
@@ -455,7 +455,7 @@ void LwpMasterPage::RegisterFillerPageStyle()
 }
 
 /**
- * @descr:  Whether the layout is next page type
+ * @descr:	Whether the layout is next page type
  *
  */
 sal_Bool LwpMasterPage::IsNextPageType()

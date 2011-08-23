@@ -1,0 +1,184 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include <outliner.hrc>
+
+
+String RID_OUTLUNDO_DEPTH
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Einr�cken : Einr�cken */
+    /* ### ACHTUNG: Neuer Text in Resource? Einr�cken : Einr�cken */
+    Text [ de ] = "Einrücken" ;
+    Text [ en-US ] = "Indent" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Avançar";
+    Text[ ru ] = "Отступ";
+    Text[ el ] = "Εσοχή";
+    Text[ nl ] = "Inspringing";
+    Text[ fr ] = "Mettre en retrait";
+    Text[ es ] = "Sangría";
+    Text[ fi ] = "Sisennä";
+    Text[ ca ] = "Sagnat";
+    Text[ it ] = "Rientra";
+    Text[ sk ] = "Odsadenie";
+    Text[ da ] = "Indryk";
+    Text[ sv ] = "Dra in";
+    Text[ pl ] = "Wcięcie";
+    Text[ pt-BR ] = "Recuo";
+    Text[ th ] = "ระยะเยื้อง";
+    Text[ ja ] = "インデント";
+    Text[ ko ] = "들여쓰기";
+    Text[ zh-CN ] = "缩进";
+    Text[ zh-TW ] = "縮排";
+    Text[ tr ] = "Girinti";
+    Text[ hi-IN ] = "इन्डेन्ट";
+    Text[ ar ] = "إزاحة";
+    Text[ he ] = "‮כניסה‬";
+};
+String RID_OUTLUNDO_EXPAND
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Unterabs�tze zeigen : Unterabs�tze zeigen */
+    /* ### ACHTUNG: Neuer Text in Resource? Unterabs�tze zeigen : Unterabs�tze zeigen */
+    Text [ de ] = "Unterabsätze zeigen" ;
+    Text [ en-US ] = "Show subpoints" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Mostrar subparágrafos";
+    Text[ ru ] = "Развернуть подабзацы";
+    Text[ el ] = "Εμφάνιση υποπαραγράφων";
+    Text[ nl ] = "Subalinea's weergeven";
+    Text[ fr ] = "Afficher les sous-paragraphes";
+    Text[ es ] = "Mostrar subpárrafos";
+    Text[ fi ] = "Näytä alipisteet";
+    Text[ ca ] = "Mostra els subpunts";
+    Text[ it ] = "Mostra i sottoparagrafi";
+    Text[ sk ] = "Zobraziť podbody";
+    Text[ da ] = "Vis underafsnit";
+    Text[ sv ] = "Visa understycken";
+    Text[ pl ] = "Pokaż podpunkty";
+    Text[ pt-BR ] = "Mostrar sub pontos";
+    Text[ th ] = "แสดงจุดย่อย";
+    Text[ ja ] = "下位段落の表示";
+    Text[ ko ] = "하위 단락 표시";
+    Text[ zh-CN ] = "显示分段落";
+    Text[ zh-TW ] = "顯示分段落";
+    Text[ tr ] = "Alt bölümleri göster";
+    Text[ hi-IN ] = "अधीनबिन्दुओं को दिखाओ";
+    Text[ ar ] = "إظهار الفقرات الفرعية";
+    Text[ he ] = "‮הצגת תת נקודות‬";
+};
+String RID_OUTLUNDO_COLLAPSE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Unterabs�tze verstecken : Unterabs�tze verstecken */
+    /* ### ACHTUNG: Neuer Text in Resource? Unterabs�tze verstecken : Unterabs�tze verstecken */
+    Text [ de ] = "Unterabsätze verstecken" ;
+    Text [ en-US ] = "Collapse" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Ocultar subparágrafos";
+    Text[ ru ] = "Свернуть подабзацы";
+    Text[ el ] = "Απόκρυψη υποπαραγράφων";
+    Text[ nl ] = "Subalinea's verbergen";
+    Text[ fr ] = "Masquer les sous-paragraphes";
+    Text[ es ] = "Ocultar subpárrafos";
+    Text[ fi ] = "Pienennä";
+    Text[ ca ] = "Redueix";
+    Text[ it ] = "Nascondi i sottoparagrafi";
+    Text[ sk ] = "Skryť všetky súčasti";
+    Text[ da ] = "Skjul underafsnit";
+    Text[ sv ] = "Dölj understycken";
+    Text[ pl ] = "Zwiń akapity podrzędne";
+    Text[ pt-BR ] = "Contrair";
+    Text[ th ] = "ยุบ";
+    Text[ ja ] = "下位段落の非表示";
+    Text[ ko ] = "하위 단락 숨기기";
+    Text[ zh-CN ] = "隐入分段落";
+    Text[ zh-TW ] = "隱入分段落";
+    Text[ tr ] = "Alt bölümleri gizle";
+    Text[ hi-IN ] = "दबाओ";
+    Text[ ar ] = "اختفاء الفقرات الفرعية";
+    Text[ he ] = "‮כיווץ‬";
+};
+String RID_OUTLUNDO_ATTR
+{
+    Text [ de ] = "Attribute anwenden" ;
+    Text [ en-US ] = "Apply attributes" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Aplicar atributos";
+    Text[ ru ] = "Применить атрибуты";
+    Text[ el ] = "Εφαρμογή ιδιοτήτων";
+    Text[ nl ] = "Attributen toepassen";
+    Text[ fr ] = "Appliquer les attributs";
+    Text[ es ] = "Aplicar atributos";
+    Text[ fi ] = "Käytä määritteitä";
+    Text[ ca ] = "Aplica els atributs";
+    Text[ it ] = "Applica attributi";
+    Text[ sk ] = "Použiť atribúty";
+    Text[ da ] = "Anvend attributter";
+    Text[ sv ] = "Använd attribut";
+    Text[ pl ] = "Zastosuj atrybuty";
+    Text[ pt-BR ] = "Aplicar atributos";
+    Text[ th ] = "ใช้คุณลักษณะ";
+    Text[ ja ] = "属性の適用";
+    Text[ ko ] = "속성 적용";
+    Text[ zh-CN ] = "使用属性";
+    Text[ zh-TW ] = "使用屬性";
+    Text[ tr ] = "Öznitelikleri uygula";
+    Text[ hi-IN ] = "ऐट्रिब्यूट्स लागू करो";
+    Text[ ar ] = "استخدام السمات";
+    Text[ he ] = "‮יישום תכונות‬";
+};
+String RID_OUTLUNDO_INSERT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Einf�gen : Einf�gen */
+    /* ### ACHTUNG: Neuer Text in Resource? Einf�gen : Einf�gen */
+    Text [ de ] = "Einfügen" ;
+    Text [ en-US ] = "Insert" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Inserir";
+    Text[ ru ] = "Вставить";
+    Text[ el ] = "Εισαγωγή";
+    Text[ nl ] = "Invoegen";
+    Text[ fr ] = "Insérer";
+    Text[ es ] = "Insertar";
+    Text[ fi ] = "Lisää";
+    Text[ ca ] = "Insereix";
+    Text[ it ] = "Inserisci";
+    Text[ sk ] = "Vložiť";
+    Text[ da ] = "Indsæt";
+    Text[ sv ] = "Infoga";
+    Text[ pl ] = "Wstaw";
+    Text[ pt-BR ] = "Inserir";
+    Text[ th ] = "แทรก";
+    Text[ ja ] = "挿入";
+    Text[ ko ] = "삽입";
+    Text[ zh-CN ] = "插入";
+    Text[ zh-TW ] = "插入";
+    Text[ tr ] = "Ekle";
+    Text[ hi-IN ] = "जोड़ो";
+    Text[ ar ] = "إدراج";
+    Text[ he ] = "‮הוספה‬";
+};

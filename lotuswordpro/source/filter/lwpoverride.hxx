@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPOVERRIDE_HXX
@@ -72,9 +72,9 @@ class LwpObjectStream;
 
 enum STATE
 {
-    STATE_OFF   = 0,
-    STATE_ON    = 1,
-    STATE_STYLE = 2
+    STATE_OFF	= 0,
+    STATE_ON	= 1,
+    STATE_STYLE	= 2
 };
 
 class LwpOverride
@@ -95,9 +95,9 @@ public:
     void Override(sal_uInt16 nBits, STATE eState);
 
 protected:
-    sal_uInt16  m_nValues;
-    sal_uInt16  m_nOverride;
-    sal_uInt16  m_nApply;
+    sal_uInt16	m_nValues;
+    sal_uInt16	m_nOverride;
+    sal_uInt16	m_nApply;
 };
 
 /////////////////////////////////////////////////////////////////
@@ -109,7 +109,7 @@ public:
     void Read(LwpObjectStream* pStrm);
 
 private:
-    sal_uInt16  m_nLanguage;
+    sal_uInt16	m_nLanguage;
 };
 
 /////////////////////////////////////////////////////////////////
@@ -128,8 +128,8 @@ private:
     enum{
     TAO_HIGHLIGHT = 0x08,
     };
-    sal_uInt16  m_nHideLevels;
-    sal_uInt32  m_nBaseLineOffset;
+    sal_uInt16	m_nHideLevels;
+    sal_uInt32	m_nBaseLineOffset;
 };
 
 inline sal_uInt16 LwpTextAttributeOverride::GetHideLevels() const
@@ -145,7 +145,7 @@ public:
     void Read(LwpObjectStream* pStrm);
 
 private:
-    sal_uInt16  m_nLevels;
+    sal_uInt16	m_nLevels;
 };
 
 /////////////////////////////////////////////////////////////////
@@ -182,14 +182,14 @@ public:
 private:
     enum
     {
-        BO_SILVERBULLET = 0x01,
+        BO_SILVERBULLET	= 0x01,
         // 0x02 is free
-        BO_RIGHTALIGN   = 0x04,
-        BO_EDITABLE     = 0x08,
-        BO_SKIP         = 0x10
+        BO_RIGHTALIGN	= 0x04,
+        BO_EDITABLE		= 0x08,
+        BO_SKIP			= 0x10
     };
 
-    LwpObjectID m_SilverBullet;
+    LwpObjectID	m_SilverBullet;
     sal_Bool m_bIsNull;
 };
 inline LwpObjectID LwpBulletOverride::GetSilverBullet() const
@@ -252,14 +252,14 @@ public:
 
     enum AlignType
     {
-        ALIGN_LEFT          = 0,
-        ALIGN_RIGHT         = 1,
-        ALIGN_CENTER        = 2,
-        ALIGN_JUSTIFY       = 3,
-        ALIGN_JUSTIFYALL    = 4,
-        ALIGN_NUMERICLEFT   = 5,
-        ALIGN_NUMERICRIGHT  = 6,
-        ALIGN_SQUEEZE       = 7
+        ALIGN_LEFT			= 0,
+        ALIGN_RIGHT			= 1,
+        ALIGN_CENTER		= 2,
+        ALIGN_JUSTIFY		= 3,
+        ALIGN_JUSTIFYALL	= 4,
+        ALIGN_NUMERICLEFT	= 5,
+        ALIGN_NUMERICRIGHT	= 6,
+        ALIGN_SQUEEZE		= 7
     };
 
     AlignType GetAlignType(){ return m_nAlignType; }
@@ -268,14 +268,14 @@ public:
 private:
     enum
     {
-        AO_TYPE     = 0x01,
-        AO_POSITION = 0x02,
-        AO_CHAR     = 0x04
+        AO_TYPE		= 0x01,
+        AO_POSITION	= 0x02,
+        AO_CHAR		= 0x04
     };
 
-    AlignType   m_nAlignType;
-    sal_uInt32  m_nPosition;
-    sal_uInt16  m_nAlignChar;
+    AlignType	m_nAlignType;
+    sal_uInt32	m_nPosition;
+    sal_uInt16	m_nAlignChar;
 };
 
 /////////////////////////////////////////////////////////////////
@@ -288,10 +288,10 @@ public:
 
     enum SpacingType
     {
-        SPACING_DYNAMIC = 0,
-        SPACING_LEADING = 1,
-        SPACING_CUSTOM  = 2,
-        SPACING_NONE    = 3
+        SPACING_DYNAMIC	= 0,
+        SPACING_LEADING	= 1,
+        SPACING_CUSTOM	= 2,
+        SPACING_NONE	= 3
     };
 
     SpacingType GetType() const {return m_nSpacingType;};
@@ -306,13 +306,13 @@ public:
 protected:
     enum
     {
-        SPO_TYPE    = 0x01,
-        SPO_AMOUNT  = 0x02,
+        SPO_TYPE	= 0x01,
+        SPO_AMOUNT	= 0x02,
         SPO_MULTIPLE= 0x04
     };
-    SpacingType m_nSpacingType;//sal_uInt16
-    sal_Int32   m_nAmount;
-    sal_Int32   m_nMultiple;
+    SpacingType	m_nSpacingType;//sal_uInt16
+    sal_Int32	m_nAmount;
+    sal_Int32	m_nMultiple;
 
 };
 
@@ -333,10 +333,10 @@ public:
     LwpSpacingCommonOverride* GetAboveSpacing(){return m_pParaSpacingAbove;};
     LwpSpacingCommonOverride* GetBelowSpacing(){return m_pParaSpacingBelow;};
 private:
-    LwpSpacingCommonOverride*   m_pSpacing;
-    LwpSpacingCommonOverride*   m_pAboveLineSpacing;
-    LwpSpacingCommonOverride*   m_pParaSpacingAbove;
-    LwpSpacingCommonOverride*   m_pParaSpacingBelow;
+    LwpSpacingCommonOverride*	m_pSpacing;
+    LwpSpacingCommonOverride*	m_pAboveLineSpacing;
+    LwpSpacingCommonOverride*	m_pParaSpacingAbove;
+    LwpSpacingCommonOverride*	m_pParaSpacingBelow;
 };
 
 /////////////////////////////////////////////////////////////////
@@ -376,29 +376,29 @@ public:
 private:
     enum
     {
-        IO_ALL          = 0x0001,
-        IO_FIRST        = 0x0002,
-        IO_REST         = 0x0004,
-        IO_RIGHT        = 0x0008,
-        IO_HANGING      = 0x0010,
-        IO_EQUAL        = 0x0020,
-        IO_BODY         = 0x0040,
-        IO_REL_ALL      = 0x0080,
-        IO_REL_FIRST    = 0x0100,
-        IO_REL_REST     = 0x0200,
-        IO_REL_FLAGS    = (IO_REL_ALL | IO_REL_FIRST | IO_REL_REST),
+        IO_ALL			= 0x0001,
+        IO_FIRST		= 0x0002,
+        IO_REST			= 0x0004,
+        IO_RIGHT		= 0x0008,
+        IO_HANGING		= 0x0010,
+        IO_EQUAL		= 0x0020,
+        IO_BODY			= 0x0040,
+        IO_REL_ALL		= 0x0080,
+        IO_REL_FIRST	= 0x0100,
+        IO_REL_REST		= 0x0200,
+        IO_REL_FLAGS	= (IO_REL_ALL | IO_REL_FIRST | IO_REL_REST),
 #ifdef JAPANESE_ENABLED // 96/4/8 ueda for indentation by char width
-        IO_USE_RELATIVE = 0x0400,
-        IO_CHARUNIT     = 0x0800
+        IO_USE_RELATIVE	= 0x0400,
+        IO_CHARUNIT		= 0x0800
 #else
-        IO_USE_RELATIVE = 0x0400
+        IO_USE_RELATIVE	= 0x0400
 #endif
     };
 
-    sal_Int32   m_nAll;
-    sal_Int32   m_nFirst;
-    sal_Int32   m_nRest;
-    sal_Int32   m_nRight;
+    sal_Int32	m_nAll;
+    sal_Int32	m_nFirst;
+    sal_Int32	m_nRest;
+    sal_Int32	m_nRight;
 };
 inline double LwpIndentOverride::GetFirst() const
 {
@@ -425,14 +425,14 @@ public:
     void Read(LwpObjectStream* pStrm);
     enum
     {
-        AMIKAKE_NONE        = 0,
-        AMIKAKE_BACKGROUND  = 1,
-        AMIKAKE_CHARACTER   = 2
+        AMIKAKE_NONE		= 0,
+        AMIKAKE_BACKGROUND	= 1,
+        AMIKAKE_CHARACTER	= 2
     };
 
 private:
-    LwpBackgroundStuff* m_pBackgroundStuff;
-    sal_uInt16      m_nType;
+    LwpBackgroundStuff*	m_pBackgroundStuff;
+    sal_uInt16		m_nType;
 
 };
 

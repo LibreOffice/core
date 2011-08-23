@@ -61,17 +61,17 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#ifndef     _XFSAXATTRLIST_HXX
-#define     _XFSAXATTRLIST_HXX
+#ifndef		_XFSAXATTRLIST_HXX
+#define		_XFSAXATTRLIST_HXX
 
-#include    "ixfattrlist.hxx"
-#include    "xmloff/attrlist.hxx"
+#include	"ixfattrlist.hxx"
+#include	"xmloff/attrlist.hxx"
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-class   XFSaxAttrList : public IXFAttrList
+class	XFSaxAttrList : public IXFAttrList
 {
 public:
     XFSaxAttrList();
@@ -80,20 +80,20 @@ public:
 
 public:
     //Interface ISaxAttributeList:
-    virtual void    AddAttribute(const rtl::OUString& name, const rtl::OUString& value);
+    virtual void	AddAttribute(const rtl::OUString& name, const rtl::OUString& value);
 
-    virtual void    Clear();
+    virtual void	Clear();
 
-    Reference<XAttributeList>   GetAttributeList();
+    Reference<XAttributeList>	GetAttributeList();
 
     friend class XFSaxStream;
 private:
-    SvXMLAttributeList  *m_pSvAttrList;
-    Reference<XAttributeList>   m_xAttrList;
+    SvXMLAttributeList	*m_pSvAttrList;
+    Reference<XAttributeList>	m_xAttrList;
 
 };
 
-inline Reference<XAttributeList>    XFSaxAttrList::GetAttributeList()
+inline Reference<XAttributeList>	XFSaxAttrList::GetAttributeList()
 {
     return m_xAttrList;
 }

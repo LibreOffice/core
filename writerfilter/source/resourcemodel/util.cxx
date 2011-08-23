@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace writerfilter
 using namespace com::sun::star;
 using namespace std;
 using text::TextContentAnchorType;
-
+    
 static string & logger_file()
 {
     static string _logger_file = string(getenv("TEMP")?getenv("TEMP"):"/tmp") + "/writerfilter.ooxml.tmp";
@@ -69,11 +69,11 @@ void logger(string prefix, string message)
     {
         string result = "";
         char sBuffer[16];
-
+        
         for (string::const_iterator aIt = str.begin(); aIt != str.end(); ++aIt)
         {
             char c = *aIt;
-
+            
             if (isprint(c) && c != '\"')
             {
                 if (c == '<')
@@ -91,17 +91,17 @@ void logger(string prefix, string message)
                 result += sBuffer;
             }
         }
-
+        
         return result;
     }
-
+    
 #ifdef DEBUG
 string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
 {
     string sResult;
 
     static int nAttribNames = 9;
-    static string sPropertyAttribNames[9] =
+    static string sPropertyAttribNames[9] = 
         {
             "MAYBEVOID",
             "BOUND",
@@ -113,9 +113,9 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
             "REMOVEABLE",
             "OPTIONAL"
         };
-
+    
     static const ::rtl::OUString sMetaFile(RTL_CONSTASCII_USTRINGPARAM("MetaFile"));
-
+    
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo
         (xPropSet->getPropertySetInfo());
 
@@ -128,36 +128,36 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
         for (sal_Int32 n = 0; n < aProps.getLength(); n++)
         {
             ::rtl::OUString sPropName(aProps[n].Name);
-
+            
             if (xPropSetInfo->hasPropertyByName(sPropName))
             {
                 bool bPropertyFound = true;
                 uno::Any aAny;
-                try
+                try 
                 {
                     if (sPropName == sMetaFile)
                         bPropertyFound = false;
                     else
-                        xPropSet->getPropertyValue(sPropName) >>= aAny;
+                        xPropSet->getPropertyValue(sPropName) >>= aAny;					
                 }
                 catch (beans::UnknownPropertyException)
                 {
                     bPropertyFound = false;
                 }
-
+                
                 if (bPropertyFound)
                 {
                     sResult += "<property name=\"";
                     sResult += OUStringToOString
                         (sPropName, RTL_TEXTENCODING_ASCII_US).getStr();
                     sResult +="\" type=\"";
-
+                    
                     ::rtl::OUString sPropType(aProps[n].Type.getTypeName());
                     sResult += OUStringToOString
                         (sPropType, RTL_TEXTENCODING_ASCII_US).getStr();
-
+                    
                     sResult += "\" attribs=\"";
-
+                    
                     sal_uInt16 nMask = 1;
                     bool bFirstAttrib = true;
                     sal_uInt16 nAttribs = aProps[n].Attributes;
@@ -169,96 +169,96 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
                                 bFirstAttrib = false;
                             else
                                 sResult += "|";
-
+                            
                             sResult += sPropertyAttribNames[i];
                         }
-
+                        
                         nMask <<= 1;
                     }
-
+                    
                     sResult += "\">";
 
                     char buffer[256];
-                    if (sPropType ==
+                    if (sPropType == 
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                         ("byte")))
                     {
                         sal_Int8 nValue = 0;
                         aAny >>= nValue;
-
+                        
                         snprintf(buffer, sizeof(buffer), "%d", nValue);
                         sResult += buffer;
-                    }
-                    if (sPropType ==
+                    } 
+                    if (sPropType == 
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                         ("short")))
                     {
                         sal_Int16 nValue = 0;
                         aAny >>= nValue;
-
+                        
                         snprintf(buffer, sizeof(buffer), "%d", nValue);
                         sResult += buffer;
-                    }
-                    else if (sPropType ==
+                    } 
+                    else if (sPropType == 
                              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                              ("long")))
                     {
                         sal_Int32 nValue = 0;
                         aAny >>= nValue;
-
+                        
                         snprintf(buffer, sizeof(buffer), "%" SAL_PRIdINT32, nValue);
                         sResult += buffer;
-                    }
-                    else if (sPropType ==
+                    } 
+                    else if (sPropType == 
                              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                              ("float")))
                     {
                         float nValue = 0.0;
                         aAny >>= nValue;
-
+                        
                         snprintf(buffer, sizeof(buffer), "%f", nValue);
                         sResult += buffer;
-                    }
-                    else if (sPropType ==
+                    } 
+                    else if (sPropType == 
                              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                              ("double")))
                     {
                         double nValue = 0.0;
                         aAny >>= nValue;
-
+                        
                         snprintf(buffer, sizeof(buffer), "%lf", nValue);
                         sResult += buffer;
-                    }
-                    else if (sPropType ==
+                    } 
+                    else if (sPropType == 
                              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                              ("boolean")))
                     {
                         sal_Bool nValue = sal_False;
                         aAny >>= nValue;
-
+                        
                         if (nValue)
                             sResult += "true";
                         else
                             sResult += "false";
                     }
-                    else if (sPropType ==
+                    else if (sPropType == 
                              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                              ("string")))
                     {
                         ::rtl::OUString sValue;
                         aAny >>= sValue;
-
+                        
                         sResult += OUStringToOString
                             (sValue, RTL_TEXTENCODING_ASCII_US).getStr();
                     }
-                    else if (sPropType ==
+                    else if (sPropType == 
                              ::rtl::OUString
                              (RTL_CONSTASCII_USTRINGPARAM
                               ("com.sun.star.text.TextContentAnchorType")))
                     {
                         text::TextContentAnchorType nValue;
                         aAny >>= nValue;
-
+                        
                         switch (nValue)
                         {
                         case text::TextContentAnchorType_AT_PARAGRAPH:
@@ -283,7 +283,7 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
                             break;
                         }
                     }
-                    else if (sPropType ==
+                    else if (sPropType == 
                              ::rtl::OUString
                              (RTL_CONSTASCII_USTRINGPARAM
                               ("com.sun.star.awt.Point")))
@@ -296,7 +296,7 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
 
                         sResult += buffer;
                     }
-                    else if (sPropType ==
+                    else if (sPropType == 
                              ::rtl::OUString
                              (RTL_CONSTASCII_USTRINGPARAM
                               ("com.sun.star.awt.Rectangle")))
@@ -306,7 +306,7 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
 
                         snprintf(buffer, sizeof(buffer), "(%" SAL_PRIdINT32 ", %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 ")",
                                  aRect.X, aRect.Y, aRect.Width, aRect.Height);
-                        sResult += buffer;
+                        sResult += buffer;                        
                     }
                     else if (sPropType ==
                              ::rtl::OUString
@@ -367,10 +367,10 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
                              (RTL_CONSTASCII_USTRINGPARAM
                               ("com.sun.star.drawing.HomogenMatrix3")))
                     {
-                        drawing::HomogenMatrix3 aMatrix;
+                        drawing::HomogenMatrix3 aMatrix;                        
                         aAny >>= aMatrix;
 
-                        snprintf(buffer, sizeof(buffer),
+                        snprintf(buffer, sizeof(buffer), 
                                  "((%f %f %f)(%f %f %f)(%f %f %f))",
                                  aMatrix.Line1.Column1,
                                  aMatrix.Line1.Column2,
@@ -384,8 +384,8 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
                         sResult += buffer;
                     }
 
-                    sResult += "</property>";
-                }
+                    sResult += "</property>";                    
+                }                                    
             }
             else
             {
@@ -397,29 +397,29 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
         }
         sResult += "</propertyset>";
     }
-
+    
     return sResult;
 }
 
 string toString(uno::Reference< text::XTextRange > textRange)
 {
     string result;
-
-    if (textRange.get())
+    
+    if (textRange.get()) 
     {
         rtl::OUString aOUStr = textRange->getString();
         rtl::OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
-
+        
         result = aOStr.getStr();
     }
     else
     {
         result="(nil)";
     }
-
+    
     return result;
 }
-
+    
 string toString(const string & rString)
 {
     return rString;

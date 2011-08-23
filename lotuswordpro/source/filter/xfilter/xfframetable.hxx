@@ -61,26 +61,26 @@
  * Change History
  * 2005-04-4 create and implements.
  ************************************************************************/
-#ifndef     _XFFRAMETABLE_HXX
-#define     _XFFRAMETABLE_HXX
+#ifndef		_XFFRAMETABLE_HXX
+#define		_XFFRAMETABLE_HXX
 
-#include    "xftable.hxx"
-#include    "xfframe.hxx"
+#include	"xftable.hxx"
+#include	"xfframe.hxx"
 
 class XFFrameTable : public XFTable
 {
 public:
-    void    SetFrameStyle(rtl::OUString style);
+    void	SetFrameStyle(rtl::OUString style);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString   m_strFrameStyle;
+    rtl::OUString	m_strFrameStyle;
 };
 
-inline void XFFrameTable::ToXml(IXFStream *pStrm)
+inline void	XFFrameTable::ToXml(IXFStream *pStrm)
 {
-    XFFrame *pFrame = new XFFrame();
+    XFFrame	*pFrame = new XFFrame();
     pFrame->SetStyleName(m_strFrameStyle);
     pFrame->Add(this);
     pFrame->ToXml(pStrm);

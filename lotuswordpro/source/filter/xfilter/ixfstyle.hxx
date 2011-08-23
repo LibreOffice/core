@@ -62,10 +62,10 @@
  * 2004-12-23 create this file.
  ************************************************************************/
 
-#ifndef     _IXFSTYLE_HXX
-#define     _IXFSTYLE_HXX
+#ifndef		_IXFSTYLE_HXX
+#define		_IXFSTYLE_HXX
 
-#include    "xfglobal.hxx"
+#include	"xfglobal.hxx"
 /**
  * @descr
  * Interface for all style object.
@@ -75,39 +75,39 @@ class IXFStyle : public IXFObject
 public:
     virtual ~IXFStyle(){}
     /**
-     * @descr:  return the style name.
+     * @descr:	return the style name.
      */
-    virtual rtl::OUString   GetStyleName() = 0;
+    virtual rtl::OUString	GetStyleName() = 0;
 
     /**
-     * @descr:  set the name of the style.
+     * @descr:	set the name of the style.
      */
-    virtual void    SetStyleName(const rtl::OUString& styleName) = 0;
+    virtual void	SetStyleName(const rtl::OUString& styleName) = 0;
 
     /**
-     * @descr   return the parent style name.
+     * @descr	return the parent style name.
      */
-    virtual rtl::OUString   GetParentStyleName() = 0;
+    virtual rtl::OUString	GetParentStyleName() = 0;
     /**
-     * @descr:  Parant paragraph style.
+     * @descr:	Parant paragraph style.
      */
-    virtual void    SetParentStyleName(const rtl::OUString& parent) = 0;
+    virtual void	SetParentStyleName(const rtl::OUString& parent) = 0;
     /**
-     * @descr:  return the style family. You can reference to enumXFStyle.
+     * @descr:	return the style family. You can reference to enumXFStyle.
      */
-    virtual enumXFStyle GetStyleFamily() = 0;
+    virtual enumXFStyle	GetStyleFamily() = 0;
 
     /**
-     * @descr:  Set the style family,not quite useful.
+     * @descr:	Set the style family,not quite useful.
      */
-    virtual void    SetStyleFamily(enumXFStyle family) = 0;
+    virtual void	SetStyleFamily(enumXFStyle family) = 0;
 
     /**
-     * @descr:  Compare wheather two style object are the same.Used only by XFStyleManager.
-     * @param:  pStyle the style to be compared.
-     * @return: return sal_True if equals,else sal_False.
+     * @descr:	Compare wheather two style object are the same.Used only by XFStyleManager.
+     * @param:	pStyle the style to be compared.
+     * @return:	return sal_True if equals,else sal_False.
      */
-    virtual sal_Bool    Equal(IXFStyle *pStyle) = 0;
+    virtual sal_Bool	Equal(IXFStyle *pStyle) = 0;
 
 };
 

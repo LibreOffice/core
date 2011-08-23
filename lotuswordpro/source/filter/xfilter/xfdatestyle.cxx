@@ -61,16 +61,16 @@
  * Change History
  * 2005-01-20 create this file.
  ************************************************************************/
-#include    "xfdatestyle.hxx"
+#include	"xfdatestyle.hxx"
 
 XFDatePart::XFDatePart()
 {
     m_bTexture = sal_False;
 }
 
-void    XFDatePart::ToXml(IXFStream *pStrm)
+void	XFDatePart::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     switch(m_ePart)
     {
@@ -176,9 +176,9 @@ enumXFStyle XFDateStyle::GetStyleFamily()
     return enumXFStyleDate;
 }
 
-void    XFDateStyle::ToXml(IXFStream *pStrm)
+void	XFDateStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );

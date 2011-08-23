@@ -61,11 +61,11 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#ifndef     _XFMASTERPAGE_HXX
-#define     _XFMASTERPAGE_HXX
+#ifndef		_XFMASTERPAGE_HXX
+#define		_XFMASTERPAGE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfcontentcontainer.hxx"
+#include	"xfstyle.hxx"
+#include	"xfcontentcontainer.hxx"
 
 class XFPageMaster;
 class XFFooter;
@@ -78,22 +78,22 @@ public:
     virtual ~XFMasterPage();
 
 public:
-    void    SetPageMaster(rtl::OUString pm);
+    void	SetPageMaster(rtl::OUString pm);
 
-    void    SetPageMaster(XFPageMaster *pPM);
+    void	SetPageMaster(XFPageMaster *pPM);
 
-    void    SetHeader(XFHeader *pHeader);
+    void	SetHeader(XFHeader *pHeader);
 
-    void    SetFooter(XFFooter *pFooter);
+    void	SetFooter(XFFooter *pFooter);
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle	GetStyleFamily();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString   m_strPageMaster;
-    XFHeader    *m_pHeader;
-    XFFooter    *m_pFooter;
+    rtl::OUString	m_strPageMaster;
+    XFHeader	*m_pHeader;
+    XFFooter	*m_pFooter;
 };
 
 #endif

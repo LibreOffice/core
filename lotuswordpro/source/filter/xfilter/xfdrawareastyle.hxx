@@ -62,11 +62,11 @@
  * Change History
  * 2004-02-21 create this file.
  ************************************************************************/
-#ifndef     _XFDRAWAREASTYLE_HXX
-#define     _XFDRAWAREASTYLE_HXX
+#ifndef		_XFDRAWAREASTYLE_HXX
+#define		_XFDRAWAREASTYLE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfcolor.hxx"
+#include	"xfstyle.hxx"
+#include	"xfcolor.hxx"
 
 class XFDrawAreaStyle : public XFStyle
 {
@@ -74,33 +74,33 @@ public:
     XFDrawAreaStyle();
 
 public:
-    void    SetAreaStyle(enumXFAreaStyle style);
+    void	SetAreaStyle(enumXFAreaStyle style);
 
-    void    SetLineStyle(enumXFAreaLineStyle style);
+    void	SetLineStyle(enumXFAreaLineStyle style);
 
-    void    SetBackColor(XFColor& color);
+    void	SetBackColor(XFColor& color);
 
-    void    SetLineColor(XFColor& color);
+    void	SetLineColor(XFColor& color);
 
-    void    SetLineAngle(sal_Int32 angle);
+    void	SetLineAngle(sal_Int32 angle);
 
-    void    SetLineSpace(double space);
+    void	SetLineSpace(double space);
 
-    enumXFAreaStyle GetAreaStyle();
+    enumXFAreaStyle	GetAreaStyle();
 
-    XFColor GetBackColor();
+    XFColor	GetBackColor();
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle	GetStyleFamily();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    enumXFAreaStyle     m_eAreaStyle;
-    enumXFAreaLineStyle m_eLineStyle;
-    XFColor     m_aBackColor;
-    XFColor     m_aLineColor;
-    sal_Int32   m_nAngle;
-    double      m_fSpace;
+    enumXFAreaStyle		m_eAreaStyle;
+    enumXFAreaLineStyle	m_eLineStyle;
+    XFColor		m_aBackColor;
+    XFColor		m_aLineColor;
+    sal_Int32	m_nAngle;
+    double		m_fSpace;
 };
 
 inline void XFDrawAreaStyle::SetAreaStyle(enumXFAreaStyle style)
@@ -113,7 +113,7 @@ inline void XFDrawAreaStyle::SetLineStyle(enumXFAreaLineStyle style)
     m_eLineStyle = style;
 }
 
-inline void XFDrawAreaStyle::SetBackColor(XFColor& color)
+inline void	XFDrawAreaStyle::SetBackColor(XFColor& color)
 {
     m_aBackColor = color;
 }
@@ -133,7 +133,7 @@ inline void XFDrawAreaStyle::SetLineSpace(double space)
     m_fSpace = space;
 }
 
-inline enumXFAreaStyle  XFDrawAreaStyle::GetAreaStyle()
+inline enumXFAreaStyle	XFDrawAreaStyle::GetAreaStyle()
 {
     return m_eAreaStyle;
 }

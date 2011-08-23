@@ -1,0 +1,3957 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+ // include ------------------------------------------------------------------
+#include "dialogs.hrc"
+ // pragma -------------------------------------------------------------------
+
+ // Strings fuer die Draw-Dialoge --------------------------------------------
+
+String RID_SVXSTR_GRADIENT
+{
+    Text [ de ] = "Farbverlauf" ;
+    Text [ en-US ] = "Gradient" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Gradação";
+    Text[ ru ] = "Градиент";
+    Text[ el ] = "~Διαβάθ. χρώματος";
+    Text[ nl ] = "Kleurovergangen";
+    Text[ fr ] = "Dégradé";
+    Text[ es ] = "Gradiente";
+    Text[ fi ] = "Liukuvärjäys";
+    Text[ ca ] = "Gradient de color";
+    Text[ it ] = "Sfumatura";
+    Text[ sk ] = "Prechod";
+    Text[ da ] = "Farvegraduering";
+    Text[ sv ] = "Färggradient";
+    Text[ pl ] = "Gradient";
+    Text[ pt-BR ] = "Gradiente";
+    Text[ th ] = "ไล่ระดับสี";
+    Text[ ja ] = "グラデーション";
+    Text[ ko ] = "그라디언트";
+    Text[ zh-CN ] = "彩色图案";
+    Text[ zh-TW ] = "彩色圖案";
+    Text[ tr ] = "Gradyan";
+    Text[ hi-IN ] = "ग्रेडिऐन्ट्";
+    Text[ ar ] = "تدرج اللون";
+    Text[ he ] = "Farbverlauf";
+};
+
+String RID_SVXSTR_BITMAP
+{
+    Text [ de ] = "Bitmap" ;
+    Text [ en-US ] = "Bitmap" ;
+    Text[ pt ] = "Bitmap";
+    Text[ ru ] = "Растр";
+    Text[ el ] = "Bitmap";
+    Text[ nl ] = "Bitmap";
+    Text[ fr ] = "Bitmap";
+    Text[ es ] = "Mapa de bits";
+    Text[ fi ] = "Bittikartta";
+    Text[ ca ] = "Mapa de bits";
+    Text[ it ] = "Bitmap";
+    Text[ sk ] = "Bitová mapa";
+    Text[ da ] = "Bitmap";
+    Text[ sv ] = "Bitmap";
+    Text[ pl ] = "Mapa bitowa";
+    Text[ pt-BR ] = "Bitmap";
+    Text[ th ] = "บิทแม็ป";
+    Text[ ja ] = "ビットマップ";
+    Text[ ko ] = "비트맵";
+    Text[ zh-CN ] = "位图";
+    Text[ zh-TW ] = "點陣圖";
+    Text[ tr ] = "Bitmap";
+    Text[ hi-IN ] = "बिटमॉप्";
+    Text[ ar ] = "صورة نقطية";
+    Text[ he ] = "Bitmap";
+};
+
+String RID_SVXSTR_LINESTYLE
+{
+    Text [ de ] = "Linienstil" ;
+    Text [ en-US ] = "Line Style" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Estilo de linha";
+    Text[ ru ] = "Стиль линии";
+    Text[ el ] = "Στυλ γραμμής";
+    Text[ nl ] = "Lijntype";
+    Text[ fr ] = "Style de ligne";
+    Text[ es ] = "Estilo de línea";
+    Text[ fi ] = "Viivatyyli";
+    Text[ ca ] = "Estil de línia";
+    Text[ it ] = "Stile linea";
+    Text[ sk ] = "Štýl čiary";
+    Text[ da ] = "Stregtype";
+    Text[ sv ] = "Linjestil";
+    Text[ pl ] = "Styl linii";
+    Text[ pt-BR ] = "Estilo da Linha";
+    Text[ th ] = "ลักษณะเส้น";
+    Text[ ja ] = "線スタイル";
+    Text[ ko ] = "선 스타일";
+    Text[ zh-CN ] = "线条式样";
+    Text[ zh-TW ] = "線條式樣";
+    Text[ tr ] = "Çizgi biçimi";
+    Text[ hi-IN ] = "रेखा शैली";
+    Text[ ar ] = "نمط الخط";
+    Text[ he ] = "‮סגנון קו‬";
+};
+
+String RID_SVXSTR_COLOR
+{
+    Text [ de ] = "Farbe" ;
+    Text [ en-US ] = "Color" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Cor";
+    Text[ ru ] = "Цвет";
+    Text[ el ] = "Χρώμα";
+    Text[ nl ] = "Kleur";
+    Text[ fr ] = "Couleur";
+    Text[ es ] = "Color";
+    Text[ fi ] = "Väri";
+    Text[ ca ] = "Color";
+    Text[ it ] = "Colore";
+    Text[ sk ] = "Farba";
+    Text[ da ] = "Farve";
+    Text[ sv ] = "Färg";
+    Text[ pl ] = "Kolor";
+    Text[ pt-BR ] = "Cor";
+    Text[ th ] = "สี";
+    Text[ ja ] = "色";
+    Text[ ko ] = "색상";
+    Text[ zh-CN ] = "颜色";
+    Text[ zh-TW ] = "顏色";
+    Text[ tr ] = "Renk";
+    Text[ hi-IN ] = "रंग";
+    Text[ ar ] = "اللون";
+    Text[ he ] = "‮צבע‬";
+};
+String RID_SVXSTR_HATCH
+{
+    Text [ de ] = "Schraffur" ;
+    Text [ en-US ] = "Hatching" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Tracejado";
+    Text[ ru ] = "Штриховка";
+    Text[ el ] = "Γραμμοσκιά";
+    Text[ nl ] = "Arcering";
+    Text[ fr ] = "Hachure";
+    Text[ es ] = "Trama";
+    Text[ fi ] = "Viivoitus";
+    Text[ ca ] = "Ombreig";
+    Text[ it ] = "Tratteggio";
+    Text[ sk ] = "Šrafovanie";
+    Text[ da ] = "Skravering";
+    Text[ sv ] = "Skraffering";
+    Text[ pl ] = "Kreskowanie";
+    Text[ pt-BR ] = "Hachurado";
+    Text[ th ] = "แรเงา";
+    Text[ ja ] = "ハッチング";
+    Text[ ko ] = "해칭";
+    Text[ zh-CN ] = "阴影线";
+    Text[ zh-TW ] = "陰影線";
+    Text[ tr ] = "Tarama";
+    Text[ hi-IN ] = "हाचिंग";
+    Text[ ar ] = "نقش";
+    Text[ he ] = "Schraffur";
+};
+
+String RID_SVXSTR_LINEEND
+{
+    Text [ de ] = "Linienende" ;
+    Text [ en-US ] = "Arrowheads" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Fim de linha";
+    Text[ ru ] = "Стили стрелок";
+    Text[ el ] = "Τέλος γραμμής";
+    Text[ nl ] = "Lijnuiteinde";
+    Text[ fr ] = "Extrémité de ligne";
+    Text[ es ] = "Fines de línea";
+    Text[ fi ] = "Nuolenkärjet";
+    Text[ ca ] = "Extrems de la fletxa";
+    Text[ it ] = "Estremità linea";
+    Text[ sk ] = "Kótovacie šípky";
+    Text[ da ] = "Pile";
+    Text[ sv ] = "Linjeslut";
+    Text[ pl ] = "Groty strzałek";
+    Text[ pt-BR ] = "Terminações de linha";
+    Text[ th ] = "หัวลูกศร";
+    Text[ ja ] = "線の終点";
+    Text[ ko ] = "화살표 모양";
+    Text[ zh-CN ] = "线条箭头";
+    Text[ zh-TW ] = "線條箭頭";
+    Text[ tr ] = "Çizgi ucu";
+    Text[ hi-IN ] = "तीर की चोटी";
+    Text[ ar ] = "نهاية الخط";
+    Text[ he ] = "Linienende";
+};
+
+String RID_SVXSTR_BLACK
+{
+    Text [ de ] = "Schwarz" ;
+    Text [ en-US ] = "Black" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Preto";
+    Text[ ru ] = "Черный";
+    Text[ el ] = "Μαύρο";
+    Text[ nl ] = "Zwart";
+    Text[ fr ] = "Noir";
+    Text[ es ] = "Negro";
+    Text[ fi ] = "Musta";
+    Text[ ca ] = "Negre";
+    Text[ it ] = "Nero";
+    Text[ sk ] = "Čierna";
+    Text[ da ] = "Sort";
+    Text[ sv ] = "Svart";
+    Text[ pl ] = "Czarny";
+    Text[ pt-BR ] = "Preto";
+    Text[ th ] = "ดำ";
+    Text[ ja ] = "黒";
+    Text[ ko ] = "검은색";
+    Text[ zh-CN ] = "黑色";
+    Text[ zh-TW ] = "黑色";
+    Text[ tr ] = "Siyah";
+    Text[ hi-IN ] = "काला";
+    Text[ ar ] = "أسود";
+    Text[ he ] = "Schwarz";
+};
+String RID_SVXSTR_BLUE
+{
+    Text [ de ] = "Blau" ;
+    Text [ en-US ] = "Blue" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Azul";
+    Text[ ru ] = "Синий";
+    Text[ el ] = "Μπλε";
+    Text[ nl ] = "Blauw";
+    Text[ fr ] = "Bleu";
+    Text[ es ] = "Azul";
+    Text[ fi ] = "Sininen";
+    Text[ ca ] = "Blau";
+    Text[ it ] = "Blu";
+    Text[ sk ] = "Modrá";
+    Text[ da ] = "Blå";
+    Text[ sv ] = "Blått";
+    Text[ pl ] = "Niebieski";
+    Text[ pt-BR ] = "Azul";
+    Text[ th ] = "น้ำเงิน";
+    Text[ ja ] = "é��";
+    Text[ ko ] = "청색";
+    Text[ zh-CN ] = "蓝色";
+    Text[ zh-TW ] = "藍色";
+    Text[ tr ] = "Mavi";
+    Text[ hi-IN ] = "नीला";
+    Text[ ar ] = "أزرق";
+    Text[ he ] = "Blau";
+};
+String RID_SVXSTR_GREEN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Gr�n : Gr�n */
+    /* ### ACHTUNG: Neuer Text in Resource? Gr�n : Gr�n */
+    Text [ de ] = "Grün" ;
+    Text [ en-US ] = "Green" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Verde";
+    Text[ ru ] = "Зеленый";
+    Text[ el ] = "Πράσινο";
+    Text[ nl ] = "Groen";
+    Text[ fr ] = "Vert";
+    Text[ es ] = "Verde";
+    Text[ fi ] = "Vihreä";
+    Text[ ca ] = "Verd";
+    Text[ it ] = "Verde";
+    Text[ sk ] = "Zelená";
+    Text[ da ] = "Grøn";
+    Text[ sv ] = "Grönt";
+    Text[ pl ] = "Zielony";
+    Text[ pt-BR ] = "Verde";
+    Text[ th ] = "เขียว";
+    Text[ ja ] = "緑";
+    Text[ ko ] = "녹색";
+    Text[ zh-CN ] = "绿色";
+    Text[ zh-TW ] = "綠色";
+    Text[ tr ] = "Yeşil";
+    Text[ hi-IN ] = "हरा";
+    Text[ ar ] = "أخضر";
+    Text[ he ] = "Grün";
+};
+String RID_SVXSTR_CYAN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? T�rkis : T�rkis */
+    /* ### ACHTUNG: Neuer Text in Resource? T�rkis : T�rkis */
+    Text [ de ] = "Türkis" ;
+    Text [ en-US ] = "Turquoise" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Turquesa";
+    Text[ ru ] = "Бирюзовый";
+    Text[ el ] = "Τυρκουάζ";
+    Text[ nl ] = "Turkoois";
+    Text[ fr ] = "Turquoise";
+    Text[ es ] = "Turquesa";
+    Text[ fi ] = "Turkoosi";
+    Text[ ca ] = "Turquesa";
+    Text[ it ] = "Ciano";
+    Text[ sk ] = "Tyrkysová";
+    Text[ da ] = "Turkis";
+    Text[ sv ] = "Turkost";
+    Text[ pl ] = "Turkusowy";
+    Text[ pt-BR ] = "Turquesa";
+    Text[ th ] = "ฟ้า";
+    Text[ ja ] = "青緑";
+    Text[ ko ] = "청록색";
+    Text[ zh-CN ] = "蓝绿色";
+    Text[ zh-TW ] = "藍玉色";
+    Text[ tr ] = "Turkuaz";
+    Text[ hi-IN ] = "टर्कोइस";
+    Text[ ar ] = "تركواز";
+    Text[ he ] = "Türkis";
+};
+String RID_SVXSTR_RED
+{
+    Text [ de ] = "Rot" ;
+    Text [ en-US ] = "Red" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Vermelho";
+    Text[ ru ] = "Красный";
+    Text[ el ] = "Κόκκινο";
+    Text[ nl ] = "Rood";
+    Text[ fr ] = "Rouge";
+    Text[ es ] = "Rojo";
+    Text[ fi ] = "Punainen";
+    Text[ ca ] = "Vermell";
+    Text[ it ] = "Rosso";
+    Text[ sk ] = "Červená";
+    Text[ da ] = "Rød";
+    Text[ sv ] = "Rött";
+    Text[ pl ] = "Czerwony";
+    Text[ pt-BR ] = "Vermelho";
+    Text[ th ] = "แดง";
+    Text[ ja ] = "赤";
+    Text[ ko ] = "적색";
+    Text[ zh-CN ] = "红色";
+    Text[ zh-TW ] = "紅色";
+    Text[ tr ] = "Kırmızı";
+    Text[ hi-IN ] = "लाल";
+    Text[ ar ] = "أحمر";
+    Text[ he ] = "Rot";
+};
+String RID_SVXSTR_MAGENTA
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Magenta : Violett */
+    Text [ de ] = "Magenta" ;
+    Text [ en-US ] = "Magenta" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Violeta";
+    Text[ ru ] = "Пурпурный";
+    Text[ el ] = "Ματζέντα";
+    Text[ nl ] = "Violet";
+    Text[ fr ] = "Magenta";
+    Text[ es ] = "Magenta";
+    Text[ fi ] = "Magenta";
+    Text[ ca ] = "Magenta";
+    Text[ it ] = "Magenta";
+    Text[ sk ] = "Purpurová";
+    Text[ da ] = "Magenta";
+    Text[ sv ] = "Magenta";
+    Text[ pl ] = "Purpurowy";
+    Text[ pt-BR ] = "Magenta";
+    Text[ th ] = "ม่วง";
+    Text[ ja ] = "マゼンタ";
+    Text[ ko ] = "선홍색";
+    Text[ zh-CN ] = "紫红色";
+    Text[ zh-TW ] = "紫紅色";
+    Text[ tr ] = "Mor";
+    Text[ hi-IN ] = "मेजन्टा";
+    Text[ ar ] = "أرجواني";
+    Text[ he ] = "Magenta";
+};
+String RID_SVXSTR_BROWN
+{
+    Text [ de ] = "Braun" ;
+    Text [ en-US ] = "Brown" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Castanho";
+    Text[ ru ] = "Коричневый";
+    Text[ el ] = "Καφέ";
+    Text[ nl ] = "Bruin";
+    Text[ fr ] = "Marron";
+    Text[ es ] = "Marrón";
+    Text[ fi ] = "Ruskea";
+    Text[ ca ] = "Marró";
+    Text[ it ] = "Marrone";
+    Text[ sk ] = "Hnedá";
+    Text[ da ] = "Brun";
+    Text[ sv ] = "Brunt";
+    Text[ pl ] = "Brązowy";
+    Text[ pt-BR ] = "Marrom";
+    Text[ th ] = "น้ำตาล";
+    Text[ ja ] = "茶色";
+    Text[ ko ] = "갈색";
+    Text[ zh-CN ] = "棕色";
+    Text[ zh-TW ] = "棕色";
+    Text[ tr ] = "Kahverengi";
+    Text[ hi-IN ] = "भूरा";
+    Text[ ar ] = "بني";
+    Text[ he ] = "Braun";
+};
+String RID_SVXSTR_GREY
+{
+    Text [ de ] = "Grau" ;
+    Text [ en-US ] = "Gray" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Cinzento";
+    Text[ ru ] = "Серый";
+    Text[ el ] = "Γκρι";
+    Text[ nl ] = "Grijs";
+    Text[ fr ] = "Gris";
+    Text[ es ] = "Gris";
+    Text[ fi ] = "Harmaa";
+    Text[ ca ] = "Gris";
+    Text[ it ] = "Grigio";
+    Text[ sk ] = "Šedá";
+    Text[ da ] = "Grå";
+    Text[ sv ] = "Grått";
+    Text[ pl ] = "Szary";
+    Text[ pt-BR ] = "Cinza";
+    Text[ th ] = "เทา";
+    Text[ ja ] = "灰色";
+    Text[ ko ] = "회색";
+    Text[ zh-CN ] = "灰色";
+    Text[ zh-TW ] = "灰色";
+    Text[ tr ] = "Gri";
+    Text[ hi-IN ] = "ग्रे";
+    Text[ ar ] = "رمادي";
+    Text[ he ] = "Grau";
+};
+String RID_SVXSTR_LIGHTGREY
+{
+    Text [ de ] = "Hellgrau" ;
+    Text [ en-US ] = "Light gray" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Cinzento-claro";
+    Text[ ru ] = "Светло-серый";
+    Text[ el ] = "Ανοιχτό γκρι";
+    Text[ nl ] = "Lichtgrijs";
+    Text[ fr ] = "Gris clair";
+    Text[ es ] = "Gris claro";
+    Text[ fi ] = "Kirkas harmaa";
+    Text[ ca ] = "Gris clar";
+    Text[ it ] = "Grigio chiaro";
+    Text[ sk ] = "Svetlo sivá";
+    Text[ da ] = "Lysegrå";
+    Text[ sv ] = "Ljusgrått";
+    Text[ pl ] = "Jasnoszary";
+    Text[ pt-BR ] = "Cinza claro";
+    Text[ th ] = "เทาอ่อน";
+    Text[ ja ] = "明るい灰色";
+    Text[ ko ] = "밝은 회색";
+    Text[ zh-CN ] = "浅灰色";
+    Text[ zh-TW ] = "淺灰色";
+    Text[ tr ] = "Açık gri";
+    Text[ hi-IN ] = "हल्का ग्रे";
+    Text[ ar ] = "رمادي فاتح";
+    Text[ he ] = "Hellgrau";
+};
+String RID_SVXSTR_LIGHTBLUE
+{
+    Text [ de ] = "Hellblau" ;
+    Text [ en-US ] = "Light blue" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Azul-claro";
+    Text[ ru ] = "Светло-синий";
+    Text[ el ] = "Ανοιχτό μπλε";
+    Text[ nl ] = "Lichtblauw";
+    Text[ fr ] = "Bleu clair";
+    Text[ es ] = "Azul claro";
+    Text[ fi ] = "Kirkas sininen";
+    Text[ ca ] = "Blau clar";
+    Text[ it ] = "Blu chiaro";
+    Text[ sk ] = "Svetlo modrá";
+    Text[ da ] = "Lyseblå";
+    Text[ sv ] = "Ljusblått";
+    Text[ pl ] = "Błękitny";
+    Text[ pt-BR ] = "Azul claro";
+    Text[ th ] = "น้ำเงินอ่อน";
+    Text[ ja ] = "明るい青";
+    Text[ ko ] = "밝은 청색";
+    Text[ zh-CN ] = "浅蓝色";
+    Text[ zh-TW ] = "淺藍色";
+    Text[ tr ] = "Açık mavi";
+    Text[ hi-IN ] = "हल्का नीला";
+    Text[ ar ] = "أزرق فاتح";
+    Text[ he ] = "Hellblau";
+};
+String RID_SVXSTR_LIGHTGREEN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Hellgr�n : Hellgr�n */
+    /* ### ACHTUNG: Neuer Text in Resource? Hellgr�n : Hellgr�n */
+    Text [ de ] = "Hellgrün" ;
+    Text [ en-US ] = "Light green" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Verde-claro";
+    Text[ ru ] = "Светло-зеленый";
+    Text[ el ] = "Ανοιχτό πράσινο";
+    Text[ nl ] = "Lichtgroen";
+    Text[ fr ] = "Vert clair";
+    Text[ es ] = "Verde claro";
+    Text[ fi ] = "Kirkas vihreä";
+    Text[ ca ] = "Verd clar";
+    Text[ it ] = "Verde chiaro";
+    Text[ sk ] = "Svetlo zelená";
+    Text[ da ] = "Lysegrøn";
+    Text[ sv ] = "Ljusgrönt";
+    Text[ pl ] = "Jasnozielony";
+    Text[ pt-BR ] = "Verde claro";
+    Text[ th ] = "เขียวอ่อน";
+    Text[ ja ] = "明るい緑";
+    Text[ ko ] = "밝은 녹색";
+    Text[ zh-CN ] = "浅绿色";
+    Text[ zh-TW ] = "淺綠色";
+    Text[ tr ] = "Açık yeşil";
+    Text[ hi-IN ] = "हल्का हरा";
+    Text[ ar ] = "أخضر فاتح";
+    Text[ he ] = "Hellgrün";
+};
+String RID_SVXSTR_LIGHTCYAN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Hellt�rkis : Hellt�rkis */
+    /* ### ACHTUNG: Neuer Text in Resource? Hellt�rkis : Hellt�rkis */
+    Text [ de ] = "Helltürkis" ;
+    Text [ en-US ] = "Light cyan" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Turquesa-claro";
+    Text[ ru ] = "Светло-бирюзовый";
+    Text[ el ] = "Ανοιχτό κυανό";
+    Text[ nl ] = "Licht turkoois";
+    Text[ fr ] = "Turquoise clair";
+    Text[ es ] = "Turquesa claro";
+    Text[ fi ] = "Kirkas syaani";
+    Text[ ca ] = "Cian clar";
+    Text[ it ] = "Ciano chiaro";
+    Text[ sk ] = "Svetlo modrozelená";
+    Text[ da ] = "Lys turkis";
+    Text[ sv ] = "Ljusturkost";
+    Text[ pl ] = "Jasnoseledynowy";
+    Text[ pt-BR ] = "Ciano claro";
+    Text[ th ] = "ฟ้าอ่อน";
+    Text[ ja ] = "明るい青緑";
+    Text[ ko ] = "밝은 청록색";
+    Text[ zh-CN ] = "浅蓝绿色";
+    Text[ zh-TW ] = "淺藍綠色";
+    Text[ tr ] = "Açık turkuaz";
+    Text[ hi-IN ] = "हल्का सियान";
+    Text[ ar ] = "تركواز فاتح";
+    Text[ he ] = "Helltürkis";
+};
+String RID_SVXSTR_LIGHTRED
+{
+    Text [ de ] = "Hellrot" ;
+    Text [ en-US ] = "Light red" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Vermelho-claro";
+    Text[ ru ] = "Светло-красный";
+    Text[ el ] = "Ανοιχτό κόκκινο";
+    Text[ nl ] = "Lichtrood";
+    Text[ fr ] = "Rouge clair";
+    Text[ es ] = "Rojo claro";
+    Text[ fi ] = "Kirkas punainen";
+    Text[ ca ] = "Vermell clar";
+    Text[ it ] = "Rosso chiaro";
+    Text[ sk ] = "Svetlo červená";
+    Text[ da ] = "Lys rød";
+    Text[ sv ] = "Ljusrött";
+    Text[ pl ] = "Jasnoczerwony";
+    Text[ pt-BR ] = "Vermelho claro";
+    Text[ th ] = "แดงอ่อน";
+    Text[ ja ] = "明るい赤";
+    Text[ ko ] = "밝은 적색";
+    Text[ zh-CN ] = "浅红色";
+    Text[ zh-TW ] = "淺紅色";
+    Text[ tr ] = "Açık kırmızı";
+    Text[ hi-IN ] = "हल्का लाल";
+    Text[ ar ] = "أحمر فاتح";
+    Text[ he ] = "Hellrot";
+};
+String RID_SVXSTR_LIGHTMAGENTA
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Hellmagenta : Hellviolett */
+    Text [ de ] = "Hellmagenta" ;
+    Text [ en-US ] = "Light magenta" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Violeta-claro";
+    Text[ ru ] = "Светло-пурпурный";
+    Text[ el ] = "Ανοιχτό ματζέντα";
+    Text[ nl ] = "Lichtviolet";
+    Text[ fr ] = "Magenta clair";
+    Text[ es ] = "Magenta claro";
+    Text[ fi ] = "Kirkas magenta";
+    Text[ ca ] = "Magenta clar";
+    Text[ it ] = "Magenta chiaro";
+    Text[ sk ] = "Svetlo purpurová";
+    Text[ da ] = "Lys magenta";
+    Text[ sv ] = "Ljus magenta";
+    Text[ pl ] = "Jasnopurpurowy";
+    Text[ pt-BR ] = "Magenta claro";
+    Text[ th ] = "ม่วงอ่อน";
+    Text[ ja ] = "明るいマゼンタ";
+    Text[ ko ] = "밝은 선홍색";
+    Text[ zh-CN ] = "浅紫红色";
+    Text[ zh-TW ] = "淺紫紅色";
+    Text[ tr ] = "Eflatun";
+    Text[ hi-IN ] = "हल्का मेजन्टा";
+    Text[ ar ] = "أرجواني فاتح";
+    Text[ he ] = "Hellmagenta";
+};
+String RID_SVXSTR_YELLOW
+{
+    Text [ de ] = "Gelb" ;
+    Text [ en-US ] = "Yellow" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Amarelo";
+    Text[ ru ] = "Желтый";
+    Text[ el ] = "Κίτρινο";
+    Text[ nl ] = "Geel";
+    Text[ fr ] = "Jaune";
+    Text[ es ] = "Amarillo";
+    Text[ fi ] = "Keltainen";
+    Text[ ca ] = "Groc";
+    Text[ it ] = "Giallo";
+    Text[ sk ] = "Žltá";
+    Text[ da ] = "Gul";
+    Text[ sv ] = "Gult";
+    Text[ pl ] = "Żółty";
+    Text[ pt-BR ] = "Amarelo";
+    Text[ th ] = "เหลือง";
+    Text[ ja ] = "黄色";
+    Text[ ko ] = "황색";
+    Text[ zh-CN ] = "黄色";
+    Text[ zh-TW ] = "黃色";
+    Text[ tr ] = "Sarı";
+    Text[ hi-IN ] = "पीला";
+    Text[ ar ] = "أصفر";
+    Text[ he ] = "Gelb";
+};
+String RID_SVXSTR_WHITE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Wei� : Wei� */
+    /* ### ACHTUNG: Neuer Text in Resource? Wei� : Wei� */
+    Text [ de ] = "Weiß" ;
+    Text [ en-US ] = "White" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Branco";
+    Text[ ru ] = "Белый";
+    Text[ el ] = "Λευκό";
+    Text[ nl ] = "Wit";
+    Text[ fr ] = "Blanc";
+    Text[ es ] = "Blanco";
+    Text[ fi ] = "Valkoinen";
+    Text[ ca ] = "Blanc";
+    Text[ it ] = "Bianco";
+    Text[ sk ] = "Biela";
+    Text[ da ] = "Hvid";
+    Text[ sv ] = "Vitt";
+    Text[ pl ] = "Biały";
+    Text[ pt-BR ] = "Branco";
+    Text[ th ] = "ขาว";
+    Text[ ja ] = "白";
+    Text[ ko ] = "흰색";
+    Text[ zh-CN ] = "白色";
+    Text[ zh-TW ] = "白色";
+    Text[ tr ] = "Beyaz";
+    Text[ hi-IN ] = "सफ़ेद";
+    Text[ ar ] = "أبيض";
+    Text[ he ] = "Weiß";
+};
+String RID_SVXSTR_BLUEGREY
+{
+    Text [ de ] = "Blaugrau" ;
+    Text [ en-US ] = "Blue gray" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Azul acizentado";
+    Text[ ru ] = "Сине-серый";
+    Text[ el ] = "Μπλε-γκρι";
+    Text[ nl ] = "Blauwgrijs";
+    Text[ fr ] = "Gris bleu";
+    Text[ es ] = "Gris azulado";
+    Text[ fi ] = "Siniharmaa";
+    Text[ ca ] = "Gris blavós";
+    Text[ it ] = "Grigioblu";
+    Text[ sk ] = "Modrošedá";
+    Text[ da ] = "Blågrå";
+    Text[ sv ] = "Blågrått";
+    Text[ pl ] = "Szaroniebieski";
+    Text[ pt-BR ] = "Cinza azulado";
+    Text[ th ] = "น้ำเงินเทา";
+    Text[ ja ] = "青灰色";
+    Text[ ko ] = "회청색";
+    Text[ zh-CN ] = "蓝灰色";
+    Text[ zh-TW ] = "藍灰色";
+    Text[ tr ] = "Mavi-gri";
+    Text[ hi-IN ] = "नीला ग्रे";
+    Text[ ar ] = "رمادي مزرق";
+    Text[ he ] = "Blaugrau";
+};
+String RID_SVXSTR_ORANGE
+{
+    Text [ de ] = "Orange" ;
+    Text [ en-US ] = "Orange" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Laranja";
+    Text[ ru ] = "Оранжевый";
+    Text[ el ] = "Πορτοκαλί";
+    Text[ nl ] = "Oranje";
+    Text[ fr ] = "Orange";
+    Text[ es ] = "Naranja";
+    Text[ fi ] = "Oranssi";
+    Text[ ca ] = "Taronja";
+    Text[ it ] = "Arancione";
+    Text[ sk ] = "Oranžová";
+    Text[ da ] = "Orange";
+    Text[ sv ] = "Orange";
+    Text[ pl ] = "Pomarańczowy";
+    Text[ pt-BR ] = "Laranja";
+    Text[ th ] = "ส้ม";
+    Text[ ja ] = "橙色";
+    Text[ ko ] = "주황색";
+    Text[ zh-CN ] = "橙色";
+    Text[ zh-TW ] = "桔色";
+    Text[ tr ] = "Turuncu";
+    Text[ hi-IN ] = "नारंगी";
+    Text[ ar ] = "برتقالي";
+    Text[ he ] = "Orange";
+};
+String RID_SVXSTR_ARROW
+{
+    Text [ de ] = "Pfeil" ;
+    Text [ en-US ] = "Arrow" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Seta";
+    Text[ ru ] = "Стрелка";
+    Text[ el ] = "Βέλος";
+    Text[ nl ] = "Pijl";
+    Text[ fr ] = "Flèche";
+    Text[ es ] = "Flecha";
+    Text[ fi ] = "Nuoli";
+    Text[ ca ] = "Fletxa";
+    Text[ it ] = "Freccia";
+    Text[ sk ] = "Šípka";
+    Text[ da ] = "Pil";
+    Text[ sv ] = "Pil";
+    Text[ pl ] = "Strzałka";
+    Text[ pt-BR ] = "Seta";
+    Text[ th ] = "ลูกศร";
+    Text[ ja ] = "矢印";
+    Text[ ko ] = "화살표";
+    Text[ zh-CN ] = "箭头";
+    Text[ zh-TW ] = "箭頭";
+    Text[ tr ] = "Ok";
+    Text[ hi-IN ] = "तीर";
+    Text[ ar ] = "سهم";
+    Text[ he ] = "Pfeil";
+};
+String RID_SVXSTR_SQUARE
+{
+    Text [ de ] = "Quadrat" ;
+    Text [ en-US ] = "Square" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Quadrado";
+    Text[ ru ] = "Квадрат";
+    Text[ el ] = "Τετράγωνο";
+    Text[ nl ] = "Vierkant";
+    Text[ fr ] = "Carré";
+    Text[ es ] = "Cuadrado";
+    Text[ fi ] = "Neliö";
+    Text[ ca ] = "Quadrat";
+    Text[ it ] = "Quadrato";
+    Text[ sk ] = "Štvorec";
+    Text[ da ] = "Kvadrat";
+    Text[ sv ] = "Kvadrat";
+    Text[ pl ] = "Kwadrat";
+    Text[ pt-BR ] = "Quadrado";
+    Text[ th ] = "สี่เหลี่ยมจัตุรัส";
+    Text[ ja ] = "正方形";
+    Text[ ko ] = "정사각형";
+    Text[ zh-CN ] = "正方形";
+    Text[ zh-TW ] = "正方形";
+    Text[ tr ] = "Kare";
+    Text[ hi-IN ] = "सम चतुर्भुज";
+    Text[ ar ] = "مربع";
+    Text[ he ] = "Quadrat";
+};
+String RID_SVXSTR_CIRCLE
+{
+    Text [ de ] = "Kreis" ;
+    Text [ en-US ] = "Circle" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Círculo";
+    Text[ ru ] = "Круг";
+    Text[ el ] = "Κύκλος";
+    Text[ nl ] = "Cirkel";
+    Text[ fr ] = "Cercle";
+    Text[ es ] = "Círculo";
+    Text[ fi ] = "Ympyrä";
+    Text[ ca ] = "Cercle";
+    Text[ it ] = "Cerchio";
+    Text[ sk ] = "Kruh";
+    Text[ da ] = "Cirkel";
+    Text[ sv ] = "Cirkel";
+    Text[ pl ] = "Koło";
+    Text[ pt-BR ] = "Círculo";
+    Text[ th ] = "วงกลม";
+    Text[ ja ] = "円";
+    Text[ ko ] = "원";
+    Text[ zh-CN ] = "圆";
+    Text[ zh-TW ] = "圓形";
+    Text[ tr ] = "Daire";
+    Text[ hi-IN ] = "वृत्त";
+    Text[ ar ] = "دائرة";
+    Text[ he ] = "Kreis";
+};
+
+
+
+
+
+
+
+
+// BM: some additional standard colors
+
+String RID_SVXSTR_VIOLET
+{
+    Text [ de ] = "Lila";
+    Text [ en-US ] = "Violet";
+    Text[ pt ] = "Violeta";
+    Text[ ru ] = "Фиолетовый";
+    Text[ el ] = "Βιολετί";
+    Text[ nl ] = "Lila";
+    Text[ fr ] = "Violet";
+    Text[ es ] = "Violeta";
+    Text[ fi ] = "Violetti";
+    Text[ ca ] = "Violeta";
+    Text[ it ] = "Lilla";
+    Text[ sk ] = "Fialová";
+    Text[ da ] = "Lilla";
+    Text[ sv ] = "Lila";
+    Text[ pl ] = "Fiolet";
+    Text[ pt-BR ] = "Violeta";
+    Text[ th ] = "ม่วง";
+    Text[ ja ] = "紫";
+    Text[ ko ] = "보라색";
+    Text[ zh-CN ] = "紫色";
+    Text[ zh-TW ] = "紫色";
+    Text[ tr ] = "Menekşe";
+    Text[ hi-IN ] = "बैंगनी";
+    Text[ ar ] = "بنفسجي";
+    Text[ he ] = "Lila";
+};
+
+String RID_SVXSTR_BORDEAUX
+{
+    Text [ de ] = "Bordeaux";
+    Text [ en-US ] = "Bordeaux";
+    Text[ pt ] = "Bordeaux";
+    Text[ ru ] = "Бордовый";
+    Text[ el ] = "Μπορντό";
+    Text[ nl ] = "Bordeaux";
+    Text[ fr ] = "Bordeaux";
+    Text[ es ] = "Burdeos";
+    Text[ fi ] = "Bordeaux";
+    Text[ ca ] = "Burdeus";
+    Text[ it ] = "Bordeaux";
+    Text[ sk ] = "Tmavo červená";
+    Text[ da ] = "Bordeauxrød";
+    Text[ sv ] = "Bordeaux";
+    Text[ pl ] = "Bordowy";
+    Text[ pt-BR ] = "Bordô";
+    Text[ th ] = "บอร์โด";
+    Text[ ja ] = "えんじ";
+    Text[ ko ] = "보르도";
+    Text[ zh-CN ] = "深红色";
+    Text[ zh-TW ] = "深紅色";
+    Text[ tr ] = "Bordo";
+    Text[ hi-IN ] = "बोर्डयक्स";
+    Text[ ar ] = "أحمر قانٍ";
+    Text[ he ] = "Bordeaux";
+};
+
+String RID_SVXSTR_PALE_YELLOW
+{
+    Text [ de ] = "Blassgelb";
+    Text [ en-US ] = "Pale yellow";
+    Text[ pt ] = "Amarelo-claro";
+    Text[ ru ] = "Бледно-желтый";
+    Text[ el ] = "Απαλό κίτρινο";
+    Text[ nl ] = "Geel pastel";
+    Text[ fr ] = "Jaune pâle";
+    Text[ es ] = "Amarillo pastel";
+    Text[ fi ] = "Vaaleankeltainen";
+    Text[ ca ] = "Groc pastel";
+    Text[ it ] = "Giallo chiaro";
+    Text[ sk ] = "Svetložltá";
+    Text[ da ] = "Bleggul";
+    Text[ sv ] = "Blekgul";
+    Text[ pl ] = "Bladożółty";
+    Text[ pt-BR ] = "Amarelo-pálido";
+    Text[ th ] = "เหลืองซีด";
+    Text[ ja ] = "淡黄色";
+    Text[ ko ] = "담황색";
+    Text[ zh-CN ] = "浅黄色";
+    Text[ zh-TW ] = "淺黃色";
+    Text[ tr ] = "Solgun sarı";
+    Text[ hi-IN ] = "फीका पीला";
+    Text[ ar ] = "أصفر شاحب";
+    Text[ he ] = "Blassgelb";
+};
+
+String RID_SVXSTR_PALE_GREEN
+{
+    Text [ de ] = "Blassgrün";
+    Text [ en-US ] = "Pale green";
+    Text[ pt ] = "Verde-claro";
+    Text[ ru ] = "Бледно-зеленый";
+    Text[ el ] = "Απαλό πράσινο";
+    Text[ nl ] = "Groen pastel";
+    Text[ fr ] = "Vert pâle";
+    Text[ es ] = "Verde pastel";
+    Text[ fi ] = "Vaaleanvihreä";
+    Text[ ca ] = "Verd pastel";
+    Text[ it ] = "Verde chiaro";
+    Text[ sk ] = "Svetlozelená";
+    Text[ da ] = "Bleggrøn";
+    Text[ sv ] = "Blekgrön";
+    Text[ pl ] = "Bladozielony";
+    Text[ pt-BR ] = "Verde-pálido";
+    Text[ th ] = "เขียวซีด";
+    Text[ ja ] = "淡緑";
+    Text[ ko ] = "담녹색";
+    Text[ zh-CN ] = "淡绿色";
+    Text[ zh-TW ] = "淺綠色";
+    Text[ tr ] = "Solgun yeşil";
+    Text[ hi-IN ] = "फीका हरा";
+    Text[ ar ] = "أخضر شاحب";
+    Text[ he ] = "Blassgrün";
+};
+
+String RID_SVXSTR_DKVIOLET
+{
+    Text [ de ] = "Dunkellila";
+    Text [ en-US ] = "Dark violet";
+    Text[ pt ] = "Violeta escuro";
+    Text[ ru ] = "Темно-фиолетовый";
+    Text[ el ] = "Σκούρο βιολετί";
+    Text[ nl ] = "Donkepaars";
+    Text[ fr ] = "Violet foncé";
+    Text[ es ] = "Violeta oscuro";
+    Text[ fi ] = "Tummanvioletti";
+    Text[ ca ] = "Violeta fosc";
+    Text[ it ] = "Lilla scuro";
+    Text[ sk ] = "Tmavo fialová";
+    Text[ da ] = "Mørkelilla";
+    Text[ sv ] = "Mörklila";
+    Text[ pl ] = "Ciemny fiolet";
+    Text[ pt-BR ] = "Violeta escuro";
+    Text[ th ] = "ม่วงเข้ม";
+    Text[ ja ] = "濃紫";
+    Text[ ko ] = "진보라색";
+    Text[ zh-CN ] = "深紫色";
+    Text[ zh-TW ] = "深紫色";
+    Text[ tr ] = "Koyu lila";
+    Text[ hi-IN ] = "गहरा नीला";
+    Text[ ar ] = "بنفسجي غامق";
+    Text[ he ] = "Dunkellila";
+};
+
+String RID_SVXSTR_SALMON
+{
+    Text [ de ] = "Lachs";
+    Text [ en-US ] = "Salmon";
+    Text[ pt ] = "Salmão";
+    Text[ ru ] = "Алый";
+    Text[ el ] = "Σομόν";
+    Text[ nl ] = "Zalmkleur";
+    Text[ fr ] = "Saumon";
+    Text[ es ] = "Salmón";
+    Text[ fi ] = "Lohisuomu";
+    Text[ ca ] = "Salmó";
+    Text[ it ] = "Salmone";
+    Text[ sk ] = "Lososová";
+    Text[ da ] = "Laksefarvet";
+    Text[ sv ] = "Lax";
+    Text[ pl ] = "Łososiowy";
+    Text[ pt-BR ] = "Salmão";
+    Text[ th ] = "ชมพู";
+    Text[ ja ] = "サーモンピンク";
+    Text[ ko ] = "연어 살색";
+    Text[ zh-CN ] = "橙红色";
+    Text[ zh-TW ] = "橙紅色";
+    Text[ tr ] = "Somon";
+    Text[ hi-IN ] = "नारंगी";
+    Text[ ar ] = "قرنفلي";
+    Text[ he ] = "Lachs";
+};
+
+String RID_SVXSTR_SEABLUE
+{
+    Text [ de ] = "Seeblau";
+    Text [ en-US ] = "Sea blue";
+    Text[ pt ] = "Azul marinho";
+    Text[ ru ] = "Морская волна";
+    Text[ el ] = "Γαλάζιο";
+    Text[ nl ] = "Azuurblauw";
+    Text[ fr ] = "Azur";
+    Text[ es ] = "Azul marino";
+    Text[ fi ] = "Merensininen";
+    Text[ ca ] = "Blau marí";
+    Text[ it ] = "Blu mare";
+    Text[ sk ] = "Námornícka modrá";
+    Text[ da ] = "Azurblå";
+    Text[ sv ] = "Havsblå";
+    Text[ pl ] = "Lazurowy";
+    Text[ pt-BR ] = "Azul marinho";
+    Text[ th ] = "น้ำเงินทะเล";
+    Text[ ja ] = "海の青";
+    Text[ ko ] = "심청색";
+    Text[ zh-CN ] = "湖蓝色";
+    Text[ zh-TW ] = "海水藍";
+    Text[ tr ] = "Deniz mavisi";
+    Text[ hi-IN ] = "समुद्री नीला";
+    Text[ ar ] = "أزرق نيلي";
+    Text[ he ] = "Seeblau";
+};
+
+String RID_SVXSTR_COLOR_SUN
+{
+    // attention: this is the color string for the Sun Microsystems specific colors !!!
+    Text [ de ] = "Sun";
+    Text [ en-US ] = "Sun" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Sun";
+    Text[ ru ] = "Sun";
+    Text[ el ] = "Sun";
+    Text[ nl ] = "Sun";
+    Text[ fr ] = "Sun";
+    Text[ es ] = "Sun";
+    Text[ fi ] = "Aurinko";
+    Text[ ca ] = "Sun";
+    Text[ it ] = "Sun";
+    Text[ sk ] = "Sun modrá";
+    Text[ da ] = "Sun";
+    Text[ sv ] = "Sun";
+    Text[ pl ] = "Sun";
+    Text[ pt-BR ] = "Sun";
+    Text[ th ] = "ซัน";
+    Text[ ja ] = "Sun";
+    Text[ ko ] = "Sun";
+    Text[ zh-CN ] = "Sun";
+    Text[ zh-TW ] = "Sun";
+    Text[ tr ] = "Sun";
+    Text[ hi-IN ] = "Sun";
+    Text[ ar ] = "Sun";
+    Text[ he ] = "Sun";
+};
+
+String RID_SVXSTR_TBLAFMT_3D
+{
+    Text [ de ] = "3D";
+    Text [ en-US ] = "3D";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "3D";
+    Text[ ru ] = "Трехмерный";
+    Text[ el ] = "3Δ";
+    Text[ nl ] = "3D";
+    Text[ fr ] = "3D";
+    Text[ es ] = "3D";
+    Text[ fi ] = "Kolmiulotteinen";
+    Text[ ca ] = "3D";
+    Text[ it ] = "3D";
+    Text[ sk ] = "3D";
+    Text[ da ] = "3D";
+    Text[ sv ] = "3D";
+    Text[ pl ] = "3D";
+    Text[ pt-BR ] = "3D";
+    Text[ th ] = "3มิติ";
+    Text[ ja ] = "3D";
+    Text[ ko ] = "3Ｄ";
+    Text[ zh-CN ] = "3 维";
+    Text[ zh-TW ] = "3D";
+    Text[ tr ] = "3B";
+    Text[ hi-IN ] = "3D";
+    Text[ ar ] = "ثلاثي الأبعاد";
+    Text[ he ] = "3D";
+};
+String RID_SVXSTR_TBLAFMT_BLACK1
+{
+    Text [ de ] = "Schwarz 1";
+    Text [ en-US ] = "Black 1";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Preto 1";
+    Text[ ru ] = "Черный 1";
+    Text[ el ] = "Μαύρο 1";
+    Text[ nl ] = "Zwart 1";
+    Text[ fr ] = "Noir 1";
+    Text[ es ] = "Negro 1";
+    Text[ fi ] = "Musta 1";
+    Text[ ca ] = "Negre 1";
+    Text[ it ] = "Nero 1";
+    Text[ sk ] = "Čierna 1";
+    Text[ da ] = "Sort 1";
+    Text[ sv ] = "Svart 1";
+    Text[ pl ] = "Czarny 1";
+    Text[ pt-BR ] = "Preto 1";
+    Text[ th ] = "ดำ 1";
+    Text[ ja ] = "黒 1";
+    Text[ ko ] = "검은색 1";
+    Text[ zh-CN ] = "黑色 1";
+    Text[ zh-TW ] = "黑色 1";
+    Text[ tr ] = "Siyah 1";
+    Text[ hi-IN ] = "काला 1";
+    Text[ ar ] = "أسود 1";
+    Text[ he ] = "Schwarz 1";
+};
+String RID_SVXSTR_TBLAFMT_BLACK2
+{
+    Text [ de ] = "Schwarz 2";
+    Text [ en-US ] = "Black 2";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Preto 2";
+    Text[ ru ] = "Черный 2";
+    Text[ el ] = "Μαύρο 2";
+    Text[ nl ] = "Zwart 2";
+    Text[ fr ] = "Noir 2";
+    Text[ es ] = "Negro 2";
+    Text[ fi ] = "Musta 2";
+    Text[ ca ] = "Negre 2";
+    Text[ it ] = "Nero 2";
+    Text[ sk ] = "Čierna 2";
+    Text[ da ] = "Sort 2";
+    Text[ sv ] = "Svart 2";
+    Text[ pl ] = "Czarny 2";
+    Text[ pt-BR ] = "Preto 2";
+    Text[ th ] = "ดำ 2";
+    Text[ ja ] = "黒 2";
+    Text[ ko ] = "검은색 2";
+    Text[ zh-CN ] = "黑色 2";
+    Text[ zh-TW ] = "黑色 2";
+    Text[ tr ] = "Siyah 2";
+    Text[ hi-IN ] = "काला 2";
+    Text[ ar ] = "أسود 2";
+    Text[ he ] = "Schwarz 2";
+};
+String RID_SVXSTR_TBLAFMT_BLUE
+{
+    Text [ de ] = "Blau";
+    Text [ en-US ] = "Blue";
+    Text[ pt ] = "Azul";
+    Text[ ru ] = "Синий";
+    Text[ el ] = "Μπλε";
+    Text[ nl ] = "Blauw";
+    Text[ fr ] = "Bleu";
+    Text[ es ] = "Azul";
+    Text[ fi ] = "Sininen";
+    Text[ ca ] = "Blau";
+    Text[ it ] = "Blu";
+    Text[ sk ] = "Modrá";
+    Text[ da ] = "Blå";
+    Text[ sv ] = "Blått";
+    Text[ pl ] = "Niebieski";
+    Text[ pt-BR ] = "Azul";
+    Text[ th ] = "น้ำเงิน";
+    Text[ ja ] = "青";
+    Text[ ko ] = "청색";
+    Text[ zh-CN ] = "蓝色";
+    Text[ zh-TW ] = "藍色";
+    Text[ tr ] = "Mavi";
+    Text[ hi-IN ] = "नीला";
+    Text[ ar ] = "أزرق";
+    Text[ he ] = "Blau";
+};
+String RID_SVXSTR_TBLAFMT_BROWN
+{
+    Text [ de ] = "Braun";
+    Text [ en-US ] = "Brown";
+    Text[ pt ] = "Castanho";
+    Text[ ru ] = "Коричневый";
+    Text[ el ] = "Καφέ";
+    Text[ nl ] = "Bruin";
+    Text[ fr ] = "Marron";
+    Text[ es ] = "Marrón";
+    Text[ fi ] = "Ruskea";
+    Text[ ca ] = "Marró";
+    Text[ it ] = "Marrone";
+    Text[ sk ] = "Hnedá";
+    Text[ da ] = "Brun";
+    Text[ sv ] = "Brunt";
+    Text[ pl ] = "Brązowy";
+    Text[ pt-BR ] = "Marrom";
+    Text[ th ] = "น้ำตาล";
+    Text[ ja ] = "茶色";
+    Text[ ko ] = "갈색";
+    Text[ zh-CN ] = "棕色";
+    Text[ zh-TW ] = "棕色";
+    Text[ tr ] = "Kahverengi";
+    Text[ hi-IN ] = "भूरा";
+    Text[ ar ] = "بني";
+    Text[ he ] = "Braun";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY
+{
+    Text [ de ] = "Währung";
+    Text [ en-US ] = "Currency";
+    Text[ pt ] = "Moeda";
+    Text[ ru ] = "Валюта";
+    Text[ el ] = "Νόμισμα";
+    Text[ nl ] = "Valuta";
+    Text[ fr ] = "Monnaie";
+    Text[ es ] = "Moneda";
+    Text[ fi ] = "Valuutta";
+    Text[ ca ] = "Moneda";
+    Text[ it ] = "Valuta";
+    Text[ sk ] = "Mena";
+    Text[ da ] = "Valuta";
+    Text[ sv ] = "Valuta";
+    Text[ pl ] = "Waluta";
+    Text[ pt-BR ] = "Moeda";
+    Text[ th ] = "สกุลเงิน";
+    Text[ ja ] = "通貨";
+    Text[ ko ] = "통화";
+    Text[ zh-CN ] = "货币";
+    Text[ zh-TW ] = "貨幣";
+    Text[ tr ] = "Para birimi";
+    Text[ hi-IN ] = "मुद्रा";
+    Text[ ar ] = "العملة";
+    Text[ he ] = "Währung";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY_3D
+{
+    Text [ de ] = "Währung 3D";
+    Text [ en-US ] = "Currency 3D";
+    Text[ pt ] = "Moeda 3D";
+    Text[ ru ] = "Трехмерная валюта";
+    Text[ el ] = "Νόμισμα 3Δ";
+    Text[ nl ] = "Valuta 3D";
+    Text[ fr ] = "Monnaie 3D";
+    Text[ es ] = "Moneda 3D";
+    Text[ fi ] = "Valuutta kolmiulotteisena";
+    Text[ ca ] = "Moneda 3D";
+    Text[ it ] = "Valuta 3D";
+    Text[ sk ] = "Mena 3D";
+    Text[ da ] = "Valuta 3D";
+    Text[ sv ] = "Valuta 3D";
+    Text[ pl ] = "Waluta 3D";
+    Text[ pt-BR ] = "Moeda 3D";
+    Text[ th ] = "สกุลเงิน 3มิติ";
+    Text[ ja ] = "通貨 3D";
+    Text[ ko ] = "통화 3Ｄ";
+    Text[ zh-CN ] = "货币 3 维";
+    Text[ zh-TW ] = "貨幣 3D";
+    Text[ tr ] = "Para birimi 3B";
+    Text[ hi-IN ] = "मुद्रा 3D";
+    Text[ ar ] = "عملة ثلاثية الأبعاد";
+    Text[ he ] = "Währung 3D";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY_GRAY
+{
+    Text [ de ] = "Währung Grau";
+    Text [ en-US ] = "Currency Gray";
+    Text[ pt ] = "Moeda em cinzento";
+    Text[ ru ] = "Валюта серая";
+    Text[ el ] = "Νόμισμα Γκρι";
+    Text[ nl ] = "Valuta grijs";
+    Text[ fr ] = "Monnaie grise";
+    Text[ es ] = "Moneda gris";
+    Text[ fi ] = "Valuutta harmaana";
+    Text[ ca ] = "Gris moneda";
+    Text[ it ] = "Valuta grigio";
+    Text[ sk ] = "Šedá mena";
+    Text[ da ] = "Valuta grå";
+    Text[ sv ] = "Valuta grått";
+    Text[ pl ] = "Waluta Szara";
+    Text[ pt-BR ] = "Moeda cor cinza";
+    Text[ th ] = "สกุลเงินสีเทา";
+    Text[ ja ] = "通貨 灰色";
+    Text[ ko ] = "통화 회색";
+    Text[ zh-CN ] = "货币 灰色";
+    Text[ zh-TW ] = "貨幣 灰色";
+    Text[ tr ] = "Para birimi gri";
+    Text[ hi-IN ] = "मुद्रा ग्रे";
+    Text[ ar ] = "عملة رمادية";
+    Text[ he ] = "Währung Grau";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER
+{
+    Text [ de ] = "Währung Flieder";
+    Text [ en-US ] = "Currency Lavender";
+    Text[ pt ] = "Moeda em lilás";
+    Text[ ru ] = "Валюта фиолетовая";
+    Text[ el ] = "Νόμισμα λεβάντα";
+    Text[ nl ] = "Valuta lavendel";
+    Text[ fr ] = "Monnaie lavande";
+    Text[ es ] = "Moneda lavanda";
+    Text[ fi ] = "Valuutta laventelinvihreänä";
+    Text[ ca ] = "Lavanda Moneda";
+    Text[ it ] = "Valuta lavanda";
+    Text[ sk ] = "Levanduľová mena";
+    Text[ da ] = "Valuta lysviolet";
+    Text[ sv ] = "Valuta syrenlila";
+    Text[ pl ] = "Waluta Fioletowa";
+    Text[ pt-BR ] = "Moeda cor lilás";
+    Text[ th ] = "สกุลเงินสีม่วงอ่อน";
+    Text[ ja ] = "通貨 ラベンダー";
+    Text[ ko ] = "통화 담자색";
+    Text[ zh-CN ] = "货币 淡紫色";
+    Text[ zh-TW ] = "貨幣 淡紫色";
+    Text[ tr ] = "Para birimi eflatun";
+    Text[ hi-IN ] = "मुद्रा हल्का पीला";
+    Text[ ar ] = "عملة أرجوانية فاتح";
+    Text[ he ] = "Währung Flieder";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
+{
+    Text [ de ] = "Währung Türkis";
+    Text [ en-US ] = "Currency Turquoise";
+    Text[ pt ] = "Moeda em turquesa";
+    Text[ ru ] = "Валюта бирюзовая";
+    Text[ el ] = "Νόμισμα τυρκουάζ";
+    Text[ nl ] = "Valuta turkoois";
+    Text[ fr ] = "Monnaie turquoise";
+    Text[ es ] = "Moneda turquesa";
+    Text[ fi ] = "Valuutta turkoosina";
+    Text[ ca ] = "Turquesa moneda";
+    Text[ it ] = "Valuta turchese";
+    Text[ sk ] = "Tyrkysová mena";
+    Text[ da ] = "Valuta turkis";
+    Text[ sv ] = "Valuta turkost";
+    Text[ pl ] = "Waluta Turkusowa";
+    Text[ pt-BR ] = "Moeda cor turquesa";
+    Text[ th ] = "สกุลเงินสีน้ำเงินทะเล";
+    Text[ ja ] = "通貨 青緑";
+    Text[ ko ] = "통화 청옥색";
+    Text[ zh-CN ] = "货币 蓝玉色";
+    Text[ zh-TW ] = "貨幣 藍玉色";
+    Text[ tr ] = "Para birimi turkuaz";
+    Text[ hi-IN ] = "मुद्रा टर्कोइस";
+    Text[ ar ] = "عملة تركواز";
+    Text[ he ] = "Währung Türkis";
+};
+String RID_SVXSTR_TBLAFMT_GRAY
+{
+    Text [ de ] = "Grau";
+    Text [ en-US ] = "Gray";
+    Text[ pt ] = "Cinzento";
+    Text[ ru ] = "Серый";
+    Text[ el ] = "Γκρι";
+    Text[ nl ] = "Grijs";
+    Text[ fr ] = "Gris";
+    Text[ es ] = "Gris";
+    Text[ fi ] = "Harmaa";
+    Text[ ca ] = "Gris";
+    Text[ it ] = "Grigio";
+    Text[ sk ] = "Šedá";
+    Text[ da ] = "Grå";
+    Text[ sv ] = "Grått";
+    Text[ pl ] = "Szary";
+    Text[ pt-BR ] = "Cinza";
+    Text[ th ] = "เทา";
+    Text[ ja ] = "灰色";
+    Text[ ko ] = "회색";
+    Text[ zh-CN ] = "灰色";
+    Text[ zh-TW ] = "灰色";
+    Text[ tr ] = "Gri";
+    Text[ hi-IN ] = "ग्रे";
+    Text[ ar ] = "رمادي";
+    Text[ he ] = "Grau";
+};
+String RID_SVXSTR_TBLAFMT_GREEN
+{
+    Text [ de ] = "Grün";
+    Text [ en-US ] = "Green";
+    Text[ pt ] = "Verde";
+    Text[ ru ] = "Зеленый";
+    Text[ el ] = "Πράσινο";
+    Text[ nl ] = "Groen";
+    Text[ fr ] = "Vert";
+    Text[ es ] = "Verde";
+    Text[ fi ] = "Vihreä";
+    Text[ ca ] = "Verd";
+    Text[ it ] = "Verde";
+    Text[ sk ] = "Zelená";
+    Text[ da ] = "Grøn";
+    Text[ sv ] = "Grönt";
+    Text[ pl ] = "Zielony";
+    Text[ pt-BR ] = "Verde";
+    Text[ th ] = "เขียว";
+    Text[ ja ] = "緑";
+    Text[ ko ] = "녹색";
+    Text[ zh-CN ] = "绿色";
+    Text[ zh-TW ] = "綠色";
+    Text[ tr ] = "Yeşil";
+    Text[ hi-IN ] = "हरा";
+    Text[ ar ] = "أخضر";
+    Text[ he ] = "Grün";
+};
+String RID_SVXSTR_TBLAFMT_LAVENDER
+{
+    Text [ de ] = "Flieder";
+    Text [ en-US ] = "Lavender";
+    Text[ pt ] = "Lilás";
+    Text[ ru ] = "Фиолетовый";
+    Text[ el ] = "Λεβάντα";
+    Text[ nl ] = "Bordeaux";
+    Text[ fr ] = "Lavande";
+    Text[ es ] = "Lavanda";
+    Text[ fi ] = "Laventelinvihreä";
+    Text[ ca ] = "Lavanda";
+    Text[ it ] = "Lavanda";
+    Text[ sk ] = "Levanduľová";
+    Text[ da ] = "Lysviolet";
+    Text[ sv ] = "Syrenlila";
+    Text[ pl ] = "Fioletowy";
+    Text[ pt-BR ] = "Lilás";
+    Text[ th ] = "ม่วงอ่อน";
+    Text[ ja ] = "ラベンダー";
+    Text[ ko ] = "담자색";
+    Text[ zh-CN ] = "淡紫色";
+    Text[ zh-TW ] = "淡紫色";
+    Text[ tr ] = "Eflatun";
+    Text[ hi-IN ] = "हल्का पीला";
+    Text[ ar ] = "أرجواني فاتح";
+    Text[ he ] = "Flieder";
+};
+String RID_SVXSTR_TBLAFMT_RED
+{
+    Text [ de ] = "Rot";
+    Text [ en-US ] = "Red";
+    Text[ pt ] = "Vermelho";
+    Text[ ru ] = "Красный";
+    Text[ el ] = "Κόκκινο";
+    Text[ nl ] = "Rood";
+    Text[ fr ] = "Rouge";
+    Text[ es ] = "Rojo";
+    Text[ fi ] = "Punainen";
+    Text[ ca ] = "Vermell";
+    Text[ it ] = "Rosso";
+    Text[ sk ] = "Červená";
+    Text[ da ] = "Rød";
+    Text[ sv ] = "Rött";
+    Text[ pl ] = "Czerwony";
+    Text[ pt-BR ] = "Vermelho";
+    Text[ th ] = "แดง";
+    Text[ ja ] = "赤";
+    Text[ ko ] = "적색";
+    Text[ zh-CN ] = "红色";
+    Text[ zh-TW ] = "紅色";
+    Text[ tr ] = "Kırmızı";
+    Text[ hi-IN ] = "लाल";
+    Text[ ar ] = "أحمر";
+    Text[ he ] = "Rot";
+};
+String RID_SVXSTR_TBLAFMT_TURQUOISE
+{
+    Text [ de ] = "Türkis";
+    Text [ en-US ] = "Turquoise";
+    Text[ pt ] = "Turquesa";
+    Text[ ru ] = "Бирюзовый";
+    Text[ el ] = "Τυρκουάζ";
+    Text[ nl ] = "Turkoois";
+    Text[ fr ] = "Turquoise";
+    Text[ es ] = "Turquesa";
+    Text[ fi ] = "Turkoosi";
+    Text[ ca ] = "Turquesa";
+    Text[ it ] = "Turchese";
+    Text[ sk ] = "Tyrkysová";
+    Text[ da ] = "Turkis";
+    Text[ sv ] = "Turkost";
+    Text[ pl ] = "Turkusowy";
+    Text[ pt-BR ] = "Turquesa";
+    Text[ th ] = "น้ำเงินทะเล";
+    Text[ ja ] = "青緑";
+    Text[ ko ] = "청록색";
+    Text[ zh-CN ] = "蓝玉色";
+    Text[ zh-TW ] = "藍玉色";
+    Text[ tr ] = "Turkuaz";
+    Text[ hi-IN ] = "टर्कोइस";
+    Text[ ar ] = "تركواز";
+    Text[ he ] = "Türkis";
+};
+String RID_SVXSTR_TBLAFMT_YELLOW
+{
+    Text [ de ] = "Gelb";
+    Text [ en-US ] = "Yellow";
+    Text[ pt ] = "Amarelo";
+    Text[ ru ] = "Желтый";
+    Text[ el ] = "Κίτρινο";
+    Text[ nl ] = "Geel";
+    Text[ fr ] = "Jaune";
+    Text[ es ] = "Amarillo";
+    Text[ fi ] = "Keltainen";
+    Text[ ca ] = "Groc";
+    Text[ it ] = "Giallo";
+    Text[ sk ] = "Žltá";
+    Text[ da ] = "Gul";
+    Text[ sv ] = "Gult";
+    Text[ pl ] = "Żółty";
+    Text[ pt-BR ] = "Amarelo";
+    Text[ th ] = "เหลือง";
+    Text[ ja ] = "黄色";
+    Text[ ko ] = "황색";
+    Text[ zh-CN ] = "黄色";
+    Text[ zh-TW ] = "黃色";
+    Text[ tr ] = "Sarı";
+    Text[ hi-IN ] = "पीला";
+    Text[ ar ] = "أصفر";
+    Text[ he ] = "Gelb";
+};
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standardcolor-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_BLACK_DEF
+{
+    Text = "Black" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BLUE_DEF
+{
+    Text = "Blue" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GREEN_DEF
+{
+    Text = "Green" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_CYAN_DEF
+{
+    Text = "Turquoise" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_RED_DEF
+{
+    Text = "Red" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_MAGENTA_DEF
+{
+    Text = "Magenta" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BROWN_DEF
+{
+    Text = "Brown" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GREY_DEF
+{
+    Text = "Gray" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTGREY_DEF
+{
+    Text = "Light gray" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTBLUE_DEF
+{
+    Text = "Light blue" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTGREEN_DEF
+{
+    Text = "Light green" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTCYAN_DEF
+{
+    Text = "Light cyan" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTRED_DEF
+{
+    Text = "Light red" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTMAGENTA_DEF
+{
+    Text = "Light magenta" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_YELLOW_DEF
+{
+    Text = "Yellow" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_WHITE_DEF
+{
+    Text = "White" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BLUEGREY_DEF
+{
+    Text = "Blue gray" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_ORANGE_DEF
+{
+    Text = "Orange" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_VIOLET_DEF
+{
+    Text = "Violet";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BORDEAUX_DEF
+{
+    Text = "Bordeaux";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_PALE_YELLOW_DEF
+{
+    Text = "Pale yellow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_PALE_GREEN_DEF
+{
+    Text = "Pale green";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DKVIOLET_DEF
+{
+    Text = "Dark violet";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_SALMON_DEF
+{
+    Text = "Salmon";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_SEABLUE_DEF
+{
+    Text = "Sea blue";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_COLOR_SUN_DEF
+{
+    // attention: this is the color string for the Sun Microsystems specific colors !!!
+    Text = "Sun";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-gradient-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT0_DEF
+{
+    Text = "Gradient";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT1_DEF
+{
+    Text = "Linear blue/white";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT2_DEF
+{
+    Text = "Linear magenta/green";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT3_DEF
+{
+    Text = "Linear yellow/brown";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT4_DEF
+{
+    Text = "Radial green/black";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT5_DEF
+{
+    Text = "Radial red/yellow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT6_DEF
+{
+    Text = "Rectangular red/white";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT7_DEF
+{
+    Text = "Square yellow/white";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT8_DEF
+{
+    Text = "Ellipsoid blue grey/light blue";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT9_DEF
+{
+    Text = "Axial light red/white";
+};
+
+String RID_SVXSTR_GRDT0
+{
+    Text [ de ] = "Farbverlauf";
+    Text [ en-US ] = "Gradient";
+    Text[ pt ] = "Gradação";
+    Text[ ru ] = "Градиент";
+    Text[ el ] = "~Διαβάθ. χρώματος";
+    Text[ nl ] = "Kleurovergangen";
+    Text[ fr ] = "Dégradé";
+    Text[ es ] = "Gradiente";
+    Text[ fi ] = "Liukuvärjäys";
+    Text[ ca ] = "Gradient";
+    Text[ it ] = "Sfumatura";
+    Text[ sk ] = "Prechod";
+    Text[ da ] = "Farvegraduering";
+    Text[ sv ] = "Färggradient";
+    Text[ pl ] = "Gradient";
+    Text[ pt-BR ] = "Gradiente";
+    Text[ th ] = "ไล่ระดับสี";
+    Text[ ja ] = "グラデーション";
+    Text[ ko ] = "그라디언트";
+    Text[ zh-CN ] = "彩色图案";
+    Text[ zh-TW ] = "彩色圖案";
+    Text[ tr ] = "Gradyan";
+    Text[ hi-IN ] = "ग्रेडिऐन्ट्";
+    Text[ ar ] = "تدرج اللون";
+    Text[ he ] = "Farbverlauf";
+};
+String RID_SVXSTR_GRDT1
+{
+    Text [ de ] = "Linear Blau/weiß";
+    Text [ en-US ] = "Linear blue/white";
+    Text[ pt ] = "Linear azul/branco";
+    Text[ ru ] = "Линейный: синий/белый";
+    Text[ el ] = "Γραμμικά μπλέ/λευκό";
+    Text[ nl ] = "Lineair blauw/wit";
+    Text[ fr ] = "Linéaire bleu/blanc";
+    Text[ es ] = "Lineal azul/blanco";
+    Text[ fi ] = "Lineaarinen sininen/valkoinen";
+    Text[ ca ] = "Blau/blanc lineal";
+    Text[ it ] = "Lineare blu/bianco";
+    Text[ sk ] = "Lineárna modrá/biela";
+    Text[ da ] = "Lineær blå/hvid";
+    Text[ sv ] = "Linjär blått/vitt";
+    Text[ pl ] = "Liniowy błękit-biel";
+    Text[ pt-BR ] = "Linear azul / branco";
+    Text[ th ] = "เส้นสีน้ำเงิน/ขาว";
+    Text[ ja ] = "線状 青/白";
+    Text[ ko ] = "선형 청색/흰색";
+    Text[ zh-CN ] = "线性 蓝/白";
+    Text[ zh-TW ] = "線條藍/白";
+    Text[ tr ] = "Doğrusal mavi/beyaz";
+    Text[ hi-IN ] = "संकुचित नीला/सफेद";
+    Text[ ar ] = "خطي أزرق/أبيض";
+    Text[ he ] = "Linear Blau/weiß";
+};
+String RID_SVXSTR_GRDT2
+{
+    Text [ de ] = "Linear violett/grün";
+    Text [ en-US ] = "Linear magenta/green";
+    Text[ pt ] = "Linear violeta/verde";
+    Text[ ru ] = "Линейный: пурпурный/зеленый";
+    Text[ el ] = "Γραμμικά ματζέν./πράσινο";
+    Text[ nl ] = "Lineair violet/groen";
+    Text[ fr ] = "Linéaire violet/vert";
+    Text[ es ] = "Lineal magenta/verde";
+    Text[ fi ] = "Lineaarinen magenta/vihreä";
+    Text[ ca ] = "Magenta/verd lineal";
+    Text[ it ] = "Lineare magenta/verde";
+    Text[ sk ] = "Lineárna purpurová/zelená";
+    Text[ da ] = "Lineær violet/grøn";
+    Text[ sv ] = "Linjär violett/grönt";
+    Text[ pl ] = "Liniowy purpura-zieleń";
+    Text[ pt-BR ] = "Linear magenta / verde";
+    Text[ th ] = "เส้นสีม่วง/เขียว";
+    Text[ ja ] = "線状 紫/緑";
+    Text[ ko ] = "선형 보라색/녹색";
+    Text[ zh-CN ] = "线性 紫/绿";
+    Text[ zh-TW ] = "線條紅紫色/綠色";
+    Text[ tr ] = "Doğrusal menekşe/yeşil";
+    Text[ hi-IN ] = "संकुचित मेजन्टा/हरा";
+    Text[ ar ] = "خطي أرجواني/أخضر";
+    Text[ he ] = "Linear violett/grün";
+};
+String RID_SVXSTR_GRDT3
+{
+    Text [ de ] = "Linear gelb/braun";
+    Text [ en-US ] = "Linear yellow/brown";
+    Text[ pt ] = "Linear amarelo/castanho";
+    Text[ ru ] = "Линейный: желтый/коричневый";
+    Text[ el ] = "Γραμμικά κίτρινο/καφέ";
+    Text[ nl ] = "Lineair geel/bruin";
+    Text[ fr ] = "Linéaire jaune/marron";
+    Text[ es ] = "Lineal amarillo/marrón";
+    Text[ fi ] = "Lineaarinen keltainen/ruskea";
+    Text[ ca ] = "Marró/groc lineal";
+    Text[ it ] = "Lineare giallo/marrone";
+    Text[ sk ] = "Lineárna žltá/hnedá";
+    Text[ da ] = "Lineær gul/brun";
+    Text[ sv ] = "Linjär gult/brunt";
+    Text[ pl ] = "Liniowy żółć-brąz";
+    Text[ pt-BR ] = "Linear amarelo / marrom";
+    Text[ th ] = "เส้นสีเหลือง/น้ำตาล";
+    Text[ ja ] = "線状 黄色/茶色";
+    Text[ ko ] = "선형 황색/갈색";
+    Text[ zh-CN ] = "线性 黄/棕色";
+    Text[ zh-TW ] = "線條黃色/棕色";
+    Text[ tr ] = "Doğrusal sarı/kahverengi";
+    Text[ hi-IN ] = "संकुचित पीला/भूरा";
+    Text[ ar ] = "خطي أصفر/بني";
+    Text[ he ] = "Linear gelb/braun";
+};
+String RID_SVXSTR_GRDT4
+{
+    Text [ de ] = "Radial grün/schwarz";
+    Text [ en-US ] = "Radial green/black";
+    Text[ pt ] = "Radial verde/preto";
+    Text[ ru ] = "Радиальный: зеленый/черный";
+    Text[ el ] = "Ακτινικά πράσινο/μαύρο";
+    Text[ nl ] = "Radiaal groen/zwart";
+    Text[ fr ] = "Radial vert/noir";
+    Text[ es ] = "Radial verde/negro";
+    Text[ fi ] = "Säteittäinen vihreä/musta";
+    Text[ ca ] = "Radial verd/negre";
+    Text[ it ] = "Radiale verde/nero";
+    Text[ sk ] = "Radiálna zelená/čierna";
+    Text[ da ] = "Radial grøn/sort";
+    Text[ sv ] = "Radiellt grönt/svart";
+    Text[ pl ] = "Radialny zieleń-czerń";
+    Text[ pt-BR ] = "Radial verde / preto";
+    Text[ th ] = "รัศมีสีเขียว/ดำ";
+    Text[ ja ] = "放射状 緑/黒";
+    Text[ ko ] = "방사형 녹색/검은색";
+    Text[ zh-CN ] = "径向 绿/黑";
+    Text[ zh-TW ] = "光線狀綠色/黑色";
+    Text[ tr ] = "Radyal yeşil/siyah";
+    Text[ hi-IN ] = "किरण-सम्बन्धी हरा/काला";
+    Text[ ar ] = "شعاعي أخضر/أسود";
+    Text[ he ] = "Radial grün/schwarz";
+};
+String RID_SVXSTR_GRDT5
+{
+    Text [ de ] = "Radial rot/gelb";
+    Text [ en-US ] = "Radial red/yellow";
+    Text[ pt ] = "Radial vermelho/amarelo";
+    Text[ ru ] = "Радиальный: красный/желтый";
+    Text[ el ] = "Ακτινικά κόκκινο/κίτρινο";
+    Text[ nl ] = "Radiaal rood/geel";
+    Text[ fr ] = "Radial rouge/jaune";
+    Text[ es ] = "Radial rojo/amarillo";
+    Text[ fi ] = "Säteittäinen punainen/keltainen";
+    Text[ ca ] = "Radial vermell/groc";
+    Text[ it ] = "Radiale rosso/giallo";
+    Text[ sk ] = "Radiálna červená/žltá";
+    Text[ da ] = "Radial rød/gul";
+    Text[ sv ] = "Radiellt rött/gult";
+    Text[ pl ] = "Radialny czerwień-żółć";
+    Text[ pt-BR ] = "Radial vermelho / amarelo";
+    Text[ th ] = "รัศมีสีแดง/เหลือง";
+    Text[ ja ] = "放射状 赤/黄色";
+    Text[ ko ] = "방사형 적색/황색";
+    Text[ zh-CN ] = "径向 红/黄";
+    Text[ zh-TW ] = "光線狀紅色/黃色";
+    Text[ tr ] = "Radyal kırmızı/sarı";
+    Text[ hi-IN ] = "किरण-सम्बन्धी लाल/पीला";
+    Text[ ar ] = "شعاعي أحمر/أصفر";
+    Text[ he ] = "Radial rot/gelb";
+};
+String RID_SVXSTR_GRDT6
+{
+    Text [ de ] = "Rechteck rot/weiß";
+    Text [ en-US ] = "Rectangular red/white";
+    Text[ pt ] = "Rectangular vermelho/branco";
+    Text[ ru ] = "Прямоугольный: красный/белый";
+    Text[ el ] = "Ορθογώνιο κόκκινο/λευκό";
+    Text[ nl ] = "Rechthoek rood/wit";
+    Text[ fr ] = "Rectangulaire rouge/blanc";
+    Text[ es ] = "Rectangular rojo/blanco";
+    Text[ fi ] = "Suorakulmio punainen/valkoinen";
+    Text[ ca ] = "Rectangular vermell/blanc";
+    Text[ it ] = "Rettangolare rosso/bianco";
+    Text[ sk ] = "Obdĺžnik červená/biela";
+    Text[ da ] = "Rektangel rød/hvid";
+    Text[ sv ] = "Rektangulär rött/vitt";
+    Text[ pl ] = "Rombowy czerwień-biel";
+    Text[ pt-BR ] = "Retangular vermelho / branco";
+    Text[ th ] = "สีเหลี่ยมสีแดง/ขาว";
+    Text[ ja ] = "長方形 赤/白";
+    Text[ ko ] = "직사각형 적색/흰색";
+    Text[ zh-CN ] = "矩形 红/白";
+    Text[ zh-TW ] = "矩形紅色/白色";
+    Text[ tr ] = "Dikdörtgen kırmızı/beyaz";
+    Text[ hi-IN ] = "आयताकार लाल/सफेद";
+    Text[ ar ] = "مستطيل أحمر/أبيض";
+    Text[ he ] = "Rechteck rot/weiß";
+};
+String RID_SVXSTR_GRDT7
+{
+    Text [ de ] = "Quadratisch gelb/weiß";
+    Text [ en-US ] = "Square yellow/white";
+    Text[ pt ] = "Quadrado amarelo/branco";
+    Text[ ru ] = "Квадратный: желтый/белый";
+    Text[ el ] = "Τετράγωνο κίτρινο/λευκό";
+    Text[ nl ] = "Vierkant geel/wit";
+    Text[ fr ] = "Carré jaune/blanc";
+    Text[ es ] = "Cuadrado amarillo/blanco";
+    Text[ fi ] = "Neliö keltainen/valkoinen";
+    Text[ ca ] = "Quadrat groc/blanc";
+    Text[ it ] = "Quadrato giallo/bianco";
+    Text[ sk ] = "Štvorec žltá/biela";
+    Text[ da ] = "Kvadratisk gul/hvid";
+    Text[ sv ] = "Kvadratisk gult/vitt";
+    Text[ pl ] = "Kwadratowy żółć-biel";
+    Text[ pt-BR ] = "Quadrado amarelo / branco";
+    Text[ th ] = "สีเหลี่ยมจัตุรัสสีเหลือง/ขาว";
+    Text[ ja ] = "正方形 黄色/白";
+    Text[ ko ] = "정사각형 황색/흰색";
+    Text[ zh-CN ] = "正方形 黄/白";
+    Text[ zh-TW ] = "正方形黃色/白色";
+    Text[ tr ] = "Kare sarı/beyaz";
+    Text[ hi-IN ] = "समचतुर्भुज पीला/सफेद";
+    Text[ ar ] = "مربع أ�µفر/أبيض";
+    Text[ he ] = "Quadratisch gelb/weiß";
+};
+String RID_SVXSTR_GRDT8
+{
+    Text [ de ] = "Ellipsoid blaugrau/hellblau";
+    Text [ en-US ] = "Ellipsoid blue gray/light blue";
+    Text[ pt ] = "Elipsoidal cinzento azulado/azul-claro";
+    Text[ ru ] = "Эллипсоидный: серо-голубой/голубой";
+    Text[ el ] = "Ελλειψ. μπλε-γκρι/μπλε ανοιχ.";
+    Text[ nl ] = "Ellips grijsblauw/lichtblauw";
+    Text[ fr ] = "Ellipsoïde gris bleu/bleu clair";
+    Text[ es ] = "Elipsoide azul gris/azul claro";
+    Text[ fi ] = "Ellipsoidi siniharmaa/kirkas sininen";
+    Text[ ca ] = "Elipsoide blau gris/blau clar";
+    Text[ it ] = "Ellissoidale blu-grigio/celeste";
+    Text[ sk ] = "Ovál modrošedý/svetlomodrý";
+    Text[ da ] = "Ellipsoide blågrå/lyseblå";
+    Text[ sv ] = "Ellipsoid blågrå/ljusblå";
+    Text[ pl ] = "Eliptyczny szarość-błękit";
+    Text[ pt-BR ] = "Elipsóide cinza-azulado / azul-claro";
+    Text[ th ] = "วงรีสีน้ำเงินเทา/น้ำเงินอ่อน";
+    Text[ ja ] = "楕円体 青灰色/明るい青";
+    Text[ ko ] = "타원형 회청색/밝은 청색";
+    Text[ zh-CN ] = "椭圆体 蓝灰/浅蓝";
+    Text[ zh-TW ] = "橢圓藍灰色/淺灰色";
+    Text[ tr ] = "Elipsoid mavi gri/açık mavi";
+    Text[ hi-IN ] = "दीर्घवृत्तज नीला ग्रे/हल्का नीला";
+    Text[ ar ] = "بيضوي رمادي مزرق/أزرق فاتح";
+    Text[ he ] = "Ellipsoid blaugrau/hellblau";
+};
+String RID_SVXSTR_GRDT9
+{
+    Text [ de ] = "Axial hellrot/weiß";
+    Text [ en-US ] = "Axial light red/white";
+    Text[ pt ] = "Axial vermelho-claro/branco";
+    Text[ ru ] = "Осевой: светло-красный/белый";
+    Text[ el ] = "Αξονικό λευκό/κόκκινο ανοιχ.";
+    Text[ nl ] = "Axiaal lichtrood/wit";
+    Text[ fr ] = "Axial rouge clair/blanc";
+    Text[ es ] = "Axial rojo claro/blanco";
+    Text[ fi ] = "Akselivalaistus punainen/valkoinen";
+    Text[ ca ] = "Llum axial vermella/blanca";
+    Text[ it ] = "Assiale rosso chiaro/bianco";
+    Text[ sk ] = "Svetlo osi červená/biela";
+    Text[ da ] = "Aksial lys rød/hvid";
+    Text[ sv ] = "Axialt ljusrött/vitt";
+    Text[ pl ] = "Osiowy róż-biel";
+    Text[ pt-BR ] = "Axial vermelho-claro / branco";
+    Text[ th ] = "แกนสีแดงอ่อน/ขาว";
+    Text[ ja ] = "軸状 明るい赤/白";
+    Text[ ko ] = "축 밝은 적색/흰색";
+    Text[ zh-CN ] = "轴向 浅红/白";
+    Text[ zh-TW ] = "軸向淺紅色/白色";
+    Text[ tr ] = "Eksen açık kırmızı/beyaz";
+    Text[ hi-IN ] = "धुरी-सम्बन्धी हल्का लाल/सफेद";
+    Text[ ar ] = "محوري أحمر فاتح/أبيض";
+    Text[ he ] = "Axial hellrot/weiß";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-hatch-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH0_DEF
+{
+    Text = "Black 45 Degrees Wide";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH1_DEF
+{
+    Text = "Black 45 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH2_DEF
+{
+    Text = "Black -45 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH3_DEF
+{
+    Text = "Black 90 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH4_DEF
+{
+    Text = "Red Crossed 45 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH5_DEF
+{
+    Text = "Red Crossed 0 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH6_DEF
+{
+    Text = "Blue Crossed 45 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH7_DEF
+{
+    Text = "Blue Crossed 0 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH8_DEF
+{
+    Text = "Blue Triple 90 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH9_DEF
+{
+    Text = "Black 0 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH10_DEF
+{
+    Text = "Hatch";
+};
+
+String RID_SVXSTR_HATCH0
+{
+    Text [ de ] = "Schwarz 45 Grad weit";
+    Text [ en-US ] = "Black 45 degrees wide";
+    Text[ pt ] = "Preto 45 graus de largura";
+    Text[ ru ] = "Черная 45 градусов, разреженная";
+    Text[ el ] = "Μαύρο 45 μοίρες πλατιά";
+    Text[ nl ] = "Zwart 45 graden breed";
+    Text[ fr ] = "Noir 45 degrés de large";
+    Text[ es ] = "Negro 45 grados ancho";
+    Text[ fi ] = "Musta 45 astetta leveä";
+    Text[ ca ] = "Negre d'ample 45 graus";
+    Text[ it ] = "Nero 45 gradi, ampio";
+    Text[ sk ] = "Čierna 45 stupňov široká";
+    Text[ da ] = "Sort 45 grader vidt";
+    Text[ sv ] = "Svart 45 grader vid";
+    Text[ pl ] = "Czarne 45° szerokie";
+    Text[ pt-BR ] = "Preto 45 graus espaçado";
+    Text[ th ] = "กว้าง  45 องศาสีดำ";
+    Text[ ja ] = "黒 45度 幅広";
+    Text[ ko ] = "검은색 45도 넓이";
+    Text[ zh-CN ] = "黑色 45 度(宽距)";
+    Text[ zh-TW ] = "黑色 45 度寬";
+    Text[ tr ] = "Siyah 45 derece geniş";
+    Text[ hi-IN ] = "काला 45 डिग्रियाँ चौड़ाई";
+    Text[ ar ] = "أسود 45 درجة واسع";
+    Text[ he ] = "Schwarz 45 Grad weit";
+};
+String RID_SVXSTR_HATCH1
+{
+    Text [ de ] = "Schwarz 45 Grad";
+    Text [ en-US ] = "Black 45 degrees";
+    Text[ pt ] = "Preto 45 graus";
+    Text[ ru ] = "Черная 45 градусов";
+    Text[ el ] = "Μαύρο 45 μοίρες";
+    Text[ nl ] = "Zwart 45 graden";
+    Text[ fr ] = "Noir 45 degrés";
+    Text[ es ] = "Negro 45 grados";
+    Text[ fi ] = "Musta 45 astetta";
+    Text[ ca ] = "Negre 45 graus";
+    Text[ it ] = "Nero 45 gradi";
+    Text[ sk ] = "Čierna 45 stupňov";
+    Text[ da ] = "Sort 45 grader";
+    Text[ sv ] = "Svart 45 grader";
+    Text[ pl ] = "Czarne 45°";
+    Text[ pt-BR ] = "Preto 45 graus";
+    Text[ th ] = " 45 องศาสีดำ";
+    Text[ ja ] = "黒 45度";
+    Text[ ko ] = "검은색 45도";
+    Text[ zh-CN ] = "黑色 45 度";
+    Text[ zh-TW ] = "黑色 45 度";
+    Text[ tr ] = "Siyah 45 derece";
+    Text[ hi-IN ] = "काला 45 डिग्रियाँ";
+    Text[ ar ] = "أسود 45 درجة";
+    Text[ he ] = "Schwarz 45 Grad";
+};
+String RID_SVXSTR_HATCH2
+{
+    Text [ de ] = "Schwarz -45 Grad";
+    Text [ en-US ] = "Black -45 degrees";
+    Text[ pt ] = "Preto -45 graus";
+    Text[ ru ] = "Черная -45 градусов";
+    Text[ el ] = "Μαύρο -45 μοίρες";
+    Text[ nl ] = "Zwart -45 graden";
+    Text[ fr ] = "Noir -45 degrés";
+    Text[ es ] = "Negro -45 grados";
+    Text[ fi ] = "Musta -45 astetta";
+    Text[ ca ] = "Negre -45 graus";
+    Text[ it ] = "Nero -45 gradi";
+    Text[ sk ] = "Čierna -45 stupňov";
+    Text[ da ] = "Sort -45 grader";
+    Text[ sv ] = "Svart -45 grader";
+    Text[ pl ] = "Czarne -45°";
+    Text[ pt-BR ] = "Preto -45 graus";
+    Text[ th ] = "สีดำ -45 องศา";
+    Text[ ja ] = "黒 -45度";
+    Text[ ko ] = "검은색 45 도";
+    Text[ zh-CN ] = "黑色 -45 度";
+    Text[ zh-TW ] = "黑色 -45 度";
+    Text[ tr ] = "Siyah -45 derece";
+    Text[ hi-IN ] = "काला -45 डिग्रियाँ";
+    Text[ ar ] = "أسود -45 درجة";
+    Text[ he ] = "Schwarz -45 Grad";
+};
+String RID_SVXSTR_HATCH3
+{
+    Text [ de ] = "Schwarz 90 Grad";
+    Text [ en-US ] = "Black 90 degrees";
+    Text[ pt ] = "Preto 90 graus";
+    Text[ ru ] = "Черная 90 градусов";
+    Text[ el ] = "Μαύρο 90 μοίρες";
+    Text[ nl ] = "Zwart 90 graden";
+    Text[ fr ] = "Noir 90 degrés";
+    Text[ es ] = "Negro 90 grados";
+    Text[ fi ] = "Musta 90 astetta";
+    Text[ ca ] = "Negre 90 graus";
+    Text[ it ] = "Nero 90 gradi";
+    Text[ sk ] = "Čierna 90 stupňov";
+    Text[ da ] = "Sort 90 grader";
+    Text[ sv ] = "Svart 90 grader";
+    Text[ pl ] = "Czarne 90°";
+    Text[ pt-BR ] = "Preto 90 graus";
+    Text[ th ] = "90 องศาสีดำ";
+    Text[ ja ] = "黒 90度";
+    Text[ ko ] = "검은색 90 도";
+    Text[ zh-CN ] = "黑色 90 度";
+    Text[ zh-TW ] = "黑色 90 度";
+    Text[ tr ] = "Siyah 90 derece";
+    Text[ hi-IN ] = "काला 90 डिग्रियाँ";
+    Text[ ar ] = "أسود 90 درجة";
+    Text[ he ] = "Schwarz 90 Grad";
+};
+String RID_SVXSTR_HATCH4
+{
+    Text [ de ] = "Rot Netz 45 Grad";
+    Text [ en-US ] = "Red crossed 45 degrees";
+    Text[ pt ] = "Vermelho cruzado 45 graus";
+    Text[ ru ] = "Красная перекрестная 45 градусов";
+    Text[ el ] = "Σύμπτωση κόκκινου στις 45 μοίρες";
+    Text[ nl ] = "Rood gekruist 45 graden";
+    Text[ fr ] = "Rouge double incliné 45 degrés";
+    Text[ es ] = "Rojo red 45 grados";
+    Text[ fi ] = "Punainen ristissä 45 astetta";
+    Text[ ca ] = "Vermell encreuat 45 graus";
+    Text[ it ] = "Rosso a rete 45 gradi";
+    Text[ sk ] = "Červené šrafovanie 45 stupňov";
+    Text[ da ] = "Rødt gitter 45 grader";
+    Text[ sv ] = "Rött nät 45 grader";
+    Text[ pl ] = "Czerwona siatka 45°";
+    Text[ pt-BR ] = "Vermelho cruzado 45 graus";
+    Text[ th ] = "45 องศาขวางสีแดง";
+    Text[ ja ] = "赤 縞 45度";
+    Text[ ko ] = "적색 네트 45도";
+    Text[ zh-CN ] = "红色网格线 45 度";
+    Text[ zh-TW ] = "紅網狀 45 度";
+    Text[ tr ] = "Kırmızı ızgaralı 45 derece";
+    Text[ hi-IN ] = "लाल कटा हुआ 45 डिग्रियाँ";
+    Text[ ar ] = "أحمر شبكة 45 درجة";
+    Text[ he ] = "Rot Netz 45 Grad";
+};
+String RID_SVXSTR_HATCH5
+{
+    Text [ de ] = "Rot Netz 0 Grad";
+    Text [ en-US ] = "Red crossed 0 degrees";
+    Text[ pt ] = "Vermelho cruzado 0 graus";
+    Text[ ru ] = "Красная перекрестная 0 градусов";
+    Text[ el ] = "Σύμπτωση κόκκινου στις 0 μοίρες";
+    Text[ nl ] = "Rood gekruist 0 graden";
+    Text[ fr ] = "Rouge double incliné 0 degré";
+    Text[ es ] = "Rojo red 0 grados";
+    Text[ fi ] = "Punainen ristissä 0 astetta";
+    Text[ ca ] = "Vermell encreuat 0 graus";
+    Text[ it ] = "Rosso a rete 0 gradi";
+    Text[ sk ] = "Červené šrafovanie 0 stupňov";
+    Text[ da ] = "Rødt gitter 0 grader";
+    Text[ sv ] = "Rött nät 0 grader";
+    Text[ pl ] = "Czerwona siatka 0°";
+    Text[ pt-BR ] = "Vermelho cruzado 0 graus";
+    Text[ th ] = " 0 องศาขวางสีแดง";
+    Text[ ja ] = "赤 縞 0度";
+    Text[ ko ] = "적색 네트 0도";
+    Text[ zh-CN ] = "红色网格线 0 度";
+    Text[ zh-TW ] = "紅網 0 度";
+    Text[ tr ] = "Kırmızı ızgaralı 0 derece";
+    Text[ hi-IN ] = "लाल कटा हुआ 0 डिग्रियाँ";
+    Text[ ar ] = "أحمر شبكة 0 درجة";
+    Text[ he ] = "Rot Netz 0 Grad";
+};
+String RID_SVXSTR_HATCH6
+{
+    Text [ de ] = "Blau Netz 45 Grad";
+    Text [ en-US ] = "Blue crossed 45 degrees";
+    Text[ pt ] = "Azul cruzado 45 graus";
+    Text[ ru ] = "Синяя перекрестная 45 градусов";
+    Text[ el ] = "Σύμπτωση μπλε στις 45 μοίρες";
+    Text[ nl ] = "Blauw gekruist 45 graden";
+    Text[ fr ] = "Bleu double incliné 45 degrés";
+    Text[ es ] = "Azul red 45 grados";
+    Text[ fi ] = "Sininen ristissä 45 astetta";
+    Text[ ca ] = "Blau encreuat 45 graus";
+    Text[ it ] = "Blu a rete 45 gradi";
+    Text[ sk ] = "Modré šrafovanie 45 stupňov";
+    Text[ da ] = "Blåt gitter 45 grader";
+    Text[ sv ] = "Blått nät 45 grader";
+    Text[ pl ] = "Niebieska siatka 45°";
+    Text[ pt-BR ] = "Azul cruzado 45 graus";
+    Text[ th ] = " 45 องศาขวางสีน้ำเงิน";
+    Text[ ja ] = "青 縞 45度";
+    Text[ ko ] = "청색 네트 45도";
+    Text[ zh-CN ] = "蓝色网格线 45 度";
+    Text[ zh-TW ] = "藍網 45 度";
+    Text[ tr ] = "Mavi ızgaralı 45 derece";
+    Text[ hi-IN ] = "नीला कटा हुआ 45 डिग्रियाँ";
+    Text[ ar ] = "أزرق شبكة 45 درجة";
+    Text[ he ] = "Blau Netz 45 Grad";
+};
+String RID_SVXSTR_HATCH7
+{
+    Text [ de ] = "Blau Netz 0 Grad";
+    Text [ en-US ] = "Blue crossed 0 degrees";
+    Text[ pt ] = "Azul cruzado 0 graus";
+    Text[ ru ] = "Синяя перекрестная 0 градусов";
+    Text[ el ] = "Σύμπτωση μπλε στις 0 μοίρες";
+    Text[ nl ] = "Bauw gekruist 0 graden";
+    Text[ fr ] = "Bleu double incliné 0 degré";
+    Text[ es ] = "Azul red 0 grados";
+    Text[ fi ] = "Sininen ristissä 0 astetta";
+    Text[ ca ] = "Blau encreuat 0 graus";
+    Text[ it ] = "Blu a rete 0 gradi";
+    Text[ sk ] = "Modré šrafovanie 0 stupňov";
+    Text[ da ] = "Blåt gitter 0 grader";
+    Text[ sv ] = "Blått nät 0 grader";
+    Text[ pl ] = "Niebieska siatka 0°";
+    Text[ pt-BR ] = "Azul cruzado 0 graus";
+    Text[ th ] = " 0 องศาขวางสีน้ำเงิน";
+    Text[ ja ] = "青 縞 0度";
+    Text[ ko ] = "청색 네트 0도";
+    Text[ zh-CN ] = "蓝色网格线 0 度";
+    Text[ zh-TW ] = "藍網 0 度";
+    Text[ tr ] = "Mavi ızgaralı 0 derece";
+    Text[ hi-IN ] = "नीला कटा हुआ 0 डिग्रियाँ";
+    Text[ ar ] = "أزرق شبكة 0 درجة";
+    Text[ he ] = "Blau Netz 0 Grad";
+};
+String RID_SVXSTR_HATCH8
+{
+    Text [ de ] = "Blau 3er Netz 90 Grad";
+    Text [ en-US ] = "Blue triple 90 degrees";
+    Text[ pt ] = "Azul cruzado triplo 90 graus";
+    Text[ ru ] = "Синяя тройная 90 градусов";
+    Text[ el ] = "Μπλέ τριπλό 90 μοίρες";
+    Text[ nl ] = "Blauw drievoudig gekruist 90 graden";
+    Text[ fr ] = "Bleu triple incliné 90 degrés";
+    Text[ es ] = "Azul red triple 90 grados";
+    Text[ fi ] = "Sininen kolminkertainen 90 astetta";
+    Text[ ca ] = "Blau triple 90 graus";
+    Text[ it ] = "Blu tripla rete 90 gradi";
+    Text[ sk ] = "Modrá trikrát 90 stupňov";
+    Text[ da ] = "Blåt 3'er gitter 90 grader";
+    Text[ sv ] = "Blått trippelnät 90 grader";
+    Text[ pl ] = "Potrójne niebieskie 90°";
+    Text[ pt-BR ] = "Azul triplo 90 graus";
+    Text[ th ] = " 90 องศาสามอันสีน้ำเงิน";
+    Text[ ja ] = "青 3本縞 90度";
+    Text[ ko ] = "청색 3중네트 90도";
+    Text[ zh-CN ] = "蓝色三重网格线 90 度";
+    Text[ zh-TW ] = "藍色三網 90 度";
+    Text[ tr ] = "Mavi 3'lü ızgaralı 90 derece";
+    Text[ hi-IN ] = "नीला तिगुना 90 डिग्रियाँ";
+    Text[ ar ] = "أزرق شبكة ثلاثية 90 درجة";
+    Text[ he ] = "Blau 3er Netz 90 Grad";
+};
+String RID_SVXSTR_HATCH9
+{
+    Text [ de ] = "Schwarz 0 Grad";
+    Text [ en-US ] = "Black 0 degrees";
+    Text[ pt ] = "Preto 0 graus";
+    Text[ ru ] = "Черная 0 градусов";
+    Text[ el ] = "Μαύρο 0 μοίρες";
+    Text[ nl ] = "Zwart 0 graden";
+    Text[ fr ] = "Noir 0 degré";
+    Text[ es ] = "Negro 0 grados";
+    Text[ fi ] = "Musta 0 astetta";
+    Text[ ca ] = "Negre 0 graus";
+    Text[ it ] = "Nero 0 gradi";
+    Text[ sk ] = "Čierna 0 stupňov";
+    Text[ da ] = "Sort 0 grader";
+    Text[ sv ] = "Svart 0 grader";
+    Text[ pl ] = "Czarne 0°";
+    Text[ pt-BR ] = "Preto 0 graus";
+    Text[ th ] = "0 องศาสีดำ";
+    Text[ ja ] = "黒 0度";
+    Text[ ko ] = "검은색 0도";
+    Text[ zh-CN ] = "黑色 0 度";
+    Text[ zh-TW ] = "黑色 0 度";
+    Text[ tr ] = "Siyah 0 derece";
+    Text[ hi-IN ] = "काला 0 डिग्रियाँ";
+    Text[ ar ] = "أسود 0 درجة";
+    Text[ he ] = "Schwarz 0 Grad";
+};
+String RID_SVXSTR_HATCH10
+{
+    Text [ de ] = "Schraffur" ;
+    Text [ en-US ] = "Hatching" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Tracejado";
+    Text[ ru ] = "Штриховка";
+    Text[ el ] = "Γραμμοσκιά";
+    Text[ nl ] = "Arcering";
+    Text[ fr ] = "Hachure";
+    Text[ es ] = "Trama";
+    Text[ fi ] = "Viivoitus";
+    Text[ ca ] = "Ombreig";
+    Text[ it ] = "Tratteggio";
+    Text[ sk ] = "Šrafovanie";
+    Text[ da ] = "Skravering";
+    Text[ sv ] = "Skraffering";
+    Text[ pl ] = "Kreskowanie";
+    Text[ pt-BR ] = "Hachurado";
+    Text[ th ] = "แรเงา";
+    Text[ ja ] = "ハッチング";
+    Text[ ko ] = "해칭";
+    Text[ zh-CN ] = "阴影线";
+    Text[ zh-TW ] = "陰影線";
+    Text[ tr ] = "Tarama";
+    Text[ hi-IN ] = "हाचिंग";
+    Text[ ar ] = "نقش";
+    Text[ he ] = "Schraffur";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-bitmap-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP0_DEF
+{
+    Text = "Empty";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP1_DEF
+{
+    Text = "Sky";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP2_DEF
+{
+    Text = "Aqua";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP3_DEF
+{
+    Text = "Coarse";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP4_DEF
+{
+    Text = "Space Metal";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP5_DEF
+{
+    Text = "Space";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP6_DEF
+{
+    Text = "Metal";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP7_DEF
+{
+    Text = "Wet";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP8_DEF
+{
+    Text = "Marble";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP9_DEF
+{
+    Text = "Linen";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP10_DEF
+{
+    Text = "Stone";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP11_DEF
+{
+    Text = "Pebbles";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP12_DEF
+{
+    Text = "Wall";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP13_DEF
+{
+    Text = "Red Wall";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP14_DEF
+{
+    Text = "Pattern";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP15_DEF
+{
+    Text = "Leaves";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP16_DEF
+{
+    Text = "Lawn Artificial";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP17_DEF
+{
+    Text = "Daisy";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP18_DEF
+{
+    Text = "Orange";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP19_DEF
+{
+    Text = "Fiery";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP20_DEF
+{
+    Text = "Roses";
+};
+
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP21_DEF
+{
+    Text = "Bitmape";
+};
+
+String RID_SVXSTR_BMP0
+{
+    Text [ de ] = "Leer";
+    Text [ en-US ] = "Blank";
+    Text[ pt ] = "Vazio";
+    Text[ ru ] = "Пусто";
+    Text[ el ] = "Κενό";
+    Text[ nl ] = "Blanco";
+    Text[ fr ] = "Vide";
+    Text[ es ] = "Vacío";
+    Text[ fi ] = "Tyhjä";
+    Text[ ca ] = "En blanc";
+    Text[ it ] = "Vuoto";
+    Text[ sk ] = "Prázdny";
+    Text[ da ] = "Tomt";
+    Text[ sv ] = "Tomt";
+    Text[ pl ] = "Pusty";
+    Text[ pt-BR ] = "Em branco";
+    Text[ th ] = "ช่องว่าง";
+    Text[ ja ] = "空白";
+    Text[ ko ] = "공백";
+    Text[ zh-CN ] = "空缺";
+    Text[ zh-TW ] = "空缺";
+    Text[ tr ] = "Boş";
+    Text[ hi-IN ] = "खाली";
+    Text[ ar ] = "فارغ";
+    Text[ he ] = "Leer";
+};
+String RID_SVXSTR_BMP1
+{
+    Text [ de ] = "Himmel";
+    Text [ en-US ] = "Sky";
+    Text[ pt ] = "Céu";
+    Text[ ru ] = "Небо";
+    Text[ el ] = "Ουρανός";
+    Text[ nl ] = "Hemel";
+    Text[ fr ] = "Ciel";
+    Text[ es ] = "Cielo";
+    Text[ fi ] = "Taivas";
+    Text[ ca ] = "Cel";
+    Text[ it ] = "Cielo";
+    Text[ sk ] = "Obloha";
+    Text[ da ] = "Himmel";
+    Text[ sv ] = "Himmel";
+    Text[ pl ] = "Niebo";
+    Text[ pt-BR ] = "Céu";
+    Text[ th ] = "ท้องฟ้า";
+    Text[ ja ] = "空";
+    Text[ ko ] = "하늘";
+    Text[ zh-CN ] = "天空";
+    Text[ zh-TW ] = "天空";
+    Text[ tr ] = "Gökyüzü";
+    Text[ hi-IN ] = "आकाश";
+    Text[ ar ] = "السماء";
+    Text[ he ] = "Himmel";
+};
+String RID_SVXSTR_BMP2
+{
+    Text [ de ] = "Wasser";
+    Text [ en-US ] = "Water";
+    Text[ pt ] = "Água";
+    Text[ ru ] = "Вода";
+    Text[ el ] = "Νερό";
+    Text[ nl ] = "Water";
+    Text[ fr ] = "Eau";
+    Text[ es ] = "Agua";
+    Text[ fi ] = "Vesi";
+    Text[ ca ] = "Aigua";
+    Text[ it ] = "Acqua";
+    Text[ sk ] = "Voda";
+    Text[ da ] = "Vand";
+    Text[ sv ] = "Vatten";
+    Text[ pl ] = "Woda";
+    Text[ pt-BR ] = "Água";
+    Text[ th ] = "น้ำ";
+    Text[ ja ] = "水面";
+    Text[ ko ] = "수면";
+    Text[ zh-CN ] = "水";
+    Text[ zh-TW ] = "水";
+    Text[ tr ] = "Su";
+    Text[ hi-IN ] = "पानी";
+    Text[ ar ] = "مياه";
+    Text[ he ] = "Wasser";
+};
+String RID_SVXSTR_BMP3
+{
+    Text [ de ] = "Grobkörnig";
+    Text [ en-US ] = "Coarse grained";
+    Text[ pt ] = "Granulado grosso";
+    Text[ ru ] = "Крупная зернистость";
+    Text[ el ] = "Χοντρόκοκκα";
+    Text[ nl ] = "Grove korrel";
+    Text[ fr ] = "Gros grain";
+    Text[ es ] = "Grano grueso";
+    Text[ fi ] = "Karkea jyvitys";
+    Text[ ca ] = "En gra gruixut";
+    Text[ it ] = "Grana grossa";
+    Text[ sk ] = "Hrubozrnný";
+    Text[ da ] = "Grynet";
+    Text[ sv ] = "Grovkornig";
+    Text[ pl ] = "Chropowatość";
+    Text[ pt-BR ] = "Granulado grosso";
+    Text[ th ] = "เนื้อหยาบ";
+    Text[ ja ] = "ざらざらした面";
+    Text[ ko ] = "거친 알갱이";
+    Text[ zh-CN ] = "粗颗粒";
+    Text[ zh-TW ] = "深藍";
+    Text[ tr ] = "İri taneler";
+    Text[ hi-IN ] = "कोऐर्स ग्रेइन्ड";
+    Text[ ar ] = "حُبَيْبِيّ خشن";
+    Text[ he ] = "Grobkörnig";
+};
+String RID_SVXSTR_BMP4
+{
+    Text [ de ] = "Quecksilber";
+    Text [ en-US ] = "Mercury";
+    Text[ pt ] = "Mercúrio";
+    Text[ ru ] = "Ртуть";
+    Text[ el ] = "Υδράργυρος";
+    Text[ nl ] = "Kwikzilver";
+    Text[ fr ] = "Mercure";
+    Text[ es ] = "Mercurio";
+    Text[ fi ] = "Elohopea";
+    Text[ ca ] = "Mercuri";
+    Text[ it ] = "Mercurio";
+    Text[ sk ] = "Medený";
+    Text[ da ] = "Kviksølv";
+    Text[ sv ] = "Kvicksilver";
+    Text[ pl ] = "Rtęć";
+    Text[ pt-BR ] = "Mercúrio";
+    Text[ th ] = "ปรอท";
+    Text[ ja ] = "スペースメタã��";
+    Text[ ko ] = "수은";
+    Text[ zh-CN ] = "水银";
+    Text[ zh-TW ] = "水銀";
+    Text[ tr ] = "Çikolata";
+    Text[ hi-IN ] = "मर्कुरी";
+    Text[ ar ] = "زئبق";
+    Text[ he ] = "Quecksilber";
+};
+String RID_SVXSTR_BMP5
+{
+    Text [ de ] = "Weltraum";
+    Text [ en-US ] = "Space";
+    Text[ pt ] = "Espaço cósmico";
+    Text[ ru ] = "Космос";
+    Text[ el ] = "Διάστημα";
+    Text[ nl ] = "Heelal";
+    Text[ fr ] = "Cosmos";
+    Text[ es ] = "Espacio";
+    Text[ fi ] = "Avaruus";
+    Text[ ca ] = "Espai";
+    Text[ it ] = "Spazio";
+    Text[ sk ] = "Medzera";
+    Text[ da ] = "Verdensrum";
+    Text[ sv ] = "Världsrymd";
+    Text[ pl ] = "Kosmos";
+    Text[ pt-BR ] = "Espaço";
+    Text[ th ] = "อวกาศ";
+    Text[ ja ] = "銀河星雲";
+    Text[ ko ] = "우주";
+    Text[ zh-CN ] = "宇宙";
+    Text[ zh-TW ] = "太空";
+    Text[ tr ] = "Uzay";
+    Text[ hi-IN ] = "अंतरिक्ष";
+    Text[ ar ] = "الفضاء";
+    Text[ he ] = "Weltraum";
+};
+String RID_SVXSTR_BMP6
+{
+    Text [ de ] = "Metall";
+    Text [ en-US ] = "Metal";
+    Text[ pt ] = "Metal";
+    Text[ ru ] = "Металл";
+    Text[ el ] = "Μέταλλο";
+    Text[ nl ] = "Metaal";
+    Text[ fr ] = "Métal";
+    Text[ es ] = "Metal";
+    Text[ fi ] = "Metalli";
+    Text[ ca ] = "Metall";
+    Text[ it ] = "Metallo";
+    Text[ sk ] = "Kov";
+    Text[ da ] = "Metal";
+    Text[ sv ] = "Metall";
+    Text[ pl ] = "Metal";
+    Text[ pt-BR ] = "Metal";
+    Text[ th ] = "โลหะ";
+    Text[ ja ] = "つぶつぶした面";
+    Text[ ko ] = "금속";
+    Text[ zh-CN ] = "金属";
+    Text[ zh-TW ] = "金屬";
+    Text[ tr ] = "Metal";
+    Text[ hi-IN ] = "लोहा";
+    Text[ ar ] = "معدن";
+    Text[ he ] = "Metall";
+};
+String RID_SVXSTR_BMP7
+{
+    Text [ de ] = "Tropfen";
+    Text [ en-US ] = "Droplets";
+    Text[ pt ] = "Gotas";
+    Text[ ru ] = "Капли";
+    Text[ el ] = "Σταγόνες";
+    Text[ nl ] = "Druppels";
+    Text[ fr ] = "Gouttelettes";
+    Text[ es ] = "Gotas";
+    Text[ fi ] = "Pisarat";
+    Text[ ca ] = "Gotetes";
+    Text[ it ] = "Gocce";
+    Text[ sk ] = "Kvapky";
+    Text[ da ] = "Dråber";
+    Text[ sv ] = "Droppar";
+    Text[ pl ] = "Krople";
+    Text[ pt-BR ] = "Gotículas";
+    Text[ th ] = "หยดนิดเดียว";
+    Text[ ja ] = "しずく";
+    Text[ ko ] = "물방울";
+    Text[ zh-CN ] = "水滴";
+    Text[ zh-TW ] = "水滴";
+    Text[ tr ] = "Damla";
+    Text[ hi-IN ] = "ड्रोप्लेट्स्";
+    Text[ ar ] = "قطرات";
+    Text[ he ] = "Tropfen";
+};
+String RID_SVXSTR_BMP8
+{
+    Text [ de ] = "Marmor";
+    Text [ en-US ] = "Marble";
+    Text[ pt ] = "Mármore";
+    Text[ ru ] = "Мрамор";
+    Text[ el ] = "Μάρμαρο";
+    Text[ nl ] = "Marmer";
+    Text[ fr ] = "Marbre";
+    Text[ es ] = "Mármol";
+    Text[ fi ] = "Marmori";
+    Text[ ca ] = "Marbre";
+    Text[ it ] = "Marmo";
+    Text[ sk ] = "Mramor";
+    Text[ da ] = "Marmor";
+    Text[ sv ] = "Marmor";
+    Text[ pl ] = "Marmur";
+    Text[ pt-BR ] = "Mármore";
+    Text[ th ] = "หินอ่อน";
+    Text[ ja ] = "白大理石";
+    Text[ ko ] = "대리석";
+    Text[ zh-CN ] = "大理石";
+    Text[ zh-TW ] = "大理石";
+    Text[ tr ] = "Mermer";
+    Text[ hi-IN ] = "संगमरमर";
+    Text[ ar ] = "رخام";
+    Text[ he ] = "Marmor";
+};
+String RID_SVXSTR_BMP9
+{
+    Text [ de ] = "Leinen";
+    Text [ en-US ] = "Linen";
+    Text[ pt ] = "Linho";
+    Text[ ru ] = "Полотно";
+    Text[ el ] = "Λινό";
+    Text[ nl ] = "Linnen";
+    Text[ fr ] = "Lin";
+    Text[ es ] = "Lino";
+    Text[ fi ] = "Pellava";
+    Text[ ca ] = "Lli";
+    Text[ it ] = "Lino";
+    Text[ sk ] = "Plátno";
+    Text[ da ] = "Lærred";
+    Text[ sv ] = "Linne";
+    Text[ pl ] = "Len";
+    Text[ pt-BR ] = "Linho";
+    Text[ th ] = "ลินิน";
+    Text[ ja ] = "リネン地";
+    Text[ ko ] = "아마포";
+    Text[ zh-CN ] = "麻布";
+    Text[ zh-TW ] = "亞麻";
+    Text[ tr ] = "Keten";
+    Text[ hi-IN ] = "लिनन";
+    Text[ ar ] = "كتّان";
+    Text[ he ] = "Leinen";
+};
+String RID_SVXSTR_BMP10
+{
+    Text [ de ] = "Stein";
+    Text [ en-US ] = "Stone";
+    Text[ pt ] = "Pedra";
+    Text[ ru ] = "Камень";
+    Text[ el ] = "Πέτρα";
+    Text[ nl ] = "Steen";
+    Text[ fr ] = "Pierre";
+    Text[ es ] = "Piedra";
+    Text[ fi ] = "Kivi";
+    Text[ ca ] = "Pedra";
+    Text[ it ] = "Pietra";
+    Text[ sk ] = "Kameň";
+    Text[ da ] = "Sten";
+    Text[ sv ] = "Sten";
+    Text[ pl ] = "Kamień";
+    Text[ pt-BR ] = "Pedra";
+    Text[ th ] = "หิน";
+    Text[ ja ] = "花崗岩";
+    Text[ ko ] = "돌";
+    Text[ zh-CN ] = "石碑";
+    Text[ zh-TW ] = "石頭";
+    Text[ tr ] = "Taş";
+    Text[ hi-IN ] = "पत्थर";
+    Text[ ar ] = "حجر";
+    Text[ he ] = "Stein";
+};
+String RID_SVXSTR_BMP11
+{
+    Text [ de ] = "Schotter";
+    Text [ en-US ] = "Gravel";
+    Text[ pt ] = "Cascalho";
+    Text[ ru ] = "Гравий";
+    Text[ el ] = "Χαλίκια";
+    Text[ nl ] = "Puin";
+    Text[ fr ] = "Gravier";
+    Text[ es ] = "Grava";
+    Text[ fi ] = "Sora";
+    Text[ ca ] = "Grava";
+    Text[ it ] = "Ghiaia";
+    Text[ sk ] = "Štrk";
+    Text[ da ] = "Grus";
+    Text[ sv ] = "Makadam";
+    Text[ pl ] = "Żwir";
+    Text[ pt-BR ] = "Cascalho";
+    Text[ th ] = "กรวด";
+    Text[ ja ] = "砂利道";
+    Text[ ko ] = "자갈";
+    Text[ zh-CN ] = "碎石";
+    Text[ zh-TW ] = "碎石";
+    Text[ tr ] = "Çakıl";
+    Text[ hi-IN ] = "कंकड";
+    Text[ ar ] = "حصى";
+    Text[ he ] = "Schotter";
+};
+String RID_SVXSTR_BMP12
+{
+    Text [ de ] = "Mauer";
+    Text [ en-US ] = "Wall";
+    Text[ pt ] = "Parede";
+    Text[ ru ] = "Стена";
+    Text[ el ] = "Τοίχος";
+    Text[ nl ] = "Muur";
+    Text[ fr ] = "Muraille";
+    Text[ es ] = "Muralla";
+    Text[ fi ] = "Seinä";
+    Text[ ca ] = "Mur";
+    Text[ it ] = "Muro";
+    Text[ sk ] = "Stena";
+    Text[ da ] = "Mur";
+    Text[ sv ] = "Mur";
+    Text[ pl ] = "Mur";
+    Text[ pt-BR ] = "Parede";
+    Text[ th ] = "ผนัง";
+    Text[ ja ] = "石垣";
+    Text[ ko ] = "벽";
+    Text[ zh-CN ] = "墙";
+    Text[ zh-TW ] = "牆";
+    Text[ tr ] = "Duvar";
+    Text[ hi-IN ] = "वॉल";
+    Text[ ar ] = "سور";
+    Text[ he ] = "Mauer";
+};
+String RID_SVXSTR_BMP13
+{
+    Text [ de ] = "Ziegelsteine";
+    Text [ en-US ] = "Brownstone";
+    Text[ pt ] = "Tijolos";
+    Text[ ru ] = "Кирпич";
+    Text[ el ] = "Πυρίμαχα τούβλα";
+    Text[ nl ] = "Bakstenen";
+    Text[ fr ] = "Briques";
+    Text[ es ] = "Ladrillo";
+    Text[ fi ] = "Tiilenruskea";
+    Text[ ca ] = "Totxo";
+    Text[ it ] = "Mattoni";
+    Text[ sk ] = "Drahokamy";
+    Text[ da ] = "Teglsten";
+    Text[ sv ] = "Tegelstenar";
+    Text[ pl ] = "Cegły";
+    Text[ pt-BR ] = "Tijolos";
+    Text[ th ] = "หินสีน้ำตาล";
+    Text[ ja ] = "れんが塀";
+    Text[ ko ] = "벽돌";
+    Text[ zh-CN ] = "红砖墙";
+    Text[ zh-TW ] = "磚石";
+    Text[ tr ] = "Tuğla";
+    Text[ hi-IN ] = "ब्रउनस्टोन्";
+    Text[ ar ] = "قوالب طوب";
+    Text[ he ] = "Ziegelsteine";
+};
+String RID_SVXSTR_BMP14
+{
+    Text [ de ] = "Geflecht";
+    Text [ en-US ] = "Netting";
+    Text[ pt ] = "Rede";
+    Text[ ru ] = "Сеть";
+    Text[ el ] = "Πλέγμα";
+    Text[ nl ] = "Vlechtwerk";
+    Text[ fr ] = "Tresses";
+    Text[ es ] = "Malla";
+    Text[ fi ] = "Verkko";
+    Text[ ca ] = "Malla";
+    Text[ it ] = "Rete";
+    Text[ sk ] = "Pletivo";
+    Text[ da ] = "Fletværk";
+    Text[ sv ] = "Flätverk";
+    Text[ pl ] = "Plecionka";
+    Text[ pt-BR ] = "Malha";
+    Text[ th ] = "ตาข่าย";
+    Text[ ja ] = "麻織物";
+    Text[ ko ] = "엮어짐";
+    Text[ zh-CN ] = "编织物";
+    Text[ zh-TW ] = "編織物";
+    Text[ tr ] = "Hasır";
+    Text[ hi-IN ] = "नेट्टिंग";
+    Text[ ar ] = "شبكة";
+    Text[ he ] = "Geflecht";
+};
+String RID_SVXSTR_BMP15
+{
+    Text [ de ] = "Laub";
+    Text [ en-US ] = "Leaves";
+    Text[ pt ] = "Folhagem";
+    Text[ ru ] = "Листья";
+    Text[ el ] = "Φύλλωμα";
+    Text[ nl ] = "Loof";
+    Text[ fr ] = "Vigne vierge";
+    Text[ es ] = "Follaje";
+    Text[ fi ] = "Lehdet";
+    Text[ ca ] = "Fulles";
+    Text[ it ] = "Foglie";
+    Text[ sk ] = "Lístie";
+    Text[ da ] = "Løv";
+    Text[ sv ] = "Löv";
+    Text[ pl ] = "Liście";
+    Text[ pt-BR ] = "Folhagem";
+    Text[ th ] = "ใบไม้";
+    Text[ ja ] = "蔦";
+    Text[ ko ] = "나뭇잎";
+    Text[ zh-CN ] = "树叶";
+    Text[ zh-TW ] = "樹葉";
+    Text[ tr ] = "Yapraklar";
+    Text[ hi-IN ] = "पत्ता";
+    Text[ ar ] = "ورق أشجار";
+    Text[ he ] = "Laub";
+};
+String RID_SVXSTR_BMP16
+{
+    Text [ de ] = "Kunstrasen";
+    Text [ en-US ] = "Artificial Turf";
+    Text[ pt ] = "Relva artificial";
+    Text[ ru ] = "Искусственный дерн";
+    Text[ el ] = "Τεχνητός χορτοτάπητας";
+    Text[ nl ] = "Kunstgras";
+    Text[ fr ] = "Gazon artificiel";
+    Text[ es ] = "Césped sintético";
+    Text[ fi ] = "Keinonurmi";
+    Text[ ca ] = "Gespa artificial";
+    Text[ it ] = "Prato artificiale";
+    Text[ sk ] = "Umelý trávnik";
+    Text[ da ] = "Kunstig plæne";
+    Text[ sv ] = "Konstgjord gräsmatta";
+    Text[ pl ] = "Sztuczny trawnik";
+    Text[ pt-BR ] = "Grama Artificial";
+    Text[ th ] = "หญ้าเทียม";
+    Text[ ja ] = "人工芝生";
+    Text[ ko ] = "인공잔디";
+    Text[ zh-CN ] = "人造草地";
+    Text[ zh-TW ] = "人造草地";
+    Text[ tr ] = "Yapay çim";
+    Text[ hi-IN ] = "कृत्रिम ढेला";
+    Text[ ar ] = "نجيل صناعي";
+    Text[ he ] = "Kunstrasen";
+};
+String RID_SVXSTR_BMP17
+{
+    Text [ de ] = "Gänseblümchen";
+    Text [ en-US ] = "Daisy";
+    Text[ pt ] = "Margaridas";
+    Text[ ru ] = "Маргаритки";
+    Text[ el ] = "Ασπρολούλουδο";
+    Text[ nl ] = "Madeliefjes";
+    Text[ fr ] = "Marguerites";
+    Text[ es ] = "Margarita";
+    Text[ fi ] = "Päivänkakkara";
+    Text[ ca ] = "Margarida";
+    Text[ it ] = "Margherite";
+    Text[ sk ] = "Sedmikráska";
+    Text[ da ] = "Tusindfryd";
+    Text[ sv ] = "Tusenskönor";
+    Text[ pl ] = "Stokrotka";
+    Text[ pt-BR ] = "Margarida";
+    Text[ th ] = "เดซี่";
+    Text[ ja ] = "デージー";
+    Text[ ko ] = "데이지꽃";
+    Text[ zh-CN ] = "雏菊";
+    Text[ zh-TW ] = "雛菊";
+    Text[ tr ] = "Papatya";
+    Text[ hi-IN ] = "गुलबहार";
+    Text[ ar ] = "زهرة الربيع";
+    Text[ he ] = "Gänseblümchen";
+};
+String RID_SVXSTR_BMP18
+{
+    Text [ de ] = "Orange";
+    Text [ en-US ] = "Orange";
+    Text[ pt ] = "Laranja";
+    Text[ ru ] = "Апельсин";
+    Text[ el ] = "Πορτοκαλί";
+    Text[ nl ] = "Oranje";
+    Text[ fr ] = "Rouille";
+    Text[ es ] = "Naranja";
+    Text[ fi ] = "Oranssi";
+    Text[ ca ] = "Taronja";
+    Text[ it ] = "Arancione";
+    Text[ sk ] = "Oranžová";
+    Text[ da ] = "Orange";
+    Text[ sv ] = "Orange";
+    Text[ pl ] = "Pomarańcza";
+    Text[ pt-BR ] = "Laranja";
+    Text[ th ] = "ส้ม";
+    Text[ ja ] = "オレンジ";
+    Text[ ko ] = "주황색";
+    Text[ zh-CN ] = "橙色";
+    Text[ zh-TW ] = "橙色";
+    Text[ tr ] = "Turuncu";
+    Text[ hi-IN ] = "नारंग";
+    Text[ ar ] = "برتقالي";
+    Text[ he ] = "Orange";
+};
+String RID_SVXSTR_BMP19
+{
+    Text [ de ] = "Feurig";
+    Text [ en-US ] = "Fiery";
+    Text[ pt ] = "Chamas";
+    Text[ ru ] = "Огонь";
+    Text[ el ] = "Φλεγόμενος";
+    Text[ nl ] = "Vurig";
+    Text[ fr ] = "Flamme";
+    Text[ es ] = "Fogoso";
+    Text[ fi ] = "Tulinen";
+    Text[ ca ] = "Fogós";
+    Text[ it ] = "Fiamma";
+    Text[ sk ] = "Plamenný";
+    Text[ da ] = "Flammende";
+    Text[ sv ] = "Eldig";
+    Text[ pl ] = "Płomienie";
+    Text[ pt-BR ] = "Chamas";
+    Text[ th ] = "เพลิง";
+    Text[ ja ] = "灼熱";
+    Text[ ko ] = "불꽃";
+    Text[ zh-CN ] = "火焰";
+    Text[ zh-TW ] = "火紅色";
+    Text[ tr ] = "Ateş";
+    Text[ hi-IN ] = "तीक्ष्ण";
+    Text[ ar ] = "ناري";
+    Text[ he ] = "Feurig";
+};
+String RID_SVXSTR_BMP20
+{
+    Text [ de ] = "Rosen";
+    Text [ en-US ] = "Roses";
+    Text[ pt ] = "Rosas";
+    Text[ ru ] = "Розы";
+    Text[ el ] = "Τριαντάφυλλο";
+    Text[ nl ] = "Rozen";
+    Text[ fr ] = "Roses";
+    Text[ es ] = "Rosas";
+    Text[ fi ] = "Ruusut";
+    Text[ ca ] = "Roses";
+    Text[ it ] = "Rose";
+    Text[ sk ] = "Ruže";
+    Text[ da ] = "Roser";
+    Text[ sv ] = "Rosor";
+    Text[ pl ] = "Róże";
+    Text[ pt-BR ] = "Rosas";
+    Text[ th ] = "กุหลาบ";
+    Text[ ja ] = "真っ赤なバラ";
+    Text[ ko ] = "장미";
+    Text[ zh-CN ] = "玫瑰";
+    Text[ zh-TW ] = "玫瑰";
+    Text[ tr ] = "Gül";
+    Text[ hi-IN ] = "गुलाब";
+    Text[ ar ] = "ورد";
+    Text[ he ] = "Rosen";
+};
+
+String RID_SVXSTR_BMP21
+{
+    Text [ de ] = "Bitmap";
+    Text [ en-US ] = "Bitmap";
+    Text[ pt ] = "Bitmap";
+    Text[ ru ] = "Растр";
+    Text[ el ] = "Bitmap";
+    Text[ nl ] = "Bitmap";
+    Text[ fr ] = "Bitmap";
+    Text[ es ] = "Mapa de bits";
+    Text[ fi ] = "Bittikartta";
+    Text[ ca ] = "Mapa de bits";
+    Text[ it ] = "Bitmap";
+    Text[ sk ] = "Bitová mapa";
+    Text[ da ] = "Bitmap";
+    Text[ sv ] = "Bitmap";
+    Text[ pl ] = "Mapa bitowa";
+    Text[ pt-BR ] = "Bitmap";
+    Text[ th ] = "บิทแม็ป";
+    Text[ ja ] = "ビットマップ";
+    Text[ ko ] = "비트맵";
+    Text[ zh-CN ] = "位图";
+    Text[ zh-TW ] = "點陣圖";
+    Text[ tr ] = "Bitmap";
+    Text[ hi-IN ] = "बिटमॉप्";
+    Text[ ar ] = "صورة نقطية";
+    Text[ he ] = "Bitmap";
+};
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-dash-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH0_DEF
+{
+    Text = "Ultrafine Dashed";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH1_DEF
+{
+    Text = "Fine Dashed";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH2_DEF
+{
+    Text = "Ultrafine 2 Dots 3 Dashes";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH3_DEF
+{
+    Text = "Fine Dotted";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH4_DEF
+{
+    Text = "Line with Fine Dots";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH5_DEF
+{
+    Text = "Fine Dashed (var)";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH6_DEF
+{
+    Text = "3 Dashes 3 Dots (var)";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH7_DEF
+{
+    Text = "Ultrafine Dotted (var)";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH8_DEF
+{
+    Text = "Line Style 9";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH9_DEF
+{
+    Text = "2 Dots 1 Dash";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH10_DEF
+{
+    Text = "Dashed (var)";
+};
+/* nicht uebersetzen */
+// needed: #i33205#
+String RID_SVXSTR_DASH11_DEF
+{
+    Text = "Dash";
+};
+
+String RID_SVXSTR_DASH0
+{
+    Text [ de ] = "Ultrafein gestrichelt";
+    Text [ en-US ] = "Ultrafine dashed";
+    Text[ pt ] = "Tracejado ultrafino";
+    Text[ ru ] = "Сверхтонкий штрих";
+    Text[ el ] = "Διακεκομμένη (Πολύ λεπτή)";
+    Text[ nl ] = "Extra fijne streepjes";
+    Text[ fr ] = "Traits ultrafins";
+    Text[ es ] = "Trazos ultrafinos";
+    Text[ fi ] = "Hyvin ohut katkoviiva";
+    Text[ ca ] = "Traços molt fins";
+    Text[ it ] = "A tratti finissimi";
+    Text[ sk ] = "Veľmi jemne čiarkovaný";
+    Text[ da ] = "Ultrafin stiplet";
+    Text[ sv ] = "Mycket fint streckad";
+    Text[ pl ] = "Bardzo cienkie kreski";
+    Text[ pt-BR ] = "Tracejado ultra fino";
+    Text[ th ] = "เส้นประที่บางมาก";
+    Text[ ja ] = "極細の破線";
+    Text[ ko ] = "미세한 파선";
+    Text[ zh-CN ] = "超细划线";
+    Text[ zh-TW ] = "超細點劃線";
+    Text[ tr ] = "Çok ince kesik çizgili";
+    Text[ hi-IN ] = "अत्यन्त सूक्ष्म बिन्दुओं से डॉश् की हुयी";
+    Text[ ar ] = "شُرط رفيعة جداً";
+    Text[ he ] = "Ultrafein gestrichelt";
+};
+String RID_SVXSTR_DASH1
+{
+    Text [ de ] = "Fein gestrichelt";
+    Text [ en-US ] = "Fine dashed";
+    Text[ pt ] = "Tracejado fino";
+    Text[ ru ] = "Тонкий штрих";
+    Text[ el ] = "Διακεκομμένη (λεπτή)";
+    Text[ nl ] = "Streepjes";
+    Text[ fr ] = "Traits fins";
+    Text[ es ] = "Trazos finos";
+    Text[ fi ] = "Ohut katkoviiva";
+    Text[ ca ] = "Traços fins";
+    Text[ it ] = "A tratti fini";
+    Text[ sk ] = "Jemne čiarkovaný";
+    Text[ da ] = "Fin stiplet";
+    Text[ sv ] = "Fint streckad";
+    Text[ pl ] = "Cienkie kreski";
+    Text[ pt-BR ] = "Tracejado fino";
+    Text[ th ] = "เส้นประบาง";
+    Text[ ja ] = "細かい破線";
+    Text[ ko ] = "섬세한 파선";
+    Text[ zh-CN ] = "细划线";
+    Text[ zh-TW ] = "細點劃線";
+    Text[ tr ] = "İnce kesik çizgili";
+    Text[ hi-IN ] = "सूक्ष्म बिन्दुओं से डॉश् की हुयी";
+    Text[ ar ] = "شُرط رفيعة";
+    Text[ he ] = "Fein gestrichelt";
+};
+String RID_SVXSTR_DASH2
+{
+    Text [ de ] = "Ultrafein 2 Punkte 3 Striche";
+    Text [ en-US ] = "Ultrafine 2 dots 3 dashes";
+    Text[ pt ] = "3 traços 2 pontos ultrafino";
+    Text[ ru ] = "Сверхтонкая 2 точки 3 штриха";
+    Text[ el ] = "2 τελείες - 3 παύλες (πολύ λεπτές)";
+    Text[ nl ] = "Extra fijn 2 puntjes 3 streepjes";
+    Text[ fr ] = "Ultrafine 2 points 3 traits";
+    Text[ es ] = "Ultrafino 2 puntos 2 trazos";
+    Text[ fi ] = "Hyvin ohut, 2 pistettä, 3 katkoviivaa";
+    Text[ ca ] = "Ultrafí 2 punts 2 traços";
+    Text[ it ] = "A 2 punti 3 linee finissimi";
+    Text[ sk ] = "Veľmi jemné dve bodky a tri čiarky";
+    Text[ da ] = "Ultrafin 2 punkter 3 streger";
+    Text[ sv ] = "Mycket fint 2 prickar 3 streck";
+    Text[ pl ] = "Bardzo cienkie 2 kropki 3 kreski";
+    Text[ pt-BR ] = "3 traços 2 pontos ultra fino";
+    Text[ th ] = "เส้นประ 2 จุด 3 ขีดที่บางมาก";
+    Text[ ja ] = "極細の二点三破線";
+    Text[ ko ] = "섬세한 2점 3파선";
+    Text[ zh-CN ] = "超细2点3划线";
+    Text[ zh-TW ] = "超細兩點三劃線";
+    Text[ tr ] = "Çok ince 2 nokta 3 çizgi";
+    Text[ hi-IN ] = "अत्यन्त सूक्ष्म 2 बिन्दु 3 डॉश";
+    Text[ ar ] = "2 نقطة 3 شرط، رفيعة جداً";
+    Text[ he ] = "Ultrafein 2 Punkte 3 Striche";
+};
+String RID_SVXSTR_DASH3
+{
+    Text [ de ] = "Fein gepunktet";
+    Text [ en-US ] = "Fine dotted";
+    Text[ pt ] = "Pontilhado fino";
+    Text[ ru ] = "Тонкий пунктир 1";
+    Text[ el ] = "Λεπτή διάστικτη";
+    Text[ nl ] = "Fijn gestippeld";
+    Text[ fr ] = "Fine pointillée";
+    Text[ es ] = "Punteado fino";
+    Text[ fi ] = "Pienet pisteet";
+    Text[ ca ] = "Amb puntejat fi";
+    Text[ it ] = "A punti fini";
+    Text[ sk ] = "Jemne bodkované";
+    Text[ da ] = "Fin punkteret";
+    Text[ sv ] = "Fint prickig";
+    Text[ pl ] = "Delikatne kropki";
+    Text[ pt-BR ] = "Pontilhado fino";
+    Text[ th ] = "จุดบาง";
+    Text[ ja ] = "細かい点線";
+    Text[ ko ] = "여린 점선";
+    Text[ zh-CN ] = "细点线";
+    Text[ zh-TW ] = "細點";
+    Text[ tr ] = "İnce noktalı";
+    Text[ hi-IN ] = "सूक्ष्म बिन्दी";
+    Text[ ar ] = "نقاط رفيعة";
+    Text[ he ] = "Fein gepunktet";
+};
+String RID_SVXSTR_DASH4
+{
+    Text [ de ] = "Strich mit feinen Punkten";
+    Text [ en-US ] = "Line with fine dots";
+    Text[ pt ] = "Traço com pontos finos";
+    Text[ ru ] = "Линия с тонким пунктиром";
+    Text[ el ] = "Γραμμή με λεπτές τελείες";
+    Text[ nl ] = "Lijn met fijne puntjes";
+    Text[ fr ] = "Trait avec des points fins";
+    Text[ es ] = "Trazo con puntos finos";
+    Text[ fi ] = "Viiva pienillä pisteillä";
+    Text[ ca ] = "Traç amb punts fins";
+    Text[ it ] = "Linea con punti fini";
+    Text[ sk ] = "Čiara tvorená jemnými bodkami";
+    Text[ da ] = "Streg med fine prikker";
+    Text[ sv ] = "Streck med fina prickar";
+    Text[ pl ] = "Linia z delikatnymi kropkami";
+    Text[ pt-BR ] = "Traço com pontilhado fino";
+    Text[ th ] = "เส้นเป็นจุดบาง";
+    Text[ ja ] = "細かい点の集まった線";
+    Text[ ko ] = "섬세한 점선";
+    Text[ zh-CN ] = "细点划线";
+    Text[ zh-TW ] = "細點線條";
+    Text[ tr ] = "İnce noktalı çizgi";
+    Text[ hi-IN ] = "सूक्ष बिन्दुओं सहित रेखा";
+    Text[ ar ] = "خط ذو نقاط رفيعة";
+    Text[ he ] = "Strich mit feinen Punkten";
+};
+String RID_SVXSTR_DASH5
+{
+    Text [ de ] = "Fein gestrichelt (variabel)";
+    Text [ en-US ] = "Fine dashed (variable)";
+    Text[ pt ] = "Tracejado fino (variável)";
+    Text[ ru ] = "Тонкий пунктир 2";
+    Text[ el ] = "Διακεκομμένη λεπτή (μεταβλητή)";
+    Text[ nl ] = "Streepjes (variabel)";
+    Text[ fr ] = "Traits fins (variable)";
+    Text[ es ] = "Trazos finos (variable)";
+    Text[ fi ] = "Pienet katkoviivat (muuttuja)";
+    Text[ ca ] = "Traços fins (variable)";
+    Text[ it ] = "A tratti fini (var)";
+    Text[ sk ] = "Jemne čiarkovaný (premenlivé)";
+    Text[ da ] = "Fin stiplet (variabel)";
+    Text[ sv ] = "Fint streckad (variabel)";
+    Text[ pl ] = "Cienkie kreski (zmienne)";
+    Text[ pt-BR ] = "Tracejado fino (variável)";
+    Text[ th ] = "เส้นประบาง (ตัวแปร)";
+    Text[ ja ] = "細かい破線(可変)";
+    Text[ ko ] = "섬세한 파선(가변)";
+    Text[ zh-CN ] = "细划线 (可变)";
+    Text[ zh-TW ] = "細點劃線(可變)";
+    Text[ tr ] = "İnce kesik çizgili (değişken)";
+    Text[ hi-IN ] = "सूक्ष्म रूप से डॉश की हुयी (वेरिऐबल्)";
+    Text[ ar ] = "شُرط رفيعة (متغيرة)";
+    Text[ he ] = "Fein gestrichelt (variabel)";
+};
+String RID_SVXSTR_DASH6
+{
+    Text [ de ] = "3 Striche 3 Punkte (variabel)";
+    Text [ en-US ] = "3 dashes 3 dots (variable)";
+    Text[ pt ] = "3 traços 3 pontos (variável)";
+    Text[ ru ] = "3 штриха 3 точки";
+    Text[ el ] = "3 παύλες - 3 τελείες (μεταβλητή)";
+    Text[ nl ] = "3 streepjes 3 puntjes (variabel)";
+    Text[ fr ] = "3 traits 3 points (variable)";
+    Text[ es ] = "3 trazos 3 puntos (variable)";
+    Text[ fi ] = "3 katkoviivaa, 3 pistettä (muuttuja)";
+    Text[ ca ] = "3 traços 3 punts (variable)";
+    Text[ it ] = "A 3 linee 3 punti (var)";
+    Text[ sk ] = "3 čiarky 3 bodky (premenlivé)";
+    Text[ da ] = "3 streger 3 punkter (variabel)";
+    Text[ sv ] = "3 streck 3 prickar (variabel)";
+    Text[ pl ] = "3 kreski 3 kropki (zmienne)";
+    Text[ pt-BR ] = "3 traços 3 pontos (variável)";
+    Text[ th ] = "3 ขีด 3 จุด (ตัวแปร)";
+    Text[ ja ] = "三破線三点鎖線(可変)";
+    Text[ ko ] = "삼파선 삼점 쇄선(가변)";
+    Text[ zh-CN ] = "3 划 3 点 (可变)";
+    Text[ zh-TW ] = "3 劃線 3 點(可變)";
+    Text[ tr ] = "3 çizgi 3 nokta (değişken)";
+    Text[ hi-IN ] = "3 डॉश 3 बिन्दु (वेरिऐबल्)";
+    Text[ ar ] = "3 شُرط 3 نقاط (متغيرة)";
+    Text[ he ] = "3 Striche 3 Punkte (variabel)";
+};
+String RID_SVXSTR_DASH7
+{
+    Text [ de ] = "Ultrafein gepunktet (variabel)";
+    Text [ en-US ] = "Ultrafine dotted (variable)";
+    Text[ pt ] = "Pontilhado ultrafino (variável)";
+    Text[ ru ] = "Сверхтонкий пунктир";
+    Text[ el ] = "Πολύ λεπτή διάστικτη (μεταβλητή)";
+    Text[ nl ] = "Extra fijn gestippeld (variabel)";
+    Text[ fr ] = "Ultrafine pointillée (variable)";
+    Text[ es ] = "Punteado ultrafino (variable)";
+    Text[ fi ] = "Hyvin ohut pisteviiva (muuttuja)";
+    Text[ ca ] = "Puntejat molt fi (variable)";
+    Text[ it ] = "A punti finissimi (var)";
+    Text[ sk ] = "Veľmi jemne bodkované (premenlivé)";
+    Text[ da ] = "Ultrafin punkteret (variabel)";
+    Text[ sv ] = "Mycket fint prickig (variabel)";
+    Text[ pl ] = "Bardzo delikatne kropki (zmienne)";
+    Text[ pt-BR ] = "Pontilhado ultra fino (variável)";
+    Text[ th ] = "จุดบางมาก(ตัวแปร)";
+    Text[ ja ] = "極細の点線(可変)";
+    Text[ ko ] = "미세한 점선(가변)";
+    Text[ zh-CN ] = "超细点线 (可变)";
+    Text[ zh-TW ] = "超細點(可變)";
+    Text[ tr ] = "Çok ince noktalı (değişken)";
+    Text[ hi-IN ] = "बिन्दुओं से चिह्नित अत्यन्य सूक्ष्म रेखा (वेरिऐबल्)";
+    Text[ ar ] = "نقاط رفيعة جداً (متغيرة)";
+    Text[ he ] = "Ultrafein gepunktet (variabel)";
+};
+String RID_SVXSTR_DASH8
+{
+    Text [ de ] = "Linienstil 9";
+    Text [ en-US ] = "Line style 9";
+    Text[ pt ] = "Estilo de linha 9";
+    Text[ ru ] = "Стиль линии 9";
+    Text[ el ] = "Στυλ γραμμής 9";
+    Text[ nl ] = "Lijntype 9";
+    Text[ fr ] = "Style de ligne 9";
+    Text[ es ] = "Estilo de línea 9";
+    Text[ fi ] = "Viivatyyli 9";
+    Text[ ca ] = "Estil de línia 9";
+    Text[ it ] = "Stile linea 9";
+    Text[ sk ] = "Štýl čiary 9";
+    Text[ da ] = "Stregtype 9";
+    Text[ sv ] = "Linjestil 9";
+    Text[ pl ] = "Styl linii 9";
+    Text[ pt-BR ] = "Estilo de linha 9";
+    Text[ th ] = "เส้นลักษณะที่ 9";
+    Text[ ja ] = "線スタイル 9";
+    Text[ ko ] = "선 스타일 9";
+    Text[ zh-CN ] = "线条式样 9";
+    Text[ zh-TW ] = "線條式樣 9";
+    Text[ tr ] = "Çizgi biçimi 9";
+    Text[ hi-IN ] = "रेखा शैली 9";
+    Text[ ar ] = "نمط الخط 9";
+    Text[ he ] = "Linienstil 9";
+};
+String RID_SVXSTR_DASH9
+{
+    Text [ de ] = "2 Punkte 1 Strich";
+    Text [ en-US ] = "2 dots 1 dash";
+    Text[ pt ] = "2 pontos 1 traço";
+    Text[ ru ] = "2 точки 1 штрих";
+    Text[ el ] = "2 τελείες - 1 παύλα";
+    Text[ nl ] = "2 puntjes 1 streepje";
+    Text[ fr ] = "2 points 1 trait";
+    Text[ es ] = "2 puntos 1 trazo";
+    Text[ fi ] = "2 pistettä, 1 katkoviiva";
+    Text[ ca ] = "2 punts 1 traç";
+    Text[ it ] = "A 2 punti 1 linea";
+    Text[ sk ] = "2 bodky 1 čiarka";
+    Text[ da ] = "2 punkter 1 streg";
+    Text[ sv ] = "2 prickar 1 streck";
+    Text[ pl ] = "2 kropki 1 kreska";
+    Text[ pt-BR ] = "2 pontos 1 traço";
+    Text[ th ] = "2 จุด 1 ขีด";
+    Text[ ja ] = "二点鎖線";
+    Text[ ko ] = "이점 쇄선";
+    Text[ zh-CN ] = "2 点 1 划";
+    Text[ zh-TW ] = "2 點 1 劃線";
+    Text[ tr ] = "2 nokta 1 çizgi";
+    Text[ hi-IN ] = "2 बिन्दु 1 डॉश";
+    Text[ ar ] = "2 نقطة 1 شرطة";
+    Text[ he ] = "2 Punkte 1 Strich";
+};
+String RID_SVXSTR_DASH10
+{
+    Text [ de ] = "Gestrichelt (variabel)";
+    Text [ en-US ] = "Dashed (variable)";
+    Text[ pt ] = "Pontilhado (variável)";
+    Text[ ru ] = "Пунктир 2";
+    Text[ el ] = "Διακεκομμένη (μεταβλητή)";
+    Text[ nl ] = "Streepjes (variabel)";
+    Text[ fr ] = "Traits (variable)";
+    Text[ es ] = "Trazos (variable)";
+    Text[ fi ] = "Katkoviiva (muuttuja)";
+    Text[ ca ] = "Traços (variable)";
+    Text[ it ] = "A tratti (var)";
+    Text[ sk ] = "Čiarky (premenlivé)";
+    Text[ da ] = "Stiplet (variabel)";
+    Text[ sv ] = "Streckad (variabel)";
+    Text[ pl ] = "Kreski (zmienne)";
+    Text[ pt-BR ] = "Tracejado (variável)";
+    Text[ th ] = "เส้นประ (ตัวแปร)";
+    Text[ ja ] = "破線(可変)";
+    Text[ ko ] = "파선(가변)";
+    Text[ zh-CN ] = "划线 (可变)";
+    Text[ zh-TW ] = "點劃線(可變)";
+    Text[ tr ] = "Kesik çizgili (değişken)";
+    Text[ hi-IN ] = "डॉश किया हुआ (वेरिऐबल्)";
+    Text[ ar ] = "شُرط (متغيرة)";
+    Text[ he ] = "Gestrichelt (variabel)";
+};
+String RID_SVXSTR_DASH11
+{
+    Text [ de ] = "Gestrichelt";
+    Text [ en-US ] = "Dashed";
+    Text[ pt ] = "Tracejado";
+    Text[ ru ] = "Пунктир 1";
+    Text[ el ] = "Διακεκομμένη";
+    Text[ nl ] = "Streepjes";
+    Text[ fr ] = "Traits";
+    Text[ es ] = "Trazos";
+    Text[ fi ] = "Katkoviiva";
+    Text[ ca ] = "Traçat";
+    Text[ it ] = "A tratti";
+    Text[ sk ] = "Čiarkované";
+    Text[ da ] = "Stiplet";
+    Text[ sv ] = "Streckat";
+    Text[ pl ] = "Kreski";
+    Text[ pt-BR ] = "Tracejado";
+    Text[ th ] = "เส้นประ";
+    Text[ ja ] = "破線状";
+    Text[ ko ] = "파선";
+    Text[ zh-CN ] = "破折号";
+    Text[ zh-TW ] = "破折號";
+    Text[ tr ] = "Kesik çizgi";
+    Text[ hi-IN ] = "डॉश की हुयी";
+    Text[ ar ] = "شُرط";
+    Text[ he ] = "Gestrichelt";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-line-end-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND0_DEF
+{
+    Text = "Arrow concave";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND1_DEF
+{
+    Text = "Square 45";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND2_DEF
+{
+    Text = "Small Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND3_DEF
+{
+    Text = "Dimension Lines";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND4_DEF
+{
+    Text = "Double Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND5_DEF
+{
+    Text = "Rounded short Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND6_DEF
+{
+    Text = "Symmetric Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND7_DEF
+{
+    Text = "Line Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND8_DEF
+{
+    Text = "Rounded large Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND9_DEF
+{
+    Text = "Circle";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND10_DEF
+{
+    Text = "Square";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND11_DEF
+{
+    Text = "Arrow";
+};
+
+String RID_SVXSTR_LEND0
+{
+    Text [ de ] = "Pfeil konkav";
+    Text [ en-US ] = "Arrow concave";
+    Text[ pt ] = "Seta côncava";
+    Text[ ru ] = "Вогнутая стрелка";
+    Text[ el ] = "Βέλος κοίλο";
+    Text[ nl ] = "Pijl concaaf";
+    Text[ fr ] = "Flèche concave";
+    Text[ es ] = "Flecha cóncava";
+    Text[ fi ] = "Kovera nuoli";
+    Text[ ca ] = "Fletxa còncava";
+    Text[ it ] = "Freccia concava";
+    Text[ sk ] = "Konkávna šípka";
+    Text[ da ] = "Pil konkav";
+    Text[ sv ] = "Pil konkav";
+    Text[ pl ] = "Strzałka wklęsła";
+    Text[ pt-BR ] = "Seta côncava";
+    Text[ th ] = "ลูกศรที่เว้าเข้าข้างใน";
+    Text[ ja ] = "中くぼみの矢印";
+    Text[ ko ] = "오목 화살표";
+    Text[ zh-CN ] = "凹形箭头";
+    Text[ zh-TW ] = "箭頭凹形";
+    Text[ tr ] = "İçbükey ok";
+    Text[ hi-IN ] = "तीर नतोदर";
+    Text[ ar ] = "سهم مقعر";
+    Text[ he ] = "Pfeil konkav";
+};
+String RID_SVXSTR_LEND1
+{
+    Text [ de ] = "Quadrat 45";
+    Text [ en-US ] = "Square 45";
+    Text[ pt ] = "Quadrado 45";
+    Text[ ru ] = "Ромб";
+    Text[ el ] = "Τετράγωνο 45";
+    Text[ nl ] = "Vierkant 45";
+    Text[ fr ] = "Carré 45";
+    Text[ es ] = "Cuadrado 45";
+    Text[ fi ] = "Neliö 45";
+    Text[ ca ] = "Quadrat 45";
+    Text[ it ] = "Quadrato 45";
+    Text[ sk ] = "Štvorec 45";
+    Text[ da ] = "Kvadrat 45";
+    Text[ sv ] = "Kvadrat 45";
+    Text[ pl ] = "Kwadrat 45";
+    Text[ pt-BR ] = "Losango";
+    Text[ th ] = "สี่เหลี่ยมจัตุรัส 45";
+    Text[ ja ] = "真四角 45度傾斜";
+    Text[ ko ] = "정사각형 45";
+    Text[ zh-CN ] = "正方形 45 度";
+    Text[ zh-TW ] = "正方形 45 度";
+    Text[ tr ] = "Kare 45";
+    Text[ hi-IN ] = "समचतुर्भुज 45";
+    Text[ ar ] = "مربع 45";
+    Text[ he ] = "Quadrat 45";
+};
+String RID_SVXSTR_LEND2
+{
+    Text [ de ] = "Schmaler Pfeil";
+    Text [ en-US ] = "Small arrow";
+    Text[ pt ] = "Seta estreita";
+    Text[ ru ] = "Короткая стрелка";
+    Text[ el ] = "Λεπτό βέλος";
+    Text[ nl ] = "Smalle pijl";
+    Text[ fr ] = "Flèche étroite";
+    Text[ es ] = "Flecha estrecha";
+    Text[ fi ] = "Pieni nuoli";
+    Text[ ca ] = "Fletxa petita";
+    Text[ it ] = "Freccia piccola";
+    Text[ sk ] = "Malá šípka";
+    Text[ da ] = "Smal pil";
+    Text[ sv ] = "Smal pil";
+    Text[ pl ] = "Cienka strzałka";
+    Text[ pt-BR ] = "Seta pequena";
+    Text[ th ] = "ลูกศรเล็ก";
+    Text[ ja ] = "長細い矢印";
+    Text[ ko ] = "가는 화살표";
+    Text[ zh-CN ] = "细箭头";
+    Text[ zh-TW ] = "細小箭頭";
+    Text[ tr ] = "İnce ok";
+    Text[ hi-IN ] = "छोटा तीर";
+    Text[ ar ] = "سهم رفيع";
+    Text[ he ] = "Schmaler Pfeil";
+};
+String RID_SVXSTR_LEND3
+{
+    Text [ de ] = "Bemaßungsenden";
+    Text [ en-US ] = "Dimension lines";
+    Text[ pt ] = "Linhas de dimensionamento";
+    Text[ ru ] = "Размерные линии";
+    Text[ el ] = "Γραμμές διαστασιολόγησης";
+    Text[ nl ] = "Afmetingseinden";
+    Text[ fr ] = "Extrémités de cotation";
+    Text[ es ] = "Líneas de dimensiones";
+    Text[ fi ] = "Mittajanat";
+    Text[ ca ] = "Fines de dimensions";
+    Text[ it ] = "Estremità quotatura";
+    Text[ sk ] = "Kótovacie čiary";
+    Text[ da ] = "Dimensioneringsstreger";
+    Text[ sv ] = "Dimensioneringsändar";
+    Text[ pl ] = "Linie wymiarowe";
+    Text[ pt-BR ] = "Linhas de cota";
+    Text[ th ] = "เส้นมีมิติ";
+    Text[ ja ] = "寸法線の終点";
+    Text[ ko ] = "치수선";
+    Text[ zh-CN ] = "定尺寸线条";
+    Text[ zh-TW ] = "定尺寸線條";
+    Text[ tr ] = "Boyutlandırma çizgileri";
+    Text[ hi-IN ] = "परिमाण सम्बन्धी रेखाएँ";
+    Text[ ar ] = "خطوط قياس";
+    Text[ he ] = "Bemaßungsenden";
+};
+String RID_SVXSTR_LEND4
+{
+    Text [ de ] = "Doppelpfeil";
+    Text [ en-US ] = "Double Arrow";
+    Text[ pt ] = "Seta dupla";
+    Text[ ru ] = "Двойная стрелка";
+    Text[ el ] = "Διπλό βέλος";
+    Text[ nl ] = "Dubbele pijl";
+    Text[ fr ] = "Double flèche";
+    Text[ es ] = "Flecha doble";
+    Text[ fi ] = "Tuplanuoli";
+    Text[ ca ] = "Fletxa doble";
+    Text[ it ] = "Freccia doppia";
+    Text[ sk ] = "Dvojitá šípka";
+    Text[ da ] = "Dobbeltpil";
+    Text[ sv ] = "Dubbel pil";
+    Text[ pl ] = "Podwójna strzałka";
+    Text[ pt-BR ] = "Seta dupla";
+    Text[ th ] = "ลูกศรคู่";
+    Text[ ja ] = "二重矢印";
+    Text[ ko ] = "이중 화살표";
+    Text[ zh-CN ] = "双箭头";
+    Text[ zh-TW ] = "雙箭頭";
+    Text[ tr ] = "İki uçlu ok";
+    Text[ hi-IN ] = "द्विगुणित तीर";
+    Text[ ar ] = "سهم مزدوج";
+    Text[ he ] = "Doppelpfeil";
+};
+String RID_SVXSTR_LEND5
+{
+    Text [ de ] = "Abgerundeter kurzer Pfeil";
+    Text [ en-US ] = "Rounded short arrow";
+    Text[ pt ] = "Seta curta arredondada";
+    Text[ ru ] = "Скругленная короткая стрелка";
+    Text[ el ] = "Στρογγυλευμένο κοντό βέλος";
+    Text[ nl ] = "Afgeronde korte pijl";
+    Text[ fr ] = "Flèche courte arrondie";
+    Text[ es ] = "Flecha corta redondeada";
+    Text[ fi ] = "Pyöristetty lyhyt nuoli";
+    Text[ ca ] = "Fletxa curta arrodonida";
+    Text[ it ] = "Freccia corta arrotondata";
+    Text[ sk ] = "Zaoblená krátká šípka";
+    Text[ da ] = "Afrundet kort pil";
+    Text[ sv ] = "Avrundad kort pil";
+    Text[ pl ] = "Zaokr. krótka strzałka";
+    Text[ pt-BR ] = "Seta pequena arredondada";
+    Text[ th ] = "ลูกศรสั้นมน";
+    Text[ ja ] = "先の丸い短かめの矢印";
+    Text[ ko ] = "둥글린 짧은 화살표";
+    Text[ zh-CN ] = "圆形短箭头";
+    Text[ zh-TW ] = "圓形短箭頭";
+    Text[ tr ] = "Yuvarlatılmış kısa ok";
+    Text[ hi-IN ] = "गोल आकार का छोटा तीर";
+    Text[ ar ] = "سهم قصير مستدير";
+    Text[ he ] = "Abgerundeter kurzer Pfeil";
+};
+String RID_SVXSTR_LEND6
+{
+    Text [ de ] = "Symmetrischer Pfeil";
+    Text [ en-US ] = "Symmetric arrow";
+    Text[ pt ] = "Seta simétrica";
+    Text[ ru ] = "Симметричная стрелка";
+    Text[ el ] = "Συμμετρικό βέλος";
+    Text[ nl ] = "Symmetrische pijl";
+    Text[ fr ] = "Flèche symétrique";
+    Text[ es ] = "Flecha simétrica";
+    Text[ fi ] = "Symmetrinen nuoli";
+    Text[ ca ] = "Fletxa simètrica";
+    Text[ it ] = "Freccia simmetrica";
+    Text[ sk ] = "Súmerná šípka";
+    Text[ da ] = "Symmetrisk pil";
+    Text[ sv ] = "Symmetrisk pil";
+    Text[ pl ] = "Strzałka symetryczna";
+    Text[ pt-BR ] = "Seta simétrica";
+    Text[ th ] = "ลูกศรสมมาตร";
+    Text[ ja ] = "バランスのとれた矢印";
+    Text[ ko ] = "대칭 화살표";
+    Text[ zh-CN ] = "对称箭头";
+    Text[ zh-TW ] = "對稱式箭頭";
+    Text[ tr ] = "Simetrik ok";
+    Text[ hi-IN ] = "समरूप का तीर";
+    Text[ ar ] = "سهم متناسق";
+    Text[ he ] = "Symmetrischer Pfeil";
+};
+String RID_SVXSTR_LEND7
+{
+    Text [ de ] = "Linien-Pfeil";
+    Text [ en-US ] = "Line arrow";
+    Text[ pt ] = "Linha-seta";
+    Text[ ru ] = "Линейная стрелка";
+    Text[ el ] = "Γραμμή-βέλος";
+    Text[ nl ] = "Lijn-pijl";
+    Text[ fr ] = "Ligne fléchée";
+    Text[ es ] = "Línea de flecha";
+    Text[ fi ] = "Viivanuoli";
+    Text[ ca ] = "Fletxa línia";
+    Text[ it ] = "Linea freccia";
+    Text[ sk ] = "Šípka čiary";
+    Text[ da ] = "Streg-pil";
+    Text[ sv ] = "Linjepil";
+    Text[ pl ] = "Strzałka linii";
+    Text[ pt-BR ] = "Seta tipo linha";
+    Text[ th ] = "เส้นลูกศร";
+    Text[ ja ] = "線状の矢印";
+    Text[ ko ] = "선 화살표";
+    Text[ zh-CN ] = "线条箭头";
+    Text[ zh-TW ] = "劃線箭頭";
+    Text[ tr ] = "Çizgili ok";
+    Text[ hi-IN ] = "रेखा तीर";
+    Text[ ar ] = "سهم خطي";
+    Text[ he ] = "Linien-Pfeil";
+};
+String RID_SVXSTR_LEND8
+{
+    Text [ de ] = "Abgerundeter langer Pfeil";
+    Text [ en-US ] = "Rounded large arrow";
+    Text[ pt ] = "Seta longa arredondada";
+    Text[ ru ] = "Скругленная длинная стрелка";
+    Text[ el ] = "Στρογγυλευμένο μακρύ βέλος";
+    Text[ nl ] = "Afgeronde lange pijl";
+    Text[ fr ] = "Flèche longue arrondie";
+    Text[ es ] = "Flecha larga redondeada";
+    Text[ fi ] = "Pyöristetty iso nuoli";
+    Text[ ca ] = "Fletxa gran arrodonida";
+    Text[ it ] = "Freccia lunga arrotondata";
+    Text[ sk ] = "Zaoblená veľká šípka";
+    Text[ da ] = "Afrundet lang pil";
+    Text[ sv ] = "Avrundad stor pil";
+    Text[ pl ] = "Zaokr. długa strzałka";
+    Text[ pt-BR ] = "Seta grande arredondada";
+    Text[ th ] = "ลูกศรใหญ่มน";
+    Text[ ja ] = "先の丸い長めの矢印";
+    Text[ ko ] = "둥글린 긴 화살표";
+    Text[ zh-CN ] = "圆形长箭头";
+    Text[ zh-TW ] = "圓形大箭頭";
+    Text[ tr ] = "Yuvarlatılmış uzun ok";
+    Text[ hi-IN ] = "गोल आकार का बड़ा तीर";
+    Text[ ar ] = "سهم طويل مستدير";
+    Text[ he ] = "Abgerundeter langer Pfeil";
+};
+String RID_SVXSTR_LEND9
+{
+    Text [ de ] = "Kreis";
+    Text [ en-US ] = "Circle";
+    Text[ pt ] = "Círculo";
+    Text[ ru ] = "Круг";
+    Text[ el ] = "Κύκλος";
+    Text[ nl ] = "Cirkel";
+    Text[ fr ] = "Cercle";
+    Text[ es ] = "Círculo";
+    Text[ fi ] = "Ympyrä";
+    Text[ ca ] = "Cercle";
+    Text[ it ] = "Cerchio";
+    Text[ sk ] = "Kruh";
+    Text[ da ] = "Cirkel";
+    Text[ sv ] = "Cirkel";
+    Text[ pl ] = "Koło";
+    Text[ pt-BR ] = "Círculo";
+    Text[ th ] = "วงกลม";
+    Text[ ja ] = "丸印";
+    Text[ ko ] = "원";
+    Text[ zh-CN ] = "圆";
+    Text[ zh-TW ] = "圓形";
+    Text[ tr ] = "Daire";
+    Text[ hi-IN ] = "वृत्त";
+    Text[ ar ] = "دائرة";
+    Text[ he ] = "Kreis";
+};
+String RID_SVXSTR_LEND10
+{
+    Text [ de ] = "Quadrat";
+    Text [ en-US ] = "Square";
+    Text[ pt ] = "Quadrado";
+    Text[ ru ] = "Квадрат";
+    Text[ el ] = "Τετράγωνο";
+    Text[ nl ] = "Vierkant";
+    Text[ fr ] = "Carré";
+    Text[ es ] = "Cuadrado";
+    Text[ fi ] = "Neliö";
+    Text[ ca ] = "Quadrat";
+    Text[ it ] = "Quadrato";
+    Text[ sk ] = "Štvorec";
+    Text[ da ] = "Kvadrat";
+    Text[ sv ] = "Kvadrat";
+    Text[ pl ] = "Kwadrat";
+    Text[ pt-BR ] = "Quadrado";
+    Text[ th ] = "สี่เหลี่ยมจัตุรัส";
+    Text[ ja ] = "真四角";
+    Text[ ko ] = "정사각형";
+    Text[ zh-CN ] = "正方形";
+    Text[ zh-TW ] = "正方形";
+    Text[ tr ] = "Kare";
+    Text[ hi-IN ] = "समचतुर्भुज";
+    Text[ ar ] = "مربع";
+    Text[ he ] = "Quadrat";
+};
+String RID_SVXSTR_LEND11
+{
+    Text [ de ] = "Pfeil";
+    Text [ en-US ] = "Arrow";
+    Text[ pt ] = "Seta";
+    Text[ ru ] = "Стрелка";
+    Text[ el ] = "Βέλος";
+    Text[ nl ] = "Pijl";
+    Text[ fr ] = "Flèche";
+    Text[ es ] = "Flecha";
+    Text[ fi ] = "Nuoli";
+    Text[ ca ] = "Fletxa";
+    Text[ it ] = "Freccia";
+    Text[ sk ] = "Šípka";
+    Text[ da ] = "Pil";
+    Text[ sv ] = "Pil";
+    Text[ pl ] = "Strzałka";
+    Text[ pt-BR ] = "Seta";
+    Text[ th ] = "ลูกศร";
+    Text[ ja ] = "矢印";
+    Text[ ko ] = "화살표";
+    Text[ zh-CN ] = "箭头";
+    Text[ zh-TW ] = "箭頭";
+    Text[ tr ] = "Ok";
+    Text[ hi-IN ] = "तीर";
+    Text[ ar ] = "سهم";
+    Text[ he ] = "Pfeil";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard transparence gradients
+//
+
+/* nicht uebersetzen */
+// needed: #i33205#
+String RID_SVXSTR_TRASNGR0_DEF
+{
+    Text = "Transparency";
+};
+
+String RID_SVXSTR_TRASNGR0
+{
+    Text [ de ] = "Flächentransparenz";
+    Text [ en-US ] = "Transparency";
+    Text[ pt ] = "Transparência";
+    Text[ ru ] = "Прозрачность";
+    Text[ el ] = "Διαφάνεια επιφάνειας";
+    Text[ nl ] = "Transparantie";
+    Text[ fr ] = "Transparence";
+    Text[ es ] = "Transparencia";
+    Text[ fi ] = "Läpinäkyvyys";
+    Text[ ca ] = "Transparència";
+    Text[ it ] = "Trasparenza";
+    Text[ sk ] = "Priehľadnosť";
+    Text[ da ] = "Fladetransparens";
+    Text[ sv ] = "Yttransparens";
+    Text[ pl ] = "Przezroczystość";
+    Text[ pt-BR ] = "Transparência";
+    Text[ th ] = "โปร่งแสง";
+    Text[ ja ] = "表面の透化性";
+    Text[ ko ] = "면의 투명 효과";
+    Text[ zh-CN ] = "透明";
+    Text[ zh-TW ] = "平面透明";
+    Text[ tr ] = "Saydamlık";
+    Text[ hi-IN ] = "पारदर्शकता";
+    Text[ ar ] = "شفافية";
+    Text[ he ] = "Flächentransparenz";
+};

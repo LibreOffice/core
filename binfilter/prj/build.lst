@@ -1,0 +1,170 @@
+bf      binfilter : basic vcl xmlscript connectivity framework svtools offuh NULL
+bf	binfilter											usr1	-	all	bf_mkout NULL
+bf	binfilter\bf_svtools\source\inc						get		-	all	bf_svt_sinc NULL
+bf  binfilter\bf_svtools\source\config					nmake	-	all bf_svt_config NULL
+bf  binfilter\bf_svtools\source\filerec					nmake	-	all bf_svt_filerec NULL
+bf  binfilter\bf_svtools\source\filter.vcl\filter		nmake	-	all bf_svt_filter NULL
+bf  binfilter\bf_svtools\source\filter.vcl\igif			nmake	-	all bf_svt_igif NULL
+bf  binfilter\bf_svtools\source\filter.vcl\ixbm			nmake	-	all bf_svt_ixbm NULL
+bf  binfilter\bf_svtools\source\filter.vcl\ixpm			nmake	-	all bf_svt_ixpm NULL
+bf  binfilter\bf_svtools\source\filter.vcl\jpeg			nmake	-	all bf_svt_jpeg NULL
+bf  binfilter\bf_svtools\source\filter.vcl\wmf			nmake	-	all bf_svt_wmf NULL
+bf  binfilter\bf_svtools\source\items					nmake	-	all bf_svt_items NULL
+bf  binfilter\bf_svtools\source\items1					nmake	-	all bf_svt_items1 NULL
+bf  binfilter\bf_svtools\source\memtools				nmake	-	all bf_svt_memtools NULL
+bf  binfilter\bf_svtools\source\misc					nmake	-	all bf_svt_misc NULL
+bf  binfilter\bf_svtools\source\misc1					nmake	-	all bf_svt_misc1 NULL
+bf  binfilter\bf_svtools\source\notify					nmake	-	all bf_svt_notify NULL
+bf  binfilter\bf_svtools\source\numbers					nmake	-	all bf_svt_numbers NULL
+bf  binfilter\bf_svtools\source\svdde					nmake	-	all bf_svt_svdde NULL
+bf  binfilter\bf_svtools\source\syslocale				nmake	-	all bf_svt_syslocale NULL
+bf  binfilter\bf_svtools\source\undo					nmake	-	all bf_svt_undo NULL
+bf  binfilter\bf_svtools\source\uno						nmake	-	all bf_svt_uno NULL
+bf  binfilter\bf_svtools\util                                                   nmake   -       all bf_svt_util bf_svt_config bf_svt_filerec bf_svt_filter bf_svt_igif bf_svt_ixbm bf_svt_ixpm bf_svt_jpeg bf_svt_wmf bf_svt_items bf_svt_items1 bf_svt_memtools bf_svt_misc bf_svt_misc1 bf_svt_notify bf_svt_numbers bf_svt_svdde bf_svt_syslocale bf_svt_undo bf_svt_uno NULL
+
+bf	binfilter\bf_goodies\source\base2d					nmake	-	all	bf_go_base2d NULL
+bf	binfilter\bf_goodies\source\base3d					nmake	-	all	bf_go_base3d NULL
+bf	binfilter\bf_goodies\util							nmake	-	all	bf_go_util bf_svt_util bf_go_base3d bf_go_base2d NULL
+bf	binfilter\bf_xmloff\source\core						nmake	-	all	bf_xo_core NULL
+bf	binfilter\bf_xmloff\source\meta						nmake	-	all	bf_xo_meta NULL
+bf	binfilter\bf_xmloff\source\style					nmake	-	all	bf_xo_style NULL
+bf	binfilter\bf_xmloff\source\text						nmake	-	all	bf_xo_text NULL
+bf	binfilter\bf_xmloff\source\draw						nmake	-	all	bf_xo_draw NULL
+bf	binfilter\bf_xmloff\source\chart					nmake	-	all	bf_xo_chart NULL
+bf	binfilter\bf_xmloff\source\forms					nmake	-	all	bf_xo_forms NULL
+bf	binfilter\bf_xmloff\source\script					nmake	-	all	bf_xo_script NULL
+bf	binfilter\bf_xmloff\util							nmake	-	all	bf_xo_util bf_svt_util bf_go_util bf_xo_chart bf_xo_core bf_xo_draw bf_xo_forms bf_xo_meta bf_xo_script bf_xo_style bf_xo_text bf_so3_util NULL
+bf	binfilter\legacysmgr\source\legacy					nmake	-	all	bf_legacy	NULL
+bf  binfilter\bf_basic\source\basmgr                    nmake   -   all bf_sb_mgr NULL
+bf  binfilter\bf_basic\source\classes                   nmake   -   all bf_sb_class NULL
+bf  binfilter\bf_basic\source\comp                      nmake   -   all bf_sb_comp NULL
+bf  binfilter\bf_basic\source\runtime                   nmake   -   all bf_sb_rt NULL
+bf  binfilter\bf_basic\source\sbx                       nmake   -   all bf_sb_sbx NULL
+bf  binfilter\bf_basic\util                             nmake   -   all bf_sb_util bf_svt_util bf_sb_class bf_sb_comp bf_sb_mgr bf_sb_rt bf_sb_sbx NULL
+bf	binfilter\bf_sfx2\source\inc						get		-	all	bf_sf_sinc NULL
+bf	binfilter\bf_sfx2\source\appl						nmake	-	all	bf_sf_appl NULL
+bf	binfilter\bf_sfx2\source\view						nmake	-	all	bf_sf_view NULL
+bf	binfilter\bf_sfx2\source\bastyp						nmake	-	all	bf_sf_bast NULL
+bf	binfilter\bf_sfx2\source\config						nmake	-	all	bf_sf_cnfg NULL
+bf	binfilter\bf_sfx2\source\control					nmake	-	all	bf_sf_ctrl NULL
+bf	binfilter\bf_sfx2\source\doc						nmake	-	all	bf_sf_doc NULL
+bf	binfilter\bf_sfx2\source\notify						nmake	-	all	bf_sf_noti NULL
+bf	binfilter\bf_sfx2\source\explorer					nmake	-	all	bf_sf_expl NULL
+bf	binfilter\bf_sfx2\util								nmake	-	all	bf_sf_util bf_svt_util bf_sf_appl bf_sf_bast bf_sf_cnfg bf_sf_ctrl bf_sf_doc bf_sf_expl bf_sf_noti bf_sf_view 	bf_legacy bf_xo_util NULL
+bf  binfilter\bf_so3\src                                nmake   -   all bf_so3_src NULL
+bf  binfilter\bf_so3\source\copied                      nmake   -   all bf_so3_copied NULL
+bf  binfilter\bf_so3\source\data                        nmake   -   all bf_so3_dat NULL
+bf  binfilter\bf_so3\source\dialog                      nmake   -   all bf_so3_dlg NULL
+bf  binfilter\bf_so3\source\inplace                     nmake   -   all bf_so3_inpl NULL
+bf  binfilter\bf_so3\source\misc                        nmake   -   all bf_so3_misc NULL
+bf  binfilter\bf_so3\source\ole                         nmake   -   all bf_so3_ole NULL
+bf  binfilter\bf_so3\source\persist                     nmake   -   all bf_so3_pers NULL
+bf  binfilter\bf_so3\source\solink                      nmake   -   all bf_so3_solnk NULL
+bf  binfilter\bf_so3\util                               nmake   -   all bf_so3_util bf_svt_util bf_so3_src bf_so3_copied bf_so3_dat bf_so3_dlg bf_so3_inpl bf_so3_misc bf_so3_ole bf_so3_pers bf_so3_solnk NULL
+bf	binfilter\bf_svx\source\inc							get		-	all	bf_sv_sinc NULL
+bf	binfilter\bf_svx\source\items						nmake	-	all	bf_sv_items NULL
+bf	binfilter\bf_svx\source\xoutdev						nmake	-	all	bf_sv_xout bf_sv_items NULL
+bf	binfilter\bf_svx\source\editeng						nmake	-	all	bf_sv_eeng NULL
+bf	binfilter\bf_svx\source\outliner					nmake	-	all	bf_sv_outl NULL
+bf	binfilter\bf_svx\source\svdraw						nmake	-	all	bf_sv_draw NULL
+bf	binfilter\bf_svx\source\engine3d					nmake	-	all	bf_sv_3deng NULL
+bf	binfilter\bf_svx\source\svxlink						nmake	-	all	bf_sv_link NULL
+bf	binfilter\bf_svx\source\form						nmake	-	all	bf_sv_form NULL
+bf	binfilter\bf_svx\source\options						nmake	-	all	bf_sv_opt NULL
+bf	binfilter\bf_svx\source\dialog						nmake	-	all	bf_sv_dlg NULL
+bf	binfilter\bf_svx\source\unodraw						nmake	-	all	bf_sv_undrw NULL
+bf	binfilter\bf_svx\source\unoedit						nmake	-	all	bf_sv_unedt NULL
+bf	binfilter\bf_svx\source\xml							nmake	-	all	bf_sv_xml NULL
+bf  binfilter\bf_svx\util                               nmake   -   all bf_sv_util bf_svt_util bf_go_util bf_sv_3deng bf_sv_dlg bf_sv_draw bf_sv_eeng bf_sv_form bf_sv_items bf_sv_link bf_sv_opt bf_sv_outl bf_sv_undrw bf_sv_unedt bf_sv_xml bf_sv_xout bf_sf_util bf_sb_util bf_so3_util NULL
+bf  binfilter\binfilterdetect\source		            nmake	-	all	bf_sf_detect	bf_sv_util	NULL
+bf	binfilter\bf_forms\source\inc						get		-	all	bf_fm_inc NULL
+bf	binfilter\bf_forms\source\component					nmake	-	all	bf_fm_component NULL
+bf	binfilter\bf_forms\source\misc						nmake	-	all	bf_fm_misc NULL
+bf	binfilter\bf_forms\source\resource					nmake	-	all	bf_fm_resource NULL
+bf	binfilter\bf_forms\util								nmake	-	all	bf_fm_util bf_svt_util bf_fm_component bf_fm_misc bf_fm_resource bf_sv_util bf_so3_util NULL
+bf	binfilter\bf_starmath\source						nmake	-	all	bf_sm_sorce NULL
+bf	binfilter\bf_starmath\util							nmake	-	all	bf_sm_util bf_svt_util bf_sm_sorce bf_sv_util bf_so3_util NULL
+bf	binfilter\bf_sch\source\ui\inc						get		-	all	bf_sh_uiinc NULL
+bf	binfilter\bf_sch\source\ui\unoidl					nmake	-	all	bf_sh_uidl NULL
+bf	binfilter\bf_sch\source\ui\app						nmake	-	all	bf_sh_app NULL
+bf	binfilter\bf_sch\source\ui\docshell					nmake	-	all	bf_sh_docsh NULL
+bf	binfilter\bf_sch\source\core						nmake	-	all	bf_sh_core NULL
+bf	binfilter\bf_sch\source\filter\xml					nmake	-	all	bf_sh_xml NULL
+bf	binfilter\bf_sch\util								nmake	-	all	bf_sh_util bf_svt_util bf_sm_util bf_sh_app bf_sh_core bf_sh_docsh bf_sh_uidl bf_sh_xml bf_so3_util NULL
+bf	binfilter\bf_offmgr\source\offapp\app				nmake	-	all	bf_of_app NULL
+bf  binfilter\bf_offmgr\util                            nmake   -   all bf_of_util bf_svt_util bf_of_app bf_legacy bf_sb_util bf_sv_util bf_so3_util NULL
+bf	binfilter\bf_sc\source\core\inc						get		-	all	bf_sc_coinc NULL
+bf	binfilter\bf_sc\source\filter\inc					get		-	all	bf_sc_fiinc NULL
+bf	binfilter\bf_sc\source\ui\view						nmake	-	all	bf_sc_view NULL
+bf	binfilter\bf_sc\source\ui\app						nmake	-	all	bf_sc_app NULL
+bf	binfilter\bf_sc\source\ui\dbgui						nmake	-	all	bf_sc_dbgui NULL
+bf	binfilter\bf_sc\source\ui\docshell					nmake	-	all	bf_sc_docsh NULL
+bf	binfilter\bf_sc\source\ui\src						nmake	-	all	bf_sc_uisrc NULL
+bf	binfilter\bf_sc\source\ui\unoobj					nmake	-	all	bf_sc_unobj NULL
+bf	binfilter\bf_sc\source\core\data					nmake	-	all	bf_sc_data NULL
+bf	binfilter\bf_sc\source\core\src						nmake	-	all	bf_sc_cosrc NULL
+bf	binfilter\bf_sc\source\core\tool					nmake	-	all	bf_sc_tool NULL
+bf	binfilter\bf_sc\source\filter\xml					nmake	-	all	bf_sc_xml NULL
+bf  binfilter\bf_sc\util                                nmake   -   all bf_sc_util bf_svt_util bf_sc_app bf_sc_cosrc bf_sc_data bf_sc_dbgui bf_sc_docsh bf_sc_tool bf_sc_uisrc bf_sc_unobj bf_sc_view bf_sc_xml bf_of_util bf_sh_util bf_sb_util bf_so3_util NULL
+bf	binfilter\bf_sd\source\ui\inc						get		-	all	bf_sd_sinc NULL
+bf	binfilter\bf_sd\source\ui\view						nmake	-	all	bf_sd_view NULL
+bf	binfilter\bf_sd\source\ui\app						nmake	-	all	bf_sd_app NULL
+bf	binfilter\bf_sd\source\core							nmake	-	all	bf_sd_core NULL
+bf	binfilter\bf_sd\source\ui\docshell					nmake	-	all	bf_sd_docsh NULL
+bf	binfilter\bf_sd\source\ui\unoidl					nmake	-	all	bf_sd_unid NULL
+bf	binfilter\bf_sd\source\filter						nmake	-	all	bf_sd_filt NULL
+bf	binfilter\bf_sd\source\filter\bin					nmake	-	all	bf_sd_bin NULL
+bf	binfilter\bf_sd\source\filter\xml					nmake	-	all	bf_sd_xml NULL
+bf	binfilter\bf_sd\util								nmake	-	all	bf_sd_util bf_svt_util bf_sd_app bf_sd_bin bf_sd_core bf_sd_docsh bf_sd_filt bf_sd_unid bf_sd_view bf_sd_xml bf_sc_util bf_sm_util bf_sb_util bf_so3_util NULL
+bf	binfilter\bf_sw\source\ui\inc						get		-	all	bf_sw_uinc NULL
+bf	binfilter\bf_sw\source\core\inc						get		-	all	bf_sw_cinc NULL
+bf	binfilter\bf_sw\source\filter\inc					get		-	all	bf_sw_finc NULL
+bf 	binfilter\bf_sw\source\core\bastyp                  nmake   -   all bf_sw_bast NULL
+bf	binfilter\bf_sw\source\ui\app						nmake	-	all	bf_sw_app NULL
+bf	binfilter\bf_sw\source\ui\config					nmake	-	all	bf_sw_conf NULL
+bf	binfilter\bf_sw\source\ui\dbui						nmake	-	all	bf_sw_dbui NULL
+bf	binfilter\bf_sw\source\ui\dochdl					nmake	-	all	bf_sw_dchdl NULL
+bf	binfilter\bf_sw\source\ui\fldui						nmake	-	all	bf_sw_fldui NULL
+bf	binfilter\bf_sw\source\ui\globdoc					nmake	-	all	bf_sw_globd NULL
+bf	binfilter\bf_sw\source\ui\index						nmake	-	all	bf_sw_index NULL
+bf	binfilter\bf_sw\source\ui\misc						nmake	-	all	bf_sw_misc NULL
+bf	binfilter\bf_sw\source\ui\shells					nmake	-	all	bf_sw_shell NULL
+bf	binfilter\bf_sw\source\ui\uno						nmake	-	all	bf_sw_uiuno NULL
+bf	binfilter\bf_sw\source\ui\utlui						nmake	-	all	bf_sw_utlui NULL
+bf	binfilter\bf_sw\source\ui\web						nmake	-	all	bf_sw_web NULL
+bf	binfilter\bf_sw\source\ui\wrtsh						nmake	-	all	bf_sw_wrtsh NULL
+bf	binfilter\bf_sw\source\core\attr					nmake	-	all	bf_sw_attr NULL
+bf	binfilter\bf_sw\source\core\crsr					nmake	-	all	bf_sw_crsr NULL
+bf	binfilter\bf_sw\source\core\doc						nmake	-	all	bf_sw_doc NULL
+bf	binfilter\bf_sw\source\core\docnode					nmake	-	all	bf_sw_dcnd NULL
+bf	binfilter\bf_sw\source\core\draw					nmake	-	all	bf_sw_draw NULL
+bf	binfilter\bf_sw\source\core\edit					nmake	-	all	bf_sw_edit NULL
+bf	binfilter\bf_sw\source\core\except					nmake	-	all	bf_sw_excpt NULL
+bf	binfilter\bf_sw\source\core\fields					nmake	-	all	bf_sw_fld NULL
+bf	binfilter\bf_sw\source\core\frmedt					nmake	-	all	bf_sw_frmed NULL
+bf	binfilter\bf_sw\source\core\graphic					nmake	-	all	bf_sw_grph NULL
+bf	binfilter\bf_sw\source\core\layout					nmake	-	all	bf_sw_layo NULL
+bf	binfilter\bf_sw\source\core\ole						nmake	-	all	bf_sw_ole NULL
+bf	binfilter\bf_sw\source\core\para					nmake	-	all	bf_sw_para NULL
+bf	binfilter\bf_sw\source\core\sw3io					nmake	-	all	bf_sw_sw3io NULL
+bf	binfilter\bf_sw\source\core\swg						nmake	-	all	bf_sw_swg NULL
+bf	binfilter\bf_sw\source\core\text					nmake	-	all	bf_sw_text NULL
+bf	binfilter\bf_sw\source\core\tox						nmake	-	all	bf_sw_tox NULL
+bf	binfilter\bf_sw\source\core\txtnode					nmake	-	all	bf_sw_txtnd NULL
+bf	binfilter\bf_sw\source\core\view					nmake	-	all	bf_sw_view NULL
+bf	binfilter\bf_sw\source\core\unocore					nmake	-	all	bf_sw_uco NULL
+bf  binfilter\bf_sw\source\filter\ascii                 nmake   -   all bf_sw_ascii NULL
+bf	binfilter\bf_sw\source\filter\basflt				nmake	-	all	bf_sw_bsflt NULL
+bf	binfilter\bf_sw\source\filter\writer				nmake	-	all	bf_sw_wrtr NULL
+bf	binfilter\bf_sw\source\filter\xml					nmake	-	all	bf_sw_xml NULL
+bf  binfilter\bf_sw\source\filter\lotus                 nmake   -   all bf_sw_lotus  NULL
+bf  binfilter\bf_sw\source\filter\excel                 nmake   -   all bf_sw_excel  NULL
+bf  binfilter\bf_sw\source\filter\w4w                   nmake   -   all bf_sw_w4w    NULL
+bf  binfilter\bf_sw\source\filter\sw6                   nmake   -   all bf_sw_sw6    NULL
+bf  binfilter\bf_sw\source\ui                           nmake   -   all bf_sw_ui bf_sw_app  bf_sw_conf bf_sw_dbui bf_sw_dchdl bf_sw_fldui bf_sw_globd bf_sw_index bf_sw_misc bf_sw_shell bf_sw_uiuno bf_sw_utlui bf_sw_web bf_sw_wrtsh NULL
+bf      binfilter\bf_sw\source\core                                                     nmake   -   all bf_sw_core bf_sw_attr bf_sw_bast bf_sw_crsr bf_sw_dcnd bf_sw_doc bf_sw_draw bf_sw_edit bf_sw_excpt bf_sw_fld bf_sw_frmed bf_sw_grph bf_sw_layo bf_sw_ole bf_sw_para bf_sw_sw3io bf_sw_swg bf_sw_text bf_sw_tox bf_sw_txtnd bf_sw_uco bf_sw_view NULL
+bf  binfilter\bf_sw\source\filter                       nmake   -   all bf_sw_flt bf_sw_ascii bf_sw_bsflt  bf_sw_wrtr bf_sw_xml bf_sw_lotus bf_sw_excel bf_sw_w4w bf_sw_sw6 NULL
+bf  binfilter\bf_sw\util                                nmake   -   all bf_sw_util bf_sw_core bf_sw_flt bf_sw_ui bf_sd_util bf_sb_util bf_so3_util NULL
+bf  binfilter\filter\source\bf_offwrp                   nmake   -   all bf_offwrp bf_sf_detect bf_fm_util bf_sh_util bf_sw_util bf_sb_util bf_so3_util NULL
+bf	binfilter\filter\source\bf_migrate					nmake	-	all bf_migrate bf_sw_util bf_offwrp	bf_so3_util NULL
+bf  binfilter\util										nmake   -   all bf_util bf_xo_util bf_sw_util bf_sc_util bf_sd_util bf_sm_util bf_sh_util bf_fm_util bf_sv_util bf_offwrp bf_migrate bf_svt_util NULL

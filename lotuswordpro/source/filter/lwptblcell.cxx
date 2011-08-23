@@ -59,12 +59,12 @@
  */
 /*************************************************************************
  * Change History
- Mar 2005           Created
+ Mar 2005		 	Created
  ************************************************************************/
 
-#include    "lwpoverride.hxx"
-#include    "lwpobjid.hxx"
-#include    "lwptblcell.hxx"
+#include	"lwpoverride.hxx"
+#include	"lwpobjid.hxx"
+#include 	"lwptblcell.hxx"
 #include "lwppara.hxx"
 
 //////////////////////////////////////////////////////////////////
@@ -92,8 +92,8 @@ void LwpCellList::Read()
     LwpObjectID cDependent;
     cDependent.ReadIndexed(m_pObjStrm);
 
-    cColumn = (sal_uInt8) m_pObjStrm->QuickReaduInt16();        // written as a sal_uInt16
-//  sal_uInt8 cCellFlags = (sal_uInt8) m_pObjStrm->QuickReaduInt16();   // written as a sal_uInt16
+    cColumn = (sal_uInt8) m_pObjStrm->QuickReaduInt16();		// written as a sal_uInt16
+//	sal_uInt8 cCellFlags = (sal_uInt8) m_pObjStrm->QuickReaduInt16();	// written as a sal_uInt16
     m_pObjStrm->SeekRel(2);//CellFlags
     m_pObjStrm->SkipExtra();
 
@@ -234,7 +234,7 @@ void LwpDependent::Read()
 
     cFormulaInfo.ReadIndexed(m_pObjStrm);
     cReferenceOffset = m_pObjStrm->QuickReaduInt16();
-    cFlags = (sal_uInt8)m_pObjStrm->QuickReaduInt16();  // Written as lushort.
+    cFlags = (sal_uInt8)m_pObjStrm->QuickReaduInt16();	// Written as lushort.
 
     m_pObjStrm->SkipExtra();
 }

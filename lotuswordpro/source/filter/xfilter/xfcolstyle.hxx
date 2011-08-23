@@ -61,16 +61,16 @@
  * Change History
  * 2005-03-17 create this file.
  ************************************************************************/
-#ifndef     _XFCOLSTYLE_HXX
-#define     _XFCOLSTYLE_HXX
+#ifndef		_XFCOLSTYLE_HXX
+#define		_XFCOLSTYLE_HXX
 
-#include    "xfstyle.hxx"
+#include	"xfstyle.hxx"
 
 /**
  * @brief
  * Column style, it has only one property-the column width.
  */
-class   XFColStyle : public XFStyle
+class	XFColStyle : public XFStyle
 {
 public:
     XFColStyle();
@@ -79,27 +79,27 @@ public:
 
 public:
     /**
-     * @descr   Set column width.
+     * @descr	Set column width.
      */
-    void    SetWidth(double width);
+    void	SetWidth(double width);
 
     /**
-     * @descr   return column width.
+     * @descr	return column width.
      */
-    double  GetWidth();
+    double	GetWidth();
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle	GetStyleFamily();
 
     /**
-     * @descr   output column style as an xml node.
+     * @descr	output column style as an xml node.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    double      m_fWidth;
+    double		m_fWidth;
 };
 
-inline void XFColStyle::SetWidth(double width)
+inline void	XFColStyle::SetWidth(double width)
 {
     m_fWidth = width;
 }

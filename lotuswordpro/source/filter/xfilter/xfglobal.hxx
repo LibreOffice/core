@@ -62,48 +62,48 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#ifndef     _GLOBAL_HXX
-#define     _GLOBAL_HXX
+#ifndef		_GLOBAL_HXX
+#define		_GLOBAL_HXX
 
-#include    <cassert>
+#include	<cassert>
 
 #ifndef _SAL_TYPES_H
-#include    "sal/types.h"
+#include	"sal/types.h"
 #endif
 
 #ifndef _RTL_USTRING_HXX_
-#include    <rtl/ustring.hxx>
+#include	<rtl/ustring.hxx>
 #endif
 
-#ifndef _IXFOBJECT_HXX
-#include    "ixfobject.hxx"
+#ifndef	_IXFOBJECT_HXX
+#include	"ixfobject.hxx"
 #endif
 
-#ifndef _IXFSTREAM_HXX
-#include    "ixfstream.hxx"
+#ifndef	_IXFSTREAM_HXX
+#include	"ixfstream.hxx"
 #endif
 
 #ifndef _IXFATTRLIST_HXX
-#include    "ixfattrlist.hxx"
+#include	"ixfattrlist.hxx"
 #endif
 
 #ifndef _XFUTIL_HXX
-#include    "xfutil.hxx"
+#include	"xfutil.hxx"
 #endif
 
-#ifndef _XFDEFS_HXX
-#include    "xfdefs.hxx"
+#ifndef	_XFDEFS_HXX
+#include	"xfdefs.hxx"
 #endif
 
 #define PI 3.1415926
-#define FLOAT_MIN   0.001
+#define	FLOAT_MIN	0.001
 #define MAX2(a,b)    (((a) > (b)) ? (a) : (b))
-#define MAX3(a,b,c) MAX2(a,MAX2(b,c))
+#define MAX3(a,b,c)	MAX2(a,MAX2(b,c))
 #define MIN2(a,b)    (((a) < (b)) ? (a) : (b))
-#define MIN3(a,b,c) MIN2(a,MIN2(b,c))
-#define FABS(f)     (f>0?f:-f)
+#define MIN3(a,b,c)	MIN2(a,MIN2(b,c))
+#define	FABS(f)		(f>0?f:-f)
 
-void    XFGlobalReset();
+void	XFGlobalReset();
 
 /**
  * @brief
@@ -111,67 +111,67 @@ void    XFGlobalReset();
  * Before loading a file, we'll need to reset all global variables.
  * XFGlobal::Reset can do this for you.
  */
-class   XFGlobal
+class	XFGlobal
 {
 public:
     /**
-     * @descr   Generate a name for the section.
+     * @descr	Generate a name for the section.
      */
-    static rtl::OUString    GenSectionName();
+    static rtl::OUString	GenSectionName();
 
     /**
-     * @descr   Gen a name for the frame.
+     * @descr	Gen a name for the frame.
      */
-    static rtl::OUString    GenFrameName();
+    static rtl::OUString	GenFrameName();
 
     /**
-     * @descr   Generate a name for graphics.
+     * @descr	Generate a name for graphics.
      */
-    static rtl::OUString    GenGraphName();
+    static rtl::OUString	GenGraphName();
 
     /**
-     * @descr   Generate a name for a table.
+     * @descr	Generate a name for a table.
      */
-    static rtl::OUString    GenTableName();
+    static rtl::OUString	GenTableName();
 
     /**
-     * @descr   Generate a name for a note.
+     * @descr	Generate a name for a note.
      */
-    static rtl::OUString    GenNoteName();
+    static rtl::OUString	GenNoteName();
 
     /**
-     * @descr   Generate a name for the stroke style.
+     * @descr	Generate a name for the stroke style.
      */
-    static rtl::OUString    GenStrokeDashName();
+    static rtl::OUString	GenStrokeDashName();
 
     /**
-     * @descr   Generate a name for the area fill style.
+     * @descr	Generate a name for the area fill style.
      */
-    static rtl::OUString    GenAreaName();
+    static rtl::OUString	GenAreaName();
 
     /**
-     * @descr   Generate a name for a ole obejct.
+     * @descr	Generate a name for a ole obejct.
      */
-    static rtl::OUString    GenObjName();
+    static rtl::OUString	GenObjName();
 
     /**
-     * @descr   Generate a name for an image object
+     * @descr	Generate a name for an image object
      */
-    static rtl::OUString    GenImageName();
+    static rtl::OUString	GenImageName();
 
     /**
-     * @descr   Reset all global variables.
+     * @descr	Reset all global variables.
      */
-    static void Reset();
+    static void	Reset();
 
 public:
-    static int  s_nSectionID;
-    static int  s_nFrameID;
-    static int  s_nGraphID;
-    static int  s_nTableID;
-    static int  s_nNoteID;
-    static int  s_nStrokeDashID;
-    static int  s_nAreaID;
+    static int	s_nSectionID;
+    static int	s_nFrameID;
+    static int	s_nGraphID;
+    static int	s_nTableID;
+    static int	s_nNoteID;
+    static int	s_nStrokeDashID;
+    static int	s_nAreaID;
     static int s_nObjID;
     static int s_nImageID;
 };

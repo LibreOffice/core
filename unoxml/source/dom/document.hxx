@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -143,7 +143,7 @@ namespace DOM
             throw (RuntimeException, DOMException);
 
         /**
-        Creates a ProcessingInstruction node given the specified name and
+        Creates a ProcessingInstruction node given the specified name and 
         data strings.
         */
         virtual Reference< XProcessingInstruction > SAL_CALL createProcessingInstruction(
@@ -177,7 +177,7 @@ namespace DOM
             throw (RuntimeException);
 
         /**
-        Returns a NodeList of all the Elements with a given tag name in the
+        Returns a NodeList of all the Elements with a given tag name in the 
         order in which they are encountered in a preorder traversal of the
         Document tree.
         */
@@ -185,8 +185,8 @@ namespace DOM
             throw (RuntimeException);
 
         /**
-        Returns a NodeList of all the Elements with a given local name and
-        namespace URI in the order in which they are encountered in a preorder
+        Returns a NodeList of all the Elements with a given local name and 
+        namespace URI in the order in which they are encountered in a preorder 
         traversal of the Document tree.
         */
         virtual Reference< XNodeList > SAL_CALL getElementsByTagNameNS(const OUString& namespaceURI, const OUString& localName)
@@ -207,7 +207,7 @@ namespace DOM
         // XDocumentEvent
         virtual Reference< XEvent > SAL_CALL createEvent(const OUString& eventType) throw (RuntimeException);
 
-        // XActiveDataControl,
+        // XActiveDataControl, 
         // see http://api.openoffice.org/docs/common/ref/com/sun/star/io/XActiveDataControl.html
         virtual void SAL_CALL addListener(const Reference< XStreamListener >& aListener )  throw (RuntimeException);
         virtual void SAL_CALL removeListener(const Reference< XStreamListener >& aListener ) throw (RuntimeException);
@@ -216,7 +216,7 @@ namespace DOM
 
         // XActiveDataSource
         // see http://api.openoffice.org/docs/common/ref/com/sun/star/io/XActiveDataSource.html
-        virtual void SAL_CALL setOutputStream(  const Reference< XOutputStream >& aStream ) throw (RuntimeException);
+        virtual void SAL_CALL setOutputStream( 	const Reference< XOutputStream >& aStream ) throw (RuntimeException);
         virtual Reference< XOutputStream > SAL_CALL getOutputStream() throw (RuntimeException);
 
         // ---- resolve uno inheritance problems...
@@ -349,12 +349,12 @@ namespace DOM
             const Reference< XDocumentHandler >& i_xHandler,
             const Sequence< beans::StringPair >& i_rNamespaces)
             throw (RuntimeException, SAXException);
-
-        // ::com::sun::star::xml::sax::XFastSAXSerializable
-        virtual void SAL_CALL fastSerialize( const Reference< XFastDocumentHandler >& handler,
-                                             const Reference< XFastTokenHandler >& tokenHandler,
+        
+        // ::com::sun::star::xml::sax::XFastSAXSerializable 
+        virtual void SAL_CALL fastSerialize( const Reference< XFastDocumentHandler >& handler, 
+                                             const Reference< XFastTokenHandler >& tokenHandler, 
                                              const Sequence< beans::StringPair >& i_rNamespaces,
-                                             const Sequence< beans::Pair< rtl::OUString, sal_Int32 > >& namespaces )
+                                             const Sequence< beans::Pair< rtl::OUString, sal_Int32 > >& namespaces ) 
             throw (SAXException, RuntimeException);
     };
 }

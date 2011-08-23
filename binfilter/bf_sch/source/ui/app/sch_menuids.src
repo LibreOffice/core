@@ -1,0 +1,180 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+
+#include "app.hrc"
+
+
+#define MN_ROW_POSITION \
+MenuItem\
+{\
+    Identifier = SID_ROW_POSITION ; \
+    HelpID = SID_ROW_POSITION;\
+    Text [ de ] = "A~nordnung" ; \
+    Text [ en-US ] = "A~rrangement" ; \
+    Text[ pt ] = "~Disposição";\
+        Text[ ru ] = "Расположение";\
+        Text[ el ] = "Τακτοποίηση";\
+        Text[ nl ] = "~Rangschikking";\
+        Text[ fr ] = "~Disposition";\
+        Text[ es ] = "~Disposición";\
+        Text[ fi ] = "J~ärjestys";\
+        Text[ ca ] = "~Organitza";\
+        Text[ it ] = "~Disponi";\
+        Text[ da ] = "Placering";\
+        Text[ sv ] = "~Placering";\
+        Text[ pl ] = "~Rozmieszczenie";\
+        Text[ pt-BR ] = "Dis~posição";\
+        Text[ th ] = "จั~ดเรียง";\
+        Text[ ja ] = "配置(~R)";\
+        Text[ ko ] = "배치(~R)";\
+        Text[ zh-CN ] = "排序(~R)";\
+        Text[ zh-TW ] = "排序(~R)";\
+        Text[ tr ] = "Düzenleme";\
+        Text[ hi-IN ] = "A~rrangement";\
+        Text[ ar ] = "الترتيب";\
+        Text[ he ] = "A~nordnung";\
+    SubMenu = Menu\
+    {\
+        ItemList = \
+        {\
+            MenuItem\
+            {\
+                Identifier = SID_ROW_MOREFRONT ; \
+                HelpID = SID_ROW_MOREFRONT;\
+                Text [ de ] = "W~eiter nach vorn" ; \
+                Text [ en-US ] = "Bring ~Forward" ; \
+                    Text [ x-comment ] = " ";\
+                    Text[ pt ] = "~Mais para a frente";\
+                    Text[ ru ] = "Переместить ~вперед";\
+                    Text[ el ] = "Μ~εταφορά ένα επίπεδο εμπρός";\
+                    Text[ nl ] = "Naar v~oren";\
+                    Text[ fr ] = "V~ers l'avant";\
+                    Text[ es ] = "Traer ~adelante";\
+                    Text[ fi ] = "Siirrä ~eteenpäin";\
+                    Text[ ca ] = "Porta al ~davant";\
+                    Text[ it ] = "Porta più avanti";\
+                    Text[ da ] = "Længere ~fremad";\
+                    Text[ sv ] = "Längre fra~m";\
+                    Text[ pl ] = "P~rzesuń do przodu";\
+                    Text[ pt-BR ] = "A~vançar";\
+                    Text[ th ] = "นำไป~ข้างหน้า";\
+                    Text[ ja ] = "前方に移動(~F)";\
+                    Text[ ko ] = "앞으로 이동(~F)";\
+                    Text[ zh-CN ] = "上移一层(~F)";\
+                    Text[ zh-TW ] = "上移一層(~F)";\
+                    Text[ tr ] = "~Bir öne getir";\
+                    Text[ hi-IN ] = "~आगे प्रस्तुत करना";\
+                    Text[ ar ] = "إحضار أماماً";\
+                    Text[ he ] = "W~eiter nach vorn";\
+                };\
+            MenuItem\
+            {\
+                Identifier = SID_ROW_MOREBACK ; \
+                HelpID = SID_ROW_MOREBACK;\
+                Text [ de ] = "Weiter ~nach hinten" ; \
+                Text [ en-US ] = "Send Back~ward" ; \
+                    Text [ x-comment ] = " ";\
+                    Text[ pt ] = "Mais para o f~undo";\
+                    Text[ ru ] = "Переместить ~назад";\
+                    Text[ el ] = "~Μεταφορά πίσω";\
+                    Text[ nl ] = "Naar a~chteren";\
+                    Text[ fr ] = "~Vers l'arrière";\
+                    Text[ es ] = "Enviar a~trás";\
+                    Text[ fi ] = "Siirrä taakse~päin";\
+                    Text[ ca ] = "Envia cap ~enrere";\
+                    Text[ it ] = "Porta più i~ndietro";\
+                    Text[ da ] = "Længere ~tilbage";\
+                    Text[ sv ] = "Längre ba~k";\
+                    Text[ pl ] = "Pr~zesuń do tyłu";\
+                    Text[ pt-BR ] = "Rec~uar";\
+                    Text[ th ] = "ส่งกลับข้าง~หลัง";\
+                    Text[ ja ] = "後方に移動(~W)";\
+                    Text[ ko ] = "뒤로 이동(~W)";\
+                    Text[ zh-CN ] = "下移一层(~W)";\
+                    Text[ zh-TW ] = "下移一層(~W)";\
+                    Text[ tr ] = "Bir alta gönder";\
+                    Text[ hi-IN ] = "पिछली ~ओर भेजो";\
+                    Text[ ar ] = "إرسال خلفاً";\
+                    Text[ he ] = "Weiter ~nach hinten";\
+                };\
+        };\
+    };\
+}
+                \
+
+#define MN_TRANSFORM \
+    MenuItem\
+    {\
+        Identifier = SID_ATTR_TRANSFORM ; \
+        HelpID = SID_ATTR_TRANSFORM ; \
+        Text [ de ] = "P~osition und Größe..." ; \
+        Text [ en-US ] = "Position and Si~ze..." ; \
+        Text [ x-comment ] = " ";\
+    Text[ pt ] = "P~osição e tamanho...";\
+        Text[ ru ] = "~Позиция и размер...";\
+        Text[ el ] = "Θέση και μέγεθ~ος...";\
+        Text[ nl ] = "~Positie en grootte...";\
+        Text[ fr ] = "P~osition et taille...";\
+        Text[ es ] = "P~osición y tamaño...";\
+        Text[ fi ] = "Sijainti ja ko~ko";\
+        Text[ ca ] = "Position and Si~ze...";\
+        Text[ it ] = "P~osizione e dimensione...";\
+        Text[ da ] = "Pla~cering og størrelse...";\
+        Text[ sv ] = "P~osition och storlek...";\
+        Text[ pl ] = "~Pozycja i rozmiar...";\
+        Text[ pt-BR ] = "P~osi??o e Tamanho...";\
+        Text[ th ] = "ตำแหน่งและข~นาด...";\
+        Text[ ja ] = "位置とサイズ(~Z)...";\
+        Text[ ko ] = "위치 및 크기(~Z)...";\
+        Text[ zh-CN ] = "位置和大小(~Z)...";\
+        Text[ zh-TW ] = "位置和大小(~Z)...";\
+        Text[ tr ] = "Konum ve ~Boyut";\
+        Text[ hi-IN ] = "Position and Si~ze...";\
+        Text[ ar ] = "...الموضع والحجم~";\
+        Text[ he ] = "P~osition und Größe...";\
+    }
+
+// EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -61,7 +61,7 @@
  * Change History
  * 2004-2-17 create this file.
  ************************************************************************/
-#include    "xfdrawline.hxx"
+#include	"xfdrawline.hxx"
 
 XFDrawLine::XFDrawLine()
 {
@@ -69,12 +69,12 @@ XFDrawLine::XFDrawLine()
 
 void XFDrawLine::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     if( GetStyleName().getLength() )
         pAttrList->AddAttribute( A2OUSTR("draw:style-name"), GetStyleName() );
 
-    assert(m_strName.getLength()>0);    //name should not be null.
+    assert(m_strName.getLength()>0);	//name should not be null.
     if( m_strName.getLength() )
         pAttrList->AddAttribute( A2OUSTR("draw:name"), m_strName );
     //anchor type:
@@ -106,7 +106,7 @@ void XFDrawLine::ToXml(IXFStream *pStrm)
     pAttrList->AddAttribute( A2OUSTR("svg:y2"), DoubleToOUString(m_aPoint2.GetY()) + A2OUSTR("cm") );
 
     //transform
-    rtl::OUString   strTransform;
+    rtl::OUString	strTransform;
     if( m_nFlag&XFDRAWOBJECT_FLAG_ROTATE )
         strTransform = A2OUSTR("rotate (") + DoubleToOUString(m_fRotate) + A2OUSTR(") ");
     if( m_nFlag&XFDRAWOBJECT_FLAG_TRANLATE )

@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPUSERDICTFILES_HXX
@@ -68,7 +68,7 @@
 #include "lwpheader.hxx"
 #include "lwpobjstrm.hxx"
 /**
- * @brief   User defined words used in VO_DOCUMENT
+ * @brief	User defined words used in VO_DOCUMENT
 */
 class LwpUserDictFiles
 {

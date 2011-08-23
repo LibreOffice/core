@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,9 +76,9 @@ Reference< XFastContextHandler > SlideMasterTextStylesContext::createFastChildCo
             break;
         }
     }
-    if ( aTextListStylePtr )            // sj: the master list style is the last instance of from where properties
-    {                                   // are obtained. i got some documents without having the textsize set at
-        for ( int i = 0; i < 9; i++ )   // any point, the master reference application is using 18pt then
+    if ( aTextListStylePtr )			// sj: the master list style is the last instance of from where properties 
+    {									// are obtained. i got some documents without having the textsize set at 
+        for ( int i = 0; i < 9; i++ )	// any point, the master reference application is using 18pt then
             aTextListStylePtr->getListStyle()[ i ]->getTextCharacterProperties().moHeight = 1800;
         xRet.set( new oox::drawingml::TextListStyleContext( *this, *aTextListStylePtr ) );
     }

@@ -55,12 +55,12 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- 2005-02-25     Created
+ 2005-02-25		Created
  ************************************************************************/
-#ifndef     _XFOLEOBJ_HXX
-#define     _XFOLEOBJ_HXX
+#ifndef		_XFOLEOBJ_HXX
+#define		_XFOLEOBJ_HXX
 
-#include    "xfframe.hxx"
+#include	"xfframe.hxx"
 
 /**
  * @brief
@@ -74,12 +74,12 @@ public:
 
 public:
     /**
-     * @descr   Set ole object data. The data will be base64 encoded before sent to SODC.
+     * @descr	Set ole object data. The data will be base64 encoded before sent to SODC.
      */
-    void    SetOleData(sal_uInt8 *buf, int len);
+    void	SetOleData(sal_uInt8 *buf, int len);
 
     /**
-     * @descr   output ole obejct.
+     * @descr	output ole obejct.
      */
     virtual void ToXml(IXFStream *pStrm);
 

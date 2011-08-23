@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,8 @@ import java.io.ByteArrayOutputStream;
 
 /**
  *  This class represents a single text record in a WordSmith document.
- *  A record is composed of one or more "WordSmith elements", which
- *  include: WordSmith header, font table, color table, paragraphs,
+ *  A record is composed of one or more "WordSmith elements", which 
+ *  include: WordSmith header, font table, color table, paragraphs, 
  *  and text runs.
  *
  *  @author   David Proulx
@@ -102,13 +102,13 @@ class textRecord {
                 os.write(e.getBytes());
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) { 
+            e.printStackTrace(); 
         }
 
         if (bs != null)
             return bs.toByteArray();
-        else
+        else 
             return null;
     }
 }

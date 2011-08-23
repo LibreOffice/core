@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ public interface Iterator {
      *  own equal method, with this equivalent method, we can allow
      *  flexibility for the <code>Iterator</code> to choose a custom way
      *  to compare two objects.  Two objects can even be compared based on
-     *  the position in the <code>Iterator</code> rather than by
+     *  the position in the <code>Iterator</code> rather than by 
      *  the content via this option.
      *
      *  @param  obj1  The first <code>Object</code>.

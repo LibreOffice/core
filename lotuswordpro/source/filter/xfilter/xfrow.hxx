@@ -61,11 +61,11 @@
  * Change History
  * 2005-01-28 create and implements.
  ************************************************************************/
-#ifndef     _XFROW_HXX
-#define     _XFROW_HXX
+#ifndef		_XFROW_HXX
+#define		_XFROW_HXX
 
-#include    "xfcontent.hxx"
-#include    <map>
+#include	"xfcontent.hxx"
+#include	<map>
 
 class XFCell;
 class XFTable;
@@ -81,33 +81,33 @@ public:
     virtual ~XFRow();
 
 public:
-    void    AddCell(XFCell *pCell);
+    void	AddCell(XFCell *pCell);
 
-    void    SetRepeated(sal_Int32 repeat);
+    void	SetRepeated(sal_Int32 repeat);
 
-    void    SetRow(sal_Int32 row);
+    void	SetRow(sal_Int32 row);
 
-    void    SetOwnerTable(XFTable *pTable);
+    void	SetOwnerTable(XFTable *pTable);
 
-    sal_Int32   GetRow();
+    sal_Int32	GetRow();
 
-    sal_Int32   GetCellCount() const;
+    sal_Int32	GetCellCount() const;
 
-    XFCell*     GetCell(sal_Int32 col) const;
+    XFCell*		GetCell(sal_Int32 col) const;
 
-    XFTable*    GetOwnerTable();
+    XFTable*	GetOwnerTable();
 
-    rtl::OUString   GetRowName();
+    rtl::OUString	GetRowName();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
-    void        RemoveCell(sal_Int32 cell);
+    void		RemoveCell(sal_Int32 cell);
 
 private:
-    XFTable     *m_pOwnerTable;
-    std::map<sal_Int32,XFCell*> m_aCells;
-    sal_Int32   m_nRepeat;
-    sal_Int32   m_nRow;
+    XFTable		*m_pOwnerTable;
+    std::map<sal_Int32,XFCell*>	m_aCells;
+    sal_Int32	m_nRepeat;
+    sal_Int32	m_nRow;
 };
 
 inline void XFRow::SetRepeated(sal_Int32 repeat)
@@ -130,7 +130,7 @@ inline sal_Int32 XFRow::GetRow()
     return m_nRow;
 }
 
-inline XFTable* XFRow::GetOwnerTable()
+inline XFTable*	XFRow::GetOwnerTable()
 {
     return m_pOwnerTable;
 }

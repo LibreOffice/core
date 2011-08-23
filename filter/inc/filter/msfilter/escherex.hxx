@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,247 +86,247 @@
 #define     ESCHER_ClientRule    0xF015 /* host-defined              host-defined                                                                     */
 #define     ESCHER_CalloutRule   0xF017 /*                           an FCORU                                                           X   X   X   0 */
 #define ESCHER_Selection         0xF119 /*                           an FDGSL followed by the SPIDs of the shapes in the selection              X   0 */
-#define ESCHER_UDefProp          0xF122
+#define ESCHER_UDefProp			 0xF122
 
-#define SHAPEFLAG_GROUP         0x001   // This shape is a group shape
-#define SHAPEFLAG_CHILD         0x002   // Not a top-level shape
-#define SHAPEFLAG_PATRIARCH     0x004   // This is the topmost group shape. Exactly one of these per drawing.
-#define SHAPEFLAG_DELETED       0x008   // The shape has been deleted
-#define SHAPEFLAG_OLESHAPE      0x010   // The shape is an OLE object
-#define SHAPEFLAG_HAVEMASTER    0x020   // Shape has a hspMaster property
-#define SHAPEFLAG_FLIPH         0x040   // Shape is flipped horizontally
-#define SHAPEFLAG_FLIPV         0x080   // Shape is flipped vertically
-#define SHAPEFLAG_CONNECTOR     0x100   // Connector type of shape
-#define SHAPEFLAG_HAVEANCHOR    0x200   // Shape has an anchor of some kind
-#define SHAPEFLAG_BACKGROUND    0x400   // Background shape
-#define SHAPEFLAG_HAVESPT       0x800   // Shape has a shape type property
+#define SHAPEFLAG_GROUP			0x001	// This shape is a group shape
+#define SHAPEFLAG_CHILD			0x002	// Not a top-level shape
+#define SHAPEFLAG_PATRIARCH		0x004	// This is the topmost group shape. Exactly one of these per drawing.
+#define SHAPEFLAG_DELETED		0x008	// The shape has been deleted
+#define SHAPEFLAG_OLESHAPE		0x010	// The shape is an OLE object
+#define SHAPEFLAG_HAVEMASTER	0x020	// Shape has a hspMaster property
+#define SHAPEFLAG_FLIPH			0x040	// Shape is flipped horizontally
+#define SHAPEFLAG_FLIPV			0x080	// Shape is flipped vertically
+#define SHAPEFLAG_CONNECTOR		0x100	// Connector type of shape
+#define SHAPEFLAG_HAVEANCHOR	0x200	// Shape has an anchor of some kind
+#define SHAPEFLAG_BACKGROUND	0x400	// Background shape
+#define SHAPEFLAG_HAVESPT		0x800	// Shape has a shape type property
 
-#define ESCHER_ShpInst_Min              0
-#define ESCHER_ShpInst_NotPrimitive     ESCHER_ShpInst_Min
-#define ESCHER_ShpInst_Rectangle        1
-#define ESCHER_ShpInst_RoundRectangle   2
-#define ESCHER_ShpInst_Ellipse          3
-#define ESCHER_ShpInst_Diamond          4
-#define ESCHER_ShpInst_IsocelesTriangle 5
-#define ESCHER_ShpInst_RightTriangle    6
-#define ESCHER_ShpInst_Parallelogram    7
-#define ESCHER_ShpInst_Trapezoid        8
-#define ESCHER_ShpInst_Hexagon          9
-#define ESCHER_ShpInst_Octagon          10
-#define ESCHER_ShpInst_Plus             11
-#define ESCHER_ShpInst_Star             12
-#define ESCHER_ShpInst_Arrow            13
-#define ESCHER_ShpInst_ThickArrow       14
-#define ESCHER_ShpInst_HomePlate        15
-#define ESCHER_ShpInst_Cube             16
-#define ESCHER_ShpInst_Balloon          17
-#define ESCHER_ShpInst_Seal             18
-#define ESCHER_ShpInst_Arc              19
-#define ESCHER_ShpInst_Line             20
-#define ESCHER_ShpInst_Plaque           21
-#define ESCHER_ShpInst_Can              22
-#define ESCHER_ShpInst_Donut            23
-#define ESCHER_ShpInst_TextSimple       24
-#define ESCHER_ShpInst_TextOctagon      25
-#define ESCHER_ShpInst_TextHexagon      26
-#define ESCHER_ShpInst_TextCurve        27
-#define ESCHER_ShpInst_TextWave         28
-#define ESCHER_ShpInst_TextRing         29
-#define ESCHER_ShpInst_TextOnCurve      30
-#define ESCHER_ShpInst_TextOnRing       31
+#define ESCHER_ShpInst_Min				0
+#define ESCHER_ShpInst_NotPrimitive		ESCHER_ShpInst_Min
+#define ESCHER_ShpInst_Rectangle		1
+#define ESCHER_ShpInst_RoundRectangle	2
+#define ESCHER_ShpInst_Ellipse			3
+#define ESCHER_ShpInst_Diamond			4
+#define ESCHER_ShpInst_IsocelesTriangle	5
+#define ESCHER_ShpInst_RightTriangle	6
+#define ESCHER_ShpInst_Parallelogram	7
+#define ESCHER_ShpInst_Trapezoid		8
+#define ESCHER_ShpInst_Hexagon			9
+#define ESCHER_ShpInst_Octagon			10
+#define ESCHER_ShpInst_Plus				11
+#define ESCHER_ShpInst_Star				12
+#define ESCHER_ShpInst_Arrow			13
+#define ESCHER_ShpInst_ThickArrow		14
+#define ESCHER_ShpInst_HomePlate		15
+#define ESCHER_ShpInst_Cube				16
+#define ESCHER_ShpInst_Balloon			17
+#define ESCHER_ShpInst_Seal				18
+#define ESCHER_ShpInst_Arc				19
+#define ESCHER_ShpInst_Line				20
+#define ESCHER_ShpInst_Plaque			21
+#define ESCHER_ShpInst_Can				22
+#define ESCHER_ShpInst_Donut			23
+#define ESCHER_ShpInst_TextSimple		24
+#define ESCHER_ShpInst_TextOctagon		25
+#define ESCHER_ShpInst_TextHexagon		26
+#define ESCHER_ShpInst_TextCurve		27
+#define ESCHER_ShpInst_TextWave			28
+#define ESCHER_ShpInst_TextRing			29
+#define ESCHER_ShpInst_TextOnCurve		30
+#define ESCHER_ShpInst_TextOnRing		31
 #define ESCHER_ShpInst_StraightConnector1 32
-#define ESCHER_ShpInst_BentConnector2   33
-#define ESCHER_ShpInst_BentConnector3   34
-#define ESCHER_ShpInst_BentConnector4   35
-#define ESCHER_ShpInst_BentConnector5   36
-#define ESCHER_ShpInst_CurvedConnector2 37
-#define ESCHER_ShpInst_CurvedConnector3 38
-#define ESCHER_ShpInst_CurvedConnector4 39
-#define ESCHER_ShpInst_CurvedConnector5 40
-#define ESCHER_ShpInst_Callout1         41
-#define ESCHER_ShpInst_Callout2         42
-#define ESCHER_ShpInst_Callout3         43
-#define ESCHER_ShpInst_AccentCallout1   44
-#define ESCHER_ShpInst_AccentCallout2   45
-#define ESCHER_ShpInst_AccentCallout3   46
-#define ESCHER_ShpInst_BorderCallout1   47
-#define ESCHER_ShpInst_BorderCallout2   48
-#define ESCHER_ShpInst_BorderCallout3   49
-#define ESCHER_ShpInst_AccentBorderCallout1 50
-#define ESCHER_ShpInst_AccentBorderCallout2 51
-#define ESCHER_ShpInst_AccentBorderCallout3 52
-#define ESCHER_ShpInst_Ribbon           53
-#define ESCHER_ShpInst_Ribbon2          54
-#define ESCHER_ShpInst_Chevron          55
-#define ESCHER_ShpInst_Pentagon         56
-#define ESCHER_ShpInst_NoSmoking        57
-#define ESCHER_ShpInst_Seal8            58
-#define ESCHER_ShpInst_Seal16           59
-#define ESCHER_ShpInst_Seal32           60
-#define ESCHER_ShpInst_WedgeRectCallout 61
-#define ESCHER_ShpInst_WedgeRRectCallout    62
-#define ESCHER_ShpInst_WedgeEllipseCallout  63
-#define ESCHER_ShpInst_Wave             64
-#define ESCHER_ShpInst_FoldedCorner     65
-#define ESCHER_ShpInst_LeftArrow        66
-#define ESCHER_ShpInst_DownArrow        67
-#define ESCHER_ShpInst_UpArrow          68
-#define ESCHER_ShpInst_LeftRightArrow   69
-#define ESCHER_ShpInst_UpDownArrow      70
-#define ESCHER_ShpInst_IrregularSeal1   71
-#define ESCHER_ShpInst_IrregularSeal2   72
-#define ESCHER_ShpInst_LightningBolt    73
-#define ESCHER_ShpInst_Heart            74
-#define ESCHER_ShpInst_PictureFrame     75
-#define ESCHER_ShpInst_QuadArrow        76
-#define ESCHER_ShpInst_LeftArrowCallout 77
-#define ESCHER_ShpInst_RightArrowCallout    78
-#define ESCHER_ShpInst_UpArrowCallout   79
-#define ESCHER_ShpInst_DownArrowCallout 80
-#define ESCHER_ShpInst_LeftRightArrowCallout    81
-#define ESCHER_ShpInst_UpDownArrowCallout   82
-#define ESCHER_ShpInst_QuadArrowCallout 83
-#define ESCHER_ShpInst_Bevel            84
-#define ESCHER_ShpInst_LeftBracket      85
-#define ESCHER_ShpInst_RightBracket     86
-#define ESCHER_ShpInst_LeftBrace        87
-#define ESCHER_ShpInst_RightBrace       88
-#define ESCHER_ShpInst_LeftUpArrow      89
-#define ESCHER_ShpInst_BentUpArrow      90
-#define ESCHER_ShpInst_BentArrow        91
-#define ESCHER_ShpInst_Seal24           92
-#define ESCHER_ShpInst_StripedRightArrow    93
-#define ESCHER_ShpInst_NotchedRightArrow    94
-#define ESCHER_ShpInst_BlockArc         95
-#define ESCHER_ShpInst_SmileyFace       96
-#define ESCHER_ShpInst_VerticalScroll   97
-#define ESCHER_ShpInst_HorizontalScroll 98
-#define ESCHER_ShpInst_CircularArrow    99
-#define ESCHER_ShpInst_NotchedCircularArrow 100
-#define ESCHER_ShpInst_UturnArrow       101
-#define ESCHER_ShpInst_CurvedRightArrow 102
-#define ESCHER_ShpInst_CurvedLeftArrow  103
-#define ESCHER_ShpInst_CurvedUpArrow    104
-#define ESCHER_ShpInst_CurvedDownArrow  105
-#define ESCHER_ShpInst_CloudCallout     106
-#define ESCHER_ShpInst_EllipseRibbon    107
-#define ESCHER_ShpInst_EllipseRibbon2   108
-#define ESCHER_ShpInst_FlowChartProcess 109
-#define ESCHER_ShpInst_FlowChartDecision    110
-#define ESCHER_ShpInst_FlowChartInputOutput 111
-#define ESCHER_ShpInst_FlowChartPredefinedProcess   112
-#define ESCHER_ShpInst_FlowChartInternalStorage 113
-#define ESCHER_ShpInst_FlowChartDocument    114
-#define ESCHER_ShpInst_FlowChartMultidocument   115
-#define ESCHER_ShpInst_FlowChartTerminator  116
-#define ESCHER_ShpInst_FlowChartPreparation 117
-#define ESCHER_ShpInst_FlowChartManualInput 118
-#define ESCHER_ShpInst_FlowChartManualOperation 119
-#define ESCHER_ShpInst_FlowChartConnector   120
-#define ESCHER_ShpInst_FlowChartPunchedCard 121
-#define ESCHER_ShpInst_FlowChartPunchedTape 122
-#define ESCHER_ShpInst_FlowChartSummingJunction 123
-#define ESCHER_ShpInst_FlowChartOr      124
-#define ESCHER_ShpInst_FlowChartCollate 125
-#define ESCHER_ShpInst_FlowChartSort    126
-#define ESCHER_ShpInst_FlowChartExtract 127
-#define ESCHER_ShpInst_FlowChartMerge   128
-#define ESCHER_ShpInst_FlowChartOfflineStorage  129
-#define ESCHER_ShpInst_FlowChartOnlineStorage   130
-#define ESCHER_ShpInst_FlowChartMagneticTape    131
-#define ESCHER_ShpInst_FlowChartMagneticDisk    132
-#define ESCHER_ShpInst_FlowChartMagneticDrum    133
-#define ESCHER_ShpInst_FlowChartDisplay 134
-#define ESCHER_ShpInst_FlowChartDelay   135
-#define ESCHER_ShpInst_TextPlainText    136
-#define ESCHER_ShpInst_TextStop         137
-#define ESCHER_ShpInst_TextTriangle     138
-#define ESCHER_ShpInst_TextTriangleInverted 139
-#define ESCHER_ShpInst_TextChevron      140
-#define ESCHER_ShpInst_TextChevronInverted  141
-#define ESCHER_ShpInst_TextRingInside   142
-#define ESCHER_ShpInst_TextRingOutside  143
-#define ESCHER_ShpInst_TextArchUpCurve  144
-#define ESCHER_ShpInst_TextArchDownCurve    145
-#define ESCHER_ShpInst_TextCircleCurve  146
-#define ESCHER_ShpInst_TextButtonCurve  147
-#define ESCHER_ShpInst_TextArchUpPour   148
-#define ESCHER_ShpInst_TextArchDownPour 149
-#define ESCHER_ShpInst_TextCirclePour   150
-#define ESCHER_ShpInst_TextButtonPour   151
-#define ESCHER_ShpInst_TextCurveUp      152
-#define ESCHER_ShpInst_TextCurveDown    153
-#define ESCHER_ShpInst_TextCascadeUp    154
-#define ESCHER_ShpInst_TextCascadeDown  155
-#define ESCHER_ShpInst_TextWave1        156
-#define ESCHER_ShpInst_TextWave2        157
-#define ESCHER_ShpInst_TextWave3        158
-#define ESCHER_ShpInst_TextWave4        159
-#define ESCHER_ShpInst_TextInflate      160
-#define ESCHER_ShpInst_TextDeflate      161
-#define ESCHER_ShpInst_TextInflateBottom    162
-#define ESCHER_ShpInst_TextDeflateBottom    163
-#define ESCHER_ShpInst_TextInflateTop       164
-#define ESCHER_ShpInst_TextDeflateTop       165
-#define ESCHER_ShpInst_TextDeflateInflate   166
-#define ESCHER_ShpInst_TextDeflateInflateDeflate    167
-#define ESCHER_ShpInst_TextFadeRight    168
-#define ESCHER_ShpInst_TextFadeLeft     169
-#define ESCHER_ShpInst_TextFadeUp       170
-#define ESCHER_ShpInst_TextFadeDown     171
-#define ESCHER_ShpInst_TextSlantUp      172
-#define ESCHER_ShpInst_TextSlantDown    173
-#define ESCHER_ShpInst_TextCanUp        174
-#define ESCHER_ShpInst_TextCanDown      175
-#define ESCHER_ShpInst_FlowChartAlternateProcess    176
-#define ESCHER_ShpInst_FlowChartOffpageConnector    177
-#define ESCHER_ShpInst_Callout90        178
-#define ESCHER_ShpInst_AccentCallout90  179
-#define ESCHER_ShpInst_BorderCallout90  180
-#define ESCHER_ShpInst_AccentBorderCallout90    181
-#define ESCHER_ShpInst_LeftRightUpArrow 182
-#define ESCHER_ShpInst_Sun              183
-#define ESCHER_ShpInst_Moon             184
-#define ESCHER_ShpInst_BracketPair      185
-#define ESCHER_ShpInst_BracePair        186
-#define ESCHER_ShpInst_Seal4            187
-#define ESCHER_ShpInst_DoubleWave       188
-#define ESCHER_ShpInst_ActionButtonBlank    189
-#define ESCHER_ShpInst_ActionButtonHome     190
-#define ESCHER_ShpInst_ActionButtonHelp     191
-#define ESCHER_ShpInst_ActionButtonInformation  192
-#define ESCHER_ShpInst_ActionButtonForwardNext  193
-#define ESCHER_ShpInst_ActionButtonBackPrevious 194
-#define ESCHER_ShpInst_ActionButtonEnd      195
-#define ESCHER_ShpInst_ActionButtonBeginning    196
-#define ESCHER_ShpInst_ActionButtonReturn   197
-#define ESCHER_ShpInst_ActionButtonDocument 198
-#define ESCHER_ShpInst_ActionButtonSound    199
-#define ESCHER_ShpInst_ActionButtonMovie    200
-#define ESCHER_ShpInst_HostControl          201
-#define ESCHER_ShpInst_TextBox              202
+#define ESCHER_ShpInst_BentConnector2	33
+#define ESCHER_ShpInst_BentConnector3	34
+#define ESCHER_ShpInst_BentConnector4	35
+#define ESCHER_ShpInst_BentConnector5	36
+#define ESCHER_ShpInst_CurvedConnector2	37
+#define ESCHER_ShpInst_CurvedConnector3	38
+#define ESCHER_ShpInst_CurvedConnector4	39
+#define ESCHER_ShpInst_CurvedConnector5	40
+#define ESCHER_ShpInst_Callout1			41
+#define ESCHER_ShpInst_Callout2			42
+#define ESCHER_ShpInst_Callout3			43
+#define ESCHER_ShpInst_AccentCallout1	44
+#define ESCHER_ShpInst_AccentCallout2	45
+#define ESCHER_ShpInst_AccentCallout3	46
+#define ESCHER_ShpInst_BorderCallout1	47
+#define ESCHER_ShpInst_BorderCallout2	48
+#define ESCHER_ShpInst_BorderCallout3	49
+#define ESCHER_ShpInst_AccentBorderCallout1	50
+#define ESCHER_ShpInst_AccentBorderCallout2	51
+#define ESCHER_ShpInst_AccentBorderCallout3	52
+#define ESCHER_ShpInst_Ribbon			53
+#define ESCHER_ShpInst_Ribbon2			54
+#define ESCHER_ShpInst_Chevron			55
+#define ESCHER_ShpInst_Pentagon			56
+#define ESCHER_ShpInst_NoSmoking		57
+#define ESCHER_ShpInst_Seal8			58
+#define ESCHER_ShpInst_Seal16			59
+#define ESCHER_ShpInst_Seal32			60
+#define ESCHER_ShpInst_WedgeRectCallout	61
+#define ESCHER_ShpInst_WedgeRRectCallout	62
+#define ESCHER_ShpInst_WedgeEllipseCallout	63
+#define ESCHER_ShpInst_Wave				64
+#define ESCHER_ShpInst_FoldedCorner		65
+#define ESCHER_ShpInst_LeftArrow		66
+#define ESCHER_ShpInst_DownArrow		67
+#define ESCHER_ShpInst_UpArrow			68
+#define ESCHER_ShpInst_LeftRightArrow	69
+#define ESCHER_ShpInst_UpDownArrow		70
+#define ESCHER_ShpInst_IrregularSeal1	71
+#define ESCHER_ShpInst_IrregularSeal2	72
+#define ESCHER_ShpInst_LightningBolt	73
+#define ESCHER_ShpInst_Heart			74
+#define ESCHER_ShpInst_PictureFrame		75
+#define ESCHER_ShpInst_QuadArrow		76
+#define ESCHER_ShpInst_LeftArrowCallout	77
+#define ESCHER_ShpInst_RightArrowCallout	78
+#define ESCHER_ShpInst_UpArrowCallout	79
+#define ESCHER_ShpInst_DownArrowCallout	80
+#define ESCHER_ShpInst_LeftRightArrowCallout	81
+#define ESCHER_ShpInst_UpDownArrowCallout	82
+#define ESCHER_ShpInst_QuadArrowCallout	83
+#define ESCHER_ShpInst_Bevel			84
+#define ESCHER_ShpInst_LeftBracket		85
+#define ESCHER_ShpInst_RightBracket		86
+#define ESCHER_ShpInst_LeftBrace		87
+#define ESCHER_ShpInst_RightBrace		88
+#define ESCHER_ShpInst_LeftUpArrow		89
+#define ESCHER_ShpInst_BentUpArrow		90
+#define ESCHER_ShpInst_BentArrow		91
+#define ESCHER_ShpInst_Seal24			92
+#define ESCHER_ShpInst_StripedRightArrow	93
+#define ESCHER_ShpInst_NotchedRightArrow	94
+#define ESCHER_ShpInst_BlockArc			95
+#define ESCHER_ShpInst_SmileyFace		96
+#define ESCHER_ShpInst_VerticalScroll	97
+#define ESCHER_ShpInst_HorizontalScroll	98
+#define ESCHER_ShpInst_CircularArrow	99
+#define ESCHER_ShpInst_NotchedCircularArrow	100
+#define ESCHER_ShpInst_UturnArrow		101
+#define ESCHER_ShpInst_CurvedRightArrow	102
+#define ESCHER_ShpInst_CurvedLeftArrow	103
+#define ESCHER_ShpInst_CurvedUpArrow	104
+#define ESCHER_ShpInst_CurvedDownArrow	105
+#define ESCHER_ShpInst_CloudCallout		106
+#define ESCHER_ShpInst_EllipseRibbon	107
+#define ESCHER_ShpInst_EllipseRibbon2	108
+#define ESCHER_ShpInst_FlowChartProcess	109
+#define ESCHER_ShpInst_FlowChartDecision	110
+#define ESCHER_ShpInst_FlowChartInputOutput	111
+#define ESCHER_ShpInst_FlowChartPredefinedProcess	112
+#define ESCHER_ShpInst_FlowChartInternalStorage	113
+#define ESCHER_ShpInst_FlowChartDocument	114
+#define ESCHER_ShpInst_FlowChartMultidocument	115
+#define ESCHER_ShpInst_FlowChartTerminator	116
+#define ESCHER_ShpInst_FlowChartPreparation	117
+#define ESCHER_ShpInst_FlowChartManualInput	118
+#define ESCHER_ShpInst_FlowChartManualOperation	119
+#define ESCHER_ShpInst_FlowChartConnector	120
+#define ESCHER_ShpInst_FlowChartPunchedCard	121
+#define ESCHER_ShpInst_FlowChartPunchedTape	122
+#define ESCHER_ShpInst_FlowChartSummingJunction	123
+#define ESCHER_ShpInst_FlowChartOr		124
+#define ESCHER_ShpInst_FlowChartCollate	125
+#define ESCHER_ShpInst_FlowChartSort	126
+#define ESCHER_ShpInst_FlowChartExtract	127
+#define ESCHER_ShpInst_FlowChartMerge	128
+#define ESCHER_ShpInst_FlowChartOfflineStorage	129
+#define ESCHER_ShpInst_FlowChartOnlineStorage	130
+#define ESCHER_ShpInst_FlowChartMagneticTape	131
+#define ESCHER_ShpInst_FlowChartMagneticDisk	132
+#define ESCHER_ShpInst_FlowChartMagneticDrum	133
+#define ESCHER_ShpInst_FlowChartDisplay	134
+#define ESCHER_ShpInst_FlowChartDelay	135
+#define ESCHER_ShpInst_TextPlainText	136
+#define ESCHER_ShpInst_TextStop			137
+#define ESCHER_ShpInst_TextTriangle		138
+#define ESCHER_ShpInst_TextTriangleInverted	139
+#define ESCHER_ShpInst_TextChevron		140
+#define ESCHER_ShpInst_TextChevronInverted	141
+#define ESCHER_ShpInst_TextRingInside	142
+#define ESCHER_ShpInst_TextRingOutside	143
+#define ESCHER_ShpInst_TextArchUpCurve	144
+#define ESCHER_ShpInst_TextArchDownCurve	145
+#define ESCHER_ShpInst_TextCircleCurve	146
+#define ESCHER_ShpInst_TextButtonCurve	147
+#define ESCHER_ShpInst_TextArchUpPour	148
+#define ESCHER_ShpInst_TextArchDownPour	149
+#define ESCHER_ShpInst_TextCirclePour	150
+#define ESCHER_ShpInst_TextButtonPour	151
+#define ESCHER_ShpInst_TextCurveUp		152
+#define ESCHER_ShpInst_TextCurveDown	153
+#define ESCHER_ShpInst_TextCascadeUp	154
+#define ESCHER_ShpInst_TextCascadeDown	155
+#define ESCHER_ShpInst_TextWave1		156
+#define ESCHER_ShpInst_TextWave2		157
+#define ESCHER_ShpInst_TextWave3		158
+#define ESCHER_ShpInst_TextWave4		159
+#define ESCHER_ShpInst_TextInflate		160
+#define ESCHER_ShpInst_TextDeflate		161
+#define ESCHER_ShpInst_TextInflateBottom	162
+#define ESCHER_ShpInst_TextDeflateBottom	163
+#define ESCHER_ShpInst_TextInflateTop		164
+#define ESCHER_ShpInst_TextDeflateTop		165
+#define ESCHER_ShpInst_TextDeflateInflate	166
+#define ESCHER_ShpInst_TextDeflateInflateDeflate	167
+#define ESCHER_ShpInst_TextFadeRight	168
+#define ESCHER_ShpInst_TextFadeLeft		169
+#define ESCHER_ShpInst_TextFadeUp		170
+#define ESCHER_ShpInst_TextFadeDown		171
+#define ESCHER_ShpInst_TextSlantUp		172
+#define ESCHER_ShpInst_TextSlantDown	173
+#define ESCHER_ShpInst_TextCanUp		174
+#define ESCHER_ShpInst_TextCanDown		175
+#define ESCHER_ShpInst_FlowChartAlternateProcess	176
+#define ESCHER_ShpInst_FlowChartOffpageConnector	177
+#define ESCHER_ShpInst_Callout90		178
+#define ESCHER_ShpInst_AccentCallout90	179
+#define ESCHER_ShpInst_BorderCallout90	180
+#define ESCHER_ShpInst_AccentBorderCallout90	181
+#define ESCHER_ShpInst_LeftRightUpArrow	182
+#define ESCHER_ShpInst_Sun				183
+#define ESCHER_ShpInst_Moon				184
+#define ESCHER_ShpInst_BracketPair		185
+#define ESCHER_ShpInst_BracePair		186
+#define ESCHER_ShpInst_Seal4			187
+#define ESCHER_ShpInst_DoubleWave		188
+#define ESCHER_ShpInst_ActionButtonBlank	189
+#define ESCHER_ShpInst_ActionButtonHome		190
+#define ESCHER_ShpInst_ActionButtonHelp		191
+#define ESCHER_ShpInst_ActionButtonInformation	192
+#define ESCHER_ShpInst_ActionButtonForwardNext	193
+#define ESCHER_ShpInst_ActionButtonBackPrevious	194
+#define ESCHER_ShpInst_ActionButtonEnd		195
+#define ESCHER_ShpInst_ActionButtonBeginning	196
+#define ESCHER_ShpInst_ActionButtonReturn	197
+#define ESCHER_ShpInst_ActionButtonDocument	198
+#define ESCHER_ShpInst_ActionButtonSound	199
+#define ESCHER_ShpInst_ActionButtonMovie	200
+#define ESCHER_ShpInst_HostControl			201
+#define ESCHER_ShpInst_TextBox				202
 
 #define ESCHER_ShpInst_COUNT                203
-#define ESCHER_ShpInst_Max                  0x0FFF
-#define ESCHER_ShpInst_Nil                  ESCHER_ShpInst_Max
+#define ESCHER_ShpInst_Max					0x0FFF
+#define ESCHER_ShpInst_Nil					ESCHER_ShpInst_Max
 
 enum ESCHER_BlibType
-{                           // GEL provided types...
-   ERROR = 0,               // An error occured during loading
-   UNKNOWN,                 // An unknown blip type
-   EMF,                     // Windows Enhanced Metafile
-   WMF,                     // Windows Metafile
-   PICT,                    // Macintosh PICT
-   PEG,                     // JFIF
-   PNG,                     // PNG
-   DIB,                     // Windows DIB
-   FirstClient = 32,        // First client defined blip type
-   LastClient  = 255        // Last client defined blip type
+{							// GEL provided types...
+   ERROR = 0,				// An error occured during loading
+   UNKNOWN,					// An unknown blip type
+   EMF,						// Windows Enhanced Metafile
+   WMF,						// Windows Metafile
+   PICT,					// Macintosh PICT
+   PEG,						// JFIF
+   PNG,						// PNG
+   DIB,						// Windows DIB
+   FirstClient = 32,		// First client defined blip type
+   LastClient  = 255		// Last client defined blip type
 };
 
 enum ESCHER_FillStyle
 {
-    ESCHER_FillSolid,       // Fill with a solid color
+    ESCHER_FillSolid,		// Fill with a solid color
     ESCHER_FillPattern,     // Fill with a pattern (bitmap)
     ESCHER_FillTexture,     // A texture (pattern with its own color map)
     ESCHER_FillPicture,     // Center a picture in the shape
@@ -431,15 +431,15 @@ enum ESCHER_txfl
     ESCHER_txflBtoT,            // Bottom to Top non-@
     ESCHER_txflTtoBN,           // Top to Bottom non-@
     ESCHER_txflHorzA,           // Horizontal @-font
-    ESCHER_txflVertN            // Vertical, non-@
+    ESCHER_txflVertN			// Vertical, non-@
 };
 
 //  text direction (needed for Bi-Di support)
 enum ESCHER_txDir
 {
-    ESCHER_txdirLTR,            // left-to-right text direction
-    ESCHER_txdirRTL,            // right-to-left text direction
-    ESCHER_txdirContext         // context text direction
+    ESCHER_txdirLTR,			// left-to-right text direction
+    ESCHER_txdirRTL,			// right-to-left text direction
+    ESCHER_txdirContext			// context text direction
 };
 
 // Callout Type
@@ -506,7 +506,7 @@ enum ESCHER_3DRenderMode
 {
     ESCHER_FullRender,      // Generate a full rendering
     ESCHER_Wireframe,       // Generate a wireframe
-    ESCHER_BoundingCube     // Generate a bounding cube
+    ESCHER_BoundingCube		// Generate a bounding cube
 };
 
 //
@@ -708,7 +708,7 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_gtextFStrikethrough         255  /*  BOOL              Strike through font       */
 // Blip
 #define ESCHER_Prop_cropFromTop                 256  /*  LONG              16.16 fraction times total                          */
-#define ESCHER_Prop_cropFromBottom              257  /*  LONG                image width or height,                            */
+#define ESCHER_Prop_cropFromBottom				257  /*  LONG                image width or height,                            */
 #define ESCHER_Prop_cropFromLeft                258  /*  LONG                as appropriate.                                   */
 #define ESCHER_Prop_cropFromRight               259  /*  LONG                                                                  */
 #define ESCHER_Prop_pib                         260  /*  IMsoBlip*         Blip to display                                     */
@@ -904,8 +904,8 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_hspMaster                   769  /*  MSOHSP          master shape                                        */
 #define ESCHER_Prop_cxstyle                     771  /*  MSOCXSTYLE      Type of connector                                   */
 #define ESCHER_Prop_bWMode                      772  /*  ESCHERwMode     Settings for modifications to                       */
-#define ESCHER_Prop_bWModePureBW                773  /*  ESCHERwMode     be made when in different                         */
-#define ESCHER_Prop_bWModeBW                    774  /*  ESCHERwMode     forms of black-and-white mode.                    */
+#define ESCHER_Prop_bWModePureBW                773  /*  ESCHERwMode	 be made when in different                         */
+#define ESCHER_Prop_bWModeBW                    774  /*  ESCHERwMode	 forms of black-and-white mode.                    */
 #define ESCHER_Prop_fOleIcon                    826  /*  BOOL            For OLE objects, whether the object is in icon form */
 #define ESCHER_Prop_fPreferRelativeResize       827  /*  BOOL            For UI only. Prefer relative resizing.              */
 #define ESCHER_Prop_fLockShapeType              828  /*  BOOL            Lock the shape type (don't allow Change Shape)      */
@@ -935,8 +935,8 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_dxWrapDistRight             902  /*  LONG            Right wrapping distance from text (Word)                                                               */
 #define ESCHER_Prop_dyWrapDistBottom            903  /*  LONG            Bottom wrapping distance from text (Word)                                                              */
 #define ESCHER_Prop_lidRegroup                  904  /*  LONG            Regroup ID                                                                                             */
-#define ESCHER_Prop_tableProperties             927
-#define ESCHER_Prop_tableRowProperties          928
+#define ESCHER_Prop_tableProperties				927
+#define ESCHER_Prop_tableRowProperties			928
 #define ESCHER_Prop_fEditedWrap                 953  /*  BOOL            Has the wrap polygon been edited?                                                                      */
 #define ESCHER_Prop_fBehindDocument             954  /*  BOOL            Word-only (shape is behind text)                                                                       */
 #define ESCHER_Prop_fOnDblClickNotify           955  /*  BOOL            Notify client on a double click                                                                        */
@@ -945,14 +945,14 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_fHidden                     958  /*  BOOL            Do not display                                                                                         */
 #define ESCHER_Prop_fPrint                      959  /*  BOOL            Print this shape                                                                                       */
 
-#define ESCHER_PERSISTENTRY_PREALLOCATE     64
+#define ESCHER_PERSISTENTRY_PREALLOCATE		64
 
-#define ESCHER_Persist_PrivateEntry         0x80000000
-#define ESCHER_Persist_Dgg                  0x00010000
-#define ESCHER_Persist_Dg                   0x00020000
-#define ESCHER_Persist_CurrentPosition      0x00040000
-#define ESCHER_Persist_Grouping_Snap        0x00050000
-#define ESCHER_Persist_Grouping_Logic       0x00060000
+#define ESCHER_Persist_PrivateEntry			0x80000000
+#define ESCHER_Persist_Dgg					0x00010000
+#define ESCHER_Persist_Dg					0x00020000
+#define ESCHER_Persist_CurrentPosition		0x00040000
+#define ESCHER_Persist_Grouping_Snap		0x00050000
+#define ESCHER_Persist_Grouping_Logic		0x00060000
 
 const sal_uInt32 DFF_DGG_CLUSTER_SIZE       = 0x00000400;   /// Shape IDs per cluster in DGG atom.
 
@@ -971,40 +971,40 @@ namespace com { namespace sun { namespace star {
 
 struct MSFILTER_DLLPUBLIC EscherConnectorListEntry
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mXConnector;
-    ::com::sun::star::awt::Point            maPointA;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mXConnectToA;
-    ::com::sun::star::awt::Point            maPointB;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mXConnectToB;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape	>	mXConnector;
+    ::com::sun::star::awt::Point			maPointA;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape	>	mXConnectToA;
+    ::com::sun::star::awt::Point			maPointB;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape	>	mXConnectToB;
 
-    sal_uInt32      GetConnectorRule( sal_Bool bFirst );
+    sal_uInt32		GetConnectorRule( sal_Bool bFirst );
 
                     EscherConnectorListEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rC,
                                         const ::com::sun::star::awt::Point& rPA,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rSA ,
                                         const ::com::sun::star::awt::Point& rPB,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rSB ) :
-                                            mXConnector ( rC ),
-                                            maPointA    ( rPA ),
+                                            mXConnector	( rC ),
+                                            maPointA	( rPA ),
                                             mXConnectToA( rSA ),
-                                            maPointB    ( rPB ),
+                                            maPointB	( rPB ),
                                             mXConnectToB( rSB ) {}
 
-    sal_uInt32      GetClosestPoint( const Polygon& rPoly, const ::com::sun::star::awt::Point& rP );
+    sal_uInt32		GetClosestPoint( const Polygon& rPoly, const ::com::sun::star::awt::Point& rP );
 };
 
 struct MSFILTER_DLLPUBLIC EscherExContainer
 {
-    sal_uInt32  nContPos;
-    SvStream&   rStrm;
+    sal_uInt32	nContPos;
+    SvStream&	rStrm;
 
     EscherExContainer( SvStream& rSt, const sal_uInt16 nRecType, const sal_uInt16 nInstance = 0 );
     ~EscherExContainer();
 };
 struct MSFILTER_DLLPUBLIC EscherExAtom
 {
-    sal_uInt32  nContPos;
-    SvStream&   rStrm;
+    sal_uInt32	nContPos;
+    SvStream&	rStrm;
 
     EscherExAtom( SvStream& rSt, const sal_uInt16 nRecType, const sal_uInt16 nInstance = 0, const sal_uInt8 nVersion = 0 );
     ~EscherExAtom();
@@ -1027,8 +1027,8 @@ struct EscherPropertyValueHelper
 
 struct EscherPersistEntry
 {
-    UINT32  mnID;
-    UINT32  mnOffset;
+    UINT32	mnID;
+    UINT32	mnOffset;
             EscherPersistEntry( UINT32 nId, UINT32 nOffset ) { mnID = nId; mnOffset = nOffset; };
 
 };
@@ -1043,20 +1043,20 @@ class EscherBlibEntry
 
     protected:
 
-        UINT32          mnIdentifier[ 4 ];
-        UINT32          mnPictureOffset;        // offset auf die grafik im PictureStreams
-        UINT32          mnSize;                 // size of real graphic
+        UINT32			mnIdentifier[ 4 ];
+        UINT32			mnPictureOffset;		// offset auf die grafik im PictureStreams
+        UINT32			mnSize;					// size of real graphic
 
-        UINT32          mnRefCount;             // !! reference count
-        UINT32          mnSizeExtra;            // !! size of preceding header
+        UINT32			mnRefCount;				// !! reference count
+        UINT32			mnSizeExtra;			// !! size of preceding header
 
-        ESCHER_BlibType meBlibType;
+        ESCHER_BlibType	meBlibType;
 
-        Size            maPrefSize;
-        MapMode         maPrefMapMode;
+        Size			maPrefSize;
+        MapMode			maPrefMapMode;
 
-        sal_Bool        mbIsEmpty;
-        sal_Bool        mbIsNativeGraphicPossible;
+        sal_Bool		mbIsEmpty;
+        sal_Bool		mbIsNativeGraphicPossible;
 
     public:
 
@@ -1065,42 +1065,42 @@ class EscherBlibEntry
 
                         ~EscherBlibEntry();
 
-        void            WriteBlibEntry( SvStream& rSt, sal_Bool bWritePictureOffset, sal_uInt32 nResize = 0 );
-        sal_Bool        IsEmpty() const { return mbIsEmpty; };
+        void			WriteBlibEntry( SvStream& rSt, sal_Bool bWritePictureOffset, sal_uInt32 nResize = 0 );
+        sal_Bool		IsEmpty() const { return mbIsEmpty; };
 
-        BOOL            operator==( const EscherBlibEntry& ) const;
+        BOOL			operator==( const EscherBlibEntry& ) const;
 };
 
 // ---------------------------------------------------------------------------------------------
 
-#define _E_GRAPH_PROV_USE_INSTANCES             1
-#define _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES   2
+#define _E_GRAPH_PROV_USE_INSTANCES				1
+#define _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES	2
 
 class MSFILTER_DLLPUBLIC EscherGraphicProvider
 {
-        sal_uInt32              mnFlags;
+        sal_uInt32				mnFlags;
 
-        EscherBlibEntry**       mpBlibEntrys;
-        sal_uInt32              mnBlibBufSize;
-        sal_uInt32              mnBlibEntrys;
+        EscherBlibEntry**		mpBlibEntrys;
+        sal_uInt32				mnBlibBufSize;
+        sal_uInt32				mnBlibEntrys;
 
     protected :
 
-        UINT32                  ImplInsertBlib( EscherBlibEntry* p_EscherBlibEntry );
+        UINT32					ImplInsertBlib( EscherBlibEntry* p_EscherBlibEntry );
 
     public :
 
-        sal_uInt32  GetBlibStoreContainerSize( SvStream* pMergePicStreamBSE = NULL ) const;
-        void        WriteBlibStoreContainer( SvStream& rStrm, SvStream* pMergePicStreamBSE = NULL  );
+        sal_uInt32	GetBlibStoreContainerSize( SvStream* pMergePicStreamBSE = NULL ) const;
+        void		WriteBlibStoreContainer( SvStream& rStrm, SvStream* pMergePicStreamBSE = NULL  );
         sal_Bool WriteBlibStoreEntry(SvStream& rStrm, sal_uInt32 nBlipId,
             sal_Bool bWritePictureOffset, sal_uInt32 nResize = 0);
-        sal_uInt32  GetBlibID( SvStream& rPicOutStream, const ByteString& rGraphicId, const Rectangle& rBoundRect,
+        sal_uInt32	GetBlibID( SvStream& rPicOutStream, const ByteString& rGraphicId, const Rectangle& rBoundRect,
                     const com::sun::star::awt::Rectangle* pVisArea = NULL, const GraphicAttr* pGrafikAttr = NULL );
-        sal_Bool    HasGraphics() const { return mnBlibEntrys != 0; };
+        sal_Bool	HasGraphics() const { return mnBlibEntrys != 0; };
 
-        void        SetNewBlipStreamOffset( sal_Int32 nOffset );
+        void		SetNewBlipStreamOffset( sal_Int32 nOffset );
 
-        sal_Bool    GetPrefSize( const sal_uInt32 nBlibId, Size& rSize, MapMode& rMapMode );
+        sal_Bool	GetPrefSize( const sal_uInt32 nBlibId, Size& rSize, MapMode& rMapMode );
 
         EscherGraphicProvider( sal_uInt32 nFlags = _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
         ~EscherGraphicProvider();
@@ -1109,21 +1109,21 @@ class MSFILTER_DLLPUBLIC EscherGraphicProvider
 
 class MSFILTER_DLLPUBLIC EscherSolverContainer
 {
-    List                maShapeList;
-    List                maConnectorList;
+    List				maShapeList;
+    List				maConnectorList;
 
 public:
 
-    sal_uInt32          GetShapeId( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rShape ) const;
+    sal_uInt32			GetShapeId( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rShape ) const;
 
-    void                AddShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &, sal_uInt32 nId );
-    void                AddConnector( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &,
+    void				AddShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &, sal_uInt32 nId );
+    void				AddConnector( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &,
                                         const ::com::sun::star::awt::Point& rA,
                                     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &,
                                         const ::com::sun::star::awt::Point& rB,
                                     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConB );
 
-    void                WriteSolver( SvStream& );
+    void				WriteSolver( SvStream& );
 
                         EscherSolverContainer(){};
                         ~EscherSolverContainer();
@@ -1131,75 +1131,75 @@ public:
 
 // ---------------------------------------------------------------------------------------------
 
-#define ESCHER_CREATEPOLYGON_LINE           1
-#define ESCHER_CREATEPOLYGON_POLYLINE       2
-#define ESCHER_CREATEPOLYGON_POLYPOLYGON    4
+#define ESCHER_CREATEPOLYGON_LINE			1
+#define ESCHER_CREATEPOLYGON_POLYLINE		2
+#define ESCHER_CREATEPOLYGON_POLYPOLYGON	4
 
 class GraphicAttr;
 class SdrObjCustomShape;
 
 struct EscherPropSortStruct
 {
-    sal_uInt8*  pBuf;
-    sal_uInt32  nPropSize;
-    sal_uInt32  nPropValue;
-    sal_uInt16  nPropId;
+    sal_uInt8*	pBuf;
+    sal_uInt32	nPropSize;
+    sal_uInt32	nPropValue;
+    sal_uInt16	nPropId;
 };
 
 typedef std::vector< EscherPropSortStruct > EscherProperties;
 
 class MSFILTER_DLLPUBLIC EscherPropertyContainer
 {
-        EscherGraphicProvider*  pGraphicProvider;
-        SvStream*               pPicOutStrm;
-        Rectangle*              pShapeBoundRect;
+        EscherGraphicProvider*	pGraphicProvider;
+        SvStream*				pPicOutStrm;
+        Rectangle*				pShapeBoundRect;
 
-        EscherPropSortStruct*   pSortStruct;
+        EscherPropSortStruct*	pSortStruct;
 
-        sal_uInt32              nSortCount;
-        sal_uInt32              nSortBufSize;
-        sal_uInt32              nCountCount;
-        sal_uInt32              nCountSize;
+        sal_uInt32				nSortCount;
+        sal_uInt32				nSortBufSize;
+        sal_uInt32				nCountCount;
+        sal_uInt32				nCountSize;
 
-        sal_Bool                bHasComplexData;
-        sal_Bool                bSuppressRotation;
+        sal_Bool				bHasComplexData;
+        sal_Bool				bSuppressRotation;
 
 
-        sal_uInt32  ImplGetColor( const sal_uInt32 rColor, sal_Bool bSwap = sal_True );
-        void        ImplCreateGraphicAttributes( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+        sal_uInt32	ImplGetColor( const sal_uInt32 rColor, sal_Bool bSwap = sal_True );
+        void		ImplCreateGraphicAttributes( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                                                     sal_uInt32 nBlibId, sal_Bool bCreateCroppingAttributes );
         sal_Bool    ImplCreateEmbeddedBmp( const ByteString& rUniqueId );
-        void        ImplInit();
+        void		ImplInit();
 
     public :
 
         EscherPropertyContainer();
         EscherPropertyContainer(
-            EscherGraphicProvider& rGraphicProvider,    // the PropertyContainer needs to know
-                    SvStream* pPicOutStrm,              // the GraphicProvider to be able to write
-                        Rectangle& rShapeBoundRect );   // FillBitmaps or GraphicObjects.
+            EscherGraphicProvider& rGraphicProvider,	// the PropertyContainer needs to know
+                    SvStream* pPicOutStrm,				// the GraphicProvider to be able to write
+                        Rectangle& rShapeBoundRect );	// FillBitmaps or GraphicObjects.
                                                         // under some cirumstances the ShapeBoundRect is adjusted
                                                         // this will happen when rotated GraphicObjects
                                                         // are saved to PowerPoint
         ~EscherPropertyContainer();
 
-        void        AddOpt( sal_uInt16 nPropertyID, const rtl::OUString& rString );
+        void		AddOpt( sal_uInt16 nPropertyID, const rtl::OUString& rString );
 
-        void        AddOpt( sal_uInt16 nPropertyID, sal_uInt32 nPropValue,
+        void		AddOpt( sal_uInt16 nPropertyID, sal_uInt32 nPropValue,
                             sal_Bool bBlib = sal_False );
 
-        void        AddOpt( sal_uInt16 nPropertyID, sal_Bool bBlib, sal_uInt32 nPropValue,
+        void		AddOpt( sal_uInt16 nPropertyID, sal_Bool bBlib, sal_uInt32 nPropValue,
                             sal_uInt8* pProp, sal_uInt32 nPropSize );
 
-        sal_Bool    GetOpt( sal_uInt16 nPropertyID, sal_uInt32& rPropValue ) const;
+        sal_Bool	GetOpt( sal_uInt16 nPropertyID, sal_uInt32& rPropValue ) const;
 
-        sal_Bool    GetOpt( sal_uInt16 nPropertyID, EscherPropSortStruct& rPropValue ) const;
+        sal_Bool	GetOpt( sal_uInt16 nPropertyID, EscherPropSortStruct& rPropValue ) const;
 
         EscherProperties GetOpts() const;
 
-        void        Commit( SvStream& rSt, sal_uInt16 nVersion = 3, sal_uInt16 nRecType = ESCHER_OPT );
+        void		Commit( SvStream& rSt, sal_uInt16 nVersion = 3, sal_uInt16 nRecType = ESCHER_OPT );
 
-        sal_Bool    CreateShapeProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape );
+        sal_Bool	CreateShapeProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape );
         sal_Bool    CreateOLEGraphicProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXOleObject );
 
         /** Creates a complex ESCHER_Prop_fillBlip containing the BLIP directly (for Excel charts). */
@@ -1212,33 +1212,33 @@ class MSFILTER_DLLPUBLIC EscherPropertyContainer
                     // the GraphicProperties will only be created if a GraphicProvider and PicOutStrm is known
                     // DR: #99897# if no GraphicProvider is present, a complex ESCHER_Prop_fillBlip
                     //             will be created, containing the BLIP directly (e.g. for Excel charts).
-        sal_Bool    CreateGraphicProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+        sal_Bool	CreateGraphicProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                         const String& rSource, const sal_Bool bCreateFillBitmap, const sal_Bool bCreateCroppingAttributes = sal_False,
                             const sal_Bool bFillBitmapModeAllowed = sal_True );
 
-        sal_Bool    CreatePolygonProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+        sal_Bool	CreatePolygonProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                         sal_uInt32 nFlags, sal_Bool bBezier, ::com::sun::star::awt::Rectangle& rGeoRect, Polygon* pPolygon = NULL );
 
         static sal_uInt32 GetGradientColor( const ::com::sun::star::awt::Gradient* pGradient, sal_uInt32 nStartColor );
 
         void        CreateGradientProperties( const ::com::sun::star::awt::Gradient & rGradient );
-        void        CreateGradientProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & );
-        void        CreateLineProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, sal_Bool bEdge );
-        void        CreateFillProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, sal_Bool bEdge );
-        void        CreateTextProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, sal_uInt32 nText,
+        void		CreateGradientProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & );
+        void		CreateLineProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, sal_Bool bEdge );
+        void		CreateFillProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, sal_Bool bEdge );
+        void		CreateTextProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, sal_uInt32 nText,
                         const sal_Bool bIsCustomShape = sal_False, const sal_Bool bIsTextFrame = sal_True );
 
-        sal_Bool    CreateConnectorProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
+        sal_Bool	CreateConnectorProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
                                                 EscherSolverContainer& rSolver, ::com::sun::star::awt::Rectangle& rGeoRect,
                                                     sal_uInt16& rShapeType, sal_uInt16& rShapeFlags );
 
                     // Because shadow properties depends to the line and fillstyle, the CreateShadowProperties method should be called at last.
                     // It activ only when at least a FillStyle or LineStyle is set.
-        sal_Bool    CreateShadowProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & );
+        sal_Bool	CreateShadowProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & );
 
         // creates all necessary CustomShape properties, this includes also Text-, Shadow-, Fill-, and LineProperties
-        void        CreateCustomShapeProperties( const MSO_SPT eShapeType, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & );
-        sal_Bool    IsFontWork() const;
+        void		CreateCustomShapeProperties( const MSO_SPT eShapeType, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & );
+        sal_Bool	IsFontWork() const;
 
         // helper functions which are also used by the escher import
         static PolyPolygon GetPolyPolygon( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape );
@@ -1261,18 +1261,18 @@ class MSFILTER_DLLPUBLIC EscherPersistTable
 {
 
     public:
-        List    maPersistTable;
+        List	maPersistTable;
 
-        BOOL    PtIsID( UINT32 nID );
-        void    PtInsert( UINT32 nID, UINT32 nOfs );
-        UINT32  PtDelete( UINT32 nID );
-        UINT32  PtGetOffsetByID( UINT32 nID );
-        UINT32  PtReplace( UINT32 nID, UINT32 nOfs );
-        UINT32  PtReplaceOrInsert( UINT32 nID, UINT32 nOfs );
-        UINT32  PtGetCount() const { return maPersistTable.Count(); };
+        BOOL	PtIsID( UINT32 nID );
+        void	PtInsert( UINT32 nID, UINT32 nOfs );
+        UINT32	PtDelete( UINT32 nID );
+        UINT32	PtGetOffsetByID( UINT32 nID );
+        UINT32	PtReplace( UINT32 nID, UINT32 nOfs );
+        UINT32	PtReplaceOrInsert( UINT32 nID, UINT32 nOfs );
+        UINT32	PtGetCount() const { return maPersistTable.Count(); };
 
                 EscherPersistTable();
-        virtual ~EscherPersistTable();
+        virtual	~EscherPersistTable();
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -1284,12 +1284,12 @@ class MSFILTER_DLLPUBLIC EscherExClientRecord_Base
 {
 public:
                                 EscherExClientRecord_Base() {}
-    virtual                     ~EscherExClientRecord_Base();
+    virtual						~EscherExClientRecord_Base();
 
                                 /// Application writes the record header
                                 /// using rEx.AddAtom(...) followed by
                                 /// record data written to rEx.GetStream()
-    virtual void                WriteData( EscherEx& rEx ) const = 0;
+    virtual	void				WriteData( EscherEx& rEx ) const = 0;
 };
 
 
@@ -1298,46 +1298,46 @@ class MSFILTER_DLLPUBLIC EscherExClientAnchor_Base
 {
 public:
                                 EscherExClientAnchor_Base() {}
-    virtual                     ~EscherExClientAnchor_Base();
+    virtual						~EscherExClientAnchor_Base();
 
                                 /// Application writes the record header
                                 /// using rEx.AddAtom(...) followed by
                                 /// record data written to rEx.GetStream()
-    virtual void                WriteData( EscherEx& rEx,
+    virtual	void				WriteData( EscherEx& rEx,
                                     const Rectangle& rRect ) = 0;
 };
 
 class InteractionInfo
 {
-    bool            mbHasInteraction;
-    std::auto_ptr<SvMemoryStream>       mpHyperlinkRecord;
-    InteractionInfo();
+	bool 			mbHasInteraction;
+	std::auto_ptr<SvMemoryStream>		mpHyperlinkRecord;
+	InteractionInfo();
 public:
-    InteractionInfo( SvMemoryStream* pStream, bool bInteraction ) : mbHasInteraction( bInteraction )
-    {
-        mpHyperlinkRecord.reset( pStream );
-    }
-    bool    hasInteraction() { return mbHasInteraction; }
-    const std::auto_ptr< SvMemoryStream >&  getHyperlinkRecord() { return mpHyperlinkRecord; }
+	InteractionInfo( SvMemoryStream* pStream, bool bInteraction ) : mbHasInteraction( bInteraction )
+	{
+		mpHyperlinkRecord.reset( pStream );
+	}
+	bool	hasInteraction() { return mbHasInteraction; }
+	const std::auto_ptr< SvMemoryStream >&	getHyperlinkRecord() { return mpHyperlinkRecord; }
 };
 
 class EscherExHostAppData
 {
 private:
-        EscherExClientAnchor_Base*  pClientAnchor;
-        EscherExClientRecord_Base*  pClientData;
-        EscherExClientRecord_Base*  pClientTextbox;
-        InteractionInfo*        pInteractionInfo;
+        EscherExClientAnchor_Base*	pClientAnchor;
+        EscherExClientRecord_Base*	pClientData;
+        EscherExClientRecord_Base*	pClientTextbox;
+		InteractionInfo*		pInteractionInfo;
         // ignore single shape if entire pages are written
-        BOOL                        bDontWriteShape;
+        BOOL						bDontWriteShape;
 
 public:
         EscherExHostAppData() : pClientAnchor(0), pClientData(0),
-                                pClientTextbox(0), pInteractionInfo(0), bDontWriteShape(FALSE)
+								pClientTextbox(0), pInteractionInfo(0), bDontWriteShape(FALSE)
         {}
 
-        void SetInteractionInfo( InteractionInfo* p )
-            { pInteractionInfo = p; }
+		void SetInteractionInfo( InteractionInfo* p )
+			{ pInteractionInfo = p; }
         void SetClientAnchor( EscherExClientAnchor_Base* p )
             { pClientAnchor = p; }
         void SetClientData( EscherExClientRecord_Base* p )
@@ -1346,8 +1346,8 @@ public:
             { pClientTextbox = p; }
         void SetDontWriteShape( BOOL b )
             { bDontWriteShape = b; }
-        InteractionInfo* GetInteractionInfo() const
-            { return pInteractionInfo; }
+		InteractionInfo* GetInteractionInfo() const
+			{ return pInteractionInfo; }
         EscherExClientAnchor_Base* GetClientAnchor() const
             { return pClientAnchor; }
         EscherExClientRecord_Base* GetClientData() const
@@ -1356,11 +1356,11 @@ public:
             { return pClientTextbox; }
 
         void WriteClientAnchor( EscherEx& rEx, const Rectangle& rRect )
-            { if( pClientAnchor )   pClientAnchor->WriteData( rEx, rRect ); }
+            { if( pClientAnchor ) 	pClientAnchor->WriteData( rEx, rRect ); }
         void WriteClientData( EscherEx& rEx )
-            { if( pClientData )     pClientData->WriteData( rEx ); }
+            { if( pClientData ) 	pClientData->WriteData( rEx ); }
         void WriteClientTextbox( EscherEx& rEx )
-            { if( pClientTextbox )  pClientTextbox->WriteData( rEx ); }
+            { if( pClientTextbox ) 	pClientTextbox->WriteData( rEx ); }
 
         BOOL DontWriteShape() const { return bDontWriteShape; }
 };
@@ -1461,20 +1461,20 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
 
         EscherExGlobalRef       mxGlobal;
         ImplEscherExSdrPtr      mpImplEscherExSdr;
-        SvStream*               mpOutStrm;
-        UINT32                  mnStrmStartOfs;
+        SvStream*				mpOutStrm;
+        UINT32					mnStrmStartOfs;
         std::vector< sal_uInt32 > mOffsets;
         std::vector< sal_uInt16 > mRecTypes;
 
-        UINT32                  mnCurrentDg;
-        UINT32                  mnCountOfs;
+        UINT32					mnCurrentDg;
+        UINT32					mnCountOfs;
 
-        UINT32                  mnGroupLevel;
-        UINT16                  mnHellLayerId;
+        UINT32					mnGroupLevel;
+        UINT16					mnHellLayerId;
 
-        BOOL                    mbEscherSpgr;
-        BOOL                    mbEscherDg;
-        BOOL                    mbOleEmf;                   // OLE is EMF instead of WMF
+        BOOL					mbEscherSpgr;
+        BOOL					mbEscherDg;
+        BOOL					mbOleEmf;					// OLE is EMF instead of WMF
 
 
         virtual BOOL DoSeek( UINT32 nKey );
@@ -1525,24 +1525,24 @@ public:
      */
     void                InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom );
 
-        void    InsertPersistOffset( UINT32 nKey, UINT32 nOffset ); // Es wird nicht geprueft, ob sich jener schluessel schon in der PersistantTable befindet
+        void	InsertPersistOffset( UINT32 nKey, UINT32 nOffset );	// Es wird nicht geprueft, ob sich jener schluessel schon in der PersistantTable befindet
         void    ReplacePersistOffset( UINT32 nKey, UINT32 nOffset );
         UINT32  GetPersistOffset( UINT32 nKey );
-        BOOL    SeekToPersistOffset( UINT32 nKey );
+        BOOL	SeekToPersistOffset( UINT32 nKey );
         virtual BOOL InsertAtPersistOffset( UINT32 nKey, UINT32 nValue );// nValue wird im Stream an entrsprechender Stelle eingefuegt(overwrite modus), ohne dass sich die
                                                                     // aktuelle StreamPosition aendert
 
-        SvStream&   GetStream() const   { return *mpOutStrm; }
-        ULONG   GetStreamPos() const    { return mpOutStrm->Tell(); }
+        SvStream&	GetStream() const	{ return *mpOutStrm; }
+        ULONG	GetStreamPos() const	{ return mpOutStrm->Tell(); }
 
-        virtual BOOL SeekBehindRecHeader( UINT16 nRecType );                // der stream muss vor einem gueltigen Record Header oder Atom stehen
+        virtual BOOL SeekBehindRecHeader( UINT16 nRecType );				// der stream muss vor einem gueltigen Record Header oder Atom stehen
 
                 // features beim erzeugen folgender Container:
                 //
-                //      ESCHER_DggContainer:    ein EscherDgg Atom wird automatisch erzeugt und verwaltet
-                //      ESCHER_DgContainer:     ein EscherDg Atom wird automatisch erzeugt und verwaltet
-                //      ESCHER_SpgrContainer:
-                //      ESCHER_SpContainer:
+                //		ESCHER_DggContainer:	ein EscherDgg Atom wird automatisch erzeugt und verwaltet
+                //		ESCHER_DgContainer:		ein EscherDg Atom wird automatisch erzeugt und verwaltet
+                //		ESCHER_SpgrContainer:
+                //		ESCHER_SpContainer:
 
         virtual void OpenContainer( UINT16 nEscherContainer, int nRecInstance = 0 );
         virtual void CloseContainer();
@@ -1554,8 +1554,8 @@ public:
         virtual void AddClientAnchor( const Rectangle& rRectangle );
 
         virtual UINT32 EnterGroup( const String& rShapeName, const Rectangle* pBoundRect = 0 );
-        UINT32  EnterGroup( const Rectangle* pBoundRect = NULL );
-        UINT32  GetGroupLevel() const { return mnGroupLevel; };
+        UINT32	EnterGroup( const Rectangle* pBoundRect = NULL );
+        UINT32	GetGroupLevel() const { return mnGroupLevel; };
         virtual BOOL SetGroupSnapRect( UINT32 nGroupLevel, const Rectangle& rRect );
         virtual BOOL SetGroupLogicRect( UINT32 nGroupLevel, const Rectangle& rRect );
         virtual void LeaveGroup();
@@ -1565,21 +1565,21 @@ public:
 
         virtual void Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
 
-        UINT32  GetColor( const UINT32 nColor, BOOL bSwap = TRUE );
-        UINT32  GetColor( const Color& rColor, BOOL bSwap = TRUE );
+        UINT32	GetColor( const UINT32 nColor, BOOL bSwap = TRUE );
+        UINT32	GetColor( const Color& rColor, BOOL bSwap = TRUE );
 
                 // ...Sdr... implemented in eschesdo.cxx
 
-        void    AddSdrPage( const SdrPage& rPage );
+        void	AddSdrPage( const SdrPage& rPage );
         void    AddUnoShapes( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
 
                 /// returns the ShapeID
-        UINT32  AddSdrObject( const SdrObject& rObj );
+        UINT32	AddSdrObject( const SdrObject& rObj );
 
                 /// If objects are written through AddSdrObject the
                 /// SolverContainer has to be written, and maybe some
                 /// maintenance to be done.
-        void    EndSdrObjectPage();
+        void	EndSdrObjectPage();
 
                 /// Called before a shape is written, application supplies
                 /// ClientRecords. May set AppData::bDontWriteShape so the
@@ -1590,7 +1590,7 @@ public:
 
                 /// Called after a shape is written to inform the application
                 /// of the resulted shape type and ID.
-    virtual void    EndShape( UINT16 nShapeType, UINT32 nShapeID );
+    virtual	void	EndShape( UINT16 nShapeType, UINT32 nShapeID );
 
                 /// Called before an AdditionalText EnterGroup occurs.
                 /// The current shape will be written in three parts:
@@ -1608,17 +1608,17 @@ public:
                 /// EndShape is called for the textbox shape.
                 /// EndShape is called for the group shape, this provides
                 ///   the same functionality as an ordinary recursive group.
-    virtual EscherExHostAppData*    EnterAdditionalTextGroup();
+    virtual	EscherExHostAppData*	EnterAdditionalTextGroup();
 
                 /// Called if an ESCHER_Prop_lTxid shall be written
-    virtual UINT32  QueryTextID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >&, UINT32 nShapeId );
+    virtual	UINT32	QueryTextID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >&, UINT32 nShapeId );
             // add an dummy rectangle shape into the escher stream
         UINT32  AddDummyShape();
 
     static const SdrObject* GetSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rXShape );
 
-    void SetHellLayerId( UINT16 nId )       { mnHellLayerId = nId; }
-    UINT16 GetHellLayerId() const           { return mnHellLayerId; }
+    void SetHellLayerId( UINT16 nId )		{ mnHellLayerId = nId; }
+    UINT16 GetHellLayerId() const			{ return mnHellLayerId; }
 
 private:
                         EscherEx( const EscherEx& );
@@ -1630,6 +1630,6 @@ private:
 };
 
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

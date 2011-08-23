@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@ package org.openoffice.xmerge.converter.xml.xslt;
 import org.openoffice.xmerge.converter.xml.OfficeDocument;
 
 /**
- *  This class is an implementation of <code>OfficeDocument</code> for
+ *  This class is an implementation of <code>OfficeDocument</code> for 
  *  the generic office format.
  */
 public class GenericOfficeDocument extends OfficeDocument {
@@ -75,10 +75,10 @@ public class GenericOfficeDocument extends OfficeDocument {
      *  @return  The Office attribute for the generic format.
      */
     protected String getOfficeClassAttribute() {
-
+        
     return "";
     }
-
+    
     /**
      * Method to return the MIME type of the document.
      *
@@ -88,6 +88,6 @@ public class GenericOfficeDocument extends OfficeDocument {
         /* TODO: Determine the MIME-type from the input. */
         return "";
     }
-
+    
 }
 

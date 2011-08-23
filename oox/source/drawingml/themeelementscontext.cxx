@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -216,9 +216,9 @@ Reference< XFastContextHandler > ThemeElementsContext::createFastChildContext( s
     Reference< XFastContextHandler > xRet;
     switch( nElement )
     {
-        case NMSP_DRAWINGML|XML_clrScheme:  // CT_ColorScheme
+        case NMSP_DRAWINGML|XML_clrScheme:	// CT_ColorScheme
             return new clrSchemeContext( *this, mrTheme.getClrScheme() );
-        case NMSP_DRAWINGML|XML_fontScheme: // CT_FontScheme
+        case NMSP_DRAWINGML|XML_fontScheme:	// CT_FontScheme
             return new FontSchemeContext( *this, mrTheme.getFontScheme() );
 
         case NMSP_DRAWINGML|XML_fmtScheme:  // CT_StyleMatrix

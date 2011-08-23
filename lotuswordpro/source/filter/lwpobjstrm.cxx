@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwpobjstrm.hxx"
@@ -287,7 +287,7 @@ sal_uInt16 LwpObjectStream::CheckExtra()
 }
 /**
  * @descr  decompress data buffer from pSrc to pDst
- *        Refer to the CAmiPro40File::DecompressObject(~) in LWP
+ * 		  Refer to the CAmiPro40File::DecompressObject(~) in LWP
  */
 sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, sal_uInt16 Size)
 {

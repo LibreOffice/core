@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwpuidoc.hxx"
@@ -96,7 +96,7 @@ void LwpUIDocument::Read(LwpObjectStream *pStrm)
     }
 }
 /**
- * @descr       Read macro options from object stream
+ * @descr		Read macro options from object stream
  **/
 void LwpNamedProperties::Read(LwpObjectStream *pStrm)
 {
@@ -111,7 +111,7 @@ void LwpNamedProperties::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 /**
- * @descr       Read macro options from object stream
+ * @descr		Read macro options from object stream
  **/
 void LwpAutoRunMacroOptions::Read(LwpObjectStream *pStrm)
 {
@@ -122,7 +122,7 @@ void LwpAutoRunMacroOptions::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 /**
- * @descr       Read merge options from object stream
+ * @descr		Read merge options from object stream
  **/
 void LwpMergeOptions::Read(LwpObjectStream *pStrm)
 {

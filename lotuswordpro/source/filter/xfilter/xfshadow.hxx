@@ -61,12 +61,12 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#ifndef     _XFSHADOW_HXX
-#define     _XFSHADOW_HXX
+#ifndef		_XFSHADOW_HXX
+#define		_XFSHADOW_HXX
 
-#include    "xfglobal.hxx"
-#include    "ixfproperty.hxx"
-#include    "xfcolor.hxx"
+#include	"xfglobal.hxx"
+#include	"ixfproperty.hxx"
+#include	"xfcolor.hxx"
 
 /**
  * @brief
@@ -81,51 +81,51 @@ public:
 
 public:
     /**
-     * @descr   set shadow position. You can refer to enumXFShadowPos to get all posible positions.
+     * @descr	set shadow position. You can refer to enumXFShadowPos to get all posible positions.
      */
-    void    SetPosition(enumXFShadowPos pos);
+    void	SetPosition(enumXFShadowPos pos);
 
     /**
-     * @descr   return shadow position.
+     * @descr	return shadow position.
      */
     enumXFShadowPos GetPosition();
 
     /**
-     * @descr   Set shadow offset from owner obejct.
+     * @descr	Set shadow offset from owner obejct.
      */
-    void    SetOffset(double offset);
+    void	SetOffset(double offset);
 
     /**
-     * @descr   return shadow offset.
+     * @descr	return shadow offset.
      */
-    double  GetOffset();
+    double	GetOffset();
 
     /**
-     * @descr   Set shadow color.
+     * @descr	Set shadow color.
      */
-    void    SetColor(const XFColor& color);
+    void	SetColor(const XFColor& color);
 
     /**
-     * @descr   return shadow color.
+     * @descr	return shadow color.
      */
     XFColor GetColor();
 
-    void    Reset();
+    void	Reset();
 
-    rtl::OUString   ToString();
+    rtl::OUString	ToString();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
     friend sal_Bool operator==(XFShadow& s1, XFShadow& s2);
     friend sal_Bool operator!=(XFShadow& s1, XFShadow& s2);
 private:
-    enumXFShadowPos m_ePosition;
-    double          m_fOffset;
-    XFColor         m_aColor;
+    enumXFShadowPos	m_ePosition;
+    double			m_fOffset;
+    XFColor			m_aColor;
 };
 
 
-inline void XFShadow::SetPosition(enumXFShadowPos pos)
+inline void	XFShadow::SetPosition(enumXFShadowPos pos)
 {
     m_ePosition = pos;
 }
@@ -135,17 +135,17 @@ inline enumXFShadowPos XFShadow::GetPosition()
     return m_ePosition;
 }
 
-inline void XFShadow::SetOffset(double offset)
+inline void	XFShadow::SetOffset(double offset)
 {
     m_fOffset = offset;
 }
 
-inline double   XFShadow::GetOffset()
+inline double	XFShadow::GetOffset()
 {
     return m_fOffset;
 }
 
-inline void XFShadow::SetColor(const XFColor& color)
+inline void	XFShadow::SetColor(const XFColor& color)
 {
     m_aColor = color;
 }

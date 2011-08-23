@@ -62,11 +62,11 @@
  * 2005-01-07 create this file.
  * 2005-01-10 it works now.
  ************************************************************************/
-#ifndef     _XFTEXTHEADING_HXX
-#define     _XFTEXTHEADING_HXX
+#ifndef		_XFTEXTHEADING_HXX
+#define		_XFTEXTHEADING_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
+#include	"xfglobal.hxx"
+#include	"xfcontent.hxx"
 
 class XFTextContent;
 /**
@@ -80,14 +80,14 @@ public:
     XFTextHeading();
     virtual ~XFTextHeading();
 
-    void                SetLevel(sal_Int16 level);
-    void                SetText(rtl::OUString text);
+    void				SetLevel(sal_Int16 level);
+    void				SetText(rtl::OUString text);
 
     virtual enumXFContent GetContentType();
-    virtual void        ToXml(IXFStream *pStrm);
+    virtual void		ToXml(IXFStream *pStrm);
 private:
-    XFTextContent       *m_pContent;
-    sal_Int16           m_nLevel;
+    XFTextContent		*m_pContent;
+    sal_Int16			m_nLevel;
 };
 
 #endif

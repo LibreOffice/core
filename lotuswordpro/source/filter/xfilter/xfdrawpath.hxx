@@ -61,11 +61,11 @@
  * Change History
  * 2004-2-18 create this file.
  ************************************************************************/
-#ifndef     _XFDRAWPATH_HXX
-#define     _XFDRAWPATH_HXX
+#ifndef		_XFDRAWPATH_HXX
+#define		_XFDRAWPATH_HXX
 
-#include    "xfdrawobj.hxx"
-#include    <vector>
+#include	"xfdrawobj.hxx"
+#include	<vector>
 
 /**
  * @brief
@@ -80,21 +80,21 @@ public:
 
 public:
     /**
-     * @descr   Set svg path command,L for line,M for move,...
+     * @descr	Set svg path command,L for line,M for move,...
      */
-    void    SetCommand(rtl::OUString cmd);
+    void	SetCommand(rtl::OUString cmd);
 
     /**
-     * @descr   Set svg path point.
+     * @descr	Set svg path point.
      */
-    void    AddPoint(XFPoint pt);
+    void	AddPoint(XFPoint pt);
 
     rtl::OUString ToString();
 
     friend class XFDrawPath;
 private:
-    rtl::OUString   m_strCommand;
-    std::vector<XFPoint>    m_aPoints;
+    rtl::OUString	m_strCommand;
+    std::vector<XFPoint>	m_aPoints;
 };
 
 /**
@@ -108,36 +108,36 @@ public:
 
 public:
     /**
-     * @descr   Move command.
+     * @descr	Move command.
      */
-    void    MoveTo(XFPoint pt, sal_Bool absPosition = sal_True);
+    void	MoveTo(XFPoint pt, sal_Bool absPosition = sal_True);
 
     /**
-     * @descr   Line command.
+     * @descr	Line command.
      */
-    void    LineTo(XFPoint pt, sal_Bool absPosition = sal_True);
+    void	LineTo(XFPoint pt, sal_Bool absPosition = sal_True);
 
     /**
-     * @descr   Curve command.
+     * @descr	Curve command.
      */
-    void    CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, sal_Bool absPosition = sal_True);
+    void	CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, sal_Bool absPosition = sal_True);
 
     /**
-     * @descr   Smooth curve command.
+     * @descr	Smooth curve command.
      */
-    void    SmoothCurveTo(XFPoint dest, XFPoint ctrl, sal_Bool absPosition = sal_True);
+    void	SmoothCurveTo(XFPoint dest, XFPoint ctrl, sal_Bool absPosition = sal_True);
 
     /**
-     * @descr   Close path command.
+     * @descr	Close path command.
      */
-    void    ClosePath(sal_Bool absPosition = sal_True);
+    void	ClosePath(sal_Bool absPosition = sal_True);
 
-    XFRect  CalcViewBox();
+    XFRect	CalcViewBox();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    std::vector<XFSvgPathEntry> m_aPaths;
+    std::vector<XFSvgPathEntry>	m_aPaths;
 };
 
 inline void XFSvgPathEntry::SetCommand(rtl::OUString cmd)
@@ -145,7 +145,7 @@ inline void XFSvgPathEntry::SetCommand(rtl::OUString cmd)
     m_strCommand = cmd;
 }
 
-inline void XFSvgPathEntry::AddPoint(XFPoint pt)
+inline void	XFSvgPathEntry::AddPoint(XFPoint pt)
 {
     m_aPoints.push_back(pt);
 }

@@ -1,0 +1,352 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include "fmresids.hrc"
+/* Strings fuer Uebersetzung */
+
+String RID_STR_NAME
+{
+    Text [ de ] = "Name" ;
+    Text [ en-US ] = "Name" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Nome";
+    Text[ ru ] = "Имя";
+    Text[ el ] = "Όνομα";
+    Text[ nl ] = "Naam";
+    Text[ fr ] = "Nom";
+    Text[ es ] = "Nombre";
+    Text[ fi ] = "Nimi";
+    Text[ ca ] = "Nom";
+    Text[ it ] = "Nome";
+    Text[ sk ] = "Názov";
+    Text[ da ] = "Navn";
+    Text[ sv ] = "Namn";
+    Text[ pl ] = "Nazwa";
+    Text[ pt-BR ] = "Nome";
+    Text[ th ] = "ชื่อ";
+    Text[ ja ] = "名前";
+    Text[ ko ] = "이름";
+    Text[ zh-CN ] = "名称";
+    Text[ zh-TW ] = "名稱";
+    Text[ tr ] = "Ad";
+    Text[ hi-IN ] = "नाम्";
+    Text[ ar ] = "الاسم";
+    Text[ he ] = "‮שם‬";
+};
+
+String RID_STR_FORMS
+{
+    Text [ de ] = "Formulare" ;
+    Text [ en-US ] = "Forms" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Formulários";
+    Text[ ru ] = "Формы";
+    Text[ el ] = "Φόρμες";
+    Text[ nl ] = "Formulieren";
+    Text[ fr ] = "Formulaires";
+    Text[ es ] = "Formularios";
+    Text[ fi ] = "Lomakkeet";
+    Text[ ca ] = "Formularis";
+    Text[ it ] = "Formulari";
+    Text[ sk ] = "Formuláre";
+    Text[ da ] = "Formularer";
+    Text[ sv ] = "Formulär";
+    Text[ pl ] = "Formularze";
+    Text[ pt-BR ] = "Formulários";
+    Text[ th ] = "แบบฟอร์ม";
+    Text[ ja ] = "フォーム";
+    Text[ ko ] = "양식";
+    Text[ zh-CN ] = "表单";
+    Text[ zh-TW ] = "表單";
+    Text[ tr ] = "Formlar";
+    Text[ hi-IN ] = "फ़ॉर्म";
+    Text[ ar ] = "استمارات";
+    Text[ he ] = "‮טפסים‬";
+};
+
+String RID_STR_FORM
+{
+    Text [ de ] = "Formular" ;
+    Text [ en-US ] = "Form" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Formulário";
+    Text[ ru ] = "Форма";
+    Text[ el ] = "Φόρμα";
+    Text[ nl ] = "Formulier";
+    Text[ fr ] = "Formulaire";
+    Text[ es ] = "Formulario";
+    Text[ fi ] = "Lomake";
+    Text[ ca ] = "Formulari";
+    Text[ it ] = "Formulario";
+    Text[ sk ] = "Formulár";
+    Text[ da ] = "Formular";
+    Text[ sv ] = "Formulär";
+    Text[ pl ] = "Formularz";
+    Text[ pt-BR ] = "Formulário";
+    Text[ th ] = "แบบฟอร์ม";
+    Text[ ja ] = "フォーム";
+    Text[ ko ] = "양식";
+    Text[ zh-CN ] = "表单";
+    Text[ zh-TW ] = "表單";
+    Text[ tr ] = "Form";
+    Text[ hi-IN ] = "फ़ॉर्म";
+    Text[ ar ] = "استمارة";
+    Text[ he ] = "‮טופס‬";
+};
+
+String RID_STR_FORMSHELL
+{
+    Text [ de ] = "Formular" ;
+    Text [ en-US ] = "Form" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Formulário";
+    Text[ ru ] = "Форма";
+    Text[ el ] = "Φόρμα";
+    Text[ nl ] = "Formulier";
+    Text[ fr ] = "Formulaire";
+    Text[ es ] = "Formulario";
+    Text[ fi ] = "Lomake";
+    Text[ ca ] = "Formulari";
+    Text[ it ] = "Formulario";
+    Text[ sk ] = "Formulár";
+    Text[ da ] = "Formular";
+    Text[ sv ] = "Formulär";
+    Text[ pl ] = "Formularz";
+    Text[ pt-BR ] = "Formulário";
+    Text[ th ] = "แบบฟอร์ม";
+    Text[ ja ] = "フォーム";
+    Text[ ko ] = "양식";
+    Text[ zh-CN ] = "表单";
+    Text[ zh-TW ] = "表單";
+    Text[ tr ] = "Forum";
+    Text[ hi-IN ] = "फ़ॉर्म";
+    Text[ ar ] = "استمارة";
+    Text[ he ] = "‮טופס‬";
+};
+
+String RID_STR_CONTROL
+{
+    Text [ de ] = "Kontrollelement" ;
+    Text [ en-US ] = "Control" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Controlo";
+    Text[ ru ] = "Элемент управления";
+    Text[ el ] = "Στοιχείο ελέγχου";
+    Text[ nl ] = "Controle-element";
+    Text[ fr ] = "Élément de contrôle";
+    Text[ es ] = "Elemento de control";
+    Text[ fi ] = "Ohjausobjekti";
+    Text[ ca ] = "Control";
+    Text[ it ] = "Elemento di controllo";
+    Text[ sk ] = "Ovládací prvok";
+    Text[ da ] = "Kontrolelement";
+    Text[ sv ] = "Kontrollelement";
+    Text[ pl ] = "Formant";
+    Text[ pt-BR ] = "Controle";
+    Text[ th ] = "ควบคุม";
+    Text[ ja ] = "コントロール要素";
+    Text[ ko ] = "컨트롤";
+    Text[ zh-CN ] = "控制";
+    Text[ zh-TW ] = "控制項";
+    Text[ tr ] = "Komut alanı";
+    Text[ hi-IN ] = "नियंत्रण";
+    Text[ ar ] = "عنصر تحكم";
+    Text[ he ] = "‮פקד‬";
+};
+
+String RID_STR_FORM_FILTERED
+{
+    Text [ de ] = "(gefiltert)" ;
+    Text [ en-US ] = "(filtered)" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "(filtrado)";
+    Text[ ru ] = "(отфильтровано)";
+    Text[ el ] = "(φιλτραρισμένα)";
+    Text[ nl ] = "(gefilterd)";
+    Text[ fr ] = "(filtré)";
+    Text[ es ] = "(filtrado)";
+    Text[ fi ] = "(suodatettu)";
+    Text[ ca ] = "(filtrat)";
+    Text[ it ] = "(filtrato)";
+    Text[ sk ] = "(filtrované)";
+    Text[ da ] = "(filtreret)";
+    Text[ sv ] = "(filtrerad)";
+    Text[ pl ] = "(przefiltrowane)";
+    Text[ pt-BR ] = "(filtrado)";
+    Text[ th ] = "(กรอง)";
+    Text[ ja ] = "(フィルタ済み)";
+    Text[ ko ] = "(필터됨)";
+    Text[ zh-CN ] = "(已经筛选过)";
+    Text[ zh-TW ] = "(已經篩選過)";
+    Text[ tr ] = "(filtrelenmiş)";
+    Text[ hi-IN ] = "(फ़िल्टर किया हुआ)";
+    Text[ ar ] = "(تم تصفيته)";
+    Text[ he ] = "‮(מסונן)‬";
+};
+
+
+String RID_STR_SYNTAXERROR
+{
+    Text [ de ] = "Fehler bei der Analyse des Anfrageausdrucks" ;
+    Text [ en-US ] = "Syntax error in query expression" ;
+    Text[ pt ] = "Erro ao analisar a expressão de consulta.";
+    Text[ ru ] = "Ошибка синтаксиса в выражении запроса";
+    Text[ el ] = "Σφάλμα κατά την ανάλυση του ορίσματος του ερωτήματος";
+    Text[ nl ] = "Fout bij de analyse van queryafdruk";
+    Text[ fr ] = "Erreur dans l'analyse de l'expression de la requête";
+    Text[ es ] = "Ha ocurrido un error al analizar la expresión de la consulta";
+    Text[ fi ] = "Syntaksivirhe kyselylausekkeessa";
+    Text[ ca ] = "S'ha produït un error en analitzar l'expressió de consulta";
+    Text[ it ] = "Errore nell'analizzare dell'espressione di ricerca";
+    Text[ sk ] = "Syntaktická chyba v požiadavke";
+    Text[ da ] = "Fejl under analysen af forespørgseludtrykket";
+    Text[ sv ] = "Fel vid analys av frågeuttryck";
+    Text[ pl ] = "Błąd składni w wyrażeniu kwerendy";
+    Text[ pt-BR ] = "Erro de sintaxe na expressão da consulta.";
+    Text[ th ] = "ไวยกรณ์ในคำอธิบายแบบสอบถามผิดพลาด";
+    Text[ ja ] = "クエリー言語分析中でのエラー";
+    Text[ ko ] = "질의 표현식을 분석할 때 오류";
+    Text[ zh-CN ] = "查询语句出现语法错误。";
+    Text[ zh-TW ] = "在分解查詢語句時發生一個錯誤。";
+    Text[ tr ] = "Sorgu ifadesinde sözdizim hatası";
+    Text[ hi-IN ] = "जानकारी की वर्णन में सिन्टाक्स की गलती";
+    Text[ ar ] = "حدث خطأ أثناء تحليل عبارة الاستفسار";
+    Text[ he ] = "Syntax error in query expression";
+};
+
+
+
+
+ // Events
+
+
+
+
+
+
+
+
+
+
+
+
+QueryBox RID_QRY_SAVEMODIFIED
+{
+    Buttons = WB_YES_NO_CANCEL ;
+    DefButton = WB_DEF_YES ;
+    Message [ de ] = "Der Inhalt des aktuellen Formulars wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
+    Message [ en-US ] = "The content of the current form has been modified.\nDo you want to save your changes?" ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "O conteúdo do formulário activo foi modificado.\nGuardar modificações?";
+    Message[ ru ] = "Содержание текущей формы изменено.\nСохранить изменения?";
+    Message[ el ] = "Το περιεχόμενο της τρέχουσας φόρμας έχει αλλάξει.\nΘέλετε να αποθηκευτούν οι αλλαγές;";
+    Message[ nl ] = "De inhoud van het huidige formulier is gewijzigd.\nWilt u de wijzigingen opslaan?";
+    Message[ fr ] = "Le contenu du formulaire actif a été modifié.\nVoulez-vous enregistrer les modifications ?";
+    Message[ es ] = "El contenido del formulario actual ha sido modificado.\n¿Desea guardar los cambios?";
+    Message[ fi ] = "Käsiteltävänä olevan lomakkeen sisältöä on muutettu.\nHaluatko tallentaa muutokset?";
+    Message[ ca ] = "S'ha modificat el contingut del formulari actual.\nVoleu desar els canvis?";
+    Message[ it ] = "Il contenuto dell'attuale formulario è stato cambiato.\nSalvare le modifiche?";
+    Message[ sk ] = "Obsah aktuálneho formulára bol zmenený.\nPrajete si uložiť zmeny?";
+    Message[ da ] = "Den aktuelle formulars indhold er blevet ændret.\nSkal ændringerne gemmes?";
+    Message[ sv ] = "Innehållet i det aktuella formuläret har ändrats.\nVill du spara ändringarna?";
+    Message[ pl ] = "Zawartość bieżącego formularza została zmieniona.\nCzy zapisać zmiany?";
+    Message[ pt-BR ] = "O conteúdo do formulário atual foi modificado.\nDeseja salvar estas modificações?";
+    Message[ th ] = "เนื้อหาของแบบฟอร์มปัจจุบันถูกดัดแปลงแก้ไขแล้ว\nคุณต้องการบันทึกการเปลี่ยนแปลงหรือไม่?";
+    Message[ ja ] = "現在の形式の内容が変更されています。\n変更を保存しますか。";
+    Message[ ko ] = "현재 양식의 내용이 변경되었습니다.\n변경 사항을 저장하겠습니까?";
+    Message[ zh-CN ] = "表单的内容已经被更改。\n您要保存这些更改吗？";
+    Message[ zh-TW ] = "表單內容已經變更。\n您要儲存這些變更？";
+    Message[ tr ] = "Yürürlükteki formun içeriği değiştirildi.\nDeğişiklikleri kaydetmek istiyor musunuz?";
+    Message[ hi-IN ] = "वर्तमान फॉर्म की विषय को सुधार किया है ।\nआप सुधारों को संचित करना चाहते है?";
+    Message[ ar ] = "تم تغيير محتويات الاستمارة الحالية.\nهل تريد حفظ التغييرات؟";
+    Message[ he ] = "‮תוכן הטופס הנוכחי עודכן.\nהאם לשמור את השינוים?‬";
+};
+
+String RID_STR_ERR_DELETERECORD
+{
+    Text [ de ] = "Fehler beim Löschen des aktuellen Datensatzes";
+    Text [ en-US ] = "Error deleting the current record";
+    Text[ pt ] = "Erro ao eliminar o registo de dados activo";
+    Text[ ru ] = "Ошибка удаления текущей записи";
+    Text[ el ] = "Σφάλμα κατά την διαγραφή της τρέχουσας εγγραφής";
+    Text[ nl ] = "Fout bij wissen van huidige record";
+    Text[ fr ] = "Erreur lors de la suppression de l'enregistrement actif";
+    Text[ es ] = "Error al borrar el registro actual";
+    Text[ fi ] = "Virhe poistettaessa nykyistä tietuetta.";
+    Text[ ca ] = "S'ha produït un error en eliminar el registre actual de dades";
+    Text[ it ] = "Errore nel cancellare il record di dati attivo";
+    Text[ sk ] = "Chyba pri odstraňovaní aktuálneho záznamu";
+    Text[ da ] = "Fejl ved sletning af den aktuelle datapost";
+    Text[ sv ] = "Fel vid radering av den aktuella dataposten";
+    Text[ pl ] = "Błąd usuwania bieżącego rekordu";
+    Text[ pt-BR ] = "Ocorreu um erro ao excluir o registro atual";
+    Text[ th ] = "ลบระเบียนปัจจุบันผิดพลาด";
+    Text[ ja ] = "現在のレコードの削除の際のエラー";
+    Text[ ko ] = "현재 레코드 삭제시 오류";
+    Text[ zh-CN ] = "在删除当前数据条目时发生错误";
+    Text[ zh-TW ] = "在刪除資料條目時發生錯誤";
+    Text[ tr ] = "Yürürlükteki veri kümesini silme sırasında hata";
+    Text[ hi-IN ] = "वर्तमान लेखा को मिटाने के समय गलती";
+    Text[ ar ] = "حدث خطأ أثناء حذف السجل الحالي";
+    Text[ he ] = "‮שגיאה במחיקת הרשומה הנוכחית‬";
+};
+String RID_STR_SVT_SQL_INTERNATIONAL
+{
+    Text [ de ] = "WIE;NICHT;LEER;WAHR;FALSCH;IST;ZWISCHEN;ODER;UND;Durchschnitt;Anzahl;Maximum;Minimum;Summe" ;
+    Text [ en-US ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum" ;
+    Text[ pt ] = "COMO;NÃO;VAZIO;VERDADEIRO;FALSO;É;ENTRE;OU;E;média;quantidade;máximo;mínimo;soma";
+    Text[ ru ] = "КАК;НЕ;ПУСТО;ИСТИНА;ЛОЖЬ;ЕСТЬ;МЕЖДУ;ИЛИ;И;срднее;количество;максимум;минимум;сумма";
+    Text[ el ] = "ΟΠΩΣ;ΟΧΙ;ΚΕΝΟ;ΑΛΗΘΗΣ;ΛΑΘΟΣ;ΕΙΝΑΙ;ΜΕΤΑΞΥ;Ή;ΚΑΙ;Μέσος όρος;Πλήθος;Μέγιστο;Ελάχιστο;Άθροισμα";
+    Text[ nl ] = "ALS;NIET;LEEG;WAAR;ONWAAR;IS;TUSSEN;OF;EN;Gemiddelde;Aantal;Maximum;Minimum;Som";
+    Text[ fr ] = "COMME;PAS;VIDE;VRAI;FAUX;EST;ENTRE;OU;ET;Moyenne;Nombre;Maximum;Minimum;Somme";
+    Text[ es ] = "COMO;NO;VACIO;VERDADERO;FALSO;ES;ENTRE;O;Y;Promedio;Cantidad;Máximo;Mínimo;Suma";
+    Text[ fi ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Keskiarvo;Määrä;Enintään;Vähintään;Summa";
+    Text[ ca ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Promig;Recompte;Màxim;Mínim;Suma";
+    Text[ it ] = "COME;NON;VUOTO;VERO;FALSO;È;TRA;O;E;Media;Quantità;Massimo;Minimo;Somma";
+    Text[ sk ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum";
+    Text[ da ] = "SOM;IKKE;TOM;SAND;FALSK;ER;MELLEM;ELLER;OG;Gennemsnit;Antal;Maksimum;Minimum;Sum";
+    Text[ sv ] = "SOM;INTE;TOM;SANN;FALSK;ÄR;MELLAN;ELLER;OCH;Genomsnitt;Antal;Maximum;Minimum;Summa";
+    Text[ pl ] = "JAK;NIE;PUSTY;PRAWDA;FAŁSZ;JEST;POMIĘDZY;LUB;I;Średnia;Numer;Maksimum;Minimum;Suma";
+    Text[ pt-BR ] = "COMO;NÃO;VAZIO;VERDADEIRO;FALSO;É;ENTRE;OU;E;média;quantidade;máximo;mínimo;soma";
+    Text[ th ] = "เหมือน;ไม่;ว่าง;จริง;เท็จ;อยู่;ระหว่าง;หรือ;และ;เฉลี่ย;นับ;มากที่สุด;น้อยที่สุด;ผลรวม";
+    Text[ ja ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;平均;数;最大;最小;合計";
+    Text[ ko ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;평균;개수;최대;최소;합계";
+    Text[ zh-CN ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;平均值;数目;最大;最小;总数";
+    Text[ zh-TW ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;平均值;數目;最大;最小;總數";
+    Text[ tr ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum";
+    Text[ hi-IN ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum";
+    Text[ ar ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum";
+    Text[ he ] = "‮כמו;לא;ריק;אמת;שקר;;בין;או;ו;ממוצע;מספר;מירבי;מזערי;סיכום‬";
+};
+
+
+
+
+
+
+

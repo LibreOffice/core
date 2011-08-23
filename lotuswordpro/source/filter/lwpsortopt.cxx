@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwpsortopt.hxx"
@@ -76,7 +76,7 @@ LwpSortOption::LwpSortOption(LwpObjectStream* pStrm)
     Read(pStrm);
 }
 /**
- * @descr       Read sort option in VO_DOCUMNET from object stream
+ * @descr		Read sort option in VO_DOCUMNET from object stream
  **/
 void LwpSortOption::Read(LwpObjectStream *pStrm)
 {
@@ -90,14 +90,14 @@ void LwpSortOption::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 /**
- * @descr       skip the sort option
+ * @descr		skip the sort option
  **/
 void LwpSortOption::Skip(LwpObjectStream *pStrm)
 {
     pStrm->SeekRel(DiskSize());
 }
 /**
- * @descr       return the disk size
+ * @descr		return the disk size
  **/
 sal_uInt16 LwpSortOption::DiskSize()
 {

@@ -1,0 +1,230 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+ // include ---------------------------------------------------------------
+#include "dialogs.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // QueryBoxen ---------------------------------------------------------------
+QueryBox RID_SVXQB_THESAURUS
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+     // ### ACHTUNG: Neuer Text in Resource? Dieses Wort sollten Sie vermeiden! Thesaurus starten? : Dieses Wort sollten sie vermeiden! Thesaurus starten?
+    Message [ de ] = "Dieses Wort sollten Sie vermeiden! Thesaurus starten?" ;
+    Message [ en-US ] = "This word appears in the list of words you want to avoid. Start thesaurus?" ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Evite esta palavra! Iniciar o dicionário de sinónimos?";
+    Message[ ru ] = "Это слово указано в списке слов, которые необходимо избегать. Запустить тезаурус?";
+    Message[ el ] = "Η λέξη αυτή ανήκει σε αυτές που θέλετε να αποφύγετε! Να εκκινήσει ο θησαυρός λέξεων;";
+    Message[ nl ] = "Dit woord is niet zo geschikt. Thesaurus starten?";
+    Message[ fr ] = "Evitez l'utilisation de ce mot ! Lancer le dictionnaire des synonymes ?";
+    Message[ es ] = "¡Evite esta palabra! ¿Desea iniciar la búsqueda de sinónimos?";
+    Message[ fi ] = "Tämä sana esiintyy vältettävien sanojen luettelossa. Avataanko synonyymisanasto?";
+    Message[ ca ] = "Aquesta paraula apareix a la llista de paraules que voleu evitar. Voleu iniciar el tesaurus?";
+    Message[ it ] = "Questo termine andrebbe evitato. Avviare il dizionario dei sinonimi?";
+    Message[ sk ] = "Toto slovo sa nachádza v zozname slov, ktorým sa chcete vyhnúť.\nSpustiť slovník synoným?";
+    Message[ da ] = "Undgå venligst dette ord! Vil du bruge synonymordbogen?";
+    Message[ sv ] = "Undvik det här ordet! Starta synonymordlista?";
+    Message[ pl ] = "Ten wyraz występuje na liście tych, których chcesz unikać! Uruchomić Tezaurus?";
+    Message[ pt-BR ] = "Esta palavra aparece na lista de palavras que se deseja evitar! Deseja iniciar o dicionário de sinônimos?";
+    Message[ th ] = "คำนี้ปรากฏในรายการคำที่คุณต้องการเลี่ยง เริ่มอรรถาภิธานหรือไม่?";
+    Message[ ja ] = "この単語の使用は避けてください。類義語辞典を開始しますか。";
+    Message[ ko ] = "이 단어는 부적합 단어 목록에 있습니다. 동의어 사전을 시작할까요?";
+    Message[ zh-CN ] = "应该避免使用这个字！您要启动同义词词典？";
+    Message[ zh-TW ] = "您應該避免使用這個字﹗要啟動同義詞詞典？";
+    Message[ tr ] = "Bu sözcüğü kullanmaktan kaçınmalısınız! Eş anlamlılar sözlüğü başlatılsın mı?";
+    Message[ hi-IN ] = "इस शब्द उन शब्दों की सूची में है जिसको आप त्यागना चाहते है । शब्दकोश प्रारंभ करना है?";
+    Message[ ar ] = "يجب عليك تجنب استخدام هذه الكلمة! هل تريد بدء تشغيل قاموس المرادفات؟";
+    Message[ he ] = "Dieses Wort sollten Sie vermeiden! Thesaurus starten?";
+};
+QueryBox RID_SVXQB_CONTINUE
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    /* ### ACHTUNG: Neuer Text in Resource? �berpr�fung am Anfang des Dokumentes fortsetzen? : �berpr�fung am Anfang des Dokumentes fortsetzen? */
+    /* ### ACHTUNG: Neuer Text in Resource? �berpr�fung am Anfang des Dokumentes fortsetzen? : �berpr�fung am Anfang des Dokumentes fortsetzen? */
+    Message [ de ] = "Überprüfung am Anfang des Dokumentes fortsetzen?" ;
+    Message [ en-US ] = "Continue checking at beginning of document?" ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Deseja continuar com a verificação no início do documento?";
+    Message[ ru ] = "Продолжить проверку в начале документа?";
+    Message[ el ] = "Να συνεχιστεί ο έλεγχος από την αρχή του εγγράφου;";
+    Message[ nl ] = "Controle aan het begin van het document voortzetten?";
+    Message[ fr ] = "Continuer la vérification au début du document ?";
+    Message[ es ] = "¿Desea continuar la revisión desde el inicio del documento?";
+    Message[ fi ] = "Jatketaanko tarkistusta asiakirjan alusta?";
+    Message[ ca ] = "Voleu continuar verificant des del principi del document?";
+    Message[ it ] = "Continuare a controllare dall'inizio del documento?";
+    Message[ sk ] = "Pokračovať v kontrole od začiatku dokumentu?";
+    Message[ da ] = "Vil du fortsætte kontrollen fra dokumentets begyndelse?";
+    Message[ sv ] = "Fortsätta kontroll i början på dokumentet?";
+    Message[ pl ] = "Czy kontynuować sprawdzanie od początku dokumentu?";
+    Message[ pt-BR ] = "Deseja continuar a verificação pelo início do documento?";
+    Message[ th ] = "ทำการตวรสอบต่อที่จุดเริ่มต้นเอกสารหรือไม่?";
+    Message[ ja ] = "ドキュメントの始めに戻ってチェックを続行しますか？";
+    Message[ ko ] = "문서 처음부터 검사를 계속하겠습니까?";
+    Message[ zh-CN ] = "从文档开端继续搜寻？";
+    Message[ zh-TW ] = "從文件起始位置繼續搜尋？";
+    Message[ tr ] = "Denetlemeye, belge başında devam edilsin mi?";
+    Message[ hi-IN ] = "लेखपत्र की प्रारंभ से जाँच जारी रखना है?";
+    Message[ ar ] = "هل تريد متابعة التدقيق عند بداية المستند؟";
+    Message[ he ] = "Überprüfung am Anfang des Dokumentes fortsetzen?";
+};
+QueryBox RID_SVXQB_BW_CONTINUE
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    /* ### ACHTUNG: Neuer Text in Resource? �berpr�fung am Ende des Dokumentes fortsetzen? : �berpr�fung am Ende des Dokumentes fortsetzen? */
+    /* ### ACHTUNG: Neuer Text in Resource? �berpr�fung am Ende des Dokumentes fortsetzen? : �berpr�fung am Ende des Dokumentes fortsetzen? */
+    Message [ de ] = "Überprüfung am Ende des Dokumentes fortsetzen?" ;
+    Message [ en-US ] = "Continue checking at end of document?" ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Continuar a verificação no fim do documento?";
+    Message[ ru ] = "Продолжить проверку в конце документа?";
+    Message[ el ] = "Να συνεχιστεί ο έλεγχος από το τέλος του εγγράφου;";
+    Message[ nl ] = "Controle aan het einde van het document voortzetten?";
+    Message[ fr ] = "Continuer la vérification à la fin du document ?";
+    Message[ es ] = "¿Desea continuar la revisión al final del documento?";
+    Message[ fi ] = "Jatketaanko tarkistusta asiakirjan lopusta?";
+    Message[ ca ] = "Voleu continuar verificant des del final del document?";
+    Message[ it ] = "Continuare il controllo alla fine del documento?";
+    Message[ sk ] = "Pokračovať v kontrole od konca dokumentu?";
+    Message[ da ] = "Vil du fortsætte kontrollen fra dokumentets slutning?";
+    Message[ sv ] = "Fortsätta kontroll vid slutet av dokumentet?";
+    Message[ pl ] = "Czy kontynuować sprawdzanie od końcu dokumentu?";
+    Message[ pt-BR ] = "Deseja continuar a verificação pelo fim do documento?";
+    Message[ th ] = "ทำการตรวจสอบต่อที่ส่วนท้ายเอกสารหรือไม่?";
+    Message[ ja ] = "ドキュメント末に戻ってチェックを続行しますか？";
+    Message[ ko ] = "문서 끝에서부터 검사를 계속하겠습니까?";
+    Message[ zh-CN ] = "从文档的结束位置继续搜寻？";
+    Message[ zh-TW ] = "從文件的結束位置繼續搜尋？";
+    Message[ tr ] = "Denetlemeye, belge sonunda devam edilsin mi?";
+    Message[ hi-IN ] = "लेखपत्र की अंत से जाँच जारी रखना है?";
+    Message[ ar ] = "هل تريد متابعة التدقيق عند نهاية المستند؟";
+    Message[ he ] = "Überprüfung am Ende des Dokumentes fortsetzen?";
+};
+QueryBox RID_SVXQB_BODYTEXT
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+     // ### ACHTUNG: Neuer Text in Resource? M�chten Sie den Haupttext pr�fen? : Wollen Sie den Haupttext pr�fen?
+    /* ### ACHTUNG: Neuer Text in Resource? M�chten Sie den Haupttext pr�fen? : M�chten Sie den Haupttext pr�fen? */
+    /* ### ACHTUNG: Neuer Text in Resource? M�chten Sie den Haupttext pr�fen? : M�chten Sie den Haupttext pr�fen? */
+    Message [ de ] = "Möchten Sie den Haupttext prüfen?" ;
+    Message [ en-US ] = "Do you want to check the main text?" ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Deseja verificar o texto principal?";
+    Message[ ru ] = "Проверить основной текст?";
+    Message[ el ] = "Θέλετε να γίνει έλεγχος του κύριου κειμένου;";
+    Message[ nl ] = "Wilt u de hoofdtekst controleren?";
+    Message[ fr ] = "Voulez-vous vérifier le texte principal ?";
+    Message[ es ] = "¿Desea verificar el texto principal?";
+    Message[ fi ] = "Haluatko tarkistaa päätekstin?";
+    Message[ ca ] = "Voleu verificar el text principal?";
+    Message[ it ] = "Controllare il testo principale?";
+    Message[ sk ] = "Prajete si skontrolovať hlavný text?";
+    Message[ da ] = "Vil du kontrollere brødteksten?";
+    Message[ sv ] = "Vill du kontrollera huvudtexten?";
+    Message[ pl ] = "Czy chcesz sprawdzić tekst główny?";
+    Message[ pt-BR ] = "Deseja verificar o texto principal?";
+    Message[ th ] = "คุณต้องการตรวจสอบข้อความหลักหรือไม่?";
+    Message[ ja ] = "メインテキストをチェックしますか？";
+    Message[ ko ] = "주 텍스트를 검사하겠습니까?";
+    Message[ zh-CN ] = "您想要检查正文吗？";
+    Message[ zh-TW ] = "您想要檢查內文？";
+    Message[ tr ] = "Ana metni denetlemek istiyor musunuz?";
+    Message[ hi-IN ] = "आप प्रधान टेक्स्ट् को जाँच करना चाहते है?";
+    Message[ ar ] = "هل تريد التدقيق في النص الرئيسي؟";
+    Message[ he ] = "Möchten Sie den Haupttext prüfen?";
+};
+QueryBox RID_SVXQB_SPECIAL
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Sonderbereiche pr�fen? : Sonderbereiche pr�fen? */
+    /* ### ACHTUNG: Neuer Text in Resource? Sonderbereiche pr�fen? : Sonderbereiche pr�fen? */
+    Message [ de ] = "Sonderbereiche prüfen?" ;
+    Message [ en-US ] = "Do you want check the special regions?" ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Deseja verificar as regiões especiais?";
+    Message[ ru ] = "Проверить специальные области?";
+    Message[ el ] = "Θέλετε να γίνει έλεγχος των ειδικών περιοχών;";
+    Message[ nl ] = "Wilt u de speciale bereiken controleren?";
+    Message[ fr ] = "Voulez-vous vérifier les zones spéciales?";
+    Message[ es ] = "¿Desea verificar las áreas especiales?";
+    Message[ fi ] = "Tarkistetaanko erityisalueet?";
+    Message[ ca ] = "Voleu verificar les regions especials?";
+    Message[ it ] = "Controllare le aree speciali?";
+    Message[ sk ] = "Prajete si skontrolovať špeciálne oblasti?";
+    Message[ da ] = "Vil du kontrollere særområderne?";
+    Message[ sv ] = "Vill du kontrollera specialområden?";
+    Message[ pl ] = "Czy chcesz sprawdzić obszary specjalne?";
+    Message[ pt-BR ] = "Deseja verificar as regiões especiais?";
+    Message[ th ] = "คุณต้องการตรวจสอบส่วนพิเศษหรือไม่?";
+    Message[ ja ] = "特別範囲をチェックしますか。";
+    Message[ ko ] = "특수 영역을 검사하겠습니까?";
+    Message[ zh-CN ] = "您要检查特殊区域吗？";
+    Message[ zh-TW ] = "檢查特殊區域？";
+    Message[ tr ] = "Özel bölümler denetlensin mi?";
+    Message[ hi-IN ] = "आप विशेष प्रदेशों को जाँच करना चाहते है?";
+    Message[ ar ] = "هل تريد التدقيق في المناطق الخاصة؟";
+    Message[ he ] = "Sonderbereiche prüfen?";
+};
+QueryBox RID_SVXQB_SPECIAL_FORCED
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Sonderbereichpr�fung ist ausgeschaltet, Trotzdem pr�fen? : Sonderbereichpr�fung ist ausgeschaltet, Trotzdem pr�fen? */
+    /* ### ACHTUNG: Neuer Text in Resource? Sonderbereichpr�fung ist ausgeschaltet, Trotzdem pr�fen? : Sonderbereichpr�fung ist ausgeschaltet, Trotzdem pr�fen? */
+    Message [ de ] = "Sonderbereichprüfung ist ausgeschaltet, Trotzdem prüfen?" ;
+    Message [ en-US ] = "Check special regions is deactivated. Check anyway?" ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "A revisão de áreas especiais está desactivada. Mesmo assim prosseguir?";
+    Message[ ru ] = "Проверка специальных областей отключена. Проверить, несмотря на это?";
+    Message[ el ] = "Ο έλεγχος ειδικών περιοχών είναι απενεργοποιημένος. Θέλετε να γίνει ο έλεγχος παρ΄όλα αυτά;";
+    Message[ nl ] = "De functie 'Speciale bereiken controleren' is uitgeschakeld. Controle toch uitvoeren?";
+    Message[ fr ] = "La vérification dans les zones spéciales est désactivée. Vérifier tout de même ?";
+    Message[ es ] = "La verificación de las áreas especiales está desactivada, ¿Desea verificar de todas maneras?";
+    Message[ fi ] = "Tarkista erityisalueet -toiminto on poistettu käytöstä. Tarkistetaanko kuitenkin?";
+    Message[ ca ] = "La verificació de les àrees especials està desactivada, Voleu verificar de totes maneres?";
+    Message[ it ] = "Il controllo delle aree speciali non è attivo, controllare lo stesso?";
+    Message[ sk ] = "Kontrola špeciálnych oblastí je vypnutá. Napriek tomu skontrolovať?";
+    Message[ da ] = "Stavekontrol i særområder er slået fra, skal der kontrolleres alligevel?";
+    Message[ sv ] = "Kontroll av specialområden är avstängd. Kontrollera ändå?";
+    Message[ pl ] = "Sprawdzanie obszarów specjalnych jest nieaktywne. Sprawdzić mimo to?";
+    Message[ pt-BR ] = "A verificação de regiões especiais está desativada. Verificar mesmo assim?";
+    Message[ th ] = "ตรวจสอบส่วนพิเศษที่ไม่ถูกใช้งาน ตรวจสอบหรือไม่?";
+    Message[ ja ] = "特別範囲のチェックがオフになっています。それでもチェックしますか。";
+    Message[ ko ] = "특수영역 검사가 비활성 상태입니다. 그래도 검사할까요?";
+    Message[ zh-CN ] = "已经关闭特殊区域的检查功能，您还是要执行检查？";
+    Message[ zh-TW ] = "已經關閉檢查特殊區域﹐您還是要執行檢查？";
+    Message[ tr ] = "Özel bölüm denetleme etkin değil, yine de denetlensin mi?";
+    Message[ hi-IN ] = "विशेष प्रदेशों की जाँच निष्क्रिय किया है । किसी तरह जाँच करना चाहते है?";
+    Message[ ar ] = "تدقيق المناطق الخاصة غير نشط. هل تريد التدقيق بالرغم من ذلك؟";
+    Message[ he ] = "Sonderbereichprüfung ist ausgeschaltet, Trotzdem prüfen?";
+};

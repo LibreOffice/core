@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPUSEWHEN_HXX
@@ -67,25 +67,25 @@
 
 #include "lwpheader.hxx"
 
-#define STYLE_USEONALLPAGES     0x0001U /* repeat on all pages */
-#define STYLE_USEONALLEVENPAGES 0x0002U /* repeat on all even pages */
-#define STYLE_USEONALLODDPAGES  0x0004U /* repeat on all odd pages */
-#define STYLE_USEONTHISPAGE     0x0008U /* use this guy on this page */
-#define STYLE_USEEXCEPTTHISPAGE 0x0010U /* use guy except on this page */
-#define STYLE_USESTARTINGONPAGE 0x0020U /* use starting on page n */
-#define STYLE_USEONMASK         (STYLE_USEONALLPAGES | \
+#define STYLE_USEONALLPAGES		0x0001U	/* repeat on all pages */
+#define STYLE_USEONALLEVENPAGES	0x0002U	/* repeat on all even pages */
+#define STYLE_USEONALLODDPAGES	0x0004U	/* repeat on all odd pages */
+#define STYLE_USEONTHISPAGE		0x0008U	/* use this guy on this page */
+#define STYLE_USEEXCEPTTHISPAGE	0x0010U	/* use guy except on this page */
+#define STYLE_USESTARTINGONPAGE	0x0020U	/* use starting on page n */
+#define STYLE_USEONMASK			(STYLE_USEONALLPAGES | \
                                     STYLE_USEONALLEVENPAGES | \
                                     STYLE_USEONALLODDPAGES | \
                                     STYLE_USEONTHISPAGE | \
                                     STYLE_USEEXCEPTTHISPAGE | \
                                     STYLE_USESTARTINGONPAGE)
 
-#define STYLE_STARTONNEXTPAGE   0x0000U // This is the default
-#define STYLE_STARTONTHISPAGE   0x0040U
-#define STYLE_STARTONNEXTODD    0x0080U
-#define STYLE_STARTONNEXTEVEN   0x0100U
-#define STYLE_STARTONTHISHF     0x0200U
-#define STYLE_STARTONMASK       (STYLE_STARTONTHISPAGE | \
+#define STYLE_STARTONNEXTPAGE	0x0000U	// This is the default
+#define STYLE_STARTONTHISPAGE	0x0040U
+#define STYLE_STARTONNEXTODD	0x0080U
+#define STYLE_STARTONNEXTEVEN	0x0100U
+#define STYLE_STARTONTHISHF		0x0200U
+#define STYLE_STARTONMASK		(STYLE_STARTONTHISPAGE | \
                                     STYLE_STARTONNEXTODD | \
                                     STYLE_STARTONNEXTEVEN | \
                                     STYLE_STARTONTHISHF)
@@ -116,8 +116,8 @@ public:
 
     inline sal_uInt16 GetUsePage();
 private:
-    sal_uInt16  m_nFlags;
-    sal_uInt16  m_nUsePage;
+    sal_uInt16	m_nFlags;
+    sal_uInt16	m_nUsePage;
 };
 
 inline void LwpUseWhen::Read(LwpObjectStream* pStrm)

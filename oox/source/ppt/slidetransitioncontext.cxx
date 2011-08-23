@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,7 +130,7 @@ Reference< XFastContextHandler > SlideTransitionContext::createFastChildContext(
         if (!mbHasTransition)
         {
             mbHasTransition = true;
-            maTransition.setOoxTransitionType( aElementToken, xAttribs->getOptionalValueToken( XML_orient, XML_horz ),  xAttribs->getOptionalValueToken( XML_dir, XML_out ) );
+            maTransition.setOoxTransitionType( aElementToken, xAttribs->getOptionalValueToken( XML_orient, XML_horz ),	xAttribs->getOptionalValueToken( XML_dir, XML_out ) );
             // ST_Direction { XML_horz, XML_vert }
             // ST_TransitionInOutDirectionType { XML_out, XML_in }
         }

@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- April 2005         Created
+ April 2005		 	Created
  ************************************************************************/
 #include "lwprowlayout.hxx"
 #include "lwptable.hxx"
@@ -152,7 +152,7 @@ void LwpRowLayout::RegisterStyle()
  */
 void LwpRowLayout::Read()
 {
-    #define MAXUNIT (0x7fffffffL)               // Highest positive UNIT value
+    #define MAXUNIT	(0x7fffffffL)				// Highest positive UNIT value
     LwpObjectStream* pStrm = m_pObjStrm;
 
     LwpVirtualLayout::Read();
@@ -165,9 +165,9 @@ void LwpRowLayout::Read()
     // Row layout content
     crowid = pStrm->QuickReaduInt16();
     cheight = pStrm->QuickReadInt32();
-    cLeaderDotCount = (sal_uInt8)pStrm->QuickReaduInt16();  // was written as lushort.
-    cLeaderDotY = MAXUNIT;  // Sentinel meaning "not calculated yet"
-    cRowFlags = (sal_uInt8)pStrm->QuickReaduInt16();    // was written as lushort.
+    cLeaderDotCount = (sal_uInt8)pStrm->QuickReaduInt16();	// was written as lushort.
+    cLeaderDotY = MAXUNIT;	// Sentinel meaning "not calculated yet"
+    cRowFlags = (sal_uInt8)pStrm->QuickReaduInt16();	// was written as lushort.
 
     pStrm->SkipExtra();
 }

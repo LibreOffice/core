@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ typedef struct
      int range; /* 0-????, 1-????????, 3-??????, 4-?????? */
      char reserved3[27];
      int size;
-     char *data;        // image data
+     char *data;		// image data
      bool isset;
 } PaperBackInfo;
 
@@ -145,7 +145,7 @@ class DLLEXPORT HWPInfo
         DocChainInfo  chain_info;
         unsigned char annotation[ANNOTATION_LEN];
         short     encrypted;
-// unsigned char    reserved2[6];
+// unsigned char	reserved2[6];
         short     beginpagenum;                   /* ?????????? ???? */
 /**
  * Information about footnote

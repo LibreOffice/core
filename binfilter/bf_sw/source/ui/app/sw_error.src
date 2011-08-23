@@ -1,0 +1,1428 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+#define __RSC
+
+
+#include "globals.hrc"
+#include "app.hrc"
+#include "swerror.h"
+#include "comcore.hrc" // MS: 	Warum gibst auf der Core-Seite
+ // 		jetzt Resourcen
+
+/*--------------------------------------------------------------------
+    Beschreibung:	Strings
+ --------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------
+    Beschreibung:	Boxes
+ --------------------------------------------------------------------*/
+
+
+#define ERR_CODE( class, err )	(class | (err - ERROR_SW_BASE))
+#define WARN_CODE( class, err )	(class | ( err - WARN_SW_BASE))
+
+Resource RID_SW_ERRHDL
+{
+     // Import-Errors
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_FILE_FORMAT_ERROR )
+    {
+        Text [ de ] = "Formatfehler in der Datei entdeckt" ;
+        Text [ en-US ] = "File format error found" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Encontrado erro de formato no ficheiro";
+        Text[ ru ] = "Ошибка формата файла";
+        Text[ el ] = "Βρέθηκε σφάλμα διαμόρφωσης στο αρχείο";
+        Text[ nl ] = "Indelingsfout ontdekt in het bestand";
+        Text[ fr ] = "Erreur de format de fichier";
+        Text[ es ] = "Se ha descubierto un error de formato en el archivo";
+        Text[ fi ] = "Tiedostomuotovirhe ilmeni.";
+        Text[ ca ] = "S'ha trobat un error en el format del fitxer";
+        Text[ it ] = "Errore nel formato del file";
+        Text[ sk ] = "Chybný formát súboru";
+        Text[ da ] = "Opdaget formatfejl i filen";
+        Text[ sv ] = "Formatfel upptäckt i filen";
+        Text[ pl ] = "Znaleziono błąd w formacie pliku";
+        Text[ pt-BR ] = "Foi encontrado um erro de formato no arquivo";
+        Text[ th ] = "พบรูปแบบแฟ้มผิดพลาด";
+        Text[ ja ] = "ファイルに書式エラーが見つかりました。";
+        Text[ ko ] = "파일 형식 오류가 발견되었습니다.";
+        Text[ zh-CN ] = "发现了文件格式错误";
+        Text[ zh-TW ] = "發現了檔案格式錯誤";
+        Text[ tr ] = "Dosya format hatası bulundu";
+        Text[ hi-IN ] = "फाइल रचना गलती घटित हुआ";
+        Text[ ar ] = "تم اكتشاف خطأ تنسيق في الملف";
+        Text[ he ] = "Formatfehler in der Datei entdeckt";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_READ_ERROR )
+    {
+        Text [ de ] = "Fehler beim Lesen der Datei " ;
+        Text [ en-US ] = "Error reading file " ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Erro na leitura do ficheiro ";
+        Text[ ru ] = "Ошибка чтения файла   ";
+        Text[ el ] = "Σφάλμα κατά την ανάγνωση του αρχείου ";
+        Text[ nl ] = "Fout bij lezen van het bestand";
+        Text[ fr ] = "Erreur de lecture du fichier ";
+        Text[ es ] = "Error al leer el archivo ";
+        Text[ fi ] = "Virhe luettaessa tiedostoa ";
+        Text[ ca ] = "S'ha produït un error en llegir el fitxer ";
+        Text[ it ] = "Errore durante la lettura del file ";
+        Text[ sk ] = "Chyba pri čítaní súboru";
+        Text[ da ] = "Fejl under læsning af filen ";
+        Text[ sv ] = "Fel vid läsning av fil ";
+        Text[ pl ] = "Błąd odczytu pliku";
+        Text[ pt-BR ] = "Ocorreu um erro ao ler o arquivo";
+        Text[ th ] = "อ่านแฟ้มผิดพลาด ";
+        Text[ ja ] = "ファイルの読み取りエラー ";
+        Text[ ko ] = "파일 읽기 오류 ";
+        Text[ zh-CN ] = "在读文件时发生错误 ";
+        Text[ zh-TW ] = "讀檔案時發生錯誤 ";
+        Text[ tr ] = "Dosya okuma hatası ";
+        Text[ hi-IN ] = "पढ़ने के समय गलती ";
+        Text[ ar ] = "حدث خطأ أثناء قراءة الملف ";
+        Text[ he ] = "Fehler beim Lesen der Datei";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_INPUT_FILE )
+    {
+        Text [ de ] = "Fehler in der Eingabedatei" ;
+        Text [ en-US ] = "Input file error" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Erro no ficheiro de entrada";
+        Text[ ru ] = "Ошибка ввода файла";
+        Text[ el ] = "Σφάλμα στο αρχείο εισαγωγής";
+        Text[ nl ] = "Fout in invoerbestand";
+        Text[ fr ] = "Erreur dans le fichier de saisie";
+        Text[ es ] = "Error en el archivo de entrada";
+        Text[ fi ] = "Syöttötiedostovirhe";
+        Text[ ca ] = "Error d'entrada del fitxer";
+        Text[ it ] = "Errore nel file di input";
+        Text[ sk ] = "Chyba vo vstupnom súbore";
+        Text[ da ] = "Fejl i inputfilen";
+        Text[ sv ] = "Fel på inmatningsfilen";
+        Text[ pl ] = "Błąd w pliku wejściowym";
+        Text[ pt-BR ] = "Ocorreu um erro no arquivo de entrada";
+        Text[ th ] = "แฟ้มที่ใส่ผิดพลาด";
+        Text[ ja ] = "入力ファイルの中にエラー";
+        Text[ ko ] = "입력파일에서의 오류";
+        Text[ zh-CN ] = "输入的文件含有错误";
+        Text[ zh-TW ] = "輸入的檔案含有錯誤";
+        Text[ tr ] = "Girdi dosyasında hata";
+        Text[ hi-IN ] = "इनपुट् फाइल गलती";
+        Text[ ar ] = "حدث خطأ في ملف الإدخال";
+        Text[ he ] = "Fehler in der Eingabedatei";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_NOWRITER_FILE )
+    {
+        Text [ de ] = "Die Datei ist keine %PRODUCTNAME Writer-Datei" ;
+        Text [ en-US ] = "This is not a %PRODUCTNAME Writer file" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Este não é um ficheiro do %PRODUCTNAME Writer.";
+        Text[ ru ] = "Этот файл не является файлом %PRODUCTNAME Writer";
+        Text[ el ] = "Το αρχείο αυτό δεν είναι αρχείο του %PRODUCTNAME Writer";
+        Text[ nl ] = "Dit bestand is geen %PRODUCTNAME Writer-bestand";
+        Text[ fr ] = "Ceci n'est pas un fichier %PRODUCTNAME Writer";
+        Text[ es ] = "El archivo no es uno de %PRODUCTNAME Writer";
+        Text[ fi ] = "Tämä ei ole %PRODUCTNAME Writer -tiedosto.";
+        Text[ ca ] = "No és un fitxer d'%PRODUCTNAME Writer";
+        Text[ it ] = "Questo non è un file di %PRODUCTNAME Writer";
+        Text[ sk ] = "Toto nieje súbor %PRODUCTNAME Writer";
+        Text[ da ] = "Filen er ikke en %PRODUCTNAME Writer-fil";
+        Text[ sv ] = "Detta är inte en %PRODUCTNAME Writer-fil";
+        Text[ pl ] = "To nie jest plik %PRODUCTNAME Writer.";
+        Text[ pt-BR ] = "Este não é um arquivo do %PRODUCTNAME Writer";
+        Text[ th ] = "นี้ไม่ใช่แฟ้ม Writer  %PRODUCTNAME ";
+        Text[ ja ] = "これは %PRODUCTNAME Writer のファイルではありません。";
+        Text[ ko ] = "이 파일은  %PRODUCTNAME Writer 파일이 아닙니다.";
+        Text[ zh-CN ] = "这不是一个 %PRODUCTNAME Writer 文件";
+        Text[ zh-TW ] = "這不是一個 %PRODUCTNAME Writer 檔案";
+        Text[ tr ] = "Bu bir %PRODUCTNAME Writer dosyası değil";
+        Text[ hi-IN ] = "यह %PRODUCTNAME लेखक फाइल नहीं है";
+        Text[ ar ] = "هذا الملف ليس ملف %PRODUCTNAME Writer";
+        Text[ he ] = "Die Datei ist keine %PRODUCTNAME Writer-Datei";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_UNEXPECTED_EOF )
+    {
+        Text [ de ] = "Unerwartetes Dateiende" ;
+        Text [ en-US ] = "Unexpected end of file" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Fim de ficheiro imprevisto";
+        Text[ ru ] = "Неожиданный конец файла";
+        Text[ el ] = "Απροσδόκητο τέλος αρχείου";
+        Text[ nl ] = "Onverwacht bestandseinde";
+        Text[ fr ] = "Fin de fichier imprévue";
+        Text[ es ] = "Fin inesperado de archivo";
+        Text[ fi ] = "Odottamaton tiedoston loppu";
+        Text[ ca ] = "Final inesperat del fitxer";
+        Text[ it ] = "Fine inattesa del file";
+        Text[ sk ] = "Neočakávaný koniec súboru";
+        Text[ da ] = "Uventet filafslutning";
+        Text[ sv ] = "Oväntat filslut";
+        Text[ pl ] = "Nieoczekiwany koniec pliku";
+        Text[ pt-BR ] = "Fim de arquivo inesperado";
+        Text[ th ] = "ส่วนท้ายของแฟ้มที่ไม่ได้คาดไว้";
+        Text[ ja ] = "不適当なファイル末";
+        Text[ ko ] = "기대하지 않은 파일의 끝";
+        Text[ zh-CN ] = "意外的文件结尾";
+        Text[ zh-TW ] = "意外的檔案結尾";
+        Text[ tr ] = "Beklenmeyen dosya sonu";
+        Text[ hi-IN ] = "प्रतीक्षा न किया हुआ फाइल का अंत";
+        Text[ ar ] = "نهاية غير متوقعة للملف";
+        Text[ he ] = "Unerwartetes Dateiende";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_PASSWD )
+    {
+        Text [ de ] = "Dateien, die mit Kennwort geschützt sind, können nicht geöffnet werden." ;
+        Text [ en-US ] = "Password-protected files cannot be opened." ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "As senhas não têm suporte";
+        Text[ ru ] = "Не поддерживаются файлы, защищенные паролями";
+        Text[ el ] = "Δεν υποστηρίζεται η λειτουργία κωδικού πρόσβασης";
+        Text[ nl ] = "Wachtwoorden worden niet ondersteund";
+        Text[ fr ] = "Impossible d'ouvrir les fichiers protégés par des mots de passe !";
+        Text[ es ] = "Los archivos protegidos por contraseñas no se pueden abrir.";
+        Text[ fi ] = "Salasanoilla suojattuja tiedostoja ei tueta.";
+        Text[ ca ] = "No estan permesos els fitxers protegits amb contrasenyes";
+        Text[ it ] = "Impossibile aprire i file protetti da password.";
+        Text[ sk ] = "Zamknuté súbory nie sú podporované";
+        Text[ da ] = "Adgangskoder understøttes ikke";
+        Text[ sv ] = "Det går inte att öppna filer som är skyddade med lösenord";
+        Text[ pl ] = "Pliki zabezpieczone hasłami nie są obsługiwane";
+        Text[ pt-BR ] = "Arquivos protegidos com senhas não são suportados";
+        Text[ th ] = "ไม่สนับสนุนรหัสผ่านป้องกันแฟ้ม";
+        Text[ ja ] = "パスワード保護されているファイルは開けません。";
+        Text[ ko ] = "암호로 보안된 파일은 열 수 없습니다.";
+        Text[ zh-CN ] = "无法打开用密码保护的文件。";
+        Text[ zh-TW ] = "無法開啟受到密碼保護的檔案。";
+        Text[ tr ] = "Parola ile korunan dosyalar açılamaz.";
+        Text[ hi-IN ] = "कूटशब्द रक्षित फाइलें समर्थित नहीं";
+        Text[ ar ] = "كلمات السر غير معتمدة";
+        Text[ he ] = "Dateien, die mit Kennwort geschützt sind, können nicht geöffnet werden.";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_NO_WW6_FILE_ERR )
+    {
+        Text [ de ] = "Die Datei ist keine WinWord6-Datei" ;
+        Text [ en-US ] = "This is not a WinWord6 file" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Este não é um ficheiro do WinWord6";
+        Text[ ru ] = "Этот файл не является файлом WinWor";
+        Text[ el ] = "Το αρχείο αυτό δεν είναι αρχείο του WinWord6";
+        Text[ nl ] = "Dit bestand is geen WinWord6-bestand";
+        Text[ fr ] = "Ceci n'est pas un fichier WinWord6";
+        Text[ es ] = "El archivo no es uno de WinWord6";
+        Text[ fi ] = "Tämä ei ole WinWord6-tiedosto";
+        Text[ ca ] = "No és un fitxer de WinWord6";
+        Text[ it ] = "Questo non è un file di WinWord6";
+        Text[ sk ] = "Toto nie je súbor WinWord6";
+        Text[ da ] = "Filen er ingen WinWord6-fil";
+        Text[ sv ] = "Detta är inte en WinWord6-fil";
+        Text[ pl ] = "To nie jest plik WinWord6";
+        Text[ pt-BR ] = "Este não é um arquivo do WinWord6";
+        Text[ th ] = "นี้ไม่ใช่แฟ้ม WinWord6 ";
+        Text[ ja ] = "これは WinWord6 のファイルではありません。";
+        Text[ ko ] = "WinWord6 파일이 아닙니다.";
+        Text[ zh-CN ] = "这不是一个 WinWord6 文件";
+        Text[ zh-TW ] = "這不是一個 WinWord6 檔案";
+        Text[ tr ] = "Bu dosya WinWord6 dosyası değil";
+        Text[ hi-IN ] = "यह WinWord6 फाइल नहीं है";
+        Text[ ar ] = "هذا الملف ليس ملف WinWord6";
+        Text[ he ] = "Die Datei ist keine WinWord6-Datei";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_FASTSAVE_ERR )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        Text [ de ] = "Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord" ;
+        Text [ en-US ] = "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Este ficheiro foi guardado com a opção do WinWord \"Guardar rápido\". Desactive a opção do WinWord \"Permitir Guardar rápido\" e guarde novamente o ficheiro em WinWord";
+        Text[ ru ] = "Этот файл сохранен из WinWord в режиме 'Быстрое сохранение'. Пожалуйста, отключите параметр 'Разрешить быстрое сохранение' и заново сохраните этот файл из WinWord.";
+        Text[ el ] = "Το αρχείο αυτό αποθηκεύτηκε με την επιλογή 'Γρήγορη αποθήκευση' του WinWord. Παρακαλώ απενεργοποιήσετε την επιλογή αυτή του WinWord και αποθηκεύσ? ";
+        Text[ nl ] = "Dit bestand is met de WinWord-optie \"Snel opslaan\" opgeslagen. Schakel a.u.b. in WinWord de optie \"Snel opslaan toestaan\" uit en sla het bestand opnieuw op met WinWord.";
+        Text[ fr ] = "Ce fichier a été enregistré à l'aide de l'option 'Enregistrement rapide' de WinWord. Veuillez désactiver cette option et utiliser WinWord pour enregistrer à nouveau le fichier.";
+        Text[ es ] = "Este archivo ha sido guardado con la opción de WinWord 'guardar rápidamente' . Por favor desactive en WinWord la opción 'permitir guardar rápidamente' y guarde el archivo de nuevo en WinWord.";
+        Text[ fi ] = "Tiedosto tallennettiin WinWordin pikatallennustilassa. Poista asetuksen Salli pikatallennus valinta ja tallenna tiedosto uudelleen.";
+        Text[ ca ] = "Aquest fitxer ha estat desat amb la opció de WinWord de 'desa ràpidament'. Desactiveu en el WinWord la opció 'permet desar ràpidament' i torneu a desar el document amb el WinWord.";
+        Text[ it ] = "Questo file è stato salvato con l'opzione di Winword 'salvataggio veloce'. Disabilitate l'opzione di WinWord 'Salvataggio veloce' e utilizzate WinWord per salvare di nuovo il file.";
+        Text[ sk ] = "Tento súbor bol uložený programom WinWord v režime 'Rýchle ukladanie'. Vypnite prosím voľbu 'Povoliť rýchle ukladanie' a uložte súbor znovu.";
+        Text[ da ] = "Denne fil er blevet gemt med WinWord-indstillingen 'Gem hurtigt'. Deaktiver venligst indstillingen 'Gem hutigt' og gem filen igen med WinWord.";
+        Text[ sv ] = "Denna fil är sparad med WinWord-alternativet 'snabbspara'. Stäng av WinWord-alternativet 'Tillåt snabbspara' och spara filen med WinWord igen";
+        Text[ pl ] = "Ten plik został zapisany za pomocą programu WinWord z włączoną opcją 'Szybkie zapisywanie'. Wyłącz w programie WinWord opcję 'Szybkie zapisywanie' i ponownie zapisz plik.";
+        Text[ pt-BR ] = "Este arquivo foi armazenado com a opção 'Salvar Rápido' do WinWord. Desative a opção 'Permitir Salvar Rápido' do WinWord e utilize o WinWord para salvar novamente o arquivo";
+        Text[ th ] = "บันทึกแฟ้มนี้ด้วย WinWord ในโหมด 'บันทึกเร็ว' กรุณาไม่ตรวจสอบตัวเลือก 'ให้มีการบันทึกเร็ว' และบันทึกแฟ้มอีกครั้ง";
+        Text[ ja ] = "このファイルは WinWord オプションの「高速保存」で保存されています。WinWord のオプション「高速保存する」をオフにして WinWord でファイルを保存しなおしてください。";
+        Text[ ko ] = "이 파일은  WinWord 의  '빠른 저장' 모드로 저장되어 있습니다.  옵션 '빠른 저장 허용' 를 해제하고, 파일을 다시 저장하십시오 .";
+        Text[ zh-CN ] = "这个文件存盘采用的是 WinWord 选项 '快速保存'方式。请关闭这个选项，然后再重新存盘这个文件。";
+        Text[ zh-TW ] = "儲存檔案採用的是 WinWord 選項<快速儲存>方式。請關閉這個選項﹐然後再重新儲存這個文件。";
+        Text[ tr ] = "Bu dosya WinWord seçeneği 'Hızlı kaydet' ile kaydedilmiş. WinWord'de 'Hızlı kaydetmeye olanak sağla' seçeneğini geçersiz kılıp dosyayı yeniden WinWord ile kaydedin";
+        Text[ hi-IN ] = "इस फाइल को WinWord में 'शीघ्र संचित करो' प्रकार में  संचित किया है । कृपया 'शीघ्र संचित करना स्वीकृत' विकल्प को हटाओ और फाइल को फिर से संचित करो । ";
+        Text[ ar ] = "تم حفظ هذا الملف عن طريق خيار 'الحفظ السريع' في WinWord. الرجاء إيقاف خاصية 'السماح بالحفظ السريع' في WinWord، ثم قم بحفظ الملف من جديد بواسطة WinWord.";
+        Text[ he ] = "Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_TMP_ERROR )
+    {
+        Text [ de ] = "Fehler beim Schreiben der Temporärdatei" ;
+        Text [ en-US ] = "Error writing temporary file" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Erro ao gravar o ficheiro temporário";
+        Text[ ru ] = "Ошибка записи временного файла";
+        Text[ el ] = "Σφάλμα κατά την εγγραφή προσωρινού αρχείου";
+        Text[ nl ] = "Fout bij schrijven van tijdelijk bestand";
+        Text[ fr ] = "Erreur d'écriture du fichier temporaire";
+        Text[ es ] = "Error al escribir el archivo temporal";
+        Text[ fi ] = "Virhe kirjoitettaessa väliaikaistiedostoa";
+        Text[ ca ] = "S'ha produït un error en escriure el fitxer temporal";
+        Text[ it ] = "Errore durante la scrittura del file temporaneo";
+        Text[ sk ] = "Chyba pri zápise do dočasného súboru";
+        Text[ da ] = "Fejl under skrivning af midlertidig fil";
+        Text[ sv ] = "Fel vid skrivning av temporär fil";
+        Text[ pl ] = "Błąd zapisu pliku tymczasowego";
+        Text[ pt-BR ] = "Ocorreu um erro ao gravar o arquivo temporário";
+        Text[ th ] = "เขียนแฟ้มถาวรผิดพลาด";
+        Text[ ja ] = "一時ファイル書き込みの際のエラー";
+        Text[ ko ] = "임시파일의 쓰기에서 오류";
+        Text[ zh-CN ] = "在写入暂时文件时发生错误";
+        Text[ zh-TW ] = "在寫入暫時檔案時發生錯誤";
+        Text[ tr ] = "Geçici dosya yazma hatası";
+        Text[ hi-IN ] = "अस्थायी फाइल में लिखने के समय गलती";
+        Text[ ar ] = "حدث خطأ أثناء كتابة الملف المؤقت";
+        Text[ he ] = "Fehler beim Schreiben der Temporärdatei";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_EXCLOT_WRONG_RANGE )
+    {
+        Text [ de ] = "Einfügebereich in Ini-Datei zu groß" ;
+        Text [ en-US ] = "Inserted section in ini file too large" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "A área de inserção do ficheiro Ini é demasiado extensa";
+        Text[ ru ] = "Вставленная в ini файл секция слишком велика";
+        Text[ el ] = "Η ενότητα εισαγωγής στο αρχείο ini είναι πολύ μεγάλη";
+        Text[ nl ] = "Invoegbereik in INI-bestand is te groot";
+        Text[ fr ] = "Zone d'insertion dans le fichier Ini trop grande";
+        Text[ es ] = "La sección insertada en el archivo Ini es demasiado grande";
+        Text[ fi ] = "Ini-tiedostoon lisätty osa on liian suuri.";
+        Text[ ca ] = "L'àrea d'inserció del fitxer ini és massa gran";
+        Text[ it ] = "Area di inserimento del file ini troppo grande";
+        Text[ sk ] = "Vkladaná oblasť v ini súbore je príliš veľká";
+        Text[ da ] = "Importområdet i ini-filen er for stort";
+        Text[ sv ] = "Importområdet i ini-filen är för stort";
+        Text[ pl ] = "Wstawiono zbyt dużą sekcję do pliku ini";
+        Text[ pt-BR ] = "A seção inserida no arquivo ini é muito grande";
+        Text[ th ] = "แทรกส่วนในแฟ้ม ini ใหญ่เกินไป";
+        Text[ ja ] = "Ini ファイルの挿入範囲が大きすぎます。";
+        Text[ ko ] = "ini 파일에 삽입된 구역이 너무 큽니다.";
+        Text[ zh-CN ] = "Ini 文件插入区域太大";
+        Text[ zh-TW ] = "Ini 檔案插入區域太大";
+        Text[ tr ] = "Ini dosyası ekleme bölümü çok büyük";
+        Text[ hi-IN ] = "ini फाइल में जोड़ा हुआ विभाग बहुत बड़ा है";
+        Text[ ar ] = "نطاق الإدخال في الملف Ini كبير جداً";
+        Text[ he ] = "Einfügebereich in Ini-Datei zu groß";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL )
+    {
+        Text [ de ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt" ;
+        Text [ en-US ] = "File format error found at $(ARG1)(row,col)" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Descoberto erro de formato na posição $(ARG1)(linha, coluna) do ficheiro";
+        Text[ ru ] = "Ошибка формата файла в месте $(ARG1)(строка,столбец)";
+        Text[ el ] = "Βρέθηκε σφάλμα μορφοποίησης στη θέση $(ARG1)(γραμμή,στήλη) του αρχείο";
+        Text[ nl ] = "Indelingsfout ontdekt op positie $(ARG1)(cel,kolom) in het bestand";
+        Text[ fr ] = "Erreur de format dans le fichier, position $(ARG1)(ligne, colonne).";
+        Text[ es ] = "Se ha descubierto un error de formato en el archivo en la posición $(ARG1)(fila,columna)";
+        Text[ fi ] = "Tiedostomuotovirhe ilmeni kohteessa $(ARG1)(rivi,sarake).";
+        Text[ ca ] = "S'ha trobat un error en el format de l'arxiu a $(ARG1)(fila, col.)";
+        Text[ it ] = "È stato trovato un errore di formato nel file alla posizione $(ARG1)(riga, colonna)";
+        Text[ sk ] = "Chybný formát súboru na $(ARG1)(riadok,stĺpec)";
+        Text[ da ] = "Der blev opdaget en formatfejl i filen på position $(ARG1)(række,spalte)";
+        Text[ sv ] = "Formatfel vid position $(ARG1)(rad,kolumn) upptäckt i filen";
+        Text[ pl ] = "Znaleziono błąd w formacie pliku na pozycji $(ARG1) (wiersz, kolumna)";
+        Text[ pt-BR ] = "Foi encontrado um erro de formato de arquivo em $(ARG1)(lin,col)";
+        Text[ th ] = "พบรูปแบบแฟ้มผิดพลาดที่ $(ARG1)(แถว,คอลัมน์)";
+        Text[ ja ] = "ファイルの $(ARG1)(行、列)に書式エラーが見つかりました。";
+        Text[ ko ] = "파일 형식 오류가 $(ARG1)(행,열)에서　발견되었습니다.";
+        Text[ zh-CN ] = "文件格式错误 $(ARG1)(行，列)";
+        Text[ zh-TW ] = "檔案格式錯誤 $(ARG1)(行，列)";
+        Text[ tr ] = "Dosya format hatası $(ARG1)(satır, sütun) bulundu";
+        Text[ hi-IN ] = "$(ARG1)(पंक्ति,स्तंभ) में फाइल रचना गलती घटित हुआ ";
+        Text[ ar ] = "تم اكتشاف خطأ في الموضع $(ARG1)(سطر،عمود) في الملف";
+        Text[ he ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_NEW_VERSION )
+    {
+        Text [ de ] = "Datei wurde von einer neueren Version geschrieben" ;
+        Text [ en-US ] = "File has been written in a newer version" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "O ficheiro foi escrito numa versão mais moderna";
+        Text[ ru ] = "Файл записан в более новой версии";
+        Text[ el ] = "Το αρχείο γράφτηκε με νεότερη έκδοση";
+        Text[ nl ] = "Bestand is onder een nieuwere versie opgeslagen";
+        Text[ fr ] = "Ce fichier a été créé à l'aide d'une version plus récente";
+        Text[ es ] = "El archivo se escribió en una versión más nueva";
+        Text[ fi ] = "Tiedosto on kirjoitettu uudemmassa versiossa";
+        Text[ ca ] = "El fitxer s'ha escrit en una versió més nova";
+        Text[ it ] = "Il file è stato creato da una versione più recente";
+        Text[ sk ] = "Súbor bol uložený novšou verziou";
+        Text[ da ] = "Filen er blevet skrevet af en nyere version";
+        Text[ sv ] = "Filen har skrivits i en nyare version";
+        Text[ pl ] = "Plik został zapisany w nowszej wersji";
+        Text[ pt-BR ] = "O arquivo foi gravado numa versão mais nova";
+        Text[ th ] = "แฟ้มไม่ได้ถูกเขียนในเวอร์ชั่นที่ใหม่กว่า";
+        Text[ ja ] = "ファイルは新しいバージョンで書かれています";
+        Text[ ko ] = "파일은 최신 버전에 의해 쓰여졌습니다.";
+        Text[ zh-CN ] = "文件已经由一个新版本更新";
+        Text[ zh-TW ] = "檔案已經被一個新版本更新";
+        Text[ tr ] = "Dosya daha yeni bir sürüm ile yazılmış";
+        Text[ hi-IN ] = "फाइल को नया आवर्तन में लिखा है";
+        Text[ ar ] = "تم كتابة الملف في إصدار أحدث";
+        Text[ he ] = "Datei wurde von einer neueren Version geschrieben";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW8_NO_WW8_FILE_ERR )
+    {
+        Text [ de ] = "Die Datei ist keine WinWord97-Datei" ;
+        Text [ en-US ] = "This is not a WinWord97 file";
+        Text[ pt ] = "Não é um ficheiro WinWord97";
+        Text[ ru ] = "Данный файл не является файлом WinWor";
+        Text[ el ] = "Το αρχείο αυτό δεν είναι τύπου WinWord97";
+        Text[ nl ] = "Dit is geen WinWord97-bestand";
+        Text[ fr ] = "Il ne s'agit pas d'un fichier WinWord97 !";
+        Text[ es ] = "El archivo no es de WinWord97";
+        Text[ fi ] = "Tämä ei ole WinWord97-tiedosto";
+        Text[ ca ] = "El fitxer no és de WinWord97";
+        Text[ it ] = "Il file non è nel formato WinWord97";
+        Text[ sk ] = "Toto nie je súbor WinWord97";
+        Text[ da ] = "Filen er ingen WinWord97-fil";
+        Text[ sv ] = "Filen är inte en WinWord97-fil";
+        Text[ pl ] = "To nie jest plik WinWord97";
+        Text[ pt-BR ] = "Este não é um arquivo do WinWord97";
+        Text[ th ] = "นี้ไม่ใช่แฟ้ม WinWord97 ";
+        Text[ ja ] = "これは WinWord97 ファイルではありません";
+        Text[ ko ] = "이 파일은 WinWord97 파일이 아닙니다";
+        Text[ zh-CN ] = "这个文件不是一个 WinWord97 文件";
+        Text[ zh-TW ] = "這不是 WinWord97 檔案";
+        Text[ tr ] = "Bu dosya WinWord97 dosyası değil";
+        Text[ hi-IN ] = "यह WinWord97 फाइल नहीं है";
+        Text[ ar ] = "هذا الملف ليس ملف WinWord97";
+        Text[ he ] = "Die Datei ist keine WinWord97-Datei";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL )
+    {
+        Text [ de ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
+        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ pt ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posição $(ARG2)(linha,coluna)";
+        Text[ ru ] = "Ошибка формата файла в поддокументе $(ARG1) в позиции $(ARG2)(строка, столбец).";
+        Text[ el ] = "Εντοπίστηκε ένα σφάλμα μορφοποίησης του αρχείου στο τμήμα κειμένου $(ARG1) στη θέση $(ARG2)(γραμμή, στήλη)";
+        Text[ nl ] = "Indelingsfout in subdocument $(ARG1) op positie $(ARG2)(rij,kolom)";
+        Text[ fr ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
+        Text[ es ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posición $(ARG2)(fila,columna)";
+        Text[ fi ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe.";
+        Text[ ca ] = "S'ha descobert un error de format en el fitxer en el subdocument $(ARG1) fins al $(ARG2)(fila, col.)";
+        Text[ it ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
+        Text[ sk ] = "Chybný formát súboru v sub-dokumente $(ARG1) na pozícii $(ARG2)(riadok, stĺpec)";
+        Text[ da ] = "Der er konstateret formatfejl i underdokumentet $(ARG1) på position $(ARG2)(linje,kolonne) i filen";
+        Text[ sv ] = "Det har upptäckts ett formatfel i filen:  deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
+        Text[ pl ] = "Wykryto błąd formatowania w pliku dokumentu podrzędnego $(ARG1) na pozycji $(ARG2) (wiersz, kolumna)";
+        Text[ pt-BR ] = "Foi descoberto um erro de formato no arquivo do sub-documento $(ARG1) em $(ARG2)(lin,col)";
+        Text[ th ] = "ค้นพบรูปแบบผิดพลาดในแฟ้มในเอกสารย่อย $(ARG1) ที่ $(ARG2)(แถว,คอลัมน์)";
+        Text[ ja ] = "ファイルの $(ARG2)(行、列)にある部分ドキュメント $(ARG1) に書式エラーが見つかりました。";
+        Text[ ko ] = "파일의 $(ARG2)(행, 열)위치에 있는 부분 문서 $(ARG1)의 서식 오류를 발견했습니다.";
+        Text[ zh-CN ] = "发现文件的子文档$(ARG1)内含错误，位置在 $(ARG2)(行,列)";
+        Text[ zh-TW ] = "發現檔案的子文件$(ARG1)內含錯誤，位置在 $(ARG2)(行,欄)";
+        Text[ tr ] = "Alt metin $(ARG1) içerisinde $(ARG2)(satır,sütun) da dosya format hatası";
+        Text[ hi-IN ] = "फाइल में अधीन-लेखपत्र $(ARG1) में $(ARG2)(पंक्ति,स्तंभ) में रचना में गलती है";
+        Text[ ar ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ he ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
+    };
+     // Export-Errors
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_WRITE_ERROR )
+    {
+        Text [ de ] = "Fehler beim Schreiben der Datei " ;
+        Text [ en-US ] = "Error writing file " ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Erro ao gravar o ficheiro ";
+        Text[ ru ] = "Ошибка записи файла  ";
+        Text[ el ] = "Σφάλμα κατά την εγγραφή αρχείου ";
+        Text[ nl ] = "Fout bij schrijven van bestand";
+        Text[ fr ] = "Erreur d'écriture du fichier ";
+        Text[ es ] = "Error al escribir el archivo ";
+        Text[ fi ] = "Virhe kirjoitettaessa tiedostoa ";
+        Text[ ca ] = "S'ha produït un error en escriure el fitxer ";
+        Text[ it ] = "Errore durante la scrittura del file ";
+        Text[ sk ] = "Chyba pri zápise súboru ";
+        Text[ da ] = "Fejl under skrivning af filen ";
+        Text[ sv ] = "Fel vid skrivning av fil ";
+        Text[ pl ] = "Błąd zapisu pliku";
+        Text[ pt-BR ] = "Ocorreu um erro ao gravar o arquivo";
+        Text[ th ] = "เขียนแฟ้มผิดพลาด ";
+        Text[ ja ] = "ファイル書き込みの際のエラー ";
+        Text[ ko ] = "파일 쓰기에서 오류 ";
+        Text[ zh-CN ] = "写入文件时发生错误 ";
+        Text[ zh-TW ] = "寫入檔案時發生錯誤 ";
+        Text[ tr ] = "Dosya yazma hatası ";
+        Text[ hi-IN ] = "फाइल में लिखने के समय गलती ";
+        Text[ ar ] = "حدث خطأ أثناء كتابة الملف ";
+        Text[ he ] = "Fehler beim Schreiben der Datei";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_OLD_GLOSSARY )
+    {
+        Text [ de ] = "Das Autotextdokument hat falsche Version" ;
+        Text [ en-US ] = "Wrong AutoText document version" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "O documento do AutoTexto tem a versão errada";
+        Text[ ru ] = "Неправильная версия документа автотекста";
+        Text[ el ] = "Λάθος έκδοση του εγγράφου αυτόματου κειμένου";
+        Text[ nl ] = "Het AutoTekst-document heeft de verkeerde versie";
+        Text[ fr ] = "La version de l' AutoTexte utilisée est incorrecte";
+        Text[ es ] = "Versión del documento de texto automático errónea";
+        Text[ fi ] = "Väärä Automaattinen teksti -asiakirjaversio";
+        Text[ ca ] = "Versió incorrecta del document d'Autotext";
+        Text[ it ] = "Il documento di testo automatico presenta una versione errata";
+        Text[ sk ] = "Zlá verzia AutoText dokumentu";
+        Text[ da ] = "Forkert AutoTekst dokumentversion";
+        Text[ sv ] = "AutoText-dokumentet har fel version";
+        Text[ pl ] = "Błędna wersja dokumentu Autotekstu";
+        Text[ pt-BR ] = "Versão incorreta do documento de AutoTexto";
+        Text[ th ] = "เวอร์ชั่นเอกสารข้อความอัตโนมัติไม่ถูกต้อง";
+        Text[ ja ] = "入力支援ドキュメントのバージョンが違います";
+        Text[ ko ] = "잘못된 자동 텍스트 문서 버전";
+        Text[ zh-CN ] = "这个自动图文集的文档版本无效";
+        Text[ zh-TW ] = "這個自動圖文集文件版本無效";
+        Text[ tr ] = "Otomatik metin belgesi sürümü yanlış";
+        Text[ hi-IN ] = "गलत स्वचालित टेक्स्ट् लेखपत्र आवर्तन";
+        Text[ ar ] = "إصدار خاطئ لمستند النص التلقائي";
+        Text[ he ] = "Das Autotextdokument hat falsche Version";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_CANNOT_WRITE )
+    {
+        Text [ de ] = "Das Dokument kann nicht angelegt werden" ;
+        Text [ en-US ] = "The document cannot be created" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "É impossível criar o documento";
+        Text[ ru ] = "Невозможно создать документ";
+        Text[ el ] = "Δεν ήταν δυνατή η δημιουργία του εγγράφου";
+        Text[ nl ] = "Het document kan niet worden gemaakt";
+        Text[ fr ] = "Impossible de créer le document";
+        Text[ es ] = "No se puede crear el documento";
+        Text[ fi ] = "Asiakirjaa ei voida luoda";
+        Text[ ca ] = "No es pot crear el document";
+        Text[ it ] = "Non è possibile creare il documento";
+        Text[ sk ] = "Dokument nemôže byť vytvorený";
+        Text[ da ] = "Dokumentet kan ikke oprettes";
+        Text[ sv ] = "Det går inte att skapa dokumentet";
+        Text[ pl ] = "Dokumentu nie można utworzyć";
+        Text[ pt-BR ] = "O documento não pode ser criado";
+        Text[ th ] = "ไม่สามารถสร้างเอกสารได้";
+        Text[ ja ] = "このドキュメントは作成できません。";
+        Text[ ko ] = "문서를 만들수 없습니다.";
+        Text[ zh-CN ] = "无法生成这个文档。";
+        Text[ zh-TW ] = "無法建立這個文件";
+        Text[ tr ] = "Belge oluşturulamıyor";
+        Text[ hi-IN ] = "लेखपत्र को उत्पन्न नहीं कर सकते है";
+        Text[ ar ] = "لا يمكن إنشاء المستند";
+        Text[ he ] = "Das Dokument kann nicht angelegt werden";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_READ_TMP_ERROR )
+    {
+        Text [ de ] = "Fehler beim Lesen der Temporärdatei" ;
+        Text [ en-US ] = "Error reading temporary file" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Erro na leitura do ficheiro temporário";
+        Text[ ru ] = "Ошибка чтения временного файла";
+        Text[ el ] = "Σφάλμα κατά το διάβασμα προσωρινού αρχείου";
+        Text[ nl ] = "Fout bij lezen tijdelijke bestanden";
+        Text[ fr ] = "Erreur de lecture du fichier temporaire";
+        Text[ es ] = "Error al leer el archivo temporal";
+        Text[ fi ] = "Virhe luettaessa väliaikaistiedostoa";
+        Text[ ca ] = "S'ha produït un error en llegir el fitxer temporal";
+        Text[ it ] = "Errore durante la lettura del file temporaneo";
+        Text[ sk ] = "Chyba pri čítaní­ dočasného súboru";
+        Text[ da ] = "Fejl under læsning af midlertidig fil";
+        Text[ sv ] = "Fel vid läsning av temporär fil";
+        Text[ pl ] = "Błąd odczytu pliku tymczasowego";
+        Text[ pt-BR ] = "Ocorreu um erro ao ler o arquivo temporário";
+        Text[ th ] = "อ่านแฟ้มชั่วคราวผิดพลาด";
+        Text[ ja ] = "一時ファイル読み取りの際のエラー";
+        Text[ ko ] = "임시파일 읽기에서 오류";
+        Text[ zh-CN ] = "在读取暂时文件时发生错误";
+        Text[ zh-TW ] = "讀取暫時檔案時發生錯誤";
+        Text[ tr ] = "Geçici dosya okuma hatası";
+        Text[ hi-IN ] = "अस्थायी फाइल को पढ़ने के समय गलती";
+        Text[ ar ] = "حدث خطأ أثناء قراءة الملف المؤقت";
+        Text[ he ] = "Fehler beim Lesen der Temporärdatei";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_LARGE_DOC_ERROR )
+    {
+        Text [ de ] = "Das Dokument überschreitet die mögliche 3.1/4.0-Textdokument-Größe" ;
+        Text [ en-US ] = "The document exceeds the allowed 3.1/4.0 text document size" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "O documento ultrapassa o tamanho possível para um documento 3.1/4.0";
+        Text[ ru ] = "Документ превышает возможный объем 3.1/4.0, установленный для текстового документа";
+        Text[ el ] = "Το έγγραφο υπερβαίνει το επιτρεπόμενο όριο μεγέθους εγγράφου κειμένου για την έκδοση 3.1/4.0";
+        Text[ nl ] = "Het document overschrijdt de mogelijke 3.1/4.0-tekstdocumentgrootte";
+        Text[ fr ] = "Le document dépasse la taille maximum autorisée pour un document texte 3.1/4.0";
+        Text[ es ] = "El documento sobrepasa el tamaño posible 3.1/4.0 de documento";
+        Text[ fi ] = "Asiakirja ylittää sallitun 3.1/4.0-tekstiasiakirjan koon";
+        Text[ ca ] = "El document excedeix la mida permesa per a un document de text 3.1/4.0";
+        Text[ it ] = "Il documento supera le dimensioni del testo possibili in 3.1/4.0";
+        Text[ sk ] = "Dokument prekračuje povolenú veľkosť textového dokumentu 3.1/4.0";
+        Text[ da ] = "Dokumentet overskrider den mulige 3.1/4.0-tekstdokumentstørrelse";
+        Text[ sv ] = "Dokumentet överskrider den möjliga 3.1/4.0-textdokumentstorleken";
+        Text[ pl ] = "Dokument przekracza dopuszczalny rozmiar dokumentu tekstowego 3.1/4.0";
+        Text[ pt-BR ] = "O tamanho do arquivo ultrapassa o tamanho permitido para um documento 3.1 ou 4.0";
+        Text[ th ] = "เอกสารเกินขนาดข้อความเอกสารที่กำหนด 3.1/4.0 ";
+        Text[ ja ] = "このドキュメントは許容範囲 3.1/4.0 文書ドキュメントサイズを超えています。";
+        Text[ ko ] = "문서가 허용된 3.1/4.0 텍스트 문서 크기를 초과 했습니다.";
+        Text[ zh-CN ] = "这个文档可能超过 3.1/4.0 版本文档的大小。";
+        Text[ zh-TW ] = "這個文件可能超過 3.1/4.0 版本文件的大小。";
+        Text[ tr ] = "Belge izin verilen 3.1/4.0 metin belgesi büyüklüğünü aşıyor";
+        Text[ hi-IN ] = "लेखपत्र का परिमाण स्वीकृत 3.1/4.0 टेक्स्ट् लेखपत्र परिमाण से अधिक है";
+        Text[ ar ] = "يتجاوز المستند حجم مستند النص 3.1/4.0";
+        Text[ he ] = "Das Dokument überschreitet die mögliche 3.1/4.0-Textdokument-Größe";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_WRITE_ERROR_FILE )
+    {
+        Text [ de ] = "Fehler beim Schreiben des Teildokuments $(ARG1)" ;
+        Text [ en-US ] = "Error in writing sub-document $(ARG1)";
+        Text[ pt ] = "Erro ao escrever o sub-documento $(ARG1)";
+        Text[ ru ] = "Ошибка записи поддокумента $(ARG1)";
+        Text[ el ] = "Σφάλμα κατά την εγγραφή του τμήματος του εγγράφου $(ARG1)";
+        Text[ nl ] = "Fout bij schrijven van subdocument $(ARG1)";
+        Text[ fr ] = "Erreur d'écriture dans le sous-document $(ARG1)";
+        Text[ es ] = "Error al escribir en el documento parcial $(ARG1)";
+        Text[ fi ] = "Aliasiakirjaan $(ARG1) kirjoitettaessa on ilmennyt virhe.";
+        Text[ ca ] = "S'ha produït un error en escriure el subdocument $(ARG1)";
+        Text[ it ] = "Errore di scrittura nel sottodocumento $(ARG1)";
+        Text[ sk ] = "Chyba pri zápise sub-dokumentu $(ARG1)";
+        Text[ da ] = "Fejl under skrivning af underdokumentet $(ARG1)";
+        Text[ sv ] = "Fel när deldokumentet $(ARG1) skulle skrivas";
+        Text[ pl ] = "Błąd zapisu dokumentu podrzędnego $(ARG1)";
+        Text[ pt-BR ] = "Ocorreu um erro ao gravar o sub-documento $(ARG1)";
+        Text[ th ] = "ข้อผิดพลาดในการเขียนเอกสารย่อย $(ARG1)";
+        Text[ ja ] = "部分ドキュメント $(ARG1) に書き込む時のエラー";
+        Text[ ko ] = "부분문서 $(ARG1) 쓰기에서 오류";
+        Text[ zh-CN ] = "在写入子文档$(ARG1)时发生错误";
+        Text[ zh-TW ] = "在寫入子文件$(ARG1)時發生錯誤";
+        Text[ tr ] = "Alt metin $(ARG1) dosyası içerisine yazılırken hata oluştu";
+        Text[ hi-IN ] = "अधीन-लेखपत्र $(ARG1) में लिखने के समय गलती";
+        Text[ ar ] = "Error in writing sub-document $(ARG1)";
+        Text[ he ] = "Fehler beim Schreiben des Teildokuments $(ARG1)";
+    };
+     // Import-/Export-Errors
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_INTERNAL_ERROR )
+    {
+        Text [ de ] = "Interner Fehler im %PRODUCTNAME Writer Dateiformat" ;
+        Text [ en-US ] = "Internal error in %PRODUCTNAME Writer file format" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Erro interno no formato de ficheiro do %PRODUCTNAME Writer.";
+        Text[ ru ] = "Внутренняя ошибка формата файла %PRODUCTNAME Writer";
+        Text[ el ] = "Εσωτερικό σφάλμα στη μορφή αρχείου του %PRODUCTNAME Writer";
+        Text[ nl ] = "Interne fout in %PRODUCTNAME Writer-bestandsindeling";
+        Text[ fr ] = "Erreur interne dans le format de fichier %PRODUCTNAME Writer";
+        Text[ es ] = "Error interno en el formato de archivo de %PRODUCTNAME Writer";
+        Text[ fi ] = "Sisäinen virhe %PRODUCTNAME Writer -tiedostomuodossa";
+        Text[ ca ] = "S'ha produït un error intern en el format del  %PRODUCTNAME Writer";
+        Text[ it ] = "Errore interno nel formato di file di %PRODUCTNAME Writer";
+        Text[ sk ] = "Interná chyba vo formáte súboru %PRODUCTNAME Writer";
+        Text[ da ] = "Intern fejl i %PRODUCTNAME Writer-filformatet";
+        Text[ sv ] = "Internt fel i %PRODUCTNAME Writer-filformatet";
+        Text[ pl ] = "Wewnętrzny błąd w formacie pliku %PRODUCTNAME Writer";
+        Text[ pt-BR ] = "Ocorreu um erro interno no formato do arquivo do %PRODUCTNAME Writer";
+        Text[ th ] = "ข้อผิดพลาดภายในในรูปแบบแฟ้ม Writer %PRODUCTNAME ";
+        Text[ ja ] = "%PRODUCTNAME Writer ファイル書式の内部エラー";
+        Text[ ko ] = "%PRODUCTNAME Writer 파일 형식의 내부 오류";
+        Text[ zh-CN ] = "%PRODUCTNAME Writer 文件格式含有内部错误";
+        Text[ zh-TW ] = "%PRODUCTNAME Writer 檔案格式含有內部錯誤";
+        Text[ tr ] = "%PRODUCTNAME Writer dosya biçiminde bir hata oluştu";
+        Text[ hi-IN ] = "%PRODUCTNAME Writer फाइल रचना में भीतरी गलती";
+        Text[ ar ] = "حدث خطأ داخلي في تنسيق ملف %PRODUCTNAME Writer";
+        Text[ he ] = "Interner Fehler im %PRODUCTNAME Writer Dateiformat";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_INTERNAL_ERROR )
+    {
+        Text [ de ] = "Interner Fehler im %PRODUCTNAME Writer Dateiformat" ;
+        Text [ en-US ] = "Internal error in %PRODUCTNAME Writer file format" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Erro interno no formato de ficheiro do %PRODUCTNAME Writer";
+        Text[ ru ] = "Внутренняя ошибка формата файла %PRODUCTNAME Writer";
+        Text[ el ] = "Εσωτερικό σφάλμα στη μορφή αρχείου του %PRODUCTNAME Writer";
+        Text[ nl ] = "Interne fout in %PRODUCTNAME Writer-bestandsindeling";
+        Text[ fr ] = "Erreur interne dans le format de fichier %PRODUCTNAME Writer";
+        Text[ es ] = "Error interno en el formato de archivo de %PRODUCTNAME Writer";
+        Text[ fi ] = "Sisäinen virhe %PRODUCTNAME Writer -tiedostomuodossa";
+        Text[ ca ] = "S'ha produït un error intern en el format del fitxer %PRODUCTNAME Writer";
+        Text[ it ] = "Errore interno nel formato di file di %PRODUCTNAME Writer";
+        Text[ sk ] = "Interná chyba vo formáte súboru %PRODUCTNAME Writer";
+        Text[ da ] = "Intern fejl i %PRODUCTNAME Writer-filformatet";
+        Text[ sv ] = "Internt fel i %PRODUCTNAME Writer-filformatet";
+        Text[ pl ] = "Wewnętrzny błąd w formacie pliku %PRODUCTNAME Writer";
+        Text[ pt-BR ] = "Ocorreu um erro interno no formato do arquivo do %PRODUCTNAME Writer";
+        Text[ th ] = "ข้อผิดพลาดภายในในรูปแบบแฟ้ม Writer %PRODUCTNAME ";
+        Text[ ja ] = "%PRODUCTNAME Writer ファイル書式の内部エラー";
+        Text[ ko ] = "%PRODUCTNAME Writer 파일 형식의 내부 오류";
+        Text[ zh-CN ] = "%PRODUCTNAME Writer 文件格式含有内部错误";
+        Text[ zh-TW ] = "%PRODUCTNAME Writer 檔案格式含有內部錯誤";
+        Text[ tr ] = "%PRODUCTNAME Writer dosya biçiminde bir hata oluştu";
+        Text[ hi-IN ] = "%PRODUCTNAME लेखक फाइल रचना में भीतरी गलती";
+        Text[ ar ] = "حدث خطأ داخلي في تنسيق ملف %PRODUCTNAME Writer";
+        Text[ he ] = "Interner Fehler im %PRODUCTNAME Writer Dateiformat";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_MEM )
+    {
+        Text [ de ] = "Nicht genügend Speicher vorhanden" ;
+        Text [ en-US ] = "Insufficient memory" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Memória insuficiente";
+        Text[ ru ] = "Недостаточно памяти";
+        Text[ el ] = "Η μνήμη δεν επαρκεί.";
+        Text[ nl ] = "Onvoldoende geheugen beschikbaar";
+        Text[ fr ] = "Mémoire insuffisante !";
+        Text[ es ] = "Memoria insuficiente";
+        Text[ fi ] = "Muisti ei riitä";
+        Text[ ca ] = "No hi ha prou memòria";
+        Text[ it ] = "Memoria disponibile insufficiente";
+        Text[ sk ] = "Nedostatok pamäti";
+        Text[ da ] = "Ikke nok hukommelse";
+        Text[ sv ] = "Inte tillräckligt med minne";
+        Text[ pl ] = "Za mało pamięci";
+        Text[ pt-BR ] = "Memória insuficiente";
+        Text[ th ] = "หน่วยความจำไม่พอ";
+        Text[ ja ] = "十分な空き容量がありません";
+        Text[ ko ] = "메모리가 부족합니다.";
+        Text[ zh-CN ] = "内存不足";
+        Text[ zh-TW ] = "記憶體不足";
+        Text[ tr ] = "Yetersiz bellek";
+        Text[ hi-IN ] = "अपर्याप्त मेमरी";
+        Text[ ar ] = "الذاكرة غير كافية";
+        Text[ he ] = "Nicht genügend Speicher vorhanden";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_MEM )
+    {
+        Text [ de ] = "Nicht genügend Speicher vorhanden" ;
+        Text [ en-US ] = "Insufficient memory" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Memória insuficiente";
+        Text[ ru ] = "Недостаточно памяти";
+        Text[ el ] = "Η μνήμη δεν επαρκεί.";
+        Text[ nl ] = "Onvoldoende geheugen beschikbaar";
+        Text[ fr ] = "Mémoire insuffisante !";
+        Text[ es ] = "Memoria insuficiente";
+        Text[ fi ] = "Muisti ei riitä";
+        Text[ ca ] = "No hi ha prou memòria";
+        Text[ it ] = "Memoria disponibile insufficiente";
+        Text[ sk ] = "Nedostatok pamäti";
+        Text[ da ] = "Ikke nok hukommelse";
+        Text[ sv ] = "Inte tillräckligt med minne";
+        Text[ pl ] = "Za mało pamięci";
+        Text[ pt-BR ] = "Memória insuficiente";
+        Text[ th ] = "หน่วยความจำไม่พอ";
+        Text[ ja ] = "十分な空き容量がありません。";
+        Text[ ko ] = "메모리가 부족합니다.";
+        Text[ zh-CN ] = "内存不足";
+        Text[ zh-TW ] = "記憶體不足";
+        Text[ tr ] = "Yetersiz bellek";
+        Text[ hi-IN ] = "अपर्याप्त मेमरी";
+        Text[ ar ] = "الذاكرة غير كافية";
+        Text[ he ] = "Nicht genügend Speicher vorhanden";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_FULL )
+    {
+        Text [ de ] = "Nicht genügend Platz auf dem Speichermedium" ;
+        Text [ en-US ] = "Not enough disk space" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Espaço do disco insuficiente";
+        Text[ ru ] = "Недостаточно места на диске";
+        Text[ el ] = "Δεν υπάρχει αρκετός διαθέσιμος χώρος στο μέσο αποθήκευσης";
+        Text[ nl ] = "Onvoldoende vrije ruimte op opslagmedium";
+        Text[ fr ] = "Espace insuffisant sur le disque";
+        Text[ es ] = "No hay suficiente espacio en el disco";
+        Text[ fi ] = "Levytila ei riitä";
+        Text[ ca ] = "No hi ha prou espai al disc";
+        Text[ it ] = "Spazio su disco insufficiente";
+        Text[ sk ] = "Nedostatok miesta na disku";
+        Text[ da ] = "Ikke tilstrækkelig diskplads";
+        Text[ sv ] = "Inte tillräckligt med diskutrymme";
+        Text[ pl ] = "Brak miejsca na dysku";
+        Text[ pt-BR ] = "Espaço em disco insuficiente";
+        Text[ th ] = "เนื้อที่ดิสก์ไม่พอ";
+        Text[ ja ] = "ディスクに十分な空き容量がありません。";
+        Text[ ko ] = "디스크 공간이 부족합니다.";
+        Text[ zh-CN ] = "可用空间不足";
+        Text[ zh-TW ] = "可用空間不足";
+        Text[ tr ] = "Yeterli disk alanı yok";
+        Text[ hi-IN ] = "डिस्क् में जगह अपर्याप्त है";
+        Text[ ar ] = "لا يوجد مساحة كافية على محرك الأقراص";
+        Text[ he ] = "Nicht genügend Platz auf dem Speichermedium";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_WRITE_FULL )
+    {
+        Text [ de ] = "Nicht genügend Platz auf dem Speichermedium" ;
+        Text [ en-US ] = "Not enough disk space" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Espaço do disco insuficiente";
+        Text[ ru ] = "Недостаточно места на диске";
+        Text[ el ] = "Δεν υπάρχει αρκετός διαθέσιμος χώρος στο μέσο αποθήκευσης";
+        Text[ nl ] = "Onvoldoende vrije ruimte op opslagmedium";
+        Text[ fr ] = "Espace insuffisant sur le disque";
+        Text[ es ] = "No hay suficiente espacio en el disco";
+        Text[ fi ] = "Levytila ei riitä.";
+        Text[ ca ] = "No hi ha prou espai al disc";
+        Text[ it ] = "Spazio su disco insufficiente";
+        Text[ sk ] = "Nedostatok miesta na disku";
+        Text[ da ] = "Ikke tilstrækkelig diskplads";
+        Text[ sv ] = "Inte tillräckligt med diskutrymme";
+        Text[ pl ] = "Brak miejsca na dysku";
+        Text[ pt-BR ] = "Espaço em disco insuficiente";
+        Text[ th ] = "เนื้อที่ดิสก์ไม่พอ";
+        Text[ ja ] = "ディスクに十分な空き容量がありません。";
+        Text[ ko ] = "디스크 공간이 부족합니다.";
+        Text[ zh-CN ] = "可用空间不足";
+        Text[ zh-TW ] = "可用空間不足";
+        Text[ tr ] = "Yeterli disk alanı yok";
+        Text[ hi-IN ] = "डिस्क् में जगह अपर्याप्त है";
+        Text[ ar ] = "لا يوجد مساحة كافية على محرك الأقراص";
+        Text[ he ] = "Nicht genügend Platz auf dem Speichermedium";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_INTERNAL_ERROR )
+    {
+        Text [ de ] = "Unbekannter Fehler im W4W-Filter" ;
+        Text [ en-US ] = "Unknown error in W4W filter" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Erro desconhecido no filtro W4W";
+        Text[ ru ] = "Неизвестная ошибка в фильтре W4W";
+        Text[ el ] = "Άγνωστο σφάλμα στο φίλτρο W4W";
+        Text[ nl ] = "Onbekende fout in W4W-filter";
+        Text[ fr ] = "Erreur inconnue du filtre W4W";
+        Text[ es ] = "Error desconocido en el filtro W4W";
+        Text[ fi ] = "Tuntematon virhe W4W-suodattimessa";
+        Text[ ca ] = "Error desconegut al filtre W4W";
+        Text[ it ] = "Errore sconosciuto nel filtro W4W";
+        Text[ sk ] = "Neznáma chyba vo filtri W4W";
+        Text[ da ] = "Intern fejl i W4W-filtret";
+        Text[ sv ] = "Obekant fel i W4W-filter";
+        Text[ pl ] = "Nieznany błąd w filtrze W4W";
+        Text[ pt-BR ] = "Ocorreu um erro desconhecido no filtro W4W";
+        Text[ th ] = "ไม่รู้จักข้อผิดพลาดในตัวกรอง W4W ";
+        Text[ ja ] = "W4Wフィルタにある不明のエラー";
+        Text[ ko ] = "W4W 필터에 알 수 없는 오류";
+        Text[ zh-CN ] = "W4W 转换器发生不明错误。";
+        Text[ zh-TW ] = "W4W 轉換器發生不明錯誤。";
+        Text[ tr ] = "W4W filtresinde bilinmeyen hata";
+        Text[ hi-IN ] = "W4W फिल्टर में अज्ञात गलती";
+        Text[ ar ] = "حدث خطأ غير معروف في فلتر W4W";
+        Text[ he ] = "Unbekannter Fehler im W4W-Filter";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_INTERNAL_ERROR )
+    {
+        Text [ de ] = "Unbekannter Fehler im W4W-Filter" ;
+        Text [ en-US ] = "Unknown error in W4W filter" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Erro desconhecido no filtro W4W";
+        Text[ ru ] = "Неизвестная ошибка в фильтре W4W";
+        Text[ el ] = "Άγνωστο σφάλμα στο φίλτρο W4W";
+        Text[ nl ] = "Onbekende fout in W4W-filter";
+        Text[ fr ] = "Erreur inconnue dans le filtre W4W";
+        Text[ es ] = "Error desconocido en el filtro W4W";
+        Text[ fi ] = "Tuntematon virhe W4W-suodattimessa";
+        Text[ ca ] = "Error desconegut al filtre W4W";
+        Text[ it ] = "Errore sconosciuto nel filtro W4W";
+        Text[ sk ] = "Neznáma chyba vo filtri W4W";
+        Text[ da ] = "Intern fejl i W4W-filtret";
+        Text[ sv ] = "Obekant fel i W4W-filter";
+        Text[ pl ] = "Nieznany błąd w filtrze W4W";
+        Text[ pt-BR ] = "Ocorreu um erro desconhecido no filtro W4W";
+        Text[ th ] = "ไม่รู้จักข้อผิดพลาดในตัวกรอง W4W ";
+        Text[ ja ] = "W4Wフィルタにある不明のエラー";
+        Text[ ko ] = "W4W 필터에 알 수 없는 오류";
+        Text[ zh-CN ] = "W4W 转换器发生不明的错误。";
+        Text[ zh-TW ] = "W4W 轉換器發生不明錯誤。";
+        Text[ tr ] = "W4W filtresinde bilinmeyen hata";
+        Text[ hi-IN ] = "W4W फिल्टर में अज्ञात गलती";
+        Text[ ar ] = "حدث خطأ غير معروف في فلتر W4W";
+        Text[ he ] = "Unbekannter Fehler im W4W-Filter";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_DLL_ERROR )
+    {
+        Text [ de ] = "Fehler beim Laden des Konverters" ;
+        Text [ en-US ] = "Error loading converter" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Erro ao carregar o conversor";
+        Text[ ru ] = "Ошибка загрузки конвертора";
+        Text[ el ] = "Σφάλμα κατά τη φόρτωση του μετατροπέα";
+        Text[ nl ] = "Fout bij laden van converter";
+        Text[ fr ] = "Erreur de chargement du convertisseur";
+        Text[ es ] = "Error al cargar el convertidor";
+        Text[ fi ] = "Virhe ladattaessa muunto-ohjelmaa";
+        Text[ ca ] = "S'ha produït un error en carregar el conversor";
+        Text[ it ] = "Errore nel caricamento del convertitore";
+        Text[ sk ] = "Chyba pri načítaní­ konvertoru";
+        Text[ da ] = "Fejl under indlæsning af konverteren";
+        Text[ sv ] = "Fel vid laddning av konverteraren";
+        Text[ pl ] = "Błąd ładowania konwertera";
+        Text[ pt-BR ] = "Ocorreu um erro ao carregar o conversor";
+        Text[ th ] = "โหลดตัวแปลงผิดพลาด";
+        Text[ ja ] = "コンバータ読み込み中のエラー";
+        Text[ ko ] = "변환기 로드시에 오류";
+        Text[ zh-CN ] = "在转换时发生错误";
+        Text[ zh-TW ] = "載入轉換器時發生錯誤";
+        Text[ tr ] = "Dönüştürücü yükleme hatası";
+        Text[ hi-IN ] = "कनवर्टर को लोड़ करने के समय गलती";
+        Text[ ar ] = "حدث خطأ أثناء تحميل المحول";
+        Text[ he ] = "Fehler beim Laden des Konverters";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_DLL_ERROR )
+    {
+        Text [ de ] = "Fehler beim Laden des Konverters" ;
+        Text [ en-US ] = "Error loading converter" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Erro ao carregar o conversor";
+        Text[ ru ] = "Ошибка загрузки конвертора";
+        Text[ el ] = "Σφάλμα κατά τη φόρτωση του μετατροπέα";
+        Text[ nl ] = "Fout bij laden van converter";
+        Text[ fr ] = "Erreur de chargement du convertisseur";
+        Text[ es ] = "Error al cargar el convertidor";
+        Text[ fi ] = "Virhe ladattaessa muunto-ohjelmaa";
+        Text[ ca ] = "S'ha produït un error en carregar el conversor";
+        Text[ it ] = "Errore nel caricamento del convertitore";
+        Text[ sk ] = "Chyba pri načítaní­ konvertoru";
+        Text[ da ] = "Fejl under indlæsning af konverteren";
+        Text[ sv ] = "Fel vid laddning av konverteraren";
+        Text[ pl ] = "Błąd ładowania konwertera";
+        Text[ pt-BR ] = "Ocorreu um erro ao carregar o conversor";
+        Text[ th ] = "โหลดตัวแปลงผิดพลาด";
+        Text[ ja ] = "コンバータ読み込み中のエラー";
+        Text[ ko ] = "변환기 로드시에 오류";
+        Text[ zh-CN ] = "转换时发生错误";
+        Text[ zh-TW ] = "載入轉換器時發生錯誤";
+        Text[ tr ] = "Dönüştürücü yükleme hatası";
+        Text[ hi-IN ] = "कनवर्टर को लोड़ करने के समय गलती";
+        Text[ ar ] = "حدث خطأ أثناء تحميل المحول";
+        Text[ he ] = "Fehler beim Laden des Konverters";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_LOCKING , ERR_TXTBLOCK_NEWFILE_ERROR )
+    {
+        Text [ de ] = "$(ARG1) hat sich geändert" ;
+        Text [ en-US ] = "$(ARG1) has changed" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "$(ARG1) foi modificado";
+        Text[ ru ] = "$(ARG1) изменился";
+        Text[ el ] = "$(ARG1) έχει αλλάξει";
+        Text[ nl ] = "$(ARG1) is gewijzigd";
+        Text[ fr ] = "$(ARG1) a été modifié";
+        Text[ es ] = "$(ARG1) se ha modificado";
+        Text[ fi ] = "Kohde $(ARG1) on muuttunut.";
+        Text[ ca ] = "$(ARG1) ha canviat";
+        Text[ it ] = "$(ARG1) è cambiato";
+        Text[ sk ] = "$(ARG1) bol zmenený";
+        Text[ da ] = "$(ARG1) er ændret";
+        Text[ sv ] = "$(ARG1) har ändrats";
+        Text[ pl ] = "$(ARG1) uległ zmianie";
+        Text[ pt-BR ] = "$(ARG1) foi modificado";
+        Text[ th ] = "เปลี่ยน $(ARG1) ";
+        Text[ ja ] = "$(ARG1)は変更されました";
+        Text[ ko ] = "$(ARG1)이(가) 변경되었습니다.";
+        Text[ zh-CN ] = "$(ARG1) 已经更改。";
+        Text[ zh-TW ] = "$(ARG1) 已經變更。";
+        Text[ tr ] = "$(ARG1) değişti";
+        Text[ hi-IN ] = "$(ARG1) को परिवर्तन किया है";
+        Text[ ar ] = "تغير $(ARG1)";
+        Text[ he ] = "$(ARG1) hat sich geändert";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_PATH , ERR_AUTOPATH_ERROR )
+    {
+        Text [ de ] = "$(ARG1) existiert nicht" ;
+        Text [ en-US ] = "$(ARG1) does not exist" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "$(ARG1) não existe";
+        Text[ ru ] = "$(ARG1) не существует";
+        Text[ el ] = "$(ARG1) δεν υπάρχει";
+        Text[ nl ] = "$(ARG1) bestaat niet";
+        Text[ fr ] = "$(ARG1) n'existe pas.";
+        Text[ es ] = "$(ARG1) no existe";
+        Text[ fi ] = "Kohdetta $(ARG1) ei ole olemassa.";
+        Text[ ca ] = "$(ARG1) no existeix";
+        Text[ it ] = "$(ARG1) non esiste";
+        Text[ sk ] = "$(ARG1) neexistuje";
+        Text[ da ] = "$(ARG1) eksisterer ikke";
+        Text[ sv ] = "$(ARG1) existerar inte";
+        Text[ pl ] = "$(ARG1) nie istnieje";
+        Text[ pt-BR ] = "$(ARG1) não existe";
+        Text[ th ] = "ไม่มี $(ARG1) อยู่";
+        Text[ ja ] = "$(ARG1) はありません。";
+        Text[ ko ] = "$(ARG1)이(가) 없습니다";
+        Text[ zh-CN ] = "$(ARG1) 不存在";
+        Text[ zh-TW ] = "$(ARG1) 不存在";
+        Text[ tr ] = "$(ARG1) mevcut değil";
+        Text[ hi-IN ] = "$(ARG1) अस्तित्व में नहीं है";
+        Text[ ar ] = "$(ARG1) غير موجود";
+        Text[ he ] = "$(ARG1) existiert nicht";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLSPLIT_ERROR )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Zellen k�nnen nicht mehr geteilt werden : Zellen k�nnen nicht mehr geteilt werden */
+        Text [ de ] = "Zellen können nicht mehr geteilt werden" ;
+        Text [ en-US ] = "Cells cannot be further split" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "É impossível dividir mais as células";
+        Text[ ru ] = "Невозможно далее разбивать ячейки";
+        Text[ el ] = "Η επιπλέον διαίρεση των κελιών είναι αδύνατη";
+        Text[ nl ] = "Cellen kunnen niet meer worden gesplitst";
+        Text[ fr ] = "Impossible de scinder davantage les cellules";
+        Text[ es ] = "Las celdas no se pueden dividir más";
+        Text[ fi ] = "Soluja ei voi jakaa enempää.";
+        Text[ ca ] = "Les cel.les no es poden dividir més";
+        Text[ it ] = "Non è più possibile dividere le celle";
+        Text[ sk ] = "Bunky už ďalej nie je možné deliť";
+        Text[ da ] = "Cellerne kan ikke deles mere";
+        Text[ sv ] = "Cellerna kan inte delas mer";
+        Text[ pl ] = "Nie można bardziej podzielić komórek";
+        Text[ pt-BR ] = "As células não podem mais serem divididas";
+        Text[ th ] = "ไม่สามารถแยกเซลล์เพิ่มเติมได้";
+        Text[ ja ] = "これ以上セルを分割できません";
+        Text[ ko ] = "셀은 더 이상 분할될 수 없습니다.";
+        Text[ zh-CN ] = "无法分隔单元格";
+        Text[ zh-TW ] = "無法分開儲存格";
+        Text[ tr ] = "Hücreler daha fazla bölünemiyor";
+        Text[ hi-IN ] = "कोष्ठों को और आलगाना असंभव है";
+        Text[ ar ] = "لا يمكن تقسيم الخلايا أكثر من ذلك";
+        Text[ he ] = "Zellen können nicht mehr geteilt werden";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLINSCOL_ERROR )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? weitere Spalten k�nnen nicht eingef�gt werden : weitere Spalten k�nnen nicht eingef�gt werden */
+        Text [ de ] = "weitere Spalten können nicht eingefügt werden" ;
+        Text [ en-US ] = "Additional columns cannot be inserted" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Impossível inserir colunas adicionais";
+        Text[ ru ] = "Невозможно вставить дополнительные столбцы";
+        Text[ el ] = "δεν μπορούν να εισαχθούν περισσότερες στήλες";
+        Text[ nl ] = "Meer kolommen kunnen niet worden ingevoegd";
+        Text[ fr ] = "Impossible d'insérer des colonnes supplémentaires";
+        Text[ es ] = "No se pueden insertar columnas adicionales";
+        Text[ fi ] = "Sarakkeita ei voi lisätä enempää.";
+        Text[ ca ] = "No es poden inserir columnes addicionals";
+        Text[ it ] = "Impossibile inserire altre colonne.";
+        Text[ sk ] = "Nie je možné pridať ďalšie stĺpce";
+        Text[ da ] = "Det er ikke muligt at indsætte flere kolonner";
+        Text[ sv ] = "Det går inte att infoga fler kolumner";
+        Text[ pl ] = "Nie można wstawić dodatkowych kolumn";
+        Text[ pt-BR ] = "Não é possível inserir colunas adicionais";
+        Text[ th ] = "ไม่สามารถแทรกคอลัมน์เพิ่มเติมได้";
+        Text[ ja ] = "追加の列を挿入できません";
+        Text[ ko ] = "추가적인 열은 삽입할수 없습니다.";
+        Text[ zh-CN ] = "无法插入其它的列";
+        Text[ zh-TW ] = "無法插入其它欄";
+        Text[ tr ] = "Daha fazla sütun eklenemiyor";
+        Text[ hi-IN ] = "अधिकतर स्तंभों को नहीं जोड़ सकते है";
+        Text[ ar ] = "لا يمكن إدراج المزيد من الأعمدة";
+        Text[ he ] = "weitere Spalten können nicht eingefügt werden";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLDDECHG_ERROR )
+    {
+        Text [ de ] = "Bei einer verknüpften Tabelle darf die Struktur nicht verändert werden" ;
+        Text [ en-US ] = "The structure of a linked table cannot be modified" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "É impossível modificar a estrutura de uma tabela ligada";
+        Text[ ru ] = "Невозможно изменить структуру связанной таблицы";
+        Text[ el ] = "Δεν είναι δυνατή η αλλαγή δομής ενός συνδεδεμένου πίνακα";
+        Text[ nl ] = "Bij een gekoppelde tabel mag de structuur niet worden gewijzigd.";
+        Text[ fr ] = "La structure d'un tableau ne peut pas être modifiée s'il a fait l'objet d'un lien";
+        Text[ es ] = "No se puede modificar la estructura de una tabla vinculada";
+        Text[ fi ] = "Linkitetyn taulukon rakennetta ei voi muokata.";
+        Text[ ca ] = "No es pot modificar l'estructura d'una taula enllaçada";
+        Text[ it ] = "In una tabella collegata non sono ammesse modifiche alla struttura.";
+        Text[ sk ] = "Štruktúru prepojených tabuliek nemožno zmeniť";
+        Text[ da ] = "En kædet tabels struktur må ikke ændres";
+        Text[ sv ] = "Strukturen på en länkad tabell får inte ändras";
+        Text[ pl ] = "Nie można zmienić struktury połączonej bazy danych";
+        Text[ pt-BR ] = "Não é possível modificar a estrutura de uma tabela vinculada";
+        Text[ th ] = "ไม่สามารถดัดแปลงแก้ไขโครงสร้างของตารางที่เชื่อมโยงได้";
+        Text[ ja ] = "リンクされた表の構造は変更できません";
+        Text[ ko ] = "링크된 표에서는 구조를 변경해서는 안됩니다";
+        Text[ zh-CN ] = "不能更改一个链接的表格结构";
+        Text[ zh-TW ] = "不能變更一個連結的表格結構";
+        Text[ tr ] = "Bağlantılı bir tablonun yapısı değiştirilmez";
+        Text[ hi-IN ] = "लिंक किया हुआ सारणी का बनावट को नहीं सुधार सकते है";
+        Text[ ar ] = "لا يمكن تعديل بنية جدول مرتبط";
+        Text[ he ] = "Bei einer verknüpften Tabelle darf die Struktur nicht verändert werden";
+    };
+     // -------------------- Warnings -----------------------------------
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_NO_DRAWINGS )
+    {
+        Text [ de ] = "Es konnten keine Zeichnungen geladen werden" ;
+        Text [ en-US ] = "No drawings could be read" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Foi impossível carregar desenhos";
+        Text[ ru ] = "Невозможно прочесть рисунки";
+        Text[ el ] = "Δεν ήταν δυνατή η φόρτωση σχεδίων";
+        Text[ nl ] = "Er kunnen geen tekeningen worden geladen";
+        Text[ fr ] = "Impossible de charger des dessins";
+        Text[ es ] = "No se pudo cargar ningún dibujo";
+        Text[ fi ] = "Piiroksia ei voitu lukea";
+        Text[ ca ] = "No es poden llegir els dibuixos ";
+        Text[ it ] = "Non è stato possibile caricare alcun disegno";
+        Text[ sk ] = "Nie je možné načítať kresby";
+        Text[ da ] = "Det var ikke muligt at indlæse nogen tegninger";
+        Text[ sv ] = "Det gick inte att ladda några teckningar";
+        Text[ pl ] = "Nie udało się wczytać żadnego rysunku";
+        Text[ pt-BR ] = "Não foi possível ler os desenhos";
+        Text[ th ] = "ไม่สามารถอ่านการวาดรูปได้";
+        Text[ ja ] = "図形描画は読み込みできませんでした";
+        Text[ ko ] = "그리기를 로드하지 못했습니다.";
+        Text[ zh-CN ] = "无法装入图像";
+        Text[ zh-TW ] = "無法載入影像";
+        Text[ tr ] = "Çizim yüklenemedi";
+        Text[ hi-IN ] = "कोई रेखाचित्र को नहीं पढ़ सकते है";
+        Text[ ar ] = "تعذر تحميل أية رسومات";
+        Text[ he ] = "Es konnten keine Zeichnungen geladen werden";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_WW6_FASTSAVE_ERR )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        Text [ de ] = "Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord" ;
+        Text [ en-US ] = "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Este ficheiro foi guardado com a opção do WinWord \"Guardar rápido\". Desactive a opção do WinWord \"Permitir Guardar rápido\" e guarde novamente o ficheiro em WinWord";
+        Text[ ru ] = "Этот файл сохранен из WinWord в режиме 'Быстрое сохранение'. Пожалуйста, отключите параметр 'Разрешить быстрое сохранение' и заново сохраните этот файл из WinWord.";
+        Text[ el ] = "Το αρχείο αυτό αποθηκεύτηκε με την επιλογή 'Γρήγορη αποθήκευση' του WinWord. Παρακαλώ απενεργοποιήσετε την επιλογή αυτή του WinWord και αποθηκεύσ? ";
+        Text[ nl ] = "Dit bestand is met de WinWord optie \"Snel opslaan\" opgeslagen. Schakel a.u.b. in WinWord de optie \"Snel opslaan toestaan\" uit en sla het bestand opnieuw op met WinWord.";
+        Text[ fr ] = "Ce fichier a été enregistré à l'aide de l'option 'Enregistrement rapide' de WinWord. Veuillez désactiver cette option et utiliser WinWord pour enregistrer à nouveau le fichier.";
+        Text[ es ] = "Este archivo ha sido guardado con la opción de WinWord 'guardar rápidamente' . Por favor desactive en WinWord la opción 'permitir guardar rápidamente' y guarde nuevamente el archivo con WinWord";
+        Text[ fi ] = "Tiedosto tallennettiin WinWordin pikatallennustilassa. Poista asetuksen Salli pikatallennus valinta ja tallenna tiedosto uudelleen.";
+        Text[ ca ] = "Aquest fitxer ha estat desat amb la opció de WinWord de 'desa ràpidament'. Desactiveu en el WinWord la opció 'permet desar ràpidament' i torneu a desar el document amb el WinWord.";
+        Text[ it ] = "Questo file è stato salvato con l'opzione di Winword 'salvataggio veloce'. Disabilitate l'opzione di WinWord 'Salvataggio veloce' ed utilizzate WinWord per salvare di nuovo il file.";
+        Text[ sk ] = "Tento súbor bol uložený programom WinWord v režime 'Rýchle ukladanie'. Vypnite prosím voľbu 'Povoliť rýchle ukladanie' a uložte súbor znovu.";
+        Text[ da ] = "Denne fil er blevet gemt med WinWord-indstillingen 'Gem hurtigt'. Deaktiver venligst indstillingen 'Gem hutigt' og gem filen igen med WinWord.";
+        Text[ sv ] = "Denna fil är sparad med WinWord-alternativet 'snabbspara'. Stäng av WinWord-alternativet 'Tillåt snabbspara' och spara filen med WinWord igen";
+        Text[ pl ] = "Ten plik został zapisany za pomocą programu WinWord z włączoną opcją 'Szybkie zapisywanie'. Wyłącz w programie WinWord opcję 'Szybkie zapisywanie' i ponownie zapisz plik.";
+        Text[ pt-BR ] = "Este arquivo foi armazenado com a opção 'Salvar Rápido' do WinWord. Desative a opção 'Permitir Salvar Rápido' do WinWord e utilize o WinWord para gravar novamente o arquivo";
+        Text[ th ] = "บันทึกแฟ้มนี้ด้วย WinWord ในโหมด 'บันทึกเร็ว'  กรุณาไม่ตรวจสอบตัวเลือก 'ให้มีการบันทึกเร็ว' และบันทึกแฟ้มอีกครั้ง";
+        Text[ ja ] = "このファイルは、WinWord オプション「高速保存」で保存されています。WinWord オプション「高速保存」をオフにしてから、ファイルを WinWord で保存しなおしてください。";
+        Text[ ko ] = "이 파일은 WinWord의 '빠른 저장' 모드로 저장되어 있습니다. 옵션 '빠른 저장 허용' 을 해제하시고 파일을 다시 저장하십시오.";
+        Text[ zh-CN ] = "这个文件存盘采用的是 WinWord 选项 '快速保存'方式。请设定不使用这个选项，然后再重新存盘这个文件。";
+        Text[ zh-TW ] = "儲存檔案採用的是 WinWord 選項<快速儲存>方式。請關閉這個選項，然後再重新儲存這個檔案。";
+        Text[ tr ] = "Bu dosya WinWord seçeneği 'Hızlı kaydet' ile kaydedilmiş. WinWord'de 'Hızlı kaydetmeye olanak sağla' seçeneğini geçersiz kılıp dosyayı yeniden WinWord ile kaydedin";
+        Text[ hi-IN ] = "इस फाइल को WinWord में 'शीघ्र संचित करो' प्रकार में  संचित किया है । कृपया 'शीघ्र संचित करना स्वीकृत' विकल्प को हटाओ और फाइल को फिर से संचित करो ।";
+        Text[ ar ] = "تم حفظ هذا الملف عن طريق خيا‎ر 'الحفظ السريع' في WinWord. الرجاء إيقاف خاصية 'السماح بالحفظ السريع' في WinWord، ثم  قم بحفظ الملف من جديد بواسطة WinWord.";
+        Text[ he ] = "Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_FEATURES_LOST )
+    {
+        Text [ de ] = "Es konnten nicht alle Attribute gelesen werden" ;
+        Text [ en-US ] = "Not all attributes could be read" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Foi impossível ler todos os atributos";
+        Text[ ru ] = "Невозможно прочесть все атрибуты";
+        Text[ el ] = "Δεν ήταν δυνατή η ανάγνωση όλων των χαρακτηριστικών";
+        Text[ nl ] = "Niet alle attributen kunnen worden ingelezen";
+        Text[ fr ] = "Impossible de lire tous les attributs";
+        Text[ es ] = "No se pudieron leer todos los atributos";
+        Text[ fi ] = "Kaikkia määritteitä ei voitu lukea";
+        Text[ ca ] = "No es poden llegir tots els atributs";
+        Text[ it ] = "Non è stato possibile leggere tutti gli attributi";
+        Text[ sk ] = "Nie je možné načítať všetky atribúty";
+        Text[ da ] = "Det var ikke muligt at læse alle attributter";
+        Text[ sv ] = "Det gick inte att läsa alla attribut";
+        Text[ pl ] = "Nie wszystkie atrybuty mogły zostać odczytane";
+        Text[ pt-BR ] = "Não foi possível ler todos os atributos";
+        Text[ th ] = "ไม่สามารถอ่านคุณลักษณะทั้งหมดได้";
+        Text[ ja ] = "すべての属性を読み取ることはできませんでした";
+        Text[ ko ] = "속성을 모두 읽지는 못했습니다.";
+        Text[ zh-CN ] = "无法读取所有的属性";
+        Text[ zh-TW ] = "無法讀取所有的屬性";
+        Text[ tr ] = "Tüm öznitelikler okunamadı";
+        Text[ hi-IN ] = "सब ऐट्रिब्यूटों को नहीं पढ़ सकते है";
+        Text[ ar ] = "تعذر قراءة كل السمات";
+        Text[ he ] = "Es konnten nicht alle Attribute gelesen werden";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_FEATURES_LOST )
+    {
+        Text [ de ] = "Es konnten nicht alle Attribute geschrieben werden" ;
+        Text [ en-US ] = "Not all attributes could be recorded" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Foi impossível gravar todos os atributos";
+        Text[ ru ] = "Невозможно записать все атрибуты";
+        Text[ el ] = "Δεν ήταν δυνατή η καταγραφή όλων των χαρακτηριστικών";
+        Text[ nl ] = "Niet alle attributen kunnen worden geschreven";
+        Text[ fr ] = "Impossible d'écrire tous les attributs";
+        Text[ es ] = "No se pudieron grabar todos los atributos";
+        Text[ fi ] = "Kaikkia määritteitä ei voitu nauhoittaa";
+        Text[ ca ] = "No es poden registrar tots els atributs";
+        Text[ it ] = "Non è stato possibile scrivere tutti gli attributi";
+        Text[ sk ] = "Nie je možné zaznamenať všetky atribúty";
+        Text[ da ] = "Det var ikke muligt at skrive alle attributter";
+        Text[ sv ] = "Det gick inte att skriva alla attribut";
+        Text[ pl ] = "Nie wszystkie atrybuty mogły zostać zapisane";
+        Text[ pt-BR ] = "Não foi possível gravar todos os atributos";
+        Text[ th ] = "ไม่สามารถบันทึกคุณลักษณะทั้งหมดได้";
+        Text[ ja ] = "すべての属性を記録することはできませんでした";
+        Text[ ko ] = "속성을 모두 쓰지는 못했습니다.";
+        Text[ zh-CN ] = "不能写入所有的属性";
+        Text[ zh-TW ] = "不能寫入所有的屬性";
+        Text[ tr ] = "Tüm öznitelikler yazılamadı";
+        Text[ hi-IN ] = "सब ऐट्रिब्यूटों को नहीं रेकोर्ड कर सकते है";
+        Text[ ar ] = "تعذر كتابة كل السمات";
+        Text[ he ] = "Es konnten nicht alle Attribute geschrieben werden";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_OLE )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Einige OLE-Objekte konnten nur als Grafiken �bernommen werden : Einige OLE-Objekte konnten nur als Grafiken �bernommen werden */
+        Text [ de ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden" ;
+        Text [ en-US ] = "Some OLE objects could only be loaded as graphics" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Alguns dos objectos OLE puderam ser apenas carregados como imagens";
+        Text[ ru ] = "Загрузка некоторых OLE объектов возможна только в виде рисунков";
+        Text[ el ] = "Μερικά αντικείμενα OLE μπόρεσαν να φορτωθούν μόνο ως γραφικά";
+        Text[ nl ] = "Enkele OLE-objecten kunnen alleen als grafische objecten worden overgenomen";
+        Text[ fr ] = "Certains objets OLE ont pu être chargés uniquement sous forme d'images";
+        Text[ es ] = "Algunos objetos OLE se pudieron incluir sólo como imágenes";
+        Text[ fi ] = "Jotkin OLE-objektit voitiin ladata vain grafiikkana";
+        Text[ ca ] = "Alguns objectes OLE només s'han pogut incloure com a imatges";
+        Text[ it ] = "Alcuni oggetti OLE sono stati prelevati solo come immagini";
+        Text[ sk ] = "Niektoré OLE objekty bolo možné načítať len ako obrázky";
+        Text[ da ] = "Nogle OLE-objekter kunne kun overtages som grafik";
+        Text[ sv ] = "Några OLE-objekt kunde bara övertas som grafik";
+        Text[ pl ] = "Niektóre obiekty OLE zostały załadowane tylko jako grafiki";
+        Text[ pt-BR ] = "Alguns objetos OLE só puderam ser carregados como figuras";
+        Text[ th ] = "บางวัตถุ OLE สามารถโหลดเป็นกราฟิคได้อย่างเดียว";
+        Text[ ja ] = "OLE オブジェクトのいくつかは図としてしか読み込めません。";
+        Text[ ko ] = "일부 OLE 개체들은 그림으로서만 적용될 수 있습니다.";
+        Text[ zh-CN ] = "一些 OLE 对象只能以图像方式装入";
+        Text[ zh-TW ] = "一些 OLE 物件只能以圖形方式裝載";
+        Text[ tr ] = "Bazı OLE nesneleri yalnızca grafik olarak yüklenebildi";
+        Text[ hi-IN ] = "कुछ OLE वस्तुओं को केवल सुचित्र जैसे लोड़ कर सकते है";
+        Text[ ar ] = "لم يكن من الممكن تطبيق بعض كائنات OLE إلا كرسومات";
+        Text[ he ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_OLE )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Einige OLE-Objekte konnten nur als Grafiken �bernommen werden : Einige OLE-Objekte konnten nur als Grafiken �bernommen werden */
+        Text [ de ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden" ;
+        Text [ en-US ] = "Some OLE objects could only be saved as graphics" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Alguns dos objectos OLE foram carregados apenas como imagens";
+        Text[ ru ] = "Загрузка некоторых OLE объектов возможна только в виде рисунков";
+        Text[ el ] = "Μερικά αντικείμενα OLE μπόρεσαν να φορτωθούν μόνο ως γραφικά";
+        Text[ nl ] = "Enkele OLE-objecten kunnen alleen als grafische objecten worden overgenomen";
+        Text[ fr ] = "Certains objets OLE ont pu être chargés uniquement sous forme d'images";
+        Text[ es ] = "Algunos objetos OLE se pudieron incluir sólo como imágenes";
+        Text[ fi ] = "Jotkin OLE-objektit voitiin tallentaa vain grafiikkana";
+        Text[ ca ] = "Alguns objectes OLE només s'han pogut incloure com a imatges";
+        Text[ it ] = "Alcuni oggetti OLE sono stati prelevati solo come immagini";
+        Text[ sk ] = "Niektoré OLE objekty možno uložiť len ako obrázky";
+        Text[ da ] = "Nogle OLE-objekter kunne kun overtages som grafik";
+        Text[ sv ] = "Några OLE-objekt kunde bara övertas som grafik";
+        Text[ pl ] = "Niektóre obiekty OLE zostały zapisane tylko jako grafiki";
+        Text[ pt-BR ] = "Alguns objetos OLE só puderam ser salvos como figuras";
+        Text[ th ] = "บางวัตถุ OLE สามารถบันทึกเป็นกราฟิคได้อย่างเดียว";
+        Text[ ja ] = "OLE オブジェクトのいくつかは、図としてしか保存できませんでした";
+        Text[ ko ] = "일부 OLE 개체들은 그림으로서만 적용될 수 있습니다.";
+        Text[ zh-CN ] = "一些 OLE 对象无法被存盘为图形";
+        Text[ zh-TW ] = "一些 OLE 物件無法儲存為圖形";
+        Text[ tr ] = "Bazı OLE nesneleri yalnızca grafik olarak yüklenebildi";
+        Text[ hi-IN ] = "कुछ OLE वस्तुओं को केवल सुचित्र जैसे संचित कर सकते है";
+        Text[ ar ] = "لم يكن من الممكن تطبيق بعض كائنات OLE إلا كرسومات";
+        Text[ he ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_POOR_LOAD )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Dokument konnte nicht vollst�ndig geladen werden : Dokument konnte nicht vollst�ndig geladen werden */
+        Text [ de ] = "Dokument konnte nicht vollständig geladen werden" ;
+        Text [ en-US ] = "Document could not be completely loaded" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Foi impossível carregar o documento completamente";
+        Text[ ru ] = "Невозможно полностью загрузить документ";
+        Text[ el ] = "Δεν ήταν δυνατή η φόρτωση ολόκληρου του εγγράφου";
+        Text[ nl ] = "Document kan niet volledig worden geladen";
+        Text[ fr ] = "Le document n'a pas pu être chargé dans son intégralité";
+        Text[ es ] = "No se pudo cargar completamente el documento";
+        Text[ fi ] = "Asiakirjaa ei voitu ladata kokonaan";
+        Text[ ca ] = "El document no es pot carregar completament";
+        Text[ it ] = "Non è stato possibile caricare il file completamente";
+        Text[ sk ] = "Nie je možné načítať celý dokument";
+        Text[ da ] = "Det var ikke muligt at indlæse dokumentet helt";
+        Text[ sv ] = "Det gick inte att ladda dokumentet fullständigt";
+        Text[ pl ] = "Nie można załadować dokumentu w całości";
+        Text[ pt-BR ] = "Não foi possível carregar totalmente o documento";
+        Text[ th ] = "ไม่สามารถโหลดเอกสารได้อย่างสมบูรณ์";
+        Text[ ja ] = "ドキュメントを完全に読み込みできませんでした";
+        Text[ ko ] = "문서를 완전히 로드하지는 못했습니다.";
+        Text[ zh-CN ] = "无法完全装入文档";
+        Text[ zh-TW ] = "無法完全載入文件";
+        Text[ tr ] = "Belge tümüyle yüklenemedi";
+        Text[ hi-IN ] = "लेखपत्र को संपूर्ण लोड़ नहीं कर सकते है";
+        Text[ ar ] = "تعذر تحميل المستند بشكل تام";
+        Text[ he ] = "Dokument konnte nicht vollständig geladen werden";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_POOR_LOAD )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Dokument konnte nicht vollst�ndig gespeichert werden : Dokument konnte nicht vollst�ndig gespeichert werden */
+        Text [ de ] = "Dokument konnte nicht vollständig gespeichert werden" ;
+        Text [ en-US ] = "Document could not be completely saved" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Foi impossível guardar o documento completamente";
+        Text[ ru ] = "Невозможно полностью сохранить документ";
+        Text[ el ] = "Δεν ήταν δυνατή η αποθήκευση ολόκληρου του εγγράφου";
+        Text[ nl ] = "Document kan niet volledig worden opgeslagen";
+        Text[ fr ] = "Le document n'a pas pu être enregistré dans son intégralité";
+        Text[ es ] = "No se pudo guardar completamente el documento";
+        Text[ fi ] = "Asiakirjaa ei voitu tallentaa kokonaan";
+        Text[ ca ] = "El document no es pot desar completament";
+        Text[ it ] = "Non è stato possibile salvare il file completamente";
+        Text[ sk ] = "Nie je možné uložiť celý dokument";
+        Text[ da ] = "Det var ikke muligt at gemme dokumentet helt";
+        Text[ sv ] = "Det gick inte att spara dokumentet fullständigt";
+        Text[ pl ] = "Nie można zapisać dokumentu w całości";
+        Text[ pt-BR ] = "Não foi possível salvar totalmente o documento";
+        Text[ th ] = "ไม่สามารถบันทึกเอกสารได้อย่างสมบูรณ์";
+        Text[ ja ] = "ドキュメントを完全に保存できませんでした";
+        Text[ ko ] = "문서를 완전히 저장하지는 못했습니다.";
+        Text[ zh-CN ] = "无法完整地存盘文档";
+        Text[ zh-TW ] = "無法完整儲存文件";
+        Text[ tr ] = "Belge tümüyle kaydedilemedi";
+        Text[ hi-IN ] = "लेखपत्र को संपूर्ण संचित नहीं कर सकते है";
+        Text[ ar ] = "تعذر حفظ المستند بشكل تام";
+        Text[ he ] = "Dokument konnte nicht vollständig gespeichert werden";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_HTML_NO_MACROS)
+    {
+        Text [ de ] = "Das HTML-Dokument enthält %PRODUCTNAME Basic Makros.\nSie wurden mit den aktuellen Exporteinstellungen nicht gespeichert." ;
+        Text [ en-US ] = "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved with the current export settings.";
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "O documento HTML contém macros %PRODUCTNAME Basic.\nEstas não foram guardadas com as definições de exportação activas.";
+        Text[ ru ] = "Эта веб-страница содержит макросы %PRODUCTNAME Basic.\nОни не были сохранены из-за настроек указанных для экспорта документов.";
+        Text[ el ] = "Το έγγραφο HTML περιέχει μακροεντολές του %PRODUCTNAME Basic.\nΑυτές δεν αποθηκεύτηκαν με τις τρέχουσες ρυθμίσεις εισαγωγής.";
+        Text[ nl ] = "Dit HTML-document bevat %PRODUCTNAME Basic-macro's.\nDeze kunnen niet worden opgeslagen met de huidige exportinstellingen.";
+        Text[ fr ] = "Le document HTML contient des macros %PRODUCTNAME Basic.\nCelles-ci n'ont pas été enregistrées avec les paramètres d'export actifs.";
+        Text[ es ] = "El documento HTML contiene macros %PRODUCTNAME Basic.\nNo se guardaron con la configuración actual de exportación.";
+        Text[ fi ] = "Tämä HTML-asiakirja sisältää %PRODUCTNAME Basic -makroja.\nMakroja ei tallennettu nykyisiin vientiasetuksiin.";
+        Text[ ca ] = "El document HTML conté macros %PRODUCTNAME Basic.\nNo s'han desat amb la configuració actual d'exportació.";
+        Text[ it ] = "Il documento HTML contiene macro %PRODUCTNAME Basic che\nnon sono state salvate con le impostazioni attuali di esportazione.";
+        Text[ sk ] = "Tento HTML dokument obsahuje makrá  %PRODUCTNAME Basic.\nPodľa aktuálneho nastavenia neboli uložené.";
+        Text[ da ] = "HTML-dokumentet indeholder %PRODUCTNAME Basic-makroer.\nDe er ikke gemt med de aktuelle eksportindstillinger.";
+        Text[ sv ] = "HTML-dokumentet innehåller %PRODUCTNAME Basic-makron.\nDe sparades inte med de aktuella exportinställningarna.";
+        Text[ pl ] = "Ten dokument HTML zawiera makra %PRODUCTNAME Basic.\nPrzy bieżących ustawieniach eksportu makra te nie zostały zapisane.";
+        Text[ pt-BR ] = "Este documento HTML contém macros %PRODUCTNAME Basic.\nElas não foram salvas com as definições atuais de exportação";
+        Text[ th ] = "เอกสาร HTML นี้มีมาโคร Basic %PRODUCTNAME  \nเหล่านี้ไม่สามารถถูกบันทึกด้วยการกำหนดการส่งออกปัจจุบัน";
+        Text[ ja ] = "この HTML 形式ドキュメントに %PRODUCTNAME Basic マクロが含まれています。\nそれらは現在のエクスポート設定で保存されていません。";
+        Text[ ko ] = "이 HTML 문서는 %PRODUCTNAME Basic 매크로를 포함하고 있습니다.\n이것은 현재의 내보내기 설정으로 저장되지는 않았습니다.";
+        Text[ zh-CN ] = "这个HTML文档含有%PRODUCTNAME Basic宏。\n无法属于当前的输出设定来存盘这些宏。";
+        Text[ zh-TW ] = "HTML 文件含有 %PRODUCTNAME Basic 巨集。\n無法採用目前的匯出設定來儲存文件。";
+        Text[ tr ] = "Bu HTML dokümanı %PRODUCTNAME temel makrolar içerir. \nMevcut ihraç ayarları ile saklanmadı.";
+        Text[ hi-IN ] = "इस HTML लेखपत्र में %PRODUCTNAME Basic मॉक्रोस है ।\nउनको वर्तमान निर्यात निर्धारण द्वारा संचित नहीं किया है ।";
+        Text[ ar ] = "يحتوي المستند HTML على وحدات ماكرو %PRODUCTNAME Basic.\nلم يتم حفظها بإعدادات التصدير الحالية.";
+        Text[ he ] = "Das HTML-Dokument enthält %PRODUCTNAME Basic Makros.\nSie wurden mit den aktuellen Exporteinstellungen nicht gespeichert.";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_WRITE_ERROR_FILE )
+    {
+        Text [ de ] = "Fehler beim Schreiben des Teildokuments $(ARG1)" ;
+        Text [ en-US ] = "Error in writing sub-document $(ARG1)";
+        Text[ pt ] = "Erro ao escrever o sub-documento $(ARG1)";
+        Text[ ru ] = "Ошибка записи поддокумента $(ARG1)";
+        Text[ el ] = "Σφάλμα κατά την καταγραφφή του τμήματος του κειμένου $(ARG1)";
+        Text[ nl ] = "Fout bij schrijven van subdocument $(ARG1)";
+        Text[ fr ] = "Erreur d'écriture dans le sous-document $(ARG1)";
+        Text[ es ] = "Error de escritura en documento parcial $(ARG1)";
+        Text[ fi ] = "Aliasiakirjaan $(ARG1) kirjoitettaessa on ilmennyt virhe.";
+        Text[ ca ] = "S'ha produït un error en escriure el subdocument $(ARG1)";
+        Text[ it ] = "Errore di scrittura nel sottodocumento $(ARG1)";
+        Text[ sk ] = "Chyba pri zápise sub-dokumentu $(ARG1)";
+        Text[ da ] = "Fejl under skrivning af underdokumentet $(ARG1)";
+        Text[ sv ] = "Fel när deldokumentet $(ARG1) skulle skrivas";
+        Text[ pl ] = "Błąd zapisu dokumentu podrzędnego $(ARG1)";
+        Text[ pt-BR ] = "Ocorreu um erro ao gravar o sub-documento $(ARG1)";
+        Text[ th ] = "ข้อผิดพลาดในการเขียนเอกสารย่อย $(ARG1)";
+        Text[ ja ] = "部分ドキュメント $(ARG1) に書き込む時のエラー";
+        Text[ ko ] = "부분문서 $(ARG1) 쓰기에서 오류";
+        Text[ zh-CN ] = "在写入子文档$(ARG1)时发生错误";
+        Text[ zh-TW ] = "在寫入子文件$(ARG1)時發生錯誤";
+        Text[ tr ] = "Alt metin $(ARG1) dosyası içerisine yazılırken hata oluştu";
+        Text[ hi-IN ] = "अधीन-लेखपत्र $(ARG1) में लिखने के समय गलती";
+        Text[ ar ] = "Error in writing sub-document $(ARG1)";
+        Text[ he ] = "Fehler beim Schreiben des Teildokuments $(ARG1)";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_FORMAT_FILE_ROWCOL )
+    {
+        Text [ de ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
+        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ pt ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posição(ARG2)(linha,coluna)";
+        Text[ ru ] = "Ошибка формата файла в поддокументе $(ARG1) в позиции $(ARG2)(строка,позиция).";
+        Text[ el ] = "Εντοπίστηκε σφάλμα μορφοποίησης στο αρχείο στο τμήμα κειμένου $(ARG1) στη θέση $(ARG2)(γραμμή,στήλη)";
+        Text[ nl ] = "Indelingsfout in subdocument $(ARG1) op positie $(ARG2)(rij,kolom)";
+        Text[ fr ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
+        Text[ es ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posición $(ARG2)(fila,columna)";
+        Text[ fi ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe.";
+        Text[ ca ] = "S'ha descobert un error de format en el arxiu en el subdocument $(ARG1) fins al $(ARG2)(fila,col.)";
+        Text[ it ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
+        Text[ sk ] = "Chybný formát súboru v sub-dokumente $(ARG1) na pozícii $(ARG2)(riadok,stĺpec)";
+        Text[ da ] = "Der er konstateret formatfejl i underdokumentet $(ARG1) på position $(ARG2)(linje,kolonne) i filen";
+        Text[ sv ] = "Det har upptäckts ett formatfel i filen: deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
+        Text[ pl ] = "Wykryto błąd formatowania w pliku dokumentu podrzędnego $(ARG1) na pozycji $(ARG2) (wiersz, kolumna)";
+        Text[ pt-BR ] = "Foi descoberto um erro no formato do arquivo do sub-documento $(ARG1) em $(ARG2)(lin,col)";
+        Text[ th ] = "ค้นพบรูปแบบผิดพลาดในแฟ้มในเอกสารย่อย $(ARG1) ที่ $(ARG2)(แถว,คอลัมน์)";
+        Text[ ja ] = "ファイルの $(ARG2)(行、列) にある部分ドキュメント $(ARG1) に書式エラーが見つかりました。";
+        Text[ ko ] = "파일의 $(ARG2)(행,열) 위치에 있는 부분 문서 $(ARG1)의 서식 오류를 발견했습니다.";
+        Text[ zh-CN ] = "发现文件的子文档$(ARG1)内含错误，位置在 $(ARG2)(行,列)";
+        Text[ zh-TW ] = "發現檔案的子文件$(ARG1)內含錯誤，位置在 $(ARG2)(行,欄)";
+        Text[ tr ] = "Dosya format hatası $(ARG1)(satır, sütun) bulundu";
+        Text[ hi-IN ] = "फाइल में अधीन-लेखपत्र $(ARG1) में $(ARG2)(पंक्ति,स्तंभ) में रचना में गलती है";
+        Text[ ar ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ he ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_UNCONVERTABLE_CHARS )
+    {
+        Text [ de ] = "Die folgenden Zeichen konnten nicht im gewählten Zeichensatz dargestellt werden:\n$(ARG1)" ;
+        Text [ en-US ] = "The following characters could not be displayed in the selected character set:\n$(ARG1)";
+        Text[ pt ] = "Foi impossível representar os seguintes caracteres no conjunto seleccionado: $(ARG1)";
+        Text[ ru ] = "Невозможно показать следующие символы в выбранном наборе: $(ARG1)";
+        Text[ el ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        Text[ nl ] = "De volgende tekens kunnen niet in de gekozen tekenset worden weergegeven: $(ARG1)";
+        Text[ fr ] = "Impossible d'afficher les caractères suivants dans le jeu de caractères sélectionné : $(ARG1)";
+        Text[ es ] = "Los siguientes caracteres no se pudieron representar en el juego de caracteres seleccionado:\n$(ARG1)";
+        Text[ fi ] = "Seuraavia merkkejä ei voida näyttää valitussa merkistössä: $(ARG1)";
+        Text[ ca ] = "Aquests caràcters no es poden exportar amb la codificació de caràcters escollida: $(ARG1)";
+        Text[ it ] = "Impossibile rappresentare i caratteri seguenti con il set di caratteri selezionato:\n$(ARG1)";
+        Text[ sk ] = "V zvolenej znakovej sade nemožno zobraziť nasledujúce znaky:\n$(ARG1)";
+        Text[ da ] = "Følgende tegn kunne ikke vises i det valgte tegnsæt: ($Arg1)";
+        Text[ sv ] = "Följande tecken gick inte att visa i den valda teckenuppsättningen:\n$(ARG1)";
+        Text[ pl ] = "Następujących znaków nie udało się wyświetlić przy użyciu wybranego zestawu znaków: $(ARG1)";
+        Text[ pt-BR ] = "Não foi possível exibir os seguintes caracteres do conjunto de caracteres selecionado: $(ARG1)";
+        Text[ th ] = "ไม่สามารถแสดงผลตัวอักขระนี้ในชุดตัวอักขระที่เลือกได้: $(ARG1)";
+        Text[ ja ] = "以下の文字は選択された文字セットでは表示できませんでした:\n$(ARG1)";
+        Text[ ko ] = "아래의 문자는 선택한 문자 집합에서 표시할 수 없습니다:\n$(ARG1)";
+        Text[ zh-CN ] = "以下的字符无法采用这个选择的字符集显示：\n$(ARG1)";
+        Text[ zh-TW ] = "無法採用這個選取的字元集來顯示以下的字元：\n$(ARG1)";
+        Text[ tr ] = "Bu karakterler, seçilen karakter kodu $(ARG1) ile gösterilemez.";
+        Text[ hi-IN ] = "चुने हुए अक्षर समूह में निम्नलिखित अक्षरों को नहीं दिखा सकते है: $(ARG1)";
+        Text[ ar ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        Text[ he ] = "Die folgenden Zeichen konnten nicht im gewählten Zeichsatz dargestellt werden: $(ARG1)";
+    };
+};
+

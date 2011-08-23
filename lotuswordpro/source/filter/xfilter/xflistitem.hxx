@@ -61,25 +61,25 @@
  * Change History
  * 2005-02-17 create this file.
  ************************************************************************/
-#ifndef     _XFLISTITEM_HXX
-#define     _XFLISTITEM_HXX
+#ifndef		_XFLISTITEM_HXX
+#define		_XFLISTITEM_HXX
 
-#include    "xfcontent.hxx"
-#include    "xfcontentcontainer.hxx"
-#include    "xfparagraph.hxx"
+#include	"xfcontent.hxx"
+#include	"xfcontentcontainer.hxx"
+#include	"xfparagraph.hxx"
 
-class   XFListItem : public XFContentContainer
+class	XFListItem : public XFContentContainer
 {
 public:
     XFListItem();
 
 public:
-    void    SetIsHeader(sal_Bool isHeader=sal_True);
+    void	SetIsHeader(sal_Bool isHeader=sal_True);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    sal_Bool    m_bIsHeader;
+    sal_Bool	m_bIsHeader;
 };
 
 inline XFListItem::XFListItem()
@@ -94,7 +94,7 @@ inline void XFListItem::SetIsHeader(sal_Bool isHeader)
 
 inline void XFListItem::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     if( GetStyleName().getLength() > 0 )

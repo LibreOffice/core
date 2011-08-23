@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 #ifndef INCLUDED_WW8_DOCUMENT_IMPL_HXX
 #define INCLUDED_WW8_DOCUMENT_IMPL_HXX
-
+    
 #include <set>
 #include <WW8PieceTable.hxx>
 #include <WW8BinTable.hxx>
@@ -39,7 +39,7 @@
 #include <XNoteHelper.hxx>
 
 namespace writerfilter {
-namespace doctok
+namespace doctok 
 {
 
 class WW8DocumentImpl;
@@ -58,7 +58,7 @@ class Bookmark : public writerfilter::Reference<Properties>
 public:
     Bookmark(writerfilter::Reference<Properties>::Pointer_t pBKF,
              rtl::OUString & rName);
-
+    
     /**
        Resolve bookmark to handler.
 
@@ -88,7 +88,7 @@ class BookmarkHelper
 
     /// document to insert CpAndFcs to
     WW8DocumentImpl * mpDoc;
-
+    
     /**
        Return start CpAndFc for a bookmark.
 
@@ -116,11 +116,11 @@ class BookmarkHelper
        @param rCpAndFc    CpAndFc of the bookmark
      */
     sal_uInt32 getIndex(const CpAndFc & rCpAndFc);
-
+    
 public:
     typedef boost::shared_ptr<BookmarkHelper> Pointer_t;
 
-    BookmarkHelper(PLCF<WW8BKF>::Pointer_t pStartCps,
+    BookmarkHelper(PLCF<WW8BKF>::Pointer_t pStartCps, 
                    WW8StructBase::Pointer_t pEndCps,
                    WW8Sttbf::Pointer_t pNames,
                    WW8PieceTable::Pointer_t pPieceTable,
@@ -157,7 +157,7 @@ public:
        Return bookmark.
        @param rCpAndFc       CpAndFc of the bookmark
      */
-    writerfilter::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t 
     getBookmark(const CpAndFc & rCpAndFc);
 };
 
@@ -189,10 +189,10 @@ public:
 /**
    Helper for fields.
  */
-class FieldHelper
+class FieldHelper 
 {
 public:
-    typedef hash_map<CpAndFc, WW8FLD::Pointer_t,
+    typedef hash_map<CpAndFc, WW8FLD::Pointer_t, 
                      CpAndFcHash> Map_t;
 
 private:
@@ -212,7 +212,7 @@ public:
     WW8FLD::Pointer_t getWW8FLD(const CpAndFc & rCpAndFc);
 };
 
-/**
+/** 
     Helper for Breaks.
 */
 class BreakHelper
@@ -240,7 +240,7 @@ public:
 class WW8DocumentImpl : public WW8Document
 {
     /// true if the document is contained in another document
-    bool bSubDocument;
+    bool bSubDocument; 
 
     /// picture location
     sal_uInt32 mfcPicLoc;
@@ -252,13 +252,13 @@ class WW8DocumentImpl : public WW8Document
     WW8FLD::Pointer_t mpFLD;
 
     /// CpAndFcs in the document where properties change
-    CpAndFcs mCpAndFcs;
-
+    CpAndFcs mCpAndFcs; 
+ 
     /// CpAndFc pointing to the start of the document
-    CpAndFc mCpAndFcStart;
+    CpAndFc mCpAndFcStart; 
 
     /// CpAndFc pointing to the end of the document
-    CpAndFc mCpAndFcEnd;
+    CpAndFc mCpAndFcEnd; 
 
     /// pointer to the cache of FKPs containing character properties
     WW8FKPCache::Pointer_t mpCHPFKPCache;
@@ -300,7 +300,7 @@ class WW8DocumentImpl : public WW8Document
 
     /// pointer to the file information block
     WW8Fib::Pointer_t mpFib;
-
+    
     /// pointer to the file information block for post 2000 documents
     WW8FibRgFcLcb2000::Pointer_t mpFibRgFcLcb2000;
 
@@ -355,13 +355,13 @@ class WW8DocumentImpl : public WW8Document
 
     /// Textbox stories
     PLCF<WW8FTXBXS>::Pointer_t mpTextBoxStories;
-
+    
     bool mbInSection;
     bool mbInParagraphGroup;
     bool mbInCharacterGroup;
 
     bool isSpecial(sal_uInt32 nChar);
-
+    
     WW8Stream::Pointer_t getSubStream(const ::rtl::OUString & sId) const;
 
     /**
@@ -381,10 +381,10 @@ class WW8DocumentImpl : public WW8Document
     void endSectionGroup(Stream & rStream);
     void text(Stream & rStream, const sal_uInt8 * data, size_t len);
     void utext(Stream & rStream, const sal_uInt8 * data, size_t len);
-
+    
 public:
     WW8DocumentImpl(WW8Stream::Pointer_t rpStream);
-    WW8DocumentImpl(const WW8DocumentImpl & rSrc,
+    WW8DocumentImpl(const WW8DocumentImpl & rSrc, 
                     const CpAndFc & rStart, const CpAndFc & rEnd);
     virtual ~WW8DocumentImpl();
 
@@ -461,7 +461,7 @@ public:
        Returns character position where annatations end.
     */
     CpAndFc getAnnotationEndCp() const;
-
+    
     /**
        Returns character position where endnotes end.
     */
@@ -481,7 +481,7 @@ public:
        Insert CpAndFc to set of CpAndFcs.
 
        @param rCpAndFc    CpAndFc to insert
-    */
+    */       
     void insertCpAndFc(const CpAndFc & rCpAndFc);
 
     /**
@@ -512,7 +512,7 @@ public:
 
        @param rCpAndFc    CpAndFc to look at
      */
-    writerfilter::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t 
     getProperties(const CpAndFc & rCpAndFc);
 
     /**
@@ -534,7 +534,7 @@ public:
      Return reference to list plcs.
     */
     writerfilter::Reference<Table>::Pointer_t getListTplcs() const;
-
+    
     /**
        Return reference to list table.
      */
@@ -571,7 +571,7 @@ public:
        @param nPos   index in the list of headers and footers
      */
     CpAndFc getHeaderCpAndFc(sal_uInt32 nPos);
-
+    
     /**
        Return subdocument for header/footer.
 
@@ -609,7 +609,7 @@ public:
 
        @param nPos       index of the endnote
      */
-    writerfilter::Reference<Stream>::Pointer_t getEndnote(sal_uInt32 nPos);
+    writerfilter::Reference<Stream>::Pointer_t getEndnote(sal_uInt32 nPos);    
 
     /**
        Return subdocument for an endnote.
@@ -644,12 +644,12 @@ public:
 
        @param rCpAndFc    CpAndFc where bookmark begins or ends
      */
-    writerfilter::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t 
     getBookmark(const CpAndFc & rCpAndFc) const;
 
     /**
        Return shape.
-
+       
        @param rCpAndFc    CpAndFc of the shape
      */
     writerfilter::Reference<Properties>::Pointer_t
@@ -673,11 +673,11 @@ public:
     */
     writerfilter::Reference<Properties>::Pointer_t
     getBreak(const CpAndFc & rCpAndFc) const;
-
+    
 
     /**
        Return field.
-
+       
        @param rCpAndFc    CpAndFc of the field
      */
     writerfilter::Reference<Properties>::Pointer_t
@@ -685,7 +685,7 @@ public:
 
     /**
        Return document properties.
-
+       
     */
     writerfilter::Reference<Properties>::Pointer_t
     getDocumentProperties() const;
@@ -804,21 +804,21 @@ public:
      */
     WW8DocumentIterator & operator--();
 
-    virtual writerfilter::Reference<Properties>::Pointer_t getProperties()
+    virtual writerfilter::Reference<Properties>::Pointer_t getProperties() 
         const;
     //void setAttributes(const IAttributeSet & aAttributeSet);
 
     virtual writerfilter::Reference<Stream>::Pointer_t getSubDocument() const;
 
     /** Return if the text the iterator points to is complex.
-
+        
         @attention The definition of a complex run of text in Word is
         counter-intuitive: Complex runs use 8-bit encoding for characters,
         non-complex ones use 16 bits.
-    */
+    */    
     bool isComplex() const;
     virtual PropertyType getPropertyType() const;
-
+        
     virtual WW8Stream::Sequence getText();
     virtual bool equal(const WW8DocumentIterator & rIt) const;
 

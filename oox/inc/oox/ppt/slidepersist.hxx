@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,29 +121,29 @@ public:
     ::oox::drawingml::ShapeIdMap& getShapeMap() { return maShapeMap; }
 
 private:
-    rtl::OUString                                                           maPath;
-    rtl::OUString                                                           maLayoutPath;
+    rtl::OUString															maPath;
+    rtl::OUString															maLayoutPath;
     ::boost::shared_ptr< oox::vml::Drawing >                                mpDrawingPtr;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >    mxPage;
-    oox::drawingml::ThemePtr                                                mpThemePtr;         // the theme that is used
-    oox::drawingml::ClrSchemePtr                                            mpClrSchemePtr;     // the local color scheme (if any)
-    oox::drawingml::ClrMapPtr                                               mpClrMapPtr;        // color mapping (if any)
-    SlidePersistPtr                                                         mpMasterPagePtr;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >	mxPage;
+    oox::drawingml::ThemePtr												mpThemePtr;			// the theme that is used
+    oox::drawingml::ClrSchemePtr											mpClrSchemePtr;		// the local color scheme (if any)
+    oox::drawingml::ClrMapPtr												mpClrMapPtr;		// color mapping (if any)
+    SlidePersistPtr															mpMasterPagePtr;
 
-    oox::drawingml::ShapePtr                                                maShapesPtr;
-    oox::drawingml::FillPropertiesPtr                                       mpBackgroundPropertiesPtr;
-    ::std::list< boost::shared_ptr< TimeNode > >                            maTimeNodeList;
+    oox::drawingml::ShapePtr												maShapesPtr;
+    oox::drawingml::FillPropertiesPtr										mpBackgroundPropertiesPtr;
+    ::std::list< boost::shared_ptr< TimeNode > >							maTimeNodeList;
 
-    oox::ppt::HeaderFooter                                                  maHeaderFooter;
-    sal_Int32                                                               mnLayoutValueToken;
+    oox::ppt::HeaderFooter													maHeaderFooter;
+    sal_Int32																mnLayoutValueToken;
     sal_Bool                                                                mbMaster;
-    sal_Bool                                                                mbNotes;
+    sal_Bool																mbNotes;
 
-    oox::drawingml::TextListStylePtr                                        maDefaultTextStylePtr;
-    oox::drawingml::TextListStylePtr                                        maTitleTextStylePtr;
-    oox::drawingml::TextListStylePtr                                        maBodyTextStylePtr;
-    oox::drawingml::TextListStylePtr                                        maNotesTextStylePtr;
-    oox::drawingml::TextListStylePtr                                        maOtherTextStylePtr;
+    oox::drawingml::TextListStylePtr										maDefaultTextStylePtr;
+    oox::drawingml::TextListStylePtr										maTitleTextStylePtr;
+    oox::drawingml::TextListStylePtr										maBodyTextStylePtr;
+    oox::drawingml::TextListStylePtr										maNotesTextStylePtr;
+    oox::drawingml::TextListStylePtr										maOtherTextStylePtr;
 
     std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > > maAnimNodesMap;
     std::map< ::rtl::OUString, ::oox::drawingml::ShapePtr > maShapeMap;

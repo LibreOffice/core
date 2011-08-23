@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwpusrdicts.hxx"
@@ -69,8 +69,8 @@ LwpUserDictFiles::LwpUserDictFiles(LwpObjectStream *pStrm)
     Read(pStrm);
 }
 /**
- * @descr       Read UserDictFiles in VO_DOCUMENT
- *          words are skipped, not parsed yet
+ * @descr		Read UserDictFiles in VO_DOCUMENT
+ *			words are skipped, not parsed yet
  **/
 void LwpUserDictFiles::Read(LwpObjectStream *pStrm)
 {

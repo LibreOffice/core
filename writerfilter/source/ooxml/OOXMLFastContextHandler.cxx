@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ static uno::Sequence< sal_Int8 >  CreateUnoTunnelId()
     static osl::Mutex aCreateMutex;
     osl::Guard<osl::Mutex> aGuard( aCreateMutex );
     uno::Sequence< sal_Int8 > aSeq( 16 );
-    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0,	sal_True );
     return aSeq;
 }
 
@@ -961,9 +961,9 @@ void OOXMLFastContextHandler::sendCellProperties()
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("sendCellProperties");
 #endif
-
+    
     mpParserState->resolveCellProperties(*mpStream);
-
+    
 #ifdef DEBUG_ELEMENT
     debug_logger->endElement("sendCellProperties");
 #endif
@@ -974,9 +974,9 @@ void OOXMLFastContextHandler::sendRowProperties()
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("sendRowProperties");
 #endif
-
+    
     mpParserState->resolveRowProperties(*mpStream);
-
+    
 #ifdef DEBUG_ELEMENT
     debug_logger->endElement("sendRowProperties");
 #endif
@@ -987,9 +987,9 @@ void OOXMLFastContextHandler::sendTableProperties()
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("sendTableProperties");
 #endif
-
+    
     mpParserState->resolveTableProperties(*mpStream);
-
+    
 #ifdef DEBUG_ELEMENT
     debug_logger->endElement("sendTableProperties");
 #endif
@@ -1000,7 +1000,7 @@ void OOXMLFastContextHandler::clearTableProps()
 #ifdef DEBUG_ELEMENT
     debug_logger->element("clearTableProps");
 #endif
-
+    
     mpParserState->setTableProperties(OOXMLPropertySet::Pointer_t
                                      (new OOXMLPropertySetImpl()));
 }
@@ -1169,7 +1169,7 @@ void OOXMLFastContextHandler::sendPropertyToParent()
                 pProp(new OOXMLPropertyImpl(mId, getValue(),
                                             OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
-
+            
 #ifdef DEBUG_ELEMENT
             debug_logger->addTag(toPropertiesTag(pProps));
 #endif
@@ -1189,33 +1189,33 @@ void OOXMLFastContextHandler::sendPropertiesToParent()
     if (mpParent != NULL)
     {
         OOXMLPropertySet::Pointer_t pParentProps(mpParent->getPropertySet());
-
+        
         if (pParentProps.get() != NULL)
         {
             OOXMLPropertySet::Pointer_t pProps(getPropertySet());
-
+            
 #ifdef DEBUG_ELEMENT
             debug_logger->startElement("me");
             debug_logger->addTag(toPropertiesTag(pProps));
             debug_logger->endElement("me");
 #endif
-
+            
             if (pProps.get() != NULL)
-            {
+            {            
                 OOXMLValue::Pointer_t pValue
                 (new OOXMLPropertySetValue(getPropertySet()));
-
+                
                 OOXMLProperty::Pointer_t pProp
                 (new OOXMLPropertyImpl(getId(), pValue, OOXMLPropertyImpl::SPRM));
-
+                
 #ifdef DEBUG_ELEMENT
                 debug_logger->startElement("propertyForSet");
                 debug_logger->chars(pProp->toString());
                 debug_logger->endElement("propertyForSet");
 #endif
-
+            
                 pParentProps->add(pProp);
-
+                
 #ifdef DEBUG_ELEMENT
                 debug_logger->startElement("parent");
                 debug_logger->addTag(toPropertiesTag(pParentProps));
@@ -1558,7 +1558,7 @@ void OOXMLFastContextHandlerValue::lcl_endFastElement
 throw (uno::RuntimeException, xml::sax::SAXException)
 {
     sendPropertyToParent();
-
+    
     endAction(Element);
 }
 
@@ -1580,7 +1580,7 @@ void OOXMLFastContextHandlerValue::setDefaultIntegerValue()
 #ifdef DEBUG_ELEMENT
     debug_logger->element("setDefaultIntegerValue");
 #endif
-
+    
     if (mpValue.get() == NULL)
     {
         OOXMLValue::Pointer_t pValue(new OOXMLIntegerValue(0));
@@ -1593,7 +1593,7 @@ void OOXMLFastContextHandlerValue::setDefaultHexValue()
 #ifdef DEBUG_ELEMENT
     debug_logger->element("setDefaultHexValue");
 #endif
-
+    
     if (mpValue.get() == NULL)
     {
         OOXMLValue::Pointer_t pValue(new OOXMLHexValue(0));
@@ -1606,7 +1606,7 @@ void OOXMLFastContextHandlerValue::setDefaultStringValue()
 #ifdef DEBUG_ELEMENT
     debug_logger->element("setDefaultStringValue");
 #endif
-
+    
     if (mpValue.get() == NULL)
     {
         OOXMLValue::Pointer_t pValue(new OOXMLStringValue(::rtl::OUString()));
@@ -1783,7 +1783,7 @@ void OOXMLFastContextHandlerTextTableCell::endCell()
                              (OOXMLPropertySet::Pointer_t(pProps->clone())));
         debug_logger->endElement("endcell");
 #endif
-        mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+        mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));        
     }
 }
 
@@ -1875,7 +1875,7 @@ void OOXMLFastContextHandlerTextTable::lcl_startFastElement
 {
     mpParserState->startTable();
     mnTableDepth++;
-
+        
     boost::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySetImpl );
     {
         OOXMLValue::Pointer_t pVal
@@ -1905,7 +1905,7 @@ void OOXMLFastContextHandlerTextTable::lcl_endFastElement
 
 OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
 (OOXMLFastContextHandler * pContext)
-: OOXMLFastContextHandlerProperties(pContext), m_bShapeSent( false ),
+: OOXMLFastContextHandlerProperties(pContext), m_bShapeSent( false ), 
     m_bShapeStarted(false)
 {
     uno::Reference<uno::XComponentContext> xContext(getComponentContext());
@@ -1983,7 +1983,7 @@ void SAL_CALL OOXMLFastContextHandlerShape::startUnknownElement
 void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
 {
     OOXMLFastContextHandler::setToken(nToken);
-
+    
     if (mrShapeContext.is())
         mrShapeContext->setStartToken(nToken);
 }
@@ -1999,9 +1999,9 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
                 pValue(new OOXMLShapeValue(xShape));
             newProperty(NS_ooxml::LN_shape, pValue);
             m_bShapeSent = true;
-
+    
             bool bIsPicture = Element == ( NS_picture | OOXML_pic );
-
+      
             // Notify the dmapper that the shape is ready to use
             if ( !bIsPicture )
             {
@@ -2023,7 +2023,7 @@ void OOXMLFastContextHandlerShape::lcl_endFastElement
     }
 
     OOXMLFastContextHandlerProperties::lcl_endFastElement(Element);
-
+    
     // Ending the shape should be the last thing to do
     bool bIsPicture = Element == ( NS_picture | OOXML_pic );
     if ( !bIsPicture && m_bShapeStarted)
@@ -2076,7 +2076,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                 xContextHandler.set(this);
             break;
     }
-
+   
 
     return xContextHandler;
 }
@@ -2250,7 +2250,7 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     }
     else
         xResult.set(this);
-
+    
     if ( bInTokens )
     {
         OOXMLFastContextHandlerShape* pShapeCtx = (OOXMLFastContextHandlerShape*)mpParent;

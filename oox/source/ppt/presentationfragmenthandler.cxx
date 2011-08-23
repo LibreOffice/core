@@ -295,7 +295,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
 
     }
 
-    // todo error handling;
+    // todo	error handling;
     if ( rxStatusIndicator.is() )
         rxStatusIndicator->end();
 }
@@ -347,7 +347,7 @@ bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
     {
         const OUString sLayout = CREATE_OUSTRING( "Layout" );
         uno::Reference< beans::XPropertySet > xSet( xSlide, uno::UNO_QUERY_THROW );
-        xSet->setPropertyValue( sLayout, Any( pMasterPersistPtr->getLayoutFromValueToken() ) );
+        xSet->setPropertyValue(	sLayout, Any( pMasterPersistPtr->getLayoutFromValueToken() ) );
     }
     while( xSlide->getCount() )
     {

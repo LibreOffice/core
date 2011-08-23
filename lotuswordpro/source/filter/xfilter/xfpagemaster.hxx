@@ -62,13 +62,13 @@
  * Change History
  * 2005-01-17 create this file.
  ************************************************************************/
-#ifndef     _XFPAGEMASTER_HXX
-#define     _XFPAGEMASTER_HXX
+#ifndef		_XFPAGEMASTER_HXX
+#define		_XFPAGEMASTER_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    "xfcolor.hxx"
-#include    "xfmargins.hxx"
+#include	"xfglobal.hxx"
+#include	"xfstyle.hxx"
+#include	"xfcolor.hxx"
+#include	"xfmargins.hxx"
 
 class XFBorders;
 class XFShadow;
@@ -85,33 +85,33 @@ public:
     virtual ~XFPageMaster();
 
 public:
-    void    SetPageWidth(double width);
+    void	SetPageWidth(double width);
 
-    void    SetPageHeight(double height);
+    void	SetPageHeight(double height);
 
-    void    SetMargins(double left=-1, double right=-1,double top=-1, double bottom=-1);
+    void	SetMargins(double left=-1, double right=-1,double top=-1, double bottom=-1);
 
-    void    SetPageUsage(enumXFPageUsage usage);
+    void	SetPageUsage(enumXFPageUsage usage);
 
-    void    SetPrintOrient(sal_Bool bUseWidth=sal_True);
+    void	SetPrintOrient(sal_Bool bUseWidth=sal_True);
 
-    void    SetBorders(XFBorders *pBorders);
+    void	SetBorders(XFBorders *pBorders);
 
-    void    SetShadow(XFShadow *pShadow);
+    void	SetShadow(XFShadow *pShadow);
 
-    void    SetBackColor(XFColor color);
+    void	SetBackColor(XFColor color);
 
-    void    SetBackImage(XFBGImage *image);
+    void	SetBackImage(XFBGImage *image);
 
-    void    SetColumns(XFColumns *pColumns);
+    void	SetColumns(XFColumns *pColumns);
 
-    void    SetHeaderStyle(XFHeaderStyle *pHeaderStyle);
+    void	SetHeaderStyle(XFHeaderStyle *pHeaderStyle);
 
-    void    SetFooterStyle(XFFooterStyle *pFooterStyle);
+    void	SetFooterStyle(XFFooterStyle *pFooterStyle);
 
-    void    SetTextDir(enumXFTextDir dir);
+    void	SetTextDir(enumXFTextDir dir);
 
-    void    SetFootNoteSeparator(enumXFAlignType align = enumXFAlignStart,
+    void	SetFootNoteSeparator(enumXFAlignType align = enumXFAlignStart,
                                 double width = 0.05,
                                 sal_Int32 lengthPercent = 25,
                                 double spaceAbove = 0.1,
@@ -119,49 +119,49 @@ public:
                                 XFColor color=XFColor(0,0,0)
                                 );
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle	GetStyleFamily();
 
-    virtual void    ToXml(IXFStream *pStream);
+    virtual void	ToXml(IXFStream *pStream);
 
 private:
-    double  m_fPageWidth;
-    double  m_fPageHeight;
+    double	m_fPageWidth;
+    double	m_fPageHeight;
 
-    XFMargins   m_aMargin;
+    XFMargins	m_aMargin;
 
     enumXFPageUsage m_eUsage;
-    enumXFTextDir   m_eTextDir;
-    sal_Bool    m_bPrintOrient;
+    enumXFTextDir	m_eTextDir;
+    sal_Bool	m_bPrintOrient;
 
-    XFBorders   *m_pBorders;
-    XFShadow    *m_pShadow;
-    XFColor     m_aBackColor;
-    XFColumns   *m_pColumns;
-    XFBGImage   *m_pBGImage;
+    XFBorders	*m_pBorders;
+    XFShadow	*m_pShadow;
+    XFColor		m_aBackColor;
+    XFColumns	*m_pColumns;
+    XFBGImage	*m_pBGImage;
 
-    XFHeaderStyle   *m_pHeaderStyle;
-    XFFooterStyle   *m_pFooterStyle;
+    XFHeaderStyle	*m_pHeaderStyle;
+    XFFooterStyle	*m_pFooterStyle;
     //seperator:
-    enumXFAlignType m_eSepAlign;
-    double  m_fSepWidth;
-    XFColor m_aSepColor;
-    double  m_fSepSpaceAbove;
-    double  m_fSepSpaceBelow;
-    sal_Int32   m_nSepLengthPercent;
+    enumXFAlignType	m_eSepAlign;
+    double	m_fSepWidth;
+    XFColor	m_aSepColor;
+    double	m_fSepSpaceAbove;
+    double	m_fSepSpaceBelow;
+    sal_Int32	m_nSepLengthPercent;
 
 };
 
-inline void XFPageMaster::SetPageUsage(enumXFPageUsage usage)
+inline void	XFPageMaster::SetPageUsage(enumXFPageUsage usage)
 {
     this->m_eUsage = usage;
 }
 
-inline void XFPageMaster::SetPrintOrient(sal_Bool bUseWidth)
+inline void	XFPageMaster::SetPrintOrient(sal_Bool bUseWidth)
 {
     m_bPrintOrient = bUseWidth;
 }
 
-inline void XFPageMaster::SetTextDir(enumXFTextDir dir)
+inline void	XFPageMaster::SetTextDir(enumXFTextDir dir)
 {
     m_eTextDir = dir;
 }

@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 #ifndef _LWPBULLETSTYLEMGR_HXX
 #define _LWPBULLETSTYLEMGR_HXX
@@ -87,8 +87,8 @@ public:
     virtual ~LwpBulletStyleMgr();
     rtl::OUString RegisterBulletStyle(LwpPara* pPara, LwpBulletOverride* pBullOver,
         LwpIndentOverride* pIndent);
-//  rtl::OUString RegisterBulletStyle(const rtl::OUString& rContent, sal_uInt32 nFontID, LwpIndentOverride* pIndent);
-//  rtl::OUString AddStyleToList(LwpSilverBullet* pSilverBullet, sal_uInt16 nLevel);
+//	rtl::OUString RegisterBulletStyle(const rtl::OUString& rContent, sal_uInt32 nFontID, LwpIndentOverride* pIndent);
+//	rtl::OUString AddStyleToList(LwpSilverBullet* pSilverBullet, sal_uInt16 nLevel);
     inline void SetFoundry(LwpFoundry* pFoundry);
     inline void SetContinueFlag(sal_Bool bFlag);
     void OutputBulletListHeader(IXFStream* pOutputStream, sal_Bool bIsOrdered,
@@ -106,21 +106,21 @@ public:
     inline LwpNumberingOverride* GetCurrentNumOver();
 
 private:
-//  void CreateNewListStyle(XFListStyle*& pListStyle, XFStyleManager* pXFStyleMgr);
+//	void CreateNewListStyle(XFListStyle*& pListStyle, XFStyleManager* pXFStyleMgr);
     rtl::OUString GetDivisionName();
     rtl::OUString GetSectionName(LwpPara* pPara);
 
 private:
-//  std::vector <XFListStyle*> m_aBulletStyleList;
+//	std::vector <XFListStyle*> m_aBulletStyleList;
     typedef std::pair<LwpBulletOverride, LwpObjectID> OverridePair;
     std::vector <rtl::OUString> m_vStyleNameList;
     std::vector <OverridePair> m_vIDsPairList;
     rtl::OUString m_aCurrentStyleName;
     LwpFoundry* m_pFoundry;
     XFList* m_pBulletList;
-//  UChar32 m_nCurrentChar;
-//  rtl::OUString m_strCurrentFontName;
-//  rtl::OUString m_strCurrentNumberingName;
+//	UChar32 m_nCurrentChar;
+//	rtl::OUString m_strCurrentFontName;
+//	rtl::OUString m_strCurrentNumberingName;
     sal_Bool m_bContinue;
     sal_Bool m_bIsBulletSkipped;
     LwpObjectID m_aCurrentNumberingID;

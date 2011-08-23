@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPLINENUMBEROPTIONS_HXX
@@ -70,7 +70,7 @@
 #include "xfilter/xflinenumberconfig.hxx"
 #include "xfilter/xfstylemanager.hxx"
 /**
- * @brief   line number options
+ * @brief	line number options
 */
 class LwpLineNumberOptions
 {
@@ -90,8 +90,8 @@ public:
     };
     enum
     {
-        LN_RESETEACHPAGE    = 0x01,
-        LN_COUNTBLANKLINES  = 0x02
+        LN_RESETEACHPAGE	= 0x01,
+        LN_COUNTBLANKLINES	= 0x02
     };
     void Read(LwpObjectStream *pStrm);
     void RegisterStyle();

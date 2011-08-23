@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ extern "C++" {
 
 struct yy_buffer_state;
 typedef int yy_state_type;
-
+  
 }
 #include <rtftok/RTFScanner.hxx>
 #endif
@@ -77,7 +77,7 @@ public:
 
 protected:
 
-//  int LexerInput( char* buf, int max_size );
+//	int LexerInput( char* buf, int max_size );
     virtual void LexerOutput( const char* buf, int size );
     virtual void LexerError( const char* msg );
 
@@ -100,8 +100,8 @@ protected:
     yy_state_type yy_try_NUL_trans( yy_state_type current_state );
     int yy_get_next_buffer();
 
-    class writerfilter::rtftok::RTFInputSource* yyin;   // input source for default LexerInput
-    ostream* yyout; // output sink for default LexerOutput
+    class writerfilter::rtftok::RTFInputSource* yyin;	// input source for default LexerInput
+    ostream* yyout;	// output sink for default LexerOutput
 
     struct yy_buffer_state* yy_current_buffer;
 
@@ -114,8 +114,8 @@ protected:
     // Points to current character in buffer.
     char* yy_c_buf_p;
 
-    int yy_init;        // whether we need to initialize
-    int yy_start;       // start state number
+    int yy_init;		// whether we need to initialize
+    int yy_start;		// start state number
 
     // Flag which is used to allow yywrap()'s to do buffer switches
     // instead of setting up a fresh yyin.  A bit of a hack ...

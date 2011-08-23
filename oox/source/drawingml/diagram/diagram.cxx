@@ -187,7 +187,7 @@ void Diagram::build(  )
         OSL_ENSURE( *aCnxIter, "NULL connection found" );
         if( (*aCnxIter)->mnType != XML_parOf )
         {
-//          OSL_TRACE( "ignoring relation %s", OUSTRING_TO_CSTR( (*aCnxIter)->msModelId ) );
+//			OSL_TRACE( "ignoring relation %s", OUSTRING_TO_CSTR( (*aCnxIter)->msModelId ) );
             continue;
         }
         dgm::PointPtr pDest;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,25 +37,25 @@
 #include <map>
 
 namespace writerfilter {
-namespace doctok
+namespace doctok 
 {
 
 class WW8PropertyImpl : public WW8Property, public WW8StructBase
 {
-    sal_uInt8 get_ispmd() const
+    sal_uInt8 get_ispmd() const 
     { return sal::static_int_cast<sal_uInt8>(getId() & 0xff); }
     bool get_fSpec() const { return (getId() & 0x100) != 0; }
-    sal_uInt8 get_sgc() const
+    sal_uInt8 get_sgc() const 
     { return sal::static_int_cast<sal_uInt8>((getId() >> 10) & 0x7); }
-    sal_uInt8 get_spra() const
+    sal_uInt8 get_spra() const 
     { return sal::static_int_cast<sal_uInt8>((getId() >> 13) & 0x7); }
 
 public:
     WW8PropertyImpl(WW8Stream & rStream, sal_uInt32 nOffset, sal_uInt32 nCount);
-    WW8PropertyImpl(const WW8StructBase & rBase, sal_uInt32 nOffset,
+    WW8PropertyImpl(const WW8StructBase & rBase, sal_uInt32 nOffset, 
                     sal_uInt32 nCount);
 
-    WW8PropertyImpl(WW8StructBase * pBase, sal_uInt32 nOffset,
+    WW8PropertyImpl(WW8StructBase * pBase, sal_uInt32 nOffset, 
                     sal_uInt32 nCount);
 
     virtual ~WW8PropertyImpl();
@@ -78,7 +78,7 @@ class WW8PropertySetImpl : public WW8PropertySet, public WW8StructBase,
 
 public:
     typedef boost::shared_ptr<WW8PropertySet> Pointer_t;
-
+    
     WW8PropertySetImpl(WW8Stream & rStream, sal_uInt32 nOffset,
                        sal_uInt32 nCount, bool bPap = false);
 
@@ -120,7 +120,7 @@ class WW8PropertySetIteratorImpl : public WW8PropertySetIterator
     sal_uInt32 mnOffset;
 
 public:
-    WW8PropertySetIteratorImpl(WW8PropertySetImpl * pAttrSet,
+    WW8PropertySetIteratorImpl(WW8PropertySetImpl * pAttrSet, 
                                sal_uInt32 nOffset)
     : mpAttrSet(pAttrSet), mnOffset(nOffset)
     {

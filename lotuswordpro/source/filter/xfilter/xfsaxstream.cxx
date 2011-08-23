@@ -61,8 +61,8 @@
  * Change History
  * 2005-12-23 create this file.
  ************************************************************************/
-#include    "xfsaxstream.hxx"
-#include    "xfsaxattrlist.hxx"
+#include	"xfsaxstream.hxx"
+#include	"xfsaxattrlist.hxx"
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -96,23 +96,23 @@ XFSaxStream::~XFSaxStream()
         delete m_pAttrList;
 }
 
-void        XFSaxStream::StartDocument()
+void		XFSaxStream::StartDocument()
 {
     m_aHandler->startDocument();
 }
 
-void        XFSaxStream::EndDocument()
+void		XFSaxStream::EndDocument()
 {
     m_aHandler->endDocument();
 }
 
-void        XFSaxStream::StartElement(const rtl::OUString& oustr)
+void		XFSaxStream::StartElement(const rtl::OUString& oustr)
 {
     m_aHandler->startElement( oustr, m_pAttrList->GetAttributeList() );
     m_pAttrList->Clear();
 }
 
-void        XFSaxStream::EndElement(const rtl::OUString& oustr)
+void		XFSaxStream::EndElement(const rtl::OUString& oustr)
 {
     m_aHandler->endElement(oustr);
 
@@ -120,12 +120,12 @@ void        XFSaxStream::EndElement(const rtl::OUString& oustr)
         m_pAttrList->Clear();
 }
 
-void        XFSaxStream::Characters(const rtl::OUString& oustr)
+void		XFSaxStream::Characters(const rtl::OUString& oustr)
 {
     m_aHandler->characters(oustr);
 }
 
-IXFAttrList*    XFSaxStream::GetAttrList()
+IXFAttrList*	XFSaxStream::GetAttrList()
 {
     return m_pAttrList;
 }

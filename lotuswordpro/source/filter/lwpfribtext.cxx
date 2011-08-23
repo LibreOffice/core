@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 #include "lwpglobalmgr.hxx"
 #include "lwpfribtext.hxx"
@@ -171,7 +171,7 @@ void LwpFribDocVar::RegisterStyle(LwpFoundry* pFoundry)
     case DATECREATED:
     case DATELASTREVISION:
     {
-//      m_TimeStyle = LwpTools::RegisterDefaultTimeStyle();
+//		m_TimeStyle = LwpTools::RegisterDefaultTimeStyle();
         RegisterDefaultTimeStyle();
     }
         break;
@@ -276,7 +276,7 @@ void LwpFribDocVar::XFConvert(XFContentContainer* pXFPara)
         break;
     case DOCSIZE:
     {
-/*      pContent = new XFAnnotation;
+/*		pContent = new XFAnnotation;
         XFTextContent* pSpan = new XFTextContent();
         pSpan->SetText(A2OUSTR("Document Size is Here"));
         XFParagraph* pPara = new XFParagraph;
@@ -453,7 +453,7 @@ void LwpFribPageNumber::XFConvert(XFContentContainer* pXFPara)
     if (m_nNumStyle == 0x0)
         return;
     XFPageNumber* pNum = new XFPageNumber;
-//  pNum->SetSelect(A2OUSTR("current"));
+//	pNum->SetSelect(A2OUSTR("current"));
     switch(m_nNumStyle)
     {
     case 0x01:

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,31 +36,31 @@ import org.openoffice.xmerge.util.EndianConverter;
 
 public abstract class CellValue implements BIFFRecord {
 
-    protected byte[] rw = new byte[2];
+    protected byte[] rw	= new byte[2];
     protected byte   col;
     protected byte[] ixfe = new byte[2];
-
+    
        /**
-     * Get the row number of this cell
+     * Get the row number of this cell 
      *
-     * @return the row number of this cell
+     * @return the row number of this cell 
      */
     public int getRow() {
         return EndianConverter.readShort(rw) + 1;
     }
 
     /**
-     * Set the row number of this cell
+     * Set the row number of this cell 
      *
-     * @param row sets the row number for this cell
+     * @param row sets the row number for this cell 
      */
     public void setRow(int row) {
         this.rw = EndianConverter.writeShort((short) (row - 1));
     }
        /**
-     * Get the Index to the <code>ExtendedFormat</code>
+     * Get the Index to the <code>ExtendedFormat</code> 
      *
-     * @return the index number of this cell's <code>ExtendedFormat</code>
+     * @return the index number of this cell's <code>ExtendedFormat</code> 
      */
     public int getIxfe() {
         return EndianConverter.readShort(ixfe);
@@ -76,27 +76,27 @@ public abstract class CellValue implements BIFFRecord {
     }
 
     /**
-     * Get the column number of this cell
+     * Get the column number of this cell 
      *
-     * @return the column number of this cell
+     * @return the column number of this cell 
      */
     public int getCol() {
-        return col + 1;         // The cols start at 1
+        return col + 1;			// The cols start at 1 
     }
 
     /**
-     * Set the row number of this cell
+     * Set the row number of this cell 
      *
-     * @param col sets the row number for this cell
+     * @param col sets the row number for this cell 
      */
     public void setCol(int col) {
-        this.col = (byte) (col - 1);        // The cols start at 1
+        this.col = (byte) (col - 1);		// The cols start at 1
     }
 
     /**
      * Writes basic cell value attributes to the specified <code>Outputstream</code>
      *
-     * @param os the <code>OutputStream</code> to write to
+     * @param os the <code>OutputStream</code> to write to  
      */
     public void write(OutputStream output) throws IOException {
 
@@ -108,29 +108,29 @@ public abstract class CellValue implements BIFFRecord {
     /**
      * Writes a<code>LabelCell</code> to the specified <code>Outputstream</code>
      *
-     * @param os the <code>OutputStream</code> to write to
+     * @param os the <code>OutputStream</code> to write to  
      */
     public int read(InputStream input) throws IOException {
 
-        int numOfBytesRead  = input.read(rw);
-        col                 += input.read();
+        int numOfBytesRead	= input.read(rw);
+        col					+= input.read();    
         numOfBytesRead++;
-        numOfBytesRead      += input.read(ixfe);
-
-        Debug.log(Debug.TRACE, "\tRow : "+ EndianConverter.readShort(rw) +
+        numOfBytesRead		+= input.read(ixfe);
+    
+        Debug.log(Debug.TRACE, "\tRow : "+ EndianConverter.readShort(rw) + 
                             " Column : " + col +
-                            " ixfe : " + EndianConverter.readShort(ixfe));
-
-        return numOfBytesRead;
+                            " ixfe : " + EndianConverter.readShort(ixfe));        
+        
+        return numOfBytesRead;    
     }
-
-
+    
+    
     /**
      * Returns the contents of the cell as a String
      *
-     * @return the contents of the cell
+     * @return the contents of the cell 
      */
     abstract public String getString() throws IOException;
-
+    
 }
 

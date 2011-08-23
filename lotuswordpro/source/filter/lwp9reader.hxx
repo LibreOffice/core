@@ -63,7 +63,7 @@
 #include "lwpobjfactory.hxx"
 #include "xfilter/ixfstream.hxx"
 /**
- * @brief   Reader framework class for Lotus Word Pro 9 file
+ * @brief	Reader framework class for Lotus Word Pro 9 file
 */
 class Lwp9Reader
 {
@@ -71,10 +71,10 @@ class Lwp9Reader
         Lwp9Reader(LwpSvStream* InputStream, IXFStream* pStream);
         ~Lwp9Reader(){};
     private:
-        LwpSvStream*    m_pDocStream;
+        LwpSvStream*	m_pDocStream;
         IXFStream* m_pStream;
         LwpObjectFactory* m_pObjMgr;
-        LwpFileHeader m_LwpFileHdr;             //LWP7 object
+        LwpFileHeader m_LwpFileHdr; 			//LWP7 object
     protected:
         sal_Int64 GetFileSize();
         void ReadFileHeader();

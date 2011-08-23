@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,29 +44,29 @@ import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
  */
 public class DefinedName implements BIFFRecord {
 
-    private byte[] grbit    = new byte[2];
+    private byte[] grbit	= new byte[2];
     private byte   cch;
-    private byte[] cce      = new byte[2];
-    private byte[] ixals    = new byte[2];
+    private byte[] cce		= new byte[2];
+    private byte[] ixals	= new byte[2];
     private byte[] rgch;
     private byte[] rgce;
-    private FormulaHelper fh = new FormulaHelper();
+    private FormulaHelper fh = new FormulaHelper();    
     private String definition = new String("");
     private Workbook wb;
 
     /**
-      * Constructs a Defined Name from the <code>InputStream</code>
+      * Constructs a Defined Name from the <code>InputStream</code> 
       *
-      * @param  is InputStream containing the record data
+      * @param	is InputStream containing the record data 
       */
     public DefinedName(NameDefinition nd, Workbook wb) throws IOException {
-
+        
         fh.setWorkbook(wb);
         this.wb = wb;
         String name = nd.getName();
-
+        
         // we have to insert an = to stop the formulaParser throwing an exception
-        definition = "=" + nd.getDefinition();
+        definition = "=" + nd.getDefinition(); 
 
         cch = (byte)name.length();
         rgch = new byte[cch*2];
@@ -75,9 +75,9 @@ public class DefinedName implements BIFFRecord {
         ixals[0] = (byte)0xFF;ixals[1] = (byte)0xFF;
     }
     /**
-      * Constructs a Defined Name from the <code>InputStream</code>
+      * Constructs a Defined Name from the <code>InputStream</code> 
       *
-      * @param  is InputStream containing the record data
+      * @param	is InputStream containing the record data 
       */
     public DefinedName(InputStream is, Workbook wb) throws IOException {
 
@@ -87,51 +87,51 @@ public class DefinedName implements BIFFRecord {
     }
 
     /**
-     * Get the hex code for this particular <code>BIFFRecord</code>
+     * Get the hex code for this particular <code>BIFFRecord</code> 
      *
      * @return the hex code for <code>DefinedName</code>
      */
     public short getBiffType() {
         return PocketExcelConstants.DEFINED_NAME;
     }
-
+    
     /**
       * Reads a Defined Name from the <code>InputStream</code> The byte array
      * must be twice the size of the String as it uses unicode.
       *
-      * @param  is InputStream containing the record data
+      * @param	is InputStream containing the record data 
       */
     public int read(InputStream input) throws IOException {
-
-        int numOfBytesRead  = input.read(grbit);
-        cch                 = (byte) input.read();
+        
+        int numOfBytesRead	= input.read(grbit);    
+        cch				 	= (byte) input.read();
         numOfBytesRead++;
-        numOfBytesRead      += input.read(cce);
-        numOfBytesRead      += input.read(ixals);
-
+        numOfBytesRead		+= input.read(cce);
+        numOfBytesRead		+= input.read(ixals);    
+        
         rgch = new byte[cch*2];
-        input.read(rgch, 0, cch*2);
-
+        input.read(rgch, 0, cch*2);        
+        
         rgce = new byte[EndianConverter.readShort(cce)];
-        input.read(rgce, 0, EndianConverter.readShort(cce));
+        input.read(rgce, 0, EndianConverter.readShort(cce));        
+        
 
 
-
-        Debug.log(Debug.TRACE, "\tgrbit : "+ EndianConverter.readShort(grbit) +
+        Debug.log(Debug.TRACE, "\tgrbit : "+ EndianConverter.readShort(grbit) + 
                             " cch : " + cch +
                             " cce : " + EndianConverter.readShort(cce) +
                             " ixals : " + EndianConverter.readShort(ixals) +
-                            "\n\trgch : " + rgch +
+                            "\n\trgch : " + rgch +        
                             " rgce : " + rgce);
-
+                            
         return numOfBytesRead;
     }
-
+    
      /**
      * Write this particular <code>BIFFRecord</code> to the <code>OutputStream</code>
      *
      * @param ouput the <code>OutputStream</code>
-     */
+     */        
     public void write(OutputStream output) throws IOException {
 
         try {
@@ -142,7 +142,7 @@ public class DefinedName implements BIFFRecord {
             Debug.log(Debug.TRACE,"Error in Parsing Name Definition");
             cce = EndianConverter.writeShort((short) 0);
         }
-
+        
 
         output.write(getBiffType());
         output.write(grbit);
@@ -171,56 +171,56 @@ public class DefinedName implements BIFFRecord {
         } catch (UnsupportedEncodingException e){
             name = "unknown";
         }
-        return name;
+        return name;	
     }
 
     /**
      * Returns a definition table which can be used by the pocket excel
      * decoder to build a complete definitions table for writing to the sxc
-     * document
+     * document 
      */
      public NameDefinition getNameDefinition() {
-
+     
          String baseCellAddress;
-        getDefinition();        // This must be called first so we know the type
+        getDefinition();		// This must be called first so we know the type
 
         baseCellAddress = "$" + wb.getSheetName(0) + ".A1";
-
+            
         NameDefinition nd = new NameDefinition(getName(),definition, baseCellAddress, isRangeType(), isExpressionType());
         return nd;
      }
-
+     
     /**
-     * Returns the definition
+     * Returns the definition 
      *
-     * @return the <code>String</code> containing the definition
+     * @return the <code>String</code> containing the definition 
      */
     private String getDefinition() {
         // pexcel sometimes creates Name definition with no defintion, bug??
-        if(EndianConverter.readShort(cce)!=0) {
-            definition = fh.convertPXLToCalc(rgce);
-            definition = definition.substring(1);   // remove the '='
+        if(EndianConverter.readShort(cce)!=0) {				
+            definition = fh.convertPXLToCalc(rgce);	
+            definition = definition.substring(1);	// remove the '='
             definition = definition.replace(',', ';');
-        }
-        return definition;
+        }	
+        return definition;			
     }
-
+    
     /**
-     * Returns the defintion
+     * Returns the defintion 
      *
-     * @return the <code>String</code> containing the definition
+     * @return the <code>String</code> containing the definition 
      */
     private boolean isRangeType() {
-
-        return fh.isRangeType();
+    
+        return fh.isRangeType();			
     }
     /**
-     * Returns the defintion
+     * Returns the defintion 
      *
-     * @return the <code>String</code> containing the definition
+     * @return the <code>String</code> containing the definition 
      */
     private boolean isExpressionType() {
 
-        return fh.isExpressionType();
+        return fh.isExpressionType();			
     }
 }

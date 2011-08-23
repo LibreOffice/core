@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Mar 2005           Created
+ Mar 2005			Created
  ************************************************************************/
 #include "lwpfoundry.hxx"
 #include "lwpfilehdr.hxx"
@@ -165,8 +165,8 @@ void LwpCHBlkMarker::ConvertCHBlock(XFContentContainer* pXFPara, sal_uInt8 nType
     case CLICKHERE_CHBEHAVIORDATETIME:
         ProcessOtherCHB(pXFPara,nType);
         break;
-//      ProcessPageNumber(pXFPara,nType);
-//      break;
+//		ProcessPageNumber(pXFPara,nType);
+//		break;
     case CLICKHERE_CHBEHAVIORSTRINGLIST:
         ProcessKeylist(pXFPara,nType);
         break;
