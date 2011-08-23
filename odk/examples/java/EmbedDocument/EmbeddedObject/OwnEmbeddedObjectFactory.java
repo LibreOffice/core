@@ -67,7 +67,7 @@ public final class OwnEmbeddedObjectFactory extends WeakBase
     {
         if ( xStorage == null || sEntName == null || sEntName.length() == 0 )
             throw new com.sun.star.lang.IllegalArgumentException();
-
+    
         if ( nEntryConnectionMode == com.sun.star.embed.EntryInitModes.DEFAULT_INIT )
         {
             if ( aClassID != null && aClassID.length != 0 )

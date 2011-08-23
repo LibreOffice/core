@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,14 +39,14 @@ namespace csv
 
 
 Date::Date()
-    :   nData( 0 )
+    :	nData( 0 )
 {
 }
 
-Date::Date( unsigned            i_nDay,
-            unsigned            i_nMonth,
-            unsigned            i_nYear )
-    :   nData( (i_nDay << 24) + (i_nMonth << 16) + i_nYear )
+Date::Date( unsigned 			i_nDay,
+            unsigned 			i_nMonth,
+            unsigned 			i_nYear )
+    :	nData( (i_nDay << 24) + (i_nMonth << 16) + i_nYear )
 {
 }
 
@@ -59,15 +59,15 @@ Date::Null_()
 
 
 Time::Time()
-    :   nData( 0 )
+    :	nData( 0 )
 {
 }
 
-Time::Time( unsigned            i_nHour,
-            unsigned            i_nMinutes,
-            unsigned            i_nSeconds,
+Time::Time( unsigned 			i_nHour,
+            unsigned 			i_nMinutes,
+            unsigned 			i_nSeconds,
             unsigned            i_nSeconds100 )
-    :   nData( (i_nHour << 24) + (i_nMinutes << 16) + (i_nSeconds << 8) + i_nSeconds100 )
+    :	nData( (i_nHour << 24) + (i_nMinutes << 16) + (i_nSeconds << 8) + i_nSeconds100 )
 {
 }
 

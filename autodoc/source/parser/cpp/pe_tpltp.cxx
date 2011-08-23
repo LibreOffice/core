@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,9 +62,9 @@ PE_TemplateTop::Call_Handler( const cpp::Token & i_rTok )
 void
 PE_TemplateTop::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_TemplateTop>::F_Tok F_Tok;
+    typedef CallFunction<PE_TemplateTop>::F_Tok	F_Tok;
 
-    static F_Tok stateF_start[] =           { &PE_TemplateTop::On_start_Less };
+    static F_Tok stateF_start[] =		    { &PE_TemplateTop::On_start_Less };
     static INT16 stateT_start[] =           { Tid_Less };
 
     static F_Tok stateF_expect_qualifier[]= { &PE_TemplateTop::On_expect_qualifier_ClassOrTypename,
@@ -74,10 +74,10 @@ PE_TemplateTop::Setup_StatusFunctions()
                                               Tid_Greater,
                                               Tid_typename };
 
-    static F_Tok stateF_expect_name[] =     { &PE_TemplateTop::On_expect_name_Identifier };
+    static F_Tok stateF_expect_name[] =	    { &PE_TemplateTop::On_expect_name_Identifier };
     static INT16 stateT_expect_name[] =     { Tid_Identifier };
 
-    static F_Tok stateF_expect_separator[]= { &PE_TemplateTop::On_expect_separator_Comma,
+    static F_Tok stateF_expect_separator[]=	{ &PE_TemplateTop::On_expect_separator_Comma,
                                               &PE_TemplateTop::On_expect_separator_Greater };
     static INT16 stateT_expect_separator[]= { Tid_Comma,
                                               Tid_Greater };

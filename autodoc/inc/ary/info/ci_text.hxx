@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ class DocuDisplay;
 class DocuText
 {
   public:
-    typedef std::vector< DocuToken * >  TokenList;
+    typedef std::vector< DocuToken * >	TokenList;
 
                         DocuText();
                         ~DocuText();
@@ -57,17 +57,17 @@ class DocuText
     void                Set_HtmlUse(
                             bool                i_bUseIt )
                                                 { bUsesHtml = i_bUseIt; }
-    void                Add_Token(
-                            DYN DocuToken &     let_drToken )
+    void              	Add_Token(
+                            DYN DocuToken &		let_drToken )
                                                 { aTokens.push_back(&let_drToken); }
-    const TokenList &   Tokens() const          { return aTokens; }
+    const TokenList &	Tokens() const			{ return aTokens; }
     void                StoreAt(
                             DocuDisplay &       o_rDisplay ) const;
     bool                IsNoHtml() const        { return NOT bUsesHtml; }
     bool                IsEmpty() const         { return aTokens.size() == 0; }
 
   private:
-    TokenList           aTokens;
+    TokenList			aTokens;
     bool                bUsesHtml;
 };
 

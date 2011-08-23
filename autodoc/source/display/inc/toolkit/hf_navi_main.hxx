@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@ class HF_MainItem;
 
 
 /** @task
-    Create a HTML navigation bar with lightly coloured background.
+    Create a HTML navigation bar with lightly coloured background. 
 
     @descr
     There are three kinds of items:
-    Item with link:             Add_StdItem(),
+    Item with link:             Add_StdItem(),   
     Item without link:          Add_NoneItem(),
     Item that is current page:  Add_SelfItem().
 */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,27 +45,27 @@ namespace uidl
 
 
 
-/** is an implementation class for ParseEnvironment
+/**	is an implementation class for ParseEnvironment
 */
 class SemanticParser : public csi::uidl::Token_Receiver,
                        public csi::dsapi::Token_Receiver
 {
   public:
-  typedef std::deque< DYN TextToken * > TokenQueue;
+  typedef std::deque< DYN TextToken * >	TokenQueue;
 
                         ~SemanticParser();
 
 
-    void                Receive(
+    void				Receive(
                             DYN csi::uidl::Token &
                                                 let_drToken );
-    void                Receive(
+    void				Receive(
                             DYN csi::dsapi::Token &
                                                 let_drToken );
 
   private:
     // DATA
-    TokenQueue          aTokenQueue;
+    TokenQueue			aTokenQueue;
 
 
 };

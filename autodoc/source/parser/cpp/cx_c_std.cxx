@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,7 +153,7 @@ Context_CppStd::ReadCharChain( CharacterSource & io_rText )
     StmBoundsStatus & rBound = aStateMachine.GetCharChain(fTokenCreateFunction, io_rText);
 
     // !!!
-    //   The order of the next two lines is essential, because
+    // 	 The order of the next two lines is essential, because
     //   pFollowUpContext may be changed by PerformStatusFunction() also,
     //   which then MUST override the previous assignment.
     SetFollowUpContext(rBound.FollowUpContext());
@@ -175,9 +175,9 @@ Context_CppStd::AssignDealer( Distributor & o_rDealer )
 }
 
 void
-Context_CppStd::PerformStatusFunction( uintt                    i_nStatusSignal,
-                                       F_CRTOK                  i_fTokenCreateFunction,
-                                       CharacterSource &        io_rText )
+Context_CppStd::PerformStatusFunction( uintt					i_nStatusSignal,
+                                       F_CRTOK 	                i_fTokenCreateFunction,
+                                       CharacterSource &	    io_rText )
 {
     switch (i_nStatusSignal)
     {
@@ -233,19 +233,19 @@ Context_CppStd::PerformStatusFunction( uintt                    i_nStatusSignal,
             String  sCurChar( &cCC, 1 );
             throw X_Parser( X_Parser::x_InvalidChar, sCurChar, String::Null_(), 0 );
         }
-    }   // end switch (i_nStatusSignal)
+    }	// end switch (i_nStatusSignal)
 }
 
 void
 Context_CppStd::SetupStateMachine()
 {
     // Besondere Array-Stati (kein Tokenabschluss oder Kontextwechsel):
-//  const INT16 top = 0;        // Top-Status
-    const INT16 wht = 1;        // Whitespace-überlese-Status
-    const INT16 bez = 2;        // Bezeichner-lese-Status
+//	const INT16	top = 0;		// Top-Status
+    const INT16	wht = 1;		// Whitespace-überlese-Status
+    const INT16	bez = 2;        // Bezeichner-lese-Status
 
     // Tokenfinish-Stati:
-    const INT16 finError = 3;
+    const INT16	finError = 3;
     const INT16 finIgnore = 4;
     const INT16 finBezeichner = 5;
     const INT16 finKeyword = 6;
@@ -256,12 +256,12 @@ Context_CppStd::SetupStateMachine()
     const INT16 finEOF = 11;
 
     // Kontextwechsel-Stati:
-    const INT16 gotoComment = 12;
-    const INT16 gotoDocu = 13;
+    const INT16	gotoComment = 12;
+    const INT16	gotoDocu = 13;
     const INT16 gotoPreprocessor = 14;
-    const INT16 gotoConstString = 15;
-    const INT16 gotoConstChar = 16;
-    const INT16 gotoConstNumeric = 17;
+    const INT16	gotoConstString = 15;
+    const INT16	gotoConstChar = 16;
+    const INT16	gotoConstNumeric = 17;
     const INT16 gotoUnblockMacro = 18;
 
     // Abbreviations to be used in status tables:
@@ -277,7 +277,7 @@ Context_CppStd::SetupStateMachine()
     /// Zeros - '0' - will be replaced by AddToken().
 
     const INT16 A_nTopStatus[C_nStatusSize] =
-    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+    //  0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
     {fof,err,err,err,err,err,err,err,err,wht,  0,wht,wht,  0,err,err,
      err,err,err,err,err,err,err,err,err,err,fof,err,err,err,err,err, // 16 ...
      wht,  0,cst,  0,err,  0,  0,cch,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -289,7 +289,7 @@ Context_CppStd::SetupStateMachine()
     };
 
     const INT16 A_nWhitespaceStatus[C_nStatusSize] =
-    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
     {fof,err,err,err,err,err,err,err,err,wht,fig,wht,wht,fig,err,err,
      err,err,err,err,err,err,err,err,err,err,fof,err,err,err,err,err, // 16 ...
      wht,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,
@@ -301,7 +301,7 @@ Context_CppStd::SetupStateMachine()
     };
 
     const INT16 A_nBezeichnerStatus[C_nStatusSize] =
-    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
     {fbz,err,err,err,err,err,err,err,err,fbz,fbz,fbz,fbz,fbz,err,err,
      err,err,err,err,err,err,err,err,err,err,fbz,err,err,err,err,err, // 16 ...
      fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,
@@ -314,7 +314,7 @@ Context_CppStd::SetupStateMachine()
 
 
     const INT16 A_nOperatorDefStatus[C_nStatusSize] =
-    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
     {err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,
      err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,err, // 16 ...
      err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,err,
@@ -326,7 +326,7 @@ Context_CppStd::SetupStateMachine()
     };
 
     const INT16 A_nBezDefStatus[C_nStatusSize] =
-    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+    // 	0	1	2	3	4	5	6	7	8	9  10  11  12  13  14  15
     {fbz,err,err,err,err,err,err,err,err,fbz,fbz,fbz,fbz,fbz,err,err,
      err,err,err,err,err,err,err,err,err,err,fbz,err,err,err,err,err, // 16 ...
      fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,fbz,
@@ -344,38 +344,38 @@ Context_CppStd::SetupStateMachine()
     DYN StmArrayStatus * dpStatusBez
             = new StmArrayStatus( C_nStatusSize, A_nBezeichnerStatus, TCF_Identifier, true);
 
-    DYN StmBoundsStatus *   dpBst_finError
+    DYN StmBoundsStatus *  	dpBst_finError
             = new StmBoundsStatus( *this, TkpContext::Null_(), nF_fin_Error, true );
-    DYN StmBoundsStatus *   dpBst_finIgnore
+    DYN StmBoundsStatus *  	dpBst_finIgnore
             = new StmBoundsStatus( *this, *this, nF_fin_Ignore, true );
-    DYN StmBoundsStatus *   dpBst_finBezeichner
+    DYN StmBoundsStatus *  	dpBst_finBezeichner
             = new StmBoundsStatus( *this, *this, nF_fin_Bezeichner, true );
-    DYN StmBoundsStatus *   dpBst_finKeyword
+    DYN StmBoundsStatus *  	dpBst_finKeyword
             = new StmBoundsStatus( *this, *this, nF_fin_CreateWithoutText, false );
-    DYN StmBoundsStatus *   dpBst_finPunctuation
+    DYN StmBoundsStatus *  	dpBst_finPunctuation
             = new StmBoundsStatus( *this, *this, nF_fin_CreateWithText, false );
-    DYN StmBoundsStatus *   dpBst_finBiType
+    DYN StmBoundsStatus *  	dpBst_finBiType
             = new StmBoundsStatus( *this, *this, nF_fin_CreateWithText, false );
-    DYN StmBoundsStatus *   dpBst_finTypeModifier
+    DYN StmBoundsStatus *  	dpBst_finTypeModifier
             = new StmBoundsStatus( *this, *this, nF_fin_CreateWithText, false );
-    DYN StmBoundsStatus *   dpBst_finEOL
+    DYN StmBoundsStatus *  	dpBst_finEOL
             = new StmBoundsStatus( *this, *this, nF_fin_EOL, false );
-    DYN StmBoundsStatus *   dpBst_finEOF
+    DYN StmBoundsStatus *  	dpBst_finEOF
             = new StmBoundsStatus( *this, TkpContext::Null_(), nF_fin_EOF, false );
 
-    DYN StmBoundsStatus *   dpBst_gotoComment
+    DYN StmBoundsStatus *  	dpBst_gotoComment
             = new StmBoundsStatus( *this, *pContext_Comment, nF_goto_Comment, false );
-    DYN StmBoundsStatus *   dpBst_gotoDocu
+    DYN StmBoundsStatus *  	dpBst_gotoDocu
             = new StmBoundsStatus( *this, *pDocuContext, nF_goto_Docu, false );
-    DYN StmBoundsStatus *   dpBst_gotoPreprocessor
+    DYN StmBoundsStatus *  	dpBst_gotoPreprocessor
             = new StmBoundsStatus( *this, *pContext_Preprocessor, nF_goto_Preprocessor, false );
-    DYN StmBoundsStatus *   dpBst_gotoConstString
+    DYN StmBoundsStatus *  	dpBst_gotoConstString
             = new StmBoundsStatus( *this, *pContext_ConstString, nF_goto_Const, false );
-    DYN StmBoundsStatus *   dpBst_gotoConstChar
+    DYN StmBoundsStatus *  	dpBst_gotoConstChar
             = new StmBoundsStatus( *this, *pContext_ConstChar, nF_goto_Const, false );
-    DYN StmBoundsStatus *   dpBst_gotoConstNumeric
+    DYN StmBoundsStatus *  	dpBst_gotoConstNumeric
             = new StmBoundsStatus( *this, *pContext_ConstNumeric, nF_goto_Const, false );
-    DYN StmBoundsStatus *   dpBst_gotoUnblockMacro
+    DYN StmBoundsStatus *  	dpBst_gotoUnblockMacro
             = new StmBoundsStatus( *this, *pContext_UnblockMacro, nF_goto_UnblockMacro, false );
 
     // dpMain aufbauen:
@@ -482,47 +482,47 @@ Context_CppStd::SetupStateMachine()
     aStateMachine.AddToken(">>=",TCF_Operator,A_nOperatorDefStatus,finPunctuation);
 
     // Builtin types
-    aStateMachine.AddToken("char",  TCF_BuiltInType,    A_nBezDefStatus,    finBiType);
-    aStateMachine.AddToken("short", TCF_BuiltInType,    A_nBezDefStatus,    finBiType);
-    aStateMachine.AddToken("int",   TCF_BuiltInType,    A_nBezDefStatus,    finBiType);
-    aStateMachine.AddToken("long",  TCF_BuiltInType,    A_nBezDefStatus,    finBiType);
-    aStateMachine.AddToken("float", TCF_BuiltInType,    A_nBezDefStatus,    finBiType);
-    aStateMachine.AddToken("double",TCF_BuiltInType,    A_nBezDefStatus,    finBiType);
-    aStateMachine.AddToken("wchar_t",TCF_BuiltInType,   A_nBezDefStatus,    finBiType);
-    aStateMachine.AddToken("size_t",TCF_BuiltInType,    A_nBezDefStatus,    finBiType);
+    aStateMachine.AddToken("char",	TCF_BuiltInType,	A_nBezDefStatus,	finBiType);
+    aStateMachine.AddToken("short",	TCF_BuiltInType,	A_nBezDefStatus,	finBiType);
+    aStateMachine.AddToken("int",	TCF_BuiltInType,	A_nBezDefStatus,	finBiType);
+    aStateMachine.AddToken("long",	TCF_BuiltInType,	A_nBezDefStatus,	finBiType);
+    aStateMachine.AddToken("float",	TCF_BuiltInType,	A_nBezDefStatus,	finBiType);
+    aStateMachine.AddToken("double",TCF_BuiltInType,	A_nBezDefStatus,	finBiType);
+    aStateMachine.AddToken("wchar_t",TCF_BuiltInType,	A_nBezDefStatus,    finBiType);
+    aStateMachine.AddToken("size_t",TCF_BuiltInType,	A_nBezDefStatus,    finBiType);
 
     // Type modifiers
-    aStateMachine.AddToken("signed",    TCF_TypeModifier,   A_nBezDefStatus,    finTypeModifier);
-    aStateMachine.AddToken("unsigned",  TCF_TypeModifier,   A_nBezDefStatus,    finTypeModifier);
+    aStateMachine.AddToken("signed",	TCF_TypeModifier,	A_nBezDefStatus,	finTypeModifier);
+    aStateMachine.AddToken("unsigned",	TCF_TypeModifier,	A_nBezDefStatus,	finTypeModifier);
 
     // To ignore
-    aStateMachine.AddToken("auto",      0,  A_nBezDefStatus,    finIgnore);
-    aStateMachine.AddToken("_cdecl",    0,  A_nBezDefStatus,    finIgnore);
-    aStateMachine.AddToken("__cdecl",   0,  A_nBezDefStatus,    finIgnore);
-    aStateMachine.AddToken("__stdcall", 0,  A_nBezDefStatus,    finIgnore);
-    aStateMachine.AddToken("__fastcall",0,  A_nBezDefStatus,    finIgnore);
-    aStateMachine.AddToken("/**/",      0,  A_nOperatorDefStatus,finIgnore);
+    aStateMachine.AddToken("auto",		0,	A_nBezDefStatus,  	finIgnore);
+    aStateMachine.AddToken("_cdecl",	0,	A_nBezDefStatus,	finIgnore);
+    aStateMachine.AddToken("__cdecl",	0,	A_nBezDefStatus,	finIgnore);
+    aStateMachine.AddToken("__stdcall", 0,	A_nBezDefStatus,	finIgnore);
+    aStateMachine.AddToken("__fastcall",0,	A_nBezDefStatus,	finIgnore);
+    aStateMachine.AddToken("/**/",	    0,	A_nOperatorDefStatus,finIgnore);
 
     // Context changers
-    aStateMachine.AddToken("#",     0,  A_nOperatorDefStatus,   gotoPreprocessor);
-    aStateMachine.AddToken("#undef",0,  A_nOperatorDefStatus,   gotoPreprocessor);
+    aStateMachine.AddToken("#",		0,	A_nOperatorDefStatus,   gotoPreprocessor);
+    aStateMachine.AddToken("#undef",0,	A_nOperatorDefStatus,   gotoPreprocessor);
     aStateMachine.AddToken("#unblock-",
-                                    0,  A_nOperatorDefStatus,   gotoUnblockMacro);
-    aStateMachine.AddToken("/*",    0,  A_nOperatorDefStatus,   gotoComment);
-    aStateMachine.AddToken("//",    0,  A_nOperatorDefStatus,   gotoComment);
-    aStateMachine.AddToken("/**",   0,  A_nOperatorDefStatus,   gotoDocu);
-    aStateMachine.AddToken("///",   0,  A_nOperatorDefStatus,   gotoDocu);
+                                    0,	A_nOperatorDefStatus,   gotoUnblockMacro);
+    aStateMachine.AddToken("/*",	0,	A_nOperatorDefStatus,	gotoComment);
+    aStateMachine.AddToken("//",	0,	A_nOperatorDefStatus,	gotoComment);
+    aStateMachine.AddToken("/**",   0,	A_nOperatorDefStatus,	gotoDocu);
+    aStateMachine.AddToken("///",   0,	A_nOperatorDefStatus,	gotoDocu);
 
     // Line ends
-        //  regular
-    aStateMachine.AddToken("\r\n",  0,  A_nOperatorDefStatus,   finEOL);
-    aStateMachine.AddToken("\n",    0,  A_nOperatorDefStatus,   finEOL);
-    aStateMachine.AddToken("\r",    0,  A_nOperatorDefStatus,   finEOL);
-        //  To ignore in some cases(may be only at preprocessor?), but
-        //      linecount has to be incremented.
-    aStateMachine.AddToken("\\\r\n",0,  A_nOperatorDefStatus,   finEOL);
-    aStateMachine.AddToken("\\\n",  0,  A_nOperatorDefStatus,   finEOL);
-    aStateMachine.AddToken("\\\r",  0,  A_nOperatorDefStatus,   finEOL);
+        //	regular
+    aStateMachine.AddToken("\r\n",	0,	A_nOperatorDefStatus,	finEOL);
+    aStateMachine.AddToken("\n",	0,	A_nOperatorDefStatus,	finEOL);
+    aStateMachine.AddToken("\r",    0,	A_nOperatorDefStatus,	finEOL);
+        //	To ignore in some cases(may be only at preprocessor?), but
+        //		linecount has to be incremented.
+    aStateMachine.AddToken("\\\r\n",0,	A_nOperatorDefStatus,	finEOL);
+    aStateMachine.AddToken("\\\n",	0,	A_nOperatorDefStatus,	finEOL);
+    aStateMachine.AddToken("\\\r",	0,	A_nOperatorDefStatus,	finEOL);
 };
 
 

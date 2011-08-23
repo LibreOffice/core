@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 //***************************************************************************
@@ -82,15 +82,15 @@ import com.sun.star.table.XTableChartsSupplier;
 
 
 public class SCalc  {
-
+    
     public static void main(String args[]) {
-
+        
         //oooooooooooooooooooooooooooStep 1oooooooooooooooooooooooooooooooooooooooooo
         // call UNO bootstrap method and get the remote component context form
         // the a running office (office will be started if necessary)
         //***************************************************************************
         XComponentContext xContext = null;
-
+            
         // get the remote office component context
         try {
             xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
@@ -106,26 +106,26 @@ public class SCalc  {
         // is created. The desktop provides the XComponentLoader interface,
         // which is used to open the document via loadComponentFromURL
         //***************************************************************************
-
+        
         //Open document
-
+        
         //Calc
         XSpreadsheetDocument myDoc = null;
 //        XCell oCell = null;
-
+        
         System.out.println("Opening an empty Calc document");
         myDoc = openCalc(xContext);
-
+        
         //***************************************************************************
-
-
+        
+        
         //oooooooooooooooooooooooooooStep 3oooooooooooooooooooooooooooooooooooooooooo
         // create cell styles.
         // For this purpose get the StyleFamiliesSupplier and the the familiy
         // CellStyle. Create an instance of com.sun.star.style.CellStyle and
         // add it to the family. Now change some properties
         //***************************************************************************
-
+        
         try {
             XStyleFamiliesSupplier xSFS = (XStyleFamiliesSupplier)
                 UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, myDoc);
@@ -155,9 +155,9 @@ public class SCalc  {
         } catch (Exception e) {
             e.printStackTrace(System.err);
         }
-
+        
         //***************************************************************************
-
+        
         //oooooooooooooooooooooooooooStep 4oooooooooooooooooooooooooooooooooooooooooo
         // get the sheet an insert some data.
         // Get the sheets from the document and then the first from this container.
@@ -165,10 +165,10 @@ public class SCalc  {
         // getCellByPosition and insert into this cell via setValue() (for floats)
         // or setFormula() for formulas and Strings
         //***************************************************************************
-
-
+        
+        
         XSpreadsheet xSheet=null;
-
+        
         try {
             System.out.println("Getting spreadsheet") ;
             XSpreadsheets xSheets = myDoc.getSheets() ;
@@ -176,16 +176,16 @@ public class SCalc  {
                 XIndexAccess.class, xSheets);
             xSheet = (XSpreadsheet) UnoRuntime.queryInterface(
                 XSpreadsheet.class, oIndexSheets.getByIndex(0));
-
+            
         } catch (Exception e) {
             System.out.println("Couldn't get Sheet " +e);
             e.printStackTrace(System.err);
         }
-
-
-
+        
+        
+        
         System.out.println("Creating the Header") ;
-
+        
         insertIntoCell(1,0,"JAN",xSheet,"");
         insertIntoCell(2,0,"FEB",xSheet,"");
         insertIntoCell(3,0,"MAR",xSheet,"");
@@ -199,10 +199,10 @@ public class SCalc  {
         insertIntoCell(11,0,"NOV",xSheet,"");
         insertIntoCell(12,0,"DEC",xSheet,"");
         insertIntoCell(13,0,"SUM",xSheet,"");
-
-
+        
+        
         System.out.println("Fill the lines");
-
+        
         insertIntoCell(0,1,"Smith",xSheet,"");
         insertIntoCell(1,1,"42",xSheet,"V");
         insertIntoCell(2,1,"58.9",xSheet,"V");
@@ -217,8 +217,8 @@ public class SCalc  {
         insertIntoCell(11,1,"22.4",xSheet,"V");
         insertIntoCell(12,1,"23.5",xSheet,"V");
         insertIntoCell(13,1,"=SUM(B2:M2)",xSheet,"");
-
-
+        
+        
         insertIntoCell(0,2,"Jones",xSheet,"");
         insertIntoCell(1,2,"21",xSheet,"V");
         insertIntoCell(2,2,"40.9",xSheet,"V");
@@ -233,7 +233,7 @@ public class SCalc  {
         insertIntoCell(11,2,"25.4",xSheet,"V");
         insertIntoCell(12,2,"28.5",xSheet,"V");
         insertIntoCell(13,2,"=SUM(B3:M3)",xSheet,"");
-
+        
         insertIntoCell(0,3,"Brown",xSheet,"");
         insertIntoCell(1,3,"31.45",xSheet,"V");
         insertIntoCell(2,3,"-20.9",xSheet,"V");
@@ -248,22 +248,22 @@ public class SCalc  {
         insertIntoCell(11,3,"25.4",xSheet,"V");
         insertIntoCell(12,3,"38.5",xSheet,"V");
         insertIntoCell(13,3,"=SUM(A4:L4)",xSheet,"");
-
+        
         //***************************************************************************
-
+        
         //oooooooooooooooooooooooooooStep 5oooooooooooooooooooooooooooooooooooooooooo
         // apply the created cell style.
         // For this purpose get the PropertySet of the Cell and change the
         // property CellStyle to the appropriate value.
         //***************************************************************************
-
+        
         // change backcolor
         chgbColor( 1 , 0, 13, 0, "My Style", xSheet );
         chgbColor( 0 , 1, 0, 3, "My Style", xSheet );
         chgbColor( 1 , 1, 13, 3, "My Style2", xSheet );
-
+        
         //***************************************************************************
-
+        
         //oooooooooooooooooooooooooooStep 6oooooooooooooooooooooooooooooooooooooooooo
         // insert a 3D chart.
         // get the CellRange which holds the data for the chart and its RangeAddress
@@ -272,36 +272,36 @@ public class SCalc  {
         // get the ChartDocument, which provide the Diagramm. Change the properties
         // Dim3D (3 dimension) and String (the title) of the diagramm.
         //***************************************************************************
-
+        
         // insert a chart
-
+        
         Rectangle oRect = new Rectangle();
         oRect.X = 500;
         oRect.Y = 3000;
         oRect.Width = 25000;
         oRect.Height = 11000;
-
+        
         XCellRange oRange = (XCellRange)UnoRuntime.queryInterface(
             XCellRange.class, xSheet);
         XCellRange myRange = oRange.getCellRangeByName("A1:N4");
         XCellRangeAddressable oRangeAddr = (XCellRangeAddressable)
             UnoRuntime.queryInterface(XCellRangeAddressable.class, myRange);
         CellRangeAddress myAddr = oRangeAddr.getRangeAddress();
-
+        
         CellRangeAddress[] oAddr = new CellRangeAddress[1];
         oAddr[0] = myAddr;
         XTableChartsSupplier oSupp = (XTableChartsSupplier)UnoRuntime.queryInterface(
             XTableChartsSupplier.class, xSheet);
-
+        
         XTableChart oChart = null;
-
+        
         System.out.println("Insert Chart");
-
+        
         XTableCharts oCharts = oSupp.getCharts();
         oCharts.addNewByName("Example", oRect, oAddr, true, true);
-
+        
         // get the diagramm and Change some of the properties
-
+        
         try {
             oChart = (XTableChart) (UnoRuntime.queryInterface(
                 XTableChart.class, ((XNameAccess)UnoRuntime.queryInterface(
@@ -326,19 +326,19 @@ public class SCalc  {
             System.err.println("Changin Properties failed "+e);
             e.printStackTrace(System.err);
         }
-
-        System.out.println("done");
+        
+        System.out.println("done");        
         System.exit(0);
     }
-
+    
     public static XSpreadsheetDocument openCalc(XComponentContext xContext)
-    {
+    {    
         //define variables
         XMultiComponentFactory xMCF = null;
         XComponentLoader xCLoader;
         XSpreadsheetDocument xSpreadSheetDoc = null;
         XComponent xComp = null;
-
+        
         try {
             // get the servie manager rom the office
             xMCF = xContext.getServiceManager();
@@ -350,28 +350,28 @@ public class SCalc  {
             // query the desktop object for the XComponentLoader
             xCLoader = ( XComponentLoader ) UnoRuntime.queryInterface(
                 XComponentLoader.class, oDesktop );
-
+            
             PropertyValue [] szEmptyArgs = new PropertyValue [0];
             String strDoc = "private:factory/scalc";
 
             xComp = xCLoader.loadComponentFromURL(strDoc, "_blank", 0, szEmptyArgs );
             xSpreadSheetDoc = (XSpreadsheetDocument) UnoRuntime.queryInterface(
                 XSpreadsheetDocument.class, xComp);
-
-        } catch(Exception e){
+            
+        } catch(Exception e){            
             System.err.println(" Exception " + e);
             e.printStackTrace(System.err);
-        }
-
+        }        
+        
         return xSpreadSheetDoc;
     }
-
-
+    
+    
     public static void insertIntoCell(int CellX, int CellY, String theValue,
                                       XSpreadsheet TT1, String flag)
-    {
+    {    
         XCell xCell = null;
-
+        
         try {
             xCell = TT1.getCellByPosition(CellX, CellY);
         } catch (com.sun.star.lang.IndexOutOfBoundsException ex) {
@@ -384,9 +384,9 @@ public class SCalc  {
         } else {
             xCell.setFormula(theValue);
         }
-
+        
     }
-
+    
     public static void chgbColor( int x1, int y1, int x2, int y2,
                                   String template, XSpreadsheet TT )
     {
@@ -397,10 +397,10 @@ public class SCalc  {
             System.err.println("Could not get CellRange");
             ex.printStackTrace(System.err);
         }
-
+        
         XPropertySet xCPS = (XPropertySet)UnoRuntime.queryInterface(
             XPropertySet.class, xCR );
-
+        
         try {
             xCPS.setPropertyValue("CellStyle", template);
         } catch (Exception e) {
@@ -408,5 +408,5 @@ public class SCalc  {
             e.printStackTrace(System.err);
         }
     }
-
+    
 }

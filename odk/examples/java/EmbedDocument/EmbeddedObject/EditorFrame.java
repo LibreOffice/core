@@ -10,12 +10,12 @@ import javax.imageio.ImageIO;
 
 import org.openoffice.examples.embedding.OwnEmbeddedObject;
 
-public class EditorFrame extends JFrame
+public class EditorFrame extends JFrame 
 {
     OwnEmbeddedObject m_aEmbObj;
     JTextArea m_aTextArea;
     BufferedImage m_aBufImage;
-
+    
     WindowListener m_aCloser = new WindowAdapter()
     {
         public void windowClosing( WindowEvent e )
@@ -25,13 +25,13 @@ public class EditorFrame extends JFrame
             Graphics2D aGr = m_aBufImage.createGraphics();
             m_aTextArea.paintAll( aGr );
             aGr.dispose();
-
+            
             hide();
             m_aEmbObj.CloseFrameRequest();
         }
     };
 
-    public EditorFrame( String sName, OwnEmbeddedObject aEmbObj, int nWidth, int nHeight )
+    public EditorFrame( String sName, OwnEmbeddedObject aEmbObj, int nWidth, int nHeight ) 
     {
         super( sName );
         m_aEmbObj = aEmbObj;
@@ -65,18 +65,18 @@ public class EditorFrame extends JFrame
         Dimension aToSet =
            new Dimension( (int)( aSize.getWidth() + aOwnSize.getWidth() - aAppSize.getWidth() ),
                           (int)(aSize.getHeight() + aOwnSize.getHeight() - aAppSize.getHeight() ) );
-
+        
         setSize( aToSet );
         validate();
-
+        
         // pack();
     }
-
+    
     public byte[] getReplacementImage()
     {
         Dimension aDim = m_aTextArea.getSize();
         BufferedImage aBufImage = null;
-
+        
         if ( m_aBufImage != null )
             aBufImage = m_aBufImage;
         else
@@ -94,7 +94,7 @@ public class EditorFrame extends JFrame
             catch ( java.lang.Exception e )
             {}
         }
-
+            
         if ( aBufImage != null )
         {
             try
@@ -117,5 +117,5 @@ public class EditorFrame extends JFrame
 
         return new byte[0];
     }
-}
+}  
 

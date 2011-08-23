@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,14 +68,14 @@ PE_Typedef::Call_Handler( const cpp::Token & i_rTok )
 void
 PE_Typedef::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_Typedef>::F_Tok F_Tok;
-    static F_Tok stateF_start[] =       { &PE_Typedef::On_start_typedef };
-    static INT16 stateT_start[] =       { Tid_typedef };
+    typedef CallFunction<PE_Typedef>::F_Tok	F_Tok;
+    static F_Tok stateF_start[] = 		{ &PE_Typedef::On_start_typedef };
+    static INT16 stateT_start[] = 		{ Tid_typedef };
 
-    static F_Tok stateF_expectName[] =  { &PE_Typedef::On_expectName_Identifier };
+    static F_Tok stateF_expectName[] =	{ &PE_Typedef::On_expectName_Identifier };
     static INT16 stateT_expectName[] =  { Tid_Identifier };
 
-    static F_Tok stateF_afterName[] =   { &PE_Typedef::On_afterName_Semicolon };
+    static F_Tok stateF_afterName[] = 	{ &PE_Typedef::On_afterName_Semicolon };
     static INT16 stateT_afterName[] =   { Tid_Semicolon };
 
     SEMPARSE_CREATE_STATUS(PE_Typedef, start, Hdl_SyntaxError);

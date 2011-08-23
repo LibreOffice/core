@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace csv
 {
 
 
-/** @task
+/**	@task
     File is a class representing a file.
 */
 class File : public bstream,
@@ -58,27 +58,27 @@ class File : public bstream,
   public:
     // LIFECYCLE
                         File(
-                            uintt           i_nMode = CFM_RW );
+                            uintt 			i_nMode = CFM_RW );
                         File(
                             const ::csv::ploc::Path &
                                             i_rLocation,
-                            uintt           i_nMode = CFM_RW );
+                            uintt 			i_nMode = CFM_RW );
                         File(
-                            const char *    i_sLocation,
-                            uintt           in_nMode = CFM_RW );
+                            const char *	i_sLocation,
+                            uintt 			in_nMode = CFM_RW );
                         File(
                             const String &  i_sLocation,
-                            uintt           in_nMode = CFM_RW );
-    virtual             ~File();
+                            uintt 			in_nMode = CFM_RW );
+    virtual 		    ~File();
 
     // OPERATIONS
-    bool                Assign(
-                            ploc::Path      i_rLocation );
-    bool                Assign(
-                            const char *    i_sLocation );
-    bool                Assign(
+    bool			    Assign(
+                            ploc::Path 		i_rLocation );
+    bool	            Assign(
+                            const char *	i_sLocation );
+    bool	            Assign(
                             const String &  i_sLocation );
-    //  INQUIRY
+    //	INQUIRY
     uintt               Mode() const;
 
   private:
@@ -90,23 +90,23 @@ class File : public bstream,
     };
 
     // Interface bistream:
-    virtual uintt       do_read(
-                            void *          out_pDest,
+    virtual uintt 		do_read(
+                            void *	        out_pDest,
                             uintt           i_nNrofBytes);
-    virtual bool        inq_eod() const;
+    virtual bool		inq_eod() const;
     // Interface bostream:
-    virtual uintt       do_write(
-                            const void *    i_pSrc,
+    virtual uintt 		do_write(
+                            const void *   	i_pSrc,
                             uintt           i_nNrofBytes);
     // Interface bstream:
-    virtual uintt       do_seek(
-                            intt            i_nDistance,
+    virtual uintt 		do_seek(
+                            intt 			i_nDistance,
                             seek_dir        i_eStartPoint = ::csv::beg );
-    virtual uintt       inq_position() const;
+    virtual uintt 		inq_position() const;
     // Interface OpenClose:
-    virtual bool        do_open(
-                            uintt           in_nOpenModeInfo );
-    virtual void        do_close();
+    virtual bool   	    do_open(
+                            uintt 			in_nOpenModeInfo );
+    virtual void   	    do_close();
     virtual bool        inq_is_open() const;
     // Interface Persistent:
     virtual const ploc::Path &
@@ -115,7 +115,7 @@ class File : public bstream,
     ploc::Path          aPath;
     FILE *              pStream;
 
-    uintt               nMode;              /// RWMode, OpenMode and ShareMode.
+    uintt 			    nMode;		        /// RWMode, OpenMode and ShareMode.
     E_LastIO            eLastIO;
 };
 
@@ -123,7 +123,7 @@ class File : public bstream,
 
 // IMPLEMENTATION
 
-inline uintt
+inline uintt 
 File::Mode() const
     { return nMode; }
 

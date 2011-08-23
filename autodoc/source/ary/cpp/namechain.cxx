@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,20 +45,20 @@ namespace ut
 {
 
 
-//*********************     NameSegment     ******************//
+//*********************		NameSegment		******************//
 
 NameSegment::NameSegment( const char * i_sName )
-    :   sName( i_sName )
+    :	sName( i_sName )
         // pTemplate
 {
 }
 
 NameSegment::NameSegment( const NameSegment & i_rSeg )
-    :   sName(i_rSeg.sName)
+    :	sName(i_rSeg.sName)
         // pTemplate
 {
     // KORR_FUTURE :   Handling of copying of templates.
-//  csv_assert( NOT i_rSeg.pTemplate );
+//	csv_assert( NOT i_rSeg.pTemplate );
 }
 
 NameSegment& NameSegment::operator=(const NameSegment & i_rSeg)
@@ -116,7 +116,7 @@ NameSegment::Get_Text_AsMainType( StreamStr &   o_rName,
 }
 
 
-//*********************     NameChain     ******************//
+//*********************		NameChain     ******************//
 
 NameChain::NameChain()
 //  :   aSegments

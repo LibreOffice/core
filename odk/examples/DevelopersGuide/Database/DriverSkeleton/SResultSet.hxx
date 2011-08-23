@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 #ifndef CONNECTIVITY_SRESULTSET_HXX
@@ -57,7 +57,7 @@ namespace connectivity
     {
 
         /*
-        **  OResultSet
+        **	OResultSet
         */
         typedef ::cppu::WeakComponentImplHelper12<      ::com::sun::star::sdbc::XResultSet,
                                                         ::com::sun::star::sdbc::XRow,
@@ -72,17 +72,17 @@ namespace connectivity
                                                         ::com::sun::star::sdbc::XColumnLocate,
                                                         ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
 
-        class OResultSet :  public  OBase_Mutex,
-                            public  OResultSet_BASE,
-                            public  ::cppu::OPropertySetHelper,
-                            public  OPropertyArrayUsageHelper<OResultSet>
+        class OResultSet :	public	OBase_Mutex,
+                            public	OResultSet_BASE,
+                            public	::cppu::OPropertySetHelper,
+                            public	OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
-            OStatement_Base*                            m_pStatement;
-            ::com::sun::star::uno::WeakReferenceHelper  m_aStatement;
+            OStatement_Base*							m_pStatement;
+            ::com::sun::star::uno::WeakReferenceHelper	m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
-            rtl_TextEncoding                            m_nTextEncoding;
-            sal_Bool                                    m_bWasNull;
+            rtl_TextEncoding							m_nTextEncoding;
+            sal_Bool									m_bWasNull;
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
@@ -109,9 +109,9 @@ namespace connectivity
             virtual ~OResultSet();
         public:
             DECLARE_SERVICE_INFO();
-
+            
             OResultSet( OStatement_Base* pStmt);
-
+            
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
             {

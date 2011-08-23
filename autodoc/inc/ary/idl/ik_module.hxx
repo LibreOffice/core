@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,22 +41,22 @@
 namespace ary
 {
 namespace idl
-{
+{             
 
 class CePilot;
-
+                             
 namespace ifc_module
-{
+{                            
 
 using ifc_ce::Dyn_CeIterator;
 using ifc_ce::DocText;
 
-
+ 
 struct attr : public ifc_ce::attr
-{
-    // KORR_FUTURE
+{   
+    // KORR_FUTURE 
     //   This has to be changed that way, that the differencing takes place
-    //   within hfi_module.cxx and not here.
+    //   within hfi_module.cxx and not here.   
     //   So the class CePilot is not needed here, etc.
     //   Too much scope pollution.
     static void         Get_AllChildrenSeparated(
@@ -67,7 +67,7 @@ struct attr : public ifc_ce::attr
                             std::vector< const CodeEntity* > & o_exceptions,
                             std::vector< const CodeEntity* > & o_enums,
                             std::vector< const CodeEntity* > & o_typedefs,
-                            std::vector< const CodeEntity* > & o_constantGroups,
+                            std::vector< const CodeEntity* > & o_constantGroups, 
                             std::vector< const CodeEntity* > & o_singletons,
                             const CePilot &     i_pilot,
                             const CodeEntity &  i_ce );

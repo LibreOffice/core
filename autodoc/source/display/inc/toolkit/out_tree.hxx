@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,42 +57,42 @@ class Tree
     // LIFECYCLE
                         Tree();
                         ~Tree();
-
-    // OPERATIONS
+    
+    // OPERATIONS             
     void                Set_Overview(
-                            const StringVector &
+                            const StringVector &      
                                                 i_path,
                             const String &      i_sFileName );
     Node &              Set_NamesRoot(
-                            const StringVector &
+                            const StringVector &      
                                                 i_path );
     Node &              Set_IndexRoot(
-                            const StringVector &
+                            const StringVector &      
                                                 i_path );
     Node &              Set_ProjectsRoot(
-                            const StringVector &
+                            const StringVector &      
                                                 i_path );
     Node &              Provide_Node(
-                            const StringVector &
+                            const StringVector &      
                                                 i_path );
-
+    
     // ACCESS
     Node &              RootNode()              { return *pRoot; }
-    Node &              NamesRootNode()         { return *pNamesRoot; }
-    Node &              IndexRootNode()         { return *pIndexRoot; }
-    Node &              ProjectsRootNode()      { return *pProjectsRoot; }
-
+    Node &              NamesRootNode()	    	{ return *pNamesRoot; }
+    Node &              IndexRootNode()			{ return *pIndexRoot; }
+    Node &              ProjectsRootNode()		{ return *pProjectsRoot; }
+    
     Position            Root()                  { return Position(*pRoot); }
-    Position            Overview()              { return aOverview; }
-    Position            NamesRoot()             { return Position(*pNamesRoot); }
-    Position            IndexRoot()             { return Position(*pIndexRoot); }
-    Position            ProjectsRoot()          { return Position(*pProjectsRoot); }
+    Position            Overview()				{ return aOverview; }
+    Position            NamesRoot()				{ return Position(*pNamesRoot); }
+    Position            IndexRoot()				{ return Position(*pIndexRoot); }
+    Position            ProjectsRoot()			{ return Position(*pProjectsRoot); }
 
-  private:
+  private:                  
     // forbidden:
                         Tree(const Tree&);
     Tree &              operator=(const Tree&);
-
+    
     // DATA
     Dyn<Node>           pRoot;
     Node *              pNamesRoot;
@@ -104,27 +104,27 @@ class Tree
 
 // IMPLEMENTATION
 
-inline Node &
+inline Node &              
 Tree::Provide_Node( const StringVector & i_path )
     { return pRoot->Provide_Child(i_path); }
 
 
 inline void
 Tree::Set_Overview( const StringVector & i_path,
-                    const String &       i_sFileName )
+                    const String &		 i_sFileName )
     { aOverview.Set(Provide_Node(i_path), i_sFileName); }
 
-inline Node &
+inline Node &              
 Tree::Set_NamesRoot( const StringVector & i_path )
     { pNamesRoot = &Provide_Node(i_path);
       return *pNamesRoot; }
-
-inline Node &
+    
+inline Node &              
 Tree::Set_IndexRoot( const StringVector & i_path )
     { pIndexRoot = &Provide_Node(i_path);
       return *pIndexRoot; }
-
-inline Node &
+    
+inline Node &              
 Tree::Set_ProjectsRoot( const StringVector & i_path )
     { pProjectsRoot = &Provide_Node(i_path);
       return *pProjectsRoot; }

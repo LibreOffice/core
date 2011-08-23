@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ HF_IdlMethod::write_Declaration( const String &      i_sName,
                                  param_list &        i_rParams,
                                  type_list &         i_rExceptions,
                                  bool                i_bOneway,
-                                 bool                i_bEllipse ) const
+                                 bool				 i_bEllipse ) const
 {
     HF_FunctionDeclaration
         aDecl(CurOut(), "raises") ;

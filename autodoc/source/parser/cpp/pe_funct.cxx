@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,9 +80,9 @@ PE_Function::PE_Function( Cpp_PE * i_pParent )
     pSpParameter     = new SP_Parameter(*this);
     pSpType          = new SP_Type(*this);
 
-    pSpuParameter           = new SPU_Parameter(*pSpParameter, 0, &PE_Function::SpReturn_Parameter);
-    pSpuException           = new SPU_Type(*pSpType, 0, &PE_Function::SpReturn_Exception);
-    pSpuCastOperatorType    = new SPU_Type(*pSpType, &PE_Function::SpInit_CastOperatorType, &PE_Function::SpReturn_CastOperatorType);
+    pSpuParameter	        = new SPU_Parameter(*pSpParameter, 0, &PE_Function::SpReturn_Parameter);
+    pSpuException	        = new SPU_Type(*pSpType, 0, &PE_Function::SpReturn_Exception);
+    pSpuCastOperatorType	= new SPU_Type(*pSpType, &PE_Function::SpInit_CastOperatorType, &PE_Function::SpReturn_CastOperatorType);
 }
 
 PE_Function::~PE_Function()
@@ -164,7 +164,7 @@ PE_Function::Call_Handler( const cpp::Token & i_rTok )
 void
 PE_Function::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_Function>::F_Tok    F_Tok;
+    typedef CallFunction<PE_Function>::F_Tok	F_Tok;
 
     static F_Tok stateF_afterStdOperator[] =
                                             { &PE_Function::On_afterOperator_Std_Operator,
@@ -219,8 +219,8 @@ PE_Function::Setup_StatusFunctions()
                                               Tid_BuiltInType,
                                               Tid_TypeSpecializer };
 
-    static F_Tok stateF_afterName[] =       { &PE_Function::On_afterName_Bracket_Left };
-    static INT16 stateT_afterName[] =       { Tid_Bracket_Left };
+    static F_Tok stateF_afterName[] =		{ &PE_Function::On_afterName_Bracket_Left };
+    static INT16 stateT_afterName[] =     	{ Tid_Bracket_Left };
 
     static F_Tok stateF_expectParameterSeparator[] =
                                             { &PE_Function::On_expectParameterSeparator_BracketRight,
@@ -229,7 +229,7 @@ PE_Function::Setup_StatusFunctions()
                                             { Tid_Bracket_Right,
                                               Tid_Comma };
 
-    static F_Tok stateF_afterParameters[] = { &PE_Function::On_afterParameters_const,
+    static F_Tok stateF_afterParameters[] =	{ &PE_Function::On_afterParameters_const,
                                               &PE_Function::On_afterParameters_volatile,
                                               &PE_Function::On_afterParameters_throw,
                                               &PE_Function::On_afterParameters_SwBracket_Left,
@@ -246,8 +246,8 @@ PE_Function::Setup_StatusFunctions()
                                               Tid_Colon,
                                               Tid_Assign };
 
-    static F_Tok stateF_afterThrow[] =      { &PE_Function::On_afterThrow_Bracket_Left };
-    static INT16 stateT_afterThrow[] =      { Tid_Bracket_Left };
+    static F_Tok stateF_afterThrow[] =		{ &PE_Function::On_afterThrow_Bracket_Left };
+    static INT16 stateT_afterThrow[] =     	{ Tid_Bracket_Left };
 
     static F_Tok stateF_expectExceptionSeparator[] =
                                             { &PE_Function::On_expectExceptionSeparator_BracketRight,
@@ -256,7 +256,7 @@ PE_Function::Setup_StatusFunctions()
                                             { Tid_Bracket_Right,
                                               Tid_Comma };
 
-    static F_Tok stateF_afterExceptions[] = { &PE_Function::On_afterExceptions_SwBracket_Left,
+    static F_Tok stateF_afterExceptions[] =	{ &PE_Function::On_afterExceptions_SwBracket_Left,
                                               &PE_Function::On_afterExceptions_Semicolon,
                                               &PE_Function::On_afterExceptions_Comma,
                                               &PE_Function::On_afterExceptions_Colon,
@@ -267,8 +267,8 @@ PE_Function::Setup_StatusFunctions()
                                               Tid_Colon,
                                               Tid_Assign };
 
-    static F_Tok stateF_expectZero[] =      { &PE_Function::On_expectZero_Constant };
-    static INT16 stateT_expectZero[] =      { Tid_Constant };
+    static F_Tok stateF_expectZero[] =		{ &PE_Function::On_expectZero_Constant };
+    static INT16 stateT_expectZero[] =     	{ Tid_Constant };
 
     static F_Tok stateF_inImplementation[] =
                                             { &PE_Function::On_inImplementation_SwBracket_Left,

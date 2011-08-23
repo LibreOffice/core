@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@ class TokenDealer : virtual public ::TokenDealer
 {
   public:
 
-    virtual void        Deal_AdcDocu(
-                            adoc::Token &       let_drToken ) = 0;
+    virtual void		Deal_AdcDocu(
+                            adoc::Token & 		let_drToken ) = 0;
 };
 
 

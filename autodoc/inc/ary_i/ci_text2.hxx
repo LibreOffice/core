@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,36 +49,36 @@ class DocumentationDisplay;
 class DocuToken
 {
   public:
-    virtual             ~DocuToken() {}
-    virtual void        DisplayAt(
+    virtual			 	~DocuToken() {}
+    virtual void		DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const = 0;
-    virtual bool        IsWhiteOnly() const = 0;
+    virtual bool		IsWhiteOnly() const = 0;
 };
 
 
 class DocuTex2
 {
   public:
-    typedef std::vector< DocuToken * >  TokenList;
+    typedef std::vector< DocuToken * >	TokenList;
 
                         DocuTex2();
-    virtual             ~DocuTex2();
+    virtual				~DocuTex2();
 
-    virtual void        DisplayAt(
+    virtual void		DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
-    void                AddToken(
-                            DYN DocuToken &     let_drToken );
+    void              	AddToken(
+                            DYN DocuToken &		let_drToken );
 
-    const TokenList &   Tokens() const          { return aTokens; }
+    const TokenList &	Tokens() const			{ return aTokens; }
     bool                IsEmpty() const;
     const String &      TextOfFirstToken() const;
 
     String &            Access_TextOfFirstToken();
 
   private:
-    TokenList           aTokens;
+    TokenList			aTokens;
 };
 
 

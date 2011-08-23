@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ class X_Docu : public autodoc::X_Parser_Ifc
                             const char *        i_explanation );
                         ~X_Docu();
     // INQUIRY
-    virtual E_Event     GetEvent() const;
-    virtual void        GetInfo(
+    virtual E_Event	   	GetEvent() const;
+    virtual void	   	GetInfo(
                             std::ostream &      o_rOutputMedium ) const;
 
   private:
-    String              sTagName;
-    String              sExplanation;
+    String 				sTagName;
+    String 				sExplanation;
 };
 
 

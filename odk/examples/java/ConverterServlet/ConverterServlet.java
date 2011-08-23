@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 // JDK API
@@ -71,18 +71,18 @@ import com.sun.star.lang.XMultiComponentFactory;
  */
 public class ConverterServlet extends HttpServlet {
     /** Specifies the temporary directory on the web server.
-     */
-    private String stringWorkingDirectory =
+     */  
+    private String stringWorkingDirectory = 
     System.getProperty( "java.io.tmpdir" ).replace( '\\', '/' );
-
+    
     /** Specifies the host for the office server.
-     */
+     */  
     private String stringHost = "localhost";
-
+    
     /** Specifies the port for the office server.
-     */
+     */  
     private String stringPort = "2083";
-
+    
     /** Called by the server (via the service method) to allow a servlet to handle
      * a POST request. The file from the client will be uploaded to the web server
      * and converted on the web server and after all pushed to the client.
@@ -90,7 +90,7 @@ public class ConverterServlet extends HttpServlet {
      * @param response Object that contains the response the servlet sends to the client.
      * @throws ServletException If the request for the POST could not be handled.
      * @throws IOException If an input or output error is detected when the servlet handles the request.
-     */
+     */  
     protected void doPost( HttpServletRequest request,
                            HttpServletResponse response) throws ServletException, java.io.IOException {
         try {
@@ -98,35 +98,35 @@ public class ConverterServlet extends HttpServlet {
             if ( !stringWorkingDirectory.endsWith( "/" ) ) {
                 stringWorkingDirectory += "/";
             }
-
+        
             // Construct a MultipartRequest to help read the information.
             // Pass in the request, a directory to save files to, and the
             // maximum POST size we should attempt to handle.
             MultipartRequest multipartrequest =
                 new MultipartRequest( request, stringWorkingDirectory, 5 * 1024 * 1024 );
-
+            
             // Getting all file names from the request
             Enumeration files = multipartrequest.getFileNames();
-
+            
             // Every received file will be converted to the specified type
             while (files.hasMoreElements()) {
                 // Getting the name from the element
                 String stringName = (String)files.nextElement();
-
+        
                 // Getting the filename from the request
                 String stringFilename =
                     multipartrequest.getFilesystemName( stringName );
-
+                
                 // Converting the given file on the server to the specified type and
                 // append a special extension
                 File cleanupFile = null;
                 String stringSourceFile = stringWorkingDirectory + stringFilename;
-
+                
                 try {
                     String stringConvertedFile = convertDocument(stringSourceFile,
                         multipartrequest.getParameter( "converttype" ),
                         multipartrequest.getParameter( "extension" ));
-
+                    
                     String shortFileName = stringConvertedFile.substring(
                         stringConvertedFile.lastIndexOf('/') + 1);
 
@@ -134,10 +134,10 @@ public class ConverterServlet extends HttpServlet {
                     // Set the filename, is used when the file will be saved (problem with mozilla)
                     response.addHeader( "Content-Disposition",
                                         "attachment; filename=" + shortFileName);
-
+                
                     // Constructing the multi part response to the client
                     MultipartResponse multipartresponse = new MultipartResponse(response);
-
+                
                     // Is the convert type HTML?
                     if ( ( multipartrequest.getParameter( "converttype" ).equals(
                                "swriter: HTML (StarWriter)" ) )
@@ -152,35 +152,35 @@ public class ConverterServlet extends HttpServlet {
                         // at the client in order to save the converted file
                         multipartresponse.startResponse( "application/octet-stream" );
                     }
-
+                    
                     // Pushing the converted file to the client
                     ServletUtils.returnFile( stringConvertedFile,
                                              response.getOutputStream() );
-
+                    
                     // Finishing the multi part response
                     multipartresponse.finish();
-
+                    
                     // clean up the working directory
                     cleanupFile = new File(stringConvertedFile);
                     if ( cleanupFile.exists() )
                         cleanupFile.delete();
-
+                
                 } catch (Exception exc) {
                     response.setContentType( "text/html;charset=8859-1" );
                     PrintWriter out = response.getWriter();
 
                     exc.printStackTrace();
-
+                    
                     out.println( "<html><head>" );
                     out.println( " <title>" + "SDK Converter Servlet" + "</title>" );
                     out.println( "</head>" );
-                    out.println( "<body><br><p>");
+                    out.println( "<body><br><p>");              
                     out.println( "<b>Sorry, the conversion failed!</b></p>");
                     out.println( "<p><b>Error Mesage:</b><br>" + exc.getMessage() + "<br>");
                     exc.printStackTrace(out);
                     out.println( "</p></body><html>");
                 }
-
+                
                 // clean up the working directory
                 cleanupFile = new File(stringSourceFile);
                 if ( cleanupFile.exists() )
@@ -191,7 +191,7 @@ public class ConverterServlet extends HttpServlet {
             System.err.println( exception.toString() );
         }
     }
-
+    
     /** This method converts a document to a given type by using a running
      * OpenOffice.org and saves the converted document to the specified
      * working directory.
@@ -200,64 +200,64 @@ public class ConverterServlet extends HttpServlet {
      * @param stringExtension This string will be appended to the file name of the converted file.
      * @return The full path name of the converted file will be returned.
      * @see stringWorkingDirectory
-     */
+     */  
     private String convertDocument( String stringDocumentName,
                                     String stringConvertType,
                                     String stringExtension)
         throws Exception
     {
         String stringConvertedFile = "";
-
+        
         // Converting the document to the favoured type
 //         try {
             // Composing the URL
             String stringUrl = "file:///" + stringDocumentName;
-
+            
             /* Bootstraps a component context with the jurt base components
                registered. Component context to be granted to a component for running.
                Arbitrary values can be retrieved from the context. */
             XComponentContext xcomponentcontext =
                 com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
-
+            
             /* Gets the service manager instance to be used (or null). This method has
                been added for convenience, because the service manager is a often used
                object. */
             XMultiComponentFactory xmulticomponentfactory =
                 xcomponentcontext.getServiceManager();
-
+      
             /* Creates an instance of the component UnoUrlResolver which
                supports the services specified by the factory. */
             Object objectUrlResolver =
                 xmulticomponentfactory.createInstanceWithContext(
                     "com.sun.star.bridge.UnoUrlResolver", xcomponentcontext );
-
+            
             // Create a new url resolver
             XUnoUrlResolver xurlresolver = ( XUnoUrlResolver )
                 UnoRuntime.queryInterface( XUnoUrlResolver.class,
                                            objectUrlResolver );
-
+      
             // Resolves an object that is specified as follow:
             // uno:<connection description>;<protocol description>;<initial object name>
             Object objectInitial = xurlresolver.resolve(
                 "uno:socket,host=" + stringHost + ",port=" + stringPort +
                 ";urp;StarOffice.ServiceManager" );
-
+            
             // Create a service manager from the initial object
             xmulticomponentfactory = ( XMultiComponentFactory )
                 UnoRuntime.queryInterface( XMultiComponentFactory.class, objectInitial );
-
+            
             // Query for the XPropertySet interface.
             XPropertySet xpropertysetMultiComponentFactory = ( XPropertySet )
                 UnoRuntime.queryInterface( XPropertySet.class, xmulticomponentfactory );
-
+            
             // Get the default context from the office server.
             Object objectDefaultContext =
                 xpropertysetMultiComponentFactory.getPropertyValue( "DefaultContext" );
-
+            
             // Query for the interface XComponentContext.
             xcomponentcontext = ( XComponentContext ) UnoRuntime.queryInterface(
                 XComponentContext.class, objectDefaultContext );
-
+            
             /* A desktop environment contains tasks with one or more
                frames in which components can be loaded. Desktop is the
                environment for components which can instanciate within
@@ -266,24 +266,24 @@ public class ConverterServlet extends HttpServlet {
                 UnoRuntime.queryInterface( XComponentLoader.class,
                                            xmulticomponentfactory.createInstanceWithContext(
                                                "com.sun.star.frame.Desktop", xcomponentcontext ) );
-
+            
             // Preparing properties for loading the document
             PropertyValue propertyvalue[] = new PropertyValue[ 1 ];
             // Setting the flag for hidding the open document
             propertyvalue[ 0 ] = new PropertyValue();
             propertyvalue[ 0 ].Name = "Hidden";
             propertyvalue[ 0 ].Value = new Boolean(true);
-
+            
             // Loading the wanted document
             Object objectDocumentToStore =
                 xcomponentloader.loadComponentFromURL(
                     stringUrl, "_blank", 0, propertyvalue );
-
+            
             // Getting an object that will offer a simple way to store a document to a URL.
             XStorable xstorable =
                 ( XStorable ) UnoRuntime.queryInterface( XStorable.class,
                                                          objectDocumentToStore );
-
+      
             // Preparing properties for converting the document
             propertyvalue = new PropertyValue[ 2 ];
             // Setting the flag for overwriting
@@ -294,20 +294,20 @@ public class ConverterServlet extends HttpServlet {
             propertyvalue[ 1 ] = new PropertyValue();
             propertyvalue[ 1 ].Name = "FilterName";
             propertyvalue[ 1 ].Value = stringConvertType;
-
+            
             // Appending the favoured extension to the origin document name
             int index = stringUrl.lastIndexOf('.');
             if ( index >= 0 ) {
                 stringConvertedFile = stringUrl.substring(0, index) + "." + stringExtension;
-            } else {
+            } else {    
                 stringConvertedFile = stringUrl + "." + stringExtension;
             }
-
+            
             // Storing and converting the document
             xstorable.storeAsURL( stringConvertedFile, propertyvalue );
-
+            
             XCloseable xcloseable = (XCloseable)UnoRuntime.queryInterface( XCloseable.class,xstorable );
-
+            
             // Closing the converted document
             if ( xcloseable != null )
                 xcloseable.close(false);
@@ -318,18 +318,18 @@ public class ConverterServlet extends HttpServlet {
                     XComponent.class, xstorable );
                 xComponent.dispose();
             }
-
+            
 //         }
 //         catch( Exception exception ) {
 //             exception.printStackTrace();
 //             return( "" );
 //         }
-
+    
         if ( stringConvertedFile.startsWith( "file:///" ) ) {
             // Truncating the beginning of the file name
             stringConvertedFile = stringConvertedFile.substring( 8 );
         }
-
+        
         // Returning the name of the converted file
         return stringConvertedFile;
     }

@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 // __________ Imports __________
@@ -112,10 +112,10 @@ public class DrawingDemo
             System.exit( 0 );
         }
 
-
+ 
         Demo_PageCreation( xDrawDoc, 10 );
         Demo_PageNaming( xDrawDoc, "this page is called: LastPage" );
-        Demo_ShapeCreation( xDrawDoc );
+        Demo_ShapeCreation( xDrawDoc );	
         Demo_PolyPolygonBezier( xDrawDoc );
         Demo_Group1( xDrawDoc );
         Demo_Group2( xDrawDoc );
@@ -141,8 +141,8 @@ public class DrawingDemo
                 nMasterPages < ( ( nDrawPages + 1 ) / 2 ); nMasterPages++ )
                 PageHelper.insertNewMasterPageByIndex( xDrawDoc, nMasterPages );
 
-            // Now connect master page 1 to draw page 1 and 2,
-            // master page 2 to draw page 3 and 4 and so on.
+            // Now connect master page 1 to draw page 1 and 2, 
+            // master page 2 to draw page 3 and 4 and so on.			
             for ( i = 0; i < nDrawPages; i++ )
             {
                 XDrawPage xDrawPage = PageHelper.getDrawPageByIndex( xDrawDoc, i );
@@ -247,13 +247,13 @@ public class DrawingDemo
                 int nRndObjWidth  = aRndGen.nextInt( nHalfWidth );
                 int nRndObjHeight = aRndGen.nextInt( nHalfHeight );
 
-                int nRndObjPosX = aRndGen.nextInt( nHalfWidth - nRndObjWidth );
+                int	nRndObjPosX = aRndGen.nextInt( nHalfWidth - nRndObjWidth );
                 int nRndObjPosY = aRndGen.nextInt( nHalfHeight - nRndObjHeight )
                     + nHalfHeight;
 
                 XShapes xShapes = (XShapes)
                     UnoRuntime.queryInterface( XShapes.class, pPages[ i ] );
-                ShapeHelper.createAndInsertShape( xDrawDoc, xShapes,
+                ShapeHelper.createAndInsertShape( xDrawDoc, xShapes, 
                     new Point( nRndObjPosX, nRndObjPosY ),
                         new Size( nRndObjWidth, nRndObjHeight ),
                             "com.sun.star.drawing.RectangleShape" );
@@ -275,7 +275,7 @@ public class DrawingDemo
                 new Point( 0, 0 ),
                     new Size( 0, 0 ),
                         "com.sun.star.drawing.ClosedBezierShape" );
-
+    
             // the fact that the shape must have been added to the page before
             // it is possible to apply changes to the PropertySet, it is a good
             // proceeding to add the shape as soon as possible
@@ -301,7 +301,7 @@ public class DrawingDemo
             PolyPolygonBezierCoords aCoords = new PolyPolygonBezierCoords();
             // allocating the outer sequence
             int nPolygonCount = 50;
-            aCoords.Coordinates = new Point[ nPolygonCount ][ ];
+            aCoords.Coordinates = new Point[ nPolygonCount ][ ];	
             aCoords.Flags = new PolygonFlags[ nPolygonCount ][ ];
             int i, n, nY;
             // fill the inner point sequence now
@@ -310,8 +310,8 @@ public class DrawingDemo
                 // create a polygon using two normal and two control points
                 // allocating the inner sequence
                 int nPointCount = 8;
-                Point[]         pPolyPoints = new Point[ nPointCount ];
-                PolygonFlags[]  pPolyFlags  = new PolygonFlags[ nPointCount ];
+                Point[]			pPolyPoints = new Point[ nPointCount ];
+                PolygonFlags[]	pPolyFlags	= new PolygonFlags[ nPointCount ];
 
                 for ( n = 0; n < nPointCount; n++ )
                     pPolyPoints[ n ] = new Point();
@@ -343,7 +343,7 @@ public class DrawingDemo
                 pPolyFlags[ 7 ] = PolygonFlags.NORMAL;
 
                 aCoords.Coordinates[ i ]= pPolyPoints;
-                aCoords.Flags[ i ]      = pPolyFlags;
+                aCoords.Flags[ i ]		= pPolyFlags;
             }
             xShapeProperties.setPropertyValue( "PolyPolygonBezier", aCoords );
 
@@ -356,7 +356,7 @@ public class DrawingDemo
         }
     }
 
-    // This method will create a group containing two ellipses
+    // This method will create a group containing two ellipses 
     // the shapes will be added into the top right corner of the first
     // draw page
     public static void Demo_Group1( XComponent xDrawDoc )
@@ -380,7 +380,7 @@ public class DrawingDemo
 
             Size aPageSize = PageHelper.getPageSize( xDrawPage );
 
-            int nWidth  = 4000;
+            int nWidth  = 4000; 
             int nHeight = 2000;
             int nPosX = ( aPageSize.Width * 3 ) / 4 - nWidth / 2;
             int nPosY1 = 2000;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,81 +61,81 @@ class Adoc_PE : public TokenInterpreter
                         Adoc_PE();
                         ~Adoc_PE();
 
-    virtual void        Hdl_at_std(
-                            const Tok_at_std &  i_rTok );
-    virtual void        Hdl_at_base(
-                            const Tok_at_base & i_rTok );
-    virtual void        Hdl_at_exception(
+    virtual void		Hdl_at_std(
+                            const Tok_at_std &	i_rTok );
+    virtual void		Hdl_at_base(
+                            const Tok_at_base &	i_rTok );
+    virtual void		Hdl_at_exception(
                             const Tok_at_exception &
                                                 i_rTok );
-    virtual void        Hdl_at_impl(
-                            const Tok_at_impl & i_rTok );
-    virtual void        Hdl_at_key(
-                            const Tok_at_key &  i_rTok );
-    virtual void        Hdl_at_param(
+    virtual void		Hdl_at_impl(
+                            const Tok_at_impl &	i_rTok );
+    virtual void		Hdl_at_key(
+                            const Tok_at_key &	i_rTok );
+    virtual void		Hdl_at_param(
                             const Tok_at_param &
                                                 i_rTok );
-    virtual void        Hdl_at_see(
-                            const Tok_at_see &  i_rTok );
-    virtual void        Hdl_at_template(
+    virtual void		Hdl_at_see(
+                            const Tok_at_see &	i_rTok );
+    virtual void		Hdl_at_template(
                             const Tok_at_template &
                                                 i_rTok );
-    virtual void        Hdl_at_interface(
+    virtual void		Hdl_at_interface(
                             const Tok_at_interface &
                                                 i_rTok );
-    virtual void        Hdl_at_internal(
+    virtual void		Hdl_at_internal(
                             const Tok_at_internal &
                                                 i_rTok );
-    virtual void        Hdl_at_obsolete(
+    virtual void		Hdl_at_obsolete(
                             const Tok_at_obsolete &
                                                 i_rTok );
-    virtual void        Hdl_at_module(
+    virtual void		Hdl_at_module(
                             const Tok_at_module &
                                                 i_rTok );
-    virtual void        Hdl_at_file(
-                            const Tok_at_file & i_rTok );
-    virtual void        Hdl_at_gloss(
+    virtual void		Hdl_at_file(
+                            const Tok_at_file &	i_rTok );
+    virtual void		Hdl_at_gloss(
                             const Tok_at_gloss &
                                                 i_rTok );
-    virtual void        Hdl_at_global(
+    virtual void		Hdl_at_global(
                             const Tok_at_global &
                                                 i_rTok );
-    virtual void        Hdl_at_include(
+    virtual void		Hdl_at_include(
                             const Tok_at_include &
                                                 i_rTok );
-    virtual void        Hdl_at_label(
+    virtual void		Hdl_at_label(
                             const Tok_at_label &
                                                 i_rTok );
-    virtual void        Hdl_at_since(
+    virtual void		Hdl_at_since(
                             const Tok_at_since &
                                                 i_rTok );
-    virtual void        Hdl_at_HTML(
+    virtual void		Hdl_at_HTML(
                             const Tok_at_HTML &
                                                 i_rTok );
-    virtual void        Hdl_at_NOHTML(
+    virtual void		Hdl_at_NOHTML(
                             const Tok_at_NOHTML &
                                                 i_rTok );
 
-    virtual void        Hdl_DocWord(
-                            const Tok_DocWord & i_rTok );
+    virtual void		Hdl_DocWord(
+                            const Tok_DocWord &	i_rTok );
 
-    virtual void        Hdl_Whitespace(
+    virtual void		Hdl_Whitespace(
                             const Tok_Whitespace &
                                                 i_rTok );
-    virtual void        Hdl_LineStart(
+    virtual void		Hdl_LineStart(
                             const Tok_LineStart &
                                                 i_rTok );
-    virtual void        Hdl_Eol(
-                            const Tok_Eol &     i_rTok );
+    virtual void		Hdl_Eol(
+                            const Tok_Eol &		i_rTok );
 
-    virtual void        Hdl_EoDocu(
-                            const Tok_EoDocu &  i_rTok );
+    virtual void		Hdl_EoDocu(
+                            const Tok_EoDocu &	i_rTok );
 
 
     DYN ary::doc::OldCppDocu *
                         ReleaseJustParsedDocu();
 
-    bool                IsComplete() const;
+    bool				IsComplete() const;
 
   private:
     void                InstallAtTag(
@@ -144,7 +144,7 @@ class Adoc_PE : public TokenInterpreter
                             bool                i_bImplicit = false );  /// True for implicit @short and @descr.
     ary::doc::OldCppDocu &
                         CurDocu();
-    ary::info::AtTag &  CurAtTag();
+    ary::info::AtTag &	CurAtTag();
     bool                UsesHtmlInDocuText();
 
     void                RenameCurShortTag();
@@ -168,10 +168,10 @@ class Adoc_PE : public TokenInterpreter
 
     Dyn<ary::doc::OldCppDocu>
                         pCurDocu;
-    ary::info::AtTag *  pCurAtTag;
+    ary::info::AtTag *	pCurAtTag;
     uintt               nLineCountInDocu;
-    UINT8               nCurSpecialMeaningTokens;
-    UINT8               nCurSubtractFromLineStart;
+    UINT8				nCurSpecialMeaningTokens;
+    UINT8				nCurSubtractFromLineStart;
     E_TagState          eCurTagState;
     E_DocuState         eDocuState;
     bool                bIsComplete;

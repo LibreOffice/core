@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 // __________ Imports __________
@@ -61,7 +61,7 @@ import com.sun.star.presentation.XPresentationSupplier;
     @author Sven Jacobi
  */
 
-// This demo will demonstrate how to create a presentation using the Office API
+// This demo will demonstrate how to create a presentation using the Office API 
 
 // The first parameter describes the connection that is to use. If there is no parameter
 // "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" is used.
@@ -90,8 +90,8 @@ public class PresentationDemo
                 "private:factory/simpress", "_blank", 0, pPropValues );
 
 
-            XDrawPage    xPage;
-            XShapes      xShapes;
+            XDrawPage	 xPage;
+            XShapes		 xShapes;
             XPropertySet xShapePropSet;
 
             // create pages, so that three are available
@@ -108,7 +108,7 @@ public class PresentationDemo
                 com.sun.star.presentation.FadeEffect.FADE_FROM_RIGHT,
                     com.sun.star.presentation.AnimationSpeed.FAST,
                         1, 0 ); // automatic object and slide transition
-
+            
             // create a rectangle that is placed on the top left of the page
             xShapePropSet = ShapeHelper.createAndInsertShape( xDrawDoc,
                 xShapes,new Point( 1000, 1000 ), new Size( 5000, 5000 ),
@@ -117,7 +117,7 @@ public class PresentationDemo
                 com.sun.star.presentation.AnimationEffect.WAVYLINE_FROM_BOTTOM );
 
             /* the following three properties provokes that the shape is dimmed
-               to red
+               to red 
                after the animation has been finished */
             xShapePropSet.setPropertyValue( "DimHide", new Boolean( false ) );
             xShapePropSet.setPropertyValue( "DimPrevious", new Boolean( true ) );
@@ -177,7 +177,7 @@ public class PresentationDemo
                 UnoRuntime.queryInterface( XPropertySet.class, xShape );
             xShapePropSet.setPropertyValue("Effect",
                 com.sun.star.presentation.AnimationEffect.FADE_FROM_BOTTOM );
-
+            
             xShapePropSet.setPropertyValue(
                 "OnClick", com.sun.star.presentation.ClickAction.BOOKMARK );
             // set the name of page two, and use it with the bookmark action
@@ -219,7 +219,7 @@ public class PresentationDemo
         // what type of page xPage is, for this purpose it can been tested
         // if the com.sun.star.presentation.DrawPage service is supported
         XServiceInfo xInfo = (XServiceInfo)UnoRuntime.queryInterface(
-                XServiceInfo.class, xPage );
+                XServiceInfo.class, xPage );	
         if ( xInfo.supportsService( "com.sun.star.presentation.DrawPage" ) == true )
         {
             try

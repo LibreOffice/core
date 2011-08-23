@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 #include <stdio.h>
@@ -45,13 +45,13 @@
 
 // include our specific addon header to get access to functions and definitions
 #include <addon.hxx>
-
+ 
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
+using namespace ::com::sun::star::registry; 
 
 //##################################################################################################
 //#### EXPORTED ####################################################################################
@@ -84,13 +84,13 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * 
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLEMENTATION_NAME "/UNO/SERVICES") ) ) );
-
+            
             const Sequence< OUString > & rSNL =
                 Addon_getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();
             for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
                 xNewKey->createKey( pArray[nPos] );
-
+            
             return sal_True;
         }
         catch (InvalidRegistryException &)
@@ -107,12 +107,12 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * 
  * @param pImplName       name of implementation
  * @param pServiceManager a service manager, need for component creation
  * @param pRegistryKey    the registry key for this component, need for persistent data
- * @return a component factory
+ * @return a component factory 
  */
 extern "C" void * SAL_CALL component_getFactory(const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey)
 {
     void * pRet = 0;
-
+    
     if (rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
@@ -120,15 +120,15 @@ extern "C" void * SAL_CALL component_getFactory(const sal_Char * pImplName, void
             OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) ),
             Addon_createInstance,
             Addon_getSupportedServiceNames() ) );
-
+        
         if (xFactory.is())
         {
             xFactory->acquire();
             pRet = xFactory.get();
         }
     }
-
+    
     return pRet;
-}
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

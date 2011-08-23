@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,15 +57,15 @@ class IdlParser : public ::CodeParser,
 {
   public:
                         IdlParser(
-                            ary::Repository &       io_rRepository );
+                            ary::Repository &	    io_rRepository );
 
-    virtual void        Run(
+    virtual void		Run(
                             const autodoc::FileCollector_Ifc &
                                                 i_rFiles );
 
   private:
     // DATA
-    ary::Repository *   pRepository;
+    ary::Repository *	pRepository;
 };
 
 

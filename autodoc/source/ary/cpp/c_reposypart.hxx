@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ class RepositoryPartition : public InternalGate
                         RepositoryTitle() const;
     virtual const CodeEntity *
                         Search_RelatedCe(
-                            Type_id             i_type ) const;
+                            Type_id		        i_type ) const;
     virtual const ::ary::cpp::CppEntity *
                         Search_Entity(
                             GlobalId            i_id ) const;

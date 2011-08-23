@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,14 +41,14 @@ class Tok_Identifier : public cpp::Token
 {
   public:
                         Tok_Identifier(
-                            const char *        i_sText ) : sText(i_sText) {}
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
-    virtual INT16       TypeId() const;
+                            const char *		i_sText ) : sText(i_sText) {}
+    virtual void		Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
+    virtual INT16		TypeId() const;
     virtual const char *
                         Text() const;
   private:
-    String              sText;
+    String  			sText;
 };
 const INT16 Tid_Identifier = 1;
 
@@ -63,14 +63,14 @@ class Tok_Operator : public cpp::Token
 {
   public:
                         Tok_Operator(
-                            const char *        i_sText ) : sText(i_sText) {}
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
-    virtual INT16       TypeId() const;
+                            const char *		i_sText ) : sText(i_sText) {}
+    virtual void		Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
+    virtual INT16		TypeId() const;
     virtual const char *
                         Text() const;
   private:
-    String              sText;
+    String  			sText;
 };
 const INT16 Tid_Operator = 2;
 
@@ -79,9 +79,9 @@ const INT16 Tid_Operator = 2;
 #define DECL_TOKEN_CLASS(name,tid) \
 class Tok_##name : public cpp::Token \
 { public: \
-    virtual void        Trigger( \
-                            TokenInterpreter &  io_rInterpreter ) const; \
-    virtual INT16       TypeId() const; \
+    virtual void		Trigger( \
+                            TokenInterpreter &	io_rInterpreter ) const; \
+    virtual INT16		TypeId() const; \
     virtual const char * \
                         Text() const; \
 }; \
@@ -135,14 +135,14 @@ DECL_TOKEN_CLASS(typename,43);
 class Tok_##name : public cpp::Token \
 { public: \
                         Tok_##name( \
-                            const char *        i_sText ) : sText(i_sText) {} \
-    virtual void        Trigger( \
-                            TokenInterpreter &  io_rInterpreter ) const; \
-    virtual INT16       TypeId() const; \
+                            const char *		i_sText ) : sText(i_sText) {} \
+    virtual void		Trigger( \
+                            TokenInterpreter &	io_rInterpreter ) const; \
+    virtual INT16		TypeId() const; \
     virtual const char * \
                         Text() const; \
   private: \
-    String              sText; \
+    String  			sText; \
 }; \
 const INT16 Tid_##name = tid
 
@@ -174,11 +174,11 @@ class Tok_UnblockMacro : public ::TextToken
 {
   public:
                         Tok_UnblockMacro(
-                            const char *        i_sMacroName ) : sMacroName(i_sMacroName) {}
-    virtual const char* Text() const;
+                            const char *		i_sMacroName ) : sMacroName(i_sMacroName) {}
+    virtual const char*	Text() const;
 
-    virtual void        DealOut(
-                            ::TokenDealer &     o_rDealer );
+    virtual void		DealOut(
+                            ::TokenDealer &		o_rDealer );
   private:
     String              sMacroName;
 };
@@ -192,9 +192,9 @@ class Tok_Namespace : public cpp::Token                // file
 class Tok_Bracket : public cpp::Token                  // ueberall
 class Tok_Separator : public cpp::Token                // ueberall
 
-class Tok_Identifier : public cpp::Token               // ueberall
+class Tok_Identifier : public cpp::Token			   // ueberall
 class Tok_NameSeparator : public cpp::Token            // Type, Name
-class Tok_BuiltInType : public cpp::Token              // ueberall
+class Tok_BuiltInType : public cpp::Token			   // ueberall
 class Tok_ConVol : public cpp::Token                   // class-><FuVa>
 class Tok_StorageClass : public cpp::Token             // file-><type>,<FuVa>
 class Tok_OperatorFunctionName : public cpp::Token     // class

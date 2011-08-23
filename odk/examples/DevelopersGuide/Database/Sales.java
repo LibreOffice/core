@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,23 +29,23 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import java.io.*;
 
-//  import com.sun.star.comp.helper.RegistryServiceFactory;
-//  import com.sun.star.comp.servicemanager.ServiceManager;
-//  import com.sun.star.lang.XMultiServiceFactory;
-//  import com.sun.star.lang.XServiceInfo;
+//	import com.sun.star.comp.helper.RegistryServiceFactory;
+//	import com.sun.star.comp.servicemanager.ServiceManager;
+//	import com.sun.star.lang.XMultiServiceFactory;
+//	import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XComponent;
-//  import com.sun.star.bridge.XUnoUrlResolver;
+//	import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.*;
 import com.sun.star.util.Date;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbc.*;
-
+    
 public class Sales
 {
     private XConnection con;
@@ -82,7 +82,7 @@ public class Sales
     public void insertDataIntoSales() throws com.sun.star.uno.Exception
     {
         XStatement stmt = con.createStatement();
-        stmt.executeUpdate("INSERT INTO SALES " +
+        stmt.executeUpdate("INSERT INTO SALES " + 
                 "VALUES (1, '100', '1','Linux','2001-02-12',15)");
         stmt.executeUpdate("INSERT INTO SALES " +
                 "VALUES (2, '101', '2','Beef','2001-10-18',15.78)");
@@ -94,8 +94,8 @@ public class Sales
     public void updateSales() throws com.sun.star.uno.Exception
     {
         XStatement stmt = con.createStatement();
-        String updateString =   "UPDATE SALES " +
-                                "SET PRICE = 30 " +
+        String updateString =	"UPDATE SALES " +
+                                "SET PRICE = 30 " + 
                                 "WHERE SALENR = 1";
         stmt.executeUpdate(updateString);
     }
@@ -104,7 +104,7 @@ public class Sales
     public void retrieveSalesData() throws com.sun.star.uno.Exception
     {
         XStatement stmt = con.createStatement();
-        String query =  "SELECT NAME, PRICE FROM SALES " +
+        String query =	"SELECT NAME, PRICE FROM SALES " +
                         "WHERE SALENR = 1";
         XResultSet rs = stmt.executeQuery(query);
         XRow      row = (XRow)UnoRuntime.queryInterface(XRow.class, rs);
@@ -155,10 +155,10 @@ public class Sales
     {
         // example for a programmatic way to do updates. This doesn't work with adabas.
         XStatement stmt = con.createStatement();
-//      stmt.executeUpdate("INSERT INTO SALES " +
+//		stmt.executeUpdate("INSERT INTO SALES " +
 //                   "VALUES (4, 102, 5, 'FTOP Darjeeling tea', '2002-01-02',150)");
 //
-//      stmt = con.createStatement();
+//		stmt = con.createStatement();
         XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class,stmt);
         xProp.setPropertyValue("ResultSetType", new java.lang.Integer(ResultSetType.SCROLL_INSENSITIVE));
         xProp.setPropertyValue("ResultSetConcurrency", new java.lang.Integer(ResultSetConcurrency.UPDATABLE));
@@ -167,7 +167,7 @@ public class Sales
 
         // insert a new row
         XRowUpdate updateRow = (XRowUpdate)UnoRuntime.queryInterface(XRowUpdate.class,rs);
-        XResultSetUpdate updateRs = ( XResultSetUpdate )UnoRuntime. queryInterface(XResultSetUpdate.class,rs);
+        XResultSetUpdate updateRs = ( XResultSetUpdate )UnoRuntime.	queryInterface(XResultSetUpdate.class,rs);
         updateRs.moveToInsertRow();
         updateRow.updateInt(1, 4);
         updateRow.updateInt(2, 102);
@@ -189,7 +189,7 @@ public class Sales
         XResultSet rs = stmt.executeQuery("SELECT * FROM SALES");
         XRow       row = (XRow)UnoRuntime.queryInterface(XRow.class,rs);
 
-        XResultSetUpdate updateRs = ( XResultSetUpdate )UnoRuntime. queryInterface(XResultSetUpdate.class,rs);
+        XResultSetUpdate updateRs = ( XResultSetUpdate )UnoRuntime.	queryInterface(XResultSetUpdate.class,rs);
         // move to the inserted row
         rs.absolute(4);
         updateRs.deleteRow();
@@ -213,7 +213,7 @@ public class Sales
 
         // modifiy the 4 row
         XRowUpdate updateRow = (XRowUpdate)UnoRuntime.queryInterface(XRowUpdate.class,rs);
-        XResultSetUpdate updateRs = ( XResultSetUpdate )UnoRuntime. queryInterface(XResultSetUpdate.class,rs);
+        XResultSetUpdate updateRs = ( XResultSetUpdate )UnoRuntime.	queryInterface(XResultSetUpdate.class,rs);
         updateRow.updateFloat(2, 150);
         updateRs.updateRow();
         // repositioning

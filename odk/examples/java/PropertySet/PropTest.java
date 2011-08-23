@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,11 +29,11 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 /*
-This example shows a UNO component that inherits com.sun.star.lib.uno.helper.PropertySet in
+This example shows a UNO component that inherits com.sun.star.lib.uno.helper.PropertySet in 
 order to provide implementations of  these interfaces:
 
       com.sun.star.beans.XPropertySet
@@ -140,11 +140,11 @@ public class PropTest extends PropertySet implements XServiceInfo
     public Object[] arObjectA; // MAYBEVOID
     public Any[] arAnyA; // MAYBEVOID
     public XInterface[] arXinterfaceA; // MAYBEVOID
-    public boolean[][] ar2BoolA; // MAYBEVOID
+    public boolean[][] ar2BoolA; // MAYBEVOID 
     public Boolean boolClassA; // MAYBEVOID
     public Character charClassA; // MAYBEVOID
-    public Byte byteClassA; // MAYBEVOID
-    public Short shortClassA; // MAYBEVOID
+    public Byte byteClassA; // MAYBEVOID 
+    public Short shortClassA; // MAYBEVOID 
     public Integer intClassA; // MAYBEVOID
     public Long longClassA; // MAYBEVOID
     public Float floatClassA; // MAYBEVOID
@@ -152,7 +152,7 @@ public class PropTest extends PropertySet implements XServiceInfo
 
     // readonly
     public int roIntA= 100;
-    public Integer roIntClassA= new Integer(100);
+    public Integer roIntClassA= new Integer(100); 
     public Object roObjectA= new Integer(101);
     public Any roAnyA= new Any( new Type(int.class), new Integer(102));
 
@@ -167,7 +167,7 @@ public class PropTest extends PropertySet implements XServiceInfo
     public Object mvObjectA;
     public Any mvAnyA;
     public XInterface mvXinterfaceA;
-
+    
     public static final String __serviceName="PropTest";
 
     public PropTest() {
@@ -219,7 +219,7 @@ public class PropTest extends PropertySet implements XServiceInfo
         registerProperty("mvAnyA", PropertyAttribute.MAYBEVOID);
         registerProperty("mvXinterfaceA", PropertyAttribute.MAYBEVOID);
     }
-
+            
 
     // XServiceName
     public String getImplementationName(  )
@@ -234,7 +234,7 @@ public class PropTest extends PropertySet implements XServiceInfo
             return true;
         return false;
     }
-
+    
     //XServiceName
     public String[] getSupportedServiceNames(  )
     {
@@ -257,7 +257,7 @@ public class PropTest extends PropertySet implements XServiceInfo
         return xSingleServiceFactory;
     }
 
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey)
+    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) 
     {
         return FactoryHelper.writeRegistryServiceInfo( PropTest.class.getName(),
         PropTest.__serviceName, regKey);

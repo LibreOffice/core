@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,35 +44,35 @@ class mbstream : public bstream
   public:
     // LIFECYCLE
                         mbstream(
-                            uintt               i_nSize);
+                            uintt 				i_nSize);
                         ~mbstream();
     // OPERATIONS
-    void                resize(
-                            uintt               i_nSize );
-    //  INQUIRY
-    uintt               size() const;
-    const void *        data() const;
+    void				resize(
+                            uintt 				i_nSize );
+    //	INQUIRY
+    uintt 				size() const;
+    const void *	  	data() const;
 
   private:
     // Interface bistream:
-    virtual uintt       do_read(
-                            void *          out_pDest,
+    virtual uintt 		do_read(
+                            void *	        out_pDest,
                             uintt           i_nNrofBytes);
-    virtual bool        inq_eod() const;
+    virtual bool		inq_eod() const;
     // Interface bostream:
-    virtual uintt       do_write(
-                            const void *    i_pSrc,
+    virtual uintt 		do_write(
+                            const void *   	i_pSrc,
                             uintt           i_nNrofBytes);
     // Interface bstream:
-    virtual uintt       do_seek(
-                            intt            i_nDistance,
+    virtual uintt 		do_seek(
+                            intt 			i_nDistance,
                             seek_dir        i_eStartPoint = ::csv::beg );
-    virtual uintt       inq_position() const;
+    virtual uintt 		inq_position() const;
 
     // DYN
-    DYN char *          dpOwnedMemorySpace;
-    uintt               nSize;
-    uintt               nCurPosition;
+    DYN char *			dpOwnedMemorySpace;
+    uintt 				nSize;
+    uintt 				nCurPosition;
 };
 
 

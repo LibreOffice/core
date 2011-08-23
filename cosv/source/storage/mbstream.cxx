@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace csv
 
 
 mbstream::mbstream( uintt i_nSize )
-    :   dpOwnedMemorySpace( new char[i_nSize+1] ),
+    :	dpOwnedMemorySpace( new char[i_nSize+1] ),
         nSize( i_nSize ),
         nCurPosition( 0 )
 {
@@ -62,7 +62,7 @@ mbstream::resize( uintt  i_nSize )
 }
 
 uintt
-mbstream::do_read( void *          out_pDest,
+mbstream::do_read( void *	       out_pDest,
                    uintt           i_nNrofBytes )
 {
     uintt  ret = min( i_nNrofBytes, nSize - nCurPosition );
@@ -78,7 +78,7 @@ mbstream::inq_eod() const
 }
 
 uintt
-mbstream::do_write( const void *    i_pSrc,
+mbstream::do_write( const void *   	i_pSrc,
                     uintt           i_nNrofBytes )
 {
     resize( max( 3 * (nSize+1) / 2, nCurPosition + i_nNrofBytes) );
@@ -88,7 +88,7 @@ mbstream::do_write( const void *    i_pSrc,
 }
 
 uintt
-mbstream::do_seek( intt     i_nDistance,
+mbstream::do_seek( intt 	i_nDistance,
                    seek_dir i_eStartPoint )
 {
     switch ( i_eStartPoint )

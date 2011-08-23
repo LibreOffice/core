@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ typedef uintt           ClassId;
 typedef Rid             Gid;        /// Group Id. Id of a group.
 typedef UINT8           SlotAccessId;   /// Access to a Slot
 typedef std::set< Rid, std::less< Rid > >   Set_Rid;
-typedef std::vector<Rid>                    List_Rid;
+typedef std::vector<Rid>	                List_Rid;
 
 
 

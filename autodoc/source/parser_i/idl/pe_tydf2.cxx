@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,11 +49,11 @@ namespace uidl
 #ifdef DF
 #undef DF
 #endif
-#define DF  &PE_Typedef::On_Default
+#define DF 	&PE_Typedef::On_Default
 
 PE_Typedef::F_TOK
 PE_Typedef::aDispatcher[PE_Typedef::e_STATES_MAX][PE_Typedef::tt_MAX] =
-        {   { DF, DF, DF },  // e_none
+        { 	{ DF, DF, DF },  // e_none
             { &PE_Typedef::On_expect_description_Any,
                   &PE_Typedef::On_expect_description_Any,
                       DF },  // expect_description
@@ -65,8 +65,8 @@ PE_Typedef::aDispatcher[PE_Typedef::e_STATES_MAX][PE_Typedef::tt_MAX] =
 
 
 inline void
-PE_Typedef::CallHandler( const char *       i_sTokenText,
-                         E_TokenType        i_eTokenType )
+PE_Typedef::CallHandler( const char *		i_sTokenText,
+                         E_TokenType		i_eTokenType )
     { (this->*aDispatcher[eState][i_eTokenType])(i_sTokenText); }
 
 
@@ -74,7 +74,7 @@ PE_Typedef::CallHandler( const char *       i_sTokenText,
 
 
 PE_Typedef::PE_Typedef()
-    :   eState(e_none),
+    :	eState(e_none),
         pPE_Type(0),
         nType(0),
         sName()
@@ -83,8 +83,8 @@ PE_Typedef::PE_Typedef()
 }
 
 void
-PE_Typedef::EstablishContacts( UnoIDL_PE *              io_pParentPE,
-                               ary::Repository &    io_rRepository,
+PE_Typedef::EstablishContacts( UnoIDL_PE *				io_pParentPE,
+                               ary::Repository &	io_rRepository,
                                TokenProcessing_Result & o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);

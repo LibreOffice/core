@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace cpp
 
 
 Slot_SubNamespaces::Slot_SubNamespaces( const Map_NamespacePtr & i_rData )
-    :   pData( &i_rData )
+    :	pData( &i_rData )
 {
 }
 
@@ -75,8 +75,8 @@ Slot_SubNamespaces::StoreEntries( ary::Display &  o_rDestination ) const
 
 //***********************       Slot_BaseClass     ********************//
 
-Slot_BaseClass::Slot_BaseClass( const List_Bases & i_rData )
-    :   pData( &i_rData )
+Slot_BaseClass::Slot_BaseClass(	const List_Bases & i_rData )
+    :	pData( &i_rData )
 {
 }
 

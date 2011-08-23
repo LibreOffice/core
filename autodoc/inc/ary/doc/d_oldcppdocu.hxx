@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,38 +63,38 @@ namespace doc
 class OldCppDocu : public Node
 {
   public:
-    typedef std::vector< DYN AtTag * >  TagList;
+    typedef std::vector< DYN AtTag * >	TagList;
 
     // LIFECYCLE
                         OldCppDocu();
-    virtual             ~OldCppDocu();
+    virtual				~OldCppDocu();
 
-    void                Store2(
+    void		        Store2(
                             info::DocuStore &   o_rDocuStore );
 
-    virtual AtTag *     Create_StdTag(
-                            E_AtTagId           i_eId );
-    virtual AtTag *     CheckIn_BaseTag();
-    virtual AtTag *     CheckIn_ExceptionTag();
-    virtual AtTag *     Create_ImplementsTag();
-    virtual AtTag *     Create_KeywordTag();
-    virtual AtTag *     CheckIn_ParameterTag();
-    virtual AtTag *     CheckIn_SeeTag();
-    virtual AtTag *     CheckIn_TemplateTag();
-    virtual AtTag *     Create_LabelTag();
-    virtual AtTag *     Create_DefaultTag();
-    virtual AtTag *     Create_SinceTag();          /// @return always the first one created.
+    virtual AtTag *		Create_StdTag(
+                            E_AtTagId			i_eId );
+    virtual AtTag *		CheckIn_BaseTag();
+    virtual AtTag *		CheckIn_ExceptionTag();
+    virtual AtTag *		Create_ImplementsTag();
+    virtual AtTag *		Create_KeywordTag();
+    virtual AtTag *		CheckIn_ParameterTag();
+    virtual AtTag *		CheckIn_SeeTag();
+    virtual AtTag *		CheckIn_TemplateTag();
+    virtual AtTag *		Create_LabelTag();
+    virtual AtTag *		Create_DefaultTag();
+    virtual AtTag *		Create_SinceTag();          /// @return always the first one created.
 
     virtual void        Replace_AtShort_By_AtDescr();
 
-    virtual void        Set_Obsolete();
-    virtual void        Set_Internal();
-    virtual void        Set_Interface()         { bIsInterface = true; }
+    virtual void		Set_Obsolete();
+    virtual void		Set_Internal();
+    virtual void		Set_Interface()         { bIsInterface = true; }
 
   // INQUIRY
-    const TagList &     Tags() const            { return aTags; }
+    const TagList &		Tags() const			{ return aTags; }
     const AtTag &       Short() const;
-    bool                IsObsolete() const      { return bIsObsolete; }
+    bool				IsObsolete() const	    { return bIsObsolete; }
     virtual bool        IsInternal() const;
     virtual bool        IsInterface() const;
 
@@ -109,18 +109,18 @@ class OldCppDocu : public Node
         The index of this new AtTag is inserted in nTags at position
         i_nIndex.
     */
-    AtTag * &           NewTag(
-                            UINT8               i_nIndex );
+    AtTag * &			NewTag(
+                            UINT8				i_nIndex );
     /** Returns the Tag with the position nTags[i_nIndex]
         in aTags.
     */
     AtTag &             GetTag(
-                            UINT8               i_nIndex );
+                            UINT8				i_nIndex );
 
-    TagList             aTags;
-    bool                bIsObsolete;
-    bool                bIsInternal;
-    bool                bIsInterface;
+    TagList				aTags;
+    bool				bIsObsolete;
+    bool				bIsInternal;
+    bool				bIsInterface;
 };
 
 

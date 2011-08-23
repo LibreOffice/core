@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import java.awt.*;
@@ -63,12 +63,12 @@ public class ConnectionAwareClient extends java.awt.Frame
     private XComponentContext _ctx;
 
     private com.sun.star.frame.XComponentLoader _officeComponentLoader;
-
+    
     public ConnectionAwareClient( XComponentContext ctx , String url )
     {
         _url = url;
         _ctx = ctx;
-
+        
         Panel p1 = new Panel();
         _btnWriter = new Button("New writer");
         _btnCalc = new Button("New calc");
@@ -79,7 +79,7 @@ public class ConnectionAwareClient extends java.awt.Frame
         p1.add( _btnWriter );
         p1.add( _btnCalc );
         p1.add( _txtLabel );
-
+        
         addWindowListener(
             new WindowAdapter()
             {
@@ -100,7 +100,7 @@ public class ConnectionAwareClient extends java.awt.Frame
         _txtLabel.setText( "disconnected" );
     }
 
-    public void actionPerformed( ActionEvent event )
+    public void actionPerformed( ActionEvent event ) 
     {
         try
         {
@@ -143,7 +143,7 @@ public class ConnectionAwareClient extends java.awt.Frame
         int semicolon = url.indexOf( ';' );
         if( semicolon == -1 )
             return null;
-
+        
         aRet[0] = url.substring( 4 , semicolon );
         int nextSemicolon = url.indexOf( ';' , semicolon+1);
 
@@ -167,7 +167,7 @@ public class ConnectionAwareClient extends java.awt.Frame
             // instantiate connector service
             Object x = _ctx.getServiceManager().createInstanceWithContext(
                 "com.sun.star.connection.Connector", _ctx );
-
+            
             XConnector xConnector = (XConnector )
                 UnoRuntime.queryInterface(XConnector.class, x);
 
@@ -179,7 +179,7 @@ public class ConnectionAwareClient extends java.awt.Frame
 
             // connect using the connection string part of the uno-url only.
             XConnection connection = xConnector.connect( a[0] );
-
+        
             x = _ctx.getServiceManager().createInstanceWithContext(
                 "com.sun.star.bridge.BridgeFactory", _ctx );
 
@@ -195,7 +195,7 @@ public class ConnectionAwareClient extends java.awt.Frame
                 XComponent.class, bridge );
             xComponent.addEventListener( this );
 
-            // get the remote instance
+            // get the remote instance 
             x = bridge.getInstance( a[2] );
 
             // Did the remote server export this object ?
@@ -204,7 +204,7 @@ public class ConnectionAwareClient extends java.awt.Frame
                 throw new com.sun.star.uno.Exception(
                     "Server didn't provide an instance for" + a[2], null );
             }
-
+      
             // Query the initial object for its main factory interface
             XMultiComponentFactory xOfficeMultiComponentFactory = ( XMultiComponentFactory )
                 UnoRuntime.queryInterface( XMultiComponentFactory.class, x );
@@ -213,17 +213,17 @@ public class ConnectionAwareClient extends java.awt.Frame
             // Query for the XPropertySet interface.
             XPropertySet xProperySet = ( XPropertySet )
                 UnoRuntime.queryInterface( XPropertySet.class, xOfficeMultiComponentFactory );
-
+            
             // Get the default context from the office server.
             Object oDefaultContext =
                 xProperySet.getPropertyValue( "DefaultContext" );
-
+            
             // Query for the interface XComponentContext.
             XComponentContext xOfficeComponentContext =
                 ( XComponentContext ) UnoRuntime.queryInterface(
                     XComponentContext.class, oDefaultContext );
 
-
+            
             // now create the desktop service
             // NOTE: use the office component context here !
             Object oDesktop = xOfficeMultiComponentFactory.createInstanceWithContext(
@@ -241,7 +241,7 @@ public class ConnectionAwareClient extends java.awt.Frame
         }
         return officeComponentLoader;
     }
-
+    
     public static void main( String [] args ) throws java.lang.Exception
         {
             if( args.length != 1 )

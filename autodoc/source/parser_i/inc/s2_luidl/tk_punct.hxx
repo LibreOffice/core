@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,13 @@ class TokPunctuation : public Token
     enum E_TokenId
     {
         e_none = 0,
-        BracketOpen =  1,           // (
+        BracketOpen =  1, 			// (
         BracketClose = 2,           // )
         ArrayBracketOpen = 3,       // [
         ArrayBracketClose = 4,      // ]
         CurledBracketOpen = 5,      // {
         CurledBracketClose = 6,     // }
-        Semicolon = 7,              // ;
+        Semicolon = 7, 	            // ;
         Colon = 8,                  // :
         DoubleColon = 9,            // ::
         Comma = 10,                 // ,
@@ -69,27 +69,27 @@ class TokPunctuation : public Token
 
 
                         TokPunctuation(
-                            EV_TokenId          i_eTag )
-                                                :   eTag(i_eTag) {}
+                            EV_TokenId			i_eTag )
+                                                :	eTag(i_eTag) {}
     // OPERATIONS
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
+    virtual void		Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
     // INQUIRY
     virtual const char *
                         Text() const;
-    EV_TokenId          Id() const              { return eTag; }
+    EV_TokenId			Id() const				{ return eTag; }
 
 
   private:
     // DATA
-    EV_TokenId          eTag;
+    EV_TokenId   		eTag;
 };
 
 class Tok_EOL : public Token
 {
     // OPERATIONS
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
+    virtual void		Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
     // INQUIRY
     virtual const char *
                         Text() const;
@@ -98,8 +98,8 @@ class Tok_EOL : public Token
 class Tok_EOF : public Token
 {
     // OPERATIONS
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
+    virtual void		Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
     // INQUIRY
     virtual const char *
                         Text() const;

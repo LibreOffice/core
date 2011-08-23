@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,13 +56,13 @@ void generateIncludes(std::ostream & o,
         o << "#include \"cppuhelper/basemutex.hxx\"\n";
     } else {
         o << "#include \"cppuhelper/implbase" << interfaces.size() << ".hxx\"\n";
-    }
+    }   
 
     if (propertyhelper.getLength() > 1) {
         if (propertyhelper.equals("_"))
             o << "#include \"cppuhelper/rpopshlp.hxx\"\n";
         else
-            o << "#include \"cppuhelper/propertysetmixin.hxx\"\n";
+            o << "#include \"cppuhelper/propertysetmixin.hxx\"\n";            
     }
 
     std::hash_set< OString, OStringHash >::const_iterator iter = interfaces.begin();
@@ -72,7 +72,7 @@ void generateIncludes(std::ostream & o,
           << ((*iter).replace('.', '/').getStr())
           << ".hpp\"\n";
         iter++;
-    }
+    }        
 }
 
 short generateNamespace(std::ostream & o,
@@ -127,7 +127,7 @@ OString generateCompHelperDeclaration(std::ostream & o,
     short nbrackets = generateNamespace(o, implname, true, nm);
 
     o << "namespace css = ::com::sun::star;\n\n";
-
+    
     // generate component/service helper functions
     o << "// component and service helper functions:\n"
         "::rtl::OUString SAL_CALL _getImplementationName();\n"
@@ -141,18 +141,18 @@ OString generateCompHelperDeclaration(std::ostream & o,
     for (short i=0; i < nbrackets; i++)
         o << "} ";
     o << "// closing component helper namespace\n\n";
-
+    
     return nm;
 }
 
 void generateCompHelperDefinition(std::ostream & o,
          const OString & implname,
-         const OString & classname,
+         const OString & classname,                       
          const std::hash_set< OString, OStringHash >& services)
 {
     OString nm;
     short nbrackets = generateNamespace(o, implname, true, nm);
-
+    
     o << "::rtl::OUString SAL_CALL _getImplementationName() {\n"
       << "    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\n"
       << "        \"" << implname << "\"));\n}\n\n";
@@ -169,7 +169,7 @@ void generateCompHelperDefinition(std::ostream & o,
           << "RTL_CONSTASCII_USTRINGPARAM(\n        \""
           << (*iter).replace('/','.') << "\"));\n";
         iter++;
-    }
+    }  
     o << "    return s;\n}\n\n";
 
     o << "css::uno::Reference< css::uno::XInterface > SAL_CALL _create("
@@ -182,7 +182,7 @@ void generateCompHelperDefinition(std::ostream & o,
     for (short j=0; j < nbrackets; j++)
         o << "} ";
     o << "// closing component helper namespace\n\n";
-
+    
 }
 
 void generateCompFunctions(std::ostream & o, const OString & nmspace)
@@ -214,7 +214,7 @@ void generateXPropertySetBodies(std::ostream& o,
                                 const OString & propertyhelper)
 {
     o << "// com.sun.star.beans.XPropertySet:\n";
-
+    
     o << "css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL "
       << classname << "getPropertySetInfo() throw ("
         "css::uno::RuntimeException)\n{\n    return ::cppu::PropertySetMixin< "
@@ -265,7 +265,7 @@ void generateXPropertySetBodies(std::ostream& o,
         "css::uno::RuntimeException, css::beans::UnknownPropertyException, "
         "css::lang::WrappedTargetException)\n{\n    ::cppu::PropertySetMixin< "
       << propertyhelper
-      << " >::removeVetoableChangeListener(aPropertyName, xListener);\n}\n\n";
+      << " >::removeVetoableChangeListener(aPropertyName, xListener);\n}\n\n";    
 }
 
 void generateXFastPropertySetBodies(std::ostream& o,
@@ -279,14 +279,14 @@ void generateXFastPropertySetBodies(std::ostream& o,
         "css::beans::UnknownPropertyException, css::beans::PropertyVetoException, "
         "css::lang::IllegalArgumentException, css::lang::WrappedTargetException, "
         "css::uno::RuntimeException)\n{\n    ::cppu::PropertySetMixin< "
-      << propertyhelper << " >::setFastPropertyValue(nHandle, aValue);\n}\n\n";
+      << propertyhelper << " >::setFastPropertyValue(nHandle, aValue);\n}\n\n";    
 
-
+    
     o << "css::uno::Any SAL_CALL " << classname << "getFastPropertyValue( "
         "::sal_Int32 nHandle ) throw (css::beans::UnknownPropertyException, "
         "css::lang::WrappedTargetException, css::uno::RuntimeException)\n{\n"
         "    return ::cppu::PropertySetMixin< "
-      << propertyhelper << " >::getFastPropertyValue(nHandle);\n}\n\n";
+      << propertyhelper << " >::getFastPropertyValue(nHandle);\n}\n\n";    
 }
 
 void generateXPropertyAccessBodies(std::ostream& o,
@@ -299,15 +299,15 @@ void generateXPropertyAccessBodies(std::ostream& o,
       << classname << "getPropertyValues(  ) throw ("
         "::com::sun::star::uno::RuntimeException)\n{\n"
         "    return ::cppu::PropertySetMixin< "
-      << propertyhelper << " >::getPropertyValues();\n}\n\n";
-
+      << propertyhelper << " >::getPropertyValues();\n}\n\n";    
+        
     o << "void SAL_CALL " << classname << "setPropertyValues( const "
         "css::uno::Sequence< css::beans::PropertyValue >& aProps ) throw ("
         "css::beans::UnknownPropertyException, css::beans::PropertyVetoException, "
         "css::lang::IllegalArgumentException, css::lang::WrappedTargetException, "
         "css::uno::RuntimeException)\n{\n"
         "    ::cppu::PropertySetMixin< "
-      << propertyhelper << " >::setPropertyValues(aProps);\n}\n\n";
+      << propertyhelper << " >::setPropertyValues(aProps);\n}\n\n";    
 }
 
 void generateXLocalizable(std::ostream& o, const OString & classname)
@@ -435,12 +435,12 @@ void generateXDispatch(std::ostream& o,
         "void SAL_CALL " << classname << "dispatch( const css::util::URL& aURL, const "
         "css::uno::Sequence< css::beans::PropertyValue >& aArguments ) throw"
         "(css::uno::RuntimeException)\n{\n";
-
+    
     ProtocolCmdMap::const_iterator iter = protocolCmdMap.begin();
     while (iter != protocolCmdMap.end()) {
         o << "    if ( aURL.Protocol.equalsAscii(\"" << (*iter).first
           << "\") == 0 )\n    {\n";
-
+        
         for (std::vector< OString >::const_iterator i = (*iter).second.begin();
              i != (*iter).second.end(); ++i) {
             o << "        if ( aURL.Path.equalsAscii(\"" << (*i) << "\") )\n"
@@ -452,13 +452,13 @@ void generateXDispatch(std::ostream& o,
         iter++;
     }
     o << "}\n\n";
-
+    
     // addStatusListener
     o << "void SAL_CALL " << classname << "addStatusListener( const css::uno::Reference< "
         "css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) "
         "throw (css::uno::RuntimeException)\n{\n"
         "    // add your own code here\n}\n\n";
-
+        
     // removeStatusListener
     o << "void SAL_CALL " << classname << "removeStatusListener( const css::uno::Reference"
         "< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) "
@@ -485,7 +485,7 @@ void generateXDispatchProvider(std::ostream& o,
     while (iter != protocolCmdMap.end()) {
         o << "    if ( aURL.Protocol.equalsAscii(\"" << (*iter).first
           << "\") == 0 )\n    {\n";
-
+        
         for (std::vector< OString >::const_iterator i = (*iter).second.begin();
              i != (*iter).second.end(); ++i) {
             o << "        if ( aURL.Path.equalsAscii(\"" << (*i) << "\") == 0 )\n"
@@ -511,7 +511,7 @@ void generateXDispatchProvider(std::ostream& o,
         "                                        seqDescripts[i].SearchFlags );\n"
         "    }\n\n    return lDispatcher;\n}\n\n";
 }
-
+ 
 void generateAddinConstructorAndHelper(std::ostream& o,
          ProgramOptions const & options,
          TypeManager const & manager, const OString & classname,
@@ -525,17 +525,17 @@ void generateAddinConstructorAndHelper(std::ostream& o,
         o << "     try {\n";
 
         generateFunctionParameterMap(o, options, manager, interfaces);
-
+    
         o << "        css::uno::Reference< css::lang::XMultiServiceFactory > xProvider"
             "(\n             m_xContext->getServiceManager()->createInstanceWithContext"
             "(\n                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\n    "
             "                 \"com.sun.star.configuration.ConfigurationProvider\")),"
             "\n                 m_xContext ), css::uno::UNO_QUERY );\n\n";
-
+        
         o << "        ::rtl::OUString sReadOnlyView(\n"
             "            RTL_CONSTASCII_USTRINGPARAM(\n"
             "                \"com.sun.star.configuration.ConfigurationAccess\"));\n\n";
-
+        
         o << "        ::rtl::OUStringBuffer sPath(::rtl::OUString::createFromAscii(\n"
             "             \"/org.openoffice.Office.CalcAddIns/AddInInfo/\"));\n"
             "        sPath.appendAscii(sADDIN_SERVICENAME);\n"
@@ -546,7 +546,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
             "        aArgument.Value <<= sPath.makeStringAndClear();\n\n"
             "        css::uno::Sequence< css::uno::Any > aArguments(1);\n"
             "        aArguments[0] <<= aArgument;\n\n";
-
+        
         o << "        // create the default view using default UI locale\n"
             "        css::uno::Reference< css::uno::XInterface > xIface =\n"
             "            xProvider->createInstanceWithArguments(sReadOnlyView, "
@@ -554,7 +554,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
             "         m_xHAccess = css::uno::Reference<\n            "
             "css::container::XHierarchicalNameAccess >(xIface, css::uno::UNO_QUERY);"
             "\n\n";
-
+        
         o << "        // extend arguments to create a view for all locales to get "
             "simple\n        // access to the compatibilityname property\n"
             "        aArgument.Name = ::rtl::OUString::createFromAscii(\"locale\");\n"
@@ -566,9 +566,9 @@ void generateAddinConstructorAndHelper(std::ostream& o,
             "aArguments);\n\n"
             "        m_xCompAccess = css::uno::Reference<\n            "
             "css::container::XHierarchicalNameAccess >(xIface, css::uno::UNO_QUERY);\n";
-
+        
         o << "    }\n    catch ( css::uno::Exception & ) {\n    }\n}\n\n";
-
+        
         o << "// addin configuration property helper function:\n::rtl::OUString "
             "SAL_CALL " << classname << "::getAddinProperty(const ::rtl::OUString &"
             " funcName, const ::rtl::OUString & paramName, const char * propName) "
@@ -627,7 +627,7 @@ void generateMemberDeclaration(std::ostream& o,
         o << "    ";
         printType(o, options, manager, i->second.first.replace('.','/'),
                   1, false);
-        o << " m_" << i->first << ";\n";
+        o << " m_" << i->first << ";\n";  
     }
 }
 
@@ -643,7 +643,7 @@ OString generateClassDefinition(std::ostream& o,
 {
     OStringBuffer parentname(64);
     o << "class " << classname << ":\n";
-
+    
     if (!interfaces.empty()) {
         if (supportxcomponent) {
             parentname.append("::cppu::WeakComponentImplHelper");
@@ -656,7 +656,7 @@ OString generateClassDefinition(std::ostream& o,
             parentname.append(static_cast<sal_Int32>(interfaces.size()));
             o << "    public ::cppu::WeakImplHelper" << interfaces.size() << "<";
         }
-
+      
         std::hash_set< OString, OStringHash >::const_iterator iter =
             interfaces.begin();
         while (iter != interfaces.end())
@@ -669,12 +669,12 @@ OString generateClassDefinition(std::ostream& o,
                 o << ">";
         }
     }
-
+    
     if (propertyhelper.getLength() > 1) {
         o << ",\n    public ::cppu::PropertySetMixin< "
           << scopedCppName(propertyhelper, false, true) << " >";
     }
-
+    
     o << "\n{\npublic:\n"
       << "    explicit " << classname << "("
       << "css::uno::Reference< css::uno::XComponentContext > const & context);\n\n";
@@ -687,7 +687,7 @@ OString generateClassDefinition(std::ostream& o,
 //       << "    static css::uno::Reference< css::uno::XInterface > SAL_CALL _create("
 //       << "\n        css::uno::Reference< css::uno::XComponentContext > const & "
 //       << "context);\n\n";
-
+    
     // overload queryInterface
     if (propertyhelper.getLength() > 1) {
         o << "    // ::com::sun::star::uno::XInterface:\n"
@@ -702,7 +702,7 @@ OString generateClassDefinition(std::ostream& o,
             interfaces.begin();
         while (iter != interfaces.end())
         {
-            buffer.append(scopedCppName(*iter, false, true));
+            buffer.append(scopedCppName(*iter, false, true));            
             iter++;
             if (iter != interfaces.end())
                 buffer.append(", ");
@@ -715,7 +715,7 @@ OString generateClassDefinition(std::ostream& o,
         o << "    virtual void SAL_CALL release() throw ()\n        { "
           << parent << "::release(); }\n\n";
     }
-
+    
     std::hash_set< OString, OStringHash >::const_iterator it =
         interfaces.begin();
     codemaker::GeneratedTypeSet generated;
@@ -726,7 +726,7 @@ OString generateClassDefinition(std::ostream& o,
                      true, propertyhelper);
         it++;
     }
-
+    
     o << "private:\n    " << classname << "(const " << classname << " &); // not defined\n"
       << "    " << classname << "& operator=(const " << classname << " &); // not defined\n\n"
       << "    // destructor is private and will be called indirectly by the release call"
@@ -739,8 +739,8 @@ OString generateClassDefinition(std::ostream& o,
             "rtl::OUStringHash > FunctionMap;\n\n"
             "    ::rtl::OUString SAL_CALL getAddinProperty(const ::rtl::OUString & "
             "funcName, const ::rtl::OUString & paramName, const char * propName) "
-            "throw (css::uno::RuntimeException);\n\n";
-    }
+            "throw (css::uno::RuntimeException);\n\n";        
+    }    
 
     if (supportxcomponent) {
         o << "    // overload WeakComponentImplHelperBase::disposing()\n"
@@ -749,7 +749,7 @@ OString generateClassDefinition(std::ostream& o,
             "    // disposed, do it here.\n"
             "    virtual void SAL_CALL disposing();\n\n";
     }
-
+    
     // members
     o << "    css::uno::Reference< css::uno::XComponentContext > m_xContext;\n";
     if (!supportxcomponent && !attributes.empty())
@@ -773,7 +773,7 @@ OString generateClassDefinition(std::ostream& o,
 
     generateMemberDeclaration(o, options, manager, properties);
     generateMemberDeclaration(o, options, manager, attributes);
-
+    
 //     if (!properties.empty())
 //     {
 //         AttributeInfo::const_iterator iter = properties.begin();
@@ -782,7 +782,7 @@ OString generateClassDefinition(std::ostream& o,
 //             o << "    ";
 //             printType(o, options, manager, iter->second.first.replace('.','/'),
 //                       1, false);
-//             o << " m_" << iter->first << ";\n";
+//             o << " m_" << iter->first << ";\n";  
 //             iter++;
 //         }
 //     }
@@ -794,18 +794,18 @@ OString generateClassDefinition(std::ostream& o,
 //             o << "    ";
 //             printType(o, options, manager, iter->second.first.replace('.','/'),
 //                       1, false);
-//             o << " m_" << iter->first << ";\n";
+//             o << " m_" << iter->first << ";\n";  
 //             iter++;
 //         }
 //     }
-
+    
     o << "};\n\n";
-
+    
     // generate constructor
     if (options.componenttype == 2) {
         generateAddinConstructorAndHelper(o, options, manager,
                                           classname, interfaces);
-    } else {
+    } else {    
         o << classname << "::" << classname
           << "(css::uno::Reference< css::uno::XComponentContext > const & context) :\n";
         if (supportxcomponent) {
@@ -819,7 +819,7 @@ OString generateClassDefinition(std::ostream& o,
                     o << ",";
                 else
                     o << ">(m_aMutex),\n";
-            }
+            }        
         }
         if (propertyhelper.getLength() > 1) {
             o << "    ::cppu::PropertySetMixin< "
@@ -827,7 +827,7 @@ OString generateClassDefinition(std::ostream& o,
               << "        context, static_cast< Implements >(\n            ";
             OStringBuffer buffer(128);
             if (propinterfaces.find("com/sun/star/beans/XPropertySet")
-                != propinterfaces.end()) {
+                != propinterfaces.end()) {                
                 buffer.append("IMPLEMENTS_PROPERTY_SET");
             }
             if (propinterfaces.find("com/sun/star/beans/XFastPropertySet")
@@ -851,7 +851,7 @@ OString generateClassDefinition(std::ostream& o,
 
         generateMemberInitialization(o, options, manager, properties);
         generateMemberInitialization(o, options, manager, attributes);
-
+        
         o << "\n{}\n\n";
     }
 
@@ -865,7 +865,7 @@ OString generateClassDefinition(std::ostream& o,
             "// disposed, do it here.\n"
             "void SAL_CALL " << classname << "::disposing()\n{\n\n}\n\n";
     }
-
+    
     return parentname.makeStringAndClear();
 }
 
@@ -882,7 +882,7 @@ void generateXServiceInfoBodies(std::ostream& o,
       << "supportsService(::rtl::OUString const & "
       << "serviceName) throw (css::uno::RuntimeException)\n{\n    "
       << "css::uno::Sequence< ::rtl::OUString > serviceNames = "
-      << comphelpernamespace << "::_getSupportedServiceNames();\n    "
+      << comphelpernamespace << "::_getSupportedServiceNames();\n    " 
       << "for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {\n    "
       << "    if (serviceNames[i] == serviceName)\n            return sal_True;\n"
       << "    }\n    return sal_False;\n}\n\n";
@@ -890,12 +890,12 @@ void generateXServiceInfoBodies(std::ostream& o,
     o << "css::uno::Sequence< ::rtl::OUString > SAL_CALL " << classname
       << "getSupportedServiceNames() throw (css::uno::RuntimeException)\n{\n    "
       << "return " << comphelpernamespace
-      << "::_getSupportedServiceNames();\n}\n\n";
+      << "::_getSupportedServiceNames();\n}\n\n";    
 }
 
 
 void generateMethodBodies(std::ostream& o,
-        ProgramOptions const & options,
+        ProgramOptions const & options,                    
         TypeManager const & manager,
         std::hash_set< OString, OStringHash > const & interfaces,
         OString const & classname,
@@ -920,7 +920,7 @@ void generateMethodBodies(std::ostream& o,
 }
 
 void generateQueryInterface(std::ostream& o,
-                            ProgramOptions const & options,
+                            ProgramOptions const & options,                    
                             TypeManager const & manager,
                             const std::hash_set< OString, OStringHash >& interfaces,
                             OString const & parentname,
@@ -929,7 +929,7 @@ void generateQueryInterface(std::ostream& o,
 {
     if (propertyhelper.getLength() == 0)
         return;
-
+    
     o << "css::uno::Any " << classname
       << "::queryInterface(css::uno::Type const & type) throw ("
         "css::uno::RuntimeException)\n{\n    ";
@@ -962,9 +962,9 @@ void generateQueryInterface(std::ostream& o,
         } else {
             o << "::cppu::PropertySetMixin<\n            ";
             printType(o, options, manager, propertyhelper.replace('.', '/'),
-                      0, false);
+                      0, false);            
             o << " >::queryInterface(\n               type));\n";
-        }
+        }        
     }
     o << "}\n\n";
 }
@@ -979,7 +979,7 @@ void generateSkeleton(ProgramOptions const & options,
         generateCalcAddin(options, manager, types);
         return;
     }
-
+    
     std::hash_set< OString, OStringHash > interfaces;
     std::hash_set< OString, OStringHash > services;
     AttributeInfo properties;
@@ -1002,23 +1002,23 @@ void generateSkeleton(ProgramOptions const & options,
         checkType(manager, "com.sun.star.frame.ProtocolHandler",
                   interfaces, services, properties);
         checkType(manager, "com.sun.star.frame.XDispatch",
-                  interfaces, services, properties);
+                  interfaces, services, properties);        
     }
-
+    
     // check if service object or simple UNO object
     if (!services.empty())
         serviceobject = true;
-
+    
     OString propertyhelper = checkPropertyHelper(
         options, manager, services, interfaces, attributes, propinterfaces);
 
     checkDefaultInterfaces(interfaces, services, propertyhelper);
-
+    
     if (interfaces.size() > 12)
         throw CannotDumpException(
             "the skeletonmaker supports components with 12 interfaces "
             "only (limitation of the UNO implementation helpers)!");
-
+    
 
     supportxcomponent = checkXComponentSupport(manager, interfaces);
 
@@ -1032,7 +1032,7 @@ void generateSkeleton(ProgramOptions const & options,
         if (!standardout && options.license) {
             printLicenseHeader(*pofs, compFileName);
         }
-
+        
         generateIncludes(*pofs, interfaces, properties, propertyhelper,
                          serviceobject, supportxcomponent);
 
@@ -1054,7 +1054,7 @@ void generateSkeleton(ProgramOptions const & options,
             nm = generateNamespace(*pofs, options.implname, false, nmspace);
             *pofs << "namespace css = ::com::sun::star;\n\n";
         }
-
+        
         sal_Int32 index = 0;
         OString classname(options.implname);
         if ((index = classname.lastIndexOf('.')) > 0)
@@ -1067,14 +1067,14 @@ void generateSkeleton(ProgramOptions const & options,
 
         generateQueryInterface(*pofs, options, manager, interfaces, parentname,
                                classname, propertyhelper);
-
+        
         generateMethodBodies(*pofs, options, manager, interfaces, classname,
                              nmspace, propertyhelper);
 
         if (serviceobject) {
             // close namepsace
             *pofs << "} // closing anonymous implementation namespace\n\n";
-
+            
             generateCompHelperDefinition(*pofs, options.implname,
                                          classname, services);
             generateCompFunctions(*pofs, nmspace);
@@ -1092,17 +1092,17 @@ void generateSkeleton(ProgramOptions const & options,
         }
     } catch(CannotDumpException& e) {
 
-        std::cerr << "ERROR: " << e.m_message.getStr() << "\n";
+        std::cerr << "ERROR: " << e.m_message.getStr() << "\n";        
         if ( !standardout ) {
             if (pofs && ((std::ofstream*)pofs)->is_open()) {
-                ((std::ofstream*)pofs)->close();
+                ((std::ofstream*)pofs)->close();       
                 delete pofs;
             }
             // remove existing type file if something goes wrong to ensure
             // consistency
             if (fileExists(compFileName))
                 removeTypeFile(compFileName);
-
+            
             // remove tmp file if something goes wrong
             removeTypeFile(tmpFileName);
         }
@@ -1121,28 +1121,28 @@ void generateCalcAddin(ProgramOptions const & options,
     bool serviceobject = false;
     bool supportxcomponent = false;
 
-
+    
     std::vector< OString >::const_iterator iter = types.begin();
     while (iter != types.end()) {
         checkType(manager, *iter, interfaces, services, properties);
         iter++;
     }
-
+    
     OString sAddinService;
     if (services.size() != 1) {
         throw CannotDumpException(
             "for calc add-in components one and only one service type is necessary!"
             " Please reference a valid type with the '-t' option.");
     }
-
-
+    
+    
     // get the one and only add-in service for later use
     std::hash_set< OString, OStringHash >::const_iterator iter2 = services.begin();
     sAddinService = (*iter2).replace('/', '.');
     if (sAddinService.equals("com.sun.star.sheet.AddIn")) {
         sAddinService = (*(++iter2)).replace('/', '.');
     }
-
+    
     // if backwardcompatible==true the AddIn service needs to be added to the
     // suported service list, the necessary intefaces are mapped to the add-in
     // configuration. Since OO.org 2.0.4 this is obsolete and the add-in is
@@ -1158,17 +1158,17 @@ void generateCalcAddin(ProgramOptions const & options,
         if (interfaces.find("com.sun.star.lang.XLocalizable") == interfaces.end()) {
             interfaces.insert("com.sun.star.lang.XLocalizable");
         }
-    }
-
+    }    
+    
     OString propertyhelper = checkPropertyHelper(
         options, manager, services, interfaces, attributes, propinterfaces);
 
     if (propertyhelper.getLength() > 0)
         std::cerr << "WARNING: interfaces specifying calc add-in functions "
             "shouldn't support attributes!\n";
-
+    
     checkDefaultInterfaces(interfaces, services, propertyhelper);
-
+    
     if (interfaces.size() > 12) {
         throw CannotDumpException(
             "the skeletonmaker supports components with 12 interfaces "
@@ -1189,12 +1189,12 @@ void generateCalcAddin(ProgramOptions const & options,
     std::ostream* pofs = NULL;
     bool standardout = getOutputStream(options, ".cxx",
                                        &pofs, compFileName, tmpFileName);
-
+    
     try {
         if (!standardout && options.license) {
             printLicenseHeader(*pofs, compFileName);
         }
-
+                
         generateIncludes(*pofs, interfaces, properties, propertyhelper,
                          serviceobject, supportxcomponent);
 
@@ -1206,7 +1206,7 @@ void generateCalcAddin(ProgramOptions const & options,
             "#include \"rtl/ustrbuf.hxx\"\n\n"
             "#include <hash_map>\n"
             "#include <set>\n";
-
+        
         // namespace
         OString nmspace(generateCompHelperDeclaration(*pofs, options.implname));
 
@@ -1229,7 +1229,7 @@ void generateCalcAddin(ProgramOptions const & options,
                 "static const char * sCATEGORYDISPLAYNAME = \"CategoryDisplayName\";"
                 "\n\n";
         }
-
+        
         OString parentname(
             generateClassDefinition(*pofs,
                 options, manager, classname, interfaces, properties,
@@ -1237,18 +1237,18 @@ void generateCalcAddin(ProgramOptions const & options,
 
         generateQueryInterface(*pofs, options, manager, interfaces, parentname,
                                classname, propertyhelper);
-
+        
         generateMethodBodies(*pofs, options, manager, interfaces, classname,
                              nmspace, propertyhelper);
-
+        
         // close namepsace
         *pofs << "} // closing anonymous implementation namespace\n\n";
 
         generateCompHelperDefinition(*pofs, options.implname, classname,
                                      services);
-
+        
         generateCompFunctions(*pofs, nmspace);
-
+        
         if ( !standardout && pofs && ((std::ofstream*)pofs)->is_open()) {
             ((std::ofstream*)pofs)->close();
             delete pofs;
@@ -1259,14 +1259,14 @@ void generateCalcAddin(ProgramOptions const & options,
         std::cerr << "ERROR: " << e.m_message.getStr() << "\n";
         if ( !standardout ) {
             if (pofs && ((std::ofstream*)pofs)->is_open()) {
-                ((std::ofstream*)pofs)->close();
+                ((std::ofstream*)pofs)->close();       
                 delete pofs;
             }
             // remove existing type file if something goes wrong to ensure
             // consistency
             if (fileExists(compFileName))
                 removeTypeFile(compFileName);
-
+            
             // remove tmp file if something goes wrong
             removeTypeFile(tmpFileName);
         }

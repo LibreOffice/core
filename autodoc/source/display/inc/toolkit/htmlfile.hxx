@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ class DocuFile_Html
     // LIFECYCLE
                         DocuFile_Html();
 
-    void                SetLocation(
+    void				SetLocation(
                             const csv::ploc::Path &
                                                 i_rFilePath );
     void                SetTitle(
@@ -60,14 +60,14 @@ class DocuFile_Html
                             const char *        i_sCopyright );
     void                EmptyBody();
 
-    Html::Body &        Body()                  { return aBodyData; }
-    bool                CreateFile();
+    Html::Body &  		Body()					{ return aBodyData; }
+    bool          		CreateFile();
 
   private:
-    void                WriteHeader(
-                            csv::File &         io_aFile );
-    void                WriteBody(
-                            csv::File &         io_aFile );
+    void	 			WriteHeader(
+                            csv::File &			io_aFile );
+    void				WriteBody(
+                            csv::File &			io_aFile );
     // DATA
     String              sFilePath;
     String              sTitle;
@@ -76,7 +76,7 @@ class DocuFile_Html
     String              sCssFile;
     String              sCopyright;
 
-    Html::Body          aBodyData;
+    Html::Body			aBodyData;
     StreamStr           aBuffer;
 };
 

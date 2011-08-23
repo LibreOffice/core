@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,13 +108,13 @@ class HtmlEnvironment_Idl
                                                 { return false; }
 
     /// @return Holds only the current directory, not the current file.
-    output::Position &  CurPosition() const     { return aCurPosition; }
+    output::Position &  CurPosition() const		{ return aCurPosition; }
     void                Get_CurFilePath(
                             StreamStr &         o_buffer ) const
                                                 { o_buffer << aCurPath; }
 
     const display::CorporateFrame &
-                        Layout() const          { return *pLayout; }
+                        Layout() const			{ return *pLayout; }
     const LinkHelper &  Linker() const          { return *pLinker; }
 
     void                Get_LinkTo(
@@ -128,7 +128,7 @@ class HtmlEnvironment_Idl
                         CurPageCe() const       { return pCurPageCe; }
 
     // ACCESS
-    output::Tree &      OutputTree()            { return *pOutputTree; }
+    output::Tree &      OutputTree()     		{ return *pOutputTree; }
 
   private:
     // Local

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,30 +69,30 @@ class PE_File : public UnoIDL_PE,
 {
   public:
                         PE_File(
-                            TokenDistributor &  i_rTokenAdmin,
+                            TokenDistributor &	i_rTokenAdmin,
                             const ParserInfo &  i_parseInfo );
-    virtual void        EstablishContacts(
-                            UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+    virtual void	 	EstablishContacts(
+                            UnoIDL_PE *			io_pParentPE,
+                            ary::Repository &	io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~PE_File();
 
-    virtual void        ProcessToken(
-                            const Token &       i_rToken );
+    virtual void	  	ProcessToken(
+                            const Token &		i_rToken );
 
-    virtual void        Process_Identifier(
+    virtual void		Process_Identifier(
                             const TokIdentifier &
                                                 i_rToken );
-    virtual void        Process_Punctuation(
+    virtual void		Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
-    virtual void        Process_MetaType(
-                            const TokMetaType & i_rToken );
-    virtual void        Process_Stereotype(
+    virtual void		Process_MetaType(
+                            const TokMetaType &	i_rToken );
+    virtual void		Process_Stereotype(
                             const TokStereotype &
                                                 i_rToken );
-    virtual void        Process_Default();
+    virtual void		Process_Default();
 
   private:
     enum E_State
@@ -106,31 +106,31 @@ class PE_File : public UnoIDL_PE,
         on_default
     };
 
-    virtual void        InitData();
-    virtual void        TransferData();
-    virtual void        ReceiveData();
-    virtual UnoIDL_PE & MyPE();
+    virtual void		InitData();
+    virtual void		TransferData();
+    virtual void		ReceiveData();
+    virtual UnoIDL_PE &	MyPE();
     virtual const ary::idl::Module &
                         CurNamespace() const;
     virtual const ParserInfo &
                         ParseInfo() const;
     // DATA
-    TokenDistributor *  pTokenAdmin;
-    Dyn<PE_Service>     pPE_Service;
-    Dyn<PE_Singleton>   pPE_Singleton;
-    Dyn<PE_Interface>   pPE_Interface;
-    Dyn<PE_Struct>      pPE_Struct;
-    Dyn<PE_Exception>   pPE_Exception;
-    Dyn<PE_Constant>    pPE_Constant;
-    Dyn<PE_Enum>        pPE_Enum;
-    Dyn<PE_Typedef>     pPE_Typedef;
+    TokenDistributor *	pTokenAdmin;
+    Dyn<PE_Service>	    pPE_Service;
+    Dyn<PE_Singleton>	pPE_Singleton;
+    Dyn<PE_Interface>	pPE_Interface;
+    Dyn<PE_Struct>		pPE_Struct;
+    Dyn<PE_Exception>	pPE_Exception;
+    Dyn<PE_Constant>	pPE_Constant;
+    Dyn<PE_Enum>		pPE_Enum;
+    Dyn<PE_Typedef>		pPE_Typedef;
 
     const ary::idl::Module *
                         pCurNamespace;
     const ParserInfo *  pParseInfo;
 
-    E_State             eState;
-    uintt               nBracketCount_inDefMode;
+    E_State 			eState;
+    uintt				nBracketCount_inDefMode;
 };
 
 

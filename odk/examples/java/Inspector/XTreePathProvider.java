@@ -12,14 +12,14 @@
  * @author bc93774
  */
 public interface XTreePathProvider {
-
+    
     public XUnoNode getLastPathComponent();
-
+        
     public XUnoNode getPathComponent(int i);
-
-    public int getPathCount();
-
+    
+    public int getPathCount();          
+    
     public XTreePathProvider getParentPath();
-
-    public XTreePathProvider pathByAddingChild(XUnoNode _oUnoNode);
+    
+    public XTreePathProvider pathByAddingChild(XUnoNode _oUnoNode);    
 }
