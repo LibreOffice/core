@@ -2395,6 +2395,14 @@ public:
                     mpUserForm->triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_QueryClose") ),
                                                 aParams);
                     xVbaMethodParameter->setVbaMethodParameter( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Cancel")), aParams[0]);
+                    // If we don't cancel then we want to make sure the dialog
+                    // really is gone to make sure when we attempt to raise it again
+                    // it will actually generate an initialise event
+                    if  ( !nCancel )
+                    {
+                        removeListener(); // presumably we need to do this
+                        mpUserForm->ResetApiObj();
+                    }
                     return;
 
                 }
@@ -2497,6 +2505,7 @@ SbUserFormModule::~SbUserFormModule()
 
 void SbUserFormModule::ResetApiObj(  bool bTriggerTerminateEvent )
 {
+    OSL_TRACE(" SbUserFormModule::ResetApiObj( %s )", bTriggerTerminateEvent ? "true" : "false" );
     if ( bTriggerTerminateEvent && m_xDialog.is() ) // probably someone close the dialog window
     {
         triggerTerminateEvent();
