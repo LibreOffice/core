@@ -1558,6 +1558,7 @@ darwin*) # Mac OS X or iOS
     if test "$host_cpu" = "arm"; then
         _os=iOS
         test_gtk=no
+        test_cups=no
     else
         _os=Darwin
     fi
