@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -31,7 +31,7 @@ namespace agg
     {
     public:
         ellipse() : m_x(0.0), m_y(0.0), m_rx(1.0), m_ry(1.0), m_num(4), m_step(0) {}
-        ellipse(double x, double y, double rx, double ry, unsigned num_steps)
+        ellipse(double x, double y, double rx, double ry, unsigned num_steps) 
             : m_x(x), m_y(y), m_rx(rx), m_ry(ry), m_num(num_steps), m_step(0) {}
 
         void init(double x, double y, double rx, double ry, unsigned num_steps);
@@ -62,7 +62,7 @@ namespace agg
 
     //------------------------------------------------------------------------
     inline void ellipse::approximation_scale(double scale)
-    {
+    {   
        m_num = unsigned((fabs(m_rx) + fabs(m_ry) + 6.0) * scale);
        if(m_num < 6) m_num = 6;
     }
@@ -76,7 +76,7 @@ namespace agg
     //------------------------------------------------------------------------
     inline unsigned ellipse::vertex(double* x, double* y)
     {
-        if(m_step == m_num)
+        if(m_step == m_num) 
         {
             ++m_step;
             return path_cmd_end_poly | path_flags_close | path_flags_ccw;

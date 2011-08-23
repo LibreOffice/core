@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -65,7 +65,7 @@ namespace agg
         init(num, x, y);
     }
 
-
+    
     //------------------------------------------------------------------------
     void bspline::init(int max)
     {
@@ -100,13 +100,13 @@ namespace agg
         if(m_num > 2)
         {
             int i, k, n1;
-            double* temp;
-            double* r;
+            double* temp; 
+            double* r; 
             double* s;
-            double* al;
+            double* al; 
             double h, p, d, f, e;
-
-            for(k = 0; k < m_num; k++)
+    
+            for(k = 0; k < m_num; k++) 
             {
                 m_am[k] = 0.0;
             }
@@ -116,7 +116,7 @@ namespace agg
             al = new double[n1];
             temp = al;
 
-            for(k = 0; k < n1; k++)
+            for(k = 0; k < n1; k++) 
             {
                 temp[k] = 0.0;
             }
@@ -128,7 +128,7 @@ namespace agg
             d = m_x[1] - m_x[0];
             e = (m_y[1] - m_y[0]) / d;
 
-            for(k = 1; k < n1; k++)
+            for(k = 1; k < n1; k++) 
             {
                 h     = d;
                 d     = m_x[k + 1] - m_x[k];
@@ -139,18 +139,18 @@ namespace agg
                 s[k]  = 6.0 * (e - f) / (h + d);
             }
 
-            for(k = 1; k < n1; k++)
+            for(k = 1; k < n1; k++) 
             {
                 p = 1.0 / (r[k] * al[k - 1] + 2.0);
                 al[k] *= -p;
-                s[k] = (s[k] - r[k] * s[k - 1]) * p;
+                s[k] = (s[k] - r[k] * s[k - 1]) * p; 
             }
 
             m_am[n1]     = 0.0;
             al[n1 - 1]   = s[n1 - 1];
             m_am[n1 - 1] = al[n1 - 1];
 
-            for(k = n1 - 2, i = 0; i < m_num - 2; i++, k--)
+            for(k = n1 - 2, i = 0; i < m_num - 2; i++, k--) 
             {
                 al[k]   = al[k] * al[k + 1] + s[k];
                 m_am[k] = al[k];
@@ -180,14 +180,14 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    void bspline::bsearch(int n, const double *x, double x0, int *i)
+    void bspline::bsearch(int n, const double *x, double x0, int *i) 
     {
         int j = n - 1;
         int k;
-
-        for(*i = 0; (j - *i) > 1; )
+          
+        for(*i = 0; (j - *i) > 1; ) 
         {
-            if(x0 < x[k = (*i + j) >> 1]) j = k;
+            if(x0 < x[k = (*i + j) >> 1]) j = k; 
             else                         *i = k;
         }
     }
@@ -211,8 +211,8 @@ namespace agg
     double bspline::extrapolation_left(double x) const
     {
         double d = m_x[1] - m_x[0];
-        return (-d * m_am[1] / 6 + (m_y[1] - m_y[0]) / d) *
-               (x - m_x[0]) +
+        return (-d * m_am[1] / 6 + (m_y[1] - m_y[0]) / d) * 
+               (x - m_x[0]) + 
                m_y[0];
     }
 
@@ -220,8 +220,8 @@ namespace agg
     double bspline::extrapolation_right(double x) const
     {
         double d = m_x[m_num - 1] - m_x[m_num - 2];
-        return (d * m_am[m_num - 2] / 6 + (m_y[m_num - 1] - m_y[m_num - 2]) / d) *
-               (x - m_x[m_num - 1]) +
+        return (d * m_am[m_num - 2] / 6 + (m_y[m_num - 1] - m_y[m_num - 2]) / d) * 
+               (x - m_x[m_num - 1]) + 
                m_y[m_num - 1];
     }
 
@@ -263,15 +263,15 @@ namespace agg
                 if(x < m_x[m_last_idx] || x > m_x[m_last_idx + 1])
                 {
                     // Check if x between next points (most probably)
-                    if(m_last_idx < m_num - 2 &&
+                    if(m_last_idx < m_num - 2 && 
                        x >= m_x[m_last_idx + 1] &&
                        x <= m_x[m_last_idx + 2])
                     {
                         ++m_last_idx;
                     }
                     else
-                    if(m_last_idx > 0 &&
-                       x >= m_x[m_last_idx - 1] &&
+                    if(m_last_idx > 0 && 
+                       x >= m_x[m_last_idx - 1] && 
                        x <= m_x[m_last_idx])
                     {
                         // x is between pevious points

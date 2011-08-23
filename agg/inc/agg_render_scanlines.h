@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -38,13 +38,13 @@ namespace agg
 
 
     //========================================================render_all_paths
-    template<class Rasterizer, class Scanline, class Renderer,
+    template<class Rasterizer, class Scanline, class Renderer, 
              class VertexSource, class ColorStorage, class PathId>
-    void render_all_paths(Rasterizer& ras,
+    void render_all_paths(Rasterizer& ras, 
                           Scanline& sl,
-                          Renderer& r,
-                          VertexSource& vs,
-                          const ColorStorage& as,
+                          Renderer& r, 
+                          VertexSource& vs, 
+                          const ColorStorage& as, 
                           const PathId& id,
                           unsigned num_paths)
     {

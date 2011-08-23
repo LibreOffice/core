@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -51,18 +51,18 @@ namespace agg
     {
        double bound;
 
-       if(flags & (clip_x1 | clip_x2))
+       if(flags & (clip_x1 | clip_x2)) 
        {
            bound = (flags & clip_x1) ? m_clip_box.x1 : m_clip_box.x2;
            y = (bound - m_x1) * (m_y2 - m_y1) / (m_x2 - m_x1) + m_y1;
            x = bound;
            flags = clipping_flags_y(y);
        }
-       if(fabs(m_y2 - m_y1) < clip_epsilon && fabs(m_x2 - m_x1) < clip_epsilon)
+       if(fabs(m_y2 - m_y1) < clip_epsilon && fabs(m_x2 - m_x1) < clip_epsilon) 
        {
            return false;
        }
-       if(flags & (clip_y1 | clip_y2))
+       if(flags & (clip_y1 | clip_y2)) 
        {
            bound = (flags & clip_y1) ? m_clip_box.y1 : m_clip_box.y2;
            x = (bound - m_y1) * (m_x2 - m_x1) / (m_y2 - m_y1) + m_x1;
@@ -77,8 +77,8 @@ namespace agg
     {
         if((m_f1 & m_f2) == 0)
         {
-            if(m_f1)
-            {
+            if(m_f1) 
+            {   
                 if(!move_point(m_x1, m_y1, m_f1)) return;
                 if(m_f1) return;
                 m_x[0] = m_x1;
@@ -86,7 +86,7 @@ namespace agg
                 m_cmd[0] = path_cmd_move_to;
                 m_num_vertices = 1;
             }
-            if(m_f2)
+            if(m_f2) 
             {                    // Move Point 2
                 if(!move_point(m_x2, m_y2, m_f2)) return;
             }

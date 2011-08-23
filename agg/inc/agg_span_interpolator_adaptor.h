@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -32,11 +32,11 @@ namespace agg
 
         //--------------------------------------------------------------------
         span_interpolator_adaptor() {}
-        span_interpolator_adaptor(const trans_type& trans,
+        span_interpolator_adaptor(const trans_type& trans, 
                                   const distortion_type& dist) :
             base_type(trans),
             m_distortion(&dist)
-        {
+        {   
         }
 
         //--------------------------------------------------------------------

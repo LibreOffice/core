@@ -14,7 +14,7 @@
  *
  * The Original Code is mozilla.org code.
  *
- * The Initial Developer of the Original Code is
+ * The Initial Developer of the Original Code is 
  * Netscape Communications Corporation.
  * Portions created by the Initial Developer are Copyright (C) 1998
  * the Initial Developer. All Rights Reserved.
@@ -52,30 +52,30 @@
 #include "jri.h"                /* Java Runtime Interface */
 
 #if defined (__OS2__ ) || defined (OS2)
-#   ifndef XP_OS2
-#       define XP_OS2 1
-#   endif /* XP_OS2 */
+#	ifndef XP_OS2
+#		define XP_OS2 1
+#	endif /* XP_OS2 */
 #endif /* __OS2__ */
 
 #ifdef _WINDOWS
-#   ifndef XP_WIN
-#       define XP_WIN 1
-#   endif /* XP_WIN */
+#	ifndef XP_WIN
+#		define XP_WIN 1
+#	endif /* XP_WIN */
 #endif /* _WINDOWS */
 
 #ifdef __MWERKS__
-#   define _declspec __declspec
-#   ifdef macintosh
-#       ifndef XP_MAC
-#           define XP_MAC 1
-#       endif /* XP_MAC */
-#   endif /* macintosh */
-#   ifdef __INTEL__
-#       undef NULL
-#       ifndef XP_WIN
-#           define XP_WIN 1
-#       endif /* __INTEL__ */
-#   endif /* XP_PC */
+#	define _declspec __declspec
+#	ifdef macintosh
+#		ifndef XP_MAC
+#			define XP_MAC 1
+#		endif /* XP_MAC */
+#	endif /* macintosh */
+#	ifdef __INTEL__
+#		undef NULL
+#		ifndef XP_WIN
+#			define XP_WIN 1
+#		endif /* __INTEL__ */
+#	endif /* XP_PC */
 #endif /* __MWERKS__ */
 
 #ifdef XP_MAC
@@ -188,10 +188,10 @@ typedef long int32;
 #define NULL (0L)
 #endif
 
-typedef unsigned char   NPBool;
-typedef int16           NPError;
-typedef int16           NPReason;
-typedef char*           NPMIMEType;
+typedef unsigned char	NPBool;
+typedef int16			NPError;
+typedef int16			NPReason;
+typedef char*			NPMIMEType;
 
 
 
@@ -208,8 +208,8 @@ typedef char*           NPMIMEType;
  */
 typedef struct _NPP
 {
-  void* pdata;      /* plug-in private data */
-  void* ndata;      /* netscape private data */
+  void*	pdata;      /* plug-in private data */
+  void*	ndata;      /* netscape private data */
 } NPP_t;
 
 typedef NPP_t*  NPP;
@@ -236,8 +236,8 @@ typedef struct _NPByteRange
 
 typedef struct _NPSavedData
 {
-  int32 len;
-  void* buf;
+  int32	len;
+  void*	buf;
 } NPSavedData;
 
 
@@ -249,11 +249,11 @@ typedef struct _NPRect
   uint16 right;
 } NPRect;
 
-typedef struct _NPSize
-{
-  int32 width;
-  int32 height;
-} NPSize;
+typedef struct _NPSize 
+{ 
+  int32 width; 
+  int32 height; 
+} NPSize; 
 
 #ifdef XP_UNIX
 /*
@@ -344,11 +344,11 @@ typedef struct _NPWindow
                  /* OS/2: x - Position of bottom left corner  */
                  /* OS/2: y - relative to visible netscape window */
   int32 x;       /* Position of top left corner relative */
-  int32 y;       /* to a netscape page.                 */
+  int32 y;       /* to a netscape page.					*/
   uint32 width;  /* Maximum window size */
   uint32 height;
   NPRect clipRect; /* Clipping rectangle in port coordinates */
-                   /* Used by MAC only.           */
+                   /* Used by MAC only.			  */
 #ifdef XP_UNIX
   void * ws_info; /* Platform-dependent additonal data */
 #endif /* XP_UNIX */
@@ -359,7 +359,7 @@ typedef struct _NPWindow
 typedef struct _NPFullPrint
 {
   NPBool pluginPrinted;/* Set TRUE if plugin handled fullscreen printing */
-  NPBool printOne;       /* TRUE if plugin should print one copy to default printer */
+  NPBool printOne;		 /* TRUE if plugin should print one copy to default printer */
   void* platformPrint; /* Platform-specific printing info */
 } NPFullPrint;
 
@@ -380,7 +380,7 @@ typedef struct _NPPrint
 } NPPrint;
 
 #ifdef XP_MAC
-typedef EventRecord NPEvent;
+typedef EventRecord	NPEvent;
 #elif defined(XP_WIN)
 typedef struct _NPEvent
 {
@@ -398,7 +398,7 @@ typedef struct _NPEvent
 #elif defined (XP_UNIX) && !defined(NO_X11)
 typedef XEvent NPEvent;
 #else
-typedef void*           NPEvent;
+typedef void*			NPEvent;
 #endif /* XP_MAC */
 
 #ifdef XP_MAC
@@ -458,7 +458,7 @@ enum NPEventType {
 #define NP_ASFILE     3
 #define NP_ASFILEONLY 4
 
-#define NP_MAXREADY (((unsigned)(~0)<<1)>>1)
+#define NP_MAXREADY	(((unsigned)(~0)<<1)>>1)
 
 #ifdef XP_MAC
 #pragma options align=reset
@@ -466,7 +466,7 @@ enum NPEventType {
 
 
 /*----------------------------------------------------------------------*/
-/*           Error and Reason Code definitions          */
+/*		     Error and Reason Code definitions			*/
 /*----------------------------------------------------------------------*/
 
 /*
@@ -585,7 +585,7 @@ NPError NP_LOADDS NPN_NewStream(NPP instance, NPMIMEType type,
 int32   NP_LOADDS NPN_Write(NPP instance, NPStream* stream, int32 len, void* buffer);
 NPError NP_LOADDS NPN_DestroyStream(NPP instance, NPStream* stream, NPReason reason);
 void    NP_LOADDS NPN_Status(NPP instance, const char* message);
-const char* NP_LOADDS   NPN_UserAgent(NPP instance);
+const char* NP_LOADDS	NPN_UserAgent(NPP instance);
 void*   NP_LOADDS NPN_MemAlloc(uint32 size);
 void    NP_LOADDS NPN_MemFree(void* ptr);
 uint32  NP_LOADDS NPN_MemFlush(uint32 size);

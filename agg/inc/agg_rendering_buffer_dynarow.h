@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -118,19 +118,19 @@ namespace agg
         //    do { blend(r.ptr); r.ptr += PixWidth } while(++r.x1 < r.x2);
         // }
         //--------------------------------------------------------------------
-        row_data span(int x, int y) const
-        {
+        row_data span(int x, int y) const 
+        { 
             row_data r = m_rows[y];
             if(r.ptr)
             {
                 if(x < r.x1) x = r.x1;
                 r.ptr += x * PixWidth;
             }
-            return r;
+            return r; 
         }
 
 
-        // The main function used for rendering. Returns pointer to the
+        // The main function used for rendering. Returns pointer to the 
         // pre-allocated span. Memory for the row is allocated as needed.
         //--------------------------------------------------------------------
         int8u* span_ptr(int x, int y, unsigned len)
@@ -167,7 +167,7 @@ namespace agg
         //--------------------------------------------------------------------
         // Prohibit copying
         rendering_buffer_dynarow(const rendering_buffer_dynarow<PixWidth>&);
-        const rendering_buffer_dynarow<PixWidth>&
+        const rendering_buffer_dynarow<PixWidth>& 
             operator = (const rendering_buffer_dynarow<PixWidth>&);
 
     private:

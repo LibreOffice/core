@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -55,7 +55,7 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    path_storage::path_storage(const path_storage& ps) :
+    path_storage::path_storage(const path_storage& ps) : 
         m_total_vertices(0),
         m_total_blocks(0),
         m_max_blocks(0),
@@ -92,22 +92,22 @@ namespace agg
     //------------------------------------------------------------------------
     void path_storage::allocate_block(unsigned nb)
     {
-        if(nb >= m_max_blocks)
+        if(nb >= m_max_blocks) 
         {
-            double** new_coords =
+            double** new_coords = 
                 new double* [(m_max_blocks + block_pool) * 2];
 
-            unsigned char** new_cmds =
+            unsigned char** new_cmds = 
                 (unsigned char**)(new_coords + m_max_blocks + block_pool);
 
             if(m_coord_blocks)
             {
-                memcpy(new_coords,
-                       m_coord_blocks,
+                memcpy(new_coords, 
+                       m_coord_blocks, 
                        m_max_blocks * sizeof(double*));
 
-                memcpy(new_cmds,
-                       m_cmd_blocks,
+                memcpy(new_cmds, 
+                       m_cmd_blocks, 
                        m_max_blocks * sizeof(unsigned char*));
 
                 delete [] m_coord_blocks;
@@ -116,12 +116,12 @@ namespace agg
             m_cmd_blocks = new_cmds;
             m_max_blocks += block_pool;
         }
-        m_coord_blocks[nb] =
-            new double [block_size * 2 +
-                        block_size /
+        m_coord_blocks[nb] = 
+            new double [block_size * 2 + 
+                        block_size / 
                         (sizeof(double) / sizeof(unsigned char))];
 
-        m_cmd_blocks[nb]  =
+        m_cmd_blocks[nb]  = 
             (unsigned char*)(m_coord_blocks[nb] + block_size * 2);
 
         m_total_blocks++;
@@ -131,7 +131,7 @@ namespace agg
     //------------------------------------------------------------------------
     void path_storage::rewind(unsigned path_id)
     {
-        m_iterator = path_id;
+        m_iterator = path_id; 
     }
 
 
@@ -155,7 +155,7 @@ namespace agg
 
             // Ensure radii are valid
             //-------------------------
-            if(rx < epsilon || ry < epsilon)
+            if(rx < epsilon || ry < epsilon) 
             {
                 line_to(x, y);
                 return;
@@ -197,7 +197,7 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    void path_storage::curve3(double x_ctrl, double y_ctrl,
+    void path_storage::curve3(double x_ctrl, double y_ctrl, 
                               double x_to,   double y_to)
     {
         add_vertex(x_ctrl, y_ctrl, path_cmd_curve3);
@@ -205,7 +205,7 @@ namespace agg
     }
 
     //------------------------------------------------------------------------
-    void path_storage::curve3_rel(double dx_ctrl, double dy_ctrl,
+    void path_storage::curve3_rel(double dx_ctrl, double dy_ctrl, 
                                   double dx_to,   double dy_to)
     {
         rel_to_abs(&dx_ctrl, &dy_ctrl);
@@ -248,8 +248,8 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    void path_storage::curve4(double x_ctrl1, double y_ctrl1,
-                              double x_ctrl2, double y_ctrl2,
+    void path_storage::curve4(double x_ctrl1, double y_ctrl1, 
+                              double x_ctrl2, double y_ctrl2, 
                               double x_to,    double y_to)
     {
         add_vertex(x_ctrl1, y_ctrl1, path_cmd_curve4);
@@ -258,8 +258,8 @@ namespace agg
     }
 
     //------------------------------------------------------------------------
-    void path_storage::curve4_rel(double dx_ctrl1, double dy_ctrl1,
-                                  double dx_ctrl2, double dy_ctrl2,
+    void path_storage::curve4_rel(double dx_ctrl1, double dy_ctrl1, 
+                                  double dx_ctrl2, double dy_ctrl2, 
                                   double dx_to,    double dy_to)
     {
         rel_to_abs(&dx_ctrl1, &dy_ctrl1);
@@ -272,7 +272,7 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    void path_storage::curve4(double x_ctrl2, double y_ctrl2,
+    void path_storage::curve4(double x_ctrl2, double y_ctrl2, 
                               double x_to,    double y_to)
     {
         double x0 = 0;
@@ -298,7 +298,7 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    void path_storage::curve4_rel(double dx_ctrl2, double dy_ctrl2,
+    void path_storage::curve4_rel(double dx_ctrl2, double dy_ctrl2, 
                                   double dx_to,    double dy_to)
     {
         rel_to_abs(&dx_ctrl2, &dy_ctrl2);
@@ -389,7 +389,7 @@ namespace agg
     {
         unsigned i;
         unsigned tmp_cmd = command(_start);
-
+        
         // Shift all commands to one position
         for(i = _start; i < _end; i++)
         {
@@ -427,7 +427,7 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    unsigned path_storage::arrange_orientations(unsigned path_id,
+    unsigned path_storage::arrange_orientations(unsigned path_id, 
                                                 path_flags_e new_orientation)
     {
         unsigned _end = m_total_vertices;
@@ -441,17 +441,17 @@ namespace agg
             for(;;)
             {
                 unsigned orientation;
-                _end = perceive_polygon_orientation(start + 1, xs, ys,
+                _end = perceive_polygon_orientation(start + 1, xs, ys, 
                                                    &orientation);
                 if(_end > start + 2 &&
-                   orientation &&
+                   orientation && 
                    orientation != unsigned(new_orientation))
                 {
                     reverse_polygon(start + inc, _end - 1);
                 }
                 if(_end >= m_total_vertices) break;
                 cmd = command(_end);
-                if(is_stop(cmd))
+                if(is_stop(cmd)) 
                 {
                     ++_end;
                     break;

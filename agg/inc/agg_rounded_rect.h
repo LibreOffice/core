@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -41,7 +41,7 @@ namespace agg
         void radius(double r);
         void radius(double rx, double ry);
         void radius(double rx_bottom, double ry_bottom, double rx_top, double ry_top);
-        void radius(double rx1, double ry1, double rx2, double ry2,
+        void radius(double rx1, double ry1, double rx2, double ry2, 
                     double rx3, double ry3, double rx4, double ry4);
         void normalize_radius();
 

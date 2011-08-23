@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -26,7 +26,7 @@ namespace agg
     //------------------------------------------------------------------------
     rounded_rect::rounded_rect(double x1, double y1, double x2, double y2, double r) :
         m_x1(x1), m_y1(y1), m_x2(x2), m_y2(y2),
-        m_rx1(r), m_ry1(r), m_rx2(r), m_ry2(r),
+        m_rx1(r), m_ry1(r), m_rx2(r), m_ry2(r), 
         m_rx3(r), m_ry3(r), m_rx4(r), m_ry4(r)
     {
         if(x1 > x2) { m_x1 = x2; m_x2 = x1; }
@@ -47,31 +47,31 @@ namespace agg
     //--------------------------------------------------------------------
     void rounded_rect::radius(double r)
     {
-        m_rx1 = m_ry1 = m_rx2 = m_ry2 = m_rx3 = m_ry3 = m_rx4 = m_ry4 = r;
+        m_rx1 = m_ry1 = m_rx2 = m_ry2 = m_rx3 = m_ry3 = m_rx4 = m_ry4 = r; 
     }
 
     //--------------------------------------------------------------------
     void rounded_rect::radius(double rx, double ry)
     {
-        m_rx1 = m_rx2 = m_rx3 = m_rx4 = rx;
-        m_ry1 = m_ry2 = m_ry3 = m_ry4 = ry;
+        m_rx1 = m_rx2 = m_rx3 = m_rx4 = rx; 
+        m_ry1 = m_ry2 = m_ry3 = m_ry4 = ry; 
     }
 
     //--------------------------------------------------------------------
-    void rounded_rect::radius(double rx_bottom, double ry_bottom,
+    void rounded_rect::radius(double rx_bottom, double ry_bottom, 
                               double rx_top,    double ry_top)
     {
-        m_rx1 = m_rx2 = rx_bottom;
-        m_rx3 = m_rx4 = rx_top;
-        m_ry1 = m_ry2 = ry_bottom;
-        m_ry3 = m_ry4 = ry_top;
+        m_rx1 = m_rx2 = rx_bottom; 
+        m_rx3 = m_rx4 = rx_top; 
+        m_ry1 = m_ry2 = ry_bottom; 
+        m_ry3 = m_ry4 = ry_top; 
     }
 
     //--------------------------------------------------------------------
-    void rounded_rect::radius(double rx1, double ry1, double rx2, double ry2,
+    void rounded_rect::radius(double rx1, double ry1, double rx2, double ry2, 
                               double rx3, double ry3, double rx4, double ry4)
     {
-        m_rx1 = rx1; m_ry1 = ry1; m_rx2 = rx2; m_ry2 = ry2;
+        m_rx1 = rx1; m_ry1 = ry1; m_rx2 = rx2; m_ry2 = ry2; 
         m_rx3 = rx3; m_ry3 = ry3; m_rx4 = rx4; m_ry4 = ry4;
     }
 
@@ -83,10 +83,10 @@ namespace agg
 
         double k = 1.0;
         double t;
-        t = dx / (m_rx1 + m_rx2); if(t < k) k = t;
-        t = dx / (m_rx3 + m_rx4); if(t < k) k = t;
-        t = dy / (m_ry1 + m_ry2); if(t < k) k = t;
-        t = dy / (m_ry3 + m_ry4); if(t < k) k = t;
+        t = dx / (m_rx1 + m_rx2); if(t < k) k = t; 
+        t = dx / (m_rx3 + m_rx4); if(t < k) k = t; 
+        t = dy / (m_ry1 + m_ry2); if(t < k) k = t; 
+        t = dy / (m_ry3 + m_ry4); if(t < k) k = t; 
 
         if(k < 1.0)
         {

@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -24,8 +24,8 @@ namespace agg
 
     //========================================span_image_resample_gray_affine
     template<class ColorT,
-             class Allocator = span_allocator<ColorT> >
-    class span_image_resample_gray_affine :
+             class Allocator = span_allocator<ColorT> > 
+    class span_image_resample_gray_affine : 
     public span_image_resample_affine<ColorT, Allocator>
     {
     public:
@@ -47,18 +47,18 @@ namespace agg
 
         //--------------------------------------------------------------------
         span_image_resample_gray_affine(alloc_type& alloc,
-                                        const rendering_buffer& src,
+                                        const rendering_buffer& src, 
                                         const color_type& back_color,
                                         interpolator_type& inter,
                                         const image_filter_lut& filter) :
-            base_type(alloc, src, back_color, inter, filter)
+            base_type(alloc, src, back_color, inter, filter) 
         {}
 
 
         //--------------------------------------------------------------------
         color_type* generate(int x, int y, unsigned len)
         {
-            base_type::interpolator().begin(x + base_type::filter_dx_dbl(),
+            base_type::interpolator().begin(x + base_type::filter_dx_dbl(), 
                                             y + base_type::filter_dy_dbl(), len);
 
             long_type fg;
@@ -87,13 +87,13 @@ namespace agg
                 fg = src_alpha = image_filter_size / 2;
 
                 int y_lr = y >> image_subpixel_shift;
-                int y_hr = ((image_subpixel_mask - (y & image_subpixel_mask)) *
-                                base_type::m_ry_inv) >>
+                int y_hr = ((image_subpixel_mask - (y & image_subpixel_mask)) * 
+                                base_type::m_ry_inv) >> 
                                     image_subpixel_shift;
                 int total_weight = 0;
                 int x_lr_ini = x >> image_subpixel_shift;
-                int x_hr_ini = ((image_subpixel_mask - (x & image_subpixel_mask)) *
-                                   base_type::m_rx_inv) >>
+                int x_hr_ini = ((image_subpixel_mask - (x & image_subpixel_mask)) * 
+                                   base_type::m_rx_inv) >> 
                                        image_subpixel_shift;
                 do
                 {
@@ -106,8 +106,8 @@ namespace agg
                             base_type::source_image().row(y_lr) + x_lr;
                         do
                         {
-                            int weight = (weight_y * weight_array[x_hr] +
-                                         image_filter_size / 2) >>
+                            int weight = (weight_y * weight_array[x_hr] + 
+                                         image_filter_size / 2) >> 
                                          downscale_shift;
 
                             if(x_lr >= 0 && x_lr <= maxx)
@@ -131,8 +131,8 @@ namespace agg
                     {
                         do
                         {
-                            int weight = (weight_y * weight_array[x_hr] +
-                                         image_filter_size / 2) >>
+                            int weight = (weight_y * weight_array[x_hr] + 
+                                         image_filter_size / 2) >> 
                                          downscale_shift;
 
                             total_weight += weight;
@@ -174,9 +174,9 @@ namespace agg
 
     //==============================================span_image_resample_gray
     template<class ColorT,
-             class Interpolator,
+             class Interpolator, 
              class Allocator = span_allocator<ColorT> >
-    class span_image_resample_gray :
+    class span_image_resample_gray : 
     public span_image_resample<ColorT, Interpolator, Allocator>
     {
     public:
@@ -194,13 +194,13 @@ namespace agg
         };
 
         //--------------------------------------------------------------------
-        span_image_resample_gray(alloc_type& alloc) :
+        span_image_resample_gray(alloc_type& alloc) : 
             base_type(alloc)
         {}
 
         //--------------------------------------------------------------------
         span_image_resample_gray(alloc_type& alloc,
-                                 const rendering_buffer& src,
+                                 const rendering_buffer& src, 
                                  const color_type& back_color,
                                  interpolator_type& inter,
                                  const image_filter_lut& filter) :
@@ -211,7 +211,7 @@ namespace agg
         color_type* generate(int x, int y, unsigned len)
         {
             color_type* span = base_type::allocator().span();
-            base_type::interpolator().begin(x + base_type::filter_dx_dbl(),
+            base_type::interpolator().begin(x + base_type::filter_dx_dbl(), 
                                             y + base_type::filter_dy_dbl(), len);
             long_type fg;
             long_type src_alpha;
@@ -241,7 +241,7 @@ namespace agg
                 }
                 else
                 {
-                    if(rx > image_subpixel_size * base_type::m_scale_limit)
+                    if(rx > image_subpixel_size * base_type::m_scale_limit) 
                     {
                         rx = image_subpixel_size * base_type::m_scale_limit;
                     }
@@ -254,7 +254,7 @@ namespace agg
                 }
                 else
                 {
-                    if(ry > image_subpixel_size * base_type::m_scale_limit)
+                    if(ry > image_subpixel_size * base_type::m_scale_limit) 
                     {
                         ry = image_subpixel_size * base_type::m_scale_limit;
                     }
@@ -272,13 +272,13 @@ namespace agg
                 fg = src_alpha = image_filter_size / 2;
 
                 int y_lr = y >> image_subpixel_shift;
-                int y_hr = ((image_subpixel_mask - (y & image_subpixel_mask)) *
-                               ry_inv) >>
+                int y_hr = ((image_subpixel_mask - (y & image_subpixel_mask)) * 
+                               ry_inv) >> 
                                    image_subpixel_shift;
                 int total_weight = 0;
                 int x_lr_ini = x >> image_subpixel_shift;
-                int x_hr_ini = ((image_subpixel_mask - (x & image_subpixel_mask)) *
-                                   rx_inv) >>
+                int x_hr_ini = ((image_subpixel_mask - (x & image_subpixel_mask)) * 
+                                   rx_inv) >> 
                                        image_subpixel_shift;
 
                 do
@@ -292,8 +292,8 @@ namespace agg
                             base_type::source_image().row(y_lr) + x_lr;
                         do
                         {
-                            int weight = (weight_y * weight_array[x_hr] +
-                                         image_filter_size / 2) >>
+                            int weight = (weight_y * weight_array[x_hr] + 
+                                         image_filter_size / 2) >> 
                                          downscale_shift;
 
                             if(x_lr >= 0 && x_lr <= maxx)
@@ -317,8 +317,8 @@ namespace agg
                     {
                         do
                         {
-                            int weight = (weight_y * weight_array[x_hr] +
-                                         image_filter_size / 2) >>
+                            int weight = (weight_y * weight_array[x_hr] + 
+                                         image_filter_size / 2) >> 
                                          downscale_shift;
 
                             total_weight += weight;
@@ -350,7 +350,7 @@ namespace agg
             } while(--len);
             return base_type::allocator().span();
         }
-
+        
     };
 
 }

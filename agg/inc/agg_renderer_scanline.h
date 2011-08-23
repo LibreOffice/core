@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -35,11 +35,11 @@ namespace agg
             m_span_gen(&span_gen)
         {
         }
-
+        
         //--------------------------------------------------------------------
-        void prepare(unsigned max_span_len)
-        {
-            m_span_gen->prepare(max_span_len);
+        void prepare(unsigned max_span_len) 
+        { 
+            m_span_gen->prepare(max_span_len); 
         }
 
         //--------------------------------------------------------------------
@@ -72,7 +72,7 @@ namespace agg
                         if(x < xmin)
                         {
                             len -= xmin - x;
-                            if(!solid)
+                            if(!solid) 
                             {
                                 covers += xmin - x;
                             }
@@ -88,7 +88,7 @@ namespace agg
                             if(len > 0)
                             {
                                 m_ren->blend_color_hspan_no_clip(
-                                    x, y, len,
+                                    x, y, len, 
                                     m_span_gen->generate(x, y, len),
                                     solid ? 0 : covers,
                                     *covers);
@@ -101,7 +101,7 @@ namespace agg
             }
             while(m_ren->next_clip_box());
         }
-
+        
     private:
         base_ren_type* m_ren;
         SpanGenerator* m_span_gen;
@@ -122,11 +122,11 @@ namespace agg
             m_span_gen(&span_gen)
         {
         }
-
+        
         //--------------------------------------------------------------------
-        void prepare(unsigned max_span_len)
-        {
-            m_span_gen->prepare(max_span_len);
+        void prepare(unsigned max_span_len) 
+        { 
+            m_span_gen->prepare(max_span_len); 
         }
 
         //--------------------------------------------------------------------
@@ -159,7 +159,7 @@ namespace agg
                         if(x < xmin)
                         {
                             len -= xmin - x;
-                            if(!solid)
+                            if(!solid) 
                             {
                                 covers += xmin - x;
                             }
@@ -175,7 +175,7 @@ namespace agg
                             if(len > 0)
                             {
                                 m_ren->blend_opaque_color_hspan_no_clip(
-                                    x, y, len,
+                                    x, y, len, 
                                     m_span_gen->generate(x, y, len),
                                     solid ? 0 : covers,
                                     *covers);
@@ -188,7 +188,7 @@ namespace agg
             }
             while(m_ren->next_clip_box());
         }
-
+        
     private:
         base_ren_type* m_ren;
         SpanGenerator* m_span_gen;
@@ -208,7 +208,7 @@ namespace agg
             m_ren(&ren)
         {
         }
-
+        
         //--------------------------------------------------------------------
         void color(const color_type& c) { m_color = c; }
         const color_type& color() const { return m_color; }
@@ -228,21 +228,21 @@ namespace agg
                 int x = span->x;
                 if(span->len > 0)
                 {
-                    m_ren->blend_solid_hspan(x, y, (unsigned)span->len,
-                                             m_color,
+                    m_ren->blend_solid_hspan(x, y, (unsigned)span->len, 
+                                             m_color, 
                                              span->covers);
                 }
                 else
                 {
-                    m_ren->blend_hline(x, y, (unsigned)(x - span->len - 1),
-                                       m_color,
+                    m_ren->blend_hline(x, y, (unsigned)(x - span->len - 1), 
+                                       m_color, 
                                        *(span->covers));
                 }
                 ++span;
             }
             while(--num_spans);
         }
-
+        
     private:
         base_ren_type* m_ren;
         color_type m_color;
@@ -266,11 +266,11 @@ namespace agg
             m_span_gen(&span_gen)
         {
         }
-
+        
         //--------------------------------------------------------------------
-        void prepare(unsigned max_span_len)
-        {
-            m_span_gen->prepare(max_span_len);
+        void prepare(unsigned max_span_len) 
+        { 
+            m_span_gen->prepare(max_span_len); 
         }
 
         //--------------------------------------------------------------------
@@ -307,7 +307,7 @@ namespace agg
                             if(len > 0)
                             {
                                 m_ren->blend_color_hspan_no_clip(
-                                    x, y, len,
+                                    x, y, len, 
                                     m_span_gen->generate(x, y, len),
                                     0);
                             }
@@ -319,7 +319,7 @@ namespace agg
             }
             while(m_ren->next_clip_box());
         }
-
+        
     private:
         base_ren_type* m_ren;
         SpanGenerator* m_span_gen;
@@ -339,11 +339,11 @@ namespace agg
             m_span_gen(&span_gen)
         {
         }
-
+        
         //--------------------------------------------------------------------
-        void prepare(unsigned max_span_len)
-        {
-            m_span_gen->prepare(max_span_len);
+        void prepare(unsigned max_span_len) 
+        { 
+            m_span_gen->prepare(max_span_len); 
         }
 
         //--------------------------------------------------------------------
@@ -380,7 +380,7 @@ namespace agg
                             if(len > 0)
                             {
                                 m_ren->blend_opaque_color_hspan_no_clip(
-                                    x, y, len,
+                                    x, y, len, 
                                     m_span_gen->generate(x, y, len),
                                     0);
                             }
@@ -392,7 +392,7 @@ namespace agg
             }
             while(m_ren->next_clip_box());
         }
-
+        
     private:
         base_ren_type* m_ren;
         SpanGenerator* m_span_gen;
@@ -413,7 +413,7 @@ namespace agg
             m_ren(&ren)
         {
         }
-
+        
         //--------------------------------------------------------------------
         void color(const color_type& c) { m_color = c; }
         const color_type& color() const { return m_color; }
@@ -428,18 +428,18 @@ namespace agg
             typename Scanline::const_iterator span = sl.begin();
             do
             {
-                m_ren->blend_hline(span->x,
-                                   sl.y(),
-                                   span->x - 1 + ((span->len < 0) ?
-                                                     -span->len :
-                                                      span->len),
-                                   m_color,
+                m_ren->blend_hline(span->x, 
+                                   sl.y(), 
+                                   span->x - 1 + ((span->len < 0) ? 
+                                                     -span->len : 
+                                                      span->len), 
+                                   m_color, 
                                    cover_full);
                 ++span;
             }
             while(--num_spans);
         }
-
+        
     private:
         base_ren_type* m_ren;
         color_type m_color;

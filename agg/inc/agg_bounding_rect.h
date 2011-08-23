@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -26,8 +26,8 @@ namespace agg
 
     //-----------------------------------------------------------bounding_rect
     template<class VertexSource, class GetId, class CoordT>
-    bool bounding_rect(VertexSource& vs, GetId& gi,
-                       unsigned start, unsigned num,
+    bool bounding_rect(VertexSource& vs, GetId& gi, 
+                       unsigned start, unsigned num, 
                        CoordT* x1, CoordT* y1, CoordT* x2, CoordT* y2)
     {
         unsigned i;
@@ -71,7 +71,7 @@ namespace agg
 
 
     //-----------------------------------------------------bounding_rect_single
-    template<class VertexSource, class CoordT>
+    template<class VertexSource, class CoordT> 
     bool bounding_rect_single(VertexSource& vs, unsigned path_id,
                               CoordT* x1, CoordT* y1, CoordT* x2, CoordT* y2)
     {

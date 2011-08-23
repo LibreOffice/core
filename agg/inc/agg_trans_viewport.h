@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -41,7 +41,7 @@ namespace agg
     {
     public:
         //-------------------------------------------------------------------
-        trans_viewport() :
+        trans_viewport() : 
             m_world_x1(0.0),
             m_world_y1(0.0),
             m_world_x2(1.0),
@@ -64,8 +64,8 @@ namespace agg
         {}
 
         //-------------------------------------------------------------------
-        void preserve_aspect_ratio(double alignx,
-                                   double aligny,
+        void preserve_aspect_ratio(double alignx, 
+                                   double aligny, 
                                    aspect_ratio_e aspect)
         {
             m_align_x = alignx;
@@ -113,7 +113,7 @@ namespace agg
         }
 
         //-------------------------------------------------------------------
-        void world_viewport_actual(double* x1, double* y1,
+        void world_viewport_actual(double* x1, double* y1, 
                                    double* x2, double* y2) const
         {
             *x1 = m_wx1;
@@ -163,7 +163,7 @@ namespace agg
         //-------------------------------------------------------------------
         unsigned byte_size() const
         {
-            return
+            return 
                 sizeof(m_world_x1) +
                 sizeof(m_world_y1) +
                 sizeof(m_world_x2) +
@@ -187,7 +187,7 @@ namespace agg
 
         void serialize(int8u* ptr) const
         {
-            memcpy(ptr, &m_world_x1,  sizeof(m_world_x1));  ptr += sizeof(m_world_x1);
+            memcpy(ptr, &m_world_x1,  sizeof(m_world_x1));  ptr += sizeof(m_world_x1); 
             memcpy(ptr, &m_world_y1,  sizeof(m_world_y1));  ptr += sizeof(m_world_y1);
             memcpy(ptr, &m_world_x2,  sizeof(m_world_x2));  ptr += sizeof(m_world_x2);
             memcpy(ptr, &m_world_y2,  sizeof(m_world_y2));  ptr += sizeof(m_world_y2);
@@ -210,7 +210,7 @@ namespace agg
 
         void deserialize(const int8u* ptr)
         {
-            memcpy(&m_world_x1,  ptr, sizeof(m_world_x1));  ptr += sizeof(m_world_x1);
+            memcpy(&m_world_x1,  ptr, sizeof(m_world_x1));  ptr += sizeof(m_world_x1); 
             memcpy(&m_world_y1,  ptr, sizeof(m_world_y1));  ptr += sizeof(m_world_y1);
             memcpy(&m_world_x2,  ptr, sizeof(m_world_x2));  ptr += sizeof(m_world_x2);
             memcpy(&m_world_y2,  ptr, sizeof(m_world_y2));  ptr += sizeof(m_world_y2);

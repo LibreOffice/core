@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -234,15 +234,15 @@ namespace agg
             m_x2_lr(line_lr(_x2)),
             m_y2_lr(line_lr(_y2)),
             m_ver(abs(m_x2_lr - m_x1_lr) < abs(m_y2_lr - m_y1_lr)),
-            m_len(m_ver ? abs(m_y2_lr - m_y1_lr) :
+            m_len(m_ver ? abs(m_y2_lr - m_y1_lr) : 
                           abs(m_x2_lr - m_x1_lr)),
             m_inc(m_ver ? ((_y2 > _y1) ? 1 : -1) : ((_x2 > _x1) ? 1 : -1)),
-            m_interpolator(m_ver ? _x1 : _y1,
-                           m_ver ? _x2 : _y2,
+            m_interpolator(m_ver ? _x1 : _y1, 
+                           m_ver ? _x2 : _y2, 
                            m_len)
         {
         }
-
+    
         //--------------------------------------------------------------------
         bool     is_ver() const { return m_ver; }
         unsigned len()    const { return m_len; }

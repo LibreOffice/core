@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -77,8 +77,8 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    void vcgen_smooth_poly1::calculate(const vertex_dist& v0,
-                                       const vertex_dist& v1,
+    void vcgen_smooth_poly1::calculate(const vertex_dist& v0, 
+                                       const vertex_dist& v1, 
                                        const vertex_dist& v2,
                                        const vertex_dist& v3)
     {
@@ -153,8 +153,8 @@ namespace agg
                     }
                 }
 
-                calculate(m_src_vertices.prev(m_src_vertex),
-                          m_src_vertices.curr(m_src_vertex),
+                calculate(m_src_vertices.prev(m_src_vertex), 
+                          m_src_vertices.curr(m_src_vertex), 
                           m_src_vertices.next(m_src_vertex),
                           m_src_vertices.next(m_src_vertex + 1));
 
@@ -165,8 +165,8 @@ namespace agg
                 if(m_closed)
                 {
                     m_status = ctrl1;
-                    return ((m_src_vertex == 1) ?
-                             path_cmd_move_to :
+                    return ((m_src_vertex == 1) ? 
+                             path_cmd_move_to : 
                              path_cmd_curve4);
                 }
                 else

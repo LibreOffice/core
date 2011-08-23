@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -21,9 +21,9 @@
 
 namespace agg
 {
-    template<class LoResT=int8u,
-             class HiResT=int8u,
-             unsigned GammaShift=8,
+    template<class LoResT=int8u, 
+             class HiResT=int8u, 
+             unsigned GammaShift=8, 
              unsigned HiResShift=8> class gamma_lut
     {
     public:
@@ -47,8 +47,8 @@ namespace agg
             delete [] m_dir_gamma;
         }
 
-        gamma_lut() :
-            m_gamma(1.0),
+        gamma_lut() : 
+            m_gamma(1.0), 
             m_dir_gamma(new HiResT[gamma_size]),
             m_inv_gamma(new LoResT[hi_res_size])
         {
@@ -65,14 +65,14 @@ namespace agg
         }
 
         gamma_lut(double g) :
-            m_gamma(1.0),
+            m_gamma(1.0), 
             m_dir_gamma(new HiResT[gamma_size]),
             m_inv_gamma(new LoResT[hi_res_size])
         {
             gamma(g);
         }
 
-        void gamma(double g)
+        void gamma(double g) 
         {
             m_gamma = g;
 
@@ -94,13 +94,13 @@ namespace agg
             return m_gamma;
         }
 
-        HiResT dir(LoResT v) const
-        {
-            return m_dir_gamma[unsigned(v)];
+        HiResT dir(LoResT v) const 
+        { 
+            return m_dir_gamma[unsigned(v)]; 
         }
 
-        LoResT inv(HiResT v) const
-        {
+        LoResT inv(HiResT v) const 
+        { 
             return m_inv_gamma[unsigned(v)];
         }
 

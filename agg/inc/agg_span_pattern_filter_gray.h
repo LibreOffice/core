@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -33,8 +33,8 @@ namespace agg
              class Interpolator,
              class WrapModeX,
              class WrapModeY,
-             class Allocator = span_allocator<ColorT> >
-    class span_pattern_filter_gray_nn :
+             class Allocator = span_allocator<ColorT> > 
+    class span_pattern_filter_gray_nn : 
     public span_image_filter<ColorT, Interpolator, Allocator>
     {
     public:
@@ -51,7 +51,7 @@ namespace agg
         };
 
         //--------------------------------------------------------------------
-        span_pattern_filter_gray_nn(alloc_type& alloc) :
+        span_pattern_filter_gray_nn(alloc_type& alloc) : 
             base_type(alloc),
             m_wrap_mode_x(1),
             m_wrap_mode_y(1)
@@ -59,7 +59,7 @@ namespace agg
 
         //--------------------------------------------------------------------
         span_pattern_filter_gray_nn(alloc_type& alloc,
-                                    const rendering_buffer& src,
+                                    const rendering_buffer& src, 
                                     interpolator_type& inter) :
             base_type(alloc, src, color_type(0,0), inter, 0),
             m_wrap_mode_x(src.width()),
@@ -67,8 +67,8 @@ namespace agg
         {}
 
         //--------------------------------------------------------------------
-        void source_image(const rendering_buffer& src)
-        {
+        void source_image(const rendering_buffer& src) 
+        { 
             base_type::source_image(src);
             m_wrap_mode_x = WrapModeX(src.width());
             m_wrap_mode_y = WrapModeX(src.height());
@@ -77,7 +77,7 @@ namespace agg
         //--------------------------------------------------------------------
         color_type* generate(int x, int y, unsigned len)
         {
-            base_type::interpolator().begin(x + base_type::filter_dx_dbl(),
+            base_type::interpolator().begin(x + base_type::filter_dx_dbl(), 
                                             y + base_type::filter_dy_dbl(), len);
             color_type* span = base_type::allocator().span();
             do
@@ -112,8 +112,8 @@ namespace agg
              class Interpolator,
              class WrapModeX,
              class WrapModeY,
-             class Allocator = span_allocator<ColorT> >
-    class span_pattern_filter_gray_bilinear :
+             class Allocator = span_allocator<ColorT> > 
+    class span_pattern_filter_gray_bilinear : 
     public span_image_filter<ColorT, Interpolator, Allocator>
     {
     public:
@@ -130,7 +130,7 @@ namespace agg
         };
 
         //--------------------------------------------------------------------
-        span_pattern_filter_gray_bilinear(alloc_type& alloc) :
+        span_pattern_filter_gray_bilinear(alloc_type& alloc) : 
             base_type(alloc),
             m_wrap_mode_x(1),
             m_wrap_mode_y(1)
@@ -138,7 +138,7 @@ namespace agg
 
         //--------------------------------------------------------------------
         span_pattern_filter_gray_bilinear(alloc_type& alloc,
-                                          const rendering_buffer& src,
+                                          const rendering_buffer& src, 
                                           interpolator_type& inter) :
             base_type(alloc, src, color_type(0,0), inter, 0),
             m_wrap_mode_x(src.width()),
@@ -146,8 +146,8 @@ namespace agg
         {}
 
         //-------------------------------------------------------------------
-        void source_image(const rendering_buffer& src)
-        {
+        void source_image(const rendering_buffer& src) 
+        { 
             base_type::source_image(src);
             m_wrap_mode_x = WrapModeX(src.width());
             m_wrap_mode_y = WrapModeX(src.height());
@@ -156,7 +156,7 @@ namespace agg
         //--------------------------------------------------------------------
         color_type* generate(int x, int y, unsigned len)
         {
-            base_type::interpolator().begin(x + base_type::filter_dx_dbl(),
+            base_type::interpolator().begin(x + base_type::filter_dx_dbl(), 
                                             y + base_type::filter_dy_dbl(), len);
             calc_type fg;
             color_type* span = base_type::allocator().span();
@@ -218,8 +218,8 @@ namespace agg
              class Interpolator,
              class WrapModeX,
              class WrapModeY,
-             class Allocator = span_allocator<ColorT> >
-    class span_pattern_filter_gray_2x2 :
+             class Allocator = span_allocator<ColorT> > 
+    class span_pattern_filter_gray_2x2 : 
     public span_image_filter<ColorT, Interpolator, Allocator>
     {
     public:
@@ -236,7 +236,7 @@ namespace agg
         };
 
         //--------------------------------------------------------------------
-        span_pattern_filter_gray_2x2(alloc_type& alloc) :
+        span_pattern_filter_gray_2x2(alloc_type& alloc) : 
             base_type(alloc),
             m_wrap_mode_x(1),
             m_wrap_mode_y(1)
@@ -244,7 +244,7 @@ namespace agg
 
         //--------------------------------------------------------------------
         span_pattern_filter_gray_2x2(alloc_type& alloc,
-                                     const rendering_buffer& src,
+                                     const rendering_buffer& src, 
                                      interpolator_type& inter,
                                      const image_filter_lut& filter) :
             base_type(alloc, src, color_type(0,0), inter, &filter),
@@ -253,8 +253,8 @@ namespace agg
         {}
 
         //-------------------------------------------------------------------
-        void source_image(const rendering_buffer& src)
-        {
+        void source_image(const rendering_buffer& src) 
+        { 
             base_type::source_image(src);
             m_wrap_mode_x = WrapModeX(src.width());
             m_wrap_mode_y = WrapModeX(src.height());
@@ -263,12 +263,12 @@ namespace agg
         //--------------------------------------------------------------------
         color_type* generate(int x, int y, unsigned len)
         {
-            base_type::interpolator().begin(x + base_type::filter_dx_dbl(),
+            base_type::interpolator().begin(x + base_type::filter_dx_dbl(), 
                                             y + base_type::filter_dy_dbl(), len);
             calc_type fg;
             color_type* span = base_type::allocator().span();
-            const int16* weight_array = base_type::filter().weight_array() +
-                                        ((base_type::filter().diameter()/2 - 1) <<
+            const int16* weight_array = base_type::filter().weight_array() + 
+                                        ((base_type::filter().diameter()/2 - 1) << 
                                           image_subpixel_shift);
             do
             {
@@ -296,21 +296,21 @@ namespace agg
                 x_hr &= image_subpixel_mask;
                 y_hr &= image_subpixel_mask;
 
-                fg += ptr1[x1] * ((weight_array[x_hr + image_subpixel_size] *
-                                   weight_array[y_hr + image_subpixel_size] +
-                                   image_filter_size / 2) >>
+                fg += ptr1[x1] * ((weight_array[x_hr + image_subpixel_size] * 
+                                   weight_array[y_hr + image_subpixel_size] + 
+                                   image_filter_size / 2) >> 
                                    image_filter_shift);
-                fg += ptr1[x2] * ((weight_array[x_hr] *
-                                   weight_array[y_hr + image_subpixel_size] +
-                                   image_filter_size / 2) >>
+                fg += ptr1[x2] * ((weight_array[x_hr] * 
+                                   weight_array[y_hr + image_subpixel_size] + 
+                                   image_filter_size / 2) >> 
                                    image_filter_shift);
-                fg += ptr2[x1] * ((weight_array[x_hr + image_subpixel_size] *
-                                   weight_array[y_hr] +
-                                   image_filter_size / 2) >>
+                fg += ptr2[x1] * ((weight_array[x_hr + image_subpixel_size] * 
+                                   weight_array[y_hr] + 
+                                   image_filter_size / 2) >> 
                                    image_filter_shift);
-                fg += ptr2[x2] * ((weight_array[x_hr] *
-                                   weight_array[y_hr] +
-                                   image_filter_size / 2) >>
+                fg += ptr2[x2] * ((weight_array[x_hr] * 
+                                   weight_array[y_hr] + 
+                                   image_filter_size / 2) >> 
                                    image_filter_shift);
 
                 fg >>= image_filter_shift;
@@ -346,8 +346,8 @@ namespace agg
              class Interpolator,
              class WrapModeX,
              class WrapModeY,
-             class Allocator = span_allocator<ColorT> >
-    class span_pattern_filter_gray :
+             class Allocator = span_allocator<ColorT> > 
+    class span_pattern_filter_gray : 
     public span_image_filter<ColorT, Interpolator, Allocator>
     {
     public:
@@ -364,13 +364,13 @@ namespace agg
         };
 
         //--------------------------------------------------------------------
-        span_pattern_filter_gray(alloc_type& alloc) :
+        span_pattern_filter_gray(alloc_type& alloc) : 
             base_type(alloc)
         {}
 
         //--------------------------------------------------------------------
         span_pattern_filter_gray(alloc_type& alloc,
-                                 const rendering_buffer& src,
+                                 const rendering_buffer& src, 
                                  interpolator_type& inter,
                                  const image_filter_lut& filter) :
             base_type(alloc, src, color_type(0,0), inter, &filter),
@@ -379,8 +379,8 @@ namespace agg
         {}
 
         //--------------------------------------------------------------------
-        void source_image(const rendering_buffer& src)
-        {
+        void source_image(const rendering_buffer& src) 
+        { 
             base_type::source_image(src);
             m_wrap_mode_x = WrapModeX(src.width());
             m_wrap_mode_y = WrapModeX(src.height());
@@ -389,7 +389,7 @@ namespace agg
         //--------------------------------------------------------------------
         color_type* generate(int x, int y, unsigned len)
         {
-            base_type::interpolator().begin(x + base_type::filter_dx_dbl(),
+            base_type::interpolator().begin(x + base_type::filter_dx_dbl(), 
                                             y + base_type::filter_dy_dbl(), len);
             int fg;
 
@@ -399,7 +399,7 @@ namespace agg
 
             color_type* span = base_type::allocator().span();
 
-            int x_count;
+            int x_count; 
             int weight_y;
 
             do
@@ -409,8 +409,8 @@ namespace agg
                 x -= base_type::filter_dx_int();
                 y -= base_type::filter_dy_int();
 
-                int x_hr = x;
-                int y_hr = y;
+                int x_hr = x; 
+                int y_hr = y; 
 
                 int x_fract = x_hr & image_subpixel_mask;
                 unsigned y_count = diameter;
@@ -431,8 +431,8 @@ namespace agg
                     const value_type* row_ptr = (value_type*)base_type::source_image().row(y_lr);
                     do
                     {
-                        fg += row_ptr[x_lr] * ((weight_y * weight_array[x_hr] +
-                                               image_filter_size / 2) >>
+                        fg += row_ptr[x_lr] * ((weight_y * weight_array[x_hr] + 
+                                               image_filter_size / 2) >> 
                                                image_filter_shift);
                         x_hr += image_subpixel_size;
                         x_lr = ++m_wrap_mode_x;

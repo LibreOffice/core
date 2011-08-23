@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -35,7 +35,7 @@ namespace agg
             int x1, x2;
             const int8u* ptr;
             row_data() {}
-            row_data(int x1_, int x2_, const int8u* ptr_) :
+            row_data(int x1_, int x2_, const int8u* ptr_) : 
                 x1(x1_), x2(x2_), ptr(ptr_) {}
         };
 
@@ -102,11 +102,11 @@ namespace agg
         unsigned width()  const { return m_width;  }
         unsigned height() const { return m_height; }
         int      stride() const { return m_stride; }
-        unsigned stride_abs() const
+        unsigned stride_abs() const 
         {
-            return (m_stride < 0) ?
-                unsigned(-m_stride) :
-                unsigned(m_stride);
+            return (m_stride < 0) ? 
+                unsigned(-m_stride) : 
+                unsigned(m_stride); 
         }
 
         //--------------------------------------------------------------------
@@ -123,10 +123,10 @@ namespace agg
         {
             unsigned h = height();
             if(mtx.height() < h) h = mtx.height();
-
+        
             unsigned l = stride_abs();
             if(mtx.stride_abs() < l) l = mtx.stride_abs();
-
+        
             l *= sizeof(T);
 
             unsigned y;

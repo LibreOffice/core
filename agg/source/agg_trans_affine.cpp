@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -24,7 +24,7 @@ namespace agg
 {
 
     //------------------------------------------------------------------------
-    const trans_affine& trans_affine::parl_to_parl(const double* src,
+    const trans_affine& trans_affine::parl_to_parl(const double* src, 
                                                    const double* dst)
     {
         m0 = src[2] - src[0];
@@ -34,15 +34,15 @@ namespace agg
         m4 = src[0];
         m5 = src[1];
         invert();
-        multiply(trans_affine(dst[2] - dst[0], dst[3] - dst[1],
+        multiply(trans_affine(dst[2] - dst[0], dst[3] - dst[1], 
                               dst[4] - dst[0], dst[5] - dst[1],
                               dst[0], dst[1]));
         return *this;
     }
 
     //------------------------------------------------------------------------
-    const trans_affine& trans_affine::rect_to_parl(double x1, double y1,
-                                                   double x2, double y2,
+    const trans_affine& trans_affine::rect_to_parl(double x1, double y1, 
+                                                   double x2, double y2, 
                                                    const double* parl)
     {
         double src[6];
@@ -54,8 +54,8 @@ namespace agg
     }
 
     //------------------------------------------------------------------------
-    const trans_affine& trans_affine::parl_to_rect(const double* parl,
-                                                   double x1, double y1,
+    const trans_affine& trans_affine::parl_to_rect(const double* parl, 
+                                                   double x1, double y1, 
                                                    double x2, double y2)
     {
         double dst[6];
@@ -122,7 +122,7 @@ namespace agg
     //------------------------------------------------------------------------
     const trans_affine& trans_affine::reset()
     {
-        m0 = m3 = 1.0;
+        m0 = m3 = 1.0; 
         m1 = m2 = m4 = m5 = 0.0;
         return *this;
     }
@@ -138,7 +138,7 @@ namespace agg
     {
         return is_equal_eps(m0, 1.0, epsilon) &&
                is_equal_eps(m1, 0.0, epsilon) &&
-               is_equal_eps(m2, 0.0, epsilon) &&
+               is_equal_eps(m2, 0.0, epsilon) && 
                is_equal_eps(m3, 1.0, epsilon) &&
                is_equal_eps(m4, 0.0, epsilon) &&
                is_equal_eps(m5, 0.0, epsilon);
@@ -149,7 +149,7 @@ namespace agg
     {
         return is_equal_eps(m0, m.m0, epsilon) &&
                is_equal_eps(m1, m.m1, epsilon) &&
-               is_equal_eps(m2, m.m2, epsilon) &&
+               is_equal_eps(m2, m.m2, epsilon) && 
                is_equal_eps(m3, m.m3, epsilon) &&
                is_equal_eps(m4, m.m4, epsilon) &&
                is_equal_eps(m5, m.m5, epsilon);

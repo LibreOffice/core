@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -29,13 +29,13 @@ namespace agg
 {
 
     //-------------------------------------------------------conv_smooth_poly1
-    template<class VertexSource>
-    struct conv_smooth_poly1 :
+    template<class VertexSource> 
+    struct conv_smooth_poly1 : 
     public conv_adaptor_vcgen<VertexSource, vcgen_smooth_poly1>
     {
         typedef conv_adaptor_vcgen<VertexSource, vcgen_smooth_poly1> base_type;
 
-        conv_smooth_poly1(VertexSource& vs) :
+        conv_smooth_poly1(VertexSource& vs) : 
             conv_adaptor_vcgen<VertexSource, vcgen_smooth_poly1>(vs)
         {
         }
@@ -45,15 +45,15 @@ namespace agg
 
     private:
         conv_smooth_poly1(const conv_smooth_poly1<VertexSource>&);
-        const conv_smooth_poly1<VertexSource>&
+        const conv_smooth_poly1<VertexSource>& 
             operator = (const conv_smooth_poly1<VertexSource>&);
     };
 
 
 
     //-------------------------------------------------conv_smooth_poly1_curve
-    template<class VertexSource>
-    struct conv_smooth_poly1_curve :
+    template<class VertexSource> 
+    struct conv_smooth_poly1_curve : 
     public conv_curve<conv_smooth_poly1<VertexSource> >
     {
         conv_smooth_poly1_curve(VertexSource& vs) :
@@ -67,7 +67,7 @@ namespace agg
 
     private:
         conv_smooth_poly1_curve(const conv_smooth_poly1_curve<VertexSource>&);
-        const conv_smooth_poly1_curve<VertexSource>&
+        const conv_smooth_poly1_curve<VertexSource>& 
             operator = (const conv_smooth_poly1_curve<VertexSource>&);
 
         conv_smooth_poly1<VertexSource> m_smooth;

@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -22,7 +22,7 @@ namespace agg
 {
 
     //==============================================renderer_raster_htext_solid
-    template<class BaseRenderer, class GlyphGenerator>
+    template<class BaseRenderer, class GlyphGenerator> 
     class renderer_raster_htext_solid
     {
     public:
@@ -86,7 +86,7 @@ namespace agg
 
 
     //=============================================renderer_raster_vtext_solid
-    template<class BaseRenderer, class GlyphGenerator>
+    template<class BaseRenderer, class GlyphGenerator> 
     class renderer_raster_vtext_solid
     {
     public:
@@ -153,7 +153,7 @@ namespace agg
 
 
     //===================================================renderer_raster_htext
-    template<class ScanlineRenderer, class GlyphGenerator>
+    template<class ScanlineRenderer, class GlyphGenerator> 
     class renderer_raster_htext
     {
     public:
@@ -175,14 +175,14 @@ namespace agg
 
                 const_span() {}
                 const_span(int x_, unsigned len_, const cover_type* covers_) :
-                    x(x_), len(len_), covers(covers_)
+                    x(x_), len(len_), covers(covers_) 
                 {}
             };
 
             typedef const const_span* const_iterator;
 
             //----------------------------------------------------------------
-            scanline_single_span(int x, int y, unsigned len,
+            scanline_single_span(int x, int y, unsigned len, 
                                  const cover_type* covers) :
                 m_y(y),
                 m_span(x, len, covers)
@@ -226,8 +226,8 @@ namespace agg
                         for(i = r.y1; i <= r.y2; i++)
                         {
                             m_ren->render(
-                                scanline_single_span(r.x1,
-                                                     i,
+                                scanline_single_span(r.x1, 
+                                                     i, 
                                                      (r.x2 - r.x1 + 1),
                                                      m_glyph->span(r.y2 - i)));
                         }
@@ -237,8 +237,8 @@ namespace agg
                         for(i = r.y1; i <= r.y2; i++)
                         {
                             m_ren->render(
-                                scanline_single_span(r.x1,
-                                                     i,
+                                scanline_single_span(r.x1, 
+                                                     i, 
                                                      (r.x2 - r.x1 + 1),
                                                      m_glyph->span(i - r.y1)));
                         }

@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -29,13 +29,13 @@ namespace agg
         typedef ColorT color_type;
         static unsigned dilation() { return 0; }
 
-        static void AGG_INLINE pixel_low_res(color_type const* const* buf,
+        static void AGG_INLINE pixel_low_res(color_type const* const* buf, 
                                              color_type* p, int x, int y)
         {
             *p = buf[y][x];
         }
 
-        static void AGG_INLINE pixel_high_res(color_type const* const* buf,
+        static void AGG_INLINE pixel_high_res(color_type const* const* buf, 
                                               color_type* p, int x, int y)
         {
             *p = buf[y >> line_subpixel_shift]
@@ -57,13 +57,13 @@ namespace agg
 
         static unsigned dilation() { return 1; }
 
-        static AGG_INLINE void pixel_low_res(color_type const* const* buf,
+        static AGG_INLINE void pixel_low_res(color_type const* const* buf, 
                                              color_type* p, int x, int y)
         {
             *p = buf[y][x];
         }
 
-        static AGG_INLINE void pixel_high_res(color_type const* const* buf,
+        static AGG_INLINE void pixel_high_res(color_type const* const* buf, 
                                               color_type* p, int x, int y)
         {
             calc_type r, g, b, a;
@@ -77,7 +77,7 @@ namespace agg
             y &= line_subpixel_mask;
             const color_type* ptr = buf[y_lr] + x_lr;
 
-            weight = (line_subpixel_size - x) *
+            weight = (line_subpixel_size - x) * 
                      (line_subpixel_size - y);
             r += weight * ptr->r;
             g += weight * ptr->g;
