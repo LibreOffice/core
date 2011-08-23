@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ public class _XTimeField extends MultiMethodTest {
         oObj.setTime(11150000) ;
 
         result = oObj.getTime() == 11150000 ;
-
+        
         if (! result ) {
             System.out.println("Getting "+oObj.getTime()+ " expected 11150000");
         }

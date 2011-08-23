@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ public class TabController extends TestCase {
         ;
     }
 
-    public TestEnvironment createTestEnvironment(TestParameters param,
+    public TestEnvironment createTestEnvironment(TestParameters param, 
                                                  PrintWriter log) {
         XInterface oObj = null;
         XControl xCtrl1 = null;
@@ -83,20 +83,20 @@ public class TabController extends TestCase {
 
 
         // create object relations
-        FormTools.insertForm(xTextDoc,
+        FormTools.insertForm(xTextDoc, 
                              FormTools.getForms(WriterTools.getDrawPage(
                                                         xTextDoc)), "MyForm");
 
-        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000,
-                                                               4500, 15000,
-                                                               10000,
-                                                               "CommandButton",
+        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000, 
+                                                               4500, 15000, 
+                                                               10000, 
+                                                               "CommandButton", 
                                                                "UnoControlButton");
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
 
         XControlModel model = aShape.getControl();
         XControlAccess access = (XControlAccess) UnoRuntime.queryInterface(
-                                        XControlAccess.class,
+                                        XControlAccess.class, 
                                         xTextDoc.getCurrentController());
 
         try {
@@ -107,7 +107,7 @@ public class TabController extends TestCase {
         XForm form = null;
 
         try {
-            form = (XForm) AnyConverter.toObject(new Type(XForm.class),
+            form = (XForm) AnyConverter.toObject(new Type(XForm.class), 
                                                  (FormTools.getForms(
                                                          WriterTools.getDrawPage(
                                                                  xTextDoc)))

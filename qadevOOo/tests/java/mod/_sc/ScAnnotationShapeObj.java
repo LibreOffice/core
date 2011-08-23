@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -202,11 +202,11 @@ public class ScAnnotationShapeObj extends TestCase {
         //adding ObjRelation for XText
         DefaultDsc tDsc = new DefaultDsc("com.sun.star.text.XTextContent",
                                     "com.sun.star.text.TextField.DateTime");
-
+        
         log.println( "adding InstCreator object" );
         tEnv.addObjRelation(
-            "XTEXTINFO", new InstCreator( xSheetDoc, tDsc ) );
-
+            "XTEXTINFO", new InstCreator( xSheetDoc, tDsc ) );        
+        
         return tEnv;
     }
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,13 +49,13 @@ import lib.StatusException;
  * @see com.sun.star.view.XFormLayerAccess
  */
 public class _XFormLayerAccess extends MultiMethodTest {
-
+    
     // oObj filled by MultiMethodTest
-
+    
     public XFormLayerAccess oObj = null;
-
+    
     private XForm xForm = null;
-
+    
     /**
      * checks if the object relation <CODE>XFormLayerAccess.XForm</CODE>
      * is available
@@ -66,7 +66,7 @@ public class _XFormLayerAccess extends MultiMethodTest {
             throw new StatusException(Status.failed("Object raltion 'XFormLayerAccess.XForm' is null"));
         }
     }
-
+    
     /**
      * Test disables the FormDesignMode and calls the mthod. <p>
      * Has <b> OK </b> status if the method returns
@@ -79,26 +79,26 @@ public class _XFormLayerAccess extends MultiMethodTest {
      */
     public void _getFromController(){
         requiredMethod("setFormDesignMode()") ;
-
+        
         log.println("try to get current DesignMode...");
         boolean currentMode = oObj.isFormDesignMode();
         log.println("DesignMode is " + currentMode);
-
+        
         log.println("enable DesignMode");
         oObj.setFormDesignMode(false);
-
+        
         log.println("test for getFromController() ");
         XFormController xFormCont = oObj.getFormController(xForm);
-
+        
         if (xFormCont == null)
             log.println("ERROR: Could not get FromContoller");
-
+        
         log.println("set back DesignMode to previouse state");
         oObj.setFormDesignMode(currentMode);
-
+        
         tRes.tested("getFromController()", xFormCont != null );
     }
-
+    
     /**
      * This test calls the test for <code>setFormDesignMode()</CODE>.
      * Has <b> OK </b> status if the test for  setFormDesignMode() returns
@@ -110,49 +110,49 @@ public class _XFormLayerAccess extends MultiMethodTest {
      */
     public void _isFormDesignMode(){
         requiredMethod("setFormDesignMode()") ;
-
+        
         log.println("test for isFormDesignMode() is ok since test for 'setFormDesingMode()' use it");
         tRes.tested("isFormDesignMode()", true);
     }
-
+    
     /**
      * This test gets the current FormDesignMode, change it to the opposite and checks if the expected value of
      * method isFormDesignmode() was given. Then the FormDesignmode was set back to the original value.<P>
      * Has <B> OK </B> if expected values are returned.
      *
      */
-
+    
     public void _setFormDesignMode(){
         log.println("test for setFormDesignMode() and isFormDesignMode() ");
-
+        
         log.println("try to get current DesignMode...");
         boolean currentMode = oObj.isFormDesignMode();
         log.println("DesignMode is " + currentMode);
-
+        
         log.println("try to change to " + !currentMode + "...");
         oObj.setFormDesignMode(!currentMode);
         log.println("try to get new DesignMode...");
         boolean newMode = oObj.isFormDesignMode();
         log.println("DesignMode is " + newMode);
-
+        
         boolean bOK = (newMode != currentMode);
-
+        
         if ( !bOK)
             log.println("ERROR: both modes are equal");
-
+        
         log.println("set back DesignMode to " + currentMode);
         oObj.setFormDesignMode(currentMode);
-
+        
         log.println("try to get DesignMode...");
         boolean oldMode = oObj.isFormDesignMode();
-
+        
         bOK &= (bOK &(currentMode == oldMode));
-
+        
         if (currentMode != oldMode)
             log.println("ERROR: could not change back");
-
+        
         tRes.tested("setFormDesignMode()", bOK );
     }
-
+    
 }  // finish class _XFormLayerAccess
 

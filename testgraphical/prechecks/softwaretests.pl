@@ -4,7 +4,7 @@ eval 'exec perl -wS $0 ${1+\"$@\"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ sub prepare()
     $sPath .= "/" . $sEnv;
     chdir ($sPath);
     cwd();
-    $sPath = getcwd();
+    $sPath = getcwd(); 
     my $sInpath = $ENV{INPATH};
     $sPath .= "/" . $sInpath . "/misc";
     $sGlobalIniFile = "$sPath/pathes.ini";
@@ -128,7 +128,7 @@ sub searchForFileInPath($$)
         $sep = ';';
     }
     my @path = split($sep, $sPathList);
-
+    
     my $sPath;
     my $startdir;
     my $bFound = 0;
@@ -139,7 +139,7 @@ sub searchForFileInPath($$)
     foreach $startdir (@path)
     {
         my $nCount = 0;
-        #
+        # 
         # IMPORTANT: leave out windir path.
         #
         if ($OSNAME eq "MSWin32" || $OSNAME eq "cygwin")
@@ -160,7 +160,7 @@ sub searchForFileInPath($$)
             cwd();
             my $myfile;
             while ($myfile = readdir(DIR))      # get filename
-            {
+            {                                  
                 if (-f $myfile )                # is it a file?
                 {
                     $nCount ++;
@@ -173,7 +173,7 @@ sub searchForFileInPath($$)
                 }
             }
             closedir(DIR);
-            print " ($nCount)\n" if ($verbose);
+            print " ($nCount)\n" if ($verbose);            
         }
         if ($bFound == 1)
         {
@@ -403,7 +403,7 @@ sub checkForImageMagick()
             {
                 # next try, search image magick in $PROGRAMFILES
                 my $sPrograms = unixpath($ENV{PROGRAMFILES});
-
+        
                 if (! $sPrograms)
                 {
                     print "There exist no \$PROGRAMFILES path, wrong Windows version?\n";
@@ -413,10 +413,10 @@ sub checkForImageMagick()
                 {
                     local *DIR;
                     if (opendir (DIR, $sPrograms))           # open program directory
-                    {
+                    {                
                         my $myfile;
                         while ($myfile = readdir(DIR))       # get a filename
-                        {
+                        {                                  
                             if ($myfile =~ /ImageMagick/)
                             {
                                 $sImageMagickPath = $sPrograms . "/" . $myfile;
@@ -436,7 +436,7 @@ sub checkForImageMagick()
                     }
                 }
             }
-
+            
         }
         if ( -e "$sImageMagickPath/$sImageMagickExe" )
         {
@@ -457,7 +457,7 @@ sub checkForJava6()
     {
         $javaexe = $ENV{JAVA6};
     }
-
+    
     if ($OSNAME eq "linux" || $OSNAME eq "cygwin")
     {
         # search for imagemagick
@@ -498,8 +498,8 @@ sub checkForJava6()
          if ( $ENV{JAVA6} )
          {
              $javaexe = $ENV{JAVA6};
-         }
-
+         }    
+         
          if (! -e $javaexe)
          {
              print "Java not found.\n";
@@ -509,7 +509,7 @@ sub checkForJava6()
          {
              print "Found Java: '$javaexe'\n" if ($verbose);
              insertPath("java.exe", $javaexe);
-         }
+         }        
     }
     else
     {
@@ -520,7 +520,7 @@ sub checkForJava6()
 # different checks
 print "Environment '$OSNAME'\n" if ($verbose);
 
-if ($printerdriver)
+if ($printerdriver) 
 {
     checkForPSDriver();
 }
@@ -548,7 +548,7 @@ sub print_usage(*)
 
     print(HANDLE <<END_OF_USAGE);
 
-Usage: $tool_name [OPTIONS]
+Usage: $tool_name [OPTIONS] 
 
     -ghostscript             Try to find ghostscript in your environment
     -imagemagick             Try to find imagemagick

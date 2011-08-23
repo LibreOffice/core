@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,7 +106,7 @@ public class _XTypeDetection extends MultiMethodTest {
         ok = type.indexOf("calc") > -1;
         result &= ok;
         log.println("deep detection should detect a calc and has detected '"+ type +"': " + ok);
-
+        
         log.println("test dokument with bookmark: " + bookmarkURL);
         mediaDescr = new PropertyValue[1][1];
         mediaDescr[0][0] = new PropertyValue();
@@ -116,7 +116,7 @@ public class _XTypeDetection extends MultiMethodTest {
         ok = type.indexOf("writer") > -1;
         result &= ok;
         log.println("deep detection should detect a writer and has detected '"+ type +"': " + ok);
-
+        
         tRes.tested("queryTypeByDescriptor()", result) ;
     }
 }

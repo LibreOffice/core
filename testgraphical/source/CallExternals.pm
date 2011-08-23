@@ -3,7 +3,7 @@ package CallExternals;
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -245,7 +245,7 @@ sub callperl($$$)
     my $sParams = shift;
     my $line;
     my $error;
-
+    
     log_print("CALLPERL: $perlexe $perlprogram $sParams\n");
 #    if (open(IN_FILE, "$perlexe $sParams 2>&1 |"))
     if (open(IN_FILE, "$perlexe $perlprogram $sParams |"))
@@ -277,7 +277,7 @@ sub setJavaExecutable($)
 #     my $sJava14;
 #     if ($OSNAME eq "MSWin32")
 #     {
-#         if ($sJavaExecutable)
+#         if ($sJavaExecutable) 
 #         {
 #             $sJava14 = $sJavaExecutable;
 #         }
@@ -311,7 +311,7 @@ sub setJavaExecutable($)
 sub getJava15()
 {
     my $sJava15;
-    if ($sJavaExecutable)
+    if ($sJavaExecutable) 
     {
         $sJava15 = $sJavaExecutable;
     }
@@ -363,7 +363,7 @@ sub getJava15()
 sub getJava16()
 {
     my $sJava16;
-    if ($sJavaExecutable)
+    if ($sJavaExecutable) 
     {
         $sJava16 = $sJavaExecutable;
     }
@@ -413,7 +413,7 @@ sub getJava16()
     }
     return $sJava16;
 }
-
+    
 # ------------------------------------------------------------------------------
 sub getJavaExecutable()
 {
@@ -510,10 +510,10 @@ sub ExecSQL($)
 #     my $line;
 #     my $error;
 #     my @result;
-#
+# 
 #     $exe = quoteIfNeed($exe);
 #     $program = quoteIfNeed($program);
-#
+# 
 #     # print "Will send: $exe $sParams\n";
 #     # log_print("CALLEXE: $exe $program $sParams\n");
 #     if (open(IN_FILE, "$exe $program $sParams |"))

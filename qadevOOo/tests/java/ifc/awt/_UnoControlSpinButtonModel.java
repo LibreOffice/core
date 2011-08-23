@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,19 +31,19 @@ import lib.MultiPropertyTest;
 import util.utils;
 
 public class _UnoControlSpinButtonModel extends MultiPropertyTest {
-
+    
     /**
     * This property can be VOID, and in case if it is so new
     * value must defined.
     */
     public void _BackgroundColor() {
         testProperty("BackgroundColor", new PropertyTester() {
-            protected Object getNewValue(String p, Object old) {
+            protected Object getNewValue(String p, Object old) {                
                 return utils.isVoid(old) ? new Integer(32768) : null ;
             }
         }) ;
     }
-
+    
   /**
     * This property can be VOID, and in case if it is so new
     * value must defined.
@@ -54,8 +54,8 @@ public class _UnoControlSpinButtonModel extends MultiPropertyTest {
                 return utils.isVoid(old) ? new Integer(1234) : null ;
             }
         }) ;
-    }
-
+    }              
+    
     /**
     * This property can be VOID, and in case if it is so new
     * value must defined.
@@ -66,6 +66,6 @@ public class _UnoControlSpinButtonModel extends MultiPropertyTest {
                 return utils.isVoid(old) ? new Integer(65324) : null ;
             }
         }) ;
-    }
-
+    }        
+    
 }

@@ -2,7 +2,7 @@
 #*************************************************************************
 #*
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #
 # Owner : andreschnabel@openoffice.org
 #
-# short description : run several testscripts on unix
+# short description : run several testscripts on unix 
 #                     list of scripts to run is read from stdin
 #                     this script has been derived from former ooo_releasetests.sh
 #
@@ -54,7 +54,7 @@ function GetValueFromSection ()
 {
    $AWK -v  sVarName="$1" -v sSectionName="$2" \
       'BEGIN { bInSection = 0}
-      {  if ( index ($0 ,"[" sSectionName "]") > 0 )
+      {  if ( index ($0 ,"[" sSectionName "]") > 0 ) 
             bInSection = 1
          else if ( (bInSection == 1) && (substr ($0,1,1) == "[") )
             bInSection = 0
@@ -62,9 +62,9 @@ function GetValueFromSection ()
              sub(/\r$/,"")
             print substr ($0,index ($0 ,"=") + 1)
             }
-      }' < "$3"
+      }' < "$3" 
 }
-
+    
 #------------------------------------------------------------------------
 #--- the main script starts here ---
 #------------------------------------------------------------------------
@@ -89,11 +89,11 @@ case `uname -s` in
 esac
 
 # if sLocation is not set manuall try to get the location form testtoolrc
-if [ -z "$sLocation" ]
+if [ -z "$sLocation" ] 
 then
    # first read the profile
    sProfile=`GetValueFromSection CurrentProfile Misc "$testtoolrc"`
-   # then read the BaseDir for the profile
+   # then read the BaseDir for the profile 
    sLocation=`GetValueFromSection BaseDir "$sProfile" "$testtoolrc"`
    sLocation="$sLocation/"
 fi
@@ -147,10 +147,10 @@ while read x ;
 do
     echo "Running soffices' processes: "
     # kill office, if exists
-    `$KILLOFFICEALL`
-
+    `$KILLOFFICEALL`        
+    
     echo "****************************************************"
-    x=`echo "$x"|sed s/[[:blank:]]*$//` #cut all trailing blanks
+    x=`echo "$x"|sed s/[[:blank:]]*$//`	#cut all trailing blanks 
     sTest="$sLocation$x"
     if [ -f "$sTest" ]; then
 
@@ -173,7 +173,7 @@ do
             fi
 
             ######### wait until Testtool has finished & closed
-            while [ `ps -A | grep -v "grep" | grep $testtoolpid | wc -l` -gt 0 ] ;
+            while [ `ps -A | grep -v "grep" | grep $testtoolpid | wc -l` -gt 0 ] ; 
             do
                 sleep 5
                 i=$((i+5))
@@ -189,7 +189,7 @@ do
     fi
 done
 
-echo "Duration:" $((i/60)) "min" $((i%60)) "sec "
+echo "Duration:" $((i/60)) "min" $((i%60)) "sec " 
 
 echo "****************************************************"
 echo "************ FINISHED ************"

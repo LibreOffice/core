@@ -3,7 +3,7 @@ package filehelper;
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -105,10 +105,10 @@ sub unixpath($)
 #     my $sSolarisLockFile = "/tmp/.ai.pkg.zone.lock-afdb66cf-1dd1-11b2-a049-000d560ddc3e";
 #     return $sSolarisLockFile;
 # }
-#
+# 
 # sub checkForSolarisLock()
 # {
-#     if ($OSNAME eq "solaris")
+#     if ($OSNAME eq "solaris") 
 #     {
 #         # wait until the internal installer lock is gone
 #         while ( -e getSolarisLockFile() )
@@ -123,14 +123,14 @@ sub unixpath($)
 #         log_print( "[ok], lock is gone.\n");
 #     }
 # }
-#
+# 
 # sub deleteSolarisLock()
 # {
-#     if ($OSNAME eq "solaris")
+#     if ($OSNAME eq "solaris") 
 #     {
 #         sleep 1;
 #         unlink getSolarisLockFile();
-#
+# 
 #         sleep 1;
 #         if ( -e getSolarisLockFile() )
 #         {
@@ -196,7 +196,7 @@ our $programprefix;
 # sub getProgramPrefix($)
 # {
 #     my $sDBDistinct = shift;
-#
+# 
 #     my $sProgramPrefix;
 #     if (! $programprefix)
 #     {
@@ -275,7 +275,7 @@ sub rmkdir($)
     {
         @dirs = split("\\\\", $tpath);
     }
-
+    
     foreach $dir (@dirs)
     {
     $accum = "$accum$dir/";

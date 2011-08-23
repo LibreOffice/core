@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -191,10 +191,10 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
         params[2] = param3;
 
         XController xCont = the_frame2.getController();
-
+        
         XSelectionSupplier xSelect = (XSelectionSupplier) UnoRuntime.queryInterface(
             XSelectionSupplier.class, xCont);
-
+        
         try {
             xSelect.select(params);
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
@@ -208,7 +208,7 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-
+        
         oObj = at.getAccessibleObjectForRole(xRoot,
             AccessibleRole.ROW_HEADER);
 

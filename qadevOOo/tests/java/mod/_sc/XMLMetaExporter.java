@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -148,10 +148,10 @@ public class XMLMetaExporter extends TestCase {
             XPropertySet docInfo = (XPropertySet) UnoRuntime.queryInterface
                 (XPropertySet.class, infoSup.getDocumentInfo()) ;
             docInfo.setPropertyValue("Title", "TestDocument");
-
+            
             log.println("fill sheet 1 with contnet...");
             util.CalcTools.fillCalcSheetWithContent(xSheetDoc,1, 3, 3, 50, 50);
-
+            
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create environment.", e) ;

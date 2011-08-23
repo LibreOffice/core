@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ public class UnoSpinButtonControlModel extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.awt.UnoControlSpinButtonModel</code>.
     */
-    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    public synchronized TestEnvironment createTestEnvironment(TestParameters Param, 
                                                               PrintWriter log)
         throws StatusException {
         XInterface oObj = null;
@@ -60,7 +60,7 @@ public class UnoSpinButtonControlModel extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("OBJNAME",
+        tEnv.addObjRelation("OBJNAME", 
                             "com.sun.star.awt.UnoControlSpinButtonModel");
         System.out.println("ImplementationName: " + utils.getImplName(oObj));
 

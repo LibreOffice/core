@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ public class SwAccessibleTableCellView extends TestCase {
     * @see TestEnvironment
     * @see #getTestEnvironment()
     */
-    protected TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param, 
                                                     PrintWriter log) {
         XInterface oObj = null;
         XTextTable oTable = null;
@@ -83,7 +83,7 @@ public class SwAccessibleTableCellView extends TestCase {
             oTable = SOF.createTextTable(xTextDoc);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
-            throw new StatusException("Couldn't create TextTable : " +
+            throw new StatusException("Couldn't create TextTable : " + 
                                       e.getMessage(), e);
         }
 
@@ -91,11 +91,11 @@ public class SwAccessibleTableCellView extends TestCase {
             SOF.insertTextContent(xTextDoc, oTable);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
-            throw new StatusException("Couldn't insert text content :" +
+            throw new StatusException("Couldn't insert text content :" + 
                                       e.getMessage(), e);
         }
 
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                            xTextDoc);
 
         AccessibilityTools at = new AccessibilityTools();
@@ -113,10 +113,10 @@ public class SwAccessibleTableCellView extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         final XAccessibleSelection accSel = (XAccessibleSelection) UnoRuntime.queryInterface(
-                                                    XAccessibleSelection.class,
+                                                    XAccessibleSelection.class, 
                                                     at.SearchedContext.getAccessibleParent());
 
-        tEnv.addObjRelation("EventProducer",
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 accSel.selectAllAccessibleChildren();

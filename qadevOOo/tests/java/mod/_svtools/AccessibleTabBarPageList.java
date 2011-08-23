@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,7 +108,7 @@ public class AccessibleTabBarPageList extends TestCase {
      * @see ifc.accessibility._XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
-    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
                                                     PrintWriter log) {
         log.println("creating a test environment");
 
@@ -148,31 +148,31 @@ public class AccessibleTabBarPageList extends TestCase {
 
         shortWait();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
                                                               tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot,
+        oObj = at.getAccessibleObjectForRole(xRoot, 
                                              AccessibleRole.PAGE_TAB_LIST);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("XAccessibleSelection.multiSelection",
+        tEnv.addObjRelation("XAccessibleSelection.multiSelection", 
                             new Boolean(false));
 
-        tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected",
+        tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected", 
                             new Boolean(true));
 
         XLayerSupplier oLS = (XLayerSupplier)
             UnoRuntime.queryInterface(XLayerSupplier.class, xDoc);
         XInterface oLM = oLS.getLayerManager();
         final XLayerManager xLM = (XLayerManager) UnoRuntime.queryInterface(XLayerManager.class, oLM);
-
-
-        tEnv.addObjRelation("EventProducer",
+        
+        
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 xLM.insertNewByIndex(0);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ import basicrunner.basichelper.Filter;
 import basicrunner.basichelper.DispatchProviderInterceptor;
 
 /**
- * This class provides a BasicHandler. All classes for the communication with
- * and handling of  the BASIC tests are instantiated and inserted int the
+ * This class provides a BasicHandler. All classes for the communication with 
+ * and handling of  the BASIC tests are instantiated and inserted int the 
  * MultiServiceFactory of StarOffice.
  */
 public class BasicHandlerProvider {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ public class GraphicalDifferenceCheck
                 GlobalLogWriter.get().println("");
             }
         }
-
+    
     /**
      * Creates references form documents used by the graphical difference check
      *
@@ -72,7 +72,7 @@ public class GraphicalDifferenceCheck
 //            System.out.println("createReferences() InputPath: " + _sInputPath + " refpath: " + _sReferencePath);
             showVersion();
             File aInputPath = new File(_sInputPath);
-
+            
 //            System.out.println("Inputpath in file: " + aInputPath.getAbsolutePath());
 //!
 //             if (aInputPath.exists())
@@ -84,7 +84,7 @@ public class GraphicalDifferenceCheck
 //                 System.out.println("Inputpath doesn't exists");
 //                 return;
 //             }
-
+            
             if (aInputPath.isDirectory())
             {
                 String fs = System.getProperty("file.separator");
@@ -139,7 +139,7 @@ public class GraphicalDifferenceCheck
         {
             return OfficePrint.isReferenceExists(_aGTA, _sReferencePath, _sInputFile);
         }
-
+    
 
     /**
      * Used for the comparance of graphical differences.
@@ -230,7 +230,7 @@ public class GraphicalDifferenceCheck
         return checkOneFile( _sInputFile, _sOutputPath, _sReferencePath, null, _aGTA);
     }
 
-
+    
     /**
      * Used for the comparance of graphical differences.
      * Method compares one document (_sInputFile) with an older document of the same name in the provided directory (_sReferencePath).
@@ -283,7 +283,7 @@ public class GraphicalDifferenceCheck
 
             // one file
             String sInputFile;
-            sInputFile = createInputFile(xComponent, _sOutputPath, _resultDocName);
+            sInputFile = createInputFile(xComponent, _sOutputPath, _resultDocName);            
             sInputFile = FileHelper.getSystemPathFromFileURL(sInputFile);
             return convwatch.ConvWatch.check(_aGTA, _sOutputPath, sInputFile, _sReferencePath);
         }
@@ -296,26 +296,26 @@ public class GraphicalDifferenceCheck
 // LLA: old!      *
 // LLA: old!      * @param inputPath       the original document name (possibly including path)
 // LLA: old!      * @param referencePath   the directory where the reference document will be stored
-// LLA: old!
+// LLA: old! 
 // LLA: old!      */
 // LLA: old!     public static boolean isReferencExistent(String inputDocumentPath, String referencePath)
 // LLA: old!     {
-// LLA: old!        // isolate the document name
+// LLA: old! 		// isolate the document name
 // LLA: old!         if(inputDocumentPath.indexOf(File.separator) != -1)
 // LLA: old!             inputDocumentPath = inputDocumentPath.substring(inputDocumentPath.lastIndexOf(File.separator) + 1, inputDocumentPath.length());
-// LLA: old!
-// LLA: old!        // exchange any arbitray suffix against the refence suffix (.prn)
+// LLA: old! 
+// LLA: old! 		// exchange any arbitray suffix against the refence suffix (.prn)
 // LLA: old!         if(inputDocumentPath.indexOf('.') != -1)
 // LLA: old!             inputDocumentPath = inputDocumentPath.substring(0, inputDocumentPath.lastIndexOf('.'));
 // LLA: old!         inputDocumentPath = inputDocumentPath + ".prn";
-// LLA: old! System.out.println("GraphicalDifference CheckReferenceDocument: " + inputDocumentPath);
-// LLA: old!
+// LLA: old! System.out.println("GraphicalDifference CheckReferenceDocument: " + inputDocumentPath);        
+// LLA: old! 
 // LLA: old!         File refFile = new File(referencePath + inputDocumentPath);
 // LLA: old!         if(refFile.exists()){
 // LLA: old!             return true;
 // LLA: old!         }else
 // LLA: old!             return false;
-// LLA: old!    }
+// LLA: old! 	}
 
 
     private static String createInputFile(XComponent xComponent, String _sOutputPath, String resultDocName)

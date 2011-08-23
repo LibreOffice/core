@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ public class OSQLMessageDialog extends TestCase {
             log.println("could not create instacne of 'com.sun.star.awt.Toolkit'" );
             throw new StatusException("could not create instacne of 'com.sun.star.awt.Toolkit'", e) ;
         }
-
+        
         // Describe the properties of the container window.
         com.sun.star.awt.WindowDescriptor aDescriptor =
         new com.sun.star.awt.WindowDescriptor();
@@ -131,7 +131,7 @@ public class OSQLMessageDialog extends TestCase {
 
         com.sun.star.awt.XWindowPeer xPeer = null;
         try{
-
+        
             xPeer = xToolkit.createWindow(aDescriptor) ;
 
         } catch (com.sun.star.lang.IllegalArgumentException e){
@@ -140,8 +140,8 @@ public class OSQLMessageDialog extends TestCase {
         }
 
         com.sun.star.awt.XWindow xWindow = (com.sun.star.awt.XWindow)UnoRuntime.queryInterface (
-        com.sun.star.awt.XWindow .class, xPeer);
-
+        com.sun.star.awt.XWindow .class, xPeer);        
+        
         log.println( "    creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

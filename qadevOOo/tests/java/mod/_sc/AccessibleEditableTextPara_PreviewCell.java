@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -158,20 +158,20 @@ public class AccessibleEditableTextPara_PreviewCell extends TestCase {
         AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL,true);
 
         xRoot = AccessibilityTools.SearchedAccessible;
-
+        
         //AccessibilityTools.printAccessibleTree(log,xRoot);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,AccessibleRole.PARAGRAPH);
-
+        
         log.println("ImplementationName " + utils.getImplName(oObj));
         log.println("AccessibleName " + oObj.getAccessibleName());
         log.println("Parent " + utils.getImplName(oObj.getAccessibleParent()));
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
-
+        
         tEnv.addObjRelation("EditOnly", "AccessibleEditableTextPara_PreviewCell");
         tEnv.addObjRelation("Destroy", "AccessibleEditableTextPara_PreviewCell");
-
+        
         final XCell cell_to_change = xCell;
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
@@ -179,7 +179,7 @@ public class AccessibleEditableTextPara_PreviewCell extends TestCase {
                     cell_to_change.setFormula("NewString");
                 }
             });
-
+            
         return tEnv;
     }
 

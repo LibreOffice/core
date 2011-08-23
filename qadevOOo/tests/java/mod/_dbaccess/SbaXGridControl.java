@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -168,12 +168,12 @@ public class SbaXGridControl extends TestCase {
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
                                                               atw);
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        XInterface button = AccessibilityTools.getAccessibleObjectForRole(xRoot,
+        XInterface button = AccessibilityTools.getAccessibleObjectForRole(xRoot, 
                                                           AccessibleRole.PUSH_BUTTON);
 
         XAccessibleAction action = (XAccessibleAction) UnoRuntime.queryInterface(
@@ -234,7 +234,7 @@ public class SbaXGridControl extends TestCase {
     *      inserted into collection. Is a column instance.</li>
     * </ul>
     */
-    protected TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param, 
                                                     PrintWriter log) {
         XInterface oObj = null;
         XWindowPeer the_win = null;
@@ -258,7 +258,7 @@ public class SbaXGridControl extends TestCase {
 
         //Try to query XControlAccess
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-                                            XControlAccess.class,
+                                            XControlAccess.class, 
                                             xTextDoc.getCurrentController());
 
         try {
@@ -321,7 +321,7 @@ public class SbaXGridControl extends TestCase {
 
 
         // creating another window
-        aShape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
+        aShape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000, 
                                               10000, "TextField");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
@@ -331,7 +331,7 @@ public class SbaXGridControl extends TestCase {
 
         //Try to query XControlAccess
         the_access = (XControlAccess) UnoRuntime.queryInterface(
-                             XControlAccess.class,
+                             XControlAccess.class, 
                              xTextDoc.getCurrentController());
 
         //now get the TextControl
@@ -353,11 +353,11 @@ public class SbaXGridControl extends TestCase {
 
 
         //Relations for XSelectionSupplier
-        tEnv.addObjRelation("Selections",
+        tEnv.addObjRelation("Selections", 
                             new Object[] {
             new Object[] { new Integer(0) }, new Object[] { new Integer(1) }
         });
-        tEnv.addObjRelation("Comparer",
+        tEnv.addObjRelation("Comparer", 
                             new Comparator() {
             public int compare(Object o1, Object o2) {
                 return ((Integer) o1).compareTo((Integer)o2);
@@ -407,7 +407,7 @@ public class SbaXGridControl extends TestCase {
         final XLoadable formLoaderF = formLoader;
         final XPropertySet ps = (XPropertySet) UnoRuntime.queryInterface(
                                         XPropertySet.class, aControl2);
-        tEnv.addObjRelation("XUpdateBroadcaster.Checker",
+        tEnv.addObjRelation("XUpdateBroadcaster.Checker", 
                             new ifc.form._XUpdateBroadcaster.UpdateChecker() {
             private String lastText = "";
 
@@ -424,7 +424,7 @@ public class SbaXGridControl extends TestCase {
                 XBoundComponent bound = (XBoundComponent) UnoRuntime.queryInterface(
                                                 XBoundComponent.class, ctrl);
                 XResultSetUpdate update = (XResultSetUpdate) UnoRuntime.queryInterface(
-                                                  XResultSetUpdate.class,
+                                                  XResultSetUpdate.class, 
                                                   formLoaderF);
 
                 bound.commit();
@@ -441,7 +441,7 @@ public class SbaXGridControl extends TestCase {
         return tEnv;
     } // finish method getTestEnvironment
 
-    public static XControlShape createGrid(XComponent oDoc, int height,
+    public static XControlShape createGrid(XComponent oDoc, int height, 
                                            int width, int x, int y) {
         Size size = new Size();
         Point position = new Point();
@@ -450,7 +450,7 @@ public class SbaXGridControl extends TestCase {
 
         //get MSF
         XMultiServiceFactory oDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
-                                               XMultiServiceFactory.class,
+                                               XMultiServiceFactory.class, 
                                                oDoc);
 
         try {
@@ -460,7 +460,7 @@ public class SbaXGridControl extends TestCase {
                                   "com.sun.star.form.component.GridControl");
             XPropertySet model_props = (XPropertySet) UnoRuntime.queryInterface(
                                                XPropertySet.class, aCon);
-            model_props.setPropertyValue("DefaultControl",
+            model_props.setPropertyValue("DefaultControl", 
                                          "com.sun.star.form.control.InteractionGridControl");
             aControl = (XControlModel) UnoRuntime.queryInterface(
                                XControlModel.class, aCon);

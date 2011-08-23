@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,7 +108,7 @@ public class ScIndexEnumeration_SheetLinksEnumeration extends TestCase {
         XSheetLinkable SL = (XSheetLinkable)
             UnoRuntime.queryInterface(XSheetLinkable.class, oSheet);
 
-        // creating link.
+        // creating link. 
         String aSourceArea = util.utils.getFullTestURL("calcshapes.sxc");
         SL.link(aSourceArea, "Sheet1", "", "",
             com.sun.star.sheet.SheetLinkMode.VALUE);

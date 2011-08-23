@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ public class AccessibleListItem extends TestCase {
      * Then the TREE component is found and the 'New Document' tab is
      * selected to make list box visible. After that listbox item is obtained.
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param, 
                                                     PrintWriter log) {
         XInterface oObj = null;
         XMultiServiceFactory msf = (XMultiServiceFactory) Param.getMSF();
@@ -109,13 +109,13 @@ public class AccessibleListItem extends TestCase {
 
         shortWait();
 
-        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                             xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
         XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
-                                          XDispatchProvider.class,
+                                          XDispatchProvider.class, 
                                           secondController);
 
         XURLTransformer urlTransf = null;
@@ -146,7 +146,7 @@ public class AccessibleListItem extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
                                                               tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
@@ -154,7 +154,7 @@ public class AccessibleListItem extends TestCase {
 
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         // obtaining 'Close' button
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON, 
                                              "Close");
         action = (XAccessibleAction) UnoRuntime.queryInterface(
                          XAccessibleAction.class, oObj);
@@ -164,7 +164,7 @@ public class AccessibleListItem extends TestCase {
             oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TREE);
 
             XAccessibleSelection xAccSel = (XAccessibleSelection) UnoRuntime.queryInterface(
-                                                   XAccessibleSelection.class,
+                                                   XAccessibleSelection.class, 
                                                    oObj);
             xAccSel.selectAccessibleChild(3);
             shortWait();
@@ -172,21 +172,21 @@ public class AccessibleListItem extends TestCase {
             throw new StatusException("Can't switch to required tab", e);
         }
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.LIST_ITEM,"Spr");
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.LIST_ITEM,"Spr");               
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("EditOnly",
+        tEnv.addObjRelation("EditOnly", 
                             "This method isn't supported in this component");
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
         final XAccessibleComponent acomp = (XAccessibleComponent) UnoRuntime.queryInterface(
-                                                   XAccessibleComponent.class,
+                                                   XAccessibleComponent.class, 
                                                    oObj);
-        tEnv.addObjRelation("EventProducer",
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 acomp.grabFocus();

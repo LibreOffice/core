@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,12 +76,12 @@ public class JavaSystemBackend implements XSingleLayerStratum, XTypeProvider,
         return __implName;
     }
 
-    public com.sun.star.configuration.backend.XLayer getLayer(String str,
+    public com.sun.star.configuration.backend.XLayer getLayer(String str, 
                                                               String str1)
-        throws com.sun.star.configuration.backend.BackendAccessException,
+        throws com.sun.star.configuration.backend.BackendAccessException, 
                com.sun.star.lang.IllegalArgumentException {
         if (aLayer == null) {
-            System.out.println("JavaSystemBackend::getLayer() called for " +
+            System.out.println("JavaSystemBackend::getLayer() called for " + 
                                str);
             aLayer = new CommonLayer();
         }
@@ -123,8 +123,8 @@ public class JavaSystemBackend implements XSingleLayerStratum, XTypeProvider,
     }
 
     public com.sun.star.configuration.backend.XUpdatableLayer getUpdatableLayer(String str)
-        throws com.sun.star.configuration.backend.BackendAccessException,
-               com.sun.star.lang.NoSupportException,
+        throws com.sun.star.configuration.backend.BackendAccessException, 
+               com.sun.star.lang.NoSupportException, 
                com.sun.star.lang.IllegalArgumentException {
         throw new com.sun.star.lang.NoSupportException(
                 "Cannot write to test backend", this);
@@ -156,8 +156,8 @@ public class JavaSystemBackend implements XSingleLayerStratum, XTypeProvider,
     * @param   regKey       the registryKey
     * @see                  com.sun.star.comp.loader.JavaLoader
     */
-    public static XSingleServiceFactory __getServiceFactory(String implName,
-                                                            XMultiServiceFactory multiFactory,
+    public static XSingleServiceFactory __getServiceFactory(String implName, 
+                                                            XMultiServiceFactory multiFactory, 
                                                             XRegistryKey regKey) {
         XSingleServiceFactory xSingleServiceFactory = null;
 
@@ -165,8 +165,8 @@ public class JavaSystemBackend implements XSingleLayerStratum, XTypeProvider,
 
         if (implName.equals(JavaSystemBackend.class.getName())) {
             xSingleServiceFactory = FactoryHelper.getServiceFactory(
-                                            JavaSystemBackend.class,
-                                            __serviceName, multiFactory,
+                                            JavaSystemBackend.class, 
+                                            __serviceName, multiFactory, 
                                             regKey);
         }
 
@@ -182,13 +182,13 @@ public class JavaSystemBackend implements XSingleLayerStratum, XTypeProvider,
      * @see                  com.sun.star.comp.loader.JavaLoader
      */
     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        boolean success = FactoryHelper.writeRegistryServiceInfo(__implName,
-                                                                 __serviceName,
+        boolean success = FactoryHelper.writeRegistryServiceInfo(__implName, 
+                                                                 __serviceName, 
                                                                  regKey);
 
         if (success) {
             try {
-                String keyName = "/" + __implName +
+                String keyName = "/" + __implName + 
                                  "/DATA/SupportedComponents";
                 XRegistryKey newKey = regKey.createKey(keyName);
 
@@ -215,8 +215,8 @@ public class JavaSystemBackend implements XSingleLayerStratum, XTypeProvider,
 
     protected class CommonLayer implements XLayer, XTimeStamped {
         public void readData(XLayerHandler xLayerHandler)
-                      throws com.sun.star.lang.NullPointerException,
-                             com.sun.star.lang.WrappedTargetException,
+                      throws com.sun.star.lang.NullPointerException, 
+                             com.sun.star.lang.WrappedTargetException, 
                              com.sun.star.configuration.backend.MalformedDataException {
             System.out.println("CommonLayer is read");
 
@@ -229,7 +229,7 @@ public class JavaSystemBackend implements XSingleLayerStratum, XTypeProvider,
 
             try {
                 xLayerContentDescriber = (XLayerContentDescriber) UnoRuntime.queryInterface(
-                                                 XLayerContentDescriber.class,
+                                                 XLayerContentDescriber.class, 
                                                  msf.createInstance(
                                                          "com.sun.star.comp.configuration.backend.LayerDescriber"));
             } catch (com.sun.star.uno.Exception e) {

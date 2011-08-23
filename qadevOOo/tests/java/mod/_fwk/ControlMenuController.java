@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public class ControlMenuController extends TestCase {
      *
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
-
+        
         try {
             XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
             XCloseable.class, xTextDoc);
@@ -66,7 +66,7 @@ public class ControlMenuController extends TestCase {
 
     /**
      * Create test environment.
-     */
+     */    
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
         XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
@@ -77,7 +77,7 @@ public class ControlMenuController extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Could not create object 'ControlMenuController'", e);
         }
-
+            
 
 /*        log.println("Creating instance...");
 
@@ -93,7 +93,7 @@ public class ControlMenuController extends TestCase {
         XModel xModel = (XModel)UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
         // the supplier is available from the model
-        XUIConfigurationManagerSupplier xSupplier =
+        XUIConfigurationManagerSupplier xSupplier = 
                 (XUIConfigurationManagerSupplier)UnoRuntime.queryInterface(
                 XUIConfigurationManagerSupplier.class, xModel);
 
@@ -102,9 +102,9 @@ public class ControlMenuController extends TestCase {
         // just to make sure, it's the right one.
         log.println("TestObject: " + util.utils.getImplName(xManager));
         tEnv = new TestEnvironment(xManager); */
-        log.println("TestObject: " + utils.getImplName(oObj));
+        log.println("TestObject: " + utils.getImplName(oObj)); 
         tEnv = new TestEnvironment(oObj);
         return tEnv;
     }
-
+    
 }

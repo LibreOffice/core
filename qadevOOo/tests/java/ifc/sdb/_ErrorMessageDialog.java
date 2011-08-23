@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ public class _ErrorMessageDialog extends MultiPropertyTest {
         testProperty("SQLException", tEnv.getObjRelation("ERR1"),
             tEnv.getObjRelation("ERR2")) ;
     }
-
+    
     public void _ParentWindow(){
         log.println("Testing with custom Property tester");
         testProperty("ParentWindow", tEnv.getObjRelation("ERR_XWindow"), null);

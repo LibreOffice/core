@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,10 +55,10 @@ import util.utils;
  * @see com.sun.star.style.PageStyle
  */
 public class PageStyle extends TestCase {
-
+    
     XTextDocument xTextDoc;
     SOfficeFactory SOF = null;
-
+    
     /**
     * Creates text document.
     */
@@ -115,7 +115,7 @@ public class PageStyle extends TestCase {
             log.println("Error: exception occured.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
-        }
+        } 
 
         try {
             log.print("Creating a user-defined style... ");
@@ -140,7 +140,7 @@ public class PageStyle extends TestCase {
         XNameContainer oSFNC = (XNameContainer)
             UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
 
-
+        
         try {
             if ( oSFNC.hasByName("My Style") )
                 oSFNC.removeByName("My Style");
@@ -195,7 +195,7 @@ public class PageStyle extends TestCase {
         String[] names = utils.getFilteredPropertyNames(xStyleProp, (short)0, exclude);
         tEnv.addObjRelation("PropertyNames", names);
 
-        return tEnv;
+        return tEnv; 
     }
-
+    
 }

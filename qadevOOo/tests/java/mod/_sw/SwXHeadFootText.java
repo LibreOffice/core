@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -189,7 +189,7 @@ public class SwXHeadFootText extends TestCase {
 
         log.println( "adding InstCreator object" );
         tEnv.addObjRelation( "XTEXTINFO", new InstCreator( xTextDoc, tDsc ) );
-
+        
         tEnv.addObjRelation( "TEXT", oObj);
 
         return tEnv;

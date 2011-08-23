@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,30 +26,30 @@
  ************************************************************************/
 
 // LLA: moved to helper.StringHelper package convwatch;
-// LLA: moved to helper.StringHelper
+// LLA: moved to helper.StringHelper 
 // LLA: moved to helper.StringHelper public class StringHelper {
-// LLA: moved to helper.StringHelper
+// LLA: moved to helper.StringHelper 
 // LLA: moved to helper.StringHelper     public static String doubleQuote(String _sStr)
 // LLA: moved to helper.StringHelper         {
 // LLA: moved to helper.StringHelper             return "\"" + _sStr + "\"";
-// LLA: moved to helper.StringHelper         }
-// LLA: moved to helper.StringHelper
+// LLA: moved to helper.StringHelper         } 
+// LLA: moved to helper.StringHelper 
 // LLA: moved to helper.StringHelper     public static String singleQuote(String _sStr)
 // LLA: moved to helper.StringHelper         {
 // LLA: moved to helper.StringHelper             return "'" + _sStr + "'";
 // LLA: moved to helper.StringHelper         }
-// LLA: moved to helper.StringHelper
+// LLA: moved to helper.StringHelper 
 // LLA: moved to helper.StringHelper     public static String removeQuoteIfNeed(String _sPath)
 // LLA: moved to helper.StringHelper         {
 // LLA: moved to helper.StringHelper             String sNewPath = _sPath;
-// LLA: moved to helper.StringHelper
+// LLA: moved to helper.StringHelper 
 // LLA: moved to helper.StringHelper             if (_sPath.startsWith("\"") ||
 // LLA: moved to helper.StringHelper                 _sPath.startsWith("'"))
 // LLA: moved to helper.StringHelper             {
 // LLA: moved to helper.StringHelper                 // remove trailing quotes, if exists
 // LLA: moved to helper.StringHelper                 sNewPath = sNewPath.substring(1);
 // LLA: moved to helper.StringHelper             }
-// LLA: moved to helper.StringHelper
+// LLA: moved to helper.StringHelper 
 // LLA: moved to helper.StringHelper             if (_sPath.endsWith("\"") ||
 // LLA: moved to helper.StringHelper                 _sPath.endsWith("'"))
 // LLA: moved to helper.StringHelper             {
@@ -58,7 +58,7 @@
 // LLA: moved to helper.StringHelper             }
 // LLA: moved to helper.StringHelper             return sNewPath;
 // LLA: moved to helper.StringHelper         }
-// LLA: moved to helper.StringHelper
+// LLA: moved to helper.StringHelper     
 // LLA: moved to helper.StringHelper     public static String doubleQuoteIfNeed(String _sStr)
 // LLA: moved to helper.StringHelper         {
 // LLA: moved to helper.StringHelper             if (_sStr.startsWith("\"") && _sStr.endsWith("\""))
@@ -75,17 +75,17 @@
 // LLA: moved to helper.StringHelper             {
 // LLA: moved to helper.StringHelper                 return singleQuote(_sStr);
 // LLA: moved to helper.StringHelper             }
-// LLA: moved to helper.StringHelper
+// LLA: moved to helper.StringHelper             
 // LLA: moved to helper.StringHelper             return doubleQuote(_sStr);
 // LLA: moved to helper.StringHelper         }
-// LLA: moved to helper.StringHelper
+// LLA: moved to helper.StringHelper     
 // LLA: moved to helper.StringHelper     /**
 // LLA: moved to helper.StringHelper      * Convert a value to a string with a given length, if the len is greater the len of the value string representation
 // LLA: moved to helper.StringHelper      * fill it's front with '0'
 // LLA: moved to helper.StringHelper      * So ("5", 4) will result in a string "0005"
 // LLA: moved to helper.StringHelper      * @param _nValue
 // LLA: moved to helper.StringHelper      * @param _nLen
-// LLA: moved to helper.StringHelper      * @return
+// LLA: moved to helper.StringHelper      * @return 
 // LLA: moved to helper.StringHelper      */
 // LLA: moved to helper.StringHelper     public static String createValueString(int _nValue, int _nLen)
 // LLA: moved to helper.StringHelper         {
@@ -99,5 +99,5 @@
 // LLA: moved to helper.StringHelper             a.append(sValue);
 // LLA: moved to helper.StringHelper             return a.toString();
 // LLA: moved to helper.StringHelper         }
-// LLA: moved to helper.StringHelper
+// LLA: moved to helper.StringHelper 
 // LLA: moved to helper.StringHelper }

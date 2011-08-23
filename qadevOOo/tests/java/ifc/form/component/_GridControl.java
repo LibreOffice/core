@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ public class _GridControl extends MultiPropertyTest {
             }
         }) ;
     }
-
+    
     /**
     * This property can be void, so if old value is <code> null </code>
     * new value must be specified.

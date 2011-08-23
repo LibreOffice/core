@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,8 +70,8 @@ public class CHelpContentProvider extends TestCase {
 
         //Adding ObjRelation for XContentProvider
         tEnv.addObjRelation("FACTORY",CIF);
-        tEnv.addObjRelation("CONTENT1", "vnd.sun.star.help://swriter?System=WIN&Language=de&Query=text&HitCount=120&Scope=Heading");
-        tEnv.addObjRelation("CONTENT2",
+        tEnv.addObjRelation("CONTENT1", "vnd.sun.star.help://swriter?System=WIN&Language=de&Query=text&HitCount=120&Scope=Heading");            
+        tEnv.addObjRelation("CONTENT2", 
             util.utils.getFullTestURL("SwXTextEmbeddedObject.sdw"));
 
         return tEnv;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ public class PopupMenuControllerFactory extends TestCase {
      */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
-
+        
         try {
             XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
             XCloseable.class, xTextDoc);
@@ -67,7 +67,7 @@ public class PopupMenuControllerFactory extends TestCase {
         }
     }
 
-
+    
     /**
      * Create test environment:
      * @param tParam The test parameters.
@@ -83,7 +83,7 @@ public class PopupMenuControllerFactory extends TestCase {
 
         xTextDoc = WriterTools.createTextDoc(xMSF);
         util.dbg.printInterfaces(xTextDoc);
-
+        
         try {
             xInst = (XInterface)xMSF.createInstance(
                             "com.sun.star.comp.framework.PopupMenuControllerFactory");
@@ -91,7 +91,7 @@ public class PopupMenuControllerFactory extends TestCase {
         catch(com.sun.star.uno.Exception e) {
             throw new StatusException("Couldn't create test object", e);
         }
-
+        
         log.println("TestObject: " + util.utils.getImplName(xInst));
         tEnv = new TestEnvironment(xInst);
         XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xMSF);
@@ -108,15 +108,15 @@ public class PopupMenuControllerFactory extends TestCase {
             log.println("Cannot get the 'DefaultContext' for XMultiComponentFactory test.");
             e.printStackTrace(log);
         }
-
+        
         // register one controller, so it can be instantiated
         XUIControllerRegistration xReg = (XUIControllerRegistration)
                 UnoRuntime.queryInterface(XUIControllerRegistration.class, xInst);
-
+        
         xReg.registerController(".uno:MyCommandUrl", "", "com.sun.star.comp.framework.FooterMenuController");
         tEnv.addObjRelation("XUIControllerRegistration.RegisteredController", ".uno:MyCommandUrl");
         tEnv.addObjRelation("XMultiComponentFactory.ServiceNames", new String[]{".uno:MyCommandUrl"});
-
+                 
         return tEnv;
     }
 }

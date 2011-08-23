@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,9 +70,9 @@ public class SoundHandler extends TestCase {
         }
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
-        URL dispURL = utils.parseURL((XMultiServiceFactory)Param.getMSF(),
+        URL dispURL = utils.parseURL((XMultiServiceFactory)Param.getMSF(), 
                                             utils.getFullTestURL("ok.wav"));
-        System.out.println("DISPATCHURL: "+ dispURL.Complete);
+        System.out.println("DISPATCHURL: "+ dispURL.Complete); 
 
         tEnv.addObjRelation("XDispatch.URL", dispURL);
         return tEnv;

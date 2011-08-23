@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,9 +76,9 @@ public class TestComponent {
         private char     _char;
         private byte     _byte;
         private short    _short;
-        private int      _long;
-        private int      _ulong;
-        private long     _hyper;
+        private int      _long;   
+        private int      _ulong;    
+        private long     _hyper;    
         private float    _float;
         private double   _double;
         private String   _string = "";
@@ -293,7 +293,7 @@ public class TestComponent {
                 throw new com.sun.star.uno.RuntimeException(exception.getMessage());
             }
         }
-
+        
         public byte[] getImplementationId() throws com.sun.star.uno.RuntimeException {
             return toString().getBytes();
         }
@@ -306,11 +306,11 @@ public class TestComponent {
         private char     _char;
         private byte     _byte;
         private short    _short;
-        private short    _ushort;
-        private int      _long;
-        private int      _ulong;
-        private long     _hyper;
-        private long     _uhyper;
+        private short    _ushort;   
+        private int      _long;   
+        private int      _ulong;    
+        private long     _hyper;    
+        private long     _uhyper;   
         private float    _float;
         private double   _double;
         private String   _string;
@@ -323,7 +323,7 @@ public class TestComponent {
         private int     _nLastCallId;
         private boolean _bFirstCall;
         private boolean _bSequenceOfCallTestPassed;
-
+        
         private boolean[] arBool;
         private char[] arChar;
         private byte[] arByte;
@@ -350,23 +350,23 @@ public class TestComponent {
         }
 
 
-        public void setValues(boolean          bBool,
-                              char             cChar,
+        public void setValues(boolean          bBool, 
+                              char             cChar, 
                               byte             nByte,
-                              short            nShort,
+                              short            nShort, 
                               short            nUShort,
-                              int              nLong,
+                              int              nLong, 
                               int              nULong,
-                              long             nHyper,
+                              long             nHyper, 
                               long             nUHyper,
-                              float            fFloat,
+                              float            fFloat, 
                               double           fDouble,
-                              TestEnum         testEnum,
+                              TestEnum         testEnum, 
                               String           string,
                               Object           xInterface,
                               Object           any,
                               TestElement      testElements[],
-                              TestDataElements testDataElements) throws com.sun.star.uno.RuntimeException
+                              TestDataElements testDataElements) throws com.sun.star.uno.RuntimeException 
         {
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".setValues:" + any);
 
@@ -391,23 +391,23 @@ public class TestComponent {
 
 
 
-        public TestDataElements setValues2(/*INOUT*/boolean[]          io_bool,
-                                           /*INOUT*/char[]             io_char,
-                                           /*INOUT*/byte[]             io_byte,
-                                           /*INOUT*/short[]            io_short,
-                                           /*INOUT*/short[]            io_ushort,
-                                           /*INOUT*/int[]              io_long,
-                                           /*INOUT*/int[]              io_ulong,
-                                           /*INOUT*/long[]             io_hyper,
-                                           /*INOUT*/long[]             io_uhyper,
-                                           /*INOUT*/float[]            io_float,
-                                           /*INOUT*/double[]           io_double,
-                                           /*INOUT*/TestEnum[]         io_testEnum,
-                                           /*INOUT*/String[]           io_string,
-                                           /*INOUT*/Object[]           io_xInterface,
-                                           /*INOUT*/Object[]           io_any,
-                                           /*INOUT*/TestElement[][]    io_testElements,
-                                           /*INOUT*/TestDataElements[] io_testDataElements) throws com.sun.star.uno.RuntimeException
+        public TestDataElements setValues2(/*INOUT*/boolean[]          io_bool, 
+                                           /*INOUT*/char[]             io_char, 
+                                           /*INOUT*/byte[]             io_byte, 
+                                           /*INOUT*/short[]            io_short, 
+                                           /*INOUT*/short[]            io_ushort, 
+                                           /*INOUT*/int[]              io_long, 
+                                           /*INOUT*/int[]              io_ulong, 
+                                           /*INOUT*/long[]             io_hyper, 
+                                           /*INOUT*/long[]             io_uhyper, 
+                                           /*INOUT*/float[]            io_float, 
+                                           /*INOUT*/double[]           io_double, 
+                                           /*INOUT*/TestEnum[]         io_testEnum, 
+                                           /*INOUT*/String[]           io_string, 
+                                           /*INOUT*/Object[]           io_xInterface, 
+                                           /*INOUT*/Object[]           io_any, 
+                                           /*INOUT*/TestElement[][]    io_testElements, 
+                                           /*INOUT*/TestDataElements[] io_testDataElements) throws com.sun.star.uno.RuntimeException 
         {
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".setValues2:" + io_any[0]);
 
@@ -428,29 +428,29 @@ public class TestComponent {
             _any              = io_any[0];
             _testElements     = io_testElements[0];
             _testDataElements = io_testDataElements[0];
-
+            
             io_testElements[ 0 ] =
                 new TestElement [] { io_testElements[ 0 ][ 1 ], io_testElements[ 0 ][ 0 ] };
-
+            
             return _testDataElements;
         }
 
-        public TestDataElements getValues(/*OUT*/boolean[]          o_bool,
-                                          /*OUT*/char[]             o_char,
-                                          /*OUT*/byte[]             o_byte,
-                                          /*OUT*/short[]            o_short,
-                                          /*OUT*/short[]            o_ushort,
-                                          /*OUT*/int[]              o_long,
-                                          /*OUT*/int[]              o_ulong,
-                                          /*OUT*/long[]             o_hyper,
-                                          /*OUT*/long[]             o_uhyper,
-                                          /*OUT*/float[]            o_float,
-                                          /*OUT*/double[]           o_double,
-                                          /*OUT*/TestEnum[]         o_testEnum,
-                                          /*OUT*/String[]           o_string,
-                                          /*OUT*/Object[]           o_xInterface,
-                                          /*OUT*/Object[]           o_any,
-                                          /*OUT*/TestElement[][]    o_testElements,
+        public TestDataElements getValues(/*OUT*/boolean[]          o_bool, 
+                                          /*OUT*/char[]             o_char, 
+                                          /*OUT*/byte[]             o_byte, 
+                                          /*OUT*/short[]            o_short, 
+                                          /*OUT*/short[]            o_ushort, 
+                                          /*OUT*/int[]              o_long, 
+                                          /*OUT*/int[]              o_ulong, 
+                                          /*OUT*/long[]             o_hyper, 
+                                          /*OUT*/long[]             o_uhyper, 
+                                          /*OUT*/float[]            o_float, 
+                                          /*OUT*/double[]           o_double, 
+                                          /*OUT*/TestEnum[]         o_testEnum, 
+                                          /*OUT*/String[]           o_string, 
+                                          /*OUT*/Object[]           o_xInterface, 
+                                          /*OUT*/Object[]           o_any, 
+                                          /*OUT*/TestElement[][]    o_testElements, 
                                           /*OUT*/TestDataElements[] o_testDataElements) throws com.sun.star.uno.RuntimeException
         {
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".getValues:" + _any);
@@ -495,7 +495,7 @@ public class TestComponent {
         public int testPPCAlignment( long l1, long l2, int i1, long l3, int i2 ) throws com.sun.star.uno.RuntimeException {
             return i2;
         }
-
+        
         // Attributes
         public boolean getBool() throws com.sun.star.uno.RuntimeException {
             return _bool;
@@ -706,8 +706,8 @@ public class TestComponent {
         }
 
         public void call(int nCallId , int nWaitMUSEC) throws com.sun.star.uno.RuntimeException {
-//              TimeValue value = { nWaitMUSEC / 1000000 , nWaitMUSEC * 1000 };
-//              osl_waitThread( &value );
+//  			TimeValue value = { nWaitMUSEC / 1000000 , nWaitMUSEC * 1000 };
+//  			osl_waitThread( &value );
             try {
                 Thread.sleep(nWaitMUSEC / 10000);
             }
@@ -725,8 +725,8 @@ public class TestComponent {
         }
 
         public void callOneway( int nCallId , int nWaitMUSEC )  throws com.sun.star.uno.RuntimeException {
-//              TimeValue value = { nWaitMUSEC / 1000000 , nWaitMUSEC * 1000 };
-//              osl_waitThread( &value );
+//  			TimeValue value = { nWaitMUSEC / 1000000 , nWaitMUSEC * 1000 };
+//  			osl_waitThread( &value );
             try {
                 Thread.sleep(nWaitMUSEC / 10000);
             }
@@ -742,7 +742,7 @@ public class TestComponent {
             return _bSequenceOfCallTestPassed;
         }
 
-        public synchronized void callRecursivly(XRecursiveCall xCall,   int nToCall) throws com.sun.star.uno.RuntimeException {
+        public synchronized void callRecursivly(XRecursiveCall xCall,	int nToCall) throws com.sun.star.uno.RuntimeException {
             if(nToCall != 0)
             {
                 nToCall --;
@@ -891,8 +891,8 @@ public class TestComponent {
         }
 
         // XBridgeTest
-        public TestDataElements raiseException(short nArgumentPos, String rMsg, Object xContext)
-            throws com.sun.star.lang.IllegalArgumentException,
+        public TestDataElements raiseException(short nArgumentPos, String rMsg, Object xContext) 
+            throws com.sun.star.lang.IllegalArgumentException, 
                    com.sun.star.uno.RuntimeException
         {
             throw new com.sun.star.lang.IllegalArgumentException(rMsg, xContext, nArgumentPos);
@@ -957,7 +957,7 @@ public class TestComponent {
                 throw new com.sun.star.uno.RuntimeException(exception.getMessage());
             }
         }
-
+        
         public byte[] getImplementationId() throws com.sun.star.uno.RuntimeException {
             return toString().getBytes();
         }
@@ -1290,8 +1290,8 @@ public class TestComponent {
      * @param   regKey       the registryKey
      * @see                  com.sun.star.comp.loader.JavaLoader
      */
-    public static XSingleServiceFactory __getServiceFactory(String implName,
-                                                            XMultiServiceFactory multiFactory,
+    public static XSingleServiceFactory __getServiceFactory(String implName, 
+                                                            XMultiServiceFactory multiFactory, 
                                                             XRegistryKey regKey)
     {
         XSingleServiceFactory xSingleServiceFactory = null;
@@ -1299,18 +1299,18 @@ public class TestComponent {
           if(implName.equals(_TestObject.class.getName()))
             xSingleServiceFactory = FactoryHelper.getServiceFactory(_TestObject.class,
                                                                     _TestObject.__serviceName,
-                                                                    multiFactory,
+                                                                    multiFactory, 
                                                                     regKey);
 
         else if(implName.equals(_PerformancTestObject.class.getName()))
             xSingleServiceFactory = FactoryHelper.getServiceFactory(_PerformancTestObject.class,
                                                                     _PerformancTestObject.__serviceName,
-                                                                    multiFactory,
+                                                                    multiFactory, 
                                                                     regKey);
-
+        
         return xSingleServiceFactory;
     }
-
+    
     /**
      * Writes the service information into the given registry key.
      * This method is called by the <code>JavaLoader</code>
@@ -1323,7 +1323,7 @@ public class TestComponent {
         boolean result = true;
 
         result = result & FactoryHelper.writeRegistryServiceInfo(_TestObject.class.getName(), _TestObject.__serviceName, regKey);
-        result = result & FactoryHelper.writeRegistryServiceInfo(_PerformancTestObject.class.getName(),
+        result = result & FactoryHelper.writeRegistryServiceInfo(_PerformancTestObject.class.getName(), 
                                                                  _PerformancTestObject.__serviceName, regKey);
 
         return result;

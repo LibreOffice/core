@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public class _XScrollBar extends MultiMethodTest {
     com.sun.star.awt.XAdjustmentListener listener = new AdjustmentListener();
 
     public void _addAdjustmentListener() {
-        util.FormTools.switchDesignOf((XMultiServiceFactory) tParam.getMSF(),
+        util.FormTools.switchDesignOf((XMultiServiceFactory) tParam.getMSF(), 
                                  (XTextDocument) tEnv.getObjRelation("Document"));
         shortWait();
         oObj.addAdjustmentListener(listener);
@@ -68,35 +68,35 @@ public class _XScrollBar extends MultiMethodTest {
         requiredMethod("addAdjustmentListener()");
         tRes.tested("removeAdjustmentListener()", true);
     }
-
+    
     public void _setBlockIncrement() {
         oObj.setBlockIncrement(15);
         oObj.setBlockIncrement(5);
         int bi = oObj.getBlockIncrement();
         tRes.tested("setBlockIncrement()",bi==5);
-    }
+    }    
 
     public void _getBlockIncrement() {
         //this method is checked in the corresponding set method
         //so that method is requiered here and if it works
         //this method is given OK too
         requiredMethod("setBlockIncrement()");
-        tRes.tested("getBlockIncrement()", true);
+        tRes.tested("getBlockIncrement()", true);        
     }
-
+    
     public void _setLineIncrement() {
         oObj.setLineIncrement(12);
         oObj.setLineIncrement(2);
         int li = oObj.getLineIncrement();
         tRes.tested("setLineIncrement()",li==2);
-    }
+    }    
 
     public void _getLineIncrement() {
         //this method is checked in the corresponding set method
         //so that method is requiered here and if it works
         //this method is given OK too
         requiredMethod("setLineIncrement()");
-        tRes.tested("getLineIncrement()", true);
+        tRes.tested("getLineIncrement()", true);                
     }
 
     public void _setMaximum() {
@@ -105,44 +105,44 @@ public class _XScrollBar extends MultiMethodTest {
         int max = oObj.getMaximum();
         tRes.tested("setMaximum()",max==480);
     }
-
+    
     public void _getMaximum() {
         //this method is checked in the corresponding set method
         //so that method is requiered here and if it works
         //this method is given OK too
         requiredMethod("setMaximum()");
-        tRes.tested("getMaximum()", true);
+        tRes.tested("getMaximum()", true);                        
     }
-
+    
     public void _setOrientation() {
         oObj.setOrientation(ScrollBarOrientation.HORIZONTAL);
         oObj.setOrientation(ScrollBarOrientation.VERTICAL);
         int ori = oObj.getOrientation();
         tRes.tested("setOrientation()",ori==ScrollBarOrientation.VERTICAL);
-    }
+    }    
 
     public void _getOrientation() {
         //this method is checked in the corresponding set method
         //so that method is requiered here and if it works
         //this method is given OK too
         requiredMethod("setOrientation()");
-        tRes.tested("getOrientation()", true);
+        tRes.tested("getOrientation()", true);                                
     }
-
+    
     public void _setValue() {
         oObj.setMaximum(600);
         oObj.setValue(480);
         oObj.setValue(520);
         int val = oObj.getValue();
         tRes.tested("setValue()",val==520);
-    }
+    }    
 
     public void _getValue() {
         //this method is checked in the corresponding set method
         //so that method is requiered here and if it works
         //this method is given OK too
         requiredMethod("setValue()");
-        tRes.tested("getValue()", true);
+        tRes.tested("getValue()", true);          
     }
 
     public void _setVisibleSize() {
@@ -150,14 +150,14 @@ public class _XScrollBar extends MultiMethodTest {
         oObj.setVisibleSize(500);
         int vs = oObj.getVisibleSize();
         tRes.tested("setVisibleSize()",vs==500);
-    }
-
+    }    
+    
     public void _getVisibleSize() {
         //this method is checked in the corresponding set method
         //so that method is requiered here and if it works
         //this method is given OK too
         requiredMethod("setVisibleSize()");
-        tRes.tested("getVisibleSize()", true);
+        tRes.tested("getVisibleSize()", true);                          
     }
 
     public void _setValues() {
@@ -165,8 +165,8 @@ public class _XScrollBar extends MultiMethodTest {
         oObj.setValues(70, 210, 500);
         int val = oObj.getValue();
         int vs = oObj.getVisibleSize();
-        int max = oObj.getMaximum();
-        tRes.tested("setValues()",((val==70) && (vs==210) && (max==500)));
+        int max = oObj.getMaximum();        
+        tRes.tested("setValues()",((val==70) && (vs==210) && (max==500)));        
     }
 
     private void adjustScrollBar() {
@@ -176,17 +176,17 @@ public class _XScrollBar extends MultiMethodTest {
                                 XScrollBar.class, tEnv.getTestObject());
 
         sc.setValue(500);
-
+        
         shortWait();
 
         XAccessible acc = (XAccessible) UnoRuntime.queryInterface(
                                   XAccessible.class, tEnv.getTestObject());
 
         XAccessibleComponent aCom = (XAccessibleComponent) UnoRuntime.queryInterface(
-                                            XAccessibleComponent.class,
+                                            XAccessibleComponent.class, 
                                             acc.getAccessibleContext());
 
-        Point location = aCom.getLocationOnScreen();
+        Point location = aCom.getLocationOnScreen();        
         //Point location = (Point) tEnv.getObjRelation("Location");
         //XAccessibleComponent aCom = (XAccessibleComponent) tEnv.getObjRelation("Location");
         //Point location = aCom.getLocationOnScreen();

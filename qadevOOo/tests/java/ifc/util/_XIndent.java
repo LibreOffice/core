@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,9 @@ public class _XIndent extends MultiMethodTest {
 
     // oObj filled by MultiMethodTest
     public XIndent oObj = null ;
-
+    
     protected XPropertySet PropSet = null;
-
+    
     /**
      * Ensures that the ObjRelation PropSet is given.
      */
@@ -58,7 +58,7 @@ public class _XIndent extends MultiMethodTest {
         if (PropSet == null) {
             throw new StatusException(Status.failed("No PropertySet given"));
         }
-    }
+    }    
 
     /**
      * Calls the method. <p>
@@ -70,7 +70,7 @@ public class _XIndent extends MultiMethodTest {
         int newValue = getIndent();
         tRes.tested("incrementIndent()", oldValue < newValue) ;
     }
-
+    
     /**
      * Calls the method. <p>
      * Has <b>OK</b> status if the property 'ParaIndent' is decremented afterwards<p>
@@ -82,7 +82,7 @@ public class _XIndent extends MultiMethodTest {
         oObj.decrementIndent();
         int newValue = getIndent();
         tRes.tested("decrementIndent()", oldValue > newValue) ;
-    }
+    }    
 
     public short getIndent() {
         short ret = 0;

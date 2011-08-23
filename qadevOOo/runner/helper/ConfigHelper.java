@@ -7,7 +7,7 @@ import com.sun.star.beans.*;
 import com.sun.star.util.*;
 
 /**
- * This <CODE>ConfigHelper</CODE> makes it possible to access the
+ * This <CODE>ConfigHelper</CODE> makes it possible to access the 
  * configuration and change their content.<P>
  * <P>
  * Example: <P>
@@ -32,15 +32,15 @@ import com.sun.star.util.*;
  * <P>
  * <CODE>Definition</CODE><P>
  * <ul>
- *    <li><CODE>&lt;node oor:name=&quot;Windows&quot;&gt;</CODE>
+ *    <li><CODE>&lt;node oor:name=&quot;Windows&quot;&gt;</CODE> 
  *        represents a <CODE>Set</CODE> and is a <CODE>XNameContainer</CODE></LI>
- *    <li><CODE>&lt;node oor:name=&quot;SplitWindow0&quot;&gt;</CODE>
+ *    <li><CODE>&lt;node oor:name=&quot;SplitWindow0&quot;&gt;</CODE> 
  *        represents a <CODE>Group</CODE> and is a <CODE>XNameReplace</CODE></LI>
- *    <li><CODE>&lt;prop oor:name=&quot;Visible&quot;&gt;</CODE>
+ *    <li><CODE>&lt;prop oor:name=&quot;Visible&quot;&gt;</CODE> 
  *        represents a pr<CODE></CODE>operty of the group</li>
- *    <li><CODE>&lt;node oor:name=&quot;UserData&quot;&gt;</CODE>
+ *    <li><CODE>&lt;node oor:name=&quot;UserData&quot;&gt;</CODE> 
  *        represents a <CODE>extensible group</CODE> and is a <CODE>XNameContainer</CODE></LI>
- *    <li><CODE>&lt;prop oor:name=&quot;UserItem&quot;&gt;</CODE>
+ *    <li><CODE>&lt;prop oor:name=&quot;UserItem&quot;&gt;</CODE> 
  *        represents a <CODE>property</CODE> of the extensible group</LI>
  * </UL>
  * We assume in the following examples the existance of:<P>
@@ -48,9 +48,9 @@ import com.sun.star.util.*;
  * <ul>
  *    <li>If you like to insert a new <CODE>Group</CODE> into the <CODE>Set</CODE> "Windows":<p>
  *        <CODE>XNameReplace xMyGroup = aConfig.getOrInsertGroup("Windows", "myGroup");</CODE><P>
- *        The method <CODE>getOrInsertGroup()</CODE> uses the
+ *        The method <CODE>getOrInsertGroup()</CODE> uses the 
  *        <CODE>XSingleServiceFactory</CODE> to create the skeleton of a new group.
- *
+ *        
  *    </li>
  *    <li>If you like to change the property "WindowState" of "myGroup"
  *        of the Set "Windows"<p>
@@ -58,7 +58,7 @@ import com.sun.star.util.*;
  *          "Windows","myGroup", "WindowState", "952,180,244,349;1;0,0,0,0;");</CODE>
  *    </li>
  *    <li>If you like to change the property "myProp" of the extensible group
- *        "myExtGroup" which is an extensible group of "my2ndGroup" of the
+ *        "myExtGroup" which is an extensible group of "my2ndGroup" of the 
  *        Set "Windows":<p>
  *        <CODE>aConfig.insertOrUpdateExtensibleGroupProperty(
  *              "Windows", "my2ndGroup", "myExtGroup", "myProp","TheValue");</CODE>
@@ -147,7 +147,7 @@ public class ConfigHelper
     //-----------------------------------------------
     /**
      * Updates the configuration.<p>
-     * This must be called after you have changed the configuration
+     * This must be called after you have changed the configuration 
      * else you changes will be lost.
      */
     public void flush()
@@ -186,10 +186,10 @@ public class ConfigHelper
         aConfig.writeRelativeKey(sRelPath, sKey, aValue);
         aConfig.flush();
     }
-
-
+    
+    
     /**
-     * Insert a structured node (group) in a name container (set)
+     * Insert a structured node (group) in a name container (set) 
      * or else update it and retrun the <CODE>XNameReplace</CODE> of it.<P>
      * The <CODE>XSingleServiceFacttory</CODE> of the <CODE>set</CODE> will be used
      * to create a new group. This group is specific to its set and
@@ -197,15 +197,15 @@ public class ConfigHelper
      * @return The [inserted] group of the set
      * @param groupName The name of the goup which should be returned
      * @param setName The name of the set
-     * @throws com.sun.star.uno.Exception throws
+     * @throws com.sun.star.uno.Exception throws 
      *         <CODE>com.sun.star.uno.Exeception</CODE> on any error.
      */
-    public XNameReplace getOrInsertGroup(String setName, String groupName)
+    public XNameReplace getOrInsertGroup(String setName, String groupName) 
         throws  com.sun.star.uno.Exception
-
+                
     {
         XNameContainer xSetCont = this.getSet(setName);
-
+        
         XNameReplace xChildAccess = null;
 
         try {
@@ -215,19 +215,19 @@ public class ConfigHelper
         } catch(com.sun.star.container.NoSuchElementException e) {
              // proceed with inserting
         }
-
+        
         if (xChildAccess == null)  {
-            XSingleServiceFactory xChildfactory = (XSingleServiceFactory)
+            XSingleServiceFactory xChildfactory = (XSingleServiceFactory) 
                 UnoRuntime.queryInterface(XSingleServiceFactory.class,xSetCont);
 
             Object xNewChild = xChildfactory.createInstance();
 
             xSetCont.insertByName(groupName, xNewChild);
 
-            xChildAccess = (XNameReplace)
-                UnoRuntime.queryInterface(XNameContainer.class,xNewChild);
+            xChildAccess = (XNameReplace) 
+                UnoRuntime.queryInterface(XNameContainer.class,xNewChild);   
        }
-
+        
         return xChildAccess;
     }
 
@@ -240,13 +240,13 @@ public class ConfigHelper
      * @throws com.sun.star.uno.Exception throws <CODE>com.sun.star.uno.Exeception</CODE> on any error.
      */
     public void updateGroupProperty(String setName,
-                                    String groupName,
-                                    String propName,
+                                    String groupName, 
+                                    String propName, 
                                     Object propValue)
         throws  com.sun.star.uno.Exception
     {
         XNameContainer xSetCont = this.getSet(setName);
-
+        
         XPropertySet xProp = null;
         try {
         xProp = (XPropertySet)UnoRuntime.queryInterface(
@@ -254,7 +254,7 @@ public class ConfigHelper
                                     xSetCont.getByName(groupName));
         } catch (com.sun.star.container.NoSuchElementException e){
             throw new com.sun.star.uno.Exception(
-                "could not get group '" + groupName +
+                "could not get group '" + groupName + 
                "' from set '"+ setName +"':\n" + e.toString());
         }
         try{
@@ -265,14 +265,14 @@ public class ConfigHelper
                 "' from group '"+ groupName +
                 "' from set '"+ setName +"':\n" + e.toString());
         }
-    }
+    }   
 
-
+   
     /**
      * Insert a property in an extensible group container or else update it
      * @param setName the name of the <CODE>set</CODE> which containes the <CODE>group</CODE>
      * @param group The name of the <CODE>group</CODE> which conatins the <CODE>extensible group</CODE>.
-     * @param extGroup The name of the <CODE>extensible group</CODE> which
+     * @param extGroup The name of the <CODE>extensible group</CODE> which 
      *                  [should] contain the property
      * @param propName The name of the property.
      * @param propValue The value of the property.
@@ -281,13 +281,13 @@ public class ConfigHelper
     public void insertOrUpdateExtensibleGroupProperty(
                     String setName,
                     String group,
-                    String extGroup,
-                    String propName,
-                    Object propValue)
+                    String extGroup, 
+                    String propName, 
+                    Object propValue) 
         throws  com.sun.star.uno.Exception
     {
         XNameContainer xSetCont = this.getSet(setName);
-
+        
         XNameReplace xGroupAccess = null;
         XNameContainer xExtGroupCont = null;
 
@@ -297,10 +297,10 @@ public class ConfigHelper
                             XNameReplace.class,xGroup);
         } catch(com.sun.star.container.NoSuchElementException e) {
              throw new com.sun.star.uno.Exception(
-                "could not get group '" + group +
+                "could not get group '" + group + 
                 "' from set '"+ setName +"':\n" + e.toString());
         }
-
+        
         try {
             Object xGroup=xGroupAccess.getByName(extGroup);
             xExtGroupCont = (XNameContainer) UnoRuntime.queryInterface(
@@ -311,17 +311,17 @@ public class ConfigHelper
                 "' from group '"+ group +
                 "' from set '"+ setName +"':\n" + e.toString());
         }
-
+        
         try {
             xExtGroupCont.insertByName(propName, propValue);
         }
         catch(com.sun.star.container.ElementExistException e) {
             xExtGroupCont .replaceByName(propName, propValue);
         }
-
+        
     }
-
-
+    
+    
     /**
      * Returns a <CODE>XNameContainer</CODE> of the <CODE>Set</CODE>
      * of the <CODE>Configuration</CODE>
@@ -332,17 +332,17 @@ public class ConfigHelper
     public XNameContainer getSet(String setName)
         throws com.sun.star.uno.Exception
     {
-        XNameReplace xCont = (XNameReplace)
+        XNameReplace xCont = (XNameReplace) 
                     UnoRuntime.queryInterface(XNameReplace.class, m_xConfig);
 
         Object oSet = xCont.getByName(setName);
-
+        
         if (oSet == null)
              throw new com.sun.star.uno.Exception(
                 "could not get set '" + setName + ": null");
-
+            
         return (XNameContainer) UnoRuntime.queryInterface(
                                                 XNameContainer.class, oSet);
-
+        
     }
 }
