@@ -2754,12 +2754,6 @@ sal_Bool EditEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
     return sal_False;
 }
 
-// should be moved to the Outliner...
-void EditEngine::ImportBulletItem( SvxNumBulletItem& /*rNumBullet*/, sal_uInt16 /*nLevel*/,
-                                    const SvxBulletItem* /*pOldBullet*/, const SvxLRSpaceItem* /*pOldLRSpace*/ )
-{
-}
-
 sal_Bool EditEngine::HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable )
 {
     sal_Bool bValidData = sal_False;

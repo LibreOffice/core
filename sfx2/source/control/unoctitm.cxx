@@ -517,11 +517,6 @@ void SfxDispatchController_Impl::setMasterSlaveCommand( sal_Bool bSet )
     bMasterSlave = bSet;
 }
 
-sal_Bool SfxDispatchController_Impl::isMasterSlaveCommand() const
-{
-    return bMasterSlave;
-}
-
 void SfxDispatchController_Impl::UnBindController()
 {
     pDispatch = NULL;

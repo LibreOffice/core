@@ -134,16 +134,28 @@ EditEngine::CursorLeft(ESelection const&, unsigned short) const
 EditEngine::CursorRight(ESelection const&, unsigned short) const
 EditEngine::EnableIdleFormatter(unsigned char)
 EditEngine::EnablePasteSpecial(unsigned char)
+EditEngine::EndSpelling()
+EditEngine::GetAsianCompressionMode() const
 EditEngine::GetAvailableSearchOptions()
+EditEngine::GetBigTextObjectStart() const
+EditEngine::GetDefTab() const
+EditEngine::GetFirstLineOffset(unsigned short)
+EditEngine::GetForbiddenCharsTable() const
 EditEngine::GetGroupChars() const
-EditEngine::ImportBulletItem(SvxNumBulletItem&, unsigned short, SvxBulletItem const*, SvxLRSpaceItem const*)
+EditEngine::GetHyphenator() const
+EditEngine::GetPolygon()
+EditEngine::IsAddExtLeading() const
+EditEngine::IsAutoColorEnabled() const
 EditEngine::IsFirstWordCapitalization() const
+EditEngine::IsFixedCellHeight() const
 EditEngine::IsIdleFormatterEnabled() const
+EditEngine::IsKernAsianPunctuation() const
 EditEngine::IsParagraphVisible(unsigned short)
 EditEngine::IsPasteSpecialEnabled() const
 EditEngine::RegisterClipboardFormatName()
 EditEngine::SelectSentence(ESelection const&) const
 EditEngine::SetActiveView(EditView*)
+EditEngine::SetBigTextObjectStart(unsigned short)
 EditEngine::SetGroupChars(String const&)
 EditEngine::SetText(unsigned short, EditTextObject const&)
 EditEngine::StopSelectionMode()

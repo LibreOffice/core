@@ -47,11 +47,6 @@ public:
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       Rectangle& rRect, const MapUnit aMapUnit);
 
-    XMLVisAreaContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      ::com::sun::star::awt::Rectangle& rRect, const sal_Int16 nMeasureUnit);
-
     virtual ~XMLVisAreaContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,

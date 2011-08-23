@@ -473,7 +473,6 @@ public:
     static Font     CreateFontFromItemSet( const SfxItemSet& rItemSet );
     static Font     CreateFontFromItemSet( const SfxItemSet& rItemSet, sal_uInt16 nScriptType );
     static SvxFont  CreateSvxFontFromItemSet( const SfxItemSet& rItemSet );
-    static void     ImportBulletItem( SvxNumBulletItem& rNumBullet, sal_uInt16 nLevel, const SvxBulletItem* pOldBullet, const SvxLRSpaceItem* pOldLRSpace );
     static sal_Bool     IsPrintable( sal_Unicode c ) { return ( ( c >= 32 ) && ( c != 127 ) ); }
     static sal_Bool     HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable );
 

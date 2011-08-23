@@ -195,7 +195,6 @@ public:
     void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer* pServ );
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void                setMasterSlaveCommand( sal_Bool bSet );
-    sal_Bool            isMasterSlaveCommand() const;
     void SAL_CALL       dispatch( const ::com::sun::star::util::URL& aURL,
                                   const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
                                   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException );
