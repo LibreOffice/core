@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,69 +30,69 @@
 #define __FRAMEWORK_THREADHELP_GATE_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/inoncopyable.h>
 #include <threadhelp/igate.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          implement a gate to block multiple threads at same time or unblock all
-    @descr          A gate can be used as a negative-condition! You can open a "door" - wait() will not block ...
+    @descr			A gate can be used as a negative-condition! You can open a "door" - wait() will not block ...
                     or you can close it - wait() blocks till open() is called again.
                     As a special feature you can open the gate a little bit by sing openGap().
                     Then all currently waiting threads are running immediately - but new ones are blocked!
 
-    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
+    @attention		To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
 
     @implements     IGate
     @base           IGate
                     INonCopyable
 
-    @devstatus      ready to use
+    @devstatus		ready to use
 *//*-*************************************************************************************************************/
 class Gate : public  IGate
            , private INonCopyable
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
         /*-****************************************************************************************************//**
-            @short      ctor
-            @descr      These initialize the object right as an open gate.
+            @short		ctor
+            @descr		These initialize the object right as an open gate.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
         inline Gate()
             :   m_bClosed   ( sal_False )
@@ -102,17 +102,17 @@ class Gate : public  IGate
         }
 
         /*-****************************************************************************************************//**
-            @short      dtor
-            @descr      Is user forget it - we open the gate ...
+            @short		dtor
+            @descr		Is user forget it - we open the gate ...
                         blocked threads can running ... but I don't know
                         if it's right - we are destroyed yet!?
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
         inline virtual ~Gate()
         {
@@ -121,15 +121,15 @@ class Gate : public  IGate
 
         /*-****************************************************************************************************//**
             @interface  IGate
-            @short      open the gate
-            @descr      A wait() call will not block then.
+            @short		open the gate
+            @descr		A wait() call will not block then.
 
-            @seealso    method close()
+            @seealso	method close()
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
         inline virtual void open()
         {
@@ -144,15 +144,15 @@ class Gate : public  IGate
 
         /*-****************************************************************************************************//**
             @interface  IGate
-            @short      close the gate
-            @descr      A wait() call will block then.
+            @short		close the gate
+            @descr		A wait() call will block then.
 
-            @seealso    method open()
+            @seealso	method open()
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
         inline virtual void close()
         {
@@ -167,18 +167,18 @@ class Gate : public  IGate
 
         /*-****************************************************************************************************//**
             @interface  IGate
-            @short      open gate for current waiting threads
-            @descr      All current waiting threads stand in wait() at line "m_aPassage.wait()" ...
+            @short		open gate for current waiting threads
+            @descr		All current waiting threads stand in wait() at line "m_aPassage.wait()" ...
                         With this call you can open the passage for these waiting ones.
                         The "gap" is closed by any new thread which call wait() automaticly!
 
-            @seealso    method wait()
-            @seealso    method open()
+            @seealso	method wait()
+            @seealso	method open()
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
         inline virtual void openGap()
         {
@@ -193,19 +193,19 @@ class Gate : public  IGate
 
         /*-****************************************************************************************************//**
             @interface  IGate
-            @short      must be called to pass the gate
-            @descr      If gate "open"   => wait() will not block.
+            @short		must be called to pass the gate
+            @descr		If gate "open"   => wait() will not block.
                         If gate "closed" => wait() will block till somewhere open it again.
                         If gap  "open"   => currently waiting threads unblocked, new ones blocked
 
-            @seealso    method wait()
-            @seealso    method open()
+            @seealso	method wait()
+            @seealso	method open()
 
-            @param      "pTimeOut", optional parameter to wait a certain time
-            @return     true, if wait was successful (gate was opened)
+            @param		"pTimeOut", optional parameter to wait a certain time
+            @return		true, if wait was successful (gate was opened)
                         false, if condition has an error or timeout was reached!
 
-            @onerror    We return false.
+            @onerror	We return false.
         *//*-*****************************************************************************************************/
         inline virtual sal_Bool wait( const TimeValue* pTimeOut = NULL )
         {
@@ -233,19 +233,19 @@ class Gate : public  IGate
         }
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
     private:
 
-        ::osl::Mutex        m_aAccessLock   ;
-        ::osl::Condition    m_aPassage      ;
-        sal_Bool            m_bClosed       ;
-        sal_Bool            m_bGapOpen      ;
+        ::osl::Mutex		m_aAccessLock	;
+        ::osl::Condition	m_aPassage		;
+        sal_Bool			m_bClosed		;
+        sal_Bool			m_bGapOpen		;
 
-};      //  class Gate
+};		//	class Gate
 
-}       //  namespace framework
+}		//	namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_THREADHELP_GATE_HXX_
+#endif	//	#ifndef __FRAMEWORK_THREADHELP_GATE_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

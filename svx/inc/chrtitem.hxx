@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ enum SvxChartDataDescr
     CHDESCR_TEXTANDVALUE
 };
 
-#define CHDESCR_COUNT   (CHDESCR_TEXTANDVALUE + 1)
+#define CHDESCR_COUNT	(CHDESCR_TEXTANDVALUE + 1)
 
 enum SvxChartLegendPos
 {
@@ -128,7 +128,7 @@ enum SvxChartLegendPos
     CHLEGEND_NONE_BOTTOM
 };
 
-#define CHLEGEND_COUNT  (CHLEGEND_BOTTOM + 1)
+#define CHLEGEND_COUNT	(CHLEGEND_BOTTOM + 1)
 
 enum SvxChartTextOrder
 {
@@ -138,7 +138,7 @@ enum SvxChartTextOrder
     CHTXTORDER_AUTO
 };
 
-#define CHTXTORDER_COUNT    (CHTXTORDER_AUTO + 1)
+#define CHTXTORDER_COUNT	(CHTXTORDER_AUTO + 1)
 
 enum SvxChartTextOrient
 {
@@ -149,7 +149,7 @@ enum SvxChartTextOrient
     CHTXTORIENT_TOPBOTTOM
 };
 
-#define CHTXTORIENT_COUNT   (CHTXTORIENT_TOPBOTTOM + 1)
+#define CHTXTORIENT_COUNT	(CHTXTORIENT_TOPBOTTOM + 1)
 
 enum SvxChartKindError
 {
@@ -163,7 +163,7 @@ enum SvxChartKindError
     CHERROR_RANGE
 };
 
-#define CHERROR_COUNT   (CHERROR_RANGE + 1)
+#define CHERROR_COUNT	(CHERROR_RANGE + 1)
 
 enum SvxChartIndicate
 {
@@ -173,7 +173,7 @@ enum SvxChartIndicate
     CHINDICATE_DOWN
 };
 
-#define CHINDICATE_COUNT    (CHINDICATE_DOWN + 1)
+#define CHINDICATE_COUNT	(CHINDICATE_DOWN + 1)
 
 enum SvxChartRegress
 {
@@ -184,7 +184,7 @@ enum SvxChartRegress
     CHREGRESS_POWER
 };
 
-#define CHREGRESS_COUNT (CHREGRESS_POWER + 1)
+#define CHREGRESS_COUNT	(CHREGRESS_POWER + 1)
 
 //------------------------------------------------------------------
 
@@ -275,8 +275,8 @@ public:
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
 
-    virtual bool         QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	bool         QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool         PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     USHORT GetValueCount() const { return CHTXTORDER_COUNT; }
     SvxChartTextOrder GetValue() const
@@ -356,8 +356,8 @@ public:
     SvxDoubleItem(SvStream& rIn, USHORT nId );
     SvxDoubleItem(const SvxDoubleItem& rItem);
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual String GetValueText() const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres,
@@ -365,7 +365,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0) const;
 
-    virtual int              operator == (const SfxPoolItem&) const;
+    virtual int 			 operator == (const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool *pPool = NULL) const;
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVersion) const;
     virtual SvStream& Store(SvStream& rOut, USHORT nItemVersion ) const;
@@ -379,6 +379,6 @@ public:
     void SetValue(double fNewVal) { fVal = fNewVal; }
 };
 
-#endif   // _SVX_CHRTITEM_HXX
+#endif	 // _SVX_CHRTITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

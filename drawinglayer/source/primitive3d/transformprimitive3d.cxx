@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ namespace drawinglayer
     namespace primitive3d
     {
         TransformPrimitive3D::TransformPrimitive3D(
-            const basegfx::B3DHomMatrix& rTransformation,
+            const basegfx::B3DHomMatrix& rTransformation, 
             const Primitive3DSequence& rChildren)
-        :   GroupPrimitive3D(rChildren),
+        :	GroupPrimitive3D(rChildren),
             maTransformation(rTransformation)
         {
         }
@@ -56,7 +56,7 @@ namespace drawinglayer
             if(GroupPrimitive3D::operator==(rPrimitive))
             {
                 const TransformPrimitive3D& rCompare = static_cast< const TransformPrimitive3D& >(rPrimitive);
-
+                
                 return (getTransformation() == rCompare.getTransformation());
             }
 

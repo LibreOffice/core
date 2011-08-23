@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ TYPEINIT1(E3dLatheObj, E3dCompoundObject);
 \************************************************************************/
 
 E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon rPoly2D)
-:   E3dCompoundObject(rDefault),
+:	E3dCompoundObject(rDefault),
     maPolyPoly2D(rPoly2D)
 {
     // since the old class PolyPolygon3D did mirror the given PolyPolygons in Y, do the same here
@@ -97,7 +97,7 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyP
         {
             nSegCnt -= 1;
         }
-
+    
         GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
     }
 }
@@ -204,10 +204,10 @@ void E3dLatheObj::SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew)
             {
                 nSegCnt -= 1;
             }
-
+        
             GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
         }
-
+        
         ActionChanged();
     }
 }

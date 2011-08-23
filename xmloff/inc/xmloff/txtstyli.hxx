@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,25 +37,25 @@ class XMLEventsImportContext;
 
 class XMLOFF_DLLPUBLIC XMLTextStyleContext : public XMLPropStyleContext
 {
-    ::rtl::OUString             sListStyleName;
-    ::rtl::OUString             sCategoryVal;
-    ::rtl::OUString             sDropCapTextStyleName;
-    ::rtl::OUString             sMasterPageName;
-    ::rtl::OUString             sDataStyleName; // for grid columns only
-    const ::rtl::OUString       sIsAutoUpdate;
-    const ::rtl::OUString       sCategory;
-    const ::rtl::OUString       sNumberingStyleName;
-    const ::rtl::OUString       sOutlineLevel; //#outline level,add by zhaojianwei
+    ::rtl::OUString				sListStyleName;
+    ::rtl::OUString				sCategoryVal;
+    ::rtl::OUString				sDropCapTextStyleName;
+    ::rtl::OUString				sMasterPageName;
+    ::rtl::OUString				sDataStyleName; // for grid columns only
+    const ::rtl::OUString		sIsAutoUpdate;
+    const ::rtl::OUString		sCategory;
+    const ::rtl::OUString		sNumberingStyleName;
+    const ::rtl::OUString		sOutlineLevel; //#outline level,add by zhaojianwei
 
 public:
-    const ::rtl::OUString       sDropCapCharStyleName;
+    const ::rtl::OUString		sDropCapCharStyleName;
 private:
-    const ::rtl::OUString       sPageDescName;
+    const ::rtl::OUString		sPageDescName;
 
-    sal_Int8    nOutlineLevel;
+    sal_Int8	nOutlineLevel;
 
-    sal_Bool    bAutoUpdate : 1;
-    sal_Bool    bHasMasterPageName : 1;
+    sal_Bool	bAutoUpdate : 1;
+    sal_Bool	bHasMasterPageName : 1;
 
     sal_Bool bHasCombinedCharactersLetter : 1;
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ namespace unopkg {
     }
 };
 
-struct DeploymentResMgr :  public rtl::StaticWithInit< ResMgr *, DeploymentResMgr >
+struct DeploymentResMgr :  public rtl::StaticWithInit< ResMgr *, DeploymentResMgr > 
 {
     ResMgr * operator () () {
         return ResMgr::CreateResMgr( "deployment", OfficeLocale::get());
@@ -85,7 +85,7 @@ struct OptionInfo
 
 struct LockFileException : public css::uno::Exception
 {
-    LockFileException(::rtl::OUString const & sMessage) :
+    LockFileException(::rtl::OUString const & sMessage) : 
         css::uno::Exception(sMessage, css::uno::Reference< css::uno::XInterface > ()) {}
 };
 
@@ -150,7 +150,7 @@ public:
         if (m_xComp.is())
             m_xComp->dispose();
     }
-
+    
     inline void reset(
         css::uno::Reference<css::lang::XComponent> const & xComp )
     {

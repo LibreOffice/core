@@ -89,7 +89,7 @@ namespace dlgprov
   class DialogUnoScriptListenerImpl : public DialogSFScriptListenerImpl
     {
     Reference< awt::XControl > m_xControl;
-        Reference< XInterface > m_xHandler;
+        Reference< XInterface >	m_xHandler;
     Reference< beans::XIntrospectionAccess > m_xIntrospectionAccess;
     bool m_bDialogProviderMode;
 
@@ -101,7 +101,7 @@ namespace dlgprov
             const Reference< awt::XControl >& rxControl,
             const Reference< XInterface >& rxHandler,
             const Reference< beans::XIntrospectionAccess >& rxIntrospectionAccess,
-            bool bDialogProviderMode );     // false: ContainerWindowProvider mode
+            bool bDialogProviderMode );		// false: ContainerWindowProvider mode
 
     };
 
@@ -678,7 +678,7 @@ namespace dlgprov
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}   // namespace dlgprov
+}	// namespace dlgprov
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

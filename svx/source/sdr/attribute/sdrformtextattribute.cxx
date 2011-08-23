@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,23 +63,23 @@ namespace
     {
         switch(eLineJoint)
         {
-            case XLINEJOINT_MIDDLE  :
+            case XLINEJOINT_MIDDLE	: 
             {
-                return basegfx::B2DLINEJOIN_MIDDLE;
+                return basegfx::B2DLINEJOIN_MIDDLE;	
             }
-            case XLINEJOINT_BEVEL   :
+            case XLINEJOINT_BEVEL	: 
             {
-                return basegfx::B2DLINEJOIN_BEVEL;
+                return basegfx::B2DLINEJOIN_BEVEL;	
             }
-            case XLINEJOINT_MITER   :
+            case XLINEJOINT_MITER	: 
             {
-                return basegfx::B2DLINEJOIN_MITER;
+                return basegfx::B2DLINEJOIN_MITER;	
             }
-            case XLINEJOINT_ROUND   :
+            case XLINEJOINT_ROUND	: 
             {
-                return basegfx::B2DLINEJOIN_ROUND;
+                return basegfx::B2DLINEJOIN_ROUND;	
             }
-            default :
+            default : 
             {
                 return basegfx::B2DLINEJOIN_NONE; // XLINEJOINT_NONE
             }
@@ -154,30 +154,30 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32                              mnRefCount;
+            sal_uInt32								mnRefCount;
 
             // FormText (FontWork) Attributes
-            sal_Int32                               mnFormTextDistance;     // distance from line in upright direction
-            sal_Int32                               mnFormTextStart;        // shift from polygon start
-            sal_Int32                               mnFormTextShdwXVal;     // shadow distance or 10th degrees
-            sal_Int32                               mnFormTextShdwYVal;     // shadow distance or scaling
-            sal_uInt16                              mnFormTextShdwTransp;   // shadow transparence
-            XFormTextStyle                          meFormTextStyle;        // on/off and char orientation
-            XFormTextAdjust                         meFormTextAdjust;       // adjustment (left/right/center) and scale
-            XFormTextShadow                         meFormTextShadow;       // shadow mode
-            Color                                   maFormTextShdwColor;    // shadow color
+            sal_Int32								mnFormTextDistance;		// distance from line in upright direction
+            sal_Int32								mnFormTextStart;		// shift from polygon start
+            sal_Int32								mnFormTextShdwXVal;		// shadow distance or 10th degrees
+            sal_Int32								mnFormTextShdwYVal;		// shadow distance or scaling
+            sal_uInt16								mnFormTextShdwTransp;	// shadow transparence
+            XFormTextStyle							meFormTextStyle;		// on/off and char orientation
+            XFormTextAdjust							meFormTextAdjust;		// adjustment (left/right/center) and scale
+            XFormTextShadow							meFormTextShadow;		// shadow mode
+            Color									maFormTextShdwColor;	// shadow color
 
             // outline attributes; used when getFormTextOutline() is true and (for
             // shadow) when getFormTextShadow() != XFTSHADOW_NONE
-            SdrFormTextOutlineAttribute             maOutline;
-            SdrFormTextOutlineAttribute             maShadowOutline;
+            SdrFormTextOutlineAttribute				maOutline;
+            SdrFormTextOutlineAttribute				maShadowOutline;
 
             // bitfield
-            unsigned                                mbFormTextMirror : 1;   // change orientation
-            unsigned                                mbFormTextOutline : 1;  // show contour of objects
+            unsigned								mbFormTextMirror : 1;	// change orientation
+            unsigned								mbFormTextOutline : 1;	// show contour of objects
 
             ImpSdrFormTextAttribute(const SfxItemSet& rSet)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 mnFormTextDistance(((const XFormTextDistanceItem&)rSet.Get(XATTR_FORMTXTDISTANCE)).GetValue()),
                 mnFormTextStart(((const XFormTextStartItem&)rSet.Get(XATTR_FORMTXTSTART)).GetValue()),
                 mnFormTextShdwXVal(((const XFormTextShadowXValItem&)rSet.Get(XATTR_FORMTXTSHDWXVAL)).GetValue()),
@@ -218,7 +218,7 @@ namespace drawinglayer
             }
 
             ImpSdrFormTextAttribute()
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 mnFormTextDistance(0),
                 mnFormTextStart(0),
                 mnFormTextShdwXVal(0),
@@ -285,18 +285,18 @@ namespace drawinglayer
         };
 
         SdrFormTextAttribute::SdrFormTextAttribute(const SfxItemSet& rSet)
-        :   mpSdrFormTextAttribute(new ImpSdrFormTextAttribute(rSet))
+        :	mpSdrFormTextAttribute(new ImpSdrFormTextAttribute(rSet))
         {
         }
 
         SdrFormTextAttribute::SdrFormTextAttribute()
-        :   mpSdrFormTextAttribute(ImpSdrFormTextAttribute::get_global_default())
+        :	mpSdrFormTextAttribute(ImpSdrFormTextAttribute::get_global_default())
         {
             mpSdrFormTextAttribute->mnRefCount++;
         }
 
         SdrFormTextAttribute::SdrFormTextAttribute(const SdrFormTextAttribute& rCandidate)
-        :   mpSdrFormTextAttribute(rCandidate.mpSdrFormTextAttribute)
+        :	mpSdrFormTextAttribute(rCandidate.mpSdrFormTextAttribute)
         {
             mpSdrFormTextAttribute->mnRefCount++;
         }
@@ -330,7 +330,7 @@ namespace drawinglayer
                 {
                     delete mpSdrFormTextAttribute;
                 }
-
+                
                 mpSdrFormTextAttribute = rCandidate.mpSdrFormTextAttribute;
                 mpSdrFormTextAttribute->mnRefCount++;
             }
@@ -352,70 +352,70 @@ namespace drawinglayer
 
             return (*rCandidate.mpSdrFormTextAttribute == *mpSdrFormTextAttribute);
         }
-
-        sal_Int32 SdrFormTextAttribute::getFormTextDistance() const
-        {
-            return mpSdrFormTextAttribute->getFormTextDistance();
+        
+        sal_Int32 SdrFormTextAttribute::getFormTextDistance() const 
+        { 
+            return mpSdrFormTextAttribute->getFormTextDistance(); 
         }
 
-        sal_Int32 SdrFormTextAttribute::getFormTextStart() const
-        {
-            return mpSdrFormTextAttribute->getFormTextStart();
+        sal_Int32 SdrFormTextAttribute::getFormTextStart() const 
+        { 
+            return mpSdrFormTextAttribute->getFormTextStart(); 
         }
 
-        sal_Int32 SdrFormTextAttribute::getFormTextShdwXVal() const
-        {
-            return mpSdrFormTextAttribute->getFormTextShdwXVal();
+        sal_Int32 SdrFormTextAttribute::getFormTextShdwXVal() const 
+        { 
+            return mpSdrFormTextAttribute->getFormTextShdwXVal(); 
         }
 
-        sal_Int32 SdrFormTextAttribute::getFormTextShdwYVal() const
-        {
-            return mpSdrFormTextAttribute->getFormTextShdwYVal();
+        sal_Int32 SdrFormTextAttribute::getFormTextShdwYVal() const 
+        { 
+            return mpSdrFormTextAttribute->getFormTextShdwYVal(); 
         }
 
-        sal_uInt16 SdrFormTextAttribute::getFormTextShdwTransp() const
-        {
-            return mpSdrFormTextAttribute->getFormTextShdwTransp();
+        sal_uInt16 SdrFormTextAttribute::getFormTextShdwTransp() const 
+        { 
+            return mpSdrFormTextAttribute->getFormTextShdwTransp(); 
         }
 
-        XFormTextStyle SdrFormTextAttribute::getFormTextStyle() const
-        {
-            return mpSdrFormTextAttribute->getFormTextStyle();
+        XFormTextStyle SdrFormTextAttribute::getFormTextStyle() const 
+        { 
+            return mpSdrFormTextAttribute->getFormTextStyle(); 
         }
 
-        XFormTextAdjust SdrFormTextAttribute::getFormTextAdjust() const
-        {
-            return mpSdrFormTextAttribute->getFormTextAdjust();
+        XFormTextAdjust SdrFormTextAttribute::getFormTextAdjust() const 
+        { 
+            return mpSdrFormTextAttribute->getFormTextAdjust(); 
         }
 
-        XFormTextShadow SdrFormTextAttribute::getFormTextShadow() const
-        {
-            return mpSdrFormTextAttribute->getFormTextShadow();
+        XFormTextShadow SdrFormTextAttribute::getFormTextShadow() const 
+        { 
+            return mpSdrFormTextAttribute->getFormTextShadow(); 
         }
 
-        Color SdrFormTextAttribute::getFormTextShdwColor() const
-        {
-            return mpSdrFormTextAttribute->getFormTextShdwColor();
+        Color SdrFormTextAttribute::getFormTextShdwColor() const 
+        { 
+            return mpSdrFormTextAttribute->getFormTextShdwColor(); 
         }
 
-        const SdrFormTextOutlineAttribute& SdrFormTextAttribute::getOutline() const
-        {
-            return mpSdrFormTextAttribute->getOutline();
+        const SdrFormTextOutlineAttribute& SdrFormTextAttribute::getOutline() const 
+        { 
+            return mpSdrFormTextAttribute->getOutline(); 
         }
 
-        const SdrFormTextOutlineAttribute& SdrFormTextAttribute::getShadowOutline() const
-        {
-            return mpSdrFormTextAttribute->getShadowOutline();
+        const SdrFormTextOutlineAttribute& SdrFormTextAttribute::getShadowOutline() const 
+        { 
+            return mpSdrFormTextAttribute->getShadowOutline(); 
         }
 
-        bool SdrFormTextAttribute::getFormTextMirror() const
-        {
-            return mpSdrFormTextAttribute->getFormTextMirror();
+        bool SdrFormTextAttribute::getFormTextMirror() const 
+        { 
+            return mpSdrFormTextAttribute->getFormTextMirror(); 
         }
 
-        bool SdrFormTextAttribute::getFormTextOutline() const
-        {
-            return mpSdrFormTextAttribute->getFormTextOutline();
+        bool SdrFormTextAttribute::getFormTextOutline() const 
+        { 
+            return mpSdrFormTextAttribute->getFormTextOutline(); 
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ TYPEINIT1_FACTORY( SvxLineEndListItem, SfxPoolItem , new  SvxLineEndListItem);
 
 //==================================================================
 //
-//  SvxColorTableItem
+//	SvxColorTableItem
 //
 //==================================================================
 
@@ -82,7 +82,7 @@ SfxItemPresentation SvxColorTableItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
     return SFX_ITEM_PRESENTATION_NONE;
@@ -134,7 +134,7 @@ bool SvxColorTableItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*n
 
 //==================================================================
 //
-//  SvxGradientListItem
+//	SvxGradientListItem
 //
 //==================================================================
 
@@ -166,7 +166,7 @@ SfxItemPresentation SvxGradientListItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
     return SFX_ITEM_PRESENTATION_NONE;
@@ -218,7 +218,7 @@ bool SvxGradientListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /
 
 //==================================================================
 //
-//  SvxHatchListItem
+//	SvxHatchListItem
 //
 //==================================================================
 
@@ -250,7 +250,7 @@ SfxItemPresentation SvxHatchListItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
     return SFX_ITEM_PRESENTATION_NONE;
@@ -302,7 +302,7 @@ bool SvxHatchListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nM
 
 //==================================================================
 //
-//  SvxBitmapListItem
+//	SvxBitmapListItem
 //
 //==================================================================
 
@@ -334,7 +334,7 @@ SfxItemPresentation SvxBitmapListItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
     return SFX_ITEM_PRESENTATION_NONE;
@@ -387,7 +387,7 @@ bool SvxBitmapListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*n
 
 //==================================================================
 //
-//  SvxDashListItem
+//	SvxDashListItem
 //
 //==================================================================
 
@@ -420,7 +420,7 @@ SfxItemPresentation SvxDashListItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
     return SFX_ITEM_PRESENTATION_NONE;
@@ -477,7 +477,7 @@ void SvxDashListItem::SetDashList( XDashList* pList )
 
 //==================================================================
 //
-//  SvxLineEndListItem
+//	SvxLineEndListItem
 //
 //==================================================================
 
@@ -509,7 +509,7 @@ SfxItemPresentation SvxLineEndListItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
     return SFX_ITEM_PRESENTATION_NONE;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -333,25 +333,25 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
                 beans::PropertyValue *pSymbol = aSequence.getArray();
 
                 pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Name         = sName;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Value       <<= pDescriptor->sName;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Value	    <<= pDescriptor->sName;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_EXPORT_NAME].Name  = sExportName;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_EXPORT_NAME].Value<<= pDescriptor->sExportName;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Name    = sFontName;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Value  <<= pDescriptor->sFontName;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Value	<<= pDescriptor->sFontName;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Name      = sCharSet;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Value   <<= pDescriptor->nCharSet;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Value	<<= pDescriptor->nCharSet;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Name       = sFamily;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Value <<= pDescriptor->nFamily;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Value	<<= pDescriptor->nFamily;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Name        = sPitch;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Value      <<= pDescriptor->nPitch;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Value	    <<= pDescriptor->nPitch;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Name       = sWeight;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Value <<= pDescriptor->nWeight;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Value	<<= pDescriptor->nWeight;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Name       = sItalic;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Value <<= pDescriptor->nItalic;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Value	<<= pDescriptor->nItalic;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Name       = sSymbolSet;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Value <<= pDescriptor->sSymbolSet;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Value	<<= pDescriptor->sSymbolSet;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Name       = sCharacter;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Value  <<= pDescriptor->nCharacter;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Value	<<= pDescriptor->nCharacter;
 
                 xBox->insertByIndex(nIndex, uno::makeAny( aSequence ));
             }

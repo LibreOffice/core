@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,9 +55,9 @@
 
 namespace css = ::com::sun::star;
 
-#define FILETYPE_TEXT       1
-#define FILETYPE_GRF        2
-#define FILETYPE_OBJECT     3
+#define FILETYPE_TEXT		1
+#define FILETYPE_GRF		2
+#define FILETYPE_OBJECT		3
 
 struct Impl_DownLoadData
 {
@@ -128,12 +128,12 @@ BOOL SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                 Graphic aGrf;
 
                 //JP 15.07.98: Bug 52959
-                //      falls das Nativformat doch erwuenscht ist, muss am
-                //      Ende das Flag zurueckgesetzt werden.
+                //		falls das Nativformat doch erwuenscht ist, muss am
+                //		Ende das Flag zurueckgesetzt werden.
 // wird einzig und allein im sw/ndgrf.cxx benutzt, wenn der Link vom
 // GraphicNode entfernt wird.
                 BOOL bOldNativFormat = bNativFormat;
-//!!??              bNativFormat = 0 != (ASPECT_ICON & pSvData->GetAspect());
+//!!??				bNativFormat = 0 != (ASPECT_ICON & pSvData->GetAspect());
 
                 // falls gedruckt werden soll, warten wir bis die
                 // Daten vorhanden sind
@@ -156,7 +156,7 @@ BOOL SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                 }
 
                 if( pDownLoadData ||
-                    ( !bWaitForData && ( xMed.Is() ||       // wurde als URL geladen
+                    ( !bWaitForData && ( xMed.Is() || 		// wurde als URL geladen
                         ( bSynchron && LoadFile_Impl() && xMed.Is() ) )) )
                 {
                     // falls
@@ -308,7 +308,7 @@ BOOL SvFileObject::LoadFile_Impl()
 
         bClearMedium = !xMed.Is();
         if( bClearMedium )
-            xMed = xTmpMed;     // falls gleich im DownLoad schon schluss ist
+            xMed = xTmpMed;		// falls gleich im DownLoad schon schluss ist
         return bDataReady;
     }
 
@@ -365,7 +365,7 @@ BOOL SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
             if( !pDownLoadData->aGrf.GetContext() )
             {
                 xMed->SetDataAvailableLink( Link() );
-//              xMed->SetDoneLink( Link() );
+//				xMed->SetDoneLink( Link() );
                 delete pDownLoadData, pDownLoadData = 0;
                 bDataReady = TRUE;
                 bWaitForData = FALSE;
@@ -641,14 +641,14 @@ IMPL_LINK( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
     return 0;
 }
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Die Methode stellt fest, ob aus einem DDE-Object die Daten gelesen
     werden kann.
     Zurueckgegeben wird:
-        ERRCODE_NONE            wenn sie komplett gelesen wurde
-        ERRCODE_SO_PENDING      wenn sie noch nicht komplett gelesen wurde
-        ERRCODE_SO_FALSE        sonst
+        ERRCODE_NONE 			wenn sie komplett gelesen wurde
+        ERRCODE_SO_PENDING		wenn sie noch nicht komplett gelesen wurde
+        ERRCODE_SO_FALSE		sonst
 */
 BOOL SvFileObject::IsPending() const
 {

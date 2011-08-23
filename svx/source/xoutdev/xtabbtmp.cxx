@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,10 +56,10 @@ using namespace rtl;
 
 sal_Unicode const pszExtBitmap[]  = {'s','o','b'};
 
-static char const aChckBitmap[]  = { 0x04, 0x00, 'S','O','B','L'};  // very old
-static char const aChckBitmap0[] = { 0x04, 0x00, 'S','O','B','0'};  // old
-static char const aChckBitmap1[] = { 0x04, 0x00, 'S','O','B','1'};  // = 5.2
-static char const aChckXML[]     = { 'P', 'K', 0x03, 0x04 };        // = 6.0
+static char const aChckBitmap[]  = { 0x04, 0x00, 'S','O','B','L'};	// very old
+static char const aChckBitmap0[] = { 0x04, 0x00, 'S','O','B','0'};	// old
+static char const aChckBitmap1[] = { 0x04, 0x00, 'S','O','B','1'};	// = 5.2
+static char const aChckXML[]     = { 'P', 'K', 0x03, 0x04 };		// = 6.0
 
 // -------------------
 // class XBitmapTable
@@ -250,10 +250,10 @@ BOOL XBitmapList::Create()
     // 48 49 50 51 52 53 54 55
     // 56 57 58 59 60 61 62 63
 
-    String  aStr( SVX_RES( RID_SVXSTR_BITMAP ) );
-    Color   aColWhite( RGB_Color( COL_WHITE ) );
+    String	aStr( SVX_RES( RID_SVXSTR_BITMAP ) );
+    Color	aColWhite( RGB_Color( COL_WHITE ) );
     xub_StrLen nLen;
-    USHORT  aArray[64];
+    USHORT	aArray[64];
 
     memset( aArray, 0, sizeof( aArray ) );
     aStr.AppendAscii(" 1");

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@ namespace connectivity
         // these typedef's are only necessary for the compiler
         typedef ::cppu::ImplHelper2<  ::com::sun::star::sdbcx::XRowLocate,
                                       ::com::sun::star::sdbcx::XDeleteRows> OCalcResultSet_BASE;
-        typedef file::OResultSet                                            OCalcResultSet_BASE2;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OCalcResultSet> OCalcResultSet_BASE3;
+        typedef file::OResultSet											OCalcResultSet_BASE2;
+        typedef ::comphelper::OPropertyArrayUsageHelper<OCalcResultSet>	OCalcResultSet_BASE3;
 
 
         class OCalcResultSet : public OCalcResultSet_BASE2,
@@ -59,7 +59,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            OCalcResultSet( file::OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&   _aSQLIterator);
+            OCalcResultSet( file::OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&	_aSQLIterator);
 
         private:
             // XInterface

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #include <comphelper/sequence.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
-#include <stdio.h>      //sprintf
+#include <stdio.h>		//sprintf
 #include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
 #include "LDriver.hxx"
@@ -246,7 +246,7 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
                     break;
                 default:
                     eType = DataType::VARCHAR;
-                    nPrecision = 0; // nyi: Daten koennen aber laenger sein!
+                    nPrecision = 0;	// nyi: Daten koennen aber laenger sein!
                     nScale = 0;
                     aTypeName = ::rtl::OUString::createFromAscii("VARCHAR");
             };
@@ -324,8 +324,8 @@ void OEvoabFolderList::construct()
 
         // Buffersize abhaengig von der Filegroesse
         m_pFileStream->SetBufferSize(nSize > 1000000 ? 32768 :
-                                    nSize > 100000  ? 16384 :
-                                    nSize > 10000   ? 4096  : 1024);
+                                    nSize > 100000	? 16384 :
+                                    nSize > 10000	? 4096	: 1024);
         OSL_TRACE("OEvoabFolderList::construct()::m_pFileStream->Tell() = %d\n", nSize );
 
         fillColumns(aAppLocale);
@@ -336,7 +336,7 @@ void OEvoabFolderList::construct()
 //------------------------------------------------------------------
 sal_Bool OEvoabFolderList::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols)
 {
-    (_rRow->get())[0] = m_nFilePos; // the "bookmark"
+    (_rRow->get())[0] = m_nFilePos;	// the "bookmark"
 
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
     // Felder:
@@ -353,7 +353,7 @@ sal_Bool OEvoabFolderList::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols)
         else
         {
             // length depending on the data type
-            sal_Int32   nType   = m_aTypes[i];
+            sal_Int32	nType	= m_aTypes[i];
             switch(nType)
             {
                 case DataType::TIMESTAMP:
@@ -384,10 +384,10 @@ sal_Bool OEvoabFolderList::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols)
                     {
                         (_rRow->get())[i+1].setNull();
                     }
-                }   break;
+                }	break;
                 case DataType::DOUBLE:
                 case DataType::INTEGER:
-                case DataType::DECIMAL:             // #99178# OJ
+                case DataType::DECIMAL:				// #99178# OJ
                 case DataType::NUMERIC:
                 {
                     sal_Unicode cDecimalDelimiter = pConnection->getDecimalDelimiter();
@@ -526,7 +526,7 @@ void OEvoabFolderList::initializeRow(sal_Int32 _nColumnCount)
 {
     if(!m_aRow.is())
     {
-        m_aRow  = new OValueVector(_nColumnCount);
+        m_aRow	= new OValueVector(_nColumnCount);
         (m_aRow->get())[0].setBound(sal_True);
         ::std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetBound(sal_False));
     }

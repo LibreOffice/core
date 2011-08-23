@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,10 +62,10 @@
 #include <svtools/accessibilityoptions.hxx>
 
 // Draw modes
-#define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
+#define OUTPUT_DRAWMODE_COLOR		(DRAWMODE_DEFAULT)
 #define OUTPUT_DRAWMODE_GRAYSCALE   (DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT)
 #define OUTPUT_DRAWMODE_BLACKWHITE  (DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP | DRAWMODE_WHITEGRADIENT)
-#define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
+#define OUTPUT_DRAWMODE_CONTRAST	(DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
 
 //========================================================================
 
@@ -157,9 +157,9 @@ void SfxPreviewWin_Impl::ImpPaint(
         pWindow->SetLineColor( aBlackCol );
         pWindow->SetFillColor( aWhiteCol );
         pWindow->DrawRect( Rectangle( aPoint + Point( FRAME, FRAME ), bPoint + Point( FRAME, FRAME ) ) );
-//!     pFile->Move( Point( FRAME, FRAME ) );
-//!     pFile->Scale( Fraction( aTmpSize.Width(), aSize.Width() ),
-//!                   Fraction( aTmpSize.Height(), aSize.Height() ) );
+//!		pFile->Move( Point( FRAME, FRAME ) );
+//!		pFile->Scale( Fraction( aTmpSize.Width(), aSize.Width() ),
+//!					  Fraction( aTmpSize.Height(), aSize.Height() ) );
         pFile->WindStart();
         pFile->Play( pWindow, aPoint + Point( FRAME, FRAME ), aSize  );
     }
@@ -570,7 +570,7 @@ void    SfxNewFileDialog_Impl::SetTemplateFlags(USHORT nSet)
 
 SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     SfxNewFileDialog* pAntiImplP, USHORT nFl)
-    :   aRegionFt( pAntiImplP, SfxResId( FT_REGION ) ),
+    :	aRegionFt( pAntiImplP, SfxResId( FT_REGION ) ),
         aRegionLb( pAntiImplP, SfxResId( LB_REGION ) ),
         aTemplateFt( pAntiImplP, SfxResId( FT_TEMPLATE ) ),
         aTemplateLb( pAntiImplP, SfxResId( LB_TEMPLATE ) ),
@@ -680,8 +680,8 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     aPrevTimer.SetTimeout( 500 );
     aPrevTimer.SetTimeoutHdl( LINK( this, SfxNewFileDialog_Impl, Update));
 
-//   else
-//        aRegionLb.InsertEntry(String(SfxResId(STR_STANDARD)));
+//	 else
+//		  aRegionLb.InsertEntry(String(SfxResId(STR_STANDARD)));
     aRegionLb.SelectEntryPos(0);
     RegionSelect(&aRegionLb);
 }

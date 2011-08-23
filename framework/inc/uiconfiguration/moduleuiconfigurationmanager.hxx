@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <hash_map>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <accelerators/presethandler.hxx>
 #include <threadhelp/threadhelpbase.hxx>
@@ -50,7 +50,7 @@
 #include <uiconfiguration/moduleimagemanager.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -66,7 +66,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -75,15 +75,15 @@
 
 namespace framework
 {
-    class ModuleUIConfigurationManager :   public com::sun::star::lang::XTypeProvider                       ,
-                                           public com::sun::star::lang::XServiceInfo                        ,
+    class ModuleUIConfigurationManager :   public com::sun::star::lang::XTypeProvider	                    ,
+                                           public com::sun::star::lang::XServiceInfo	                    ,
                                            public com::sun::star::lang::XComponent                          ,
                                            public com::sun::star::lang::XInitialization                     ,
                                            public ::com::sun::star::ui::XUIConfiguration              ,
                                            public ::com::sun::star::ui::XUIConfigurationManager       ,
                                            public ::com::sun::star::ui::XModuleUIConfigurationManager ,
                                            public ::com::sun::star::ui::XUIConfigurationPersistence   ,
-                                           private ThreadHelpBase                       ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                           private ThreadHelpBase						,	// Struct for right initalization of mutex member! Must be first of baseclasses.
                                            public ::cppu::OWeakObject
     {
         public:
@@ -139,7 +139,7 @@ namespace framework
                 LAYER_USERDEFINED,
                 LAYER_COUNT
             };
-
+            
             enum NotifyOp
             {
                 NotifyOp_Remove,
@@ -154,7 +154,7 @@ namespace framework
                 rtl::OUString   aResourceURL;
                 rtl::OUString   aUIName;
             };
-
+            
             struct UIElementData
             {
                 UIElementData() : bModified( false ), bDefault( true ), bDefaultNode( true ) {};
@@ -170,14 +170,14 @@ namespace framework
             struct UIElementType;
             friend struct UIElementType;
             typedef ::std::hash_map< rtl::OUString, UIElementData, OUStringHashCode, ::std::equal_to< rtl::OUString > > UIElementDataHashMap;
-
+            
             struct UIElementType
             {
                 UIElementType() : bModified( false ),
-                                  bLoaded( false ),
+                                  bLoaded( false ), 
                                   bDefaultLayer( false ),
                                   nElementType( ::com::sun::star::ui::UIElementType::UNKNOWN ) {}
-
+                
 
                 bool                                                              bModified;
                 bool                                                              bLoaded;

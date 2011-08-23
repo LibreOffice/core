@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@ xub_StrLen OEvoabString::GetTokenCount( sal_Unicode cTok, sal_Unicode cStrDel ) 
         return 0;
 
     xub_StrLen nTokCount = 1;
-    BOOL bStart = TRUE;     // Stehen wir auf dem ersten Zeichen im Token?
-    BOOL bInString = FALSE; // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
+    BOOL bStart = TRUE;		// Stehen wir auf dem ersten Zeichen im Token?
+    BOOL bInString = FALSE;	// Befinden wir uns INNERHALB eines (cStrDel delimited) String?
 
     // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
     for( xub_StrLen i = 0; i < Len(); i++ )
@@ -53,8 +53,8 @@ xub_StrLen OEvoabString::GetTokenCount( sal_Unicode cTok, sal_Unicode cStrDel ) 
             // Erstes Zeichen ein String-Delimiter?
             if ((*this).GetChar(i) == cStrDel)
             {
-                bInString = TRUE;   // dann sind wir jetzt INNERHALB des Strings!
-                continue;           // dieses Zeichen ueberlesen!
+                bInString = TRUE;	// dann sind wir jetzt INNERHALB des Strings!
+                continue;			// dieses Zeichen ueberlesen!
             }
         }
 
@@ -65,7 +65,7 @@ xub_StrLen OEvoabString::GetTokenCount( sal_Unicode cTok, sal_Unicode cStrDel ) 
                 if ((i+1 < Len()) && ((*this).GetChar(i+1) == cStrDel))
                 {
                     // Verdoppeltes String-Delimiter-Zeichen:
-                    i++;    // kein String-Ende, naechstes Zeichen ueberlesen.
+                    i++;	// kein String-Ende, naechstes Zeichen ueberlesen.
                 }
                 else
                 {
@@ -94,11 +94,11 @@ void OEvoabString::GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Uni
     xub_StrLen nLen = Len();
     if ( nLen )
     {
-        BOOL bInString = (nStartPos < nLen) && ((*this).GetChar(nStartPos) == cStrDel); // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
+        BOOL bInString = (nStartPos < nLen) && ((*this).GetChar(nStartPos) == cStrDel);	// Befinden wir uns INNERHALB eines (cStrDel delimited) String?
 
         // Erstes Zeichen ein String-Delimiter?
         if (bInString )
-            ++nStartPos;            // dieses Zeichen ueberlesen!
+            ++nStartPos;			// dieses Zeichen ueberlesen!
         // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
         for( xub_StrLen i = nStartPos; i < nLen; ++i )
         {
@@ -110,9 +110,9 @@ void OEvoabString::GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Uni
                     if ((i+1 < nLen) && ((*this).GetChar(i+1) == cStrDel))
                     {
                         // Verdoppeltes String-Delimiter-Zeichen:
-                        ++i;    // kein String-Ende, naechstes Zeichen ueberlesen.
+                        ++i;	// kein String-Ende, naechstes Zeichen ueberlesen.
 
-                        _rStr += (*this).GetChar(i);    // Zeichen gehoert zum Resultat-String
+                        _rStr += (*this).GetChar(i);	// Zeichen gehoert zum Resultat-String
                     }
                     else
                     {
@@ -122,7 +122,7 @@ void OEvoabString::GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Uni
                 }
                 else
                 {
-                    _rStr += (*this).GetChar(i);    // Zeichen gehoert zum Resultat-String
+                    _rStr += (*this).GetChar(i);	// Zeichen gehoert zum Resultat-String
                 }
 
             }
@@ -138,7 +138,7 @@ void OEvoabString::GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Uni
                 }
                 else
                 {
-                    _rStr += (*this).GetChar(i);    // Zeichen gehoert zum Resultat-String
+                    _rStr += (*this).GetChar(i);	// Zeichen gehoert zum Resultat-String
                 }
             }
         }
@@ -283,7 +283,7 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
                     aIter = m_aRowToFilePos.upper_bound(nOffset);
                     if(aIter == m_aRowToFilePos.end())
                     {
-                        m_nRowPos   = m_aRowToFilePos.rbegin()->first;
+                        m_nRowPos	= m_aRowToFilePos.rbegin()->first;
                         nCurPos = m_nFilePos = m_aRowToFilePos.rbegin()->second;
                         while(m_nRowPos != nOffset)
                             seekRow(IResultSetHelper::NEXT,1,nCurPos);
@@ -291,8 +291,8 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
                     else
                     {
                         --aIter;
-                        m_nRowPos   = aIter->first;
-                        m_nFilePos  = aIter->second;
+                        m_nRowPos	= aIter->first;
+                        m_nFilePos	= aIter->second;
                         m_pFileStream->Seek(m_nFilePos);
                         if (m_pFileStream->IsEof() || !checkHeaderLine())
                             return sal_False;
@@ -310,7 +310,7 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
             if (m_pFileStream->IsEof())
                 return sal_False;
 
-            m_nFilePos = m_pFileStream->Tell(); // Byte-Position in der Datei merken (am ZeilenANFANG)
+            m_nFilePos = m_pFileStream->Tell();	// Byte-Position in der Datei merken (am ZeilenANFANG)
             m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
             if (m_pFileStream->IsEof())
                 return sal_False;

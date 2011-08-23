@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,10 +51,10 @@ public:
     SvxParaVertAlignItem( sal_uInt16 nValue /*= 0*/,
                        const sal_uInt16 nId  );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream & rStrm, USHORT nIVer) const;
-    virtual USHORT          GetVersion( USHORT nFileVersion ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*	Create(SvStream &, USHORT) const;
+    virtual SvStream& 		Store(SvStream & rStrm, USHORT nIVer) const;
+    virtual USHORT			GetVersion( USHORT nFileVersion ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -73,7 +73,7 @@ public:
         return *this;
     }
 
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual int 			 operator==( const SfxPoolItem& ) const;
 
 };
 

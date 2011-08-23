@@ -106,9 +106,9 @@ const SfxItemPropertyMapEntry* lcl_GetDocInfoPropertyMap()
         { "AutoloadEnabled" , 15, MID_DOCINFO_AUTOLOADENABLED, &::getBooleanCppuType(),   PROPERTY_UNBOUND, 0 },
         { "AutoloadSecs"    , 12, MID_DOCINFO_AUTOLOADSECS, &::getCppuType((const sal_Int32*)0),     PROPERTY_UNBOUND, 0 },
         { "AutoloadURL"     , 11, MID_DOCINFO_AUTOLOADURL, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "Category"            , 8 , MID_CATEGORY,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "Company"         , 7 , MID_COMPANY,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "Manager"         , 7 , MID_MANAGER,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+    { "Category"			, 8	, MID_CATEGORY,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+    { "Company"			, 7	, MID_COMPANY,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+    { "Manager"			, 7	, MID_MANAGER,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
         { "CreationDate"    , 12, WID_DATE_CREATED,   &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
         { "DefaultTarget"   , 13, MID_DOCINFO_DEFAULTTARGET, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
         { "Description"     , 11, MID_DOCINFO_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
@@ -337,8 +337,8 @@ MixedPropertySetInfo::~MixedPropertySetInfo()
 
 struct SfxDocumentInfoObject_Impl
 {
-    ::osl::Mutex                        _aMutex;
-    ::cppu::OInterfaceContainerHelper   _aDisposeContainer;
+    ::osl::Mutex						_aMutex;
+    ::cppu::OInterfaceContainerHelper	_aDisposeContainer;
 
     sal_Bool            bDisposed;
 

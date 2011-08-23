@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ private:
 public:
     XMLNamedBoolPropertyHdl( const ::rtl::OUString& rTrueStr, const ::rtl::OUString& rFalseStr ) : maTrueStr( rTrueStr ), maFalseStr( rFalseStr ) {}
 
-    XMLNamedBoolPropertyHdl(
+    XMLNamedBoolPropertyHdl( 
             ::xmloff::token::XMLTokenEnum eTrue,
             ::xmloff::token::XMLTokenEnum eFalse
             ) :
@@ -60,6 +60,6 @@ public:
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif      // _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
+#endif		// _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,17 +113,17 @@ TYPEINIT1(E3dAttributesUndoAction, SdrUndoAction);
 |*
 \************************************************************************/
 E3dAttributesUndoAction::E3dAttributesUndoAction( SdrModel &rModel,
-    E3dView*    p3dView,
-    E3dObject*  pInObject,
+    E3dView*	p3dView,
+    E3dObject*	pInObject,
     const SfxItemSet& rNewSet,
     const SfxItemSet& rOldSet,
     BOOL bUseSubObj)
-:   SdrUndoAction( rModel ),
-    pObject      ( pInObject ),
-    pView        ( p3dView ),
+:	SdrUndoAction( rModel ),
+    pObject	 	 ( pInObject ),
+    pView		 ( p3dView ),
     bUseSubObjects(bUseSubObj),
-    aNewSet      ( rNewSet ),
-    aOldSet      ( rOldSet )
+    aNewSet		 ( rNewSet ),
+    aOldSet		 ( rOldSet )
 {
 }
 

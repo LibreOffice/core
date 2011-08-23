@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,12 +73,12 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
         if( sTempURL.getLength() )
         {
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sTempURL );
-            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE,
+            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, 
                                       XML_SIMPLE );
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE,
                                       XML_ONLOAD );
         }
-
+        
         OUStringBuffer aOut;
         switch( ePos )
         {

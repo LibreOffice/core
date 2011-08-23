@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
@@ -37,12 +37,12 @@
 #include <threadhelp/resetableguard.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase1.hxx>
 
@@ -134,15 +134,15 @@ sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const ::rtl::OUString &
 }
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider
+//	XInterface, XTypeProvider
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_6     (   ConstItemContainer                                              ,
                             OWeakObject                                                     ,
                             DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider         ),
                             DIRECT_INTERFACE( ::com::sun::star::container::XElementAccess   ),
                             DIRECT_INTERFACE( ::com::sun::star::container::XIndexAccess     ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet     ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet         ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet		),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet		    ),
                             DIRECT_INTERFACE( ::com::sun::star::lang::XUnoTunnel            )
                         )
 

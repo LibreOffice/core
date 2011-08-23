@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,11 +46,11 @@ class SVX_DLLPUBLIC FmFormModel :
     public SdrModel
 {
 private:
-    FmFormModelImplData*    m_pImpl;
-    SfxObjectShell*         m_pObjShell;
+    FmFormModelImplData*	m_pImpl;
+    SfxObjectShell*			m_pObjShell;
 
-    sal_Bool            m_bOpenInDesignMode : 1;
-    sal_Bool            m_bAutoControlFocus : 1;
+    sal_Bool			m_bOpenInDesignMode : 1;
+    sal_Bool			m_bAutoControlFocus : 1;
 
     SVX_DLLPRIVATE FmFormModel( const FmFormModel& );   // never implemented
     SVX_DLLPRIVATE void operator=(const FmFormModel& rSrcModel);   // never implemented
@@ -74,29 +74,29 @@ public:
     virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
     virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum);
 
-    virtual SdrLayerID      GetControlExportLayerId( const SdrObject& rObj ) const;
-    SfxObjectShell*         GetObjectShell() const { return m_pObjShell; }
-    void                    SetObjectShell( SfxObjectShell* pShell );
+    virtual SdrLayerID 		GetControlExportLayerId( const SdrObject& rObj ) const;
+    SfxObjectShell* 		GetObjectShell() const { return m_pObjShell; }
+    void 					SetObjectShell( SfxObjectShell* pShell );
 
     sal_Bool GetOpenInDesignMode() const { return m_bOpenInDesignMode; }
     void SetOpenInDesignMode( sal_Bool _bOpenDesignMode );
 
-    sal_Bool    GetAutoControlFocus() const { return m_bAutoControlFocus; }
-    void        SetAutoControlFocus( sal_Bool _bAutoControlFocus );
+    sal_Bool	GetAutoControlFocus() const { return m_bAutoControlFocus; }
+    void		SetAutoControlFocus( sal_Bool _bAutoControlFocus );
 
     /** check whether the OpenInDesignMode has been set explicitly or been loaded (<FALSE/>)
         or if it still has the default value from construction (<TRUE/>)
     */
-    sal_Bool    OpenInDesignModeIsDefaulted();
+    sal_Bool	OpenInDesignModeIsDefaulted();
 
     /** determines whether form controls should use the SdrModel's reference device for text rendering
     */
     sal_Bool    ControlsUseRefDevice() const;
 
-    FmXUndoEnvironment& GetUndoEnv();
+    FmXUndoEnvironment&	GetUndoEnv();
 
 private:
-    void        implSetOpenInDesignMode( sal_Bool _bOpenDesignMode, sal_Bool _bForce );
+    void		implSetOpenInDesignMode( sal_Bool _bOpenDesignMode, sal_Bool _bForce );
 };
 
 #endif          // _FM_FMMODEL_HXX

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include "TransformerContext.hxx"
 
-class XMLDocumentTransformerContext : public XMLTransformerContext
+class XMLDocumentTransformerContext : public XMLTransformerContext 
 {
 public:
     TYPEINFO();
@@ -40,7 +40,7 @@ public:
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
-    XMLDocumentTransformerContext( XMLTransformerBase& rTransformer,
+    XMLDocumentTransformerContext( XMLTransformerBase& rTransformer, 
                            const ::rtl::OUString& rQName );
 
     // A contexts destructor does anything that is required if an element
@@ -55,6 +55,6 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-#endif  //  _XMLOFF_DOCUMENTTCONTEXT_HXX
+#endif	//  _XMLOFF_DOCUMENTTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

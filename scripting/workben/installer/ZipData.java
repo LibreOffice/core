@@ -11,7 +11,7 @@ public class ZipData
 {
     public ZipData(String file) {
     }
-
+    
     public boolean extractEntry(String entry, String destination,
         JLabel statusLabel) {
 
@@ -43,7 +43,7 @@ public class ZipData
 
         if (!destName.equals(entryName))
             destination = destination.concat(entryName);
-
+        
         System.out.println("Unzipping " + entry + " to " + destination);
 
     try {

@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,8 +88,8 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system;
 
-#define ERROR_TAG   String( DEFINE_CONST_UNICODE("Error: ") )
-#define PATH_TAG    String( DEFINE_CONST_UNICODE("\nPath: ") )
+#define ERROR_TAG	String( DEFINE_CONST_UNICODE("Error: ") )
+#define PATH_TAG	String( DEFINE_CONST_UNICODE("\nPath: ") )
 
 class NoHelpErrorBox : public ErrorBox
 {
@@ -113,18 +113,24 @@ void NoHelpErrorBox::RequestHelp( const HelpEvent& )
 
 #define STARTERLIST 0
 
-rtl::OUString HelpLocaleString()
+static bool impl_hasHelpInstalled( const rtl::OUString &rLang );
+
+/// Return the locale we prefer for displaying help
+static rtl::OUString HelpLocaleString()
 {
     static rtl::OUString aLocaleStr;
     if (!aLocaleStr.getLength())
     {
+        const rtl::OUString aEnglish( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
         // detect installed locale
         Any aLocale =
             ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
                ::utl::ConfigManager::LOCALE );
         aLocale >>= aLocaleStr;
         bool bOk = aLocaleStr.getLength() != 0;
-        if ( bOk )
+        if ( !bOk )
+            aLocaleStr = aEnglish;
+        else
         {
             rtl::OUString aBaseInstallPath;
             // utl::Bootstrap::PathStatus aBaseLocateResult =
@@ -151,15 +157,19 @@ rtl::OUString HelpLocaleString()
                 }
             }
         }
-        if (!bOk)
-            aLocaleStr = rtl::OUString( DEFINE_CONST_UNICODE("en") );
+        // if not OK, and not even English installed, we use online help, and
+        // have to preserve the full locale name
+        if ( !bOk && impl_hasHelpInstalled( aEnglish ) )
+            aLocaleStr = aEnglish;
     }
     return aLocaleStr;
 }
 
-void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
+void AppendConfigToken( String& rURL, sal_Bool bQuestionMark, const rtl::OUString &rLang )
 {
-    ::rtl::OUString aLocaleStr(HelpLocaleString());
+    ::rtl::OUString aLocaleStr( rLang );
+    if ( !aLocaleStr.getLength() )
+        aLocaleStr = HelpLocaleString();
 
     // query part exists?
     if ( bQuestionMark )
@@ -231,7 +241,7 @@ static Sequence< ::rtl::OUString > GetPropertyNames()
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
     Sequence< ::rtl::OUString > aNames( nCount );
     ::rtl::OUString* pNames = aNames.getArray();
-    ::rtl::OUString* pEnd   = pNames + aNames.getLength();
+    ::rtl::OUString* pEnd	= pNames + aNames.getLength();
     int i = 0;
     for ( ; pNames != pEnd; ++pNames )
         *pNames = ::rtl::OUString::createFromAscii( aPropNames[i++] );
@@ -301,26 +311,26 @@ void SfxHelpOptions_Impl::Commit()
 class SfxHelp_Impl
 {
 private:
-    sal_Bool                            m_bIsDebug;     // environment variable "help_debug=1"
-    SfxHelpOptions_Impl*                m_pOpt;         // the options
-    ::std::vector< ::rtl::OUString >    m_aModulesList; // list of all installed modules
-    void                    Load();
+    sal_Bool							m_bIsDebug;		// environment variable "help_debug=1"
+    SfxHelpOptions_Impl*				m_pOpt;			// the options
+    ::std::vector< ::rtl::OUString >	m_aModulesList;	// list of all installed modules
+    void					Load();
 
 public:
     SfxHelp_Impl( sal_Bool bDebug );
     ~SfxHelp_Impl();
 
-    SfxHelpOptions_Impl*    GetOptions();
-    String                  GetHelpText( ULONG nHelpId, const String& rModule );    // get "Active Help"
+    SfxHelpOptions_Impl*	GetOptions();
+    String					GetHelpText( ULONG nHelpId, const String& rModule );	// get "Active Help"
     String                  GetHelpText( const rtl::OUString& aCommandURL, const String& rModule );
-    sal_Bool                HasModule( const ::rtl::OUString& rModule );            // module installed
-    sal_Bool                IsHelpInstalled();                                      // module list not empty
+    sal_Bool				HasModule( const ::rtl::OUString& rModule );			// module installed
+    sal_Bool				IsHelpInstalled();										// module list not empty
 };
 
 SfxHelp_Impl::SfxHelp_Impl( sal_Bool bDebug ) :
 
-    m_bIsDebug      ( bDebug ),
-    m_pOpt          ( NULL )
+    m_bIsDebug		( bDebug ),
+    m_pOpt      	( NULL )
 
 {
 }
@@ -335,7 +345,7 @@ void SfxHelp_Impl::Load()
     // fill modules list
     // create the help url (empty, without module and helpid)
     String sHelpURL( DEFINE_CONST_UNICODE("vnd.sun.star.help://") );
-    AppendConfigToken_Impl( sHelpURL, sal_True );
+    AppendConfigToken( sHelpURL, sal_True );
 
     // open ucb content and get the list of the help modules
     // the list contains strings with three tokens "ui title \t type \t url"
@@ -343,7 +353,7 @@ void SfxHelp_Impl::Load()
     sal_Int32 nLen = aAllModulesList.getLength();
     m_aModulesList.reserve( nLen + 1 );
     const ::rtl::OUString* pBegin = aAllModulesList.getConstArray();
-    const ::rtl::OUString* pEnd = pBegin + nLen;
+    const ::rtl::OUString* pEnd	= pBegin + nLen;
     for ( ; pBegin != pEnd; ++pBegin )
     {
         // get one module string
@@ -400,7 +410,7 @@ sal_Bool SfxHelp_Impl::IsHelpInstalled()
 SfxHelp::SfxHelp() :
 
     bIsDebug( sal_False ),
-    pImp    ( NULL )
+    pImp	( NULL )
 
 {
     // read the environment variable "HELP_DEBUG"
@@ -618,11 +628,11 @@ String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
             aHelpURL += String::CreateFromInt64( nHelpId );
 
             String aTempURL = aHelpURL;
-            AppendConfigToken_Impl( aTempURL, sal_True );
+            AppendConfigToken( aTempURL, sal_True );
             bHasAnchor = GetHelpAnchor_Impl( aTempURL, aAnchor );
         }
 
-        AppendConfigToken_Impl( aHelpURL, sal_True );
+        AppendConfigToken( aHelpURL, sal_True );
 
         if ( bHasAnchor )
         {
@@ -634,7 +644,7 @@ String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
     return aHelpURL;
 }
 
-String  SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rModuleName )
+String	SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rModuleName )
 {
     // build up the help URL
     String aHelpURL;
@@ -680,11 +690,11 @@ String  SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rM
                                               RTL_TEXTENCODING_ASCII_US ));
 
         String aTempURL = aHelpURL;
-        AppendConfigToken_Impl( aTempURL, sal_True );
+        AppendConfigToken( aTempURL, sal_True );
         bHasAnchor = GetHelpAnchor_Impl( aTempURL, aAnchor );
     }
 
-    AppendConfigToken_Impl( aHelpURL, sal_True );
+    AppendConfigToken( aHelpURL, sal_True );
 
     if ( bHasAnchor )
     {
@@ -746,10 +756,10 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
 }
 
 /// Check for built-in help
-static bool impl_hasHelpInstalled()
+static bool impl_hasHelpInstalled( const rtl::OUString &rLang = rtl::OUString() )
 {
     String aHelpRootURL( DEFINE_CONST_OUSTRING("vnd.sun.star.help://") );
-    AppendConfigToken_Impl( aHelpRootURL, sal_True );
+    AppendConfigToken( aHelpRootURL, sal_True, rLang );
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpRootURL );
 
     return ( aFactories.getLength() != 0 );

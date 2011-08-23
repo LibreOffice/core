@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,8 +105,8 @@ class SvxRubyData_Impl : public cppu::WeakImplHelper1
                                 <  ::com::sun::star::view::XSelectionChangeListener >
 {
     Reference<XModel>               xModel;
-    Reference<XRubySelection>       xSelection;
-    Sequence<PropertyValues>        aRubyValues;
+    Reference<XRubySelection> 		xSelection;
+    Sequence<PropertyValues>		aRubyValues;
     Reference<XController>          xController;
     sal_Bool                        bHasSelectionChanged;
     public:
@@ -217,27 +217,27 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     aLeftFT(this,               ResId(FT_LEFT,*rResId.GetResMgr() )),
     aLeft1ED(this,              ResId(ED_LEFT_1,*rResId.GetResMgr()  )),
     aRightFT(this,              ResId(FT_RIGHT,*rResId.GetResMgr()  )),
-    aRight1ED(this,             ResId(ED_RIGHT_1,*rResId.GetResMgr() )),
-    aLeft2ED(this,              ResId(ED_LEFT_2,*rResId.GetResMgr()  )),
-    aRight2ED(this,             ResId(ED_RIGHT_2,*rResId.GetResMgr() )),
-    aLeft3ED(this,              ResId(ED_LEFT_3,*rResId.GetResMgr()  )),
-    aRight3ED(this,             ResId(ED_RIGHT_3,*rResId.GetResMgr() )),
-    aLeft4ED(this,              ResId(ED_LEFT_4,*rResId.GetResMgr()  )),
-    aRight4ED(this,             ResId(ED_RIGHT_4,*rResId.GetResMgr() )),
-    aScrollSB(this,             ResId(SB_SCROLL,*rResId.GetResMgr()  )),
-    aAutoDetectionCB(this,      ResId(CB_AUTO_DETECT,*rResId.GetResMgr()    )),
-    aAdjustFT(this,             ResId(FT_ADJUST,*rResId.GetResMgr()     )),
-    aAdjustLB(this,             ResId(LB_ADJUST,*rResId.GetResMgr()     )),
+    aRight1ED(this, 			ResId(ED_RIGHT_1,*rResId.GetResMgr() )),
+    aLeft2ED(this, 				ResId(ED_LEFT_2,*rResId.GetResMgr()  )),
+    aRight2ED(this, 			ResId(ED_RIGHT_2,*rResId.GetResMgr() )),
+    aLeft3ED(this, 				ResId(ED_LEFT_3,*rResId.GetResMgr()  )),
+    aRight3ED(this, 			ResId(ED_RIGHT_3,*rResId.GetResMgr() )),
+    aLeft4ED(this, 				ResId(ED_LEFT_4,*rResId.GetResMgr()  )),
+    aRight4ED(this, 			ResId(ED_RIGHT_4,*rResId.GetResMgr() )),
+    aScrollSB(this, 			ResId(SB_SCROLL,*rResId.GetResMgr()  )),
+    aAutoDetectionCB(this, 		ResId(CB_AUTO_DETECT,*rResId.GetResMgr()	)),
+    aAdjustFT(this, 			ResId(FT_ADJUST,*rResId.GetResMgr()		)),
+    aAdjustLB(this, 			ResId(LB_ADJUST,*rResId.GetResMgr()		)),
     aPositionFT(this,           ResId(FT_POSITION,*rResId.GetResMgr()     )),
     aPositionLB(this,           ResId(LB_POSITION,*rResId.GetResMgr()     )),
     aCharStyleFT(this,          ResId(FT_CHAR_STYLE,*rResId.GetResMgr()     )),
-    aCharStyleLB(this,          ResId(LB_CHAR_STYLE,*rResId.GetResMgr()     )),
-    aStylistPB(this,            ResId(PB_STYLIST,*rResId.GetResMgr()        )),
-    aPreviewFT(this,            ResId(FT_PREVIEW,*rResId.GetResMgr()        )),
-    aPreviewWin(*this,          ResId(WIN_PREVIEW,*rResId.GetResMgr()       )),
-    aApplyPB(this,              ResId(PB_APPLY,*rResId.GetResMgr()          )),
-    aClosePB(this,              ResId(PB_CLOSE,*rResId.GetResMgr()          )),
-    aHelpPB(this,               ResId(PB_HELP,*rResId.GetResMgr()           )),
+    aCharStyleLB(this, 			ResId(LB_CHAR_STYLE,*rResId.GetResMgr()		)),
+    aStylistPB(this, 			ResId(PB_STYLIST,*rResId.GetResMgr()		)),
+    aPreviewFT(this, 			ResId(FT_PREVIEW,*rResId.GetResMgr()		)),
+    aPreviewWin(*this, 			ResId(WIN_PREVIEW,*rResId.GetResMgr()		)),
+    aApplyPB(this, 				ResId(PB_APPLY,*rResId.GetResMgr()			)),
+    aClosePB(this, 				ResId(PB_CLOSE,*rResId.GetResMgr()			)),
+    aHelpPB(this, 				ResId(PB_HELP,*rResId.GetResMgr()			)),
     nLastPos(0),
     nCurrentEdit(0),
     bModified(FALSE),
@@ -301,7 +301,7 @@ void SvxRubyDialog::ClearCharStyleList()
 /* -----------------------------09.01.01 17:17--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SvxRubyDialog::Close()
+BOOL 	SvxRubyDialog::Close()
 {
     pBindings->GetDispatcher()->Execute( SID_RUBY_DIALOG,
                               SFX_CALLMODE_ASYNCHRON |
@@ -315,7 +315,7 @@ void SvxRubyDialog::Activate()
 {
     SfxModelessDialog::Activate();
     SfxPoolItem* pState = 0;
-    SfxItemState    eState = pBindings->QueryState( SID_STYLE_DESIGNER, pState );
+    SfxItemState	eState = pBindings->QueryState( SID_STYLE_DESIGNER, pState );
     sal_Bool bEnable = (eState < SFX_ITEM_AVAILABLE) || !pState || !((SfxBoolItem*)pState)->GetValue();
     aStylistPB.Enable(bEnable);
     //get selection from current view frame
@@ -395,7 +395,7 @@ void SvxRubyDialog::Activate()
 /* -----------------------------29.01.01 15:26--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    SvxRubyDialog::Deactivate()
+void	SvxRubyDialog::Deactivate()
 {
     SfxModelessDialog::Deactivate();
 }
@@ -538,7 +538,7 @@ void SvxRubyDialog::Update()
 /* -----------------------------16.02.01 14:01--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    SvxRubyDialog::GetCurrentText(String& rBase, String& rRuby)
+void	SvxRubyDialog::GetCurrentText(String& rBase, String& rRuby)
 {
     rBase = aEditArr[nCurrentEdit * 2]->GetText();
     rRuby = aEditArr[nCurrentEdit * 2 + 1]->GetText();
@@ -576,7 +576,7 @@ IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
     }
     GetText();
     //reset all edit fields - SaveValue is called
-    ScrollHdl_Impl(&aScrollSB);
+    ScrollHdl_Impl(&aScrollSB); 
 
     Reference<XRubySelection>  xSelection = pImpl->GetRubySelection();
     if(IsModified() && xSelection.is())
@@ -606,7 +606,7 @@ IMPL_LINK(SvxRubyDialog, CloseHdl_Impl, PushButton*, EMPTYARG)
 IMPL_LINK(SvxRubyDialog, StylistHdl_Impl, PushButton*, EMPTYARG)
 {
     SfxPoolItem* pState = 0;
-    SfxItemState    eState = pBindings->QueryState( SID_STYLE_DESIGNER, pState );
+    SfxItemState	eState = pBindings->QueryState( SID_STYLE_DESIGNER, pState );
     if(eState <= SFX_ITEM_SET || !pState || !((SfxBoolItem*)pState)->GetValue())
     {
         pBindings->GetDispatcher()->Execute( SID_STYLE_DESIGNER,
@@ -782,13 +782,13 @@ void SvxRubyDialog::AssertOneEntry()
 
 void SvxRubyDialog::UpdateColors( void )
 {
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    svtools::ColorConfig        aColorConfig;
+    const StyleSettings&	rStyleSettings = GetSettings().GetStyleSettings();
+    svtools::ColorConfig		aColorConfig;
 
-    Font                    aFnt( aPreviewWin.GetFont() );
+    Font					aFnt( aPreviewWin.GetFont() );
 
-    Color                   aNewTextCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-    Color                   aNewFillCol( rStyleSettings.GetWindowColor() );
+    Color					aNewTextCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+    Color					aNewFillCol( rStyleSettings.GetWindowColor() );
 
     if( aNewFillCol != aFnt.GetFillColor() || aNewTextCol != aFnt.GetColor() )
     {

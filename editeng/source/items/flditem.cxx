@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@
 // #90477#
 #include <tools/tenccvt.hxx>
 
-#define FRAME_MARKER    (sal_uInt32)0x21981357
-#define CHARSET_MARKER  (FRAME_MARKER+1)
+#define FRAME_MARKER	(sal_uInt32)0x21981357
+#define CHARSET_MARKER	(FRAME_MARKER+1)
 
 // -----------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ int SvxFieldData::operator==( const SvxFieldData& rFld ) const
 {
     DBG_ASSERT( Type() == rFld.Type(), "==: Verschiedene Typen" );
     (void)rFld;
-    return TRUE;    // Basicklasse immer gleich.
+    return TRUE;	// Basicklasse immer gleich.
 }
 
 // -----------------------------------------------------------------------
@@ -107,7 +107,7 @@ MetaAction* SvxFieldData::createEndComment() const
 SvxFieldItem::SvxFieldItem( SvxFieldData* pFld, const USHORT nId ) :
     SfxPoolItem( nId )
 {
-    pField = pFld;  // gehoert direkt dem Item
+    pField = pFld;	// gehoert direkt dem Item
 }
 
 // -----------------------------------------------------------------------
@@ -121,7 +121,7 @@ SvxFieldItem::SvxFieldItem( const SvxFieldData& rField, const USHORT nId ) :
 // -----------------------------------------------------------------------
 
 SvxFieldItem::SvxFieldItem( const SvxFieldItem& rItem ) :
-    SfxPoolItem ( rItem )
+    SfxPoolItem	( rItem )
 {
     pField = rItem.GetField() ? rItem.GetField()->Clone() : 0;
 }
@@ -152,7 +152,7 @@ SfxPoolItem* SvxFieldItem::Create( SvStream& rStrm, USHORT ) const
         aPStrm.SetError( SVSTREAM_GENERALERROR );
 
     if ( aPStrm.GetError() == ERRCODE_IO_NOFACTORY )
-        aPStrm.ResetError();    // Eigentlich einen Code, dass nicht alle Attr gelesen wurden...
+        aPStrm.ResetError();	// Eigentlich einen Code, dass nicht alle Attr gelesen wurden...
 
     return new SvxFieldItem( pData, Which() );
 }
@@ -461,7 +461,7 @@ MetaAction* SvxURLField::createBeginComment() const
 {
     // #i46618# Adding target URL to metafile comment
     return new MetaCommentAction( "FIELD_SEQ_BEGIN",
-                                  0,
+                                  0, 
                                   reinterpret_cast<const BYTE*>(aURL.GetBuffer()),
                                   2*aURL.Len() );
 }
@@ -474,7 +474,7 @@ SV_IMPL_PERSIST1( SvxPageField, SvxFieldData );
 
 SvxFieldData* __EXPORT SvxPageField::Clone() const
 {
-    return new SvxPageField;        // leer
+    return new SvxPageField;		// leer
 }
 
 int __EXPORT SvxPageField::operator==( const SvxFieldData& rCmp ) const
@@ -500,7 +500,7 @@ SV_IMPL_PERSIST1( SvxPagesField, SvxFieldData );
 
 SvxFieldData* __EXPORT SvxPagesField::Clone() const
 {
-    return new SvxPagesField;   // leer
+    return new SvxPagesField;	// leer
 }
 
 int __EXPORT SvxPagesField::operator==( const SvxFieldData& rCmp ) const
@@ -520,7 +520,7 @@ SV_IMPL_PERSIST1( SvxTimeField, SvxFieldData );
 
 SvxFieldData* __EXPORT SvxTimeField::Clone() const
 {
-    return new SvxTimeField;    // leer
+    return new SvxTimeField;	// leer
 }
 
 int __EXPORT SvxTimeField::operator==( const SvxFieldData& rCmp ) const
@@ -545,7 +545,7 @@ SV_IMPL_PERSIST1( SvxFileField, SvxFieldData );
 
 SvxFieldData* __EXPORT SvxFileField::Clone() const
 {
-    return new SvxFileField;    // leer
+    return new SvxFileField;	// leer
 }
 
 int __EXPORT SvxFileField::operator==( const SvxFieldData& rCmp ) const
@@ -565,7 +565,7 @@ SV_IMPL_PERSIST1( SvxTableField, SvxFieldData );
 
 SvxFieldData* __EXPORT SvxTableField::Clone() const
 {
-    return new SvxTableField;   // leer
+    return new SvxTableField;	// leer
 }
 
 int __EXPORT SvxTableField::operator==( const SvxFieldData& rCmp ) const
@@ -582,7 +582,7 @@ void __EXPORT SvxTableField::Save( SvPersistStream & /*rStm*/ )
 }
 
 //----------------------------------------------------------------------------
-//      SvxExtTimeField
+//		SvxExtTimeField
 //----------------------------------------------------------------------------
 
 SV_IMPL_PERSIST1( SvxExtTimeField, SvxFieldData );
@@ -722,7 +722,7 @@ MetaAction* SvxExtTimeField::createBeginComment() const
 }
 
 //----------------------------------------------------------------------------
-//      SvxExtFileField
+//		SvxExtFileField
 //----------------------------------------------------------------------------
 
 SV_IMPL_PERSIST1( SvxExtFileField, SvxFieldData );
@@ -869,7 +869,7 @@ XubString SvxExtFileField::GetFormatted() const
 }
 
 //----------------------------------------------------------------------------
-//      SvxAuthorField
+//		SvxAuthorField
 //----------------------------------------------------------------------------
 
 SV_IMPL_PERSIST1( SvxAuthorField, SvxFieldData );
@@ -884,7 +884,7 @@ SvxAuthorField::SvxAuthorField()
 
 //----------------------------------------------------------------------------
 
-SvxAuthorField::SvxAuthorField( const XubString& rFirstName,
+SvxAuthorField::SvxAuthorField( const XubString& rFirstName, 
                                 const XubString& rLastName,
                                 const XubString& rShortName,
                                     SvxAuthorType eT, SvxAuthorFormat eF )
@@ -989,7 +989,7 @@ XubString SvxAuthorField::GetFormatted() const
 
 static SvClassManager* pClassMgr=0;
 
-SvClassManager& SvxFieldItem::GetClassManager()
+SvClassManager&	SvxFieldItem::GetClassManager()
 {
     if ( !pClassMgr )
     {
@@ -1013,7 +1013,7 @@ SV_IMPL_PERSIST1( SvxHeaderField, SvxFieldData );
 
 SvxFieldData* __EXPORT SvxHeaderField::Clone() const
 {
-    return new SvxHeaderField;      // leer
+    return new SvxHeaderField;		// leer
 }
 
 int __EXPORT SvxHeaderField::operator==( const SvxFieldData& rCmp ) const
@@ -1035,7 +1035,7 @@ SV_IMPL_PERSIST1( SvxFooterField, SvxFieldData );
 
 SvxFieldData* __EXPORT SvxFooterField::Clone() const
 {
-    return new SvxFooterField;      // leer
+    return new SvxFooterField;		// leer
 }
 
 int __EXPORT SvxFooterField::operator==( const SvxFieldData& rCmp ) const
@@ -1057,7 +1057,7 @@ SV_IMPL_PERSIST1( SvxDateTimeField, SvxFieldData );
 
 SvxFieldData* __EXPORT SvxDateTimeField::Clone() const
 {
-    return new SvxDateTimeField;        // leer
+    return new SvxDateTimeField;		// leer
 }
 
 int __EXPORT SvxDateTimeField::operator==( const SvxFieldData& rCmp ) const

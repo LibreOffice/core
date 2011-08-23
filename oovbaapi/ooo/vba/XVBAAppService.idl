@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 
 //=============================================================================
 
-module ooo {  module vba {
+module ooo {  module vba {  
 
 //=============================================================================
 
@@ -57,14 +57,14 @@ interface XHelperInterface;
 interface XComponentContext;
 interface XModel;
 
-interface XVBAAppService
+interface XVBAAppService 
 {
     interface ::com::sun::star::uno::XInterface;
 
     any getVBE([in] XHelperInterface xParent, [in] ::com::sun::star::uno::XComponentContext xContext, [in] ::com::sun::star::frame::XModel xModel);
     any getVBProjects([in] XHelperInterface xParent, [in] ::com::sun::star::uno::XComponentContext xContext, [in] ::com::sun::star::frame::XModel xModel, [in] ::com::sun::star::script::XLibraryContainer   xMacroLibraryContainer, [in] com::sun::star::script::XLibraryContainer  xDialogLibraryContainer);
 
-
+ 
 };
 
  }; };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,9 +55,9 @@
 
 static int GenericMain()
 {
-    TCHAR               szTargetFileName[MAX_PATH];
+    TCHAR				szTargetFileName[MAX_PATH];
     TCHAR               szIniDirectory[MAX_PATH];
-    STARTUPINFO         aStartupInfo;
+    STARTUPINFO			aStartupInfo;
 
     desktop_win32::extendLoaderEnvironment(szTargetFileName, szIniDirectory);
 
@@ -66,9 +66,9 @@ static int GenericMain()
 
     GetStartupInfo( &aStartupInfo );
 
-    DWORD   dwExitCode = (DWORD)-1;
+    DWORD	dwExitCode = (DWORD)-1;
 
-    PROCESS_INFORMATION aProcessInfo;
+    PROCESS_INFORMATION	aProcessInfo;
 
     size_t iniDirLen = wcslen(szIniDirectory);
     WCHAR cwd[MAX_PATH];
@@ -109,7 +109,7 @@ static int GenericMain()
         p = desktop_win32::commandLineAppendEncoded(p, cwd);
     }
     desktop_win32::commandLineAppend(p, MY_STRING(L"\""));
-
+    
     BOOL fSuccess = CreateProcess(
         szTargetFileName,
         cl2,
@@ -126,7 +126,7 @@ static int GenericMain()
 
     if ( fSuccess )
     {
-        DWORD   dwWaitResult;
+        DWORD	dwWaitResult;
 
         do
         {
@@ -137,7 +137,7 @@ static int GenericMain()
 
             if (  WAIT_OBJECT_0 + 1 == dwWaitResult )
             {
-                MSG msg;
+                MSG	msg;
 
                 PeekMessage( &msg, NULL, 0, 0, PM_REMOVE );
             }

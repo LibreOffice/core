@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,10 +47,10 @@ namespace rtl
 
 struct XMLNumberFormat
 {
-    rtl::OUString   sCurrency;
-    sal_Int32       nNumberFormat;
-    sal_Int16       nType;
-    sal_Bool        bIsStandard : 1;
+    rtl::OUString	sCurrency;
+    sal_Int32		nNumberFormat;
+    sal_Int16		nType;
+    sal_Bool		bIsStandard : 1;
     XMLNumberFormat() : nNumberFormat(0), nType(0) {}
     XMLNumberFormat(const rtl::OUString& sTempCurrency, sal_Int32 nTempFormat,
         sal_Int16 nTempType) : sCurrency(sTempCurrency), nNumberFormat(nTempFormat),
@@ -65,12 +65,12 @@ struct LessNumberFormat
     }
 };
 
-typedef std::set<XMLNumberFormat, LessNumberFormat> XMLNumberFormatSet;
+typedef std::set<XMLNumberFormat, LessNumberFormat>	XMLNumberFormatSet;
 
 class XMLOFF_DLLPUBLIC XMLNumberFormatAttributesExportHelper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > xNumberFormats;
-    SvXMLExport*        pExport;
+    SvXMLExport*		pExport;
     const rtl::OUString sEmpty;
     const rtl::OUString sStandardFormat;
     const rtl::OUString sType;
@@ -83,7 +83,7 @@ class XMLOFF_DLLPUBLIC XMLNumberFormatAttributesExportHelper
     const rtl::OUString sAttrCurrency;
     const rtl::OUString msCurrencySymbol;
     const rtl::OUString msCurrencyAbbreviation;
-    XMLNumberFormatSet  aNumberFormats;
+    XMLNumberFormatSet	aNumberFormats;
 public :
     XMLNumberFormatAttributesExportHelper(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier);
     XMLNumberFormatAttributesExportHelper(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier,

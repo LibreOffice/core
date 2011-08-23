@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# tries to locate the executable specified
+# tries to locate the executable specified 
 # as first parameter in the user's path.
 which() {
   if [ ! -z "$1" ]; then
@@ -13,7 +13,7 @@ which() {
   fi
 }
 
-# checks for the original mozilla start script(s)
+# checks for the original mozilla start script(s) 
 # and restrict the "-remote" semantics to those.
 run_mozilla() {
   if file "$1" | grep "script" > /dev/null && grep "NPL" "$1" > /dev/null; then
@@ -28,7 +28,7 @@ run_mozilla() {
   fi
 }
 
-# checks the browser value for a %s as defined in
+# checks the browser value for a %s as defined in 
 # http://www.catb.org/~esr/BROWSER/index.html
 run_browser() {
   echo "$1|$2" | awk '

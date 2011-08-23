@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,17 +45,17 @@ class E3dScene;
 class E3dDragMethodUnit
 {
 public:
-    E3dObject*                      mp3DObj;
-    basegfx::B3DPolyPolygon         maWireframePoly;
-    basegfx::B3DHomMatrix           maDisplayTransform;
-    basegfx::B3DHomMatrix           maInvDisplayTransform;
+    E3dObject*						mp3DObj;
+    basegfx::B3DPolyPolygon			maWireframePoly;
+    basegfx::B3DHomMatrix			maDisplayTransform;
+    basegfx::B3DHomMatrix			maInvDisplayTransform;
     basegfx::B3DHomMatrix           maInitTransform;
-    basegfx::B3DHomMatrix           maTransform;
-    sal_Int32                       mnStartAngle;
-    sal_Int32                       mnLastAngle;
+    basegfx::B3DHomMatrix			maTransform;
+    sal_Int32						mnStartAngle;
+    sal_Int32						mnLastAngle;
 
-    E3dDragMethodUnit()
-    :   mp3DObj(0),
+    E3dDragMethodUnit() 
+    :	mp3DObj(0),
         maWireframePoly(),
         maDisplayTransform(),
         maInvDisplayTransform(),
@@ -75,12 +75,12 @@ public:
 class E3dDragMethod : public SdrDragMethod
 {
 protected:
-    ::std::vector< E3dDragMethodUnit >  maGrp;
-    E3dDragConstraint                   meConstraint;
-    Point                               maLastPos;
-    Rectangle                           maFullBound;
-    bool                                mbMoveFull;
-    bool                                mbMovedAtAll;
+    ::std::vector< E3dDragMethodUnit >	maGrp;
+    E3dDragConstraint					meConstraint;
+    Point								maLastPos;
+    Rectangle							maFullBound;
+    bool								mbMoveFull;
+    bool								mbMovedAtAll;
 
 public:
     TYPEINFO();
@@ -111,7 +111,7 @@ public:
 
 class E3dDragRotate : public E3dDragMethod
 {
-    basegfx::B3DPoint                   maGlobalCenter;
+    basegfx::B3DPoint					maGlobalCenter;
 
 public:
     TYPEINFO();
@@ -134,8 +134,8 @@ public:
 
 class E3dDragMove : public E3dDragMethod
 {
-    SdrHdlKind              meWhatDragHdl;
-    Point                   maScaleFixPos;
+    SdrHdlKind				meWhatDragHdl;
+    Point					maScaleFixPos;
 
 public:
     TYPEINFO();
@@ -151,6 +151,6 @@ public:
 };
 
 
-#endif          // _E3D_DRAGMT3D_HXX
+#endif			// _E3D_DRAGMT3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

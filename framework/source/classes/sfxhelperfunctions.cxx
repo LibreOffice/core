@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@
 
 static pfunc_setToolBoxControllerCreator   pToolBoxControllerCreator   = NULL;
 static pfunc_setStatusBarControllerCreator pStatusBarControllerCreator = NULL;
-static pfunc_getRefreshToolbars            pRefreshToolbars            = NULL;
-static pfunc_createDockingWindow           pCreateDockingWindow        = NULL;
+static pfunc_getRefreshToolbars	           pRefreshToolbars            = NULL;
+static pfunc_createDockingWindow		   pCreateDockingWindow        = NULL;
 static pfunc_isDockingWindowVisible        pIsDockingWindowVisible     = NULL;
 static pfunc_activateToolPanel             pActivateToolPanel          = NULL;
 
@@ -65,7 +65,7 @@ svt::ToolboxController* SAL_CALL CreateToolBoxController( const Reference< XFram
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         pFactory = pToolBoxControllerCreator;
     }
-
+    
     if ( pFactory )
         return (*pFactory)( rFrame, pToolbox, nID, aCommandURL );
     else
@@ -87,7 +87,7 @@ svt::StatusbarController* SAL_CALL CreateStatusBarController( const Reference< X
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         pFactory = pStatusBarControllerCreator;
     }
-
+    
     if ( pFactory )
         return (*pFactory)( rFrame, pStatusBar, nID, aCommandURL );
     else
@@ -110,7 +110,7 @@ void SAL_CALL RefreshToolbars( ::com::sun::star::uno::Reference< ::com::sun::sta
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         pCallback = pRefreshToolbars;
     }
-
+    
     if ( pCallback )
         (*pCallback)( rFrame );
 }
@@ -131,7 +131,7 @@ void SAL_CALL CreateDockingWindow( const ::com::sun::star::uno::Reference< ::com
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         pFactory = pCreateDockingWindow;
     }
-
+    
     if ( pFactory )
         (*pFactory)( rFrame, rResourceURL );
 }
@@ -152,7 +152,7 @@ bool SAL_CALL IsDockingWindowVisible( const ::com::sun::star::uno::Reference< ::
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         pCall = pIsDockingWindowVisible;
     }
-
+    
     if ( pIsDockingWindowVisible )
         return (*pIsDockingWindowVisible)( rFrame, rResourceURL );
     else

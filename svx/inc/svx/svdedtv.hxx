@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,55 +92,55 @@ enum SdrMergeMode {
 
 class SVX_DLLPUBLIC SdrEditView: public SdrMarkView
 {
-    friend class                SdrPageView;
-    friend class                SdrDragDistort;
-    friend class                SdrDragCrook;
+    friend class				SdrPageView;
+    friend class				SdrDragDistort;
+    friend class				SdrDragCrook;
 
 protected:
 
     // Die Transformationsnachfragen, etc. etwas cachen
-    unsigned                    bPossibilitiesDirty : 1;
-    unsigned                    bReadOnly : 1;
-    unsigned                    bGroupPossible : 1;
-    unsigned                    bUnGroupPossible : 1;
-    unsigned                    bGrpEnterPossible : 1;
-    unsigned                    bDeletePossible : 1;
-    unsigned                    bToTopPossible : 1;
-    unsigned                    bToBtmPossible : 1;
-    unsigned                    bReverseOrderPossible : 1;
-    unsigned                    bImportMtfPossible : 1;
-    unsigned                    bCombinePossible : 1;
-    unsigned                    bDismantlePossible : 1;
-    unsigned                    bCombineNoPolyPolyPossible : 1;
-    unsigned                    bDismantleMakeLinesPossible : 1;
-    unsigned                    bOrthoDesiredOnMarked : 1;
-    unsigned                    bMoreThanOneNotMovable : 1;   // Es ist mehr als ein Objekt nicht verschiebbar
-    unsigned                    bOneOrMoreMovable : 1;        // Wenigstens 1 Obj verschiebbar
-    unsigned                    bMoreThanOneNoMovRot : 1;     // Es ist mehr als ein Objekt nicht verschieb- und drehbar (Crook)
-    unsigned                    bContortionPossible : 1;      // Alles Polygone (ggf. gruppiert)
-    unsigned                    bAllPolys : 1;                // Alles Polygone (nicht gruppiert)
-    unsigned                    bOneOrMorePolys : 1;          // Mindestens 1 Polygon (nicht gruppiert)
-    unsigned                    bMoveAllowed : 1;
-    unsigned                    bResizeFreeAllowed : 1;
-    unsigned                    bResizePropAllowed : 1;
-    unsigned                    bRotateFreeAllowed : 1;
-    unsigned                    bRotate90Allowed : 1;
-    unsigned                    bMirrorFreeAllowed : 1;
-    unsigned                    bMirror45Allowed : 1;
-    unsigned                    bMirror90Allowed : 1;
-    unsigned                    bShearAllowed : 1;
-    unsigned                    bEdgeRadiusAllowed : 1;
-    unsigned                    bTransparenceAllowed : 1;
-    unsigned                    bGradientAllowed : 1;
-    unsigned                    bCanConvToPath : 1;
-    unsigned                    bCanConvToPoly : 1;
-    unsigned                    bCanConvToContour : 1;
-    unsigned                    bCanConvToPathLineToArea : 1;
-    unsigned                    bCanConvToPolyLineToArea : 1;
-    unsigned                    bMoveProtect : 1;
-    unsigned                    bResizeProtect : 1;
+    unsigned					bPossibilitiesDirty : 1;
+    unsigned					bReadOnly : 1;
+    unsigned					bGroupPossible : 1;
+    unsigned					bUnGroupPossible : 1;
+    unsigned					bGrpEnterPossible : 1;
+    unsigned					bDeletePossible : 1;
+    unsigned					bToTopPossible : 1;
+    unsigned					bToBtmPossible : 1;
+    unsigned					bReverseOrderPossible : 1;
+    unsigned					bImportMtfPossible : 1;
+    unsigned					bCombinePossible : 1;
+    unsigned					bDismantlePossible : 1;
+    unsigned					bCombineNoPolyPolyPossible : 1;
+    unsigned					bDismantleMakeLinesPossible : 1;
+    unsigned					bOrthoDesiredOnMarked : 1;
+    unsigned					bMoreThanOneNotMovable : 1;   // Es ist mehr als ein Objekt nicht verschiebbar
+    unsigned					bOneOrMoreMovable : 1;        // Wenigstens 1 Obj verschiebbar
+    unsigned					bMoreThanOneNoMovRot : 1;     // Es ist mehr als ein Objekt nicht verschieb- und drehbar (Crook)
+    unsigned					bContortionPossible : 1;      // Alles Polygone (ggf. gruppiert)
+    unsigned					bAllPolys : 1;                // Alles Polygone (nicht gruppiert)
+    unsigned					bOneOrMorePolys : 1;          // Mindestens 1 Polygon (nicht gruppiert)
+    unsigned					bMoveAllowed : 1;
+    unsigned					bResizeFreeAllowed : 1;
+    unsigned					bResizePropAllowed : 1;
+    unsigned					bRotateFreeAllowed : 1;
+    unsigned					bRotate90Allowed : 1;
+    unsigned					bMirrorFreeAllowed : 1;
+    unsigned					bMirror45Allowed : 1;
+    unsigned					bMirror90Allowed : 1;
+    unsigned					bShearAllowed : 1;
+    unsigned					bEdgeRadiusAllowed : 1;
+    unsigned					bTransparenceAllowed : 1;
+    unsigned					bGradientAllowed : 1;
+    unsigned					bCanConvToPath : 1;
+    unsigned					bCanConvToPoly : 1;
+    unsigned					bCanConvToContour : 1;
+    unsigned					bCanConvToPathLineToArea : 1;
+    unsigned					bCanConvToPolyLineToArea : 1;
+    unsigned					bMoveProtect : 1;
+    unsigned					bResizeProtect : 1;
     // Z-Order von virtuellen Objekten zusammenhalten (Writer)
-    unsigned                    bBundleVirtObj : 1;
+    unsigned					bBundleVirtObj : 1;
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();

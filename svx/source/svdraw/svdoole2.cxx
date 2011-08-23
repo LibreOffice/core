@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -253,7 +253,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
 
             MapUnit aObjMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpObj->GetObjRef()->getMapUnit( mpObj->GetAspect() ) );
 
-            Rectangle          aVisArea;
+            Rectangle		   aVisArea;
             awt::Size aSz;
             try
             {
@@ -609,17 +609,17 @@ void SdrLightEmbeddedClient_Impl::setWindow(const uno::Reference< awt::XWindow >
 
 class SdrEmbedObjectLink : public sfx2::SvBaseLink
 {
-    SdrOle2Obj*         pObj;
+    SdrOle2Obj*			pObj;
 
 public:
                         SdrEmbedObjectLink(SdrOle2Obj* pObj);
-    virtual             ~SdrEmbedObjectLink();
+    virtual				~SdrEmbedObjectLink();
 
-    virtual void        Closed();
-    virtual void        DataChanged( const String& rMimeType,
+    virtual void		Closed();
+    virtual void		DataChanged( const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
 
-    sal_Bool            Connect() { return GetRealObject() != NULL; }
+    sal_Bool			Connect() { return GetRealObject() != NULL; }
 };
 
 // -----------------------------------------------------------------------------
@@ -686,16 +686,16 @@ class SdrOle2ObjImpl
 {
 public:
     // TODO/LATER: do we really need this pointer?
-    GraphicObject*  pGraphicObject;
+    GraphicObject*	pGraphicObject;
     String          aPersistName;       // name of object in persist
     SdrLightEmbeddedClient_Impl* pLightClient; // must be registered as client only using AddOwnLightClient() call
 
     // #107645#
     // New local var to avoid repeated loading if load of OLE2 fails
-    sal_Bool        mbLoadingOLEObjectFailed;
+    sal_Bool		mbLoadingOLEObjectFailed;
     sal_Bool        mbConnected;
 
-    SdrEmbedObjectLink* mpObjectLink;
+    SdrEmbedObjectLink*	mpObjectLink;
     String maLinkURL;
 
     SdrOle2ObjImpl()
@@ -723,7 +723,7 @@ static bool ImplIsMathObj( const uno::Reference < embed::XEmbeddedObject >& rObj
         aClassName == SvGlobalName(SO3_SM_CLASSID_40) ||
         aClassName == SvGlobalName(SO3_SM_CLASSID_50) ||
         aClassName == SvGlobalName(SO3_SM_CLASSID_60) ||
-        aClassName == SvGlobalName(SO3_SM_CLASSID)      )
+        aClassName == SvGlobalName(SO3_SM_CLASSID) 		)
     {
         return true;
     }
@@ -901,7 +901,7 @@ void SdrOle2Obj::SetGraphic_Impl(const Graphic* pGrf)
     BroadcastObjectChange();
 
     //if ( ppObjRef->Is() && pGrf )
-    //  BroadcastObjectChange();
+    //	BroadcastObjectChange();
 }
 
 void SdrOle2Obj::SetGraphic(const Graphic* pGrf)
@@ -1491,7 +1491,7 @@ SdrObject* SdrOle2Obj::getFullDragClone() const
     // create a graphic object with it
     Graphic* pOLEGraphic = GetGraphic();
     SdrObject* pClone = 0;
-
+    
     if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         pOLEGraphic = getEmbeddedObjectRef().GetHCGraphic();
@@ -1500,7 +1500,7 @@ SdrObject* SdrOle2Obj::getFullDragClone() const
     if(pOLEGraphic)
     {
         pClone = new SdrGrafObj(*pOLEGraphic, GetSnapRect());
-
+        
         // this would be the place where to copy all attributes
         // when OLE will support fill and line style
         // pClone->SetMergedItem(pOleObject->GetMergedItemSet());
@@ -2217,7 +2217,7 @@ sal_Bool SdrOle2Obj::AddOwnLightClient()
         }
 
         return sal_False;
-    }
+    }   
 
        return sal_True;
 }

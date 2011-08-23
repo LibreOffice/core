@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -127,35 +127,35 @@ using ::comphelper::UStringLess;
 
 static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
 {
-    { XML_NAMESPACE_TEXT, XML_P,                XML_TOK_TEXT_P              },
-    { XML_NAMESPACE_TEXT, XML_H,                XML_TOK_TEXT_H              },
-    { XML_NAMESPACE_TEXT, XML_LIST,             XML_TOK_TEXT_LIST           },
-    { XML_NAMESPACE_DRAW, XML_FRAME,            XML_TOK_TEXT_FRAME_PAGE     },
-    { XML_NAMESPACE_DRAW, XML_A,                XML_TOK_DRAW_A_PAGE },
-    { XML_NAMESPACE_TABLE,XML_TABLE,            XML_TOK_TABLE_TABLE         },
-//  { XML_NAMESPACE_TABLE,XML_SUB_TABLE,        XML_TOK_TABLE_SUBTABLE      },
-    { XML_NAMESPACE_TEXT, XML_VARIABLE_DECLS,   XML_TOK_TEXT_VARFIELD_DECLS },
+    { XML_NAMESPACE_TEXT, XML_P, 				XML_TOK_TEXT_P				},
+    { XML_NAMESPACE_TEXT, XML_H, 				XML_TOK_TEXT_H				},
+    { XML_NAMESPACE_TEXT, XML_LIST, 			XML_TOK_TEXT_LIST			},
+    { XML_NAMESPACE_DRAW, XML_FRAME, 			XML_TOK_TEXT_FRAME_PAGE 	},
+    { XML_NAMESPACE_DRAW, XML_A, 				XML_TOK_DRAW_A_PAGE },
+    { XML_NAMESPACE_TABLE,XML_TABLE,			XML_TOK_TABLE_TABLE 		},
+//	{ XML_NAMESPACE_TABLE,XML_SUB_TABLE,		XML_TOK_TABLE_SUBTABLE 		},
+    { XML_NAMESPACE_TEXT, XML_VARIABLE_DECLS,	XML_TOK_TEXT_VARFIELD_DECLS },
     { XML_NAMESPACE_TEXT, XML_USER_FIELD_DECLS, XML_TOK_TEXT_USERFIELD_DECLS },
-    { XML_NAMESPACE_TEXT, XML_SEQUENCE_DECLS,   XML_TOK_TEXT_SEQUENCE_DECLS },
+    { XML_NAMESPACE_TEXT, XML_SEQUENCE_DECLS,	XML_TOK_TEXT_SEQUENCE_DECLS },
     { XML_NAMESPACE_TEXT, XML_DDE_CONNECTION_DECLS, XML_TOK_TEXT_DDE_DECLS },
-    { XML_NAMESPACE_TEXT, XML_SECTION,          XML_TOK_TEXT_SECTION },
+    { XML_NAMESPACE_TEXT, XML_SECTION,			XML_TOK_TEXT_SECTION },
     { XML_NAMESPACE_TEXT, XML_TABLE_OF_CONTENT, XML_TOK_TEXT_TOC },
-    { XML_NAMESPACE_TEXT, XML_OBJECT_INDEX,     XML_TOK_TEXT_OBJECT_INDEX },
-    { XML_NAMESPACE_TEXT, XML_TABLE_INDEX,      XML_TOK_TEXT_TABLE_INDEX },
+    { XML_NAMESPACE_TEXT, XML_OBJECT_INDEX, 	XML_TOK_TEXT_OBJECT_INDEX },
+    { XML_NAMESPACE_TEXT, XML_TABLE_INDEX,		XML_TOK_TEXT_TABLE_INDEX },
     { XML_NAMESPACE_TEXT, XML_ILLUSTRATION_INDEX, XML_TOK_TEXT_ILLUSTRATION_INDEX },
-    { XML_NAMESPACE_TEXT, XML_USER_INDEX,       XML_TOK_TEXT_USER_INDEX },
+    { XML_NAMESPACE_TEXT, XML_USER_INDEX,		XML_TOK_TEXT_USER_INDEX },
     { XML_NAMESPACE_TEXT, XML_ALPHABETICAL_INDEX, XML_TOK_TEXT_ALPHABETICAL_INDEX },
     { XML_NAMESPACE_TEXT, XML_BIBLIOGRAPHY,     XML_TOK_TEXT_BIBLIOGRAPHY_INDEX },
-    { XML_NAMESPACE_TEXT, XML_INDEX_TITLE,      XML_TOK_TEXT_INDEX_TITLE },
+    { XML_NAMESPACE_TEXT, XML_INDEX_TITLE,		XML_TOK_TEXT_INDEX_TITLE },
     { XML_NAMESPACE_TEXT, XML_TRACKED_CHANGES,  XML_TOK_TEXT_TRACKED_CHANGES },
-    { XML_NAMESPACE_TEXT, XML_CHANGE_START,     XML_TOK_TEXT_CHANGE_START },
-    { XML_NAMESPACE_TEXT, XML_CHANGE_END,       XML_TOK_TEXT_CHANGE_END },
-    { XML_NAMESPACE_TEXT, XML_CHANGE,           XML_TOK_TEXT_CHANGE },
-    { XML_NAMESPACE_OFFICE, XML_FORMS,          XML_TOK_TEXT_FORMS },
-    { XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS,    XML_TOK_TEXT_CALCULATION_SETTINGS },
+    { XML_NAMESPACE_TEXT, XML_CHANGE_START,	    XML_TOK_TEXT_CHANGE_START },
+    { XML_NAMESPACE_TEXT, XML_CHANGE_END, 		XML_TOK_TEXT_CHANGE_END },
+    { XML_NAMESPACE_TEXT, XML_CHANGE, 			XML_TOK_TEXT_CHANGE },
+    { XML_NAMESPACE_OFFICE, XML_FORMS,			XML_TOK_TEXT_FORMS },
+    { XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS,	XML_TOK_TEXT_CALCULATION_SETTINGS },
     { XML_NAMESPACE_TEXT, XML_ALPHABETICAL_INDEX_AUTO_MARK_FILE, XML_TOK_TEXT_AUTOMARK },
     // --> FLR #i52127#
-    { XML_NAMESPACE_TEXT, XML_NUMBERED_PARAGRAPH, XML_TOK_TEXT_NUMBERED_PARAGRAPH   },
+    { XML_NAMESPACE_TEXT, XML_NUMBERED_PARAGRAPH, XML_TOK_TEXT_NUMBERED_PARAGRAPH	},
     // <--
 
     XML_TOKEN_MAP_END
@@ -182,7 +182,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
       XML_TOK_TEXT_REFERENCE_END },
 
     { XML_NAMESPACE_DRAW, XML_FRAME, XML_TOK_TEXT_FRAME },
-    { XML_NAMESPACE_DRAW, XML_A,                XML_TOK_DRAW_A },
+    { XML_NAMESPACE_DRAW, XML_A, 				XML_TOK_DRAW_A },
 
     // index marks
     { XML_NAMESPACE_TEXT, XML_TOC_MARK, XML_TOK_TEXT_TOC_MARK },
@@ -285,7 +285,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_CONDITIONAL_TEXT,
       XML_TOK_TEXT_CONDITIONAL_TEXT },
     { XML_NAMESPACE_TEXT, XML_FILE_NAME, XML_TOK_TEXT_FILENAME },
-    { XML_NAMESPACE_TEXT, XML_CHAPTER,  XML_TOK_TEXT_CHAPTER },
+    { XML_NAMESPACE_TEXT, XML_CHAPTER,	XML_TOK_TEXT_CHAPTER },
     { XML_NAMESPACE_TEXT, XML_TEMPLATE_NAME, XML_TOK_TEXT_TEMPLATENAME },
     { XML_NAMESPACE_TEXT, XML_PARAGRAPH_COUNT, XML_TOK_TEXT_PARAGRAPH_COUNT },
     { XML_NAMESPACE_TEXT, XML_WORD_COUNT, XML_TOK_TEXT_WORD_COUNT },
@@ -313,7 +313,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_SHEET_NAME, XML_TOK_TEXT_SHEET_NAME },
 
     // draw fields
-    { XML_NAMESPACE_TEXT, XML_MEASURE,  XML_TOK_TEXT_MEASURE },
+    { XML_NAMESPACE_TEXT, XML_MEASURE,	XML_TOK_TEXT_MEASURE },
 
     // RDF metadata
     { XML_NAMESPACE_TEXT, XML_META,         XML_TOK_TEXT_META },
@@ -339,13 +339,13 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aTextPAttrTokenMap[] =
 {
-    { XML_NAMESPACE_XML  , XML_ID,          XML_TOK_TEXT_P_XMLID },
-    { XML_NAMESPACE_XHTML, XML_ABOUT,       XML_TOK_TEXT_P_ABOUT },
-    { XML_NAMESPACE_XHTML, XML_PROPERTY,    XML_TOK_TEXT_P_PROPERTY },
-    { XML_NAMESPACE_XHTML, XML_CONTENT,     XML_TOK_TEXT_P_CONTENT },
-    { XML_NAMESPACE_XHTML, XML_DATATYPE,    XML_TOK_TEXT_P_DATATYPE },
+    { XML_NAMESPACE_XML  , XML_ID,			XML_TOK_TEXT_P_XMLID },
+    { XML_NAMESPACE_XHTML, XML_ABOUT,		XML_TOK_TEXT_P_ABOUT },
+    { XML_NAMESPACE_XHTML, XML_PROPERTY,	XML_TOK_TEXT_P_PROPERTY },
+    { XML_NAMESPACE_XHTML, XML_CONTENT,		XML_TOK_TEXT_P_CONTENT },
+    { XML_NAMESPACE_XHTML, XML_DATATYPE,	XML_TOK_TEXT_P_DATATYPE },
     { XML_NAMESPACE_TEXT, XML_ID,           XML_TOK_TEXT_P_TEXTID },
-    { XML_NAMESPACE_TEXT, XML_STYLE_NAME,   XML_TOK_TEXT_P_STYLE_NAME },
+    { XML_NAMESPACE_TEXT, XML_STYLE_NAME,	XML_TOK_TEXT_P_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_COND_STYLE_NAME,
                                             XML_TOK_TEXT_P_COND_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,XML_TOK_TEXT_P_LEVEL },
@@ -372,7 +372,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextNumberedParagraphAttrTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aTextListBlockAttrTokenMap[] =
 {
-    { XML_NAMESPACE_XML , XML_ID,           XML_TOK_TEXT_LIST_BLOCK_XMLID },
+    { XML_NAMESPACE_XML , XML_ID,			XML_TOK_TEXT_LIST_BLOCK_XMLID },
     { XML_NAMESPACE_TEXT, XML_STYLE_NAME,
             XML_TOK_TEXT_LIST_BLOCK_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_CONTINUE_NUMBERING,
@@ -386,7 +386,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextListBlockAttrTokenMap[] =
 static __FAR_DATA SvXMLTokenMapEntry aTextListBlockElemTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_LIST_HEADER, XML_TOK_TEXT_LIST_HEADER },
-    { XML_NAMESPACE_TEXT, XML_LIST_ITEM,    XML_TOK_TEXT_LIST_ITEM   },
+    { XML_NAMESPACE_TEXT, XML_LIST_ITEM, 	XML_TOK_TEXT_LIST_ITEM	 },
     XML_TOKEN_MAP_END
 };
 
@@ -410,11 +410,11 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
     { XML_NAMESPACE_DRAW, XML_ZINDEX, XML_TOK_TEXT_FRAME_Z_INDEX },
     { XML_NAMESPACE_SVG, XML_TRANSFORM, XML_TOK_TEXT_FRAME_TRANSFORM },
     { XML_NAMESPACE_DRAW, XML_CLASS_ID, XML_TOK_TEXT_FRAME_CLASS_ID },
-    { XML_NAMESPACE_DRAW,   XML_CODE,           XML_TOK_TEXT_FRAME_CODE },
-    { XML_NAMESPACE_DRAW,   XML_OBJECT,         XML_TOK_TEXT_FRAME_OBJECT },
-    { XML_NAMESPACE_DRAW,   XML_ARCHIVE,        XML_TOK_TEXT_FRAME_ARCHIVE },
-    { XML_NAMESPACE_DRAW,   XML_MAY_SCRIPT,     XML_TOK_TEXT_FRAME_MAY_SCRIPT },
-    { XML_NAMESPACE_DRAW,   XML_MIME_TYPE,  XML_TOK_TEXT_FRAME_MIME_TYPE },
+    { XML_NAMESPACE_DRAW,  	XML_CODE,       	XML_TOK_TEXT_FRAME_CODE },
+    { XML_NAMESPACE_DRAW,  	XML_OBJECT, 		XML_TOK_TEXT_FRAME_OBJECT },
+    { XML_NAMESPACE_DRAW,  	XML_ARCHIVE, 		XML_TOK_TEXT_FRAME_ARCHIVE },
+    { XML_NAMESPACE_DRAW,   XML_MAY_SCRIPT, 	XML_TOK_TEXT_FRAME_MAY_SCRIPT },
+    { XML_NAMESPACE_DRAW,   XML_MIME_TYPE, 	XML_TOK_TEXT_FRAME_MIME_TYPE },
     { XML_NAMESPACE_DRAW, XML_APPLET_NAME, XML_TOK_TEXT_FRAME_APPLET_NAME },
     { XML_NAMESPACE_DRAW, XML_FRAME_NAME, XML_TOK_TEXT_FRAME_FRAME_NAME },
     { XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES, XML_TOK_TEXT_FRAME_NOTIFY_ON_UPDATE },
@@ -424,12 +424,12 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aTextContourAttrTokenMap[] =
 {
-    { XML_NAMESPACE_SVG, XML_WIDTH,     XML_TOK_TEXT_CONTOUR_WIDTH      },
-    { XML_NAMESPACE_SVG, XML_HEIGHT,    XML_TOK_TEXT_CONTOUR_HEIGHT     },
-    { XML_NAMESPACE_SVG, XML_VIEWBOX,   XML_TOK_TEXT_CONTOUR_VIEWBOX    },
-    { XML_NAMESPACE_SVG, XML_D,         XML_TOK_TEXT_CONTOUR_D          },
-    { XML_NAMESPACE_DRAW,XML_POINTS,    XML_TOK_TEXT_CONTOUR_POINTS     },
-    { XML_NAMESPACE_DRAW,XML_RECREATE_ON_EDIT,  XML_TOK_TEXT_CONTOUR_AUTO   },
+    { XML_NAMESPACE_SVG, XML_WIDTH, 	XML_TOK_TEXT_CONTOUR_WIDTH		},
+    { XML_NAMESPACE_SVG, XML_HEIGHT,	XML_TOK_TEXT_CONTOUR_HEIGHT		},
+    { XML_NAMESPACE_SVG, XML_VIEWBOX,	XML_TOK_TEXT_CONTOUR_VIEWBOX	},
+    { XML_NAMESPACE_SVG, XML_D,	    	XML_TOK_TEXT_CONTOUR_D			},
+    { XML_NAMESPACE_DRAW,XML_POINTS,	XML_TOK_TEXT_CONTOUR_POINTS		},
+    { XML_NAMESPACE_DRAW,XML_RECREATE_ON_EDIT,	XML_TOK_TEXT_CONTOUR_AUTO	},
     XML_TOKEN_MAP_END
 };
 
@@ -1005,7 +1005,7 @@ XMLTextImportHelper::XMLTextImportHelper(
     }
 
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( rModel, UNO_QUERY );
-//  DBG_ASSERT( xFamiliesSupp.is(), "no chapter numbering supplier" ); for clipboard there may be documents without styles
+//	DBG_ASSERT( xFamiliesSupp.is(), "no chapter numbering supplier" ); for clipboard there may be documents without styles
 
     if( xFamiliesSupp.is() )
     {
@@ -1827,7 +1827,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                         // #i107225# the combined characters need to be inserted first
                         // the selected text has to be removed afterwards
                         m_pImpl->m_xText->insertTextContent( xRange->getStart(), xTextContent, sal_True );
-
+                        
                         if( xRange->getString().getLength() )
                         {
                             try
@@ -2298,7 +2298,7 @@ void XMLTextImportHelper::SetRuby(
                 rImport.GetStyleDisplayName(
                             XML_STYLE_FAMILY_TEXT_TEXT, rTextStyleName ) );
             if( (sDisplayName.getLength() > 0) &&
-//              xPropSetInfo->hasPropertyByName( sRubyCharStyleName ) &&
+//				xPropSetInfo->hasPropertyByName( sRubyCharStyleName ) &&
                 m_pImpl->m_xTextStyles->hasByName( sDisplayName ))
             {
                 xPropSet->setPropertyValue(sRubyCharStyleName, makeAny(sDisplayName));
@@ -2397,7 +2397,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             XML_TEXT_TYPE_HEADER_FOOTER == eType )
         {
             pContext = new XMLVariableDeclsImportContext(
-                rImport, *this, nPrefix, rLocalName, VarTypeSequence);
+                rImport, *this,	nPrefix, rLocalName, VarTypeSequence);
             bContent = sal_False;
         }
         break;
@@ -2549,15 +2549,15 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         }
     }
 
-//  if( !pContext )
-//      pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+//	if( !pContext )
+//		pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     // handle open redlines
     if ( (XML_TOK_TEXT_CHANGE != nToken) &&
          (XML_TOK_TEXT_CHANGE_END != nToken) &&
          (XML_TOK_TEXT_CHANGE_START != nToken) )
     {
-//      ResetOpenRedlineId();
+//		ResetOpenRedlineId();
     }
 
     if( XML_TEXT_TYPE_BODY == eType && bContent )

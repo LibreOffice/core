@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ public:
                         com::sun::star::lang::XMultiServiceFactory > & xSMgr );
 
     virtual ~CachedDynamicResultSetStub();
-
+    
 
     //-----------------------------------------------------------------
     // XInterface inherited
@@ -83,7 +83,7 @@ class CachedDynamicResultSetStubFactory
 {
 protected:
     com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >    m_xSMgr;
+        com::sun::star::lang::XMultiServiceFactory >	m_xSMgr;
 
 public:
 

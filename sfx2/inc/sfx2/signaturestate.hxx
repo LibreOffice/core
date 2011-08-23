@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@
 #define SIGNATURESTATE_SIGNATURES_OK            (sal_Int16)1
 #define SIGNATURESTATE_SIGNATURES_BROKEN        (sal_Int16)2
 // State was SIGNATURES_OK, but doc is modified now
-#define SIGNATURESTATE_SIGNATURES_INVALID       (sal_Int16)3
+#define SIGNATURESTATE_SIGNATURES_INVALID       (sal_Int16)3   
 // signature is OK, but certificate could not be validated
-#define SIGNATURESTATE_SIGNATURES_NOTVALIDATED  (sal_Int16)4
+#define SIGNATURESTATE_SIGNATURES_NOTVALIDATED  (sal_Int16)4    
 //signatur and certificate are ok,but not al files are signed, as was the case in
 //OOo 2.x - OOo 3.1.1. This state is only used  together with document signatures.
-#define SIGNATURESTATE_SIGNATURES_PARTIAL_OK    (sal_Int16)5
+#define SIGNATURESTATE_SIGNATURES_PARTIAL_OK    (sal_Int16)5    
 
 #endif // SFX2_SIGNATURESTATE_HXX
 

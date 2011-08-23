@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include "xmloff/xmlexp.hxx"
 
-namespace rtl { class OUString; }
+namespace rtl {	class OUString; }
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
     namespace uno { template<class X> class Reference; }

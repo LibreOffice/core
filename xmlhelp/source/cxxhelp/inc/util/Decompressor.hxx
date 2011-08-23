@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@
 
 
 namespace xmlsearch {
-
+  
     namespace util {
 
-
+    
         class CompressorIterator;
 
-
+    
         class Decompressor
         {
         public:
@@ -55,53 +55,53 @@ namespace xmlsearch {
             }
 
             virtual ~Decompressor() { }
-
+    
             virtual sal_Int32 getNextByte() = 0;
-
+      
             virtual void initReading()
             {
                 toRead_ = 0;
             }
-
+      
         private:
 
             static const sal_Int32 BitsInByte;
             static const sal_Int32 NBits;
-
+      
             sal_Int32 readByte_, toRead_, path_;
         };
 
 
 
-
+    
         class StreamDecompressor
             : public Decompressor
         {
         public:
-
+      
             StreamDecompressor( RandomAccessStream* in )
                 : in_( in )
             {
             }
-
+      
             ~StreamDecompressor() { }
 
 
             virtual sal_Int32 getNextByte();
 
         private:
-
+      
             RandomAccessStream* in_;
-
+            
         };
 
-
-
+    
+    
         class ByteArrayDecompressor
             : public Decompressor
         {
         public:
-
+            
             ByteArrayDecompressor( sal_Int32 arrayL,sal_Int8* array,sal_Int32 index )
             {
                 initReading(array,arrayL,index);
@@ -109,12 +109,12 @@ namespace xmlsearch {
 
 
             ~ByteArrayDecompressor() { }
-
+      
             sal_Int32 bytesRead()
             {
                 return index_ - index0_;
             }
-
+      
 
             sal_Int32 getNextByte() throw( xmlsearch::excep::XmlSearchException )
             {
@@ -124,9 +124,9 @@ namespace xmlsearch {
                 return array_[index_++] & 0xFF;
             }
 
-
+      
         private:
-
+      
             sal_Int32  arrayL_;
             sal_Int8   *array_;
 
@@ -140,10 +140,10 @@ namespace xmlsearch {
                 index_ = index0_ = index;
                 Decompressor::initReading();
             }
-
+      
         };
-
-
+    
+    
     }
 
 }

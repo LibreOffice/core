@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,23 +45,23 @@ class SVX_DLLPUBLIC SvxPasswordDialog : public SfxModalDialog
 {
 private:
     FixedLine       aOldFL;
-    FixedText       aOldPasswdFT;
-    Edit            aOldPasswdED;
+    FixedText		aOldPasswdFT;
+    Edit			aOldPasswdED;
     FixedLine       aNewFL;
-    FixedText       aNewPasswdFT;
-    Edit            aNewPasswdED;
-    FixedText       aRepeatPasswdFT;
-    Edit            aRepeatPasswdED;
-    OKButton        aOKBtn;
-    CancelButton    aEscBtn;
-    HelpButton      aHelpBtn;
+    FixedText		aNewPasswdFT;
+    Edit			aNewPasswdED;
+    FixedText		aRepeatPasswdFT;
+    Edit			aRepeatPasswdED;
+    OKButton		aOKBtn;
+    CancelButton	aEscBtn;
+    HelpButton		aHelpBtn;
 
-    String          aOldPasswdErrStr;
-    String          aRepeatPasswdErrStr;
+    String			aOldPasswdErrStr;
+    String			aRepeatPasswdErrStr;
 
     Link            aCheckPasswordHdl;
 
-    BOOL            bEmpty;
+    BOOL		    bEmpty;
 
     DECL_LINK( ButtonHdl, OKButton * );
     DECL_LINK( EditModifyHdl, Edit * );
@@ -70,8 +70,8 @@ public:
                     SvxPasswordDialog( Window* pParent, BOOL bAllowEmptyPasswords = FALSE, BOOL bDisableOldPassword = FALSE );
                     ~SvxPasswordDialog();
 
-    String          GetOldPassword() const { return aOldPasswdED.GetText(); }
-    String          GetNewPassword() const { return aNewPasswdED.GetText(); }
+    String			GetOldPassword() const { return aOldPasswdED.GetText(); }
+    String			GetNewPassword() const { return aNewPasswdED.GetText(); }
 
     void            SetCheckPasswordHdl( const Link& rLink ) { aCheckPasswordHdl = rLink; }
 };

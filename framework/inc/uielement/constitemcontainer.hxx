@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_UIELEMENT_CONSTITEMCONTAINER_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/threadhelpbase.hxx>
@@ -39,7 +39,7 @@
 #include <macros/xtypeprovider.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -50,7 +50,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
@@ -63,7 +63,7 @@ namespace framework
 
 class RootItemContainer;
 class ItemContainer;
-class ConstItemContainer :  public ::com::sun::star::lang::XTypeProvider    ,
+class ConstItemContainer :	public ::com::sun::star::lang::XTypeProvider    ,
                             public com::sun::star::container::XIndexAccess  ,
                             public ::com::sun::star::lang::XUnoTunnel       ,
                             public ::com::sun::star::beans::XFastPropertySet,
@@ -72,7 +72,7 @@ class ConstItemContainer :  public ::com::sun::star::lang::XTypeProvider    ,
 {
     friend class RootItemContainer;
     friend class ItemContainer;
-
+    
     public:
         ConstItemContainer();
         ConstItemContainer( const ItemContainer& rtemContainer );
@@ -81,16 +81,16 @@ class ConstItemContainer :  public ::com::sun::star::lang::XTypeProvider    ,
         virtual ~ConstItemContainer();
 
         //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider
+        //	XInterface, XTypeProvider
         //---------------------------------------------------------------------------------------------------------
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
-
+        
         // XUnoTunnel
-        static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
-        static ConstItemContainer*                                  GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
-        sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-
+        static const ::com::sun::star::uno::Sequence< sal_Int8 >&	GetUnoTunnelId() throw();
+        static ConstItemContainer*								    GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
+        sal_Int64													SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+        
         // XIndexAccess
         virtual sal_Int32 SAL_CALL getCount()
             throw (::com::sun::star::uno::RuntimeException);
@@ -116,7 +116,7 @@ class ConstItemContainer :  public ::com::sun::star::lang::XTypeProvider    ,
         virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
+        
         // XFastPropertySet
         virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -124,7 +124,7 @@ class ConstItemContainer :  public ::com::sun::star::lang::XTypeProvider    ,
     private:
         ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         const com::sun::star::uno::Sequence< com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
-        static ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > SAL_CALL createPropertySetInfo( ::cppu::IPropertyArrayHelper & rProperties ) SAL_THROW( () );
+        static ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > SAL_CALL createPropertySetInfo( ::cppu::IPropertyArrayHelper & rProperties ) SAL_THROW( () ); 
 
         void copyItemContainer( const std::vector< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& rSourceVector );
         com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > deepCopyContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rSubContainer );
@@ -132,7 +132,7 @@ class ConstItemContainer :  public ::com::sun::star::lang::XTypeProvider    ,
         std::vector< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > m_aItemVector;
         rtl::OUString                                                                        m_aUIName;
 };
-
+                            
 }
 
 #endif // #ifndef __FRAMEWORK_UIELEMENT_CONSTITEMCONTAINER_HXX_

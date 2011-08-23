@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,20 +82,20 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
             for (sal_uInt32 i = 0; i < pSelection->count(); i++)
             {
                 OSQLParseNode *pColumnRef = pSelection->getChild(i)->getChild(0);
-                if (    ( SQL_ISRULE(pColumnRef,set_fct_spec) && pColumnRef->count() == 4 )
-                    ||  SQL_ISRULE(pColumnRef,char_value_fct)
-                    ||  SQL_ISRULE(pColumnRef,char_substring_fct)
-                    ||  SQL_ISRULE(pColumnRef,position_exp)
-                    ||  SQL_ISRULE(pColumnRef,fold)
-                    ||  SQL_ISRULE(pColumnRef,length_exp)
-                    ||  SQL_ISRULE(pColumnRef,num_value_exp)
-                    ||  SQL_ISRULE(pColumnRef,term)
-                    ||  SQL_ISRULE(pColumnRef,factor)
-                    ||  SQL_ISRULE(pColumnRef,set_fct_spec) )
+                if (	( SQL_ISRULE(pColumnRef,set_fct_spec) && pColumnRef->count() == 4 )
+                    ||	SQL_ISRULE(pColumnRef,char_value_fct)
+                    ||	SQL_ISRULE(pColumnRef,char_substring_fct)
+                    ||	SQL_ISRULE(pColumnRef,position_exp)
+                    ||	SQL_ISRULE(pColumnRef,fold)
+                    ||	SQL_ISRULE(pColumnRef,length_exp)
+                    ||	SQL_ISRULE(pColumnRef,num_value_exp)
+                    ||	SQL_ISRULE(pColumnRef,term)
+                    ||	SQL_ISRULE(pColumnRef,factor)
+                    ||	SQL_ISRULE(pColumnRef,set_fct_spec) )
                 {
-                    ::rtl::Reference<OPredicateCompiler>        pCompiler = new OPredicateCompiler(this);
+                    ::rtl::Reference<OPredicateCompiler>		pCompiler = new OPredicateCompiler(this);
                     pCompiler->setOrigColumns(m_aCompiler->getOrigColumns());
-                    ::rtl::Reference<OPredicateInterpreter> pInterpreter = new OPredicateInterpreter(pCompiler);
+                    ::rtl::Reference<OPredicateInterpreter>	pInterpreter = new OPredicateInterpreter(pCompiler);
                     pCompiler->execute( pColumnRef );
                     m_aSelectionEvaluations.push_back( TPredicates(pCompiler,pInterpreter) );
                 }
@@ -119,7 +119,7 @@ void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvalu
     // wenn nur ein Kriterium, und das entsprechende Feld ist indiziert
     // dann wird der Index verwendet
 
-    OEvaluateSet*       pEvaluateSet = NULL;
+    OEvaluateSet*		pEvaluateSet = NULL;
 
     for (OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end(); ++aIter)
     {
@@ -150,7 +150,7 @@ void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvalu
 void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
 {
     // first the select part
-    OEvaluateSetList    aEvaluateSetList;
+    OEvaluateSetList	aEvaluateSetList;
     for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
     {
         if ( aIter->first.is() )
@@ -160,11 +160,11 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
 //------------------------------------------------------------------
 ::std::vector<sal_Int32>* OSQLAnalyzer::bindEvaluationRow(OValueRefRow& _pRow)
 {
-    OEvaluateSetList    aEvaluateSetList;
+    OEvaluateSetList	aEvaluateSetList;
     bindRow( m_aCompiler->m_aCodeList,_pRow,aEvaluateSetList);
 
-    ::std::vector<sal_Int32>*   pKeySet      = NULL;
-    OEvaluateSet*               pEvaluateSet = NULL;
+    ::std::vector<sal_Int32>*	pKeySet		 = NULL;
+    OEvaluateSet*				pEvaluateSet = NULL;
 
     // Keyset erzeugen mit kleinster Liste
     if(!aEvaluateSetList.empty())
@@ -174,7 +174,7 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
         pEvaluateSet = *(i);
         for(++i; i != aEvaluateSetList.end();++i)
         {
-            OEvaluateSet*   pEvaluateSetComp = (*i);
+            OEvaluateSet*	pEvaluateSetComp = (*i);
             for(OEvaluateSet::reverse_iterator j = pEvaluateSet->rbegin(); j != pEvaluateSet->rend(); ++j)
             {
                 if (pEvaluateSetComp->find(j->second) != pEvaluateSetComp->end())
@@ -199,7 +199,7 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
 //------------------------------------------------------------------
 void OSQLAnalyzer::describeParam(::rtl::Reference<OSQLColumns> rParameterColumns)
 {
-    OCodeList& rCodeList    = m_aCompiler->m_aCodeList;
+    OCodeList& rCodeList	= m_aCompiler->m_aCodeList;
     OCodeStack aCodeStack;
 
     if (!rCodeList.size())
@@ -216,7 +216,7 @@ void OSQLAnalyzer::describeParam(::rtl::Reference<OSQLColumns> rParameterColumns
     bindParameterRow(aParameterRow);
 
     OValueRefRow aTestRow = new OValueRefVector(Reference< XIndexAccess>(m_aCompiler->getOrigColumns(),UNO_QUERY)->getCount());
-    delete bindEvaluationRow(aTestRow);                 // Binden der Attribute an die Values
+    delete bindEvaluationRow(aTestRow);					// Binden der Attribute an die Values
 
     for(OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end(); ++aIter)
     {
@@ -227,11 +227,11 @@ void OSQLAnalyzer::describeParam(::rtl::Reference<OSQLColumns> rParameterColumns
         else
         {
             if (pOperator->getRequestedOperands() == 2)     // bei zwei Operatoren ist es moeglich
-            {                                               // einen Parameter weiter zu spezifizieren
+            {												// einen Parameter weiter zu spezifizieren
                 OOperandParam *pParam  = PTR_CAST(OOperandParam,aCodeStack.top());
                 if (pParam)  // Anpassen des ParameterTyps, wenn der linke Operand ein Attribut ist
                 {
-                    OOperandAttr *pLeft  = PTR_CAST(OOperandAttr,*(rCodeList.end() - 2));
+                    OOperandAttr *pLeft	 = PTR_CAST(OOperandAttr,*(rCodeList.end() - 2));
                     if (pLeft)
                     {
                         Reference< XPropertySet> xCol;
@@ -255,7 +255,7 @@ void OSQLAnalyzer::describeParam(::rtl::Reference<OSQLColumns> rParameterColumns
         OSL_ENSURE(0,"Illegal here!");
 
     rParameterColumns = aNewParamColumns;
-    //  m_aCompiler->setParameterColumns(rParameterColumns);
+    //	m_aCompiler->setParameterColumns(rParameterColumns);
 }
 
 // -----------------------------------------------------------------------------
@@ -292,7 +292,7 @@ void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std:
     {
         if ( aIter->second.is() )
         {
-            sal_Int32   map = nPos;
+            sal_Int32	map = nPos;
             // the first column (index 0) is for convenience only. The first real select column is no 1.
             if ( (nPos > 0) && (nPos < static_cast<sal_Int32>(_rColumnMapping.size())) )
                 map = _rColumnMapping[nPos];

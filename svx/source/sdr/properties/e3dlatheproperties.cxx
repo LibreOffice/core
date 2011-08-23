@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,12 @@ namespace sdr
     namespace properties
     {
         E3dLatheProperties::E3dLatheProperties(SdrObject& rObj)
-        :   E3dCompoundProperties(rObj)
+        :	E3dCompoundProperties(rObj)
         {
         }
 
         E3dLatheProperties::E3dLatheProperties(const E3dLatheProperties& rProps, SdrObject& rObj)
-        :   E3dCompoundProperties(rProps, rObj)
+        :	E3dCompoundProperties(rProps, rObj)
         {
         }
 

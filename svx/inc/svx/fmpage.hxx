@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 class StarBASIC;
 class FmFormModel;
-class FmFormPageImpl;   // contains a list of all forms
+class FmFormPageImpl;	// contains a list of all forms
 
 FORWARD_DECLARE_INTERFACE(container,XNameContainer)
 
@@ -47,8 +47,8 @@ class SVX_DLLPUBLIC FmFormPage : public SdrPage
 {
     friend class FmFormObj;
     FmFormPageImpl*     m_pImpl;
-    String              m_sPageName;
-    StarBASIC*          m_pBasic;
+    String				m_sPageName;
+    StarBASIC* 			m_pBasic;
 
 public:
     TYPEINFO();
@@ -57,12 +57,12 @@ public:
     FmFormPage(const FmFormPage& rPage);
     ~FmFormPage();
 
-    virtual void    SetModel(SdrModel* pNewModel);
+    virtual void  	SetModel(SdrModel* pNewModel);
 
     virtual SdrPage* Clone() const;
     using SdrPage::Clone;
 
-    virtual void    InsertObject(SdrObject* pObj, ULONG nPos = CONTAINER_APPEND,
+    virtual void	InsertObject(SdrObject* pObj, ULONG nPos = CONTAINER_APPEND,
                                     const SdrInsertReason* pReason=NULL);
 
     virtual SdrObject* RemoveObject(ULONG nObjNum);
@@ -75,10 +75,10 @@ public:
 #endif // SVX_LIGHT
 
 public:
-    const String&       GetName() const { return m_sPageName; }
-    void                SetName( const String& rName ) { m_sPageName = rName; }
-    StarBASIC*          GetBasic() const { return m_pBasic; }
-    sal_Bool            RequestHelp(
+    const String& 		GetName() const { return m_sPageName; }
+    void 				SetName( const String& rName ) { m_sPageName = rName; }
+    StarBASIC*      	GetBasic() const { return m_pBasic; }
+    sal_Bool			RequestHelp(
                             Window* pWin,
                             SdrView* pView,
                             const HelpEvent& rEvt );

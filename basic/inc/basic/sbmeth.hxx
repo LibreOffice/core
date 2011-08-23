@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,13 +46,13 @@ class SbMethod : public SbxMethod
     friend class SbJScriptMethod;
     friend class SbIfaceMapperMethod;
 
-    SbMethodImpl* mpSbMethodImpl;           // Impl data
+    SbMethodImpl* mpSbMethodImpl;			// Impl data
     SbxVariable* mCaller;                   // caller
     SbModule* pMod;
     USHORT    nDebugFlags;
-    USHORT    nLine1, nLine2;
-    UINT32    nStart;
-    BOOL      bInvalid;
+    USHORT	  nLine1, nLine2;
+    UINT32	  nStart;
+    BOOL	  bInvalid;
     SbxArrayRef refStatics;
     SbMethod( const String&, SbxDataType, SbModule* );
     SbMethod( const SbMethod& );
@@ -67,11 +67,11 @@ public:
     SbxArray* GetLocals();
     SbxArray* GetStatics();
     void      ClearStatics();
-    SbModule* GetModule()                { return pMod;        }
-    UINT32    GetId() const              { return nStart;      }
-    USHORT    GetDebugFlags()            { return nDebugFlags; }
-    void      SetDebugFlags( USHORT n )  { nDebugFlags = n;    }
-    void      GetLineRange( USHORT&, USHORT& );
+    SbModule* GetModule() 				 { return pMod; 	   }
+    UINT32	  GetId() const				 { return nStart;	   }
+    USHORT    GetDebugFlags()			 { return nDebugFlags; }
+    void 	  SetDebugFlags( USHORT n )  { nDebugFlags = n;    }
+    void 	  GetLineRange( USHORT&, USHORT& );
 
     // Interface to execute a method from the applications
     virtual ErrCode Call( SbxValue* pRet = NULL,  SbxVariable* pCaller = NULL );

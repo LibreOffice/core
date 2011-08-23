@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,19 +45,19 @@
 #include <svx/xtable.hxx>
 #include <svx/xlnwtit.hxx>
 
-#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
+#define ITEMVALUE(ItemSet,Id,Cast)	((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 TYPEINIT1(E3dPolyScene, E3dScene);
 
 E3dPolyScene::E3dPolyScene()
-:   E3dScene()
+:	E3dScene()
 {
 }
 
 E3dPolyScene::E3dPolyScene(E3dDefaultAttributes& rDefault)
-:   E3dScene(rDefault)
+:	E3dScene(rDefault)
 {
 }
 

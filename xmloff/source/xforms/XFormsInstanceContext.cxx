@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,8 +71,8 @@ static SvXMLTokenMapEntry aAttributes[] =
     XML_TOKEN_MAP_END
 };
 
-XFormsInstanceContext::XFormsInstanceContext(
-    SvXMLImport& rImport,
+XFormsInstanceContext::XFormsInstanceContext( 
+    SvXMLImport& rImport, 
     USHORT nPrefix,
     const OUString& rLocalName,
     Reference<XPropertySet> xModel ) :
@@ -86,7 +86,7 @@ XFormsInstanceContext::~XFormsInstanceContext()
 {
 }
 
-SvXMLImportContext* XFormsInstanceContext::CreateChildContext(
+SvXMLImportContext* XFormsInstanceContext::CreateChildContext( 
     USHORT nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& )
@@ -94,7 +94,7 @@ SvXMLImportContext* XFormsInstanceContext::CreateChildContext(
     SvXMLImportContext* pContext = NULL;
 
     // only the first element child of an xforms:instance element
-    // is used as an instance. The other children remainder must be
+    // is used as an instance. The other children remainder must be 
     // ignored.
     if( mxInstance.is() )
     {
@@ -104,7 +104,7 @@ SvXMLImportContext* XFormsInstanceContext::CreateChildContext(
     else
     {
         // create new DomBuilderContext. Save reference to tree in Model.
-        DomBuilderContext* pInstance =
+        DomBuilderContext* pInstance = 
             new DomBuilderContext( GetImport(), nPrefix, rLocalName );
         mxInstance = pInstance->getTree();
         pContext = pInstance;
@@ -130,8 +130,8 @@ void XFormsInstanceContext::EndElement()
 }
 
 
-void XFormsInstanceContext::HandleAttribute(
-    sal_uInt16 nToken,
+void XFormsInstanceContext::HandleAttribute( 
+    sal_uInt16 nToken, 
     const rtl::OUString& rValue )
 {
     switch( nToken )
@@ -148,7 +148,7 @@ void XFormsInstanceContext::HandleAttribute(
     }
 }
 
-SvXMLImportContext* XFormsInstanceContext::HandleChild(
+SvXMLImportContext* XFormsInstanceContext::HandleChild( 
     sal_uInt16,
     sal_uInt16,
     const OUString&,

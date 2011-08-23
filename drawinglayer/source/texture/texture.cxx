@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ namespace drawinglayer
         }
 
         GeoTexSvxGradient::GeoTexSvxGradient(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder)
-        :   maTargetRange(rTargetRange),
+        :	maTargetRange(rTargetRange),
             maStart(rStart),
             maEnd(rEnd),
             mfBorder(fBorder)
@@ -142,7 +142,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxGradientLinear::GeoTexSvxGradientLinear(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fAngle)
-        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        :	GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
             basegfx::tools::createLinearODFGradientInfo(maGradientInfo,
                                                         rTargetRange,
@@ -197,7 +197,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxGradientAxial::GeoTexSvxGradientAxial(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fAngle)
-        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        :	GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
             basegfx::tools::createAxialODFGradientInfo(maGradientInfo,
                                                        rTargetRange,
@@ -252,7 +252,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxGradientRadial::GeoTexSvxGradientRadial(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY)
-        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        :	GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
             basegfx::tools::createRadialODFGradientInfo(maGradientInfo,
                                                         rTargetRange,
@@ -299,7 +299,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxGradientElliptical::GeoTexSvxGradientElliptical(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle)
-        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        :	GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
             basegfx::tools::createEllipticalODFGradientInfo(maGradientInfo,
                                                             rTargetRange,
@@ -366,7 +366,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxGradientSquare::GeoTexSvxGradientSquare(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle)
-        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        :	GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
             basegfx::tools::createSquareODFGradientInfo(maGradientInfo,
                                                         rTargetRange,
@@ -414,7 +414,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxGradientRect::GeoTexSvxGradientRect(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle)
-        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        :	GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
             basegfx::tools::createRectangularODFGradientInfo(maGradientInfo,
                                                              rTargetRange,
@@ -481,7 +481,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxHatch::GeoTexSvxHatch(const basegfx::B2DRange& rTargetRange, double fDistance, double fAngle)
-        :   mfDistance(0.1),
+        :	mfDistance(0.1),
             mfAngle(fAngle),
             mnSteps(10L)
         {
@@ -572,7 +572,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxTiled::GeoTexSvxTiled(const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize)
-        :   maTopLeft(rTopLeft),
+        :	maTopLeft(rTopLeft),
             maSize(rSize)
         {
             if(basegfx::fTools::lessOrEqual(maSize.getX(), 0.0))

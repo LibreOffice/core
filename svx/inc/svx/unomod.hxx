@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@ public:
 
     /** fills the given EventObject from the given SdrHint.
         @returns
-            true    if the SdrHint could be translated to an EventObject<br>
-            false   if not
+            true	if the SdrHint could be translated to an EventObject<br>
+            false	if not
     */
     static sal_Bool createEvent( const SdrModel* pDoc, const SdrHint* pSdrHint, ::com::sun::star::document::EventObject& aEvent );
 };

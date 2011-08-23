@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ public class ScriptPanel extends JPanel {
     public void addScriptEntries(ScriptEntry[] entries) {
         for (int i = 0; i < entries.length; i++) {
             ScriptEntry entry;
-
+            
             try {
                 entry = (ScriptEntry) entries[i].clone();
             }
@@ -74,11 +74,11 @@ public class ScriptPanel extends JPanel {
                                         entries[i].getLogicalName(),
                                         entries[i].getLocation());
             }
-
+            
             model.add(entry);
         }
     }
-
+        
     public void removeSelectedRows() {
         int[] selections = table.getSelectedRows();
 
@@ -90,7 +90,7 @@ public class ScriptPanel extends JPanel {
     public void removeAllRows() {
         model.removeAll();
     }
-
+    
     public Enumeration getScriptEntries() {
         return model.getScriptEntries();
     }
@@ -99,7 +99,7 @@ public class ScriptPanel extends JPanel {
         table = new JTable(model);
         TableColumn column = table.getColumnModel().getColumn(1);
         column.setCellEditor(new DefaultCellEditor(new JTextField()));
-
+        
         table.addFocusListener(new FocusAdapter() {
             public void focusLost(FocusEvent evt) {
                 tableFocusLost(evt);
@@ -128,7 +128,7 @@ public class ScriptPanel extends JPanel {
     }
 
     private class ScriptTableModel extends AbstractTableModel {
-        final String[] columnNames = {"Exported Method",
+        final String[] columnNames = {"Exported Method", 
                                       "Script Name"};
 
         private Vector scripts;
@@ -145,7 +145,7 @@ public class ScriptPanel extends JPanel {
         public int getColumnCount() {
             return columnNames.length;
         }
-
+        
         public int getRowCount() {
             return scripts.size();
         }
@@ -165,7 +165,7 @@ public class ScriptPanel extends JPanel {
             fireTableRowsDeleted(row, row);
             nextRow--;
         }
-
+        
         public void removeAll() {
             scripts.removeAllElements();
             fireTableRowsDeleted(0, nextRow);

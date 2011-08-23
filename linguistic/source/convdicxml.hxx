@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ protected:
     //void ExportNodes(const SmNode *pIn, int nLevel);
 
 public:
-    ConvDicXMLExport( ConvDic &rConvDic,
+    ConvDicXMLExport( ConvDic &rConvDic, 
         const rtl::OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > &rHandler) :
         SvXMLExport ( utl::getProcessServiceFactory(), rFileName, rHandler ),
@@ -67,10 +67,10 @@ public:
     virtual ~ConvDicXMLExport()
     {
     }
-
+    
     // XServiceInfo (override parent method)
     ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-
+    
     // SvXMLExport
     void _ExportAutoStyles()    {}
     void _ExportMasterStyles()  {}
@@ -105,18 +105,18 @@ public:
         nConversionType = -1;
         bSuccess        = sal_False;
     }
-
+    
     virtual ~ConvDicXMLImport() throw ()
     {
     }
-
+    
     // XServiceInfo (override parent method)
     ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL startDocument(void) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL endDocument(void) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
-    virtual SvXMLImportContext * CreateContext(
+    virtual SvXMLImportContext * CreateContext( 
         sal_uInt16 nPrefix, const rtl::OUString &rLocalName,
         const com::sun::star::uno::Reference < com::sun::star::xml::sax::XAttributeList > &rxAttrList );
 

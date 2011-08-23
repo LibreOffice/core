@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace sdr
     }
 
     MasterPageDescriptor::MasterPageDescriptor(SdrPage& aOwnerPage, SdrPage& aUsedPage)
-    :   maOwnerPage(aOwnerPage),
+    :	maOwnerPage(aOwnerPage),
         maUsedPage(aUsedPage),
         mpViewContact(0L)
     {
@@ -58,7 +58,7 @@ namespace sdr
         // register at used page
         maUsedPage.AddPageUser(*this);
     }
-
+    
     MasterPageDescriptor::~MasterPageDescriptor()
     {
         // de-register at used page
@@ -76,7 +76,7 @@ namespace sdr
     {
         if(!mpViewContact)
         {
-            const_cast< MasterPageDescriptor* >(this)->mpViewContact =
+            const_cast< MasterPageDescriptor* >(this)->mpViewContact = 
                 const_cast< MasterPageDescriptor* >(this)->CreateObjectSpecificViewContact();
         }
 
@@ -103,14 +103,14 @@ namespace sdr
     // operators
     sal_Bool MasterPageDescriptor::operator==(const MasterPageDescriptor& rCandidate) const
     {
-        return (&maOwnerPage == &rCandidate.maOwnerPage
+        return (&maOwnerPage == &rCandidate.maOwnerPage 
             && &maUsedPage == &rCandidate.maUsedPage
             && maVisibleLayers == rCandidate.maVisibleLayers);
     }
 
     sal_Bool MasterPageDescriptor::operator!=(const MasterPageDescriptor& rCandidate) const
     {
-        return (&maOwnerPage != &rCandidate.maOwnerPage
+        return (&maOwnerPage != &rCandidate.maOwnerPage 
             || &maUsedPage != &rCandidate.maUsedPage
             || maVisibleLayers != rCandidate.maVisibleLayers);
     }

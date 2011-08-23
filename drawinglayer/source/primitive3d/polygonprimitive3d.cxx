@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,9 @@ namespace drawinglayer
     namespace primitive3d
     {
         PolygonHairlinePrimitive3D::PolygonHairlinePrimitive3D(
-            const basegfx::B3DPolygon& rPolygon,
+            const basegfx::B3DPolygon& rPolygon, 
             const basegfx::BColor& rBColor)
-        :   BasePrimitive3D(),
+        :	BasePrimitive3D(),
             maPolygon(rPolygon),
             maBColor(rBColor)
         {
@@ -61,7 +61,7 @@ namespace drawinglayer
             {
                 const PolygonHairlinePrimitive3D& rCompare = (PolygonHairlinePrimitive3D&)rPrimitive;
 
-                return (getB3DPolygon() == rCompare.getB3DPolygon()
+                return (getB3DPolygon() == rCompare.getB3DPolygon() 
                     && getBColor() == rCompare.getBColor());
             }
 
@@ -130,15 +130,15 @@ namespace drawinglayer
                     }
                 }
             }
-
+            
             return aRetval;
         }
 
         PolygonStrokePrimitive3D::PolygonStrokePrimitive3D(
-            const basegfx::B3DPolygon& rPolygon,
+            const basegfx::B3DPolygon& rPolygon, 
             const attribute::LineAttribute& rLineAttribute,
             const attribute::StrokeAttribute& rStrokeAttribute)
-        :   BufferedDecompositionPrimitive3D(),
+        :	BufferedDecompositionPrimitive3D(),
             maPolygon(rPolygon),
             maLineAttribute(rLineAttribute),
             maStrokeAttribute(rStrokeAttribute)
@@ -146,9 +146,9 @@ namespace drawinglayer
         }
 
         PolygonStrokePrimitive3D::PolygonStrokePrimitive3D(
-            const basegfx::B3DPolygon& rPolygon,
+            const basegfx::B3DPolygon& rPolygon, 
             const attribute::LineAttribute& rLineAttribute)
-        :   BufferedDecompositionPrimitive3D(),
+        :	BufferedDecompositionPrimitive3D(),
             maPolygon(rPolygon),
             maLineAttribute(rLineAttribute),
             maStrokeAttribute()
@@ -161,7 +161,7 @@ namespace drawinglayer
             {
                 const PolygonStrokePrimitive3D& rCompare = (PolygonStrokePrimitive3D&)rPrimitive;
 
-                return (getB3DPolygon() == rCompare.getB3DPolygon()
+                return (getB3DPolygon() == rCompare.getB3DPolygon() 
                     && getLineAttribute() == rCompare.getLineAttribute()
                     && getStrokeAttribute() == rCompare.getStrokeAttribute());
             }

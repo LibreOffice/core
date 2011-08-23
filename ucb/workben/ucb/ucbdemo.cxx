@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -953,14 +953,14 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
     {
         aOpenArg.Mode = ucb::OpenMode::ALL;
         aOpenArg.Priority = 32768;
-//      if ( bFolder )
+//		if ( bFolder )
         {
             // Property values which shall be in the result set...
             uno::Sequence< beans::Property > aProps( 5 );
             beans::Property* pProps = aProps.getArray();
             pProps[ 0 ].Name   = rtl::OUString::createFromAscii( "Title" );
             pProps[ 0 ].Handle = -1; // Important!
-/**/        pProps[ 0 ].Type = getCppuType(static_cast< rtl::OUString * >(0));
+/**/		pProps[ 0 ].Type = getCppuType(static_cast< rtl::OUString * >(0));
                 // HACK for sorting...
             pProps[ 1 ].Name   = rtl::OUString::createFromAscii( "DateCreated" );
             pProps[ 1 ].Handle = -1; // Important!
@@ -968,7 +968,7 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
             pProps[ 2 ].Handle = -1; // Important!
             pProps[ 3 ].Name   = rtl::OUString::createFromAscii( "IsFolder" );
             pProps[ 3 ].Handle = -1; // Important!
-/**/        pProps[ 3 ].Type = getCppuType(static_cast< sal_Bool * >(0));
+/**/		pProps[ 3 ].Type = getCppuType(static_cast< sal_Bool * >(0));
                 // HACK for sorting...
             pProps[ 4 ].Name   = rtl::OUString::createFromAscii( "IsDocument" );
             pProps[ 4 ].Handle = -1; // Important!
@@ -987,13 +987,13 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
                 aOpenArg.SortingInfo[ 1 ].Ascending   = sal_True;
             }
         }
-//      else
+//		else
             aOpenArg.Sink
                 = static_cast< cppu::OWeakObject * >(new TestOutputStream);
         aArg <<= aOpenArg;
     }
 
-//  putenv("PROT_REMOTE_ACTIVATE=1"); // to log remote uno traffic
+//	putenv("PROT_REMOTE_ACTIVATE=1"); // to log remote uno traffic
 
     ULONG nTime = 0;
     if ( bTiming )
@@ -1191,7 +1191,7 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
     if (xComponent.is())
         xComponent->dispose();
 
-//  putenv("PROT_REMOTE_ACTIVATE="); // to log remote uno traffic
+//	putenv("PROT_REMOTE_ACTIVATE="); // to log remote uno traffic
 
     if ( bTiming )
     {
@@ -1433,10 +1433,10 @@ uno::Any UcbContent::getPropertyValue( const rtl::OUString& rName )
     uno::Sequence< beans::Property > aProps( 1 );
     beans::Property& rProp = aProps.getArray()[ 0 ];
 
-    rProp.Name       = rName;
+    rProp.Name	     = rName;
     rProp.Handle     = -1; /* unknown */
-//  rProp.Type       = ;
-//  rProp.Attributes = ;
+//	rProp.Type       = ;
+//	rProp.Attributes = ;
 
     uno::Any aArg;
     aArg <<= aProps;
@@ -1482,10 +1482,10 @@ void UcbContent::setPropertyValue( const rtl::OUString& rName,
     uno::Sequence< beans::PropertyValue > aProps( 1 );
     beans::PropertyValue& rProp = aProps.getArray()[ 0 ];
 
-    rProp.Name       = rName;
+    rProp.Name	     = rName;
     rProp.Handle     = -1; /* unknown */
-    rProp.Value      = rValue;
-//  rProp.State      = ;
+    rProp.Value	     = rValue;
+//	rProp.State      = ;
 
     uno::Any aArg;
     aArg <<= aProps;
@@ -1738,41 +1738,41 @@ void SAL_CALL UcbContent::propertiesChange(
  *
  *=======================================================================*/
 
-#define MYWIN_ITEMID_CLEAR          1
-#define MYWIN_ITEMID_CREATE         2
-#define MYWIN_ITEMID_RELEASE        3
-#define MYWIN_ITEMID_COMMANDS       4
-#define MYWIN_ITEMID_PROPS          5
-#define MYWIN_ITEMID_ADD_PROP       6
-#define MYWIN_ITEMID_REMOVE_PROP    7
-#define MYWIN_ITEMID_GET_PROP       8
-#define MYWIN_ITEMID_SET_PROP       9
-#define MYWIN_ITEMID_OPEN           10
-#define MYWIN_ITEMID_OPEN_ALL       11
-#define MYWIN_ITEMID_UPDATE         12
-#define MYWIN_ITEMID_SYNCHRONIZE    13
-#define MYWIN_ITEMID_COPY           14
-#define MYWIN_ITEMID_MOVE           15
-#define MYWIN_ITEMID_DELETE         16
-#define MYWIN_ITEMID_SEARCH         17
-#define MYWIN_ITEMID_TIMING         18
-#define MYWIN_ITEMID_SORT           19
-#define MYWIN_ITEMID_FETCHSIZE      20
-#define MYWIN_ITEMID_SYS2URI        21
-#define MYWIN_ITEMID_URI2SYS        22
-#define MYWIN_ITEMID_OFFLINE        23
-#define MYWIN_ITEMID_ONLINE         24
-#define MYWIN_ITEMID_REORGANIZE     25
+#define MYWIN_ITEMID_CLEAR    		1
+#define MYWIN_ITEMID_CREATE   		2
+#define MYWIN_ITEMID_RELEASE   		3
+#define MYWIN_ITEMID_COMMANDS 		4
+#define MYWIN_ITEMID_PROPS 			5
+#define MYWIN_ITEMID_ADD_PROP		6
+#define MYWIN_ITEMID_REMOVE_PROP	7
+#define MYWIN_ITEMID_GET_PROP		8
+#define MYWIN_ITEMID_SET_PROP		9
+#define MYWIN_ITEMID_OPEN			10
+#define MYWIN_ITEMID_OPEN_ALL		11
+#define MYWIN_ITEMID_UPDATE		   	12
+#define MYWIN_ITEMID_SYNCHRONIZE 	13
+#define MYWIN_ITEMID_COPY 			14
+#define MYWIN_ITEMID_MOVE 			15
+#define MYWIN_ITEMID_DELETE 		16
+#define MYWIN_ITEMID_SEARCH			17
+#define MYWIN_ITEMID_TIMING			18
+#define MYWIN_ITEMID_SORT			19
+#define MYWIN_ITEMID_FETCHSIZE		20
+#define MYWIN_ITEMID_SYS2URI		21
+#define MYWIN_ITEMID_URI2SYS		22
+#define MYWIN_ITEMID_OFFLINE		23
+#define MYWIN_ITEMID_ONLINE			24
+#define MYWIN_ITEMID_REORGANIZE		25
 
 //-------------------------------------------------------------------------
 class MyWin : public WorkWindow
 {
 private:
-    ToolBox*            m_pTool;
-    Edit*               m_pCmdEdit;
-    MyOutWindow*        m_pOutEdit;
+    ToolBox*			m_pTool;
+    Edit*				m_pCmdEdit;
+    MyOutWindow*		m_pOutEdit;
 
-    Ucb         m_aUCB;
+    Ucb 		m_aUCB;
     UcbContent* m_pContent;
 
     sal_Int32 m_nFetchSize;
@@ -2211,7 +2211,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 
         case MYWIN_ITEMID_REMOVE_PROP:
             if ( m_pContent )
-                m_pContent->removeProperty( aCmdLine );
+                m_pContent->removeProperty(	aCmdLine );
             else
                 print( "No content!" );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,30 +46,30 @@ SV_IMPL_PTRARR( SfxStatements_Impl, SfxMacroStatement* );
 
 struct SfxMacro_Impl
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Implementations-Struktur der Klasse <SfxMacro>.
 */
 
 {
-    SfxMacroMode        eMode;  /*  Zweck der <SfxMacro>-Instanz,
+    SfxMacroMode		eMode;	/*	Zweck der <SfxMacro>-Instanz,
                                     Bedeutung siehe enum <SfxMacroMode> */
-    SfxStatements_Impl  aList;  /*  Liste von aufgezeichneten Statements */
+    SfxStatements_Impl	aList;  /* 	Liste von aufgezeichneten Statements */
 };
 
 //====================================================================
 
 SfxMacroStatement::SfxMacroStatement
 (
-    const SfxShell& /*rShell*/,     // <SfxShell>, die den Request ausf"uhrte
-    const String&   /*rTarget*/,    // Name des Zielobjektes vor der Ausf"urhung
-    BOOL            /*bAbsolute*/,  // obsolet
-    const SfxSlot&  rSlot,          // der <SfxSlot>, der das Statement abspielen kann
-    BOOL            bRequestDone,   // wurde der Request tats"achlich ausgef"uhrt
+    const SfxShell& /*rShell*/,		// <SfxShell>, die den Request ausf"uhrte
+    const String&	/*rTarget*/,	// Name des Zielobjektes vor der Ausf"urhung
+    BOOL			/*bAbsolute*/,	// obsolet
+    const SfxSlot&	rSlot,			// der <SfxSlot>, der das Statement abspielen kann
+    BOOL			bRequestDone,	// wurde der Request tats"achlich ausgef"uhrt
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rArgs
 )
 
-/*  [Beschreibung]
+/* 	[Beschreibung]
 
     Dieser Konstruktor der Klasse SfxMacroStatement erzeugt ein Statement,
     bei dem ein Objekt angesprochen wird, welches durch 'rShell' angegeben
@@ -81,11 +81,11 @@ SfxMacroStatement::SfxMacroStatement
 
                           | absolut                  relativ
     -----------------------------------------------------------------------
-    SfxApplication'       | 'StarCalc'              'Application'
+    SfxApplication'       | 'StarCalc'  			'Application'
     SfxViewFrame'         | '[mydoc.sdc:1]'         'ActiveWindow'
     SfxViewShell'         | '[mydoc.sdc:1]'         'AvtiveWindow'
     SfxObjectShell'       | '[mydoc.sdc]'           'ActiveDocument'
-    sonstige (Sub-Shells) | '[mydoc.sdc:1]'         'ActiveWindow'
+    sonstige (Sub-Shells) | '[mydoc.sdc:1]'			'ActiveWindow'
 
     Dabei sind 'StarCalc' stellvertretend fuer den Namen der Applikation
     (Application::GetAppName()const). In der absoluten Fassung k"onnte
@@ -117,7 +117,7 @@ SfxMacroStatement::SfxMacroStatement
     <SfxMacroStatement::SfxMacroStatement(const String&)>
 */
 
-:   nSlotId( rSlot.GetSlotId() ),
+:	nSlotId( rSlot.GetSlotId() ),
     aArgs( rArgs ),
     bDone( bRequestDone ),
     pDummy( 0 )
@@ -228,13 +228,13 @@ SfxMacroStatement::SfxMacroStatement
 
 SfxMacroStatement::SfxMacroStatement
 (
-    const String&   rTarget,        // Objekt, was beim Playing angesprochen wird
-    const SfxSlot&  rSlot,          // der <SfxSlot>, der das Statement abspielen kann
-    BOOL            bRequestDone,   // wurde der Request tats"achlich ausgef"uhrt
+    const String&   rTarget,		// Objekt, was beim Playing angesprochen wird
+    const SfxSlot&	rSlot,			// der <SfxSlot>, der das Statement abspielen kann
+    BOOL			bRequestDone,	// wurde der Request tats"achlich ausgef"uhrt
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rArgs
 )
 
-/*  [Beschreibung]
+/* 	[Beschreibung]
 
 
     [Querverweise]
@@ -243,7 +243,7 @@ SfxMacroStatement::SfxMacroStatement
     <SfxMacroStatement::SfxMacroStatement(const SfxShell&,BOOL,const SfxSlot&,BOOL,SfxArguments*)>
 */
 
-:   nSlotId( rSlot.GetSlotId() ),
+:	nSlotId( rSlot.GetSlotId() ),
     aArgs( rArgs ),
     bDone( bRequestDone ),
     pDummy( 0 )
@@ -257,10 +257,10 @@ SfxMacroStatement::SfxMacroStatement
 
 SfxMacroStatement::SfxMacroStatement
 (
-    const String&   rStatement      // manuell erzeugte(s) Statement(s)
+    const String&   rStatement  	// manuell erzeugte(s) Statement(s)
 )
 
-/*  [Beschreibung]
+/* 	[Beschreibung]
 
     Dieser Konstruktor erzeugt eine SfxMacroStatement-Instanz, deren
     Aufbau vollst"andig vom Applikationsentwickler bestimmt wird. Da der
@@ -275,7 +275,7 @@ SfxMacroStatement::SfxMacroStatement
     <SfxMacroStatement::SfxMacroStatement(const SfxShell&,BOOL,const SfxSlot&,BOOL,SfxArguments*)>
 */
 
-:   nSlotId( 0 ),
+:	nSlotId( 0 ),
        aStatement( rStatement ),
     bDone( TRUE ),
     pDummy( 0 )
@@ -286,15 +286,15 @@ SfxMacroStatement::SfxMacroStatement
 
 SfxMacroStatement::SfxMacroStatement
 (
-    const SfxMacroStatement&    rOrig // Original, von dem kopiert wird
+    const SfxMacroStatement&	rOrig // Original, von dem kopiert wird
 )
 
-/*  [Beschreibung]
+/* 	[Beschreibung]
 
     Copy-Konstruktor der SfxMacroStatement-Klasse.
 */
 
-:   nSlotId( rOrig.nSlotId ),
+:	nSlotId( rOrig.nSlotId ),
     aStatement( rOrig.aStatement ),
        bDone( rOrig.bDone ),
     pDummy( 0 )
@@ -306,7 +306,7 @@ SfxMacroStatement::SfxMacroStatement
 
 SfxMacroStatement::~SfxMacroStatement()
 
-/*  [Beschreibung]
+/* 	[Beschreibung]
 
     Destruktor der Klasse SfxMacroStatement. Gibt die Liste der
     aktuellen Parameter frei.
@@ -319,13 +319,13 @@ SfxMacroStatement::~SfxMacroStatement()
 
 void SfxMacroStatement::GenerateNameAndArgs_Impl
 (
-    SfxMacro*       /*pMacro*/,         // darin wird aufgezeichnet
-    const SfxSlot&  rSlot,          // der Slot, der das Statement abspielen kann
-    BOOL            bRequestDone,   // TRUE=wurde ausgef"uhrt, FALSE=abgebrochen
+    SfxMacro*		/*pMacro*/,			// darin wird aufgezeichnet
+    const SfxSlot&	rSlot,			// der Slot, der das Statement abspielen kann
+    BOOL			bRequestDone,	// TRUE=wurde ausgef"uhrt, FALSE=abgebrochen
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& /*rArgs*/
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Interne Hilfsmethode zum generieren des Funktions-/Property-Names
     sowie der Parameter. Diese Methode wird nur verwendet, wenn der
@@ -459,10 +459,10 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
 
 SfxMacro::SfxMacro
 (
-    SfxMacroMode    eMode       // Zweck der Instanz, siehe <SfxMacroMode>
+    SfxMacroMode 	eMode		// Zweck der Instanz, siehe <SfxMacroMode>
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Konstruktor der Klasse SfxMacro. Instanzen dieser Klasse werden im
     SFx zu zwei Zwecken ben"otigt:
@@ -481,7 +481,7 @@ SfxMacro::SfxMacro
     oder <SfxControllerItem>s konfiguriert werden sollen.
 */
 
-:   pImp( new SfxMacro_Impl )
+:	pImp( new SfxMacro_Impl )
 
 {
     pImp->eMode = eMode;
@@ -491,7 +491,7 @@ SfxMacro::SfxMacro
 
 SfxMacro::~SfxMacro()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Virtueller Destruktor der Klasse SfxMacro. Dieser sollte in den
     abgeleiteten Klassen "uberladen werden, um in den Modi
@@ -516,7 +516,7 @@ SfxMacro::~SfxMacro()
 
 SfxMacroMode SfxMacro::GetMode() const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Liefert den Modus, der besagt zu welchem Zweck das SfxMacro konstruiert
     wurde.
@@ -535,10 +535,10 @@ SfxMacroMode SfxMacro::GetMode() const
 
 void SfxMacro::Record
 (
-    SfxMacroStatement*  pStatement  // aufzuzeichnendes <SfxMacroStatement>
+    SfxMacroStatement*	pStatement 	// aufzuzeichnendes <SfxMacroStatement>
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese Methode zeichnet das als Parameter "ubergeben Statement auf.
     Die Instanz auf die der "ubergebe Pointer zeigt, geht in das Eigentum
@@ -565,10 +565,10 @@ void SfxMacro::Record
 
 void SfxMacro::Replace
 (
-    SfxMacroStatement*  pStatement  // aufzuzeichnendes <SfxMacroStatement>
+    SfxMacroStatement*	pStatement	// aufzuzeichnendes <SfxMacroStatement>
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese Methode zeichnet das als Parameter "ubergeben Statement auf.
     Dabei wird das jeweils zuletzt aufgezeichnete Statement "uberschrieben.
@@ -611,7 +611,7 @@ void SfxMacro::Replace
 
 void SfxMacro::Remove()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese Methode l"oscht das zuletzt aufgezeichnete <SfxMacroStatement>
     und entfernt es aus dem Macro.

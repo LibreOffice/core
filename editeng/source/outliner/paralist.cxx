@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_editeng.hxx"
 
 #include <paralist.hxx>
-#include <editeng/outliner.hxx>     // nur wegen Paragraph, muss geaendert werden!
+#include <editeng/outliner.hxx>		// nur wegen Paragraph, muss geaendert werden!
 #include <editeng/numdef.hxx>
 
 DBG_NAME(Paragraph)
@@ -234,8 +234,8 @@ Paragraph* ParagraphList::GetParent( Paragraph* pParagraph /*, USHORT& rRelPos *
     Paragraph* pPrev = GetParagraph( --n );
     while ( pPrev && ( pPrev->GetDepth() >= pParagraph->GetDepth() ) )
     {
-//      if ( pPrev->GetDepth() == pParagraph->GetDepth() )
-//          rRelPos++;
+//		if ( pPrev->GetDepth() == pParagraph->GetDepth() )
+//			rRelPos++;
         pPrev = GetParagraph( --n );
     }
 

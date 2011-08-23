@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -515,7 +515,7 @@ static MapUnit lcl_getUnit( const OUString& rValue )
 
 XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
         Reference< XAttributeList >& rAttrList, sal_uInt16 nActionMap,
-           sal_Bool bClone  )
+           sal_Bool bClone	)
 {
     XMLMutableAttributeList *pMutableAttrList = 0;
     XMLTransformerActions *pActions = GetUserDefinedActions( nActionMap );
@@ -1073,18 +1073,18 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
 
                     switch( nType )
                     {
-                    case UnicodeType::UPPERCASE_LETTER:     // Lu
-                    case UnicodeType::LOWERCASE_LETTER:     // Ll
-                    case UnicodeType::TITLECASE_LETTER:     // Lt
-                    case UnicodeType::OTHER_LETTER:         // Lo
-                    case UnicodeType::LETTER_NUMBER:        // Nl
+                    case UnicodeType::UPPERCASE_LETTER:		// Lu
+                    case UnicodeType::LOWERCASE_LETTER:		// Ll
+                    case UnicodeType::TITLECASE_LETTER:		// Lt
+                    case UnicodeType::OTHER_LETTER:			// Lo
+                    case UnicodeType::LETTER_NUMBER: 		// Nl
                         bValidChar = sal_True;
                         break;
-                    case UnicodeType::NON_SPACING_MARK:     // Ms
-                    case UnicodeType::ENCLOSING_MARK:       // Me
-                    case UnicodeType::COMBINING_SPACING_MARK:   //Mc
-                    case UnicodeType::MODIFIER_LETTER:      // Lm
-                    case UnicodeType::DECIMAL_DIGIT_NUMBER: // Nd
+                    case UnicodeType::NON_SPACING_MARK:		// Ms
+                    case UnicodeType::ENCLOSING_MARK:		// Me
+                    case UnicodeType::COMBINING_SPACING_MARK:	//Mc
+                    case UnicodeType::MODIFIER_LETTER:		// Lm
+                    case UnicodeType::DECIMAL_DIGIT_NUMBER:	// Nd
                         bValidChar = i > 0;
                         break;
                     }
@@ -1312,12 +1312,12 @@ sal_Bool XMLTransformerBase::ConvertURIToOASIS( ::rtl::OUString& rURI,
                     {
                     case '/':
                         // a relative path segement
-                        nPos = nLen;    // leave loop
+                        nPos = nLen;	// leave loop
                         break;
                     case ':':
                         // a schema
                         bRel = sal_False;
-                        nPos = nLen;    // leave loop
+                        nPos = nLen;	// leave loop
                         break;
                     default:
                         // we don't care about any other characters
@@ -1378,12 +1378,12 @@ sal_Bool XMLTransformerBase::ConvertURIToOOo( ::rtl::OUString& rURI,
                     {
                     case '/':
                         // a relative path segement within the package
-                        nPos = nLen;    // leave loop
+                        nPos = nLen;	// leave loop
                         break;
                     case ':':
                         // a schema
                         bPackage = sal_False;
-                        nPos = nLen;    // leave loop
+                        nPos = nLen;	// leave loop
                         break;
                     default:
                         // we don't care about any other characters
@@ -1468,8 +1468,8 @@ const XMLTransformerContext *XMLTransformerBase::GetAncestorContext(
 bool XMLTransformerBase::isWriter() const
 {
     Reference< XServiceInfo > xSI( mxModel, UNO_QUERY );
-    return  xSI.is() &&
-        (   xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) ) ||
+    return	xSI.is() &&
+        (	xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) ) ||
             xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ) ) ) ||
             xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) ) );
 }

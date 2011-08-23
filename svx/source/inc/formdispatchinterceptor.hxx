@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,28 +56,28 @@ namespace svxform
     };
 
     //====================================================================
-    //=
+    //= 
     //====================================================================
-    typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::frame::XDispatchProviderInterceptor
-                                            ,   ::com::sun::star::lang::XEventListener
-                                            >   DispatchInterceptionMultiplexer_BASE;
+    typedef ::cppu::WeakComponentImplHelper2<	::com::sun::star::frame::XDispatchProviderInterceptor
+                                            ,	::com::sun::star::lang::XEventListener
+                                            >	DispatchInterceptionMultiplexer_BASE;
 
     class DispatchInterceptionMultiplexer : public DispatchInterceptionMultiplexer_BASE
     {
-        ::osl::Mutex    m_aFallback;
+        ::osl::Mutex	m_aFallback;
         ::osl::Mutex*   m_pMutex;
 
         // the component which's dispatches we're intercepting
         ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProviderInterception >
                         m_xIntercepted;
-        sal_Bool        m_bListening;
+        sal_Bool		m_bListening;
 
         // the real interceptor
-        DispatchInterceptor*            m_pMaster;
+        DispatchInterceptor*			m_pMaster;
 
         // chaining
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>           m_xSlaveDispatcher;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>           m_xMasterDispatcher;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>			m_xSlaveDispatcher;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>			m_xMasterDispatcher;
 
         virtual ~DispatchInterceptionMultiplexer();
 
@@ -100,7 +100,7 @@ namespace svxform
         // ::com::sun::star::frame::XDispatchProviderInterceptor
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getSlaveDispatchProvider(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setSlaveDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewDispatchProvider ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getMasterDispatchProvider(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getMasterDispatchProvider(	) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setMasterDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewSupplier ) throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::lang::XEventListener

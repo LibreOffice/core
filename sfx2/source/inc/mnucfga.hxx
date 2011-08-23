@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,11 +37,11 @@ class SfxMenuCfgItemArr;
 
 struct SfxMenuCfgItem
 {
-    USHORT             nId;        // id of the binding or 0 if none
-    String             aTitle;     // title of the item
-    String             aHelpText;  // Hilfetext
-    String              aCommand;
-    SfxMenuCfgItemArr* pPopup;     // pointer to a popup menu (if any)
+    USHORT			   nId; 	   // id of the binding or 0 if none
+    String			   aTitle;	   // title of the item
+    String			   aHelpText;  // Hilfetext
+    String				aCommand;
+    SfxMenuCfgItemArr* pPopup;	   // pointer to a popup menu (if any)
 };
 
 DECL_PTRARRAY(SfxMenuCfgItemArr, SfxMenuCfgItem*, 4, 4 )

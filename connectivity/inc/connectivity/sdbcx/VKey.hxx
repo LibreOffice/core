@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,13 +51,13 @@ namespace connectivity
         {
             ::std::vector< ::rtl::OUString> m_aKeyColumnNames;
             ::rtl::OUString m_ReferencedTable;
-            sal_Int32       m_Type;
-            sal_Int32       m_UpdateRule;
-            sal_Int32       m_DeleteRule;
+            sal_Int32		m_Type;
+            sal_Int32		m_UpdateRule;
+            sal_Int32		m_DeleteRule;
             KeyProperties(const ::rtl::OUString& _ReferencedTable,
-                          sal_Int32     _Type,
-                          sal_Int32     _UpdateRule,
-                          sal_Int32     _DeleteRule)
+                          sal_Int32		_Type,
+                          sal_Int32		_UpdateRule,
+                          sal_Int32		_DeleteRule)
                           :m_ReferencedTable(_ReferencedTable),
                           m_Type(_Type),
                           m_UpdateRule(_UpdateRule),
@@ -79,7 +79,7 @@ namespace connectivity
         {
         protected:
             TKeyProperties   m_aProps;
-            OCollection*    m_pColumns;
+            OCollection*	m_pColumns;
 
             using ODescriptor_BASE::rBHelper;
             // OPropertyArrayUsageHelper
@@ -89,11 +89,11 @@ namespace connectivity
         public:
             OKey(sal_Bool _bCase);
             OKey(const ::rtl::OUString& _Name,const TKeyProperties& _rProps,sal_Bool _bCase);
-            /*OKey( const ::rtl::OUString& _Name,
+            /*OKey(	const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _ReferencedTable,
-                    sal_Int32       _Type,
-                    sal_Int32       _UpdateRule,
-                    sal_Int32       _DeleteRule,
+                    sal_Int32		_Type,
+                    sal_Int32		_UpdateRule,
+                    sal_Int32		_DeleteRule,
                     sal_Bool _bCase);*/
 
             virtual ~OKey( );

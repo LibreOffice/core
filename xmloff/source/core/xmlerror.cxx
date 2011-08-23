@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ class ErrorRecord
 {
 public:
 
-    ErrorRecord( sal_Int32 nId,
+    ErrorRecord( sal_Int32 nId, 
                  const Sequence<OUString>& rParams,
                  const OUString& rExceptionMessage,
                  sal_Int32 nRow,
@@ -80,7 +80,7 @@ public:
     OUString sSystemId; /// public identifier
 
     /// message Parameters
-    Sequence<OUString> aParams;
+    Sequence<OUString> aParams;  
 };
 
 
@@ -96,7 +96,7 @@ ErrorRecord::ErrorRecord( sal_Int32 nID, const Sequence<OUString>& rParams,
         aParams(rParams)
 {
 }
-
+    
 ErrorRecord::~ErrorRecord()
 {
 }
@@ -112,7 +112,7 @@ XMLErrors::~XMLErrors()
 {
 }
 
-void XMLErrors::AddRecord(
+void XMLErrors::AddRecord( 
     sal_Int32 nId,
     const Sequence<OUString> & rParams,
     const OUString& rExceptionMessage,
@@ -121,7 +121,7 @@ void XMLErrors::AddRecord(
     const OUString& rPublicId,
     const OUString& rSystemId )
 {
-    aErrors.push_back( ErrorRecord( nId, rParams, rExceptionMessage,
+    aErrors.push_back( ErrorRecord( nId, rParams, rExceptionMessage, 
                                     nRow, nColumn, rPublicId, rSystemId ) );
 
 #ifdef DBG_UTIL
@@ -193,13 +193,13 @@ void XMLErrors::AddRecord(
     }
 
     // convert to byte string and signal the error
-    ByteString aError( String( sMessage.makeStringAndClear() ),
+    ByteString aError( String( sMessage.makeStringAndClear() ), 
                        RTL_TEXTENCODING_ASCII_US );
     DBG_ERROR( aError.GetBuffer() );
-#endif
+#endif    
 }
 
-void XMLErrors::AddRecord(
+void XMLErrors::AddRecord( 
     sal_Int32 nId,
     const Sequence<OUString> & rParams,
     const OUString& rExceptionMessage,
@@ -207,19 +207,19 @@ void XMLErrors::AddRecord(
 {
     if ( rLocator.is() )
     {
-        AddRecord( nId, rParams, rExceptionMessage,
+        AddRecord( nId, rParams, rExceptionMessage, 
                    rLocator->getLineNumber(), rLocator->getColumnNumber(),
                    rLocator->getPublicId(), rLocator->getSystemId() );
     }
     else
     {
         OUString sEmpty;
-        AddRecord( nId, rParams, rExceptionMessage,
+        AddRecord( nId, rParams, rExceptionMessage, 
                    -1, -1, sEmpty, sEmpty );
     }
 }
 
-void XMLErrors::AddRecord(
+void XMLErrors::AddRecord( 
     sal_Int32 nId,
     const Sequence<OUString> & rParams,
     const OUString& rExceptionMessage)
@@ -228,14 +228,14 @@ void XMLErrors::AddRecord(
     AddRecord( nId, rParams, rExceptionMessage, -1, -1, sEmpty, sEmpty );
 }
 
-void XMLErrors::AddRecord(
+void XMLErrors::AddRecord( 
     sal_Int32 nId,
     const Sequence<OUString> & rParams)
 {
     OUString sEmpty;
     AddRecord( nId, rParams, sEmpty, -1, -1, sEmpty, sEmpty );
 }
-
+    
 void XMLErrors::ThrowErrorAsSAXException(sal_Int32 nIdMask)
     throw( SAXParseException )
 {
@@ -250,7 +250,7 @@ void XMLErrors::ThrowErrorAsSAXException(sal_Int32 nIdMask)
             ErrorRecord& rErr = aErrors[0];
             Any aAny;
             aAny <<= rErr.aParams;
-            throw SAXParseException(
+            throw SAXParseException( 
                 rErr.sExceptionMessage, NULL, aAny,
                 rErr.sPublicId, rErr.sSystemId, rErr.nRow, rErr.nColumn );
         }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,6 +79,6 @@ public:
             sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const;
 };
 
-#endif  //  _XMLOFF_XMLIMPPR_HXX
+#endif	//  _XMLOFF_XMLIMPPR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

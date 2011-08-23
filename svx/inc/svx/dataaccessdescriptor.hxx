@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,24 +45,24 @@ namespace svx
     //====================================================================
     enum DataAccessDescriptorProperty
     {
-        daDataSource,           /// data source name            (string)
-        daDatabaseLocation,     /// database file URL           (string)
-        daConnectionResource,   /// database driver URL         (string)
-        daConnection,           /// connection                  (XConnection)
+        daDataSource,			/// data source name			(string)
+        daDatabaseLocation,		/// database file URL			(string)
+        daConnectionResource,	/// database driver URL			(string)
+        daConnection,			/// connection					(XConnection)
 
-        daCommand,              /// command                     (string)
-        daCommandType,          /// command type                (long)
-        daEscapeProcessing,     /// escape processing           (boolean)
-        daFilter,               /// additional filter           (string)
-        daCursor,               /// the cursor                  (XResultSet)
+        daCommand,				/// command						(string)
+        daCommandType,			/// command type				(long)
+        daEscapeProcessing,		/// escape processing			(boolean)
+        daFilter,				/// additional filter			(string)
+        daCursor,				/// the cursor					(XResultSet)
 
-        daColumnName,           /// column name                 (string)
-        daColumnObject,         /// column object               (XPropertySet)
+        daColumnName,			/// column name					(string)
+        daColumnObject,			/// column object				(XPropertySet)
 
-        daSelection,            /// selection                   (sequence< any >)
-        daBookmarkSelection,    /// selection are bookmarks?    (boolean)
+        daSelection,			/// selection					(sequence< any >)
+        daBookmarkSelection,	/// selection are bookmarks?	(boolean)
 
-        daComponent             /// component name              (XContent)
+        daComponent				/// component name				(XContent)
     };
 
     //====================================================================
@@ -73,7 +73,7 @@ namespace svx
     class SVX_DLLPUBLIC ODataAccessDescriptor
     {
     protected:
-        ODADescriptorImpl*      m_pImpl;
+        ODADescriptorImpl*		m_pImpl;
 
     public:
         ODataAccessDescriptor();
@@ -112,7 +112,7 @@ namespace svx
             <p>If <arg>_bClear</arg> is <TRUE/>, the descriptor will clear all it's current settings before
             initializing with the new ones.</p>
         */
-        void        initializeFrom(
+        void		initializeFrom(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxValues,
                         sal_Bool _bClear = sal_True);
 
@@ -120,23 +120,23 @@ namespace svx
             <p>If <arg>_bClear</arg> is <TRUE/>, the descriptor will clear all it's current settings before
             initializing with the new ones.</p>
         */
-        void        initializeFrom(
+        void		initializeFrom(
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rValues,
                         sal_Bool _bClear = sal_True);
 
         /// checks whether or not a given property is present in the descriptor
-        sal_Bool    has(DataAccessDescriptorProperty _eWhich) const;
+        sal_Bool	has(DataAccessDescriptorProperty _eWhich) const;
 
         /** erases the given property from the descriptor
         */
-        void        erase(DataAccessDescriptorProperty _eWhich);
+        void		erase(DataAccessDescriptorProperty _eWhich);
 
         /** empties the descriptor
         */
-        void        clear();
+        void		clear();
 
         /// return the value of a given property
-        const   ::com::sun::star::uno::Any& operator [] ( DataAccessDescriptorProperty _eWhich ) const;
+        const	::com::sun::star::uno::Any& operator [] ( DataAccessDescriptorProperty _eWhich ) const;
 
         /** return the (modifiable) value of a given property
             <p>This operator is not allowed to be called if the descriptor is readonly.</p>
@@ -150,14 +150,14 @@ namespace svx
 
 
         /** set the data source name, if it is not file URL
-            @param  _sDataSourceNameOrLocation
+            @param	_sDataSourceNameOrLocation
                 the data source name or database location
         */
         void setDataSource(const ::rtl::OUString& _sDataSourceNameOrLocation);
     };
 
 //........................................................................
-}   // namespace svx
+}	// namespace svx
 //........................................................................
 
 #endif // _SVX_DATACCESSDESCRIPTOR_HXX_

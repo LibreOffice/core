@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,20 +67,20 @@ using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry __READONLY_DATA aXML_EventActions_EnumMap[] =
 {
-    { XML_NONE,             ClickAction_NONE    },
-    { XML_PREVIOUS_PAGE,    ClickAction_PREVPAGE },
-    { XML_NEXT_PAGE,        ClickAction_NEXTPAGE },
-    { XML_FIRST_PAGE,       ClickAction_FIRSTPAGE },
-    { XML_LAST_PAGE,        ClickAction_LASTPAGE },
-    { XML_HIDE,             ClickAction_INVISIBLE },
-    { XML_STOP,             ClickAction_STOPPRESENTATION },
-    { XML_EXECUTE,          ClickAction_PROGRAM },
-    { XML_SHOW,             ClickAction_BOOKMARK },
-    { XML_SHOW,             ClickAction_DOCUMENT },
-    { XML_EXECUTE_MACRO,    ClickAction_MACRO },
-    { XML_VERB,             ClickAction_VERB },
-    { XML_FADE_OUT,         ClickAction_VANISH },
-    { XML_SOUND,            ClickAction_SOUND },
+    { XML_NONE,			    ClickAction_NONE	},
+    { XML_PREVIOUS_PAGE,	ClickAction_PREVPAGE },
+    { XML_NEXT_PAGE,		ClickAction_NEXTPAGE },
+    { XML_FIRST_PAGE,		ClickAction_FIRSTPAGE },
+    { XML_LAST_PAGE,		ClickAction_LASTPAGE },
+    { XML_HIDE,			    ClickAction_INVISIBLE },
+    { XML_STOP,			    ClickAction_STOPPRESENTATION },
+    { XML_EXECUTE,			ClickAction_PROGRAM },
+    { XML_SHOW,			    ClickAction_BOOKMARK },
+    { XML_SHOW,			    ClickAction_DOCUMENT },
+    { XML_EXECUTE_MACRO,	ClickAction_MACRO },
+    { XML_VERB,			    ClickAction_VERB },
+    { XML_FADE_OUT,		    ClickAction_VANISH },
+    { XML_SOUND,			ClickAction_SOUND },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -97,7 +97,7 @@ public:
     SdXMLEventContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList, const Reference< XShape >& rxShape );
     virtual ~SdXMLEventContext();
 
-    virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const OUString& rLocalName,    const Reference< XAttributeList>& xAttrList );
+    virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const OUString& rLocalName,	const Reference< XAttributeList>& xAttrList );
     virtual void EndElement();
 
     sal_Bool mbValid;
@@ -119,7 +119,7 @@ public:
 
 class XMLEventSoundContext : public SvXMLImportContext
 {
-    SdXMLEventContext*  mpParent;
+    SdXMLEventContext*	mpParent;
 
 public:
     TYPEINFO();
@@ -170,7 +170,7 @@ XMLEventSoundContext::~XMLEventSoundContext()
 TYPEINIT1( SdXMLEventContext, SvXMLImportContext );
 
 SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, const Reference< XShape >& rxShape )
-:   SvXMLImportContext(rImp, nPrfx, rLocalName),
+:	SvXMLImportContext(rImp, nPrfx, rLocalName),
     mxShape( rxShape ), mbScript( sal_False ), meClickAction( ClickAction_NONE ),
     meEffect( EK_none ), meDirection( ED_none ), mnStartScale( 100 ),
     meSpeed( AnimationSpeed_MEDIUM ), mnVerb(0), mbPlayFull( sal_False )
@@ -262,10 +262,10 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
             {
                 msMacroName = sValue;
             }
-//          else if( IsXMLToken( aLocalName, XML_LIBRARY ) )
-//          {
-//              msLibrary = sValue;
-//          }
+//			else if( IsXMLToken( aLocalName, XML_LIBRARY ) )
+//			{
+//				msLibrary = sValue;
+//			}
             break;
 
         case XML_NAMESPACE_XLINK:
@@ -513,7 +513,7 @@ void SdXMLEventContext::EndElement()
 
 TYPEINIT1( SdXMLEventsContext, SvXMLImportContext );
 
-SdXMLEventsContext::SdXMLEventsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
+SdXMLEventsContext::SdXMLEventsContext( SvXMLImport& rImport, sal_uInt16 nPrfx,	const OUString& rLocalName,
         const Reference< XAttributeList>&, const Reference< XShape >& rxShape)
 : SvXMLImportContext(rImport, nPrfx, rLocalName), mxShape( rxShape )
 {

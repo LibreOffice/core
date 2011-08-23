@@ -5,7 +5,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ my (%documents,$key,$icon,$name);
 $name = "";
 
 while (<SOURCE>) {
-  if ( /<\/dict>/ ) {
+  if ( /<\/dict>/ ) {  
     $documents{$icon} = $name if length $name > 0;
     $key = $icon = $name = "";
   } elsif ( /<key>(.*)<\/key>/ ) {
@@ -72,7 +72,7 @@ while (<SOURCE>) {
     } elsif ( $key eq 'CFBundleTypeName' ) {
       $name = $1;
     }
-  }
+  } 
 }
 
 close (SOURCE);

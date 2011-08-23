@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,9 +72,9 @@ SFX_IMPL_DOCKINGWINDOW( Svx3DChildWindow, SID_3D_WIN )
 
 struct Svx3DWinImpl
 {
-    SfxItemPool*        pPool;
-    Image               maImgLightOnH;
-    Image               maImgLightOffH;
+    SfxItemPool*		pPool;
+    Image				maImgLightOnH;
+    Image				maImgLightOffH;
 };
 
 #define SETHCIMAGE(btn,res) \
@@ -95,7 +95,7 @@ namespace {
     SfxDispatcher* LocalGetDispatcher (const SfxBindings* pBindings)
     {
         SfxDispatcher* pDispatcher = NULL;
-
+        
         if (SfxViewFrame::Current() != NULL)
             pDispatcher = SfxViewFrame::Current()->GetDispatcher();
         else if (pBindings != NULL)
@@ -107,154 +107,154 @@ namespace {
 
 
 /*************************************************************************
-|*  Svx3DWin - FloatingWindow
+|*	Svx3DWin - FloatingWindow
 \************************************************************************/
 __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
                 SfxChildWindow *pCW, Window* pParent ) :
         SfxDockingWindow    ( pInBindings, pCW, pParent,
                                     SVX_RES( RID_SVXFLOAT_3D ) ),
-        aBtnGeo             ( this, SVX_RES( BTN_GEO ) ),
-        aBtnRepresentation  ( this, SVX_RES( BTN_REPRESENTATION ) ),
-        aBtnLight           ( this, SVX_RES( BTN_LIGHT ) ),
-        aBtnTexture         ( this, SVX_RES( BTN_TEXTURE ) ),
-        aBtnMaterial        ( this, SVX_RES( BTN_MATERIAL ) ),
-        aBtnUpdate          ( this, SVX_RES( BTN_UPDATE ) ),
-        aBtnAssign          ( this, SVX_RES( BTN_ASSIGN ) ),
+        aBtnGeo				( this, SVX_RES( BTN_GEO ) ),
+        aBtnRepresentation	( this, SVX_RES( BTN_REPRESENTATION ) ),
+        aBtnLight			( this, SVX_RES( BTN_LIGHT ) ),
+        aBtnTexture			( this, SVX_RES( BTN_TEXTURE ) ),
+        aBtnMaterial		( this, SVX_RES( BTN_MATERIAL ) ),
+        aBtnUpdate			( this, SVX_RES( BTN_UPDATE ) ),
+        aBtnAssign			( this, SVX_RES( BTN_ASSIGN ) ),
 
         // Geometrie
-        aFtPercentDiagonal  ( this, SVX_RES( FT_PERCENT_DIAGONAL ) ),
-        aMtrPercentDiagonal ( this, SVX_RES( MTR_PERCENT_DIAGONAL ) ),
-        aFtBackscale        ( this, SVX_RES( FT_BACKSCALE ) ),
-        aMtrBackscale       ( this, SVX_RES( MTR_BACKSCALE ) ),
-        aFtEndAngle         ( this, SVX_RES( FT_END_ANGLE ) ),
-        aMtrEndAngle        ( this, SVX_RES( MTR_END_ANGLE ) ),
-        aFtDepth            ( this, SVX_RES( FT_DEPTH ) ),
-        aMtrDepth           ( this, SVX_RES( MTR_DEPTH ) ),
+        aFtPercentDiagonal	( this, SVX_RES( FT_PERCENT_DIAGONAL ) ),
+        aMtrPercentDiagonal	( this, SVX_RES( MTR_PERCENT_DIAGONAL ) ),
+        aFtBackscale		( this, SVX_RES( FT_BACKSCALE ) ),
+        aMtrBackscale		( this, SVX_RES( MTR_BACKSCALE ) ),
+        aFtEndAngle			( this, SVX_RES( FT_END_ANGLE ) ),
+        aMtrEndAngle		( this, SVX_RES( MTR_END_ANGLE ) ),
+        aFtDepth			( this, SVX_RES( FT_DEPTH ) ),
+        aMtrDepth			( this, SVX_RES( MTR_DEPTH ) ),
         aFLGeometrie       ( this, SVX_RES( FL_GEOMETRIE ) ),
 
-        aFtHorizontal       ( this, SVX_RES( FT_HORIZONTAL ) ),
-        aNumHorizontal      ( this, SVX_RES( NUM_HORIZONTAL ) ),
-        aFtVertical         ( this, SVX_RES( FT_VERTICAL ) ),
-        aNumVertical        ( this, SVX_RES( NUM_VERTICAL ) ),
+        aFtHorizontal		( this, SVX_RES( FT_HORIZONTAL ) ),
+        aNumHorizontal		( this, SVX_RES( NUM_HORIZONTAL ) ),
+        aFtVertical			( this, SVX_RES( FT_VERTICAL ) ),
+        aNumVertical		( this, SVX_RES( NUM_VERTICAL ) ),
         aFLSegments        ( this, SVX_RES( FL_SEGMENTS ) ),
 
-        aBtnNormalsObj      ( this, SVX_RES( BTN_NORMALS_OBJ ) ),
-        aBtnNormalsFlat     ( this, SVX_RES( BTN_NORMALS_FLAT ) ),
-        aBtnNormalsSphere   ( this, SVX_RES( BTN_NORMALS_SPHERE ) ),
-        aBtnNormalsInvert   ( this, SVX_RES( BTN_NORMALS_INVERT ) ),
+        aBtnNormalsObj		( this, SVX_RES( BTN_NORMALS_OBJ ) ),
+        aBtnNormalsFlat		( this, SVX_RES( BTN_NORMALS_FLAT ) ),
+        aBtnNormalsSphere	( this, SVX_RES( BTN_NORMALS_SPHERE ) ),
+        aBtnNormalsInvert	( this, SVX_RES( BTN_NORMALS_INVERT ) ),
         aBtnTwoSidedLighting( this, SVX_RES( BTN_TWO_SIDED_LIGHTING ) ),
         aFLNormals         ( this, SVX_RES( FL_NORMALS ) ),
 
-        aBtnDoubleSided     ( this, SVX_RES( BTN_DOUBLE_SIDED ) ),
+        aBtnDoubleSided   	( this, SVX_RES( BTN_DOUBLE_SIDED ) ),
 
         // Darstellung
-        aFtShademode        ( this, SVX_RES( FT_SHADEMODE ) ),
-        aLbShademode        ( this, SVX_RES( LB_SHADEMODE ) ),
-        aBtnShadow3d        ( this, SVX_RES( BTN_SHADOW_3D ) ),
-        aFtSlant            ( this, SVX_RES( FT_SLANT ) ),
-        aMtrSlant           ( this, SVX_RES( MTR_SLANT ) ),
+        aFtShademode		( this, SVX_RES( FT_SHADEMODE ) ),
+        aLbShademode		( this, SVX_RES( LB_SHADEMODE ) ),
+        aBtnShadow3d 		( this, SVX_RES( BTN_SHADOW_3D ) ),
+        aFtSlant      		( this, SVX_RES( FT_SLANT ) ),
+        aMtrSlant     		( this, SVX_RES( MTR_SLANT ) ),
         aFLShadow          ( this, SVX_RES( FL_SHADOW ) ),
-        aFtDistance         ( this, SVX_RES( FT_DISTANCE ) ),
-        aMtrDistance        ( this, SVX_RES( MTR_DISTANCE ) ),
-        aFtFocalLeng        ( this, SVX_RES( FT_FOCAL_LENGTH ) ),
-        aMtrFocalLength     ( this, SVX_RES( MTR_FOCAL_LENGTH ) ),
+        aFtDistance			( this, SVX_RES( FT_DISTANCE ) ),
+        aMtrDistance		( this, SVX_RES( MTR_DISTANCE ) ),
+        aFtFocalLeng		( this, SVX_RES( FT_FOCAL_LENGTH ) ),
+        aMtrFocalLength		( this, SVX_RES( MTR_FOCAL_LENGTH ) ),
         aFLCamera          ( this, SVX_RES( FL_CAMERA ) ),
         aFLRepresentation  ( this, SVX_RES( FL_REPRESENTATION ) ),
 
         // Beleuchtung
-        aBtnLight1          ( this, SVX_RES( BTN_LIGHT_1 ) ),
-        aBtnLight2          ( this, SVX_RES( BTN_LIGHT_2 ) ),
-        aBtnLight3          ( this, SVX_RES( BTN_LIGHT_3 ) ),
-        aBtnLight4          ( this, SVX_RES( BTN_LIGHT_4 ) ),
-        aBtnLight5          ( this, SVX_RES( BTN_LIGHT_5 ) ),
-        aBtnLight6          ( this, SVX_RES( BTN_LIGHT_6 ) ),
-        aBtnLight7          ( this, SVX_RES( BTN_LIGHT_7 ) ),
-        aBtnLight8          ( this, SVX_RES( BTN_LIGHT_8 ) ),
-        aLbLight1           ( this, SVX_RES( LB_LIGHT_1 ) ),
-        aLbLight2           ( this, SVX_RES( LB_LIGHT_2 ) ),
-        aLbLight3           ( this, SVX_RES( LB_LIGHT_3 ) ),
-        aLbLight4           ( this, SVX_RES( LB_LIGHT_4 ) ),
-        aLbLight5           ( this, SVX_RES( LB_LIGHT_5 ) ),
-        aLbLight6           ( this, SVX_RES( LB_LIGHT_6 ) ),
-        aLbLight7           ( this, SVX_RES( LB_LIGHT_7 ) ),
-        aLbLight8           ( this, SVX_RES( LB_LIGHT_8 ) ),
-
-        aBtnLightColor      ( this, SVX_RES( BTN_LIGHT_COLOR ) ),
+        aBtnLight1			( this, SVX_RES( BTN_LIGHT_1 ) ),
+        aBtnLight2			( this, SVX_RES( BTN_LIGHT_2 ) ),
+        aBtnLight3			( this, SVX_RES( BTN_LIGHT_3 ) ),
+        aBtnLight4			( this, SVX_RES( BTN_LIGHT_4 ) ),
+        aBtnLight5			( this, SVX_RES( BTN_LIGHT_5 ) ),
+        aBtnLight6			( this, SVX_RES( BTN_LIGHT_6 ) ),
+        aBtnLight7			( this, SVX_RES( BTN_LIGHT_7 ) ),
+        aBtnLight8			( this, SVX_RES( BTN_LIGHT_8 ) ),
+        aLbLight1			( this, SVX_RES( LB_LIGHT_1 ) ),
+        aLbLight2   		( this, SVX_RES( LB_LIGHT_2 ) ),
+        aLbLight3			( this, SVX_RES( LB_LIGHT_3 ) ),
+        aLbLight4			( this, SVX_RES( LB_LIGHT_4 ) ),
+        aLbLight5			( this, SVX_RES( LB_LIGHT_5 ) ),
+        aLbLight6			( this, SVX_RES( LB_LIGHT_6 ) ),
+        aLbLight7			( this, SVX_RES( LB_LIGHT_7 ) ),
+        aLbLight8			( this, SVX_RES( LB_LIGHT_8 ) ),
+        
+        aBtnLightColor		( this, SVX_RES( BTN_LIGHT_COLOR ) ),
         aFTLightsource     ( this, SVX_RES( FT_LIGHTSOURCE ) ),
 
         // #99694# Keyboard shortcuts activate the next control, so the
         // order needed to be changed here
-        aFTAmbientlight    ( this, SVX_RES( FT_AMBIENTLIGHT ) ),    // Text label
-        aLbAmbientlight     ( this, SVX_RES( LB_AMBIENTLIGHT ) ),   // ListBox
-        aBtnAmbientColor    ( this, SVX_RES( BTN_AMBIENT_COLOR ) ), // color button
-
+        aFTAmbientlight    ( this, SVX_RES( FT_AMBIENTLIGHT ) ),	// Text label
+        aLbAmbientlight		( this, SVX_RES( LB_AMBIENTLIGHT ) ),	// ListBox
+        aBtnAmbientColor	( this, SVX_RES( BTN_AMBIENT_COLOR ) ), // color button
+        
         aFLLight           ( this, SVX_RES( FL_LIGHT ) ),
 
         // Textures
-        aFtTexKind          ( this, SVX_RES( FT_TEX_KIND ) ),
-        aBtnTexLuminance    ( this, SVX_RES( BTN_TEX_LUMINANCE ) ),
-        aBtnTexColor        ( this, SVX_RES( BTN_TEX_COLOR ) ),
-        aFtTexMode          ( this, SVX_RES( FT_TEX_MODE ) ),
-        aBtnTexReplace      ( this, SVX_RES( BTN_TEX_REPLACE ) ),
-        aBtnTexModulate     ( this, SVX_RES( BTN_TEX_MODULATE ) ),
-        aBtnTexBlend        ( this, SVX_RES( BTN_TEX_BLEND ) ),
-        aFtTexProjectionX   ( this, SVX_RES( FT_TEX_PROJECTION_X ) ),
-        aBtnTexObjectX      ( this, SVX_RES( BTN_TEX_OBJECT_X ) ),
-        aBtnTexParallelX    ( this, SVX_RES( BTN_TEX_PARALLEL_X ) ),
-        aBtnTexCircleX      ( this, SVX_RES( BTN_TEX_CIRCLE_X ) ),
-        aFtTexProjectionY   ( this, SVX_RES( FT_TEX_PROJECTION_Y ) ),
-        aBtnTexObjectY      ( this, SVX_RES( BTN_TEX_OBJECT_Y ) ),
-        aBtnTexParallelY    ( this, SVX_RES( BTN_TEX_PARALLEL_Y ) ),
-        aBtnTexCircleY      ( this, SVX_RES( BTN_TEX_CIRCLE_Y ) ),
-        aFtTexFilter        ( this, SVX_RES( FT_TEX_FILTER ) ),
-        aBtnTexFilter       ( this, SVX_RES( BTN_TEX_FILTER ) ),
+        aFtTexKind			( this, SVX_RES( FT_TEX_KIND ) ),
+        aBtnTexLuminance	( this, SVX_RES( BTN_TEX_LUMINANCE ) ),
+        aBtnTexColor		( this, SVX_RES( BTN_TEX_COLOR ) ),
+        aFtTexMode			( this, SVX_RES( FT_TEX_MODE ) ),
+        aBtnTexReplace		( this, SVX_RES( BTN_TEX_REPLACE ) ),
+        aBtnTexModulate		( this, SVX_RES( BTN_TEX_MODULATE ) ),
+        aBtnTexBlend		( this, SVX_RES( BTN_TEX_BLEND ) ),
+        aFtTexProjectionX	( this, SVX_RES( FT_TEX_PROJECTION_X ) ),
+        aBtnTexObjectX		( this, SVX_RES( BTN_TEX_OBJECT_X ) ),
+        aBtnTexParallelX	( this, SVX_RES( BTN_TEX_PARALLEL_X ) ),
+        aBtnTexCircleX		( this, SVX_RES( BTN_TEX_CIRCLE_X ) ),
+        aFtTexProjectionY	( this, SVX_RES( FT_TEX_PROJECTION_Y ) ),
+        aBtnTexObjectY		( this, SVX_RES( BTN_TEX_OBJECT_Y ) ),
+        aBtnTexParallelY	( this, SVX_RES( BTN_TEX_PARALLEL_Y ) ),
+        aBtnTexCircleY		( this, SVX_RES( BTN_TEX_CIRCLE_Y ) ),
+        aFtTexFilter		( this, SVX_RES( FT_TEX_FILTER ) ),
+        aBtnTexFilter		( this, SVX_RES( BTN_TEX_FILTER ) ),
         aFLTexture         ( this, SVX_RES( FL_TEXTURE ) ),
 
         // Material
-        aFtMatFavorites     ( this, SVX_RES( FT_MAT_FAVORITES ) ),
-        aLbMatFavorites     ( this, SVX_RES( LB_MAT_FAVORITES ) ),
-        aFtMatColor         ( this, SVX_RES( FT_MAT_COLOR ) ),
-        aLbMatColor         ( this, SVX_RES( LB_MAT_COLOR ) ),
-        aBtnMatColor        ( this, SVX_RES( BTN_MAT_COLOR ) ),
-        aFtMatEmission      ( this, SVX_RES( FT_MAT_EMISSION ) ),
-        aLbMatEmission      ( this, SVX_RES( LB_MAT_EMISSION ) ),
-        aBtnEmissionColor   ( this, SVX_RES( BTN_EMISSION_COLOR ) ),
-        aFtMatSpecular      ( this, SVX_RES( FT_MAT_SPECULAR ) ),
-        aLbMatSpecular      ( this, SVX_RES( LB_MAT_SPECULAR ) ),
-        aBtnSpecularColor   ( this, SVX_RES( BTN_SPECULAR_COLOR ) ),
+        aFtMatFavorites 	( this, SVX_RES( FT_MAT_FAVORITES ) ),
+        aLbMatFavorites 	( this, SVX_RES( LB_MAT_FAVORITES ) ),
+        aFtMatColor			( this, SVX_RES( FT_MAT_COLOR ) ),
+        aLbMatColor			( this, SVX_RES( LB_MAT_COLOR ) ),
+        aBtnMatColor		( this, SVX_RES( BTN_MAT_COLOR ) ),
+        aFtMatEmission		( this, SVX_RES( FT_MAT_EMISSION ) ),
+        aLbMatEmission		( this, SVX_RES( LB_MAT_EMISSION ) ),
+        aBtnEmissionColor	( this, SVX_RES( BTN_EMISSION_COLOR ) ),
+        aFtMatSpecular		( this, SVX_RES( FT_MAT_SPECULAR ) ),
+        aLbMatSpecular		( this, SVX_RES( LB_MAT_SPECULAR ) ),
+        aBtnSpecularColor	( this, SVX_RES( BTN_SPECULAR_COLOR ) ),
         aFtMatSpecularIntensity( this, SVX_RES( FT_MAT_SPECULAR_INTENSITY ) ),
         aMtrMatSpecularIntensity( this, SVX_RES( MTR_MAT_SPECULAR_INTENSITY ) ),
         aFLMatSpecular     ( this, SVX_RES( FL_MAT_SPECULAR ) ),
         aFLMaterial        ( this, SVX_RES( FL_MATERIAL ) ),
 
         // Unterer Bereich
-        aBtnConvertTo3D     ( this, SVX_RES( BTN_CHANGE_TO_3D ) ),
-        aBtnLatheObject     ( this, SVX_RES( BTN_LATHE_OBJ ) ),
-        aBtnPerspective     ( this, SVX_RES( BTN_PERSPECTIVE ) ),
-        aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
-        aCtlLightPreview    ( this, SVX_RES( CTL_LIGHT_PREVIEW ) ),
+        aBtnConvertTo3D		( this, SVX_RES( BTN_CHANGE_TO_3D ) ),
+        aBtnLatheObject		( this, SVX_RES( BTN_LATHE_OBJ ) ),
+        aBtnPerspective		( this, SVX_RES( BTN_PERSPECTIVE ) ),
+        aCtlPreview 		( this, SVX_RES( CTL_PREVIEW ) ),
+        aCtlLightPreview 	( this, SVX_RES( CTL_LIGHT_PREVIEW ) ),
 
-        aImgLightOn         ( SVX_RES( RID_SVXIMAGE_LIGHT_ON ) ),
-        aImgLightOff        ( SVX_RES( RID_SVXIMAGE_LIGHT_OFF ) ),
+        aImgLightOn			( SVX_RES( RID_SVXIMAGE_LIGHT_ON ) ),
+        aImgLightOff		( SVX_RES( RID_SVXIMAGE_LIGHT_OFF ) ),
 
-        bUpdate             ( FALSE ),
-        eViewType           ( VIEWTYPE_GEO ),
+        bUpdate				( FALSE ),
+        eViewType			( VIEWTYPE_GEO ),
 
-        pModel              ( NULL ),
-        pFmPage             ( NULL ),
-        pVDev               ( NULL ),
-        p3DView             ( NULL ),
-        pFavorSetList       ( NULL ),
-        pMatFavSetList      ( NULL ),
+        pModel				( NULL ),
+        pFmPage				( NULL ),
+        pVDev	 			( NULL ),
+        p3DView				( NULL ),
+        pFavorSetList		( NULL ),
+        pMatFavSetList		( NULL ),
 
-        pBindings           ( pInBindings ),
+        pBindings			( pInBindings ),
         pControllerItem(0L),
         pConvertTo3DItem(0L),
         pConvertTo3DLatheItem(0L),
-//      pPool               ( NULL ),
-        mpImpl              ( new Svx3DWinImpl() ),
+//		pPool				( NULL ),
+        mpImpl				( new Svx3DWinImpl() ),
         mpRemember2DAttributes(NULL),
-        bOnly3DChanged      ( FALSE )
+        bOnly3DChanged		( FALSE )
 {
     SETHCIMAGE( aBtnGeo, BMP_GEO_H );
     SETHCIMAGE( aBtnRepresentation, BMP_REPRESENTATION_H );
@@ -1311,7 +1311,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( ( bOn && !GetUILightState( aBtnLight7 )) ||
             ( !bOn && GetUILightState( aBtnLight7 )) )
         {
-            SetUILightState( aBtnLight7 , bOn );
+            SetUILightState( aBtnLight7	, bOn );
             bUpdate = TRUE;
         }
         if( aBtnLight7.GetState() == STATE_DONTKNOW )
@@ -2134,7 +2134,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     else if( aBtnTexModulate.IsChecked() )
         nValue = 2;
     //else if( aBtnTexBlend.IsChecked() )
-    //  nValue = 2;
+    //	nValue = 2;
 
     if( nValue == 1 || nValue == 2 )
         rAttrs.Put(Svx3DTextureModeItem(nValue));
@@ -2362,10 +2362,10 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
         // Da das permanente Updaten der Preview zu teuer waere
         BOOL bUpdatePreview = aBtnLight.IsChecked();
 
-        aBtnGeo.Check( &aBtnGeo == pBtn );
+        aBtnGeo.Check( &aBtnGeo	== pBtn );
         aBtnRepresentation.Check( &aBtnRepresentation == pBtn );
-        aBtnLight.Check( &aBtnLight == pBtn );
-        aBtnTexture.Check( &aBtnTexture == pBtn );
+        aBtnLight.Check( &aBtnLight	== pBtn );
+        aBtnTexture.Check( &aBtnTexture	== pBtn );
         aBtnMaterial.Check( &aBtnMaterial == pBtn );
 
         if( aBtnGeo.IsChecked() )
@@ -3310,7 +3310,7 @@ void __EXPORT Svx3DCtrlItem::StateChanged( USHORT /*nSId*/,
 \************************************************************************/
 
 SvxConvertTo3DItem::SvxConvertTo3DItem(UINT16 _nId, SfxBindings* _pBindings)
-:   SfxControllerItem(_nId, *_pBindings),
+:	SfxControllerItem(_nId, *_pBindings),
     bState(FALSE)
 {
 }

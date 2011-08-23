@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 class SvXMLExport;
 namespace com { namespace sun { namespace star {
-    namespace beans { struct PropertyValue; }
+    namespace beans { struct PropertyValue; } 
 } } }
 
 class XMLScriptExportHandler : public XMLEventExportHandler

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,13 +48,13 @@ class XMLTextFrameContext : public SvXMLImportContext
     SvXMLImportContextRef m_xReplImplContext;
     SvXMLAttributeList *m_pAttrList;
 
-    XMLTextFrameContextHyperlink_Impl   *m_pHyperlink;
+    XMLTextFrameContextHyperlink_Impl	*m_pHyperlink;
     // --> OD 2009-07-22 #i73249#
     ::rtl::OUString m_sTitle;
     // <--
-    ::rtl::OUString m_sDesc;
+    ::rtl::OUString	m_sDesc;
 
-    ::com::sun::star::text::TextContentAnchorType   m_eDefaultAnchorType;
+    ::com::sun::star::text::TextContentAnchorType 	m_eDefaultAnchorType;
 
     // --> OD 2006-03-10 #i51726#
     // The <draw:name> can longer be used to distinguish Writer graphic/text box

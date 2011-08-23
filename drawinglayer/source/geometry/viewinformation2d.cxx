@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,43 +55,43 @@ namespace drawinglayer
             friend class ::drawinglayer::geometry::ViewInformation2D;
 
             // the refcounter. 0 means exclusively used
-            sal_uInt32                                  mnRefCount;
+            sal_uInt32									mnRefCount;
 
         protected:
             // the object transformation
-            basegfx::B2DHomMatrix                       maObjectTransformation;
+            basegfx::B2DHomMatrix						maObjectTransformation;
 
             // the view transformation
-            basegfx::B2DHomMatrix                       maViewTransformation;
+            basegfx::B2DHomMatrix						maViewTransformation;
 
             // the ObjectToView and it's inverse, both on demand from ObjectTransformation
             // and ViewTransformation
-            basegfx::B2DHomMatrix                       maObjectToViewTransformation;
-            basegfx::B2DHomMatrix                       maInverseObjectToViewTransformation;
+            basegfx::B2DHomMatrix						maObjectToViewTransformation;
+            basegfx::B2DHomMatrix						maInverseObjectToViewTransformation;
 
             // the visible range and the on-demand one in ViewCoordinates
-            basegfx::B2DRange                           maViewport;
-            basegfx::B2DRange                           maDiscreteViewport;
+            basegfx::B2DRange							maViewport;
+            basegfx::B2DRange							maDiscreteViewport;
 
             // the DrawPage which is target of visualisation. This is needed e.g. for
             // the view-dependent decomposition of PageNumber TextFields.
             // This parameter is buffered here, but mainly resides in mxExtendedInformation,
             // so it will be interpreted, but held there. It will also not be added
             // to mxExtendedInformation in impFillViewInformationFromContent (it's there already)
-            uno::Reference< drawing::XDrawPage >        mxVisualizedPage;
+            uno::Reference< drawing::XDrawPage >		mxVisualizedPage;
 
             // the point in time
-            double                                      mfViewTime;
+            double										mfViewTime;
 
             // bitfield
             bool                                        mbReducedDisplayQuality : 1;
 
             // the complete PropertyValue representation (if already created)
-            uno::Sequence< beans::PropertyValue >       mxViewInformation;
+            uno::Sequence< beans::PropertyValue >		mxViewInformation;
 
             // the extra PropertyValues; not represented by ViewTransformation,
             // Viewport, VisualizedPage or ViewTime
-            uno::Sequence< beans::PropertyValue >       mxExtendedInformation;
+            uno::Sequence< beans::PropertyValue >		mxExtendedInformation;
 
             // the local UNO API strings
             const ::rtl::OUString& getNamePropertyObjectTransformation()
@@ -99,19 +99,19 @@ namespace drawinglayer
                 static ::rtl::OUString s_sNameProperty(RTL_CONSTASCII_USTRINGPARAM("ObjectTransformation"));
                 return s_sNameProperty;
             }
-
+            
             const ::rtl::OUString& getNamePropertyViewTransformation()
             {
                 static ::rtl::OUString s_sNameProperty(RTL_CONSTASCII_USTRINGPARAM("ViewTransformation"));
                 return s_sNameProperty;
             }
-
+            
             const ::rtl::OUString& getNamePropertyViewport()
             {
                 static ::rtl::OUString s_sNameProperty(RTL_CONSTASCII_USTRINGPARAM("Viewport"));
                 return s_sNameProperty;
             }
-
+            
             const ::rtl::OUString& getNamePropertyTime()
             {
                 static ::rtl::OUString s_sNameProperty(RTL_CONSTASCII_USTRINGPARAM("Time"));
@@ -207,7 +207,7 @@ namespace drawinglayer
                     (bObjectTransformationUsed ? 1 : 0) +
                     (bViewTransformationUsed ? 1 : 0) +
                     (bViewportUsed ? 1 : 0) +
-                    (bTimeUsed ? 1 : 0) +
+                    (bTimeUsed ? 1 : 0) + 
                     (bVisualizedPageUsed ? 1 : 0) +
                     (bReducedDisplayQualityUsed ? 1 : 0) +
                     (bExtraInformation ? mxExtendedInformation.getLength() : 0));
@@ -267,13 +267,13 @@ namespace drawinglayer
 
         public:
             ImpViewInformation2D(
-                const basegfx::B2DHomMatrix& rObjectTransformation,
-                const basegfx::B2DHomMatrix& rViewTransformation,
-                const basegfx::B2DRange& rViewport,
+                const basegfx::B2DHomMatrix& rObjectTransformation, 
+                const basegfx::B2DHomMatrix& rViewTransformation, 
+                const basegfx::B2DRange& rViewport, 
                 const uno::Reference< drawing::XDrawPage >& rxDrawPage,
                 double fViewTime,
                 const uno::Sequence< beans::PropertyValue >& rExtendedParameters)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 maObjectTransformation(rObjectTransformation),
                 maViewTransformation(rViewTransformation),
                 maObjectToViewTransformation(),
@@ -290,7 +290,7 @@ namespace drawinglayer
             }
 
             ImpViewInformation2D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 maObjectTransformation(),
                 maViewTransformation(),
                 maObjectToViewTransformation(),
@@ -307,7 +307,7 @@ namespace drawinglayer
             }
 
             ImpViewInformation2D()
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 maObjectTransformation(),
                 maViewTransformation(),
                 maObjectToViewTransformation(),
@@ -322,23 +322,23 @@ namespace drawinglayer
             {
             }
 
-            const basegfx::B2DHomMatrix& getObjectTransformation() const
-            {
-                return maObjectTransformation;
+            const basegfx::B2DHomMatrix& getObjectTransformation() const 
+            { 
+                return maObjectTransformation; 
+            }
+            
+            const basegfx::B2DHomMatrix& getViewTransformation() const 
+            { 
+                return maViewTransformation; 
+            }
+            
+            const basegfx::B2DRange& getViewport() const 
+            { 
+                return maViewport; 
             }
 
-            const basegfx::B2DHomMatrix& getViewTransformation() const
-            {
-                return maViewTransformation;
-            }
-
-            const basegfx::B2DRange& getViewport() const
-            {
-                return maViewport;
-            }
-
-            const basegfx::B2DRange& getDiscreteViewport() const
-            {
+            const basegfx::B2DRange& getDiscreteViewport() const 
+            { 
                 ::osl::Mutex m_mutex;
 
                 if(maDiscreteViewport.isEmpty() && !maViewport.isEmpty())
@@ -355,7 +355,7 @@ namespace drawinglayer
             {
                 ::osl::Mutex m_mutex;
 
-                if(maObjectToViewTransformation.isIdentity() &&
+                if(maObjectToViewTransformation.isIdentity() && 
                     (!maObjectTransformation.isIdentity() || !maViewTransformation.isIdentity()))
                 {
                     basegfx::B2DHomMatrix aObjectToView(maViewTransformation * maObjectTransformation);
@@ -369,7 +369,7 @@ namespace drawinglayer
             {
                 ::osl::Mutex m_mutex;
 
-                if(maInverseObjectToViewTransformation.isIdentity() &&
+                if(maInverseObjectToViewTransformation.isIdentity() && 
                     (!maObjectTransformation.isIdentity() || !maViewTransformation.isIdentity()))
                 {
                     basegfx::B2DHomMatrix aInverseObjectToView(maViewTransformation * maObjectTransformation);
@@ -380,9 +380,9 @@ namespace drawinglayer
                 return maInverseObjectToViewTransformation;
             }
 
-            double getViewTime() const
-            {
-                return mfViewTime;
+            double getViewTime() const 
+            { 
+                return mfViewTime; 
             }
 
             const uno::Reference< drawing::XDrawPage >& getVisualizedPage() const
@@ -445,35 +445,35 @@ namespace drawinglayer
     namespace geometry
     {
         ViewInformation2D::ViewInformation2D(
-            const basegfx::B2DHomMatrix& rObjectTransformation,
-            const basegfx::B2DHomMatrix& rViewTransformation,
-            const basegfx::B2DRange& rViewport,
+            const basegfx::B2DHomMatrix& rObjectTransformation, 
+            const basegfx::B2DHomMatrix& rViewTransformation, 
+            const basegfx::B2DRange& rViewport, 
             const uno::Reference< drawing::XDrawPage >& rxDrawPage,
             double fViewTime,
             const uno::Sequence< beans::PropertyValue >& rExtendedParameters)
-        :   mpViewInformation2D(new ImpViewInformation2D(
-                rObjectTransformation,
-                rViewTransformation,
-                rViewport,
-                rxDrawPage,
-                fViewTime,
+        :	mpViewInformation2D(new ImpViewInformation2D(
+                rObjectTransformation, 
+                rViewTransformation, 
+                rViewport, 
+                rxDrawPage, 
+                fViewTime, 
                 rExtendedParameters))
         {
         }
 
         ViewInformation2D::ViewInformation2D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
-        :   mpViewInformation2D(new ImpViewInformation2D(rViewParameters))
+        :	mpViewInformation2D(new ImpViewInformation2D(rViewParameters))
         {
         }
 
         ViewInformation2D::ViewInformation2D()
-        :   mpViewInformation2D(ImpViewInformation2D::get_global_default())
+        :	mpViewInformation2D(ImpViewInformation2D::get_global_default())
         {
             mpViewInformation2D->mnRefCount++;
         }
 
         ViewInformation2D::ViewInformation2D(const ViewInformation2D& rCandidate)
-        :   mpViewInformation2D(rCandidate.mpViewInformation2D)
+        :	mpViewInformation2D(rCandidate.mpViewInformation2D)
         {
             ::osl::Mutex m_mutex;
             mpViewInformation2D->mnRefCount++;
@@ -510,7 +510,7 @@ namespace drawinglayer
             {
                 delete mpViewInformation2D;
             }
-
+            
             mpViewInformation2D = rCandidate.mpViewInformation2D;
             mpViewInformation2D->mnRefCount++;
 
@@ -566,7 +566,7 @@ namespace drawinglayer
         {
             return mpViewInformation2D->getInverseObjectToViewTransformation();
         }
-
+        
         const basegfx::B2DRange& ViewInformation2D::getDiscreteViewport() const
         {
             return mpViewInformation2D->getDiscreteViewport();

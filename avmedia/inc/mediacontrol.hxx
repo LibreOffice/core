@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #ifndef _AVMEDIA_MEDIACONTROL_HXX
 #define _AVMEDIA_MEDIACONTROL_HXX
 
-#include <avmedia/mediaitem.hxx>
+#include <avmedia/mediaitem.hxx> 
 
 #include <vcl/timer.hxx>
 #include <vcl/slider.hxx>
@@ -65,27 +65,27 @@ class MediaControl : public Control
 public:
 
                         MediaControl( Window* pParent, MediaControlStyle eControlStyle );
-    virtual             ~MediaControl();
-
-    const Size&         getMinSizePixel() const;
-
-    void                setState( const MediaItem& rItem );
-    void                getState( MediaItem& rItem ) const;
-
+    virtual				~MediaControl();
+                        
+    const Size&			getMinSizePixel() const;
+                
+    void				setState( const MediaItem& rItem );
+    void				getState( MediaItem& rItem ) const;
+            
 protected:
-
-    virtual void        update() = 0;
-    virtual void        execute( const MediaItem& rItem ) = 0;
-
-    virtual void        Resize();
+    
+    virtual void		update() = 0;
+    virtual void		execute( const MediaItem& rItem ) = 0;
+    
+    virtual void		Resize();
 
 private:
 
-    void                implUpdateToolboxes();
-    void                implUpdateTimeSlider();
-    void                implUpdateVolumeSlider();
-    void                implUpdateTimeField( double fCurTime );
-    Image               implGetImage( sal_Int32 nImageId ) const;
+    void 				implUpdateToolboxes();
+    void 				implUpdateTimeSlider();
+    void				implUpdateVolumeSlider();
+    void				implUpdateTimeField( double fCurTime );
+    Image				implGetImage( sal_Int32 nImageId ) const;
 
                         DECL_LINK( implTimeHdl, Slider* );
                         DECL_LINK( implTimeEndHdl, Slider* );
@@ -94,24 +94,24 @@ private:
                         DECL_LINK( implSelectHdl, ToolBox* );
                         DECL_LINK( implZoomSelectHdl, ListBox* );
                         DECL_LINK( implTimeoutHdl, Timer* );
-
-    ImageList           maImageList;
-    Timer               maTimer;
-    MediaItem           maItem;
-    ToolBox             maPlayToolBox;
-    Slider              maTimeSlider;
-    ToolBox             maMuteToolBox;
-    Slider              maVolumeSlider;
-    ToolBox             maZoomToolBox;
-    ListBox*            mpZoomListBox;
-    Edit                maTimeEdit;
-    Size                maMinSize;
-    MediaControlStyle   meControlStyle;
+                        
+    ImageList			maImageList;
+    Timer				maTimer;
+    MediaItem			maItem;
+    ToolBox				maPlayToolBox;
+    Slider				maTimeSlider;
+    ToolBox				maMuteToolBox;
+    Slider				maVolumeSlider;
+    ToolBox				maZoomToolBox;
+    ListBox*			mpZoomListBox;
+    Edit				maTimeEdit;
+    Size				maMinSize;
+    MediaControlStyle	meControlStyle;
     bool                mbLocked;
 };
 
 }
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

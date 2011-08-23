@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,32 +30,32 @@
 #define __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/inoncopyable.h>
 #include <threadhelp/itransactionmanager.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -68,9 +68,9 @@ namespace framework{
                     It's possible too, to enable automaticly throwing of some exceptions for illegal
                     transaction requests ... e.g. interface call for already disposed objects.
 
-    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
+    @attention		To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
 
-    @implements     -
+    @implements		-
     @base           INonCopyable
 
     @devstatus      draft
@@ -78,7 +78,7 @@ namespace framework{
 class TransactionGuard : private INonCopyable
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
@@ -157,26 +157,26 @@ class TransactionGuard : private INonCopyable
         }
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
 
         /*-****************************************************************************************************//**
-            @short      disable using of these functions!
-            @descr      It's not allowed to use this methods. Different problem can occure otherwise.
+            @short		disable using of these functions!
+            @descr		It's not allowed to use this methods. Different problem can occure otherwise.
                         Thats why we disable it by make it private.
 
-            @seealso    other ctor
+            @seealso	other ctor
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
         TransactionGuard();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
     private:
 
@@ -184,7 +184,7 @@ class TransactionGuard : private INonCopyable
 
 };      //  class TransactionGuard
 
-}       //  namespace framework
+}		//	namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
 

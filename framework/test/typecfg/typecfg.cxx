@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <classes/servicemanager.hxx>
 #include <classes/filtercache.hxx>
@@ -39,14 +39,14 @@
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
 #include <osl/process.h>
@@ -60,39 +60,39 @@
 #include <stdio.h>
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
-#define RDBFILE                                 DECLARE_ASCII("typecfg.rdb"     )
-#define ARGUMENT_GENERATE_CFGVIEW               DECLARE_ASCII("-cfgview"        )
-#define ARGUMENT_CHECK_FILTERREGISTRATION       DECLARE_ASCII("-registerfilter" )
-#define ARGUMENT_GENERATE_TYPEDETECTION_XCD     DECLARE_ASCII("-generatexcd"    )
+#define	RDBFILE									DECLARE_ASCII("typecfg.rdb"		)
+#define	ARGUMENT_GENERATE_CFGVIEW				DECLARE_ASCII("-cfgview"		)
+#define	ARGUMENT_CHECK_FILTERREGISTRATION		DECLARE_ASCII("-registerfilter"	)
+#define	ARGUMENT_GENERATE_TYPEDETECTION_XCD		DECLARE_ASCII("-generatexcd"	)
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
-using namespace ::std                       ;
-using namespace ::rtl                       ;
-using namespace ::framework                 ;
-using namespace ::comphelper                ;
-using namespace ::com::sun::star::uno       ;
-using namespace ::com::sun::star::lang      ;
-using namespace ::com::sun::star::container ;
-using namespace ::com::sun::star::beans     ;
+using namespace ::std						;
+using namespace ::rtl						;
+using namespace ::framework					;
+using namespace ::comphelper				;
+using namespace ::com::sun::star::uno		;
+using namespace ::com::sun::star::lang		;
+using namespace ::com::sun::star::container	;
+using namespace ::com::sun::star::beans		;
 
 //_________________________________________________________________________________________________________________
-//  defines
+//	defines
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 enum EMode
 {
-    E_GENERATE_CFGVIEW              ,
-    E_CHECK_FILTERREGISTRATION      ,
+    E_GENERATE_CFGVIEW		   		,
+    E_CHECK_FILTERREGISTRATION		,
     E_GENERATE_TYPEDETECTION_XCD
 };
 
@@ -107,23 +107,23 @@ class TypeApplication : public Application
     //*************************************************************************************************************
     private:
 
-        void impl_parseCommandLine          ();
-        void impl_generateCFGView           ();
-        void impl_checkFilterRegistration   ();
-        void impl_generateTypeDetectionXCD  ();
+        void impl_parseCommandLine			();
+        void impl_generateCFGView			();
+        void impl_checkFilterRegistration	();
+        void impl_generateTypeDetectionXCD	();
 
     //*************************************************************************************************************
     private:
 
-        EMode                               m_eMode             ;
-        Reference< XMultiServiceFactory >   m_xServiceManager   ;
+        EMode								m_eMode				;
+        Reference< XMultiServiceFactory >	m_xServiceManager	;
 
-        FilterCache*                        m_pCache            ;
+        FilterCache*						m_pCache			;
 
-};  //  class FilterApplication
+};	//	class FilterApplication
 
 //_________________________________________________________________________________________________________________
-//  global variables
+//	global variables
 //_________________________________________________________________________________________________________________
 
 TypeApplication gApplication;
@@ -142,11 +142,11 @@ void TypeApplication::Main()
 
     switch( m_eMode )
     {
-        case E_GENERATE_CFGVIEW                 :   impl_generateCFGView();
+        case E_GENERATE_CFGVIEW					:	impl_generateCFGView();
                                                     break;
-        case E_CHECK_FILTERREGISTRATION         :   impl_checkFilterRegistration();
+        case E_CHECK_FILTERREGISTRATION			:	impl_checkFilterRegistration();
                                                     break;
-        case E_GENERATE_TYPEDETECTION_XCD       :   impl_generateTypeDetectionXCD();
+        case E_GENERATE_TYPEDETECTION_XCD  		:	impl_generateTypeDetectionXCD();
                                                     break;
     }
 
@@ -157,8 +157,8 @@ void TypeApplication::Main()
 //*****************************************************************************************************************
 void TypeApplication::impl_parseCommandLine()
 {
-    OUString        sArgument   ;
-    sal_Int32       nArgument   = 0                         ;
+    OUString		sArgument	;
+    sal_Int32		nArgument	= 0							;
     sal_Int32       nCount =  osl_getCommandArgCount();
 
     while( nArgument<nCount )
@@ -194,7 +194,7 @@ void TypeApplication::impl_generateCFGView()
         // Cache use ref count!
         FilterCache aCache;
         aCache.impldbg_generateHTMLView();
-    #endif  //ENABLE_FILTERCACHEDEBUG
+    #endif	//ENABLE_FILTERCACHEDEBUG
 }
 
 //*****************************************************************************************************************
@@ -206,32 +206,32 @@ void TypeApplication::impl_checkFilterRegistration()
     {
         Sequence< PropertyValue > lProperties( 8 );
 
-        lProperties[0].Name     =   DECLARE_ASCII("Type")               ;
-        lProperties[0].Value    <<= DECLARE_ASCII("MeinType")           ;
+        lProperties[0].Name		=	DECLARE_ASCII("Type")				;
+        lProperties[0].Value	<<=	DECLARE_ASCII("MeinType")			;
 
-        lProperties[1].Name     =   DECLARE_ASCII("UIName")             ;
-        lProperties[1].Value    <<= DECLARE_ASCII("MeinUIName")         ;
+        lProperties[1].Name		=	DECLARE_ASCII("UIName")				;
+        lProperties[1].Value	<<=	DECLARE_ASCII("MeinUIName")			;
 
-        lProperties[2].Name     =   DECLARE_ASCII("UINames")            ;
-        lProperties[2].Value    <<= Sequence< PropertyValue >()         ;
+        lProperties[2].Name		=	DECLARE_ASCII("UINames")	   		;
+        lProperties[2].Value	<<=	Sequence< PropertyValue >()			;
 
-        lProperties[3].Name     =   DECLARE_ASCII("DocumentService")    ;
-        lProperties[3].Value    <<= DECLARE_ASCII("MeinDocService")     ;
+        lProperties[3].Name		=	DECLARE_ASCII("DocumentService")	;
+        lProperties[3].Value	<<=	DECLARE_ASCII("MeinDocService")		;
 
-        lProperties[4].Name     =   DECLARE_ASCII("FilterService")      ;
-        lProperties[4].Value    <<= DECLARE_ASCII("MeinFilterService")  ;
+        lProperties[4].Name		=	DECLARE_ASCII("FilterService")		;
+        lProperties[4].Value	<<=	DECLARE_ASCII("MeinFilterService")	;
 
-        lProperties[5].Name     =   DECLARE_ASCII("Flags")              ;
-        lProperties[5].Value    <<= (sal_Int32)256                      ;
+        lProperties[5].Name		=	DECLARE_ASCII("Flags")				;
+        lProperties[5].Value	<<=	(sal_Int32)256						;
 
-        lProperties[6].Name     =   DECLARE_ASCII("UserData")           ;
-        lProperties[6].Value    <<= Sequence< OUString >()              ;
+        lProperties[6].Name		=	DECLARE_ASCII("UserData")			;
+        lProperties[6].Value	<<=	Sequence< OUString >()				;
 
-        lProperties[7].Name     =   DECLARE_ASCII("FileFormatVersion")  ;
-        lProperties[7].Value    <<= (sal_Int32)0                        ;
+        lProperties[7].Name		=	DECLARE_ASCII("FileFormatVersion")	;
+        lProperties[7].Value	<<=	(sal_Int32)0						;
 
-        lProperties[8].Name     =   DECLARE_ASCII("TemplateName")       ;
-        lProperties[8].Value    <<= DECLARE_ASCII("MeinTemplate")       ;
+        lProperties[8].Name		=	DECLARE_ASCII("TemplateName")		;
+        lProperties[8].Value	<<=	DECLARE_ASCII("MeinTemplate")		;
     }
 }
 
@@ -240,11 +240,11 @@ void TypeApplication::impl_generateTypeDetectionXCD()
 {
     #ifdef ENABLE_GENERATEFILTERCACHE
     // Cache use ref count!
-    FilterCache aCache                  ;
-    sal_Bool    bWriteable  =   sal_True;
-    sal_Unicode cSeparator  =   ','     ;
-    aCache.impldbg_generateXCD( "org.openoffice.Office.TypeDetection.xcd", bWriteable, cSeparator );
-    #endif  //ENABLE_GENERATEFILTERCACHE
+    FilterCache	aCache					;
+    sal_Bool	bWriteable	=	sal_True;
+    sal_Unicode	cSeparator	=	','		;
+    aCache.impldbg_generateXCD(	"org.openoffice.Office.TypeDetection.xcd", bWriteable, cSeparator );
+    #endif	//ENABLE_GENERATEFILTERCACHE
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

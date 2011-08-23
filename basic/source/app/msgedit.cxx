@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,9 @@
 #include "precompiled_basic.hxx"
 /*************************************************************************
 File Versions so far:
-No Version          Initial Implementation without Version Information
-Version 2           changed order of entries(New Entries at the end)
-Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
+No Version			Initial Implementation without Version Information
+Version 2			changed order of entries(New Entries at the end)
+Version 3			Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 
 *************************************************************************/
 #include <cstdio>
@@ -75,7 +75,7 @@ MsgEdit::MsgEdit( AppError* pParent, BasicFrame *pBF, const WinBits& aBits )
 , pAppError( pParent )
 , aEditTree( pParent, pBF, aBits | WB_HASBUTTONS | WB_HASLINES | WB_HASBUTTONSATROOT )
 {
-//  SetFont( aEditTree.GetDefaultFont( DEFAULTFONT_FIXED, aEditTree.GetSettings().GetLanguage(), 0, &aEditTree ) );
+//	SetFont( aEditTree.GetDefaultFont( DEFAULTFONT_FIXED, aEditTree.GetSettings().GetLanguage(), 0, &aEditTree ) );
     aEditTree.SetNodeBitmaps( Bitmap( SttResId (MBP_PLUS) ), Bitmap( SttResId (MBP_MINUS) ) );
     aEditTree.SetSelectionMode( MULTIPLE_SELECTION );
     if ( aEditTree.GetModel()->GetSortMode() != SortNone )
@@ -100,10 +100,10 @@ MsgEdit::~MsgEdit()
 {}
 
 // set the LogType since calling the add method can be from other add methods
-#define COPY_TTDEBUGDATA( LOGTYPE )                     \
-    TTDebugData *pTTDebugData = new TTDebugData;        \
-    *pTTDebugData = aDebugData;                         \
-    pTTDebugData->aLogType = LOGTYPE;                   \
+#define COPY_TTDEBUGDATA( LOGTYPE )						\
+    TTDebugData *pTTDebugData = new TTDebugData;		\
+    *pTTDebugData = aDebugData;							\
+    pTTDebugData->aLogType = LOGTYPE;					\
 
 
 void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
@@ -159,19 +159,19 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
                     }
                     AddRun( aUILogMsg, LogMsg->aDebugData ); break;
                 }
-            case LOG_TEST_CASE: AddTestCase( aUILogMsg, LogMsg->aDebugData ); break;
-            case LOG_ERROR:     AddError( aUILogMsg, LogMsg->aDebugData ); break;
+            case LOG_TEST_CASE:	AddTestCase( aUILogMsg, LogMsg->aDebugData ); break;
+            case LOG_ERROR:		AddError( aUILogMsg, LogMsg->aDebugData ); break;
             case LOG_CALL_STACK:AddCallStack( aUILogMsg, LogMsg->aDebugData ); break;
-            case LOG_MESSAGE:   AddMessage( aUILogMsg, LogMsg->aDebugData ); break;
-            case LOG_WARNING:   AddWarning( aUILogMsg, LogMsg->aDebugData ); break;
-            case LOG_ASSERTION: AddAssertion( aUILogMsg, LogMsg->aDebugData ); break;
-            case LOG_ASSERTION_STACK:   AddAssertionStack( aUILogMsg, LogMsg->aDebugData ); break;
-            case LOG_QA_ERROR:  AddQAError( aUILogMsg, LogMsg->aDebugData ); break;
+            case LOG_MESSAGE:	AddMessage( aUILogMsg, LogMsg->aDebugData ); break;
+            case LOG_WARNING:	AddWarning( aUILogMsg, LogMsg->aDebugData ); break;
+            case LOG_ASSERTION:	AddAssertion( aUILogMsg, LogMsg->aDebugData ); break;
+            case LOG_ASSERTION_STACK:	AddAssertionStack( aUILogMsg, LogMsg->aDebugData ); break;
+            case LOG_QA_ERROR:	AddQAError( aUILogMsg, LogMsg->aDebugData ); break;
             default:DBG_ERROR("Unbekannter Typ in ResultFile. Speichern des ResultFile resultiert in Informationsverlust");
         }
 
         if ( !bFileLoading )
-        {   // Comes from Testtool and must be written immediately
+        {	// Comes from Testtool and must be written immediately
             BOOL bFileWasChanged = pAppError->DiskFileChanged( SINCE_LAST_LOAD );
 
             DBG_ASSERT( aLogFileName == LogMsg->aLogFileName, "Logging to different logfile as before" );
@@ -180,7 +180,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
             SvFileStream aStrm( LogMsg->aLogFileName, STREAM_STD_WRITE );
             if ( bNewFile )
             {
-                String aSave = VERSION_STRING.Append( UniString::CreateFromInt32( 3 ) ).AppendAscii("\n");      // Version 3
+                String aSave = VERSION_STRING.Append( UniString::CreateFromInt32( 3 ) ).AppendAscii("\n");		// Version 3
                 aSave.ConvertLineEnd(LINEEND_CRLF);
                 aStrm << ByteString( aSave, RTL_TEXTENCODING_IBM_850 ).GetBuffer();
             }
@@ -233,7 +233,7 @@ void MsgEdit::AddRun( String aMsg, TTDebugData aDebugData )
         {
             while ( pRun && aEditTree.NextSibling( pRun ) )
                 aEditTree.GetModel()->Remove( aEditTree.NextSibling( pRun ) );
-
+    
             aEditTree.GetModel()->Remove( pRun );
             bModified = TRUE;
             lModify.Call( NULL );
@@ -245,8 +245,8 @@ void MsgEdit::AddRun( String aMsg, TTDebugData aDebugData )
     COPY_TTDEBUGDATA( LOG_RUN );
     if ( !bFileLoading || ( bFileLoading && nVersion >= 2 ) )
         pCurrentRun = aEditTree.InsertEntry( aMsg, NULL, FALSE, 0, pTTDebugData );
-    else        // First file format
-        pCurrentRun = aEditTree.InsertEntry( aMsg, NULL, FALSE, LIST_APPEND, pTTDebugData );    // and therefor at the end
+    else		// First file format
+        pCurrentRun = aEditTree.InsertEntry( aMsg, NULL, FALSE, LIST_APPEND, pTTDebugData );	// and therefor at the end
 
     aEditTree.ShowEntry( pCurrentRun );
     pCurrentTestCase = NULL;
@@ -258,7 +258,7 @@ void MsgEdit::AddTestCase( String aMsg, TTDebugData aDebugData )
 {
     if ( pCurrentRun )
     {
-        if ( aMsg.Len() == 0 )  // End of Testcase
+        if ( aMsg.Len() == 0 )	// End of Testcase
         {
             pCurrentTestCase = NULL;
         }
@@ -423,32 +423,32 @@ void MsgEdit::AddQAError( String aMsg, TTDebugData aDebugData )
 }
 
 /*
-    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, ULONG nPos ) const { return SvLBox::GetEntry(pParent,nPos); }
-    SvLBoxEntry*    GetEntry( ULONG nRootPos ) const { return SvLBox::GetEntry(nRootPos);}
+    SvLBoxEntry*	GetEntry( SvLBoxEntry* pParent, ULONG nPos ) const { return SvLBox::GetEntry(pParent,nPos); }
+    SvLBoxEntry*	GetEntry( ULONG nRootPos ) const { return SvLBox::GetEntry(nRootPos);}
 
 
 
-    SvLBoxEntry*    FirstChild(SvLBoxEntry* pParent ) const { return (SvLBoxEntry*)(pModel->FirstChild(pParent)); }
-    SvLBoxEntry*    NextSibling(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->NextSibling( pEntry )); }
-    SvLBoxEntry*    PrevSibling(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->PrevSibling( pEntry )); }
+    SvLBoxEntry*	FirstChild(SvLBoxEntry* pParent ) const { return (SvLBoxEntry*)(pModel->FirstChild(pParent)); }
+    SvLBoxEntry*	NextSibling(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->NextSibling( pEntry )); }
+    SvLBoxEntry*	PrevSibling(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->PrevSibling( pEntry )); }
 
-    SvLBoxEntry*    FirstSelected() const { return (SvLBoxEntry*)SvListView::FirstSelected(); }
-    SvLBoxEntry*    NextSelected( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(SvListView::NextSelected(pEntry)); }
-    SvLBoxEntry*    PrevSelected( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(SvListView::PrevSelected(pEntry)); }
-    SvLBoxEntry*    LastSelected() const { return (SvLBoxEntry*)(SvListView::LastSelected()); }
+    SvLBoxEntry*	FirstSelected() const { return (SvLBoxEntry*)SvListView::FirstSelected(); }
+    SvLBoxEntry*	NextSelected( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(SvListView::NextSelected(pEntry)); }
+    SvLBoxEntry*	PrevSelected( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(SvListView::PrevSelected(pEntry)); }
+    SvLBoxEntry*	LastSelected() const { return (SvLBoxEntry*)(SvListView::LastSelected()); }
 
-    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, ULONG nPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(pParent,nPos)); }
-    SvLBoxEntry*    GetEntry( ULONG nRootPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(nRootPos)); }
+    SvLBoxEntry*	GetEntry( SvLBoxEntry* pParent, ULONG nPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(pParent,nPos)); }
+    SvLBoxEntry*	GetEntry( ULONG nRootPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(nRootPos)); }
 
-    SvLBoxEntry*    GetParent( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->GetParent(pEntry)); }
-    SvLBoxEntry*    GetRootLevelParent(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->GetRootLevelParent( pEntry ));}
+    SvLBoxEntry*	GetParent( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->GetParent(pEntry)); }
+    SvLBoxEntry*	GetRootLevelParent(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->GetRootLevelParent( pEntry ));}
 
-    BOOL            IsInChildList( SvListEntry* pParent, SvListEntry* pChild) const;
-    SvListEntry*    GetEntry( SvListEntry* pParent, ULONG nPos ) const;
-    SvListEntry*    GetEntry( ULONG nRootPos ) const;
-    SvListEntry*    GetEntryAtAbsPos( ULONG nAbsPos ) const;
-    SvListEntry*    GetParent( SvListEntry* pEntry ) const;
-    SvListEntry*    GetRootLevelParent( SvListEntry* pEntry ) const;
+    BOOL			IsInChildList( SvListEntry* pParent, SvListEntry* pChild) const;
+    SvListEntry*	GetEntry( SvListEntry* pParent, ULONG nPos ) const;
+    SvListEntry*	GetEntry( ULONG nRootPos ) const;
+    SvListEntry*	GetEntryAtAbsPos( ULONG nAbsPos ) const;
+    SvListEntry*	GetParent( SvListEntry* pEntry ) const;
+    SvListEntry*	GetRootLevelParent( SvListEntry* pEntry ) const;
 */
 
 //#define CHECK( pMemo ) if ( pMemo && !aEditTree.GetViewData( pMemo ) ) pMemo = NULL
@@ -477,15 +477,15 @@ String MsgEdit::Impl_MakeText( SvLBoxEntry *pEntry ) const
     TTDebugData *aData = (TTDebugData*)pEntry->GetUserData();
     switch ( aData->aLogType )
     {
-        case LOG_RUN:       aRet.AppendAscii("\n"); break;
-        case LOG_TEST_CASE: break;
-        case LOG_ERROR:     break;
+        case LOG_RUN:		aRet.AppendAscii("\n"); break;
+        case LOG_TEST_CASE:	break;
+        case LOG_ERROR:		break;
         case LOG_CALL_STACK:aRet.AppendAscii("--> "); break;
-        case LOG_MESSAGE:   break;
-        case LOG_WARNING:   break;
-        case LOG_ASSERTION: break;
-        case LOG_ASSERTION_STACK:aRet.AppendAscii("--> ");  break;
-        case LOG_QA_ERROR:  break;
+        case LOG_MESSAGE:	break;
+        case LOG_WARNING:	break;
+        case LOG_ASSERTION:	break;
+        case LOG_ASSERTION_STACK:aRet.AppendAscii("--> ");	break;
+        case LOG_QA_ERROR:	break;
         default:DBG_ERROR("Unknown type in ResultWindow!");
     }
     aRet += aEditTree.GetEntryText( pEntry );
@@ -494,7 +494,7 @@ String MsgEdit::Impl_MakeText( SvLBoxEntry *pEntry ) const
 
 String MsgEdit::Impl_MakeSaveText( TTDebugData aData ) const
 {
-//      LogType;Filename;Line;Col1;Col2;Message
+//		LogType;Filename;Line;Col1;Col2;Message
     String aRet;
     aRet += String::CreateFromInt32( (int)aData.aLogType );
     aRet += ';';
@@ -514,12 +514,12 @@ String MsgEdit::Impl_MakeSaveText( TTDebugData aData ) const
 
 String MsgEdit::Impl_MakeSaveText( SvLBoxEntry *pEntry ) const
 {
-//      LogType;Filename;Line;Col1;Col2;Message
+//		LogType;Filename;Line;Col1;Col2;Message
     String aRet;
     TTDebugData *aData = (TTDebugData*)pEntry->GetUserData();
 
     if ( aEditTree.PrevSibling( pEntry ) && LOGTYPE( aEditTree.PrevSibling( pEntry ) ) == LOG_TEST_CASE )
-    {   // To properly finish cases and warnings/msgs are in correct hierarchie
+    {	// To properly finish cases and warnings/msgs are in correct hierarchie
         aRet += String::CreateFromInt32( (int)LOG_TEST_CASE );
         aRet.AppendAscii(";;0;0;0;\"\"\n");
     }
@@ -583,7 +583,7 @@ USHORT MsgEdit::GetLineNr() const
 
 void MsgEdit::ReplaceSelected( const String& rStr )
 {
-    (void) rStr; /* avoid warning about unused parameter */
+    (void) rStr; /* avoid warning about unused parameter */ 
     Sound::Beep();
     DBG_ERROR("Not Implemented");
 }
@@ -607,14 +607,14 @@ String MsgEdit::GetText() const
 
 void MsgEdit::SetText( const String& rStr )
 {
-    (void) rStr; /* avoid warning about unused parameter */
+    (void) rStr; /* avoid warning about unused parameter */ 
     Sound::Beep();
     DBG_ERROR("Not Implemented");
 }
 
-BOOL MsgEdit::HasText() const
-{
-  return aEditTree.First() != NULL;
+BOOL MsgEdit::HasText() const 
+{ 
+  return aEditTree.First() != NULL; 
 }
 
 // Search from the beginning or mark start + 1
@@ -622,8 +622,8 @@ BOOL MsgEdit::Find( const String& s )
 {
     TextSelection r  = GetSelection();
     USHORT bgn   = (USHORT) r.GetStart().GetPara() + 1;
-    if ( r.GetStart().GetPara() == 0 )
-        bgn = 0;    // Search from the beginning
+    if ( r.GetStart().GetPara() == 0 ) 
+        bgn = 0;	// Search from the beginning
 
     SvLBoxEntry *pEntry = aEditTree.GetModel()->GetEntryAtAbsPos( bgn );
     while ( pEntry )
@@ -662,7 +662,7 @@ BOOL MsgEdit::Load( const String& aName )
         TTLogMsg *pLogMsg = new TTLogMsg;
         while( !aStrm.IsEof() && bOk )
         {
-            if ( nVersion >= 3 )    // utf8
+            if ( nVersion >= 3 )	// utf8
                 aStrm.ReadByteStringLine( aLine, RTL_TEXTENCODING_UTF8 );
             else
                 aStrm.ReadByteStringLine( aLine, RTL_TEXTENCODING_IBM_850 );
@@ -674,7 +674,7 @@ BOOL MsgEdit::Load( const String& aName )
 
             if ( aLine.GetTokenCount() >= 6 )
             {
-//          LogType;Filename;Line;Col1;Col2;Message
+//			LogType;Filename;Line;Col1;Col2;Message
                 TTDebugData aDebugData;
                 aDebugData.aLogType = TTLogType( TOKEN(0).ToInt32() );
                 aDebugData.aFilename = TOKEN(1);
@@ -682,7 +682,7 @@ BOOL MsgEdit::Load( const String& aName )
                 aDebugData.nCol1 = USHORT( TOKEN(3).ToInt32() );
                 aDebugData.nCol2 = USHORT( TOKEN(4).ToInt32() );
                 aDebugData.aMsg = aLine.GetQuotedToken( 5, CUniString("\"\"") );
-
+                
                 // Remove leading and trailing quotes
                 aDebugData.aMsg.Erase(0,1);
                 aDebugData.aMsg.Erase(aDebugData.aMsg.Len()-1,1);
@@ -703,7 +703,7 @@ BOOL MsgEdit::Load( const String& aName )
         delete pLogMsg;
         aStrm.Close();
         if ( nVersion < 2 && !bLoadError )
-            Save( aName );  // Necessary to avoid mess
+            Save( aName );	// Necessary to avoid mess
 
     }
     else
@@ -728,8 +728,8 @@ BOOL MsgEdit::Save( const String& aName )
         }
         else
         {
-//              LogType;Filename;Line;Col1;Col2;Message
-            String aSave = VERSION_STRING.Append( UniString::CreateFromInt32( 3 ) ).AppendAscii("\n");      // Version 3
+//				LogType;Filename;Line;Col1;Col2;Message
+            String aSave = VERSION_STRING.Append( UniString::CreateFromInt32( 3 ) ).AppendAscii("\n");		// Version 3
             SvLBoxEntry *pRun = aEditTree.First();
             while ( pRun && aEditTree.NextSibling( pRun ) )
                 pRun = aEditTree.NextSibling( pRun );
@@ -841,7 +841,7 @@ void TTTreeListBox::SelectHdl()
 
     SelectChildren( pHdlEntry, TRUE );
     Select( pHdlEntry, TRUE );
-//  InitMenu(pApp->GetAppMenu()->GetPopupMenu( RID_APPEDIT ));  // so that delete works correct
+//	InitMenu(pApp->GetAppMenu()->GetPopupMenu( RID_APPEDIT ));	// so that delete works correct
 }
 
 void TTTreeListBox::DeselectHdl()
@@ -946,13 +946,13 @@ void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
     {
         Color aCol;
         if ( ( aFeatures & HasError ) == HasError )
-            aCol = Color( 255, 130, 130 );  // Red
+            aCol = Color( 255, 130, 130 );	// Red
         else if ( ( aFeatures & HasWarning ) == HasWarning )
-            aCol = Color( 255, 200, 120 );  // Ochre or so
+            aCol = Color( 255, 200, 120 );	// Ochre or so
         else if ( ( aFeatures & HasAssertion ) == HasAssertion )
-            aCol = Color( 0xd0, 0xd0, 0xff );   // blueish
+            aCol = Color( 0xd0, 0xd0, 0xff );	// blueish
         else
-            aCol = Color( 0xd0, 0xff, 0xd0 );   // greenish
+            aCol = Color( 0xd0, 0xff, 0xd0 );	// greenish
 
         if( rDev.IsSelected(pEntry) )
             aFont.SetColor( aCol );

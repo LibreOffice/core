@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class XFillAttrSetItem;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SdrItemPool : public XOutdevItemPool
+class SVX_DLLPUBLIC SdrItemPool : public XOutdevItemPool 
 {
 public:
     SdrItemPool(SfxItemPool* pMaster = 0L, sal_Bool bLoadRefCounts = sal_True);

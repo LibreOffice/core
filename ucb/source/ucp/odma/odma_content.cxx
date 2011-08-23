@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -518,7 +518,7 @@ uno::Any SAL_CALL Content::execute(
         // Create a new Content object for the "shadow" file
         // corresponding to the opened document from the DMS.
         ::ucbhelper::Content aContent(sFileURL.copy(0,nLastIndex),NULL);
-        //  aTransferInfo.NameClash = ucb::NameClash::OVERWRITE;
+        //	aTransferInfo.NameClash = ucb::NameClash::OVERWRITE;
         aTransferInfo.NewTitle = sFileURL.copy( 1 + nLastIndex );
         // Copy our saved backup copy to the "shadow" file.
         aContent.executeCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")),uno::makeAny(aTransferInfo));
@@ -816,11 +816,11 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     beans::PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
-    aEvent.Further        = sal_False;
-//  aEvent.PropertyName   =
+    aEvent.Further 		  = sal_False;
+//	aEvent.PropertyName	  =
     aEvent.PropertyHandle = -1;
-//  aEvent.OldValue       =
-//  aEvent.NewValue       =
+//	aEvent.OldValue		  =
+//	aEvent.NewValue       =
 
     const beans::PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
@@ -848,11 +848,11 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             changePropertyValue(rValue,n,m_aProps->m_sSubject,nChanged,aRet,aChanges);
         }
-        else if (   rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "ContentType" ) )  ||
-                    rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) )   ||
-                    rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) )     ||
-                    rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) )  ||
-                    rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) ||
+        else if (	rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "ContentType" ) )	||
+                    rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) )	||
+                    rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) )		||
+                    rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) )	||
+                    rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "DateModified" ) )	||
                     rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "IsReadOnly" ) ) )
         {
             // Read-only property!
@@ -890,7 +890,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                                 rValue.Name, rValue.Value );
 
                         aEvent.PropertyName = rValue.Name;
-                        aEvent.OldValue     = aOldValue;
+                        aEvent.OldValue		= aOldValue;
                         aEvent.NewValue     = rValue.Value;
 
                         aChanges.getArray()[ nChanged ] = aEvent;
@@ -931,7 +931,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     if ( nChanged > 0 )
     {
         // @@@ Save changes.
-//      storeData();
+//		storeData();
 
         aGuard.clear();
         aChanges.realloc( nChanged );
@@ -979,7 +979,7 @@ void Content::insert(
 
     // Assemble new content identifier...
 
-    //  uno::Reference< ucb::XContentIdentifier > xId = ...;
+    //	uno::Reference< ucb::XContentIdentifier > xId = ...;
 
     // Fail, if a resource with given id already exists.
     if ( !bReplaceExisting ) // && hasData( m_xIdentifier ) )
@@ -990,17 +990,17 @@ void Content::insert(
                             static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );
 //        ucbhelper::cancelCommandExecution(
-//                      ucb::IOErrorCode_ALREADY_EXISTING,
-//                      Environment,
-//                      uno::makeAny(static_cast< cppu::OWeakObject * >( this ))
+//						ucb::IOErrorCode_ALREADY_EXISTING,
+//						Environment,
+//						uno::makeAny(static_cast< cppu::OWeakObject * >( this ))
 //                         );
         // Unreachable
     }
 
-    //  m_xIdentifier = xId;
+    //	m_xIdentifier = xId;
 
 //  @@@
-//  storeData();
+//	storeData();
 
     aGuard.clear();
     inserted();
@@ -1043,7 +1043,7 @@ void Content::changePropertyValue(const beans::PropertyValue& _rValue,
 
             if(!bError)
             {
-                ODMSTATUS odm = NODMSetDocInfo( ContentProvider::getHandle(),
+                ODMSTATUS odm = NODMSetDocInfo(	ContentProvider::getHandle(),
                                                 const_cast<sal_Char*>(m_aProps->m_sDocumentId.getStr()),
                                                 nDocInfo,
                                                 const_cast<sal_Char*>(sDocInfoValue.getStr())
@@ -1051,12 +1051,12 @@ void Content::changePropertyValue(const beans::PropertyValue& _rValue,
                 if(odm == ODM_SUCCESS)
                 {
                     beans::PropertyChangeEvent aEvent;
-                    aEvent.Source           = static_cast< cppu::OWeakObject * >( this );
-                    aEvent.Further          = sal_False;
-                    aEvent.PropertyHandle   = -1;
-                    aEvent.PropertyName     = _rValue.Name;
-                    aEvent.OldValue         = uno::makeAny( _rsMemberValue );
-                    aEvent.NewValue         = uno::makeAny( sNewValue );
+                    aEvent.Source			= static_cast< cppu::OWeakObject * >( this );
+                    aEvent.Further 			= sal_False;
+                    aEvent.PropertyHandle	= -1;
+                    aEvent.PropertyName		= _rValue.Name;
+                    aEvent.OldValue			= uno::makeAny( _rsMemberValue );
+                    aEvent.NewValue			= uno::makeAny( sNewValue );
 
                     _rChanges.getArray()[ _rnChanged ] = aEvent;
 

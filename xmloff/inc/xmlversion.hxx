@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,10 +54,10 @@ public:
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > &rHandler );
     virtual     ~XMLVersionListExport() {}
 
-    sal_uInt32  exportDoc( enum ::xmloff::token::XMLTokenEnum eClass );
-    void        _ExportAutoStyles() {}
-    void        _ExportMasterStyles () {}
-    void        _ExportContent() {}
+    sal_uInt32	exportDoc( enum ::xmloff::token::XMLTokenEnum eClass );
+    void		_ExportAutoStyles() {}
+    void		_ExportMasterStyles () {}
+    void		_ExportContent() {}
 };
 
 // ------------------------------------------------------------------------
@@ -116,7 +116,7 @@ class XMLVersionContext: public SvXMLImportContext
 private:
     XMLVersionListImport&  rLocalRef;
 
-    static sal_Bool         ParseISODateTimeString(
+    static sal_Bool			ParseISODateTimeString(
                                 const rtl::OUString& rString,
                                 com::sun::star::util::DateTime& rDateTime );
 

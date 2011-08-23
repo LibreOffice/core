@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,10 +67,10 @@ protected:
     void fireClickEvent();
     void fireEvent( css::script::ScriptEvent& evt );
 public:
-    ScVbaControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    ScVbaControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, 
                     const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pHelper );
     virtual ~ScVbaControl();
-    // This class will own the helper, so make sure it is allocated from
+    // This class will own the helper, so make sure it is allocated from 
     // the heap
     void setGeometryHelper( ov::AbstractGeometryAttributes* pHelper );
     // sets the name of the associated library ( used for UserForm controls )
@@ -117,7 +117,7 @@ public:
 class ScVbaControlFactory
 {
 public:
-    ScVbaControlFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    ScVbaControlFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext, 
                     const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel );
     ScVbaControl* createControl( const css::uno::Reference< css::uno::XInterface >& xParent )  throw ( css::uno::RuntimeException );
 private:

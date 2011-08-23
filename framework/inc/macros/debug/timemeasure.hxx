@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #ifdef  ENABLE_TIMEMEASURE
 
     //_________________________________________________________________________________________________________________
-    //  includes
+    //	includes
     //_________________________________________________________________________________________________________________
 
     #ifndef _RTL_STRBUF_HXX_
@@ -135,7 +135,7 @@
 #endif  // #ifdef ENABLE_TIMEMEASURE
 
 //*****************************************************************************************************************
-//  end of file
+//	end of file
 //*****************************************************************************************************************
 
 #endif  // #ifndef __FRAMEWORK_MACROS_DEBUG_TIMEMEASURE_HXX_

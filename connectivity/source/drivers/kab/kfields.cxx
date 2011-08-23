@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ sal_uInt32 findKabField(const ::rtl::OUString& columnName) throw(SQLException)
     ::KABC::Field::List::iterator aField;
     sal_uInt32 nResult;
 
-    for (   aField = aFields.begin(), nResult = KAB_DATA_FIELDS;
+    for (	aField = aFields.begin(), nResult = KAB_DATA_FIELDS;
             aField != aFields.end();
             ++aField, ++nResult)
     {

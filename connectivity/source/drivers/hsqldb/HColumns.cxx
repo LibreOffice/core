@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OHSQLColumns::OHSQLColumns( ::cppu::OWeakObject& _rParent
+OHSQLColumns::OHSQLColumns(	::cppu::OWeakObject& _rParent
                                 ,sal_Bool _bCase
                                 ,::osl::Mutex& _rMutex
                                 ,const TStringVector &_rVector
@@ -58,8 +58,8 @@ Reference< XPropertySet > OHSQLColumns::createDescriptor()
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-OHSQLColumn::OHSQLColumn(   sal_Bool    _bCase)
-    : connectivity::sdbcx::OColumn( _bCase )
+OHSQLColumn::OHSQLColumn(	sal_Bool	_bCase)
+    : connectivity::sdbcx::OColumn(	_bCase )
 {
     construct();
 }
@@ -67,7 +67,7 @@ OHSQLColumn::OHSQLColumn(   sal_Bool    _bCase)
 void OHSQLColumn::construct()
 {
     m_sAutoIncrement = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IDENTITY"));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),PROPERTY_ID_AUTOINCREMENTCREATION,0,&m_sAutoIncrement, ::getCppuType(&m_sAutoIncrement));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),PROPERTY_ID_AUTOINCREMENTCREATION,0,&m_sAutoIncrement,	::getCppuType(&m_sAutoIncrement));
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OHSQLColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const

@@ -1,7 +1,7 @@
-/*************************************************************************
+/************************************************************************* 
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ public class ScriptProviderForJavaScript
             }
             catch ( com.sun.star.uno.RuntimeException re )
             {
-                throw new ScriptFrameworkErrorException( "Failed to create script object: " + re.getMessage(),
+                throw new ScriptFrameworkErrorException( "Failed to create script object: " + re.getMessage(), 
                     null, scriptData.getLanguageName(), language, ScriptFrameworkErrorType.UNKNOWN );
             }
         }
@@ -213,7 +213,7 @@ class ScriptImpl implements XScript
          *                                   ScriptExceptionRaisedException
          */
 
-        public Object invoke(
+        public Object invoke(  
                                /*IN*/Object[]  params,
                                /*OUT*/short[][]  aOutParamIndex,
                                /*OUT*/Object[][]  aOutParam )
@@ -234,23 +234,23 @@ class ScriptImpl implements XScript
             }
             catch ( java.net.MalformedURLException mfu )
             {
-                throw new ScriptFrameworkErrorException(
-                    mfu.getMessage(), null,
+                throw new ScriptFrameworkErrorException( 
+                    mfu.getMessage(), null, 
                     metaData.getLanguageName(), metaData.getLanguage(),
                     ScriptFrameworkErrorType.MALFORMED_URL );
             }
             catch ( com.sun.star.script.framework.provider.NoSuitableClassLoaderException nsc )
             {
                 // Framework error
-                throw new ScriptFrameworkErrorException(
+                throw new ScriptFrameworkErrorException( 
                     nsc.getMessage(), null,
                     metaData.getLanguageName(), metaData.getLanguage(),
                     ScriptFrameworkErrorType.UNKNOWN );
             }
             Context ctxt = null;
 
-            try
-            {
+            try 
+            { 
                 String editorURL = sourceUrl.toString();
                 Object result = null;
                 String source = null;
@@ -262,14 +262,14 @@ class ScriptImpl implements XScript
                 {
                     editorURL = editor.getURL();
                     result = editor.execute();
-                    if ( result != null  &&
+                    if ( result != null  && 
                          result.getClass().getName().equals( "org.mozilla.javascript.Undefined" ) )
                     {
                         // Always return a string
                         // TODO revisit
                         return Context.toString( result );
                     }
-
+    
                 }
 
                 if (editor != null && editor.isModified() == true)
@@ -285,7 +285,7 @@ class ScriptImpl implements XScript
                 }
 
                 if ( source == null || source.length() == 0 ) {
-                    throw new ScriptFrameworkErrorException(
+                    throw new ScriptFrameworkErrorException( 
                         "Failed to read source data for script", null,
                         metaData.getLanguageName(), metaData.getLanguage(),
                         ScriptFrameworkErrorType.UNKNOWN );
@@ -332,7 +332,7 @@ class ScriptImpl implements XScript
                 LogUtils.DEBUG( "\t message  " + message );
                 LogUtils.DEBUG( "\t wrapped type " + wrap.getClass() );
                 LogUtils.DEBUG( "\t wrapped toString  " + wrap.toString() );
-                ScriptExceptionRaisedException se = new
+                ScriptExceptionRaisedException se = new 
                     ScriptExceptionRaisedException( message );
                 se.lineNum = -1;
                 se.language = "JavaScript";
@@ -350,7 +350,7 @@ class ScriptImpl implements XScript
             catch (Exception ex) {
                 LogUtils.DEBUG("Caught Exception " + ex );
                 LogUtils.DEBUG("rethrowing as ScriptFramework error"  );
-                throw new ScriptFrameworkErrorException(
+                throw new ScriptFrameworkErrorException( 
                     ex.getMessage(), null,
                     metaData.getLanguageName(), metaData.getLanguage(),
                     ScriptFrameworkErrorType.UNKNOWN );
@@ -368,16 +368,16 @@ class ScriptImpl implements XScript
             ScriptEditorForJavaScript editor = null;
             try
             {
-                URL sourceUrl = metaData.getSourceURL();
+                URL sourceUrl = metaData.getSourceURL(); 
                 editor = ScriptEditorForJavaScript.getEditor( sourceUrl );
                 if ( editor == null )
                 {
                     editor = ScriptEditorForJavaScript.getEditor();
-                    editor.edit(
+                    editor.edit( 
                         ScriptContext.createContext(m_xModel, m_xInvocContext,
                             m_xContext, m_xMultiComponentFactory), metaData );
                     editor = ScriptEditorForJavaScript.getEditor( sourceUrl );
-                }
+                } 
                 if ( editor != null )
                 {
                     System.out.println("** Have raised IDE for JavaScript, calling indicateErrorLine for line " + lineNum );
@@ -387,6 +387,6 @@ class ScriptImpl implements XScript
             catch( Exception ignore )
             {
             }
-        }
+        } 
 }
-
+        

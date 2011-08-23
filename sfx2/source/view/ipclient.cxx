@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,7 +118,7 @@ public:
     Rectangle                       m_aLastObjAreaPixel;    // area of object in coordinate system of the container (without scaling)
     sal_Bool                        m_bStoreObject;
     sal_Bool                        m_bUIActive;            // set and cleared when notification for UI (de)activation is sent
-    sal_Bool                        m_bResizeNoScale;
+    sal_Bool						m_bResizeNoScale;
 
     uno::Reference < embed::XEmbeddedObject > m_xObject;
     uno::Reference < embed::XEmbeddedClient > m_xClient;
@@ -624,7 +624,7 @@ void SfxInPlaceClient_Impl::SizeHasChanged()
                 Size aNewSize = m_pClient->GetEditWin()->LogicToLogic( m_aObjArea.GetSize(), &aClientMap, &aObjectMap );
                 m_xObject->setVisualAreaSize( m_nAspect, awt::Size( aNewSize.Width(), aNewSize.Height() ) );
             }
-
+    
             xInplace->setObjectRectangles( getPlacement(), getClipRectangle() );
         }
     }
@@ -877,7 +877,7 @@ sal_Bool SfxInPlaceClient::IsObjectInPlaceActive() const
     try {
         return(
                (
-                m_pImp->m_xObject.is() &&
+                m_pImp->m_xObject.is() && 
                 (m_pImp->m_xObject->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE)
                ) ||
                (

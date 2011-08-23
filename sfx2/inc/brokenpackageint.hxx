@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,68 +36,68 @@
 using namespace ::framework;
 typedef ContinuationBase< ::com::sun::star::task::XInteractionApprove > SfxContinuationApprove;
 typedef ContinuationBase< ::com::sun::star::task::XInteractionDisapprove > SfxContinuationDisapprove;
-
-class SFX2_DLLPUBLIC RequestPackageReparation :
+ 
+class SFX2_DLLPUBLIC RequestPackageReparation : 
         public ::com::sun::star::task::XInteractionRequest,
         public ::cppu::OWeakObject
 {
     ::com::sun::star::uno::Any m_aRequest;
-
-    ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
+        
+    ::com::sun::star::uno::Sequence< 
+                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > 
                 > m_lContinuations;
-
-    SfxContinuationApprove* m_pApprove;
-    SfxContinuationDisapprove*  m_pDisapprove;
+        
+    SfxContinuationApprove*	m_pApprove;
+    SfxContinuationDisapprove*	m_pDisapprove;
 
 public:
     RequestPackageReparation( ::rtl::OUString aName );
-
+    
     // XInterface / OWeakObject
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw ();
     virtual void SAL_CALL release(  ) throw ();
 
-    sal_Bool    isApproved() { return m_pApprove->isSelected(); }
-
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest()
+    sal_Bool	isApproved() { return m_pApprove->isSelected(); }
+        
+    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() 
         throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
-            > SAL_CALL getContinuations()
+    virtual ::com::sun::star::uno::Sequence< 
+                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > 
+            > SAL_CALL getContinuations() 
         throw( ::com::sun::star::uno::RuntimeException );
-};
+}; 
 
-class SFX2_DLLPUBLIC NotifyBrokenPackage :
+class SFX2_DLLPUBLIC NotifyBrokenPackage : 
     public ::com::sun::star::task::XInteractionRequest,
     public ::cppu::OWeakObject
 {
     ::com::sun::star::uno::Any m_aRequest;
-
-    ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
+        
+    ::com::sun::star::uno::Sequence< 
+                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > 
                 > m_lContinuations;
-
-    ContinuationAbort*  m_pAbort;
+        
+    ContinuationAbort*	m_pAbort;
 
 public:
     NotifyBrokenPackage( ::rtl::OUString aName );
-
+    
     // XInterface / OWeakObject
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw ();
     virtual void SAL_CALL release(  ) throw ();
 
-    sal_Bool    isAborted() { return m_pAbort->isSelected(); }
-
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest()
+    sal_Bool	isAborted() { return m_pAbort->isSelected(); }
+        
+    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() 
         throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
-            > SAL_CALL getContinuations()
+    virtual ::com::sun::star::uno::Sequence< 
+                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > 
+            > SAL_CALL getContinuations() 
         throw( ::com::sun::star::uno::RuntimeException );
-};
+};  
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

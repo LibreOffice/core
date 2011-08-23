@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ class SVX_DLLPRIVATE FmFormPageImpl
     FmFormPage&     m_rPage;
     Link            m_aFormsCreationHdl;
 
-    sal_Bool        m_bFirstActivation;
+    sal_Bool		m_bFirstActivation;
     bool            m_bAttemptedFormCreation;
     bool            m_bInFind;
 
@@ -85,7 +85,7 @@ public:
     FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl );
     ~FmFormPageImpl();
 
-    //  nur wichtig fuer den DesignMode
+    //	nur wichtig fuer den DesignMode
     void setCurForm(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xForm);
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> getDefaultForm();
 
@@ -104,8 +104,8 @@ public:
     );
 
     // activation handling
-    inline  sal_Bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
-    inline  void        setHasBeenActivated( ) { m_bFirstActivation = sal_False; }
+    inline	sal_Bool	hasEverBeenActivated( ) const { return !m_bFirstActivation; }
+    inline	void		setHasBeenActivated( ) { m_bFirstActivation = sal_False; }
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& getForms( bool _bForceCreate = true );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ SvXMLImportContext* XMLChangeElementImportContext::CreateChildContext(
         pContext = new XMLChangeInfoContext(GetImport(), nPrefix, rLocalName,
                                             rChangedRegion, GetLocalName());
     }
-    else
+    else 
     {
         // import into redline -> create XText
         rChangedRegion.UseRedlineText();

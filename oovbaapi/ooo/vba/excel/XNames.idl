@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,29 +26,29 @@
  ************************************************************************/
 #ifndef __ooo_vba_excel_XNames_idl__
 #define __ooo_vba_excel_XNames_idl__
-
+                                                                                                                             
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
-
+                                                                                                                             
 #ifndef __ooo_vba_XCollection_idl__
 #include <ooo/vba/XCollection.idl>
 #endif
-
+                                                                                                                             
 //=============================================================================
-
+                                                                                                                             
 module ooo {  module vba {  module excel {
-
+                                                                                                                             
 //=============================================================================
-
+                                                                                                                             
 interface XNames
 {
     interface ::ooo::vba::XCollection;
 
         any Add( [in] any Name , [in] any RefersTo , [in] any Visible , [in] any MacroType , [in] any ShortcutKey , [in] any Category , [in] any NameLocal , [in] any RefersToLocal , [in] any CategoryLocal , [in] any RefersToR1C1 , [in] any RefersToR1C1Local );
 };
-
+                                                                                                                             
 }; }; };
-
+                                                                                                                             
 #endif
 

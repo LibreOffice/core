@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ public:
                             com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > xChartDoc );
 
     /** This function reorders local data to fit the correct data structure.
-        Call it after the data series got their styles set.
+        Call it after the data series got their styles set.  
      */
     static void switchRangesFromOuterToInternalIfNecessary( const SchXMLTable& rTable,
                                   const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
@@ -226,6 +226,6 @@ public:
     virtual void EndElement();
 };
 
-#endif  // _SCH_XMLTABLECONTEXT_HXX_
+#endif	// _SCH_XMLTABLECONTEXT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

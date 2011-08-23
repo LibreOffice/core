@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <xmloff/xmlictxt.hxx>
 
 
-namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star { 
     namespace beans { class XPropertySet; }
     namespace io { class XOutputStream; } } } }
 
@@ -41,10 +41,10 @@ class XMLReplacementImageContext : public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference <
         ::com::sun::star::io::XOutputStream > m_xBase64Stream;
-::com::sun::star::uno::Reference <
+::com::sun::star::uno::Reference < 
         ::com::sun::star::beans::XPropertySet > m_xPropSet;
 
-    ::rtl::OUString m_sHRef;
+    ::rtl::OUString	m_sHRef;
     const ::rtl::OUString m_sGraphicURL;
 
 public:
@@ -56,7 +56,7 @@ public:
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & rAttrList,
-            const ::com::sun::star::uno::Reference <
+            const ::com::sun::star::uno::Reference < 
                 ::com::sun::star::beans::XPropertySet >& rPropSet );
     virtual ~XMLReplacementImageContext();
 
@@ -69,6 +69,6 @@ public:
 
 };
 
-#endif  //  _XMLOFF_XMLREPLACEMENTIMAGECONTEXT_HXX
+#endif	//  _XMLOFF_XMLREPLACEMENTIMAGECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

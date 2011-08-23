@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,20 +35,20 @@ class SfxSlot;
 class SfxSlotServer
 {
 private:
-    const SfxSlot*      _pSlot;
-    USHORT              _nShellLevel;
+    const SfxSlot*		_pSlot;
+    USHORT				_nShellLevel;
 
 public:
                         SfxSlotServer( const SfxSlot &rSlot, USHORT nShell );
                         SfxSlotServer();
 
-    USHORT              GetShellLevel() const;
-    void                SetShellLevel(USHORT nLevel) { _nShellLevel = nLevel; }
-    void                SetSlot(const SfxSlot* pSlot) {
+    USHORT				GetShellLevel() const;
+    void				SetShellLevel(USHORT nLevel) { _nShellLevel = nLevel; }
+    void				SetSlot(const SfxSlot* pSlot) {
                             _pSlot = pSlot;
                         }
-    const SfxSlot*      GetSlot() const;
-    void                Invalidate() { _pSlot = 0; }
+    const SfxSlot*		GetSlot() const;
+    void				Invalidate() { _pSlot = 0; }
 };
 
 //--------------------------------------------------------------------

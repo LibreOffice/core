@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,18 +39,18 @@
 //============================================================================
 class PasswordCreateDialog : public ModalDialog
 {
-    FixedText       aFTPasswordCrt;
-    Edit            aEDPasswordCrt;
-    FixedText       aFTPasswordRepeat;
-    Edit            aEDPasswordRepeat;
+    FixedText		aFTPasswordCrt;
+    Edit			aEDPasswordCrt;
+    FixedText		aFTPasswordRepeat;
+    Edit			aEDPasswordRepeat;
     FixedText       aFTWarning;
     FixedLine       aFixedLine1;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
+    OKButton		aOKBtn;
+    CancelButton	aCancelBtn;
+    HelpButton		aHelpBtn;
 
-    ResMgr*                                         pResourceMgr;
-    sal_uInt16                                      nMinLen;
+    ResMgr*											pResourceMgr;
+    sal_uInt16										nMinLen;
 
     DECL_LINK( OKHdl_Impl, OKButton * );
     DECL_LINK( EditHdl_Impl, Edit * );
@@ -58,7 +58,7 @@ class PasswordCreateDialog : public ModalDialog
 public:
     PasswordCreateDialog( Window* pParent, ResMgr * pResMgr, bool bMSCryptoMode = false );
 
-    String          GetPassword() const { return aEDPasswordCrt.GetText(); }
+    String			GetPassword() const { return aEDPasswordCrt.GetText(); }
 };
 
 #endif // UUI_PASSCRTDLG_HXX

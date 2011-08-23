@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@
 
 
 namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XAttributeList; } }
+    namespace xml { namespace sax {	class XAttributeList; } }
 } } }
-namespace rtl { class OUString; }
+namespace rtl {	class OUString; }
 class XMLEventContextFactory;
 class XMLEventsImportContext;
 struct XMLEventNameTranslation;
@@ -51,13 +51,13 @@ typedef ::std::list< NameMap* > NameMapList;
 
 /**
  * Helps the XMLEventsImportContext.
- *
+ * 
  * This class stores
  * a) the translation from XML event names to API event names, and
  * b) a mapping from script language names to XMLEventContextFactory objects
  *    (that handle particular languages).
  *
- * Event name translation tables may be added, i.e. they will be joined
+ * Event name translation tables may be added, i.e. they will be joined 
  * together. If different translations are needed (i.e., if the same XML name
  * needs to be translated to different API names in different contexts), then
  * translation tables may be saved on a translation table stack.
@@ -96,7 +96,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
         XMLEventsImportContext* rEvents,
         const ::rtl::OUString& rXmlEventName,

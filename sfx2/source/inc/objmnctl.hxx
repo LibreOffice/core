@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@ class Menu;
 
 class SfxObjectVerbsControl: public SfxMenuControl
 {
-    PopupMenu*          pMenu;
-    Menu&               rParent;
+    PopupMenu*			pMenu;
+    Menu&				rParent;
 
 private:
-    void                FillMenu();
+    void				FillMenu();
     DECL_LINK( MenuSelect, Menu * );
-    virtual             void StateChanged( USHORT, SfxItemState, const SfxPoolItem* pState );
+    virtual 			void StateChanged( USHORT, SfxItemState, const SfxPoolItem* pState );
 
 public:
                         SfxObjectVerbsControl(USHORT, Menu&, SfxBindings&);

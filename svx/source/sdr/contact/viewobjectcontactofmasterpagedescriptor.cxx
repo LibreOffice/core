@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace sdr
     namespace contact
     {
         ViewObjectContactOfMasterPageDescriptor::ViewObjectContactOfMasterPageDescriptor(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContact(rObjectContact, rViewContact)
+        :	ViewObjectContact(rObjectContact, rViewContact)
         {
         }
 
@@ -84,10 +84,10 @@ namespace sdr
             // used range (retval) is fixed here, it's the MasterPage fill range
             const SdrPage& rOwnerPage = rDescriptor.GetOwnerPage();
             const basegfx::B2DRange aPageFillRange(
-                rOwnerPage.GetLftBorder(), rOwnerPage.GetUppBorder(),
+                rOwnerPage.GetLftBorder(), rOwnerPage.GetUppBorder(), 
                 rOwnerPage.GetWdt() - rOwnerPage.GetRgtBorder(), rOwnerPage.GetHgt() - rOwnerPage.GetLwrBorder());
 
-            // Modify DisplayInfo for MasterPageContent collection; remember original layers and
+            // Modify DisplayInfo for MasterPageContent collection; remember original layers and 
             // set combined LayerSet; set MasterPagePaint flag
             const SetOfByte aRememberedLayers(rDisplayInfo.GetProcessLayers());
             SetOfByte aPreprocessedLayers(aRememberedLayers);
@@ -112,7 +112,7 @@ namespace sdr
                 // get the VOC of the Master-SdrPage and get it's object hierarchy
                 ViewContact& rViewContactOfMasterPage(rDescriptor.GetUsedPage().GetViewContact());
                 ViewObjectContact& rVOCOfMasterPage(rViewContactOfMasterPage.GetViewObjectContact(GetObjectContact()));
-
+                
                 xMasterPageSequence = rVOCOfMasterPage.getPrimitive2DSequenceHierarchy(rDisplayInfo);
             }
 

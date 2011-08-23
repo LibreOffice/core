@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -188,10 +188,10 @@ enum SdXML3DLightAttrTokenMap
 class SdXML3DLightContext: public SvXMLImportContext
 {
     // local parameters which need to be read
-    Color                       maDiffuseColor;
-    ::basegfx::B3DVector        maDirection;
-    bool                        mbEnabled;
-    bool                        mbSpecular;
+    Color						maDiffuseColor;
+    ::basegfx::B3DVector		maDirection;
+    bool						mbEnabled;
+    bool						mbSpecular;
 
 public:
     SdXML3DLightContext(
@@ -217,26 +217,26 @@ protected:
     SvXMLImport& mrImport;
 
     // list for local light contexts
-    Imp3DLightList              maList;
+    Imp3DLightList				maList;
 
     // local parameters which need to be read
     com::sun::star::drawing::HomogenMatrix mxHomMat;
-    BOOL                        mbSetTransform;
+    BOOL						mbSetTransform;
 
     com::sun::star::drawing::ProjectionMode mxPrjMode;
-    sal_Int32                   mnDistance;
-    sal_Int32                   mnFocalLength;
-    sal_Int32                   mnShadowSlant;
+    sal_Int32					mnDistance;
+    sal_Int32					mnFocalLength;
+    sal_Int32					mnShadowSlant;
     com::sun::star::drawing::ShadeMode mxShadeMode;
-    Color                       maAmbientColor;
-    bool                        mbLightingMode;
+    Color						maAmbientColor;
+    bool						mbLightingMode;
 
-    ::basegfx::B3DVector        maVRP;
-    ::basegfx::B3DVector        maVPN;
-    ::basegfx::B3DVector        maVUP;
-    BOOL                        mbVRPUsed;
-    BOOL                        mbVPNUsed;
-    BOOL                        mbVUPUsed;
+    ::basegfx::B3DVector		maVRP;
+    ::basegfx::B3DVector		maVPN;
+    ::basegfx::B3DVector		maVUP;
+    BOOL						mbVRPUsed;
+    BOOL						mbVPNUsed;
+    BOOL						mbVUPUsed;
 
 public:
     SdXML3DSceneAttributesHelper( SvXMLImport& rImporter );
@@ -257,9 +257,9 @@ public:
 class SvXMLShapeContext : public SvXMLImportContext
 {
 protected:
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >   mxShape;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >	mxShape;
     sal_Bool                                                            mbTemporaryShape;
-    rtl::OUString                                                       msHyperlink;
+    rtl::OUString														msHyperlink;
 
 public:
     SvXMLShapeContext( SvXMLImport& rImp, USHORT nPrfx,
@@ -280,38 +280,38 @@ struct XMLShapeImportPageContextImpl;
 
 class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public UniRefBase
 {
-    XMLShapeImportHelperImpl*   mpImpl;
+    XMLShapeImportHelperImpl*	mpImpl;
 
-    XMLShapeImportPageContextImpl*  mpPageContext;
+    XMLShapeImportPageContextImpl*	mpPageContext;
 
     com::sun::star::uno::Reference< com::sun::star::frame::XModel > mxModel;
 
     // PropertySetMappers and factory
-    XMLSdPropHdlFactory*        mpSdPropHdlFactory;
-    SvXMLImportPropertyMapper*      mpPropertySetMapper;
-    SvXMLImportPropertyMapper*      mpPresPagePropsMapper;
+    XMLSdPropHdlFactory*		mpSdPropHdlFactory;
+    SvXMLImportPropertyMapper*		mpPropertySetMapper;
+    SvXMLImportPropertyMapper*		mpPresPagePropsMapper;
 
     // contexts for Style and AutoStyle import
-    SvXMLStylesContext*         mpStylesContext;
-    SvXMLStylesContext*         mpAutoStylesContext;
+    SvXMLStylesContext*			mpStylesContext;
+    SvXMLStylesContext*			mpAutoStylesContext;
 
     // contexts for xShape contents TokenMaps
-    SvXMLTokenMap*              mpGroupShapeElemTokenMap;
-    SvXMLTokenMap*              mpFrameShapeElemTokenMap;
-    SvXMLTokenMap*              mp3DSceneShapeElemTokenMap;
-    SvXMLTokenMap*              mp3DObjectAttrTokenMap;
-    SvXMLTokenMap*              mp3DPolygonBasedAttrTokenMap;
-    SvXMLTokenMap*              mp3DCubeObjectAttrTokenMap;
-    SvXMLTokenMap*              mp3DSphereObjectAttrTokenMap;
-    SvXMLTokenMap*              mp3DSceneShapeAttrTokenMap;
-    SvXMLTokenMap*              mp3DLightAttrTokenMap;
-    SvXMLTokenMap*              mpPathShapeAttrTokenMap;
-    SvXMLTokenMap*              mpPolygonShapeAttrTokenMap;
+    SvXMLTokenMap*				mpGroupShapeElemTokenMap;
+    SvXMLTokenMap*				mpFrameShapeElemTokenMap;
+    SvXMLTokenMap*				mp3DSceneShapeElemTokenMap;
+    SvXMLTokenMap*				mp3DObjectAttrTokenMap;
+    SvXMLTokenMap*				mp3DPolygonBasedAttrTokenMap;
+    SvXMLTokenMap*				mp3DCubeObjectAttrTokenMap;
+    SvXMLTokenMap*				mp3DSphereObjectAttrTokenMap;
+    SvXMLTokenMap*				mp3DSceneShapeAttrTokenMap;
+    SvXMLTokenMap*				mp3DLightAttrTokenMap;
+    SvXMLTokenMap*				mpPathShapeAttrTokenMap;
+    SvXMLTokenMap*				mpPolygonShapeAttrTokenMap;
 
-    const ::rtl::OUString       msStartShape;
-    const ::rtl::OUString       msEndShape;
-    const ::rtl::OUString       msStartGluePointIndex;
-    const ::rtl::OUString       msEndGluePointIndex;
+    const ::rtl::OUString		msStartShape;
+    const ::rtl::OUString		msEndShape;
+    const ::rtl::OUString		msStartGluePointIndex;
+    const ::rtl::OUString		msEndGluePointIndex;
 
     rtl::Reference< XMLTableImport > mxShapeTableImport;
 
@@ -336,7 +336,7 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xFrameAttrList);
-    SvXMLImportContext* CreateFrameChildContext(
+    SvXMLImportContext* CreateFrameChildContext( 
         SvXMLImportContext *pThisContext, USHORT nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
@@ -434,7 +434,7 @@ public:
 
     XMLSdPropHdlFactory* GetSdPropHdlFactory() const { return mpSdPropHdlFactory; }
 
-    const rtl::Reference< XMLTableImport >&     GetShapeTableImport();
+    const rtl::Reference< XMLTableImport >&		GetShapeTableImport();
 };
 
 #endif // _XMLOFF_SHAPEIMPORT_HXX_

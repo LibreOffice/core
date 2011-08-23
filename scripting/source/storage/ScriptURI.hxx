@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,41 +50,41 @@ struct Uri {
 /**
  * Helper class for dealing with script URIs.
  */
-class ScriptURI
+class ScriptURI 
 {
 public:
-    ScriptURI( const ::rtl::OUString& scriptURI )
+    ScriptURI( const ::rtl::OUString& scriptURI ) 
         throw ( css::lang::IllegalArgumentException );
     virtual ~ScriptURI()  SAL_THROW ( () );
 
     /**
      *  This function returns the location of the script
-     *
+     *  
      */
     virtual ::rtl::OUString  getLocation();
 
     /**
-     *  This function returns the language of the script, eg. java,
+     *  This function returns the language of the script, eg. java, 
      *  StarBasic,...
-     *
+     *  
      */
     virtual ::rtl::OUString  getLanguage();
 
     /**
-     *  This function returns the language dependent function name of
+     *  This function returns the language dependent function name of 
      *  the script
      */
     virtual ::rtl::OUString  getFunctionName();
 
     /**
-     *  This function returns the language independent logical name of
+     *  This function returns the language independent logical name of 
      *  the script
      */
     virtual ::rtl::OUString  getLogicalName();
 
     /**
      *  This function returns the full URI
-     *
+     *  
      */
     virtual ::rtl::OUString  getURI();
 

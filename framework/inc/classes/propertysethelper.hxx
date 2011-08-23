@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_CLASSES_PROPERTYSETHELPER_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/transactionbase.hxx>
@@ -39,7 +39,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -47,12 +47,12 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 
 #include <cppuhelper/weakref.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 
 namespace framework{
 

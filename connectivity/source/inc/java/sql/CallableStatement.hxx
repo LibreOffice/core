@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace connectivity
     //************ Class: java.sql.CallableStatement
     //**************************************************************
 
-    class java_sql_CallableStatement :  public java_sql_PreparedStatement,
+    class java_sql_CallableStatement :	public java_sql_PreparedStatement,
                                                                                 public ::com::sun::star::sdbc::XRow,
                                                                                 public ::com::sun::star::sdbc::XOutParameters
     {
@@ -52,7 +52,7 @@ namespace connectivity
     public:
         DECLARE_SERVICE_INFO();
         virtual jclass getMyClass() const;
-
+        
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_CallableStatement( JNIEnv * pEnv, java_sql_Connection& _rCon, const ::rtl::OUString& sql );
 

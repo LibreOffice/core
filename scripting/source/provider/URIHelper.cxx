@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ namespace ucb = ::com::sun::star::ucb;
 namespace lang = ::com::sun::star::lang;
 namespace uri = ::com::sun::star::uri;
 namespace script = ::com::sun::star::script;
-
+ 
 static const char SHARE[] = "share";
 static const char SHARE_URI[] =
     "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::BaseInstallation}";
 
 static const char SHARE_UNO_PACKAGES[] = "share:uno_packages";
-static const char SHARE_UNO_PACKAGES_URI[] =
+static const char SHARE_UNO_PACKAGES_URI[] = 
     "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE";
 
 static const char USER[] = "user";
@@ -108,7 +108,7 @@ ScriptingFrameworkURIHelper::initialize(
 throw ( uno::Exception, uno::RuntimeException )
 {
     if ( args.getLength() != 2 ||
-         args[0].getValueType() != ::getCppuType((const OUString*)NULL) ||
+         args[0].getValueType() != ::getCppuType((const OUString*)NULL) || 
          args[1].getValueType() != ::getCppuType((const OUString*)NULL) )
     {
         throw uno::RuntimeException( OUString::createFromAscii(
@@ -311,7 +311,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
 ScriptingFrameworkURIHelper::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
-    ::rtl::OUString serviceNameList[] = {
+    ::rtl::OUString serviceNameList[] = { 
         ::rtl::OUString::createFromAscii(
             "com.sun.star.script.provider.ScriptURIHelper" ) };
 

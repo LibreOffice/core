@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,16 +45,16 @@ namespace drawinglayer
         {
         private:
             // The BitmapEx to use, PixelSize is used
-            BitmapEx                                maBitmapEx;
+            BitmapEx								maBitmapEx;
 
             // The logic position
-            basegfx::B2DPoint                       maBasePosition;
+            basegfx::B2DPoint						maBasePosition;
 
             // The pixel inside the BitmapEx which is assocciated with
             // the target position (offset in the bitmap)
-            sal_uInt16                              mnCenterX;
-            sal_uInt16                              mnCenterY;
-
+            sal_uInt16								mnCenterX;
+            sal_uInt16								mnCenterY;
+        
         protected:
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -89,13 +89,13 @@ namespace drawinglayer
         {
         private:
             // The logic position
-            basegfx::B2DPoint                       maBasePosition;
+            basegfx::B2DPoint						maBasePosition;
 
             // The stripe colors and legth
-            basegfx::BColor                         maRGBColorA;
-            basegfx::BColor                         maRGBColorB;
-            double                                  mfDiscreteDashLength;
-
+            basegfx::BColor							maRGBColorA;
+            basegfx::BColor							maRGBColorB;
+            double									mfDiscreteDashLength;
+        
         protected:
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -121,7 +121,7 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-// Overlay helper class for a hatch rectangle as used e.g. for text object
+// Overlay helper class for a hatch rectangle as used e.g. for text object 
 // selection hilighting
 namespace drawinglayer
 {
@@ -134,17 +134,17 @@ namespace drawinglayer
             basegfx::B2DRange               maObjectRange;
 
             // the hatch definition
-            double                          mfDiscreteHatchDistance;
-            double                          mfHatchRotation;
-            basegfx::BColor                 maHatchColor;
+            double							mfDiscreteHatchDistance;
+            double							mfHatchRotation;
+            basegfx::BColor					maHatchColor;
 
             // the dscrete grow and shrink of the box
-            double                          mfDiscreteGrow;
-            double                          mfDiscreteShrink;
+            double							mfDiscreteGrow;
+            double							mfDiscreteShrink;
 
             // the rotation of the primitive itself
-            double                          mfRotation;
-
+            double							mfRotation;
+        
         protected:
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -193,16 +193,16 @@ namespace drawinglayer
         {
         private:
             // The logic position
-            basegfx::B2DPoint                       maBasePosition;
+            basegfx::B2DPoint						maBasePosition;
 
             // the style
             HelplineStyle                           meStyle;
 
             // The stripe colors and legth
-            basegfx::BColor                         maRGBColorA;
-            basegfx::BColor                         maRGBColorB;
-            double                                  mfDiscreteDashLength;
-
+            basegfx::BColor							maRGBColorA;
+            basegfx::BColor							maRGBColorB;
+            double									mfDiscreteDashLength;
+        
         protected:
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -230,7 +230,7 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-// Overlay helper class for rolling rectangle helplines. This primitive is
+// Overlay helper class for rolling rectangle helplines. This primitive is 
 // only for the extended lines to the ends of the view
 
 namespace drawinglayer
@@ -241,13 +241,13 @@ namespace drawinglayer
         {
         private:
             // The logic range
-            basegfx::B2DRange                       maRollingRectangle;
+            basegfx::B2DRange						maRollingRectangle;
 
             // The stripe colors and legth
-            basegfx::BColor                         maRGBColorA;
-            basegfx::BColor                         maRGBColorB;
-            double                                  mfDiscreteDashLength;
-
+            basegfx::BColor							maRGBColorA;
+            basegfx::BColor							maRGBColorB;
+            double									mfDiscreteDashLength;
+        
         protected:
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 

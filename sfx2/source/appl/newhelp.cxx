@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,41 +132,39 @@ using namespace ::com::sun::star::ui;
 
 using namespace ::comphelper;
 
-extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // sfxhelp.cxx
-
 // defines ---------------------------------------------------------------
 
-#define SPLITSET_ID         0
-#define COLSET_ID           1
-#define INDEXWIN_ID         2
-#define TEXTWIN_ID          3
+#define SPLITSET_ID			0
+#define COLSET_ID			1
+#define INDEXWIN_ID			2
+#define TEXTWIN_ID			3
 
-#define TOOLBOX_OFFSET      3
+#define TOOLBOX_OFFSET		3
 
-#define TBI_INDEX           1001
-#define TBI_BACKWARD        1002
-#define TBI_FORWARD         1003
-#define TBI_START           1004
-#define TBI_PRINT           1005
-#define TBI_COPY            1006
-#define TBI_BOOKMARKS       1007
-#define TBI_SEARCHDIALOG    1008
-#define TBI_SOURCEVIEW      1009
+#define TBI_INDEX			1001
+#define TBI_BACKWARD		1002
+#define TBI_FORWARD			1003
+#define TBI_START			1004
+#define TBI_PRINT			1005
+#define TBI_COPY			1006
+#define TBI_BOOKMARKS		1007
+#define TBI_SEARCHDIALOG	1008
+#define TBI_SOURCEVIEW		1009
 #define TBI_SELECTIONMODE   1010
-#define TBI_ONSTARTUP       1011
+#define TBI_ONSTARTUP		1011
 
-#define CONFIGNAME_HELPWIN      DEFINE_CONST_UNICODE("OfficeHelp")
-#define CONFIGNAME_INDEXWIN     DEFINE_CONST_UNICODE("OfficeHelpIndex")
-#define CONFIGNAME_SEARCHPAGE   DEFINE_CONST_UNICODE("OfficeHelpSearch")
-#define IMAGE_URL               DEFINE_CONST_UNICODE("private:factory/")
+#define CONFIGNAME_HELPWIN		DEFINE_CONST_UNICODE("OfficeHelp")
+#define CONFIGNAME_INDEXWIN		DEFINE_CONST_UNICODE("OfficeHelpIndex")
+#define CONFIGNAME_SEARCHPAGE	DEFINE_CONST_UNICODE("OfficeHelpSearch")
+#define IMAGE_URL				DEFINE_CONST_UNICODE("private:factory/")
 
-#define PROPERTY_KEYWORDLIST    DEFINE_CONST_OUSTRING("KeywordList")
-#define PROPERTY_KEYWORDREF     DEFINE_CONST_OUSTRING("KeywordRef")
-#define PROPERTY_ANCHORREF      DEFINE_CONST_OUSTRING("KeywordAnchorForRef")
-#define PROPERTY_TITLEREF       DEFINE_CONST_OUSTRING("KeywordTitleForRef")
-#define PROPERTY_TITLE          DEFINE_CONST_OUSTRING("Title")
-#define HELP_URL                DEFINE_CONST_OUSTRING("vnd.sun.star.help://")
-#define HELP_SEARCH_TAG         DEFINE_CONST_OUSTRING("/?Query=")
+#define PROPERTY_KEYWORDLIST	DEFINE_CONST_OUSTRING("KeywordList")
+#define PROPERTY_KEYWORDREF		DEFINE_CONST_OUSTRING("KeywordRef")
+#define PROPERTY_ANCHORREF		DEFINE_CONST_OUSTRING("KeywordAnchorForRef")
+#define PROPERTY_TITLEREF		DEFINE_CONST_OUSTRING("KeywordTitleForRef")
+#define PROPERTY_TITLE			DEFINE_CONST_OUSTRING("Title")
+#define HELP_URL				DEFINE_CONST_OUSTRING("vnd.sun.star.help://")
+#define HELP_SEARCH_TAG			DEFINE_CONST_OUSTRING("/?Query=")
 #define USERITEM_NAME           DEFINE_CONST_OUSTRING("UserItem")
 
 #define PACKAGE_SETUP           DEFINE_CONST_OUSTRING("/org.openoffice.Setup")
@@ -260,8 +258,8 @@ namespace sfx2
 
 struct IndexEntry_Impl
 {
-    sal_Bool        m_bSubEntry;
-    String          m_aURL;
+    sal_Bool		m_bSubEntry;
+    String			m_aURL;
 
     IndexEntry_Impl( const String& rURL, sal_Bool bSubEntry ) :
         m_bSubEntry( bSubEntry ), m_aURL( rURL ) {}
@@ -274,8 +272,8 @@ struct IndexEntry_Impl
 
 struct ContentEntry_Impl
 {
-    String      aURL;
-    sal_Bool    bIsFolder;
+    String		aURL;
+    sal_Bool	bIsFolder;
 
     ContentEntry_Impl( const String& rURL, sal_Bool bFolder ) :
         aURL( rURL ), bIsFolder( bFolder ) {}
@@ -287,9 +285,9 @@ ContentListBox_Impl::ContentListBox_Impl( Window* pParent, const ResId& rResId )
 
     SvTreeListBox( pParent, rResId ),
 
-    aOpenBookImage      ( SfxResId( IMG_HELP_CONTENT_BOOK_OPEN ) ),
-    aClosedBookImage    ( SfxResId( IMG_HELP_CONTENT_BOOK_CLOSED ) ),
-    aDocumentImage      ( SfxResId( IMG_HELP_CONTENT_DOC ) )
+    aOpenBookImage		( SfxResId( IMG_HELP_CONTENT_BOOK_OPEN ) ),
+    aClosedBookImage	( SfxResId( IMG_HELP_CONTENT_BOOK_CLOSED ) ),
+    aDocumentImage		( SfxResId( IMG_HELP_CONTENT_DOC ) )
 
 {
     if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
@@ -565,9 +563,9 @@ IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* 
 
     HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_INDEX ) ),
 
-    aExpressionFT   ( this, SfxResId( FT_EXPRESSION ) ),
-    aIndexCB        ( this, SfxResId( CB_INDEX ) ),
-    aOpenBtn        ( this, SfxResId( PB_OPEN_INDEX ) ),
+    aExpressionFT	( this, SfxResId( FT_EXPRESSION ) ),
+    aIndexCB		( this, SfxResId( CB_INDEX ) ),
+    aOpenBtn		( this, SfxResId( PB_OPEN_INDEX ) ),
 
     bIsActivated    ( sal_False )
 
@@ -615,21 +613,21 @@ namespace sfx2 {
     typedef ::std::hash_map< ::rtl::OUString, int, hashOUString, equalOUString > KeywordInfo;
 }
 
-#define UNIFY_AND_INSERT_TOKEN( aToken )                                                            \
-    it =                                                                                            \
-    aInfo.insert( sfx2::KeywordInfo::value_type( aToken, 0 ) ).first;                               \
-    if ( ( tmp = it->second++ ) != 0 )                                                              \
-       nPos = aIndexCB.InsertEntry( aToken + rtl::OUString( append, tmp ) );                        \
-    else                                                                                            \
+#define UNIFY_AND_INSERT_TOKEN( aToken )															\
+    it =																							\
+    aInfo.insert( sfx2::KeywordInfo::value_type( aToken, 0 ) ).first;								\
+    if ( ( tmp = it->second++ ) != 0 )																\
+       nPos = aIndexCB.InsertEntry( aToken + rtl::OUString( append, tmp ) );						\
+    else																							\
        nPos = aIndexCB.InsertEntry( aToken )
 
-#define INSERT_DATA( j )                                                                            \
-    if ( aAnchorList[j].getLength() > 0 )                                                           \
-    {                                                                                               \
-        aData.append( aRefList[j] ).append( sal_Unicode('#') ).append( aAnchorList[j] );            \
-        aIndexCB.SetEntryData( nPos, NEW_ENTRY( aData.makeStringAndClear(), insert ) );             \
-    }                                                                                               \
-    else                                                                                            \
+#define INSERT_DATA( j )																			\
+    if ( aAnchorList[j].getLength() > 0 )															\
+    {																								\
+        aData.append( aRefList[j] ).append( sal_Unicode('#') ).append( aAnchorList[j] );			\
+        aIndexCB.SetEntryData( nPos, NEW_ENTRY( aData.makeStringAndClear(), insert ) );				\
+    }																								\
+    else																							\
         aIndexCB.SetEntryData( nPos, NEW_ENTRY( aRefList[j], insert ) );
 
 // -----------------------------------------------------------------------
@@ -652,7 +650,7 @@ void IndexTabPage_Impl::InitializeIndex()
         aURL += ::rtl::OUString( sFactory );
 
         String aTemp = aURL;
-        AppendConfigToken_Impl( aTemp, sal_True );
+        AppendConfigToken( aTemp, sal_True );
         aURL = aTemp;
 
         Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
@@ -714,8 +712,8 @@ void IndexTabPage_Impl::InitializeIndex()
 
                     sal_uInt32 nRefListLen = aRefList.getLength();
 
-                    DBG_ASSERT( aAnchorList.getLength(), "*IndexTabPage_Impl::InitializeIndex(): AnchorList is empty!" );           \
-                    DBG_ASSERT( nRefListLen, "*IndexTabPage_Impl::InitializeIndex(): RefList is empty!" );          \
+                    DBG_ASSERT( aAnchorList.getLength(), "*IndexTabPage_Impl::InitializeIndex(): AnchorList is empty!" );			\
+                    DBG_ASSERT( nRefListLen, "*IndexTabPage_Impl::InitializeIndex(): RefList is empty!" );			\
 
                     if ( aAnchorList.getLength() && nRefListLen )
                     {
@@ -981,14 +979,14 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl
 
     HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_SEARCH ) ),
 
-    aSearchFT       ( this, SfxResId( FT_SEARCH ) ),
-    aSearchED       ( this, SfxResId( ED_SEARCH ) ),
-    aSearchBtn      ( this, SfxResId( PB_SEARCH ) ),
-    aFullWordsCB    ( this, SfxResId( CB_FULLWORDS ) ),
-    aScopeCB        ( this, SfxResId( CB_SCOPE ) ),
-    aResultsLB      ( this, SfxResId( LB_RESULT ) ),
-    aOpenBtn        ( this, SfxResId( PB_OPEN_SEARCH ) ),
-    xBreakIterator  ( vcl::unohelper::CreateBreakIterator() )
+    aSearchFT		( this, SfxResId( FT_SEARCH ) ),
+    aSearchED		( this, SfxResId( ED_SEARCH ) ),
+    aSearchBtn		( this, SfxResId( PB_SEARCH ) ),
+    aFullWordsCB	( this, SfxResId( CB_FULLWORDS ) ),
+    aScopeCB		( this, SfxResId( CB_SCOPE ) ),
+    aResultsLB		( this, SfxResId( LB_RESULT ) ),
+    aOpenBtn		( this, SfxResId( PB_OPEN_SEARCH ) ),
+    xBreakIterator	( vcl::unohelper::CreateBreakIterator() )
 
 {
     FreeResource();
@@ -1097,7 +1095,7 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
         if ( !aFullWordsCB.IsChecked() )
             aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
         aSearchURL += aSearchText;
-        AppendConfigToken_Impl( aSearchURL, sal_False );
+        AppendConfigToken( aSearchURL, sal_False );
         if ( aScopeCB.IsChecked() )
             aSearchURL += DEFINE_CONST_UNICODE("&Scope=Heading");
         Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aSearchURL );
@@ -1384,9 +1382,9 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent, SfxHelpIndexWindo
 
     HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_BOOKMARKS ) ),
 
-    aBookmarksFT    ( this, SfxResId( FT_BOOKMARKS ) ),
-    aBookmarksBox   ( this, SfxResId( LB_BOOKMARKS ) ),
-    aBookmarksPB    ( this, SfxResId( PB_BOOKMARKS ) )
+    aBookmarksFT	( this, SfxResId( FT_BOOKMARKS ) ),
+    aBookmarksBox	( this, SfxResId( LB_BOOKMARKS ) ),
+    aBookmarksPB	( this, SfxResId( PB_BOOKMARKS ) )
 
 {
     FreeResource();
@@ -1522,7 +1520,7 @@ sal_Bool SfxHelpWindow_Impl::splitHelpURL(const ::rtl::OUString& sHelpURL,
     sHelpURL.append(sFactory);
     sHelpURL.append(sContent);
     String sURL = String(sHelpURL.makeStringAndClear());
-    AppendConfigToken_Impl(sURL, bUseQuestionMark);
+    AppendConfigToken(sURL, bUseQuestionMark);
     if (sAnchor.getLength())
         sURL += String(sAnchor);
     return ::rtl::OUString(sURL);
@@ -1583,16 +1581,16 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* _pParent )
 
     Window( _pParent, SfxResId( WIN_HELPINDEX ) ),
 
-    aActiveLB           ( this, SfxResId( LB_ACTIVE ) ),
-    aActiveLine         ( this, SfxResId( FL_ACTIVE ) ),
-    aTabCtrl            ( this, SfxResId( TC_INDEX ) ),
+    aActiveLB			( this, SfxResId( LB_ACTIVE ) ),
+    aActiveLine			( this, SfxResId( FL_ACTIVE ) ),
+    aTabCtrl			( this, SfxResId( TC_INDEX ) ),
 
-    aIndexKeywordLink   ( LINK( this, SfxHelpIndexWindow_Impl, KeywordHdl ) ),
-    pParentWin          ( _pParent ),
+    aIndexKeywordLink	( LINK( this, SfxHelpIndexWindow_Impl, KeywordHdl ) ),
+    pParentWin			( _pParent ),
 
-    pCPage              ( NULL ),
-    pIPage              ( NULL ),
-    pSPage              ( NULL ),
+    pCPage				( NULL ),
+    pIPage				( NULL ),
+    pSPage				( NULL ),
     pBPage              ( NULL ),
 
     bWasCursorLeftOrRight( false ),
@@ -1643,7 +1641,7 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 void SfxHelpIndexWindow_Impl::Initialize()
 {
     String aHelpURL = HELP_URL;
-    AppendConfigToken_Impl( aHelpURL, sal_True );
+    AppendConfigToken( aHelpURL, sal_True );
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpURL );
     const ::rtl::OUString* pFacs  = aFactories.getConstArray();
     UINT32 i, nCount = aFactories.getLength();
@@ -1884,7 +1882,7 @@ void SfxHelpIndexWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
-    if ( ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) ||
+    if ( ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS )	||
            ( rDCEvt.GetType() == DATACHANGED_DISPLAY ) ) &&
          ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
@@ -2079,20 +2077,20 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
     Window( pParent, WB_CLIPCHILDREN | WB_TABSTOP | WB_DIALOGCONTROL ),
 
-    aToolBox            ( this, 0 ),
+    aToolBox			( this, 0 ),
     aOnStartupCB        ( this, SfxResId( RID_HELP_ONSTARTUP_BOX ) ),
-    aIndexOnImage       ( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON ) ),
-    aIndexOffImage      ( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) ),
-    aIndexOnText        ( SfxResId( STR_HELP_BUTTON_INDEX_ON ) ),
-    aIndexOffText       ( SfxResId( STR_HELP_BUTTON_INDEX_OFF ) ),
+    aIndexOnImage		( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON ) ),
+    aIndexOffImage  	( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) ),
+    aIndexOnText		( SfxResId( STR_HELP_BUTTON_INDEX_ON ) ),
+    aIndexOffText		( SfxResId( STR_HELP_BUTTON_INDEX_OFF ) ),
     aOnStartupText      ( SfxResId( RID_HELP_ONSTARTUP_TEXT ) ),
-    pHelpWin            ( pParent ),
-    pTextWin            ( new TextWin_Impl( this ) ),
+    pHelpWin			( pParent ),
+    pTextWin			( new TextWin_Impl( this ) ),
     pSrchDlg            ( NULL ),
-    nMinPos             ( 0 ),
-    bIsDebug            ( sal_False ),
-    bIsIndexOn          ( sal_False ),
-    bIsInClose          ( sal_False ),
+    nMinPos				( 0 ),
+    bIsDebug			( sal_False ),
+    bIsIndexOn			( sal_False ),
+    bIsInClose			( sal_False ),
     bIsFullWordSearch   ( sal_False )
 
 {
@@ -2366,7 +2364,7 @@ bool SfxHelpTextWindow_Impl::isHandledKey( const KeyCode& _rKeyCode )
     USHORT nCode = _rKeyCode.GetCode();
 
     // the keys <STRG><A> (select all), <STRG><C> (copy),
-    //          <STRG><F> (find), <STRG><P> (print) and <STRG><W> (close window)
+    //			<STRG><F> (find), <STRG><P> (print) and <STRG><W> (close window)
     // were handled in help
     if ( _rKeyCode.IsMod1() &&
          ( KEY_A == nCode || KEY_C == nCode || KEY_F == nCode || KEY_P == nCode || KEY_W == nCode ) )
@@ -2693,7 +2691,7 @@ void SfxHelpTextWindow_Impl::GetFocus()
         {
             if( xFrame.is() )
             {
-                Reference< ::com::sun::star::awt::XWindow > xWindow = xFrame->getComponentWindow();
+                Reference< ::com::sun::star::awt::XWindow >	xWindow = xFrame->getComponentWindow();
                 if( xWindow.is() )
                     xWindow->setFocus();
             }
@@ -2711,7 +2709,7 @@ void SfxHelpTextWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
-    if ( ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) ||
+    if ( ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS )	||
            ( rDCEvt.GetType() == DATACHANGED_DISPLAY ) ) &&
          ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
@@ -2859,7 +2857,7 @@ void SfxHelpWindow_Impl::Resize()
 
 void SfxHelpWindow_Impl::Split()
 {
-    static long nMinSplitSize = 5;
+    static long	nMinSplitSize = 5;
     static long nMaxSplitSize = 99 - nMinSplitSize;
 
     SplitWindow::Split();
@@ -2867,7 +2865,7 @@ void SfxHelpWindow_Impl::Split()
     nIndexSize = GetItemSize( INDEXWIN_ID );
     nTextSize = GetItemSize( TEXTWIN_ID );
 
-    BOOL        bMod = FALSE;
+    BOOL		bMod = FALSE;
     if( nIndexSize < nMinSplitSize )
     {
         nIndexSize = nMinSplitSize;
@@ -3084,7 +3082,7 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
 
     ::rtl::OUString sHelpURL;
 
-//  INetURLObject aObj(aEntry);
+// 	INetURLObject aObj(aEntry);
 //  BOOL bComplete = ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP );
 
     BOOL bComplete = rtl::OUString(aEntry).toAsciiLowerCase().match(rtl::OUString::createFromAscii("vnd.sun.star.help"),0);
@@ -3209,20 +3207,20 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
 
     SplitWindow( pParent, WB_3DLOOK | WB_NOSPLITDRAW ),
 
-    xFrame              ( rFrame ),
-    pIndexWin           ( NULL ),
-    pTextWin            ( NULL ),
-    pHelpInterceptor    ( new HelpInterceptor_Impl() ),
-    pHelpListener       ( new HelpListener_Impl( pHelpInterceptor ) ),
-    nExpandWidth        ( 0 ),
-    nCollapseWidth      ( 0 ),
-    nHeight             ( 0 ),
-    nIndexSize          ( 40 ),
-    nTextSize           ( 60 ),
-    bIndex              ( sal_True ),
-    bGrabFocusToToolBox ( sal_False ),
-    aWinPos             ( 0, 0 ),
-    sTitle              ( pParent->GetText() )
+    xFrame				( rFrame ),
+    pIndexWin			( NULL ),
+    pTextWin	   		( NULL ),
+    pHelpInterceptor	( new HelpInterceptor_Impl() ),
+    pHelpListener		( new HelpListener_Impl( pHelpInterceptor ) ),
+    nExpandWidth		( 0 ),
+    nCollapseWidth		( 0 ),
+    nHeight				( 0 ),
+    nIndexSize			( 40 ),
+    nTextSize			( 60 ),
+    bIndex				( sal_True ),
+    bGrabFocusToToolBox	( sal_False ),
+    aWinPos				( 0, 0 ),
+    sTitle				( pParent->GetText() )
 {
     SetHelpId( HID_HELP_WINDOW );
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
@@ -3248,7 +3246,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
 SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 {
     SaveConfig();
-    Window* pDel = pIndexWin;
+    Window*	pDel = pIndexWin;
     pIndexWin = NULL;
     delete pDel;
 
@@ -3462,11 +3460,11 @@ SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl( Window* pParent, s
 
     ModalDialog( pParent, SfxResId( DLG_HELP_ADDBOOKMARK ) ),
 
-    aTitleFT    ( this, SfxResId( FT_BOOKMARK_TITLE ) ),
-    aTitleED    ( this, SfxResId( ED_BOOKMARK_TITLE ) ),
-    aOKBtn      ( this, SfxResId( PB_BOOKMARK_OK ) ),
-    aEscBtn     ( this, SfxResId( PB_BOOKMARK_CANCEL ) ),
-    aHelpBtn    ( this, SfxResId( PB_BOOKMARK_HELP ) )
+    aTitleFT	( this, SfxResId( FT_BOOKMARK_TITLE ) ),
+    aTitleED	( this, SfxResId( ED_BOOKMARK_TITLE ) ),
+    aOKBtn		( this, SfxResId( PB_BOOKMARK_OK ) ),
+    aEscBtn		( this, SfxResId( PB_BOOKMARK_CANCEL ) ),
+    aHelpBtn	( this, SfxResId( PB_BOOKMARK_HELP ) )
 
 {
     if ( bRename )

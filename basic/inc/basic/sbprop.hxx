@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class SbProperty : public SbxProperty
     friend class SbModule;
     friend class SbProcedureProperty;
     SbModule* pMod;
-    BOOL     bInvalid;
+    BOOL	 bInvalid;
     SbProperty( const String&, SbxDataType, SbModule* );
     virtual ~SbProperty();
 public:
@@ -56,7 +56,7 @@ SV_DECL_IMPL_REF(SbProperty)
 
 class SbProcedureProperty : public SbxProperty
 {
-    bool mbSet;     // Flag for set command
+    bool mbSet;		// Flag for set command
 
     virtual ~SbProcedureProperty();
 

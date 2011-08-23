@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,18 +79,18 @@ using namespace com::sun::star::style;
 using rtl::OUString;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
-#define NUM_PAGETYPE_BULLET         0
+#define NUM_PAGETYPE_BULLET			0
 #define NUM_PAGETYPE_SINGLENUM      1
 #define NUM_PAGETYPE_NUM            2
 #define NUM_PAGETYPE_BMP            3
 #define PAGETYPE_USER_START         10
 
-#define SHOW_NUMBERING              0
-#define SHOW_BULLET                 1
-#define SHOW_BITMAP                 2
+#define SHOW_NUMBERING				0
+#define SHOW_BULLET					1
+#define SHOW_BITMAP					2
 
-#define MAX_BMP_WIDTH               16
-#define MAX_BMP_HEIGHT              16
+#define MAX_BMP_WIDTH				16
+#define MAX_BMP_HEIGHT				16
 
 static const sal_Char cNumberingType[] = "NumberingType";
 static const sal_Char cValue[] = "Value";
@@ -161,7 +161,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         20, 30,
         25, 50,
         30, 70,
-        35, 90, // up to here line positions
+        35, 90,	// up to here line positions
         05, 10, // character positions
         10, 30,
         15, 50,
@@ -175,7 +175,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
     OutputDevice*  pDev = rUDEvt.GetDevice();
     Rectangle aRect = rUDEvt.GetRect();
-    USHORT  nItemId = rUDEvt.GetItemId();
+    USHORT	nItemId = rUDEvt.GetItemId();
     long nRectWidth = aRect.GetWidth();
     long nRectHeight = aRect.GetHeight();
     Size aRectSize(nRectWidth, aRect.GetHeight());
@@ -233,7 +233,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             }
         }
     }
-    pDev->DrawOutDev(   aRect.TopLeft(), aRectSize,
+    pDev->DrawOutDev(	aRect.TopLeft(), aRectSize,
                         aOrgRect.TopLeft(), aRectSize,
                         *pVDev );
     // jetzt kommt der Text
@@ -390,7 +390,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     long nLineTop = nStartY + nRectHeight * aLinesArr[2 * i + 1]/100 ;
                     Point aLineLeft(aLeft.X() /*+ nStartX + nRectWidth * aLinesArr[2 * i]/ 100*/, nLineTop );
                     Point aLineRight(nStartX + nRectWidth * 90 /100, nLineTop );
-                    pVDev->DrawLine(aLineLeft,  aLineRight);
+                    pVDev->DrawLine(aLineLeft,	aLineRight);
                 }
 
             }
@@ -410,7 +410,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             }
 #endif
         }
-        pDev->DrawOutDev(   aRect.TopLeft(), aRectSize,
+        pDev->DrawOutDev(	aRect.TopLeft(), aRectSize,
                             aOrgRect.TopLeft(), aRectSize,
                             *pVDev );
     }
@@ -438,7 +438,7 @@ SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nTy
     SetStyle( GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
     if(NUM_PAGETYPE_BULLET == nType)
     {
-        for ( USHORT i = 0; i < 8; i++ )
+        for	( USHORT i = 0; i < 8; i++ )
         {
             InsertItem( i + 1, i );
             SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_BULLET_DESCRIPTIONS + i ) );
@@ -460,7 +460,7 @@ SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nTy
 void SvxNumValueSet::SetNumberingSettings(
     const Sequence<Sequence<PropertyValue> >& aNum,
     Reference<XNumberingFormatter>& xFormat,
-    const Locale& rLocale   )
+    const Locale& rLocale	)
 {
     aNumSettings = aNum;
     xFormatter = xFormat;
@@ -522,13 +522,13 @@ SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, co
 
 --------------------------------------------------*/
 
-void    SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
+void   	SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     SvxNumValueSet::UserDraw(rUDEvt);
 
     Rectangle aRect = rUDEvt.GetRect();
     OutputDevice*  pDev = rUDEvt.GetDevice();
-    USHORT  nItemId = rUDEvt.GetItemId();
+    USHORT	nItemId = rUDEvt.GetItemId();
     Point aBLPos = aRect.TopLeft();
 
     int nRectHeight = aRect.GetHeight();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 // -------------------------------------------------------------------------
-OAdabasUser::OAdabasUser(   OAdabasConnection* _pConnection) : connectivity::sdbcx::OUser(sal_True)
+OAdabasUser::OAdabasUser(	OAdabasConnection* _pConnection) : connectivity::sdbcx::OUser(sal_True)
                 ,m_pConnection(_pConnection)
 {
     construct();
@@ -90,16 +90,16 @@ void OAdabasUser::refreshGroups()
         m_pGroups = new OGroups(*this,m_aMutex,aVector,m_pConnection,this);
 }
 // -------------------------------------------------------------------------
-OUserExtend::OUserExtend(   OAdabasConnection* _pConnection) : OAdabasUser(_pConnection)
+OUserExtend::OUserExtend(	OAdabasConnection* _pConnection) : OAdabasUser(_pConnection)
 {
     construct();
 }
 // -------------------------------------------------------------------------
-typedef connectivity::sdbcx::OUser  OUser_TYPEDEF;
+typedef connectivity::sdbcx::OUser	OUser_TYPEDEF;
 void OUserExtend::construct()
 {
 
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD),    PROPERTY_ID_PASSWORD,0,&m_Password,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD),	PROPERTY_ID_PASSWORD,0,&m_Password,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const
@@ -266,10 +266,10 @@ void SAL_CALL OAdabasUser::changePassword( const ::rtl::OUString& objPassword, c
         if(pNewConnection)
         {
             Sequence< PropertyValue> aSeq(2);
-            aSeq.getArray()[0].Name     = ::rtl::OUString::createFromAscii("user") ;
-            aSeq.getArray()[0].Value    <<= m_Name;
-            aSeq.getArray()[1].Name     = ::rtl::OUString::createFromAscii("password") ;
-            aSeq.getArray()[1].Value    <<= objPassword;
+            aSeq.getArray()[0].Name		= ::rtl::OUString::createFromAscii("user") ;
+            aSeq.getArray()[0].Value	<<= m_Name;
+            aSeq.getArray()[1].Name		= ::rtl::OUString::createFromAscii("password") ;
+            aSeq.getArray()[1].Value	<<= objPassword;
             pNewConnection->Construct(m_pConnection->getMetaData()->getURL(),aSeq);
         }
         bDisposeConnection = sal_True;

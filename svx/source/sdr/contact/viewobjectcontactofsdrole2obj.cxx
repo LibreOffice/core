@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ namespace sdr
             const bool bIsInplaceActive((nState == embed::EmbedStates::INPLACE_ACTIVE) || (nState == embed::EmbedStates::UI_ACTIVE));
             const bool bIsChart(rSdrOle2.IsChart());
             bool bDone(false);
-
+ 
             if(!bDone && bIsInplaceActive)
             {
                 if( !GetObjectContact().isOutputToPrinter() && !GetObjectContact().isOutputToRecordingMetaFile() )
@@ -119,7 +119,7 @@ namespace sdr
                     // determine if embedding and PrettyPrinting shall be done at all
                     uno::Reference< frame::XModel > xChartModel;
                     bool bDoChartPrettyPrinting(true);
-
+                    
                     // the original ChartPrettyPainter does not do it for Window
                     if(bDoChartPrettyPrinting && GetObjectContact().isOutputToWindow())
                     {
@@ -216,8 +216,8 @@ namespace sdr
                             false); // no filling
 
                         const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolyPolygonHatchPrimitive2D(
-                            basegfx::B2DPolyPolygon(aObjectOutline),
-                            Color(COL_BLACK).getBColor(),
+                            basegfx::B2DPolyPolygon(aObjectOutline), 
+                            Color(COL_BLACK).getBColor(), 
                             aFillHatch));
 
                         drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xReference);
@@ -225,12 +225,12 @@ namespace sdr
                 }
 
             }
-
+            
             return xRetval;
         }
 
         ViewObjectContactOfSdrOle2Obj::ViewObjectContactOfSdrOle2Obj(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContactOfSdrObj(rObjectContact, rViewContact)
+        :	ViewObjectContactOfSdrObj(rObjectContact, rViewContact)
         {
         }
 

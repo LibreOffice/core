@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,11 +65,11 @@ public class Manifest {
         Element root, el;
 
         ensureBaseElementsExist();
-
+        
         try {
             root = (Element)
                 document.getElementsByTagName("manifest:manifest").item(0);
-
+        
             el = document.createElement("manifest:file-entry");
             el.setAttribute("manifest:media-type", type);
             el.setAttribute("manifest:full-path", entry);
@@ -95,7 +95,7 @@ public class Manifest {
         try {
             root = (Element)
                 document.getElementsByTagName("manifest:manifest").item(0);
-
+            
             NodeList nl = root.getElementsByTagName("manifest:file-entry");
             if (nl == null || (len = nl.getLength()) == 0)
                 return;
@@ -119,7 +119,7 @@ public class Manifest {
             System.err.println("Error removing entry: " + e.getMessage());
         }
     }
-
+    
     public InputStream getInputStream() throws IOException {
         InputStream result = null;
         ByteArrayOutputStream out = null;

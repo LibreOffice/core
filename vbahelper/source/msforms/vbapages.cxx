@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,33 +34,33 @@ ScVbaPages::ScVbaPages( const uno::Reference< XHelperInterface >& xParent, const
 {
 }
 
-uno::Type SAL_CALL
+uno::Type SAL_CALL 
 ScVbaPages::getElementType() throw (uno::RuntimeException)
 {
-    // return msforms::XPage::static_type(0);
-    return uno::XInterface::static_type(0);
+    // return msforms::XPage::static_type(0); 
+    return uno::XInterface::static_type(0); 
 }
 
-uno::Any
+uno::Any 
 ScVbaPages::createCollectionObject( const css::uno::Any& aSource )
 {
     return aSource;
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaPages::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPages") );
     return sImplName;
 }
 
-uno::Reference< container::XEnumeration > SAL_CALL
+uno::Reference< container::XEnumeration > SAL_CALL 
 ScVbaPages::createEnumeration() throw (uno::RuntimeException)
 {
     return uno::Reference< container::XEnumeration >();
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 ScVbaPages::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

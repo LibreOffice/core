@@ -49,16 +49,16 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32                              mnRefCount;
+            sal_uInt32								mnRefCount;
 
             // 3D scene attribute definitions
-            double                                      mfDistance;
-            double                                      mfShadowSlant;
-            ::com::sun::star::drawing::ProjectionMode   maProjectionMode;
-            ::com::sun::star::drawing::ShadeMode        maShadeMode;
+            double										mfDistance;
+            double										mfShadowSlant;
+            ::com::sun::star::drawing::ProjectionMode	maProjectionMode;
+            ::com::sun::star::drawing::ShadeMode		maShadeMode;
 
             // bitfield
-            unsigned                                    mbTwoSidedLighting : 1;
+            unsigned									mbTwoSidedLighting : 1;
 
         public:
             ImpSdrSceneAttribute(
@@ -67,7 +67,7 @@ namespace drawinglayer
                 ::com::sun::star::drawing::ProjectionMode aProjectionMode,
                 ::com::sun::star::drawing::ShadeMode aShadeMode,
                 bool bTwoSidedLighting)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 mfDistance(fDistance),
                 mfShadowSlant(fShadowSlant),
                 maProjectionMode(aProjectionMode),
@@ -118,19 +118,19 @@ namespace drawinglayer
             ::com::sun::star::drawing::ProjectionMode aProjectionMode,
             ::com::sun::star::drawing::ShadeMode aShadeMode,
             bool bTwoSidedLighting)
-        :   mpSdrSceneAttribute(new ImpSdrSceneAttribute(
+        :	mpSdrSceneAttribute(new ImpSdrSceneAttribute(
                 fDistance, fShadowSlant, aProjectionMode, aShadeMode, bTwoSidedLighting))
         {
         }
 
         SdrSceneAttribute::SdrSceneAttribute()
-        :   mpSdrSceneAttribute(ImpSdrSceneAttribute::get_global_default())
+        :	mpSdrSceneAttribute(ImpSdrSceneAttribute::get_global_default())
         {
             mpSdrSceneAttribute->mnRefCount++;
         }
 
         SdrSceneAttribute::SdrSceneAttribute(const SdrSceneAttribute& rCandidate)
-        :   mpSdrSceneAttribute(rCandidate.mpSdrSceneAttribute)
+        :	mpSdrSceneAttribute(rCandidate.mpSdrSceneAttribute)
         {
             mpSdrSceneAttribute->mnRefCount++;
         }
@@ -164,7 +164,7 @@ namespace drawinglayer
                 {
                     delete mpSdrSceneAttribute;
                 }
-
+                
                 mpSdrSceneAttribute = rCandidate.mpSdrSceneAttribute;
                 mpSdrSceneAttribute->mnRefCount++;
             }
@@ -187,29 +187,29 @@ namespace drawinglayer
             return (*rCandidate.mpSdrSceneAttribute == *mpSdrSceneAttribute);
         }
 
-        double SdrSceneAttribute::getDistance() const
-        {
-            return mpSdrSceneAttribute->getDistance();
+        double SdrSceneAttribute::getDistance() const 
+        { 
+            return mpSdrSceneAttribute->getDistance(); 
         }
 
-        double SdrSceneAttribute::getShadowSlant() const
-        {
-            return mpSdrSceneAttribute->getShadowSlant();
+        double SdrSceneAttribute::getShadowSlant() const 
+        { 
+            return mpSdrSceneAttribute->getShadowSlant(); 
         }
 
-        ::com::sun::star::drawing::ProjectionMode SdrSceneAttribute::getProjectionMode() const
-        {
-            return mpSdrSceneAttribute->getProjectionMode();
+        ::com::sun::star::drawing::ProjectionMode SdrSceneAttribute::getProjectionMode() const 
+        { 
+            return mpSdrSceneAttribute->getProjectionMode(); 
         }
 
-        ::com::sun::star::drawing::ShadeMode SdrSceneAttribute::getShadeMode() const
-        {
-            return mpSdrSceneAttribute->getShadeMode();
+        ::com::sun::star::drawing::ShadeMode SdrSceneAttribute::getShadeMode() const 
+        { 
+            return mpSdrSceneAttribute->getShadeMode(); 
         }
 
-        bool SdrSceneAttribute::getTwoSidedLighting() const
-        {
-            return mpSdrSceneAttribute->getTwoSidedLighting();
+        bool SdrSceneAttribute::getTwoSidedLighting() const 
+        { 
+            return mpSdrSceneAttribute->getTwoSidedLighting(); 
         }
 
     } // end of namespace attribute

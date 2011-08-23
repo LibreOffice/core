@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@ using namespace connectivity;
 using namespace utl;
 using namespace ::com::sun::star;
 
-namespace
+namespace 
 {
     void lcl_convert(const uno::Sequence< ::rtl::OUString >& _aSource,uno::Any& _rDest)
     {
@@ -101,7 +101,7 @@ namespace
     }
 }
 // -----------------------------------------------------------------------------
-DriversConfigImpl::DriversConfigImpl()
+DriversConfigImpl::DriversConfigImpl() 
 {
 }
 // -----------------------------------------------------------------------------
@@ -174,7 +174,7 @@ DriversConfig& DriversConfig::operator=( const DriversConfig& _rhs )
             sOldPattern = aIter->first;
         }
     }
-
+    
     return sRet;
 }
 // -----------------------------------------------------------------------------
@@ -194,7 +194,7 @@ DriversConfig& DriversConfig::operator=( const DriversConfig& _rhs )
             sOldPattern = aIter->first;
         }
     }
-
+    
     return sRet;
 }
 // -----------------------------------------------------------------------------
@@ -215,7 +215,7 @@ const ::comphelper::NamedValueCollection& DriversConfig::getMetaData(const ::rtl
 // -----------------------------------------------------------------------------
 const ::comphelper::NamedValueCollection& DriversConfig::impl_get(const ::rtl::OUString& _sURL,sal_Int32 _nProps) const
 {
-    const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
+    const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);    
     const ::comphelper::NamedValueCollection* pRet = NULL;
     ::rtl::OUString sOldPattern;
     TInstalledDrivers::const_iterator aIter = rDrivers.begin();

@@ -113,13 +113,13 @@ SbxVariable* SbiRuntime::FindElement
             pElem = pObj->Find( aName, SbxCLASS_DONTCARE );
 
             // #110004, #112015: Make private really private
-            if( bLocal && pElem )   // Local as flag for global search
+            if( bLocal && pElem )	// Local as flag for global search
             {
                 if( pElem->IsSet( SBX_PRIVATE ) )
                 {
                     SbiInstance* pInst_ = pINST;
                     if( pInst_ && pInst_->IsCompatibility() && pObj != pElem->GetParent() )
-                        pElem = NULL;   // Found but in wrong module!
+                        pElem = NULL;	// Found but in wrong module!
 
                     // Interfaces: Use SBX_EXTFOUND
                 }
@@ -386,7 +386,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, UINT32 nOp1 )
                         Any aUnoAny = pParentUnoObj->getUnoAny();
                         Reference< XInvocation > xInvocation;
                         aUnoAny >>= xInvocation;
-                        if( xInvocation.is() )  // TODO: if( xOLEAutomation.is() )
+                        if( xInvocation.is() )	// TODO: if( xOLEAutomation.is() )
                         {
                             bError_ = false;
 
@@ -688,7 +688,7 @@ void SbiRuntime::StepPARAM( UINT32 nOp1, UINT32 nOp2 )
                     p->PutString( String() );
             }
             else
-                p->PutErr( 448 );       // Wie in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
+                p->PutErr( 448 );		// Wie in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
 
             refParams->Put( p, iLoop );
             iLoop--;
@@ -883,7 +883,7 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
         pInst->CalcBreakCallLevel( nNewFlags );
         //16.10.96, ALT:
         //if( nNewFlags != SbDEBUG_CONTINUE )
-        //  nFlags = nNewFlags;
+        //	nFlags = nNewFlags;
     }
 }
 
@@ -1070,7 +1070,7 @@ void SbiRuntime::StepDCREATE_IMPL( UINT32 nOp1, UINT32 nOp2 )
 
 // Objekt aus User-Type kreieren  (+StringID+StringID)
 
-SbxObject* createUserTypeImpl( const String& rClassName );  // sb.cxx
+SbxObject* createUserTypeImpl( const String& rClassName );	// sb.cxx
 
 void SbiRuntime::StepTCREATE( UINT32 nOp1, UINT32 nOp2 )
 {
@@ -1088,7 +1088,7 @@ void SbiRuntime::StepTCREATE( UINT32 nOp1, UINT32 nOp2 )
 
 void SbiRuntime::implCreateFixedString( SbxVariable* pStrVar, UINT32 nOp2 )
 {
-    USHORT nCount = static_cast<USHORT>( nOp2 >> 17 );      // len = all bits above 0x10000
+    USHORT nCount = static_cast<USHORT>( nOp2 >> 17 );		// len = all bits above 0x10000
     String aStr;
     aStr.Fill( nCount, 0 );
     pStrVar->PutString( aStr );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ OUString LibraryContainer::get_libname(
     ::xmlscript::LibDescriptor import;
     ::ucbhelper::Content ucb_content( url, xCmdEnv );
     xml_parse( ::xmlscript::importLibrary( import ), ucb_content, xContext );
-
+    
     if (import.aName.getLength() == 0) {
         throw Exception( StrCannotDetermineLibName::get(),
                          Reference<XInterface>() );

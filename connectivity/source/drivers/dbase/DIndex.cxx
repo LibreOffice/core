@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(sal_True/*_pTable->getCo
     construct();
 }
 // -------------------------------------------------------------------------
-ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
+ODbaseIndex::ODbaseIndex(	ODbaseTable* _pTable,
                             const NDXHeader& _rHeader,
                             const ::rtl::OUString& _rName)
     :OIndex(_rName,::rtl::OUString(),_rHeader.db_unique,sal_False,sal_False,sal_True)
@@ -597,7 +597,7 @@ BOOL ODbaseIndex::CreateImpl()
         nRowsLeft = xSet->getRow();
 
         xSet->beforeFirst();
-        ORowSetValue    atmpValue=ORowSetValue();
+        ORowSetValue	atmpValue=ORowSetValue();
         ONDXKey aKey(atmpValue, nType, 0);
         ONDXKey aInsertKey(atmpValue, nType, 0);
         // Erzeugen der Indexstruktur

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ namespace connectivity
                 return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP FOREIGN KEY "));
             }
         public:
-            OMySQLKeysHelper(   OTableHelper* _pTable,
+            OMySQLKeysHelper(	OTableHelper* _pTable,
                 ::osl::Mutex& _rMutex,
                 const TStringVector& _rVector
                 ) : OKeysHelper(_pTable,_rMutex,_rVector){}
@@ -83,24 +83,24 @@ namespace connectivity
     }
 }
 
-OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
-                           const Reference< XConnection >& _xConnection)
+OMySQLTable::OMySQLTable(	sdbcx::OCollection* _pTables,
+                           const Reference<	XConnection >& _xConnection)
     :OTableHelper(_pTables,_xConnection,sal_True)
 {
     // we create a new table here, so we should have all the rights or ;-)
-    m_nPrivileges = Privilege::DROP         |
-                    Privilege::REFERENCE    |
-                    Privilege::ALTER        |
-                    Privilege::CREATE       |
-                    Privilege::READ         |
-                    Privilege::DELETE       |
-                    Privilege::UPDATE       |
-                    Privilege::INSERT       |
+    m_nPrivileges = Privilege::DROP			|
+                    Privilege::REFERENCE	|
+                    Privilege::ALTER		|
+                    Privilege::CREATE		|
+                    Privilege::READ			|
+                    Privilege::DELETE		|
+                    Privilege::UPDATE		|
+                    Privilege::INSERT		|
                     Privilege::SELECT;
     construct();
 }
 // -------------------------------------------------------------------------
-OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
+OMySQLTable::OMySQLTable(	sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
@@ -108,7 +108,7 @@ OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
                     const ::rtl::OUString& _SchemaName,
                     const ::rtl::OUString& _CatalogName,
                     sal_Int32 _nPrivileges
-                ) : OTableHelper(   _pTables,
+                ) : OTableHelper(	_pTables,
                                     _xConnection,
                                     sal_True,
                                     _Name,
@@ -125,7 +125,7 @@ void OMySQLTable::construct()
 {
     OTableHelper::construct();
     if ( !isNew() )
-        registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),  PROPERTY_ID_PRIVILEGES,PropertyAttribute::READONLY,&m_nPrivileges,  ::getCppuType(&m_nPrivileges));
+        registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),	PROPERTY_ID_PRIVILEGES,PropertyAttribute::READONLY,&m_nPrivileges,	::getCppuType(&m_nPrivileges));
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OMySQLTable::createArrayHelper( sal_Int32 /*_nId*/ ) const
@@ -204,32 +204,32 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
         sal_Int32 nOldType = 0,nNewType = 0,nOldPrec = 0,nNewPrec = 0,nOldScale = 0,nNewScale = 0;
 
         ::dbtools::OPropertyMap& rProp = OMetaConnection::getPropMap();
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))         >>= nOldType;
-        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))    >>= nNewType;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))			>>= nOldType;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))	>>= nNewType;
         // and precsions and scale
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_PRECISION))    >>= nOldPrec;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_PRECISION))	>>= nOldPrec;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_PRECISION))>>= nNewPrec;
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))        >>= nOldScale;
-        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))   >>= nNewScale;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))		>>= nOldScale;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))	>>= nNewScale;
         // second: check the "is nullable" value
         sal_Int32 nOldNullable = 0,nNewNullable = 0;
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))       >>= nOldNullable;
-        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))  >>= nNewNullable;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))		>>= nOldNullable;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))	>>= nNewNullable;
 
         // check also the auto_increment
         sal_Bool bOldAutoIncrement = sal_False,bAutoIncrement = sal_False;
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))      >>= bOldAutoIncrement;
-        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))		>>= bOldAutoIncrement;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))	>>= bAutoIncrement;
         bool bColumnNameChanged = false;
         ::rtl::OUString sOldDesc,sNewDesc;
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DESCRIPTION))      >>= sOldDesc;
-        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DESCRIPTION)) >>= sNewDesc;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DESCRIPTION))		>>= sOldDesc;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DESCRIPTION))	>>= sNewDesc;
 
-        if (    nOldType != nNewType
-            ||  nOldPrec != nNewPrec
-            ||  nOldScale != nNewScale
-            ||  nNewNullable != nOldNullable
-            ||  bOldAutoIncrement != bAutoIncrement
+        if (	nOldType != nNewType
+            ||	nOldPrec != nNewPrec
+            ||	nOldScale != nNewScale
+            ||	nNewNullable != nOldNullable
+            ||	bOldAutoIncrement != bAutoIncrement 
             || sOldDesc != sNewDesc )
         {
             // special handling because they change dthe type names to distinguish
@@ -264,7 +264,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
 
         // third: check the default values
         ::rtl::OUString sNewDefault,sOldDefault;
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE))     >>= sOldDefault;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE))		>>= sOldDefault;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)) >>= sNewDefault;
 
         if(sOldDefault.getLength())

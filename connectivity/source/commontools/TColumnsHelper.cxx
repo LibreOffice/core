@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ namespace connectivity
     };
 }
 
-OColumnsHelper::OColumnsHelper( ::cppu::OWeakObject& _rParent
+OColumnsHelper::OColumnsHelper(	::cppu::OWeakObject& _rParent
                                 ,sal_Bool _bCase
                                 ,::osl::Mutex& _rMutex
                                 ,const TStringVector &_rVector
@@ -97,10 +97,10 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
     if ( !m_pImpl )
         m_pImpl = new OColumnsHelperImpl(isCaseSensitive());
 
-    sal_Bool bQueryInfo     = sal_True;
+    sal_Bool bQueryInfo		= sal_True;
     sal_Bool bAutoIncrement = sal_False;
-    sal_Bool bIsCurrency    = sal_False;
-    sal_Int32 nDataType     = DataType::OTHER;
+    sal_Bool bIsCurrency	= sal_False;
+    sal_Int32 nDataType		= DataType::OTHER;
 
     ColumnInformationMap::iterator aFind = m_pImpl->m_aColumnInfo.find(_rName);
     if ( aFind == m_pImpl->m_aColumnInfo.end() ) // we have to fill it
@@ -111,10 +111,10 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
     }
     if ( aFind != m_pImpl->m_aColumnInfo.end() )
     {
-        bQueryInfo      = sal_False;
-        bAutoIncrement  = aFind->second.first.first;
-        bIsCurrency     = aFind->second.first.second;
-        nDataType       = aFind->second.second;
+        bQueryInfo		= sal_False;
+        bAutoIncrement	= aFind->second.first.first;
+        bIsCurrency		= aFind->second.first.second;
+        nDataType		= aFind->second.second;
     } // if ( aFind != m_pImpl->m_aColumnInfo.end() )
 
     sdbcx::ObjectType xRet;
@@ -146,7 +146,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
     else
     {
 
-        xRet.set(::dbtools::createSDBCXColumn(  m_pTable,
+        xRet.set(::dbtools::createSDBCXColumn(	m_pTable,
                                                 xConnection,
                                                 _rName,
                                                 isCaseSensitive(),
@@ -163,7 +163,7 @@ void OColumnsHelper::impl_refresh() throw(RuntimeException)
 {
     if ( m_pTable )
     {
-        m_pImpl->m_aColumnInfo.clear();
+        m_pImpl->m_aColumnInfo.clear();		
         m_pTable->refreshColumns();
     }
 }
@@ -182,13 +182,13 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const ::rtl::OUString& _rForName
         return cloneDescriptor( descriptor );
 
     Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-    ::rtl::OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
+    ::rtl::OUString aSql	= ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString aQuote	= xMetaData->getIdentifierQuoteString(  );
 
     aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
     aSql += ::rtl::OUString::createFromAscii(" ADD ");
     aSql += ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),NULL,m_pTable->getTypeCreatePattern());
-
+    
     Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
     if ( xStmt.is() )
     {
@@ -204,9 +204,9 @@ void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElem
     OSL_ENSURE(m_pTable,"OColumnsHelper::dropByName: Table is null!");
     if ( m_pTable && !m_pTable->isNew() )
     {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+        ::rtl::OUString aSql	= ::rtl::OUString::createFromAscii("ALTER TABLE ");
         Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
-        ::rtl::OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
+        ::rtl::OUString aQuote	= xMetaData->getIdentifierQuoteString(  );
 
         aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
         aSql += ::rtl::OUString::createFromAscii(" DROP ");

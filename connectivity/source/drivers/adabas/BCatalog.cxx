@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ OAdabasCatalog::OAdabasCatalog(SQLHANDLE _aConnectionHdl, OAdabasConnection* _pC
     if ( sName.getLength() )
         sName += OAdabasCatalog::getDot();
     sName += _xRow->getString(3);
-
+    
 
     return sName;
 }
@@ -150,20 +150,20 @@ void OAdabasCatalog::correctColumnProperties(sal_Int32 /*_nPrec*/, sal_Int32& _r
         }
         break;
     case DataType::FLOAT:
-        //  if(_nPrec >= 16)
+        //	if(_nPrec >= 16)
         {
             static const ::rtl::OUString sDouble(RTL_CONSTASCII_USTRINGPARAM("DOUBLE PRECISION"));
             _rsTypeName = sDouble;
             _rnType = DataType::DOUBLE;
         }
-//      else if(_nPrec > 15)
-//      {
-//          static const ::rtl::OUString sReal = ::rtl::OUString::createFromAscii("REAL");
-//          _rsTypeName = sReal;
-//          _rnType = DataType::REAL;
-//      }
+//		else if(_nPrec > 15)
+//		{
+//			static const ::rtl::OUString sReal = ::rtl::OUString::createFromAscii("REAL"); 
+//			_rsTypeName = sReal;
+//			_rnType = DataType::REAL;
+//		}
         break;
-    }
+    }	
 }
 // -----------------------------------------------------------------------------
 

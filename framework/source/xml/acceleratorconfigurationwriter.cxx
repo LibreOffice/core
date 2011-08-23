@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ void AcceleratorConfigurationWriter::flush()
     css::uno::Reference< css::xml::sax::XDocumentHandler >         xCFG        = m_xConfig;
     css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > xExtendedCFG(m_xConfig, css::uno::UNO_QUERY_THROW);
 
-    aReadLock.unlock();
+    aReadLock.unlock();    
     // <- SAFE ----------------------------------
 
     // prepare attribute list
@@ -107,7 +107,7 @@ void AcceleratorConfigurationWriter::flush()
         const css::awt::KeyEvent& rKey     = *pKey;
         const ::rtl::OUString&    rCommand = m_rContainer.getCommandByKey(rKey);
         impl_ts_writeKeyCommandPair(rKey, rCommand, xCFG);
-    }
+    }         
 
     /* TODO write key-command list
     std::vector< SfxAcceleratorConfigItem>::const_iterator p;

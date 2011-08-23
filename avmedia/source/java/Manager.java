@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,15 +38,15 @@ import com.sun.star.media.*;
 public class Manager implements com.sun.star.lang.XServiceInfo,
                                 com.sun.star.lang.XTypeProvider,
                                 com.sun.star.media.XManager
-
+                                
 {
     private com.sun.star.lang.XMultiServiceFactory maFactory;
-
+    
     // -------------------------------------------------------------------------
 
     public Manager( com.sun.star.lang.XMultiServiceFactory aFactory )
     {
-        maFactory = aFactory;
+        maFactory = aFactory; 
     }
 
     // ------------
@@ -128,7 +128,7 @@ public class Manager implements com.sun.star.lang.XServiceInfo,
     }
 
     // -------------------------------------------------------------------------
-
+    
     synchronized public byte[] getImplementationId()
     {
         if( maImplementationId == null)
@@ -144,5 +144,5 @@ public class Manager implements com.sun.star.lang.XServiceInfo,
         }
 
         return maImplementationId;
-    }
+    }    
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,33 +56,33 @@ public:
     CellEditSource( const CellRef& xCell, SdrView& rView, const Window& rViewWindow );
     virtual ~CellEditSource();
 
-    virtual SvxEditSource*          Clone() const;
-    virtual SvxTextForwarder*       GetTextForwarder();
-     virtual SvxViewForwarder*      GetViewForwarder();
-     virtual SvxEditViewForwarder*  GetEditViewForwarder( sal_Bool bCreate = sal_False );
-    virtual void                    UpdateData();
+    virtual SvxEditSource*			Clone() const;
+    virtual SvxTextForwarder*		GetTextForwarder();
+     virtual SvxViewForwarder*		GetViewForwarder();
+     virtual SvxEditViewForwarder*	GetEditViewForwarder( sal_Bool bCreate = sal_False );
+    virtual void					UpdateData();
 
     virtual void addRange( SvxUnoTextRangeBase* pNewRange );
     virtual void removeRange( SvxUnoTextRangeBase* pOldRange );
     virtual const SvxUnoTextRangeBaseList& getRanges() const;
 
-    virtual SfxBroadcaster&         GetBroadcaster() const;
+    virtual SfxBroadcaster&			GetBroadcaster() const;
 
     void lock();
     void unlock();
 
     // the SvxViewForwarder interface
-    virtual BOOL        IsValid() const;
-    virtual Rectangle   GetVisArea() const;
-    virtual Point       LogicToPixel( const Point&, const MapMode& ) const;
-    virtual Point       PixelToLogic( const Point&, const MapMode& ) const;
+    virtual BOOL		IsValid() const;
+    virtual Rectangle	GetVisArea() const;
+    virtual Point		LogicToPixel( const Point&, const MapMode& ) const;
+    virtual Point		PixelToLogic( const Point&, const MapMode& ) const;
 
     void ChangeModel( SdrModel* pNewModel );
 
 private:
     CellEditSource( CellEditSourceImpl* pImpl );
 
-    CellEditSourceImpl* mpImpl;
+    CellEditSourceImpl*	mpImpl;
 };
 
 } }

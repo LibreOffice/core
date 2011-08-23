@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -45,9 +45,9 @@ namespace framework
         public:
             GraphicNameAccess();
             virtual ~GraphicNameAccess();
-
+            
             void addElement( const rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rElement );
-
+            
             // XNameAccess
             virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
                 throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,

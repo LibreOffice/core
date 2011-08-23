@@ -172,10 +172,10 @@ public:
 
 sal_uInt16 __READONLY_DATA aTitleMap_Impl[3][2] =
 {
-                                //  local               remote
-    /*  SFX_TITLE_CAPTION   */  {   SFX_TITLE_FILENAME, SFX_TITLE_TITLE },
-    /*  SFX_TITLE_PICKLIST  */  {   32,                 SFX_TITLE_FULLNAME },
-    /*  SFX_TITLE_HISTORY   */  {   32,                 SFX_TITLE_FULLNAME }
+                                //	local				remote
+    /*	SFX_TITLE_CAPTION	*/	{ 	SFX_TITLE_FILENAME, SFX_TITLE_TITLE },
+    /*	SFX_TITLE_PICKLIST  */	{ 	32,					SFX_TITLE_FULLNAME },
+    /*	SFX_TITLE_HISTORY	*/	{ 	32,					SFX_TITLE_FULLNAME }
 };
 
 //=========================================================================
@@ -231,9 +231,9 @@ void SfxObjectShell::FlushDocInfo()
 /*
     // bitte beachten:
     // 1. Titel in DocInfo aber nicht am Doc (nach HTML-Import)
-    //  => auch am Doc setzen
+    // 	=> auch am Doc setzen
     // 2. Titel in DocInfo leer (Briefumschlagsdruck)
-    //  => nicht am Doc setzen, da sonst "unbenanntX" daraus wird
+    //	=> nicht am Doc setzen, da sonst "unbenanntX" daraus wird
     String aDocInfoTitle = GetDocInfo().GetTitle();
     if ( aDocInfoTitle.Len() )
         SetTitle( aDocInfoTitle );
@@ -403,7 +403,7 @@ void SfxObjectShell::ModifyChanged()
 
     Invalidate( SID_SIGNATURE );
     Invalidate( SID_MACRO_SIGNATURE );
-    Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );    // xmlsec05, signed state might change in title...
+    Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );	// xmlsec05, signed state might change in title...
 
     SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_MODIFYCHANGED, GlobalEventConfig::GetEventName(STR_EVENT_MODIFYCHANGED), this ) );
 }
@@ -412,7 +412,7 @@ void SfxObjectShell::ModifyChanged()
 
 sal_Bool SfxObjectShell::IsReadOnlyUI() const
 
-/*  [Beschreibung]
+/* 	[Beschreibung]
 
     Liefert sal_True, wenn das Dokument fuer die UI wie r/o behandelt werden
     soll. Dieses ist unabhaengig vom tatsaechlichen r/o, welches per
@@ -427,7 +427,7 @@ sal_Bool SfxObjectShell::IsReadOnlyUI() const
 
 sal_Bool SfxObjectShell::IsReadOnlyMedium() const
 
-/*  [Beschreibung]
+/* 	[Beschreibung]
 
     Liefert sal_True, wenn das Medium r/o ist bzw. r/o geoeffnet wurde.
 */
@@ -442,7 +442,7 @@ sal_Bool SfxObjectShell::IsReadOnlyMedium() const
 
 void SfxObjectShell::SetReadOnlyUI( sal_Bool bReadOnly )
 
-/*  [Beschreibung]
+/* 	[Beschreibung]
 
     Schaltet das Dokument in einen r/o bzw. r/w Zustand ohne es neu
     zu laden und ohne die Open-Modi des Mediums zu aendern.
@@ -455,7 +455,7 @@ void SfxObjectShell::SetReadOnlyUI( sal_Bool bReadOnly )
     {
         Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
         //if ( pImp->pDocInfo )
-        //  pImp->pDocInfo->SetReadOnly( IsReadOnly() );
+        //	pImp->pDocInfo->SetReadOnly( IsReadOnly() );
     }
 }
 
@@ -799,10 +799,10 @@ IndexBitSet& SfxObjectShell::GetNoSet_Impl()
 
 void SfxObjectShell::SetTitle
 (
-    const String& rTitle        // der neue Titel des Dokuments
+    const String& rTitle		// der neue Titel des Dokuments
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit dieser Methode kann der Titel des Dokuments gesetzt werden.
     Dieser entspricht initial dem kompletten Dateinamen. Ein Setzen
@@ -830,8 +830,8 @@ void SfxObjectShell::SetTitle
     // Title setzen
     pImp->aTitle = rTitle;
 //  Wieso denn in der DocInfo?
-//  GetDocInfo().SetTitle( rTitle );
-//  FlushDocInfo();
+//	GetDocInfo().SetTitle( rTitle );
+//	FlushDocInfo();
 
     // Benachrichtigungen
     if ( GetMedium() )
@@ -858,7 +858,7 @@ String X(const String &rRet)
 //--------------------------------------------------------------------
 String SfxObjectShell::GetTitle
 (
-    sal_uInt16  nMaxLength      /*  0 (default)
+    sal_uInt16	nMaxLength 		/*	0 (default)
                                 der Titel selbst, so wie er ist
 
                                 1 (==SFX_TITLE_FILENAME)
@@ -897,7 +897,7 @@ String SfxObjectShell::GetTitle
                                 */
 ) const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Liefert den Titel bzw. logischen Dateinamen des Dokuments, je nach
     'nMaxLength'.
@@ -1052,7 +1052,7 @@ String SfxObjectShell::GetTitle
 
 void SfxObjectShell::InvalidateName()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Ermittelt den Titel des Dokuments neu aus 'unbenannt', DocInfo-Titel
     bzw. Dateinamen. Wird nach Laden aus Template oder SaveAs ben"otigt.
@@ -1061,7 +1061,7 @@ void SfxObjectShell::InvalidateName()
 {
     // Title neu erzeugen
     pImp->aTitle.Erase();
-//  pImp->nVisualDocumentNumber = USHRT_MAX;
+//	pImp->nVisualDocumentNumber = USHRT_MAX;
     //GetTitle( SFX_TITLE_DETECT );
     SetName( GetTitle( SFX_TITLE_APINAME ) );
 
@@ -1112,11 +1112,11 @@ SfxProgress* SfxObjectShell::GetProgress() const
 
 void SfxObjectShell::SetProgress_Impl
 (
-    SfxProgress *pProgress  /*  zu startender <SfxProgress> oder 0, falls
+    SfxProgress *pProgress	/*	zu startender <SfxProgress> oder 0, falls
                                 der Progress zur"uckgesetzt werden soll */
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Interne Methode zum setzen oder zur"ucksetzen des Progress-Modes
     f"ur diese SfxObjectShell.
@@ -1181,7 +1181,7 @@ void SfxObjectShell::PrepareReload( )
 
 void SfxObjectShell::LockAutoLoad( sal_Bool bLock )
 
-/*  Verhindert ein evtl. eintreffendes AutoLoad. Wird auch vor AutoLoad
+/* 	Verhindert ein evtl. eintreffendes AutoLoad. Wird auch vor AutoLoad
     eines umgebenden FrameSet beruecksichtigt.
 */
 
@@ -1216,7 +1216,7 @@ sal_Bool SfxFrame::IsAutoLoadLocked_Impl() const
 
 sal_Bool SfxObjectShell::IsAutoLoadLocked() const
 
-/*  Liefert, ob ein eintreffendes AutoLoad ausgefuehrt werden darf. Wird auch
+/* 	Liefert, ob ein eintreffendes AutoLoad ausgefuehrt werden darf. Wird auch
     vor AutoLoad eines umgebenden FrameSet beruecksichtigt.
 */
 
@@ -1790,8 +1790,8 @@ namespace {
                 String sEmptyName;
 
                 // loop through the sequence
-                const Any* pArg     =           pArguments->getConstArray();
-                const Any* pArgEnd  = pArg  +   pArguments->getLength();
+                const Any* pArg		=			pArguments->getConstArray();
+                const Any* pArgEnd	= pArg	+	pArguments->getLength();
 
                 for ( sal_uInt16 nArgPos=1; pArg != pArgEnd; ++pArg, ++nArgPos )
                     // and create a Sb object for every Any
@@ -1866,7 +1866,7 @@ ErrCode SfxObjectShell::CallScript(
 
         // did this fail because the method was not found?
         if ( nErr == ERRCODE_BASIC_PROC_UNDEFINED )
-        {   // yep-> look in the application BASIC module
+        {	// yep-> look in the application BASIC module
             nErr = CallBasic( rCode, SFX_APP()->GetName(), NULL, xMacroArguments, xReturn );
         }
     }
@@ -1989,7 +1989,7 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
         }
         else
         {
-//          DBG_ERROR( "Schlechtes ::com::sun::star::util::DateTime fuer Expired" );
+//			DBG_ERROR( "Schlechtes ::com::sun::star::util::DateTime fuer Expired" );
             pDoc->GetMedium()->SetExpired_Impl( Date( 1, 1, 1970 ) );
         }
     }

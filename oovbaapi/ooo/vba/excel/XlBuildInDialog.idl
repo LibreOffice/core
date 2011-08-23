@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,12 @@ constants XlBuildInDialog
         const long xlDialogAxes = 78; //(&H4E)
         const long xlDialogBorder = 45; //(&H2D)
         const long xlDialogCalculation = 32; //(&H20)
-        const long xlDialogCellProtection = 46; //(&H2E)
-        const long xlDialogChangeLink = 166; //(&HA6)
+        const long xlDialogCellProtection = 46; //(&H2E) 
+        const long xlDialogChangeLink = 166; //(&HA6) 
         const long xlDialogChartAddData = 392; //(&H188)
         const long xlDialogChartLocation = 527; //(&H20F)
         const long xlDialogChartOptionDataLabelMultiple = 724; //(&H2D4)
-        const long xlDialogChartOptionDataLabels = 505; //(&H1F9)
+        const long xlDialogChartOptionDataLabels = 505; //(&H1F9) 
         const long xlDialogChartOptionDataTable = 506; //(&H1FA)
         const long xlDialogChartSourceData = 540; //(&H21C)
         const long xlDialogChartTrend = 350; //(&H15E)
@@ -215,8 +215,8 @@ constants XlBuildInDialog
         const long xlDialogScenarioAdd = 307; //(&H133)
         const long xlDialogScenarioCells = 305; //(&H131)
         const long xlDialogScenarioEdit = 308; //(&H134)
-        const long xlDialogScenarioMerge = 473; //(&H1D9)
-        const long xlDialogScenarioSummary = 311; //(&H137)
+        const long xlDialogScenarioMerge = 473; //(&H1D9) 
+        const long xlDialogScenarioSummary = 311; //(&H137)  
         const long xlDialogScrollbarProperties = 420; //(&H1A4)
         const long xlDialogSearch = 731; //(&H2DB)
         const long xlDialogSelectSpecial = 132; //(&H84)
@@ -229,7 +229,7 @@ constants XlBuildInDialog
         const long xlDialogSeriesY = 462; //(&H1CE)
         const long xlDialogSetBackgroundPicture = 509; //(&H1FD)
         const long xlDialogSetPrintTitles = 23; //(&H17)
-        const long xlDialogSetUpdateStatus = 159; //(&H9F)
+        const long xlDialogSetUpdateStatus = 159; //(&H9F) 
         const long xlDialogShowDetail = 204; //(&HCC)
         const long xlDialogShowToolbar = 220; //(&HDC)
         const long xlDialogSize = 261; //(&H105)
@@ -266,9 +266,9 @@ constants XlBuildInDialog
         const long xlDialogWorkbookName = 386; //(&H182)
         const long xlDialogWorkbookNew = 302; //(&H12E)
         const long xlDialogWorkbookOptions = 284; //(&H11C)
-        const long xlDialogWorkbookProtect = 417; //(&H1A1)
-        const long xlDialogWorkbookTabSplit = 415; //(&H19F)
-        const long xlDialogWorkbookUnhide = 384; //(&H180)
+        const long xlDialogWorkbookProtect = 417; //(&H1A1) 
+        const long xlDialogWorkbookTabSplit = 415; //(&H19F) 
+        const long xlDialogWorkbookUnhide = 384; //(&H180) 
         const long xlDialogWorkgroup = 199; //(&HC7)
         const long xlDialogWorkspace = 95; //(&H5F)
         const long xlDialogZoom = 256; //(&H100)

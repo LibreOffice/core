@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ namespace connectivity
         class OGroups : public sdbcx::OCollection
         {
         protected:
-            OAdabasConnection*                          m_pConnection;
-            connectivity::sdbcx::IRefreshableGroups*    m_pParent;
+            OAdabasConnection*							m_pConnection;
+            connectivity::sdbcx::IRefreshableGroups*	m_pParent;
 
             virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);

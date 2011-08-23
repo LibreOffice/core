@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
-#define SCH_XML_SETFLAG( status, flag )     (status)|= (flag)
+#define SCH_XML_SETFLAG( status, flag )   	(status)|= (flag)
 #define SCH_XML_UNSETFLAG( status, flag )   (status) = ((status) | (flag)) - (flag)
 
 using namespace com::sun::star;
@@ -490,7 +490,7 @@ XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< 
 
     // do not chain text properties: on import this is done by shape mapper
     // to import old documents
-//      ChainImportMapper( XMLTextImportHelper::CreateParaExtPropMapper());
+//  	ChainImportMapper( XMLTextImportHelper::CreateParaExtPropMapper());
 }
 
 XMLChartImportPropertyMapper::~XMLChartImportPropertyMapper()

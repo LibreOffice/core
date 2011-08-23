@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ double SAL_CALL Player::getDuration(  )
     throw (uno::RuntimeException)
 {
     double fRet = 0.0;
-
+        
     return fRet;
 }
 
@@ -104,7 +104,7 @@ double SAL_CALL Player::getMediaTime(  )
     throw (uno::RuntimeException)
 {
     double fRet = 0.0;
-
+        
     return fRet;
 }
 
@@ -121,7 +121,7 @@ double SAL_CALL Player::getStopTime(  )
     throw (uno::RuntimeException)
 {
     double fRet = 0.0;
-
+        
     return fRet;
 }
 
@@ -138,7 +138,7 @@ double SAL_CALL Player::getRate(  )
     throw (uno::RuntimeException)
 {
     double fRet = 0.0;
-
+        
     return fRet;
 }
 
@@ -178,14 +178,14 @@ sal_Bool SAL_CALL Player::isMute(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setVolumeDB( sal_Int16 /* nVolumeDB */ )
+void SAL_CALL Player::setVolumeDB( sal_Int16 /* nVolumeDB */ ) 
     throw (uno::RuntimeException)
 {
 }
 
 // ------------------------------------------------------------------------------
-
-sal_Int16 SAL_CALL Player::getVolumeDB(  )
+    
+sal_Int16 SAL_CALL Player::getVolumeDB(  ) 
     throw (uno::RuntimeException)
 {
     sal_Int16 nRet = 0;
@@ -199,7 +199,7 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
     throw (uno::RuntimeException)
 {
     awt::Size aSize( 0, 0 );
-
+    
     return aSize;
 }
 
@@ -226,7 +226,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
 // ------------------------------------------------------------------------------
 
-uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
+uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  ) 
     throw (::com::sun::star::uno::RuntimeException)
 {
     return NULL;

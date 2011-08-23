@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@ namespace drawinglayer
     {
         Primitive2DSequence DiscreteBitmapPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // use getViewTransformation() and getObjectTransformation() from
-            // ObjectAndViewTransformationDependentPrimitive2D to create a BitmapPrimitive2D
+            // use getViewTransformation() and getObjectTransformation() from 
+            // ObjectAndViewTransformationDependentPrimitive2D to create a BitmapPrimitive2D 
             // with the correct mapping
             Primitive2DSequence xRetval;
 
@@ -86,9 +86,9 @@ namespace drawinglayer
         }
 
         DiscreteBitmapPrimitive2D::DiscreteBitmapPrimitive2D(
-            const BitmapEx& rBitmapEx,
+            const BitmapEx& rBitmapEx, 
             const basegfx::B2DPoint& rTopLeft)
-        :   ObjectAndViewTransformationDependentPrimitive2D(),
+        :	ObjectAndViewTransformationDependentPrimitive2D(),
             maBitmapEx(rBitmapEx),
             maTopLeft(rTopLeft)
         {

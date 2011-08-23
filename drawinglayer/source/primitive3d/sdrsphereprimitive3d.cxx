@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,13 +58,13 @@ namespace drawinglayer
                 || ::com::sun::star::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind());
 
             // create unit geometry
-            basegfx::B3DPolyPolygon aFill(basegfx::tools::createSphereFillPolyPolygonFromB3DRange(aUnitRange,
+            basegfx::B3DPolyPolygon aFill(basegfx::tools::createSphereFillPolyPolygonFromB3DRange(aUnitRange, 
                 getHorizontalSegments(), getVerticalSegments(), bCreateNormals));
 
             // normal inversion
-            if(!getSdrLFSAttribute().getFill().isDefault()
-                && bCreateNormals
-                && getSdr3DObjectAttribute().getNormalsInvert()
+            if(!getSdrLFSAttribute().getFill().isDefault() 
+                && bCreateNormals 
+                && getSdr3DObjectAttribute().getNormalsInvert() 
                 && aFill.areNormalsUsed())
             {
                 // invert normals
@@ -94,7 +94,7 @@ namespace drawinglayer
                 if(bSphereX || bObjectSpecificX || bSphereY || bObjectSpecificY)
                 {
                     double fRelativeAngle(0.0);
-
+                    
                     if(bObjectSpecificX)
                     {
                         // Since the texture coordinates are (for historical reasons)
@@ -112,7 +112,7 @@ namespace drawinglayer
                     const basegfx::B3DPoint aCenter(aRange.getCenter());
                     aFill = basegfx::tools::applyDefaultTextureCoordinatesSphere(aFill, aCenter,
                         bSphereX || bObjectSpecificX, bSphereY || bObjectSpecificY);
-
+                    
                     if(bObjectSpecificX)
                     {
                         // rotate back again
@@ -140,20 +140,20 @@ namespace drawinglayer
             {
                 // add fill
                 aRetval = create3DPolyPolygonFillPrimitives(
-                    a3DPolyPolygonVector,
-                    getTransform(),
+                    a3DPolyPolygonVector, 
+                    getTransform(), 
                     getTextureSize(),
-                    getSdr3DObjectAttribute(),
-                    getSdrLFSAttribute().getFill(),
+                    getSdr3DObjectAttribute(), 
+                    getSdrLFSAttribute().getFill(), 
                     getSdrLFSAttribute().getFillFloatTransGradient());
             }
             else
             {
                 // create simplified 3d hit test geometry
                 aRetval = createHiddenGeometryPrimitives3D(
-                    a3DPolyPolygonVector,
-                    getTransform(),
-                    getTextureSize(),
+                    a3DPolyPolygonVector, 
+                    getTransform(), 
+                    getTextureSize(), 
                     getSdr3DObjectAttribute());
             }
 
@@ -179,13 +179,13 @@ namespace drawinglayer
         }
 
         SdrSpherePrimitive3D::SdrSpherePrimitive3D(
-            const basegfx::B3DHomMatrix& rTransform,
+            const basegfx::B3DHomMatrix& rTransform, 
             const basegfx::B2DVector& rTextureSize,
             const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
-            const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute,
-            sal_uInt32 nHorizontalSegments,
+            const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute, 
+            sal_uInt32 nHorizontalSegments, 
             sal_uInt32 nVerticalSegments)
-        :   SdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute),
+        :	SdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute),
             mnHorizontalSegments(nHorizontalSegments),
             mnVerticalSegments(nVerticalSegments)
         {
@@ -197,7 +197,7 @@ namespace drawinglayer
             {
                 const SdrSpherePrimitive3D& rCompare = static_cast< const SdrSpherePrimitive3D& >(rPrimitive);
 
-                return (getHorizontalSegments() == rCompare.getHorizontalSegments()
+                return (getHorizontalSegments() == rCompare.getHorizontalSegments() 
                     && getVerticalSegments() == rCompare.getVerticalSegments());
             }
 

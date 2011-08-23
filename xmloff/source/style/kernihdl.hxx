@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <xmloff/xmlprhdl.hxx>
 
 /**
-    PropertyHandler for the XML-data-type:
+    PropertyHandler for the XML-data-type: 
 */
 class XMLKerningPropHdl : public XMLPropertyHandler
 {
@@ -43,6 +43,6 @@ public:
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif      // _XMLOFF_PROPERTYHANDLER_KERNINGTYPES_HXX
+#endif		// _XMLOFF_PROPERTYHANDLER_KERNINGTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

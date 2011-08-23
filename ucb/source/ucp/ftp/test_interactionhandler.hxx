@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,35 +39,35 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 namespace test_ftp {
-
-
+    
+    
     class Test_InteractionHandler
         : public cppu::OWeakObject,
           public com::sun::star::task::XInteractionHandler
     {
     public:
-
+        
         // XInterface
-
-        virtual com::sun::star::uno::Any SAL_CALL
+        
+        virtual com::sun::star::uno::Any SAL_CALL 
         queryInterface( const com::sun::star::uno::Type& rType )
             throw( com::sun::star::uno::RuntimeException );
-
-
+        
+        
         virtual void SAL_CALL acquire( void ) throw();
 
         virtual void SAL_CALL release( void ) throw();
-
-
+        
+        
         // XInteractionHandler
-
+        
         virtual void SAL_CALL
         handle( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::task::XInteractionRequest >& Request )
             throw (::com::sun::star::uno::RuntimeException);
-
+        
     private:
-
+        
     };
 
 }

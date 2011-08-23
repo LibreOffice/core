@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ using ::rtl::OUStringBuffer;
 using namespace ::xmloff::token;
 
 /* The basic idea of this class is that we have two two ways to search our
- * data...by prefix and by key. We use an STL hash_map for fast prefix
+ * data...by prefix and by key. We use an STL hash_map for fast prefix 
  * searching and an STL map for fast key searching.
  *
  * The references to an 'Index' refer to an earlier implementation of the
@@ -111,7 +111,7 @@ sal_uInt16 SvXMLNamespaceMap::_Add( const OUString& rPrefix, const OUString &rNa
     pEntry->nKey    = nKey;
     pEntry->sPrefix = rPrefix;
     aNameHash[ rPrefix ] = pEntry;
-    aNameMap [ nKey ]    = pEntry;
+    aNameMap [ nKey ]	 = pEntry;
     return nKey;
 }
 
@@ -348,7 +348,7 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
         {
             // found: retrieve namespace key
             nKey = xEntry->nKey = (*aIter).second->nKey;
-            if ( pNamespace )
+            if ( pNamespace ) 
                 *pNamespace = (*aIter).second->sName;
         }
         else if ( xEntry->sPrefix == sXMLNS )
@@ -384,7 +384,7 @@ sal_uInt16 SvXMLNamespaceMap::GetNextKey( sal_uInt16 nLastKey ) const
 
 sal_uInt16 SvXMLNamespaceMap::GetKeyByIndex( sal_uInt16 nIdx ) const
 {
-    return nIdx;
+    return nIdx; 
 }
 
 sal_uInt16 SvXMLNamespaceMap::GetIndexByKey( sal_uInt16 nKey ) const
@@ -425,7 +425,7 @@ sal_Bool SvXMLNamespaceMap::AddAtIndex( sal_uInt16 nIdx, const sal_Char *pPrefix
 {
     OUString sPrefix( OUString::createFromAscii(pPrefix) );
     OUString sName( OUString::createFromAscii(pName) );
-
+    
     return AddAtIndex( nIdx, sPrefix, sName, nKey );
 }
 
@@ -490,7 +490,7 @@ sal_Bool SvXMLNamespaceMap::NormalizeW3URI( ::rtl::OUString& rName )
     //                   (year)/(WG name)
     // For the following WG/standards names:
     // - xforms
-
+    
     sal_Bool bSuccess = sal_False;
     const OUString sURIPrefix = GetXMLToken( XML_URI_W3_PREFIX );
     if( rName.compareTo( sURIPrefix, sURIPrefix.getLength() ) == 0 )
@@ -529,8 +529,8 @@ sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( ::rtl::OUString& rName )
         return sal_True;
     }
 
-    //
-    // Check if URN matches
+    // 
+    // Check if URN matches 
     // :urn:oasis:names:tc:[^:]*:xmlns:[^:]*:1.[^:]*
     //                     |---|       |---| |-----|
     //                     TC-Id      Sub-Id Version
@@ -551,7 +551,7 @@ sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( ::rtl::OUString& rName )
     sal_Int32 nTCIdEnd = rName.indexOf( ':', nTCIdStart );
     if( -1 == nTCIdEnd )
         return sal_False;
-
+    
     // :urn:oasis:names:tc:[^:]:xmlns.*
     nPos = nTCIdEnd + 1;
     OUString sTmp( rName.copy( nPos ) );
@@ -571,7 +571,7 @@ sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( ::rtl::OUString& rName )
 
     // :urn:oasis:names:tc:[^:]:xmlns:[^:]*:[^:][^:][^:][^:]*
     sal_Int32 nVersionStart = nPos+1;
-    if( nVersionStart+2 >= nNameLen ||
+    if( nVersionStart+2 >= nNameLen || 
         -1 != rName.indexOf( ':', nVersionStart ) )
         return sal_False;
 

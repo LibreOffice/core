@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,12 +82,12 @@ bool XMLTabStopPropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
 }
 
 sal_Bool XMLTabStopPropHdl::importXML( const ::rtl::OUString&, ::com::sun::star::uno::Any&, const SvXMLUnitConverter& ) const
-{
-    return sal_False;
+{ 
+    return sal_False; 
 }
 
 sal_Bool XMLTabStopPropHdl::exportXML( ::rtl::OUString&, const ::com::sun::star::uno::Any&, const SvXMLUnitConverter& ) const
-{
+{ 
     return sal_False;
 }
 

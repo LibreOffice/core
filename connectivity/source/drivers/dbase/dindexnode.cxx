@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -204,7 +204,7 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
                 {
                     // geht davon aus, dass der Knoten, auf dem die Bedingung (<=)
                     // zutrifft, als m_nCurNode gesetzt ist
-                    --nCount;   // (sonst bekomme ich u.U. Assertions und GPFs - 60593)
+                    --nCount;	// (sonst bekomme ich u.U. Assertions und GPFs - 60593)
                     bResult = Insert(rIndex.m_nCurNode + 1, rNode);
                 }
                 else  // Position unbekannt
@@ -212,7 +212,7 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
                     USHORT nPos = NODE_NOTFOUND;
                     while (++nPos < nCount && rNode.GetKey() > ((*this)[nPos]).GetKey()) ;
 
-                    --nCount;   // (sonst bekomme ich u.U. Assertions und GPFs - 60593)
+                    --nCount;	// (sonst bekomme ich u.U. Assertions und GPFs - 60593)
                     bResult = Insert(nPos, rNode);
                 }
 
@@ -432,7 +432,7 @@ BOOL ONDXPage::Delete(USHORT nNodePos)
 ONDXNode ONDXPage::Split(ONDXPage& rPage)
 {
     DBG_ASSERT(IsFull(), "Falsches Splitting");
-    /*  Aufteilen einer Seite auf zwei
+    /*	Aufteilen einer Seite auf zwei
         Blatt:
             Seite 1 behaelt (n - (n/2))
             Seite 2 erhaelt (n/2)
@@ -485,14 +485,14 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
     DBG_ASSERT(HasParent(), "kein Vater vorhanden");
     DBG_ASSERT(nParentNodePos != NODE_NOTFOUND, "Falscher Indexaufbau");
 
-    /*  Zusammenlegen zweier Seiten */
+    /*	Zusammenlegen zweier Seiten	*/
     ONDXNode aResultNode;
     USHORT nMaxNodes = rIndex.GetMaxNodes(),
            nMaxNodes_2 = nMaxNodes / 2;
 
     // Feststellen ob Seite rechter oder linker Nachbar
-    BOOL    bRight    = ((*xPage)[0].GetKey() > (*this)[0].GetKey()); // TRUE, wenn xPage die rechte Seite ist
-    USHORT  nNewCount = (*xPage).Count() + Count();
+    BOOL	bRight    = ((*xPage)[0].GetKey() > (*this)[0].GetKey()); // TRUE, wenn xPage die rechte Seite ist
+    USHORT	nNewCount = (*xPage).Count() + Count();
 
     if (IsLeaf())
     {
@@ -548,7 +548,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
             xPage->SetModified(FALSE);
             xPage->ReleaseFull(); // wird nicht mehr benoetigt
         }
-        // Ausgleichen der Elemente   nNewCount >= (nMaxNodes_2 * 2)
+        // Ausgleichen der Elemente	  nNewCount >= (nMaxNodes_2 * 2)
         else
         {
             if (bRight)
@@ -709,7 +709,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
     if (!rIndex.isUnique() || rPage.IsLeaf())
         rStream << (sal_uInt32)aKey.nRecord; // schluessel
     else
-        rStream << (sal_uInt32)0;   // schluessel
+        rStream << (sal_uInt32)0;	// schluessel
 
     if (rIndex.getHeader().db_keytype) // double
     {

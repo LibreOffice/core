@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,13 +31,13 @@
 #include <uielement/objectmenucontroller.hxx>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -47,7 +47,7 @@
 #include <com/sun/star/embed/VerbAttributes.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
@@ -59,7 +59,7 @@
 #include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
 //
 
@@ -72,9 +72,9 @@ using namespace com::sun::star::util;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   ObjectMenuController                    ,
+DEFINE_XSERVICEINFO_MULTISERVICE        (   ObjectMenuController				    ,
                                             OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER         ,
+                                            SERVICENAME_POPUPMENUCONTROLLER		    ,
                                             IMPLEMENTATIONNAME_OBJECTMENUCONTROLLER
                                         )
 
@@ -152,7 +152,7 @@ void SAL_CALL ObjectMenuController::statusChanged( const FeatureStateEvent& Even
 // XMenuListener
 void ObjectMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
-    Sequence<PropertyValue>      aArgs;
+    Sequence<PropertyValue>	     aArgs;
     if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
         UiEventLogHelper(::rtl::OUString::createFromAscii("ObjectMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
     OSL_ENSURE(_xDispatch.is(),"ObjectMenuController::impl_select: No dispatch");

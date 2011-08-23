@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <tools/debug.hxx>
 #include <svl/lngmisc.hxx>
 
-#include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/factory.hxx>	// helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <unotools/processfactory.hxx>
@@ -53,12 +53,12 @@ using namespace linguistic;
 
 ///////////////////////////////////////////////////////////////////////////
 
-static BOOL SvcListHasLanguage(
-        const Sequence< Reference< XThesaurus > > &rRefs,
+static BOOL SvcListHasLanguage( 
+        const Sequence< Reference< XThesaurus > > &rRefs, 
         const Locale &rLocale )
 {
     BOOL bHasLanguage = FALSE;
-
+    
     const Reference< XThesaurus > *pRef = rRefs.getConstArray();
     INT32 nLen = rRefs.getLength();
     for (INT32 k = 0;  k < nLen  &&  !bHasLanguage;  ++k)
@@ -66,7 +66,7 @@ static BOOL SvcListHasLanguage(
         if (pRef[k].is())
             bHasLanguage = pRef[k]->hasLocale( rLocale );
     }
-
+    
     return bHasLanguage;
 }
 
@@ -96,7 +96,7 @@ Sequence< Locale > SAL_CALL
     ThesaurusDispatcher::getLocales()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     Sequence< Locale > aLocales( static_cast< sal_Int32 >(aSvcMap.size()) );
     Locale *pLocales = aLocales.getArray();
@@ -104,7 +104,7 @@ Sequence< Locale > SAL_CALL
     for (aIt = aSvcMap.begin();  aIt != aSvcMap.end();  ++aIt)
     {
         *pLocales++ = CreateLocale( aIt->first );
-    }
+    }    
     return aLocales;
 }
 
@@ -113,7 +113,7 @@ sal_Bool SAL_CALL
     ThesaurusDispatcher::hasLocale( const Locale& rLocale )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     ThesSvcByLangMap_t::const_iterator aIt( aSvcMap.find( LocaleToLanguage( rLocale ) ) );
     return aIt != aSvcMap.end();
 }
@@ -125,9 +125,9 @@ Sequence< Reference< XMeaning > > SAL_CALL
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
-    Sequence< Reference< XMeaning > >   aMeanings;
+    Sequence< Reference< XMeaning > >	aMeanings;
 
     INT16 nLanguage = LocaleToLanguage( rLocale );
     if (nLanguage == LANGUAGE_NONE  || !rTerm.getLength())
@@ -207,7 +207,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
                     pEntry->nLastTriedSvcIndex = (INT16) i;
                     ++i;
                 }
-
+                
                 // if language is not supported by any of the services
                 // remove it from the list.
                 if (i == nLen  &&  aMeanings.getLength() == 0)
@@ -226,7 +226,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
 void ThesaurusDispatcher::SetServiceList( const Locale &rLocale,
         const Sequence< OUString > &rSvcImplNames )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     INT16 nLanguage = LocaleToLanguage( rLocale );
 
@@ -257,7 +257,7 @@ void ThesaurusDispatcher::SetServiceList( const Locale &rLocale,
 Sequence< OUString >
     ThesaurusDispatcher::GetServiceList( const Locale &rLocale ) const
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     Sequence< OUString > aRes;
 

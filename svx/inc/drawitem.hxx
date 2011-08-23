@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,14 +36,14 @@
 #include "svx/svxdllapi.h"
 
 //==================================================================
-//  SvxColorTableItem
+//	SvxColorTableItem
 //==================================================================
 
 class XColorTable;
 
 class SVX_DLLPUBLIC SvxColorTableItem: public SfxPoolItem
 {
-    XColorTable*            pColorTable;
+    XColorTable*			pColorTable;
 
 public:
                             TYPEINFO();
@@ -57,19 +57,19 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual int 			operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
-    XColorTable*            GetColorTable() const { return pColorTable; }
-    void                    SetColorTable( XColorTable* pTable ) {
+    XColorTable*			GetColorTable() const { return pColorTable; }
+    void			 		SetColorTable( XColorTable* pTable ) {
                                     pColorTable = pTable; }
 };
 
 
 //==================================================================
-//  SvxGradientListItem
+//	SvxGradientListItem
 //==================================================================
 
 
@@ -77,7 +77,7 @@ class XGradientList;
 
 class SVX_DLLPUBLIC SvxGradientListItem: public SfxPoolItem
 {
-    XGradientList*              pGradientList;
+    XGradientList*				pGradientList;
 
 public:
                             TYPEINFO();
@@ -91,20 +91,20 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual int 			operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
-    XGradientList*          GetGradientList() const { return pGradientList; }
-    void                    SetGradientList( XGradientList* pList ) {
+    XGradientList*			GetGradientList() const { return pGradientList; }
+    void			 		SetGradientList( XGradientList* pList ) {
                                     pGradientList = pList; }
 };
 
 
 
 //==================================================================
-//  SvxHatchListItem
+//	SvxHatchListItem
 //==================================================================
 
 
@@ -112,7 +112,7 @@ class XHatchList;
 
 class SVX_DLLPUBLIC SvxHatchListItem: public SfxPoolItem
 {
-    XHatchList*             pHatchList;
+    XHatchList*				pHatchList;
 
 public:
                             TYPEINFO();
@@ -126,20 +126,20 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual int 			operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
-    XHatchList*             GetHatchList() const { return pHatchList; }
-    void                    SetHatchList( XHatchList* pList ) {
+    XHatchList*				GetHatchList() const { return pHatchList; }
+    void			 		SetHatchList( XHatchList* pList ) {
                                     pHatchList = pList; }
 };
 
 
 
 //==================================================================
-//  SvxBitmapListItem
+//	SvxBitmapListItem
 //==================================================================
 
 
@@ -147,7 +147,7 @@ class XBitmapList;
 
 class SVX_DLLPUBLIC SvxBitmapListItem: public SfxPoolItem
 {
-    XBitmapList*                pBitmapList;
+    XBitmapList*				pBitmapList;
 
 public:
                             TYPEINFO();
@@ -161,20 +161,20 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual int 			operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
-    XBitmapList*            GetBitmapList() const { return pBitmapList; }
-    void                    SetBitmapList( XBitmapList* pList ) {
+    XBitmapList*			GetBitmapList() const { return pBitmapList; }
+    void			 		SetBitmapList( XBitmapList* pList ) {
                                     pBitmapList = pList; }
 };
 
 
 
 //==================================================================
-//  SvxDashListItem
+//	SvxDashListItem
 //==================================================================
 
 
@@ -182,7 +182,7 @@ class XDashList;
 
 class SVX_DLLPUBLIC SvxDashListItem: public SfxPoolItem
 {
-    XDashList*              pDashList;
+    XDashList*				pDashList;
 
 public:
                             TYPEINFO();
@@ -196,19 +196,19 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual int 			operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
-    XDashList*              GetDashList() const { return pDashList; }
-    void                    SetDashList( XDashList* pList );
+    XDashList*	  			GetDashList() const { return pDashList; }
+    void			 		SetDashList( XDashList* pList );
 };
 
 
 
 //==================================================================
-//  SvxLineEndListItem
+//	SvxLineEndListItem
 //==================================================================
 
 
@@ -216,7 +216,7 @@ class XLineEndList;
 
 class SVX_DLLPUBLIC SvxLineEndListItem: public SfxPoolItem
 {
-    XLineEndList*           pLineEndList;
+    XLineEndList*	 		pLineEndList;
 
 public:
                             TYPEINFO();
@@ -230,13 +230,13 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual int 			operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
-    XLineEndList*           GetLineEndList() const { return pLineEndList; }
-    void                    SetLineEndList( XLineEndList* pList ) {
+    XLineEndList*			GetLineEndList() const { return pLineEndList; }
+    void			 		SetLineEndList( XLineEndList* pList ) {
                                     pLineEndList = pList; }
 };
 

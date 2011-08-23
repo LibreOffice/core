@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,28 +42,28 @@
 #include <editeng/mutxhelp.hxx>
 
 // ids usable for the constructor
-#define ID_DATEFIELD        0
-#define ID_URLFIELD         1
-#define ID_PAGEFIELD        2
-#define ID_PAGESFIELD       3
-#define ID_TIMEFIELD        4
-#define ID_FILEFIELD        5
-#define ID_TABLEFIELD       6
-#define ID_EXT_TIMEFIELD    7
-#define ID_EXT_FILEFIELD    8
-#define ID_AUTHORFIELD      9
-#define ID_MEASUREFIELD     10
-#define ID_EXT_DATEFIELD    11
-#define ID_HEADERFIELD      12
-#define ID_FOOTERFIELD      13
-#define ID_DATETIMEFIELD    14
-#define ID_UNKNOWN          15      // this must be the last entry
+#define ID_DATEFIELD		0
+#define ID_URLFIELD			1
+#define ID_PAGEFIELD		2
+#define ID_PAGESFIELD		3
+#define ID_TIMEFIELD		4
+#define ID_FILEFIELD		5
+#define ID_TABLEFIELD		6
+#define ID_EXT_TIMEFIELD	7
+#define ID_EXT_FILEFIELD	8
+#define ID_AUTHORFIELD		9
+#define ID_MEASUREFIELD		10
+#define ID_EXT_DATEFIELD	11
+#define ID_HEADERFIELD		12
+#define ID_FOOTERFIELD		13
+#define ID_DATETIMEFIELD	14
+#define ID_UNKNOWN			15		// this must be the last entry
 
 class SvxUnoFieldData_Impl;
 class SfxItemPropertySet;
 class SvxFieldData;
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > EDITENG_DLLPUBLIC SAL_CALL SvxUnoTextCreateTextField(
+com::sun::star::uno::Reference< com::sun::star::uno::XInterface > EDITENG_DLLPUBLIC SAL_CALL SvxUnoTextCreateTextField( 
     const ::rtl::OUString& ServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
 class EDITENG_DLLPUBLIC SvxUnoTextField : public SvxMutexHelper,
@@ -75,9 +75,9 @@ class EDITENG_DLLPUBLIC SvxUnoTextField : public SvxMutexHelper,
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > mxAnchor;
-    const SfxItemPropertySet*   mpPropSet;
-    sal_Int32               mnServiceId;
-    SvxUnoFieldData_Impl*   mpImpl;
+    const SfxItemPropertySet*	mpPropSet;
+    sal_Int32				mnServiceId;
+    SvxUnoFieldData_Impl*	mpImpl;
 
 protected:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
@@ -85,7 +85,7 @@ protected:
 public:
     SvxUnoTextField( sal_Int32 nServiceId ) throw();
     SvxUnoTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xAnchor, const ::rtl::OUString& rPresentation, const SvxFieldData* pFieldData ) throw();
-    virtual ~SvxUnoTextField() throw();
+    virtual	~SvxUnoTextField() throw();
 
     // Intern
     virtual sal_Int32 GetFieldId( const SvxFieldData* pFieldData ) const throw();

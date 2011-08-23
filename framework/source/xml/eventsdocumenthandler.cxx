@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <stdio.h>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/resetableguard.hxx>
@@ -40,13 +40,13 @@
 #include <macros/debug.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 #include <sal/config.h>
@@ -56,7 +56,7 @@
 #include <comphelper/attributelist.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 using namespace ::com::sun::star::uno;
@@ -64,40 +64,40 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 
 
-#define XMLNS_EVENT             "http://openoffice.org/2001/event"
-#define XMLNS_XLINK             "http://www.w3.org/1999/xlink"
-#define XMLNS_EVENT_PREFIX      "event:"
-#define XMLNS_XLINK_PREFIX      "xlink:"
+#define XMLNS_EVENT				"http://openoffice.org/2001/event"
+#define XMLNS_XLINK				"http://www.w3.org/1999/xlink"
+#define XMLNS_EVENT_PREFIX		"event:"
+#define XMLNS_XLINK_PREFIX		"xlink:"
 
-#define ATTRIBUTE_XMLNS_EVENT   "xmlns:event"
-#define ATTRIBUTE_XMLNS_XLINK   "xmlns:xlink"
+#define ATTRIBUTE_XMLNS_EVENT	"xmlns:event"
+#define ATTRIBUTE_XMLNS_XLINK	"xmlns:xlink"
 
-#define XMLNS_FILTER_SEPARATOR  "^"
+#define XMLNS_FILTER_SEPARATOR	"^"
 
-#define ELEMENT_EVENTS          "events"
-#define ELEMENT_EVENT           "event"
+#define ELEMENT_EVENTS			"events"
+#define ELEMENT_EVENT			"event"
 
-#define ATTRIBUTE_LANGUAGE      "language"
-#define ATTRIBUTE_LIBRARY       "library"
-#define ATTRIBUTE_NAME          "name"
-#define ATTRIBUTE_HREF          "href"
-#define ATTRIBUTE_TYPE          "type"
-#define ATTRIBUTE_MACRONAME     "macro-name"
+#define ATTRIBUTE_LANGUAGE		"language"
+#define ATTRIBUTE_LIBRARY		"library"
+#define ATTRIBUTE_NAME			"name"
+#define ATTRIBUTE_HREF			"href"
+#define ATTRIBUTE_TYPE			"type"
+#define ATTRIBUTE_MACRONAME		"macro-name"
 
-#define ELEMENT_NS_EVENTS       "event:events"
-#define ELEMENT_NS_EVENT        "event:event"
+#define ELEMENT_NS_EVENTS		"event:events"
+#define ELEMENT_NS_EVENT		"event:event"
 
-#define ATTRIBUTE_TYPE_CDATA    "CDATA"
+#define ATTRIBUTE_TYPE_CDATA	"CDATA"
 
-#define EVENTS_DOCTYPE          "<!DOCTYPE event:events PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"event.dtd\">"
+#define EVENTS_DOCTYPE			"<!DOCTYPE event:events PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"event.dtd\">"
 
 // Property names for events
-#define PROP_EVENT_TYPE     "EventType"
-#define PROP_LIBRARY        "Library"
-#define PROP_SCRIPT         "Script"
-#define PROP_MACRO_NAME     "MacroName"
-#define STAR_BASIC          "StarBasic"
-#define JAVA_SCRIPT         "JavaScript"
+#define	PROP_EVENT_TYPE		"EventType"
+#define PROP_LIBRARY		"Library"
+#define PROP_SCRIPT			"Script"
+#define PROP_MACRO_NAME		"MacroName"
+#define STAR_BASIC			"StarBasic"
+#define JAVA_SCRIPT			"JavaScript"
 
 
 namespace framework
@@ -105,20 +105,20 @@ namespace framework
 
 struct EventEntryProperty
 {
-    OReadEventsDocumentHandler::Event_XML_Namespace nNamespace;
-    char                                            aEntryName[20];
+    OReadEventsDocumentHandler::Event_XML_Namespace	nNamespace;
+    char											aEntryName[20];
 };
 
 static EventEntryProperty EventEntries[OReadEventsDocumentHandler::EV_XML_ENTRY_COUNT] =
 {
-    { OReadEventsDocumentHandler::EV_NS_EVENT,  ELEMENT_EVENTS          },
-    { OReadEventsDocumentHandler::EV_NS_EVENT,  ELEMENT_EVENT           },
-    { OReadEventsDocumentHandler::EV_NS_EVENT,  ATTRIBUTE_LANGUAGE      },
-    { OReadEventsDocumentHandler::EV_NS_EVENT,  ATTRIBUTE_NAME          },
-    { OReadEventsDocumentHandler::EV_NS_XLINK,  ATTRIBUTE_HREF          },
-    { OReadEventsDocumentHandler::EV_NS_XLINK,  ATTRIBUTE_TYPE          },
-    { OReadEventsDocumentHandler::EV_NS_EVENT,  ATTRIBUTE_MACRONAME     },
-    { OReadEventsDocumentHandler::EV_NS_EVENT,  ATTRIBUTE_LIBRARY       }
+    { OReadEventsDocumentHandler::EV_NS_EVENT,	ELEMENT_EVENTS			},
+    { OReadEventsDocumentHandler::EV_NS_EVENT,	ELEMENT_EVENT			},
+    { OReadEventsDocumentHandler::EV_NS_EVENT,	ATTRIBUTE_LANGUAGE		},
+    { OReadEventsDocumentHandler::EV_NS_EVENT,	ATTRIBUTE_NAME			},
+    { OReadEventsDocumentHandler::EV_NS_XLINK,	ATTRIBUTE_HREF			},
+    { OReadEventsDocumentHandler::EV_NS_XLINK,	ATTRIBUTE_TYPE			},
+    { OReadEventsDocumentHandler::EV_NS_EVENT,	ATTRIBUTE_MACRONAME		},
+    { OReadEventsDocumentHandler::EV_NS_EVENT,	ATTRIBUTE_LIBRARY		}
 };
 
 
@@ -149,9 +149,9 @@ OReadEventsDocumentHandler::OReadEventsDocumentHandler( EventsConfig& aItems ) :
         }
     }
 
-    m_bEventsStartFound             = sal_False;
-    m_bEventsEndFound               = sal_False;
-    m_bEventStartFound              = sal_False;
+    m_bEventsStartFound				= sal_False;
+    m_bEventsEndFound				= sal_False;
+    m_bEventStartFound				= sal_False;
 }
 
 OReadEventsDocumentHandler::~OReadEventsDocumentHandler()
@@ -160,17 +160,17 @@ OReadEventsDocumentHandler::~OReadEventsDocumentHandler()
 
 // XDocumentHandler
 void SAL_CALL OReadEventsDocumentHandler::startDocument(void)
-throw ( SAXException, RuntimeException )
+throw (	SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadEventsDocumentHandler::endDocument(void)
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
     if (( m_bEventsStartFound && !m_bEventsEndFound ) ||
-        ( !m_bEventsStartFound && m_bEventsEndFound )       )
+        ( !m_bEventsStartFound && m_bEventsEndFound )		)
     {
         ::rtl::OUString aErrorMessage = getErrorLineString();
         aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No matching start or end element 'event:events' found!" ));
@@ -180,7 +180,7 @@ throw(  SAXException, RuntimeException )
 
 void SAL_CALL OReadEventsDocumentHandler::startElement(
     const ::rtl::OUString& aName, const Reference< XAttributeList > &xAttribs )
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -226,8 +226,8 @@ throw(  SAXException, RuntimeException )
 
                 m_bEventStartFound = sal_True;
 
-                long                      nIndex = m_aEventItems.aEventNames.getLength();
-                long                      nPropCount = 2; // every event config entry needs at least 2 properties
+                long					  nIndex = m_aEventItems.aEventNames.getLength();
+                long					  nPropCount = 2; // every event config entry needs at least 2 properties
                 Sequence< PropertyValue > aEventProperties( nPropCount );
 
                 m_aEventItems.aEventNames.realloc(  nIndex + 1 );
@@ -336,7 +336,7 @@ throw(  SAXException, RuntimeException )
 }
 
 void SAL_CALL OReadEventsDocumentHandler::endElement(const ::rtl::OUString& aName)
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -378,24 +378,24 @@ throw(  SAXException, RuntimeException )
 }
 
 void SAL_CALL OReadEventsDocumentHandler::characters(const ::rtl::OUString&)
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadEventsDocumentHandler::ignorableWhitespace(const ::rtl::OUString&)
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadEventsDocumentHandler::processingInstruction(
     const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ )
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadEventsDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -419,7 +419,7 @@ throw(  SAXException, RuntimeException )
 
 
 //_________________________________________________________________________________________________________________
-//  OWriteEventsDocumentHandler
+//	OWriteEventsDocumentHandler
 //_________________________________________________________________________________________________________________
 
 OWriteEventsDocumentHandler::OWriteEventsDocumentHandler(
@@ -430,10 +430,10 @@ OWriteEventsDocumentHandler::OWriteEventsDocumentHandler(
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    m_xEmptyList        = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
-    m_aAttributeType    = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
-    m_aXMLXlinkNS       = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
-    m_aXMLEventNS       = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_EVENT_PREFIX ));
+    m_xEmptyList		= Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
+    m_aAttributeType	= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
+    m_aXMLXlinkNS		= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
+    m_aXMLEventNS		= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_EVENT_PREFIX ));
 }
 
 OWriteEventsDocumentHandler::~OWriteEventsDocumentHandler()
@@ -484,7 +484,7 @@ void OWriteEventsDocumentHandler::WriteEventsDocument() throw
 }
 
 //_________________________________________________________________________________________________________________
-//  protected member functions
+//	protected member functions
 //_________________________________________________________________________________________________________________
 
 void OWriteEventsDocumentHandler::WriteEvent( const ::rtl::OUString& aEventName, const Sequence< PropertyValue >& aPropertyValues ) throw
@@ -513,9 +513,9 @@ void OWriteEventsDocumentHandler::WriteEvent( const ::rtl::OUString& aEventName,
 
         pList->AddAttribute( m_aAttributeName, m_aAttributeType, aEventName );
 
-        sal_Bool    bURLSet = sal_False;
-        ::rtl::OUString aValue;
-        ::rtl::OUString aName;
+        sal_Bool	bURLSet = sal_False;
+        ::rtl::OUString	aValue;
+        ::rtl::OUString	aName;
 
         // save attributes
         for ( int i = 0; i < aPropertyValues.getLength(); i++ )

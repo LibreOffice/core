@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ namespace // private
 {
     class CPreviewException
     {
-        // used when registering or creation
+        // used when registering or creation 
         // of the preview window failed
     };
 
@@ -85,7 +85,7 @@ namespace // private
     //------------------------------------------------------------
 
     inline
-    sal_Int32 SubDiv( sal_Int32 nNumber, sal_Int32 nMinuend, sal_Int32 nDenominator )
+    sal_Int32 SubDiv( sal_Int32	nNumber, sal_Int32 nMinuend, sal_Int32 nDenominator )
     {
         return ( static_cast<sal_Int32>( ( nNumber - nMinuend ) / nDenominator ) );
     }
@@ -114,7 +114,7 @@ namespace // private
     //
     //------------------------------------------------------------
 
-    inline
+    inline 
     sal_uInt32 _getHeightRect( const RECT& aRect )
     {
         return ( aRect.bottom - aRect.top );
@@ -125,7 +125,7 @@ namespace // private
     // displayed centered within the given window
     //------------------------------------------------------------
 
-    inline
+    inline 
     POINT _calcULCorner( HWND hwnd, const CDimension& aPicSize )
     {
         RECT rect;
@@ -133,7 +133,7 @@ namespace // private
 
         sal_Int32 nWidthWnd  = _getWidthRect( rect );
         sal_Int32 nHeightWnd = _getHeightRect( rect );
-
+                
         POINT ulCorner;
         ulCorner.x = SubDiv( nWidthWnd,  aPicSize.m_cx, 2 );
         ulCorner.y = SubDiv( nHeightWnd, aPicSize.m_cy, 2 );
@@ -146,17 +146,17 @@ namespace // private
     // arbitrary window
     // we expect the width and height to be in pixel
     //------------------------------------------------------------
-
+    
     inline
     sal_Bool _pictureSizeFitsWindowSize( HWND hwnd, const CDimension& aPicSize )
     {
         RECT rect;
         GetClientRect( hwnd, &rect );
-
+    
         sal_Int32 nWidthWnd  = _getWidthRect( rect );
         sal_Int32 nHeightWnd = _getHeightRect( rect );
 
-        return ( ( ( nWidthWnd  - HORZ_BODER_SPACE )  >= aPicSize.m_cx ) &&
+        return ( ( ( nWidthWnd  - HORZ_BODER_SPACE )  >= aPicSize.m_cx ) && 
                  ( ( nHeightWnd - VERT_BORDER_SPACE ) >= aPicSize.m_cy ) );
     }
 
@@ -170,13 +170,13 @@ namespace // private
     CDimension _scalePictureSize( HWND hwnd, const CDimension& aPicSize )
     {
         CDimension scaledPicSize = aPicSize;
-
+        
         if ( !_pictureSizeFitsWindowSize( hwnd, aPicSize ) )
         {
             RECT rect;
             GetClientRect( hwnd, &rect );
-
-            // the dimensions of the preview wnd are not equal
+    
+            // the dimensions of the preview wnd are not equal 
             // that's why we equalize it
             sal_Int32 nHeightWnd = _getHeightRect( rect ) - VERT_BORDER_SPACE;
             sal_Int32 nWidthWnd  = nHeightWnd;
@@ -184,14 +184,14 @@ namespace // private
             if ( aPicSize.m_cx >= aPicSize.m_cy )
             {
                 scaledPicSize.m_cx = nWidthWnd;
-                scaledPicSize.m_cy =
-                    static_cast< sal_Int32 >(
-                        aPicSize.m_cy * nWidthWnd / aPicSize.m_cx );
+                scaledPicSize.m_cy = 
+                    static_cast< sal_Int32 >( 
+                        aPicSize.m_cy * nWidthWnd / aPicSize.m_cx ); 
             }
             else
             {
-                scaledPicSize.m_cx =
-                    static_cast< sal_Int32 >(
+                scaledPicSize.m_cx = 
+                    static_cast< sal_Int32 >( 
                         aPicSize.m_cx * nHeightWnd / aPicSize.m_cy );
                 scaledPicSize.m_cy = nHeightWnd;
             }
@@ -202,24 +202,24 @@ namespace // private
 
 } // end namespace
 
-
+ 
 //---------------------------------------------------
 // to ensure only one instance (singleton)
 //---------------------------------------------------
 
-CFilePreview* CFilePreview::createInstance(
-    HWND aParent,
-    POINT ulCorner,
-    const CDimension& aSize,
-    HINSTANCE hInstance,
-    sal_Bool bShow,
+CFilePreview* CFilePreview::createInstance( 
+    HWND aParent, 
+    POINT ulCorner, 
+    const CDimension& aSize, 
+    HINSTANCE hInstance, 
+    sal_Bool bShow, 
     sal_Bool bEnabled )
 {
     if ( !s_FilePreviewInst )
     {
         try
         {
-            s_FilePreviewInst = new CFilePreview(
+            s_FilePreviewInst = new CFilePreview( 
                 aParent, ulCorner, aSize, hInstance, bShow, bEnabled );
             s_SingletonDestroyer.reset( s_FilePreviewInst );
         }
@@ -242,41 +242,41 @@ CFilePreview* CFilePreview::createInstance(
 //
 //---------------------------------------------------
 
-CFilePreview::CFilePreview(
-    HWND aParent,
-    POINT ulCorner,
-    const CDimension& aSize,
-    HINSTANCE hInstance,
-    sal_Bool bShow,
-    sal_Bool bEnabled ) :
+CFilePreview::CFilePreview( 
+    HWND aParent, 
+    POINT ulCorner, 
+    const CDimension& aSize, 
+    HINSTANCE hInstance, 
+    sal_Bool bShow, 
+    sal_Bool bEnabled ) : 
     m_hInstance( hInstance ),
     m_bEnabled( bEnabled )
 {
-    // register the preview window class
-    WNDCLASSEX wndClsEx;
+    // register the preview window class 
+    WNDCLASSEX wndClsEx;	
     ZeroMemory(&wndClsEx, sizeof(wndClsEx));
 
     wndClsEx.cbSize        = sizeof(wndClsEx);
-    wndClsEx.style         = CS_HREDRAW | CS_VREDRAW;
+    wndClsEx.style		   = CS_HREDRAW | CS_VREDRAW;
     wndClsEx.lpfnWndProc   = CFilePreview::WndProc;
     wndClsEx.hInstance     = m_hInstance;
     wndClsEx.hbrBackground = (HBRUSH)( COLOR_INACTIVEBORDER + 1 );
     wndClsEx.lpszClassName = PREVIEWWND_CLASS_NAME;
-
+        
     // register the preview window class
-    // !!! Win95 -   the window class will be unregistered automaticly
-    //               if the dll is unloaded
+    // !!! Win95 -   the window class will be unregistered automaticly 
+    //			     if the dll is unloaded
     //     Win2000 - the window class must be unregistered manually
-    //               if the dll is unloaded
+    //				 if the dll is unloaded
     m_atomPrevWndClass = RegisterClassEx(&wndClsEx);
     if ( !m_atomPrevWndClass )
         throw CPreviewException( );
-
+        
     // create the preview window in invisible state
     sal_uInt32 dwStyle = bShow ? (WS_CHILD | WS_VISIBLE) : WS_CHILD;
-    m_hwnd = CreateWindowEx(
-        WS_EX_CLIENTEDGE,
-        PREVIEWWND_CLASS_NAME,
+    m_hwnd = CreateWindowEx( 
+        WS_EX_CLIENTEDGE, 
+        PREVIEWWND_CLASS_NAME, 
         TEXT(""),
         dwStyle,
         ulCorner.x,
@@ -284,7 +284,7 @@ CFilePreview::CFilePreview(
         aSize.m_cx,
         aSize.m_cy,
         aParent,
-        (HMENU)100, // for child windows this will
+        (HMENU)100, // for child windows this will 
                     // be used as child window identifier
         m_hInstance,
         0 );
@@ -297,12 +297,12 @@ CFilePreview::CFilePreview(
 //---------------------------------------------------
 
 CFilePreview::~CFilePreview( )
-{
+{	
     // unregister preview window class
-    sal_Bool bRet = UnregisterClass(
+    sal_Bool bRet = UnregisterClass( 
         (LPCTSTR)MAKELONG( m_atomPrevWndClass, 0 ),
         m_hInstance );
-    OSL_POSTCOND( bRet, "Unregister preview window class failed" );
+    OSL_POSTCOND( bRet, "Unregister preview window class failed" );    
 }
 
 //---------------------------------------------------
@@ -312,19 +312,19 @@ CFilePreview::~CFilePreview( )
 sal_Bool SAL_CALL CFilePreview::setSize( const CDimension& aSize )
 {
     OSL_PRECOND( IsWindow( m_hwnd ), "Preview window not initialized" );
-
+    
     // resize the fileopen file listbox
-    return SetWindowPos(
-        m_hwnd,
-        NULL,
-        0,
-        0,
-        aSize.m_cx,
-        aSize.m_cy,
+    return SetWindowPos( 
+        m_hwnd, 
+        NULL, 
+        0, 
+        0, 
+        aSize.m_cx, 
+        aSize.m_cy, 
         SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE );
 }
 
-//---------------------------------------------------
+//---------------------------------------------------	
 // returns the dimension of the preview
 //---------------------------------------------------
 
@@ -342,7 +342,7 @@ sal_Bool SAL_CALL CFilePreview::getSize( CDimension& theSize ) const
 }
 
 //---------------------------------------------------
-// sets the position of the upper left corner
+// sets the position of the upper left corner 
 // of the preview window relative to the
 // upper left corner of the parent window
 //---------------------------------------------------
@@ -352,13 +352,13 @@ sal_Bool SAL_CALL CFilePreview::setPos( POINT ulCorner )
     OSL_PRECOND( IsWindow( m_hwnd ), "Preview window not initialized" );
 
     // resize the fileopen file listbox
-    return SetWindowPos(
-        m_hwnd,
-        NULL,
-        ulCorner.x,
-        ulCorner.y,
-        0,
-        0,
+    return SetWindowPos( 
+        m_hwnd, 
+        NULL, 
+        ulCorner.x, 
+        ulCorner.y, 
+        0, 
+        0, 
         SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
 }
 
@@ -386,16 +386,16 @@ sal_Bool SAL_CALL CFilePreview::getPos( POINT& ulCorner ) const
 }
 
 //---------------------------------------------------
-//
+// 
 //---------------------------------------------------
 
 void SAL_CALL CFilePreview::enable( sal_Bool bEnable )
 {
     m_bEnabled = bEnable;
-
+    
     // force a redraw
     InvalidateRect( m_hwnd, NULL, TRUE );
-    UpdateWindow( m_hwnd );
+    UpdateWindow( m_hwnd );	
 }
 
 //---------------------------------------------------
@@ -415,33 +415,33 @@ sal_Bool SAL_CALL CFilePreview::show( sal_Bool bShow )
     return ShowWindow( m_hwnd, showState );
 }
 
-//---------------------------------------------------
-// if the preview is shown and enabled
+//---------------------------------------------------	
+// if the preview is shown and enabled 
 // preview of the given file will be shown
 // returns true on success or false if an error
 // occured (the file in not there or not accessible etc.)
 //---------------------------------------------------
 
 sal_Bool SAL_CALL CFilePreview::update( const rtl::OUString& aFileName )
-{
+{	
     OSL_PRECOND( IsWindow( m_hwnd ), "Preview window not initialized" );
 
     try
     {
         if ( m_bEnabled )
-        {
+        {	
             if ( m_IPicture )
                 m_IPicture.Release( );
 
             loadFile( aFileName );
-
+        
             // force a complete window redraw
             InvalidateRect( m_hwnd, NULL, TRUE );
-            UpdateWindow( m_hwnd );
+            UpdateWindow( m_hwnd );	
         }
-    }
+    }	
     catch( _com_error& )
-    {
+    {		
     }
 
     return sal_True;
@@ -456,8 +456,8 @@ void SAL_CALL CFilePreview::onPaint( HWND hWnd, HDC hDC )
     OSL_PRECOND( IsWindow( m_hwnd ), "Preview window not initialized" );
 
     try
-    {
-        if ( m_bEnabled )
+    {		
+        if ( m_bEnabled ) 
         {
             // get width and height of picture
             long cxPicHIMETRIC;
@@ -465,16 +465,16 @@ void SAL_CALL CFilePreview::onPaint( HWND hWnd, HDC hDC )
 
             m_IPicture->get_Width( &cxPicHIMETRIC );
             m_IPicture->get_Height( &cyPicHIMETRIC );
-
+                
             // convert himetric to pixels
-            int cxPicPIXEL = Himetric2Pixel( hDC, cxPicHIMETRIC, LOGPIXELSX );
-            int cyPicPIXEL = Himetric2Pixel( hDC, cyPicHIMETRIC, LOGPIXELSY );
-
+            int cxPicPIXEL = Himetric2Pixel( hDC, cxPicHIMETRIC, LOGPIXELSX ); 
+            int cyPicPIXEL = Himetric2Pixel( hDC, cyPicHIMETRIC, LOGPIXELSY ); 
+            
             // scale the picture based on the size of the preview window
             RECT rcPrevWnd;
             GetClientRect(hWnd, &rcPrevWnd);
 
-            CDimension scaledPicSize = _scalePictureSize(
+            CDimension scaledPicSize = _scalePictureSize( 
                 hWnd, CDimension( cxPicPIXEL, cyPicPIXEL ) );
 
             // calc the upper left corner so that the picture
@@ -492,27 +492,27 @@ void SAL_CALL CFilePreview::onPaint( HWND hWnd, HDC hDC )
                 cyPicHIMETRIC,
                 cxPicHIMETRIC,
                 -cyPicHIMETRIC,
-                &rcPrevWnd );
+                &rcPrevWnd );			
         } // end if ( m_bEnabled )
     }
     catch( _com_error& )
-    {
+    {		
     }
 }
 
 //---------------------------------------------------
 //
 //---------------------------------------------------
-
+    
 sal_Bool CFilePreview::loadFile( const rtl::OUString& aFileName )
 {
-    HANDLE      hFile   = 0;
-    HGLOBAL     hGlobal = 0;
-    LPVOID      pData   = NULL;
-    IStreamPtr  pIStream;
-    HRESULT     hr = E_FAIL;
-    sal_Bool    bRet;
-    sal_uInt32  nBytesRead;
+    HANDLE		hFile   = 0;
+    HGLOBAL		hGlobal = 0;
+    LPVOID		pData   = NULL;
+    IStreamPtr	pIStream;
+    HRESULT		hr = E_FAIL;
+    sal_Bool	bRet;
+    sal_uInt32	nBytesRead;
     sal_uInt32  fszExtra;
     sal_uInt32  fsize;
 
@@ -528,10 +528,10 @@ sal_Bool CFilePreview::loadFile( const rtl::OUString& aFileName )
         goto CLEANUP_AND_EXIT;
 
     fszExtra = 0;
-    fsize = GetFileSize( hFile, &fszExtra );
+    fsize = GetFileSize( hFile, &fszExtra );	
 
     // empty file, error or file to big
-    if ( -1 == fsize || 0 == fsize || fszExtra )
+    if ( -1 == fsize || 0 == fsize || fszExtra ) 
         goto CLEANUP_AND_EXIT;
 
     hGlobal = GlobalAlloc( GMEM_MOVEABLE, fsize );
@@ -541,23 +541,23 @@ sal_Bool CFilePreview::loadFile( const rtl::OUString& aFileName )
     pData = GlobalLock( hGlobal );
     if ( !pData )
         goto CLEANUP_AND_EXIT;
-
+    
     bRet = ReadFile(
         hFile, pData, fsize, &nBytesRead, NULL );
 
     if ( !bRet )
         goto CLEANUP_AND_EXIT;
-
+    
     hr = CreateStreamOnHGlobal(
         hGlobal, FALSE, &pIStream );
 
     if ( SUCCEEDED( hr ) )
     {
         hr = OleLoadPicture(
-            pIStream, fsize, FALSE,
+            pIStream, fsize, FALSE, 
             __uuidof( IPicture ), (LPVOID*)&m_IPicture );
     }
-
+    
 CLEANUP_AND_EXIT:
     if ( hFile )
         CloseHandle( hFile );
@@ -574,8 +574,8 @@ CLEANUP_AND_EXIT:
 //---------------------------------------------------
 //
 //---------------------------------------------------
-
-LRESULT CALLBACK CFilePreview::WndProc(
+    
+LRESULT CALLBACK CFilePreview::WndProc( 
     HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     LRESULT lResult = 0;
@@ -587,7 +587,7 @@ LRESULT CALLBACK CFilePreview::WndProc(
         OSL_PRECOND( s_FilePreviewInst, "Static member not initialized" );
 
         HDC         hDC;
-        PAINTSTRUCT ps;
+        PAINTSTRUCT ps;	
 
         hDC = BeginPaint( hWnd, &ps );
         s_FilePreviewInst->onPaint( hWnd, hDC );
@@ -595,8 +595,8 @@ LRESULT CALLBACK CFilePreview::WndProc(
     }
     break;
 
-    // under windows 95/98 the creation of the
-        // hidden target request window fails if
+    // under windows 95/98 the creation of the 
+        // hidden target request window fails if 
         // we don't handle this message ourself
         // because the DefWindowProc returns 0 as
         // a result of handling WM_NCCREATE what

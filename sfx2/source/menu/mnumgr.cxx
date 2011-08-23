@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@
 #include <ctime>
 #endif
 
-#include <string>   // HACK: prevent conflict between STLPORT and Workshop headers
-#include <cstdarg>  // std::va_list
+#include <string> 	// HACK: prevent conflict between STLPORT and Workshop headers
+#include <cstdarg>	// std::va_list
 
 #include <vcl/pointr.hxx>
 
@@ -181,10 +181,10 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
 static Image lcl_GetImageFromPngUrl( const ::rtl::OUString &rFileUrl )
 {
     Image aRes;
-
+    
     ::rtl::OUString aTmp;
     osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
-
+    
     Graphic aGraphic;
     const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
     if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
@@ -229,7 +229,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         {
             SvtLinguConfig aCfg;
             const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-
+            
             Image aImage;
             String sThesImplName( aHelper.GetThesImplName( aLocale ) );
             ::rtl::OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName, bHC ) );
@@ -240,7 +240,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
             {
                 //! item ids should start with values > 0, since 0 has special meaning
                 const USHORT nId = i + 1;
-
+                
                 String aItemText( GetThesaurusReplaceText_Impl( aSynonyms[i] ) );
                 pThesSubMenu->InsertItem( nId, aItemText );
                 ::rtl::OUString aCmd( ::rtl::OUString::createFromAscii( ".uno:ThesaurusFromContext?WordReplace:string=" ) );
@@ -622,7 +622,7 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
         aPop.Execute( rPoint, pWindow );
 
         // #i112646 avoid crash when context menu is closed.
-        // the (manually inserted) sub-menu needs to be destroyed before
+        // the (manually inserted) sub-menu needs to be destroyed before 
         // aPop gets destroyed.
         delete pThesSubMenu;
         pThesSubMenu = 0;

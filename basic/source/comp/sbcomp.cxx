@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -23,7 +23,7 @@
  * version 3 along with OpenOffice.org.  If not, see
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
- *
+ *	
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
@@ -44,10 +44,10 @@
 #include <hash_map>
 
 // Trace Settings
-static const char*  GpTraceFileName = "d:\\zBasic.Asm\\BasicTrace.txt";
-static const bool   GbIncludePCodes = false;
-static const int    GnIndentPerCallLevel = 4;
-static const int    GnIndentForPCode = 2;
+static const char*	GpTraceFileName = "d:\\zBasic.Asm\\BasicTrace.txt";
+static const bool	GbIncludePCodes = false;
+static const int	GnIndentPerCallLevel = 4;
+static const int	GnIndentForPCode = 2;
 
 struct TraceTextData
 {
@@ -57,8 +57,8 @@ struct TraceTextData
 typedef std::hash_map< sal_Int32, TraceTextData > PCToTextDataMap;
 typedef std::hash_map< ::rtl::OUString, PCToTextDataMap*, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleTraceMap;
 
-ModuleTraceMap      GaModuleTraceMap;
-ModuleTraceMap&     rModuleTraceMap = GaModuleTraceMap;
+ModuleTraceMap		GaModuleTraceMap;
+ModuleTraceMap&		rModuleTraceMap = GaModuleTraceMap;
 
 static void lcl_PrepareTraceForModule( SbModule* pModule )
 {
@@ -165,7 +165,7 @@ String dumpMethodParameters( SbMethod* pMethod )
         SbxBase::SetError( eOld );
 
     return aStr;
-}
+} 
 
 // Public functions
 void dbg_InitTrace( void )
@@ -214,7 +214,7 @@ void dbg_traceStep( SbModule* pModule, UINT32 nPC, INT32 nCallLvl )
 
     //nCallLvl--;
     //if( nCallLvl < 0 )
-    //  nCallLvl = 0;
+    //	nCallLvl = 0;
     int nIndent = nCallLvl * GnIndentPerCallLevel;
 
     const TraceTextData& rTraceTextData = itInner->second;
@@ -466,7 +466,7 @@ BOOL SbModule::Compile()
 
 /**************************************************************************
 *
-*   Syntax-Highlighting
+*	Syntax-Highlighting
 *
 **************************************************************************/
 

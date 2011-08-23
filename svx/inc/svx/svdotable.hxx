@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -303,9 +303,9 @@ public:
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     // #103836# iterates over the paragraphs of a given SdrObject and removes all
-    //          hard set character attributes with the which ids contained in the
-    //          given vector
-//  virtual void RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds );
+    //			hard set character attributes with the which ids contained in the
+    //			given vector
+//	virtual void RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds );
 
     /** hack for clipboard with calc and writer, export and import table content as rtf table */
     static void ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
@@ -331,9 +331,9 @@ private:
     friend class sdr::contact::ViewContactOfTableObj;
     const TableLayouter& getTableLayouter() const;
 
-    Rectangle   maLogicRect;
+    Rectangle	maLogicRect;
 private:
-    SdrTableObjImpl*    mpImpl;
+    SdrTableObjImpl*	mpImpl;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

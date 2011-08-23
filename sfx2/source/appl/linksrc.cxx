@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,10 +80,10 @@ static void StartTimer( SvLinkSourceTimer ** ppTimer, SvLinkSource * pOwner,
 
 struct SvLinkSource_Entry_Impl
 {
-    SvBaseLinkRef       xSink;
-    String              aDataMimeType;
-    USHORT              nAdviseModes;
-    BOOL                bIsDataSink;
+    SvBaseLinkRef		xSink;
+    String				aDataMimeType;
+    USHORT				nAdviseModes;
+    BOOL 				bIsDataSink;
 
     SvLinkSource_Entry_Impl( SvBaseLink* pLink, const String& rMimeType,
                                 USHORT nAdvMode )
@@ -166,9 +166,9 @@ SvLinkSource_Entry_Impl* SvLinkSource_EntryIter_Impl::Next()
 struct SvLinkSource_Impl
 {
     SvLinkSource_Array_Impl aArr;
-    String              aDataMimeType;
-    SvLinkSourceTimer * pTimer;
-    ULONG               nTimeout;
+    String				aDataMimeType;
+    SvLinkSourceTimer *	pTimer;
+    ULONG				nTimeout;
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
     m_xInputStreamToLoadFrom;
     sal_Bool m_bIsReadOnly;

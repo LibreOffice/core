@@ -592,9 +592,9 @@ void SdrEditView::ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) 
     if(pSource && pDest)
     {
         SfxItemSet aSet(pMod->GetItemPool(),
-            SDRATTR_START,              SDRATTR_NOTPERSIST_FIRST-1,
-            SDRATTR_NOTPERSIST_LAST+1,  SDRATTR_END,
-            EE_ITEMS_START,             EE_ITEMS_END,
+            SDRATTR_START,				SDRATTR_NOTPERSIST_FIRST-1,
+            SDRATTR_NOTPERSIST_LAST+1,	SDRATTR_END,
+            EE_ITEMS_START,				EE_ITEMS_END,
             0, 0); // #52757#, #52762#
 
         aSet.Put(pSource->GetMergedItemSet());
@@ -796,9 +796,9 @@ basegfx::B2DPolygon SdrEditView::ImpCombineToSinglePolygon(const basegfx::B2DPol
 // for distribution dialog function
 struct ImpDistributeEntry
 {
-    SdrObject*                  mpObj;
-    INT32                       mnPos;
-    INT32                       mnLength;
+    SdrObject*					mpObj;
+    INT32						mnPos;
+    INT32						mnLength;
 };
 
 DECLARE_LIST(ImpDistributeEntryList, ImpDistributeEntry*)

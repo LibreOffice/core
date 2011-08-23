@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public:
 
     bool create( const ::rtl::OUString& rURL );
 
-//    void processMessage( GstMessage *message );
+//    void processMessage( GstMessage *message ); 
 
     // XPlayer
     virtual void SAL_CALL start(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -78,21 +78,21 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
-
+    
     QTMovie* getMovie();
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
 
     ::rtl::OUString         maURL;
-
+    
     QTMovie                 *mpMovie;      // the Movie object
   /* GST
     sal_Bool                mbFakeVideo;
   */
     float                   mnUnmutedVolume;
     double                  mnStopTime;
-
+    
     sal_Bool                mbMuted;
     sal_Bool                mbLooping;
     sal_Bool                mbInitialized;

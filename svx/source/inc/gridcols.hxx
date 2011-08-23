@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,16 +44,16 @@ namespace rtl { class OUString; }
 #define FM_COL_FORMATTEDFIELD rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FormattedField" ) )
 
 // column type ids
-#define TYPE_CHECKBOX       0
-#define TYPE_COMBOBOX       1
+#define TYPE_CHECKBOX		0
+#define TYPE_COMBOBOX		1
 #define TYPE_CURRENCYFIELD  2
-#define TYPE_DATEFIELD      3
-#define TYPE_FORMATTEDFIELD 4
-#define TYPE_LISTBOX        5
-#define TYPE_NUMERICFIELD   6
-#define TYPE_PATTERNFIELD   7
-#define TYPE_TEXTFIELD      8
-#define TYPE_TIMEFIELD      9
+#define TYPE_DATEFIELD		3
+#define TYPE_FORMATTEDFIELD	4
+#define TYPE_LISTBOX		5
+#define TYPE_NUMERICFIELD	6
+#define TYPE_PATTERNFIELD	7
+#define TYPE_TEXTFIELD		8
+#define TYPE_TIMEFIELD		9
 
 //------------------------------------------------------------------------------
 sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName);

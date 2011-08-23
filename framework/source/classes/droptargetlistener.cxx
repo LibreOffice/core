@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <classes/droptargetlistener.hxx>
 #include <threadhelp/readguard.hxx>
@@ -39,7 +39,7 @@
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -48,7 +48,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <svtools/transfer.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -58,7 +58,7 @@
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework

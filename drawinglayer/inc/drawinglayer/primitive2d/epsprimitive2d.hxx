@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,13 +45,13 @@ namespace drawinglayer
         {
         private:
             /// the geometry definition
-            basegfx::B2DHomMatrix                       maEpsTransform;
+            basegfx::B2DHomMatrix						maEpsTransform;
 
             /// the Eps content definition
-            GfxLink                                     maGfxLink;
+            GfxLink										maGfxLink;
 
             /// the replacement content definition
-            GDIMetaFile                                 maMetaFile;
+            GDIMetaFile									maMetaFile;
 
         protected:
             /// create local decomposition

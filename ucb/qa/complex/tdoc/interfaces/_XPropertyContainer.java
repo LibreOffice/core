@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ import share.LogWriter;
 public class _XPropertyContainer {
     public XPropertyContainer oObj = null;
     public LogWriter log = null;
-
+    
     public boolean _addProperty() {
         boolean result = true;
         // add illegal property
@@ -72,7 +72,7 @@ public class _XPropertyContainer {
         }
         return result;
     }
-
+    
     public boolean _removeProperty() {
         boolean result = true;
         try {
@@ -98,5 +98,5 @@ public class _XPropertyContainer {
         }
         return result;
     }
-
+    
 }

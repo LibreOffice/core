@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,119 +44,119 @@ class SdrObject;
 class SdrPageView;
 
 // Ein Container fuer USHORTs (im Prinzip ein dynamisches Array)
-class SVX_DLLPUBLIC SdrUShortCont
+class SVX_DLLPUBLIC SdrUShortCont 
 {
-    Container                                           maArray;
-    sal_Bool                                            mbSorted;
+    Container											maArray;
+    sal_Bool											mbSorted;
 
 private:
     void CheckSort(ULONG nPos);
 
 public:
     SdrUShortCont(sal_uInt16 nBlock, sal_uInt16 nInit, sal_uInt16 nResize)
-    :   maArray(nBlock, nInit, nResize),
-    mbSorted(sal_True)
+    :	maArray(nBlock, nInit, nResize), 
+    mbSorted(sal_True) 
     {}
 
     SdrUShortCont(const SdrUShortCont& rCont)
-    :   maArray(rCont.maArray),
-        mbSorted(rCont.mbSorted)
+    :	maArray(rCont.maArray), 
+        mbSorted(rCont.mbSorted) 
     {}
 
     /** helper to migrate to stl containers */
     std::set< sal_uInt16 > getContainer();
 
     SdrUShortCont& operator=(const SdrUShortCont& rCont)
-    {
-        maArray = rCont.maArray;
-        mbSorted = rCont.mbSorted;
-        return *this;
+    { 
+        maArray = rCont.maArray; 
+        mbSorted = rCont.mbSorted; 
+        return *this; 
     }
 
-    sal_Bool operator==(const SdrUShortCont& rCont) const
-    {
-        return maArray == rCont.maArray;
+    sal_Bool operator==(const SdrUShortCont& rCont) const 
+    { 
+        return maArray == rCont.maArray; 
     }
 
-    sal_Bool operator!=(const SdrUShortCont& rCont) const
-    {
-        return maArray != rCont.maArray;
+    sal_Bool operator!=(const SdrUShortCont& rCont) const 
+    { 
+        return maArray != rCont.maArray; 
     }
 
     void Clear()
-    {
-        maArray.Clear();
-        mbSorted = sal_True;
+    { 
+        maArray.Clear(); 
+        mbSorted = sal_True; 
     }
 
     void Sort() const;
 
     void ForceSort() const
-    {
-        if(!mbSorted)
+    { 
+        if(!mbSorted) 
         {
-            Sort();
+            Sort(); 
         }
     }
 
-    void Insert(sal_uInt16 nElem, ULONG nPos = CONTAINER_APPEND)
-    {
-        maArray.Insert((void*)ULONG(nElem),nPos);
+    void Insert(sal_uInt16 nElem, ULONG nPos = CONTAINER_APPEND) 
+    { 
+        maArray.Insert((void*)ULONG(nElem),nPos); 
 
-        if(mbSorted)
+        if(mbSorted) 
         {
-            CheckSort(nPos);
+            CheckSort(nPos); 
         }
     }
 
-    void Remove(ULONG nPos)
-    {
-        maArray.Remove(nPos);
+    void Remove(ULONG nPos) 
+    { 
+        maArray.Remove(nPos); 
     }
 
     void Replace(sal_uInt16 nElem, ULONG nPos)
-    {
-        maArray.Replace((void*)ULONG(nElem), nPos);
+    { 
+        maArray.Replace((void*)ULONG(nElem), nPos); 
 
         if(mbSorted)
         {
-            CheckSort(nPos);
+            CheckSort(nPos); 
         }
     }
 
-    sal_uInt16 GetObject(ULONG nPos) const
-    {
-        return sal_uInt16(sal_uIntPtr(maArray.GetObject(nPos)));
+    sal_uInt16 GetObject(ULONG nPos) const 
+    { 
+        return sal_uInt16(sal_uIntPtr(maArray.GetObject(nPos))); 
     }
 
     ULONG GetPos(sal_uInt16 nElem) const
-    {
-        return maArray.GetPos((void*)(ULONG)nElem);
+    { 
+        return maArray.GetPos((void*)(ULONG)nElem); 
     }
 
     ULONG GetCount() const
-    {
-        return maArray.Count();
+    { 
+        return maArray.Count(); 
     }
 
     sal_Bool Exist(sal_uInt16 nElem) const
-    {
-        return (CONTAINER_ENTRY_NOTFOUND != maArray.GetPos((void*)(ULONG)nElem));
+    { 
+        return (CONTAINER_ENTRY_NOTFOUND != maArray.GetPos((void*)(ULONG)nElem)); 
     }
 };
 
 // Alles was eine View ueber ein markiertes Objekt wissen muss
 class SVX_DLLPUBLIC SdrMark : public sdr::ObjectUser
-{
+{ 
 protected:
-    SdrObject*                                          mpSelectedSdrObject;    // the seleceted object
-    SdrPageView*                                        mpPageView;
-    SdrUShortCont*                                      mpPoints;     // Markierte Punkte
-    SdrUShortCont*                                      mpLines;      // Markierte Linienabschnitte
-    SdrUShortCont*                                      mpGluePoints; // Markierte Klebepunkte (deren Id's)
-    sal_Bool                                            mbCon1;       // fuer Connectoren
-    sal_Bool                                            mbCon2;       // fuer Connectoren
-    sal_uInt16                                          mnUser;       // z.B. fuer CopyObjects, mitkopieren von Edges
+    SdrObject*											mpSelectedSdrObject;	// the seleceted object
+    SdrPageView*										mpPageView;
+    SdrUShortCont*										mpPoints;     // Markierte Punkte
+    SdrUShortCont*										mpLines;      // Markierte Linienabschnitte
+    SdrUShortCont*										mpGluePoints; // Markierte Klebepunkte (deren Id's)
+    sal_Bool											mbCon1;       // fuer Connectoren
+    sal_Bool											mbCon2;       // fuer Connectoren
+    sal_uInt16											mnUser;       // z.B. fuer CopyObjects, mitkopieren von Edges
 
 public:
     SdrMark(SdrObject* pNewObj = 0L, SdrPageView* pNewPageView = 0L);
@@ -168,9 +168,9 @@ public:
 
     SdrMark& operator=(const SdrMark& rMark);
     sal_Bool operator==(const SdrMark& rMark) const;
-    sal_Bool operator!=(const SdrMark& rMark) const
-    {
-        return !(operator==(rMark));
+    sal_Bool operator!=(const SdrMark& rMark) const 
+    { 
+        return !(operator==(rMark)); 
     }
 
     void SetMarkedSdrObj(SdrObject* pNewObj);
@@ -179,113 +179,113 @@ public:
     SdrPage* GetPage() const;
     SdrObjList* GetObjList() const;
     SdrPageView* GetPageView() const
-    {
-        return mpPageView;
+    { 
+        return mpPageView; 
     }
 
-    void SetPageView(SdrPageView* pNewPageView)
-    {
-        mpPageView = pNewPageView;
+    void SetPageView(SdrPageView* pNewPageView) 
+    { 
+        mpPageView = pNewPageView; 
     }
 
-    void SetCon1(sal_Bool bOn)
-    {
-        mbCon1 = bOn;
+    void SetCon1(sal_Bool bOn) 
+    { 
+        mbCon1 = bOn; 
     }
 
     sal_Bool IsCon1() const
-    {
-        return mbCon1;
+    { 
+        return mbCon1; 
     }
 
     void SetCon2(sal_Bool bOn)
-    {
-        mbCon2 = bOn;
+    { 
+        mbCon2 = bOn; 
     }
 
     sal_Bool IsCon2() const
-    {
-        return mbCon2;
+    { 
+        return mbCon2; 
     }
 
     void SetUser(sal_uInt16 nVal)
-    {
-        mnUser = nVal;
+    { 
+        mnUser = nVal; 
     }
 
     sal_uInt16 GetUser() const
-    {
-        return mnUser;
+    { 
+        return mnUser; 
     }
 
     const SdrUShortCont* GetMarkedPoints() const
-    {
-        return mpPoints;
+    { 
+        return mpPoints;     
     }
 
     const SdrUShortCont* GetMarkedLines() const
-    {
-        return mpLines;
+    { 
+        return mpLines;      
     }
 
-    const SdrUShortCont* GetMarkedGluePoints() const
-    {
-        return mpGluePoints;
+    const SdrUShortCont* GetMarkedGluePoints() const    
+    { 
+        return mpGluePoints; 
     }
 
     SdrUShortCont* GetMarkedPoints()
-    {
-        return mpPoints;
+    { 
+        return mpPoints;     
     }
 
     SdrUShortCont* GetMarkedLines()
-    {
-        return mpLines;
+    { 
+        return mpLines;      
     }
 
     SdrUShortCont* GetMarkedGluePoints()
-    {
-        return mpGluePoints;
+    { 
+        return mpGluePoints; 
     }
 
     SdrUShortCont* ForceMarkedPoints()
-    {
-        if(!mpPoints)
-            mpPoints = new SdrUShortCont(1024, 32, 32);
+    { 
+        if(!mpPoints) 
+            mpPoints = new SdrUShortCont(1024, 32, 32); 
 
-        return mpPoints;
+        return mpPoints; 
     }
 
-    SdrUShortCont* ForceMarkedLines()
-    {
-        if(!mpLines)
-            mpLines = new SdrUShortCont(1024, 32, 32);
+    SdrUShortCont* ForceMarkedLines()             
+    { 
+        if(!mpLines) 
+            mpLines = new SdrUShortCont(1024, 32, 32); 
 
-        return mpLines;
+        return mpLines; 
     }
 
-    SdrUShortCont* ForceMarkedGluePoints()
-    {
-        if(!mpGluePoints)
-            mpGluePoints = new SdrUShortCont(1024, 32, 32);
+    SdrUShortCont* ForceMarkedGluePoints()        
+    { 
+        if(!mpGluePoints) 
+            mpGluePoints = new SdrUShortCont(1024, 32, 32); 
 
-        return mpGluePoints;
+        return mpGluePoints; 
     }
 };
 
-class SVX_DLLPUBLIC SdrMarkList
+class SVX_DLLPUBLIC SdrMarkList 
 {
 protected:
-    Container                                           maList;
+    Container											maList;
 
-    String                                              maMarkName;
-    String                                              maPointName;
-    String                                              maGluePointName;
+    String												maMarkName;
+    String												maPointName;
+    String												maGluePointName;
 
-    sal_Bool                                            mbPointNameOk;
-    sal_Bool                                            mbGluePointNameOk;
-    sal_Bool                                            mbNameOk;
-    sal_Bool                                            mbSorted;
+    sal_Bool											mbPointNameOk;
+    sal_Bool											mbGluePointNameOk;
+    sal_Bool											mbNameOk;
+    sal_Bool											mbSorted;
 
 private:
     SVX_DLLPRIVATE sal_Bool operator==(const SdrMarkList& rCmpMarkList) const;
@@ -295,41 +295,41 @@ private:
     SVX_DLLPRIVATE const XubString& GetPointMarkDescription(sal_Bool bGlue) const;
 
 public:
-    SdrMarkList()
-    :   maList(1024, 64, 64),
+    SdrMarkList() 
+    :	maList(1024, 64, 64),
         mbPointNameOk(sal_False),
         mbGluePointNameOk(sal_False),
         mbNameOk(sal_False),
-        mbSorted(sal_True)
+        mbSorted(sal_True) 
     {
     }
 
-    SdrMarkList(const SdrMarkList& rLst)
-    :   maList(1024, 64, 64)
-    {
-        *this = rLst;
+    SdrMarkList(const SdrMarkList& rLst) 
+    :	maList(1024, 64, 64)        
+    { 
+        *this = rLst; 
     }
 
-    ~SdrMarkList()
-    {
-        Clear();
+    ~SdrMarkList() 
+    { 
+        Clear(); 
     }
 
     void Clear();
     void ForceSort() const;
     void SetUnsorted()
-    {
-        mbSorted = sal_False;
+    { 
+        mbSorted = sal_False; 
     }
 
-    ULONG GetMarkCount() const
-    {
-        return maList.Count();
+    ULONG GetMarkCount() const 
+    { 
+        return maList.Count(); 
     }
 
-    SdrMark* GetMark(ULONG nNum) const
-    {
-        return (SdrMark*)(maList.GetObject(nNum));
+    SdrMark* GetMark(ULONG nNum) const 
+    { 
+        return (SdrMark*)(maList.GetObject(nNum)); 
     }
 
     ULONG FindObject(const SdrObject* pObj) const;
@@ -340,24 +340,24 @@ public:
     sal_Bool DeletePageView(const SdrPageView& rPV);
     sal_Bool InsertPageView(const SdrPageView& rPV);
 
-    void SetNameDirty()
-    {
-        mbNameOk = sal_False;
-        mbPointNameOk = sal_False;
-        mbGluePointNameOk = sal_False;
+    void SetNameDirty() 
+    { 
+        mbNameOk = sal_False; 
+        mbPointNameOk = sal_False; 
+        mbGluePointNameOk = sal_False; 
     }
 
     // Eine verbale Beschreibung der markierten Objekte z.B.:
     // "27 Linien", "12 Objekte", "Polygon" oder auch "Kein Objekt"
     const String& GetMarkDescription() const;
-    const String& GetPointMarkDescription() const
-    {
-        return GetPointMarkDescription(sal_False);
+    const String& GetPointMarkDescription() const 
+    { 
+        return GetPointMarkDescription(sal_False); 
     }
 
-    const String& GetGluePointMarkDescription() const
-    {
-        return GetPointMarkDescription(sal_True);
+    const String& GetGluePointMarkDescription() const 
+    { 
+        return GetPointMarkDescription(sal_True); 
     }
 
     // pPage=0L: Die Markierungen aller! Seiten beruecksichtigen
@@ -375,13 +375,13 @@ namespace sdr
 {
     class SVX_DLLPUBLIC ViewSelection
     {
-        SdrMarkList                 maMarkedObjectList;
-        SdrMarkList                 maEdgesOfMarkedNodes;
-        SdrMarkList                 maMarkedEdgesOfMarkedNodes;
-        List                        maAllMarkedObjects;
+        SdrMarkList					maMarkedObjectList;
+        SdrMarkList					maEdgesOfMarkedNodes;
+        SdrMarkList					maMarkedEdgesOfMarkedNodes;
+        List						maAllMarkedObjects;
 
         // bitfield
-        unsigned                    mbEdgesOfMarkedNodesDirty : 1;
+        unsigned					mbEdgesOfMarkedNodesDirty : 1;
 
         SVX_DLLPRIVATE void ImpForceEdgesOfMarkedNodes();
         SVX_DLLPRIVATE void ImplCollectCompleteSelection(SdrObject* pObj);
@@ -391,18 +391,18 @@ namespace sdr
 
         void SetEdgesOfMarkedNodesDirty();
 
-        const SdrMarkList& GetMarkedObjectList() const
-        {
-            return maMarkedObjectList;
+        const SdrMarkList& GetMarkedObjectList() const 
+        { 
+            return maMarkedObjectList; 
         }
 
         const SdrMarkList& GetEdgesOfMarkedNodes() const;
         const SdrMarkList& GetMarkedEdgesOfMarkedNodes() const;
         const List& GetAllMarkedObjects() const;
 
-        SdrMarkList& GetMarkedObjectListWriteAccess()
-        {
-            return maMarkedObjectList;
+        SdrMarkList& GetMarkedObjectListWriteAccess() 
+        { 
+            return maMarkedObjectList; 
         }
     };
 } // end of namespace sdr

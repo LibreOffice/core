@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,20 +43,20 @@ namespace framework
 
 struct EventsConfig
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >              aEventNames;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >   aEventsProperties;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >				aEventNames;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >	aEventsProperties;
 };
 
 class EventsConfiguration
 {
     public:
         // #110897#
-        static sal_Bool LoadEventsConfig(
+        static sal_Bool	LoadEventsConfig( 
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             SvStream& rInStream, EventsConfig& aItems );
 
         // #110897#
-        static sal_Bool StoreEventsConfig(
+        static sal_Bool	StoreEventsConfig( 
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             SvStream& rOutStream, const EventsConfig& aItems );
 };

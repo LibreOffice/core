@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,21 +79,21 @@ SortedDynamicResultSet::SortedDynamicResultSet(
                         const Reference < XMultiServiceFactory > &xSMgr )
 {
     mpDisposeEventListeners = NULL;
-    mpOwnListener           = new SortedDynamicResultSetListener( this );
+    mpOwnListener			= new SortedDynamicResultSetListener( this );
 
     mxOwnListener = Reference< XDynamicResultSetListener >( mpOwnListener );
 
-    mxOriginal  = xOriginal;
-    maOptions   = aOptions;
-    mxCompFac   = xCompFac;
-    mxSMgr      = xSMgr;
+    mxOriginal	= xOriginal;
+    maOptions	= aOptions;
+    mxCompFac	= xCompFac;
+    mxSMgr		= xSMgr;
 
     mpOne = NULL;
     mpTwo = NULL;
 
-    mbGotWelcome    = sal_False;
-    mbUseOne        = sal_True;
-    mbStatic        = sal_False;
+    mbGotWelcome	= sal_False;
+    mbUseOne		= sal_True;
+    mbStatic		= sal_False;
 }
 
 //--------------------------------------------------------------------------
@@ -119,7 +119,7 @@ SortedDynamicResultSet::~SortedDynamicResultSet()
 XINTERFACE_IMPL_4( SortedDynamicResultSet,
                    XTypeProvider,
                    XServiceInfo,
-                   XComponent,      /* base class of XDynamicResultSet */
+                   XComponent,		/* base class of XDynamicResultSet */
                    XDynamicResultSet );
 
 //--------------------------------------------------------------------------
@@ -318,7 +318,7 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     sal_Bool bHasNew = sal_False;
     sal_Bool bHasModified = sal_False;
 
-    SortedResultSet *pCurSet = NULL;
+    SortedResultSet	*pCurSet = NULL;
 
     // mxNew und mxOld vertauschen und anschliessend die Tabellen von Old
     // nach New kopieren
@@ -338,7 +338,7 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
         }
     }
 
-    Any  aRet;
+    Any	 aRet;
 
     try {
         aRet = pCurSet->getPropertyValue( OUString::createFromAscii( "IsRowCountFinal" ) );
@@ -588,7 +588,7 @@ SortedDynamicResultSetListener::~SortedDynamicResultSetListener()
 //-----------------------------------------------------------------
 
 XINTERFACE_IMPL_2( SortedDynamicResultSetListener,
-                   XEventListener,  /* base class of XDynamicResultSetListener */
+                   XEventListener,	/* base class of XDynamicResultSetListener */
                    XDynamicResultSetListener );
 
 //-----------------------------------------------------------------

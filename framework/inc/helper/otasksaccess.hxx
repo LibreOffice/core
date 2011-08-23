@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_HELPER_OTASKSACCESS_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <classes/framecontainer.hxx>
@@ -41,7 +41,7 @@
 #include <macros/debug.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XElementAccess.hpp>
@@ -49,209 +49,209 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
+//	exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  exported definitions
+//	exported definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          implement XEnumerationAccess interface as helper to create many oneway enumeration of tasks
-    @descr          We share mutex and framecontainer with ouer owner and have full access to his child tasks.
+    @short			implement XEnumerationAccess interface as helper to create many oneway enumeration of tasks
+    @descr			We share mutex and framecontainer with ouer owner and have full access to his child tasks.
                     (Ouer owner can be the Desktop only!) We create oneway enumerations on demand. These "lists"
                     can be used for one time only. Step during the list from first to last element.
                     (The type of created enumerations is OTasksEnumeration.)
 
-    @implements     XInterface
+    @implements		XInterface
                     XEnumerationAccess
                     XElementAccess
 
-    @base           OWeakObject
+    @base			OWeakObject
 
-    @devstatus      deprecated
+    @devstatus		deprecated
 *//*-*************************************************************************************************************/
 
-class OTasksAccess  :   public css::lang::XTypeProvider             ,
-                        public css::container::XEnumerationAccess   ,   // => XElementAccess
+class OTasksAccess	:	public css::lang::XTypeProvider				,
+                        public css::container::XEnumerationAccess	,	// => XElementAccess
                         private ThreadHelpBase                      ,
                         public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      constructor to initialize this instance
-            @descr      A desktop will create an enumeration-access-object. An enumeration is a oneway-list and a
+            @short		constructor to initialize this instance
+            @descr		A desktop will create an enumeration-access-object. An enumeration is a oneway-list and a
                         snapshot of the tasklist of current tasks of desktop.
                         But we need a instance to create more then one enumerations to the same tasklist!
 
-            @seealso    class Desktop
-            @seealso    class OTasksEnumeration
+            @seealso	class Desktop
+            @seealso	class OTasksEnumeration
 
-            @param      "xOwner" is a reference to ouer owner and must be the desktop!
-            @param      "pTasks" is a pointer to the taskcontainer of the desktop. We need it to create a new enumeration.
-            @return     -
+            @param		"xOwner" is a reference to ouer owner and must be the desktop!
+            @param		"pTasks" is a pointer to the taskcontainer of the desktop. We need it to create a new enumeration.
+            @return		-
 
-            @onerror    Do nothing and reset this object to default with an empty list.
+            @onerror	Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
-         OTasksAccess(  const   css::uno::Reference< css::frame::XDesktop >&    xOwner  ,
+         OTasksAccess(	const	css::uno::Reference< css::frame::XDesktop >&	xOwner	,
                                 FrameContainer*                                 pTasks  );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XInterface
+        //	XInterface
         //---------------------------------------------------------------------------------------------------------
 
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
 
         //---------------------------------------------------------------------------------------------------------
-        //  XEnumerationAccess
+        //	XEnumerationAccess
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      create a new enumeration of tasks
-            @descr      You can call this method to get a new snapshot to all tasks of the desktop as an enumeration.
+            @short		create a new enumeration of tasks
+            @descr		You can call this method to get a new snapshot to all tasks of the desktop as an enumeration.
 
-            @seealso    interface XEnumerationAccess
-            @seealso    interface XEnumeration
-            @seealso    class Desktop
+            @seealso	interface XEnumerationAccess
+            @seealso	interface XEnumeration
+            @seealso	class Desktop
 
-            @param      -
-            @return     If the desktop and some tasks exist => a valid reference to an enumeration<BR>
+            @param		-
+            @return		If the desktop and some tasks exist => a valid reference to an enumeration<BR>
                         An NULL-reference, other way.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XElementAccess
+        //	XElementAccess
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      get the type of elements in enumeration
-            @descr      -
+            @short		get the type of elements in enumeration
+            @descr		-
 
-            @seealso    interface XElementAccess
-            @seealso    class TasksEnumeration
+            @seealso	interface XElementAccess
+            @seealso	class TasksEnumeration
 
-            @param      -
-            @return     The uno-type XTask.
+            @param		-
+            @return		The uno-type XTask.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short      get state of tasklist of enumeration.
-            @descr      -
+            @short		get state of tasklist of enumeration.
+            @descr		-
 
-            @seealso    interface XElementAccess
+            @seealso	interface XElementAccess
 
-            @param      -
-            @return     sal_True  ,if more then 0 elements exist.
-            @return     sal_False ,otherwise.
+            @param		-
+            @return		sal_True  ,if more then 0 elements exist.
+            @return		sal_False ,otherwise.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
+    //	protected methods
     //-------------------------------------------------------------------------------------------------------------
 
     protected:
 
         /*-****************************************************************************************************//**
-            @short      standard destructor
-            @descr      This method destruct an instance of this class and clear some member.
+            @short		standard destructor
+            @descr		This method destruct an instance of this class and clear some member.
                         Don't use an instance of this class as normal member. Use it dynamicly with a pointer.
                         We hold a weakreference to ouer owner and not to ouer superclass!
                         Thats the reason for a protected dtor.
 
-            @seealso    class Desktop
+            @seealso	class Desktop
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
-        virtual ~OTasksAccess();
+        virtual	~OTasksAccess();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
     //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
+    //	debug methods
+    //	(should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
+            @short		debug-method to check incoming parameter of some other mehods of this class
+            @descr		The following methods are used to check parameters for other methods
                         of this class. The return value is used directly for an ASSERT(...).
 
-            @seealso    ASSERTs in implementation!
+            @seealso	ASSERTs in implementation!
 
-            @param      references to checking variables
-            @return     sal_False ,on invalid parameter.
-            @return     sal_True  ,otherwise
+            @param		references to checking variables
+            @return		sal_False ,on invalid parameter.
+            @return		sal_True  ,otherwise
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
     #ifdef ENABLE_ASSERTIONS
 
     private:
 
-        static sal_Bool impldbg_checkParameter_OTasksAccessCtor(    const   css::uno::Reference< css::frame::XDesktop >&    xOwner  ,
+        static sal_Bool impldbg_checkParameter_OTasksAccessCtor(	const	css::uno::Reference< css::frame::XDesktop >&	xOwner	,
                                                                             FrameContainer*                                 pTasks  );
 
-    #endif  // #ifdef ENABLE_ASSERTIONS
+    #endif	// #ifdef ENABLE_ASSERTIONS
 
     //-------------------------------------------------------------------------------------------------------------
-    //  variables
-    //  (should be private everyway!)
+    //	variables
+    //	(should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
-        css::uno::WeakReference< css::frame::XDesktop >     m_xOwner            ;   /// weak reference to the desktop object!
-        FrameContainer*                                     m_pTasks            ;   /// pointer to list of current tasks on desktop (is a member of class Desktop!)
+        css::uno::WeakReference< css::frame::XDesktop >		m_xOwner			;	/// weak reference to the desktop object!
+        FrameContainer*										m_pTasks			;	/// pointer to list of current tasks on desktop (is a member of class Desktop!)
                                                                                     /// This pointer is valid only, if weakreference can be locked.
 
-};      //  class OTasksAccess
+};		//	class OTasksAccess
 
-}       //  namespace framework
+}		//	namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_HELPER_OTASKSACCESS_HXX_
+#endif	//	#ifndef __FRAMEWORK_HELPER_OTASKSACCESS_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

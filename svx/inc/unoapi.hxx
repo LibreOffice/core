@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ SVX_DLLPUBLIC sal_Bool SvxFieldUnitToMeasureUnit( const short nVcl, short& eApi 
 SVX_DLLPUBLIC void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalName, rtl::OUString& rApiName ) throw();
 
 /** if the given name is a predefined api name it is replaced by the predefined name
-    for the current language.
+    for the current	language.
 */
 SVX_DLLPUBLIC void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& rApiName, String& rInternalName ) throw();
 

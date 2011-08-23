@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,11 +48,11 @@ namespace hierarchy_ucp {
 
 #define HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME \
                 "com.sun.star.ucb.HierarchyContentProvider"
-#define HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME_LENGTH  41
+#define HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME_LENGTH	41
 
 #define HIERARCHY_URL_SCHEME \
                 "vnd.sun.star.hier"
-#define HIERARCHY_URL_SCHEME_LENGTH 17
+#define HIERARCHY_URL_SCHEME_LENGTH	17
 
 #define HIERARCHY_FOLDER_CONTENT_TYPE \
                 "application/" HIERARCHY_URL_SCHEME "-folder"

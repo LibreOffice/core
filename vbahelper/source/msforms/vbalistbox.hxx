@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@
 typedef cppu::ImplInheritanceHelper2<ScVbaControl, ov::msforms::XListBox, css::script::XDefaultProperty > ListBoxImpl_BASE;
 class ScVbaListBox : public ListBoxImpl_BASE
     ,public PropListener
-{
+{		
     std::auto_ptr< ListControlHelper > mpListHelper;
-    rtl::OUString sSourceName;
+    rtl::OUString sSourceName; 
     rtl::OUString msDftPropName;
 
     sal_Int16 m_nIndex;
-
+    
 public:
     ScVbaListBox( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper );
 
@@ -73,10 +73,10 @@ public:
 
     // XDefaultProperty
     rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString::createFromAscii("Value"); }
-
+    
     //XHelperInterface
     virtual rtl::OUString& getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();    
 
     //PropListener
     virtual void setValueEvent( const css::uno::Any& value );

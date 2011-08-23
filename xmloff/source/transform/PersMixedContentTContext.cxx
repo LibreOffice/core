@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class XMLPersTextTContext_Impl : public XMLTransformerContext
 public:
     TYPEINFO();
 
-    XMLPersTextTContext_Impl( XMLTransformerBase& rTransformer,
+    XMLPersTextTContext_Impl( XMLTransformerBase& rTransformer, 
                            const ::rtl::OUString& rChars );
     virtual ~XMLPersTextTContext_Impl();
 
@@ -63,8 +63,8 @@ public:
 
 TYPEINIT1( XMLPersTextTContext_Impl, XMLTransformerContext );
 
-XMLPersTextTContext_Impl::XMLPersTextTContext_Impl(
-        XMLTransformerBase& rImp,
+XMLPersTextTContext_Impl::XMLPersTextTContext_Impl( 
+        XMLTransformerBase& rImp, 
         const OUString& rChars ) :
     XMLTransformerContext( rImp, OUString() ),
     m_aCharacters( rChars )
@@ -85,7 +85,7 @@ XMLTransformerContext *XMLPersTextTContext_Impl::CreateChildContext(
     return 0;
 }
 
-void XMLPersTextTContext_Impl::StartElement(
+void XMLPersTextTContext_Impl::StartElement( 
     const Reference< XAttributeList >& )
 {
     OSL_ENSURE( !this, "illegal call to StartElement" );
@@ -115,23 +115,23 @@ void XMLPersTextTContext_Impl::Export()
 
 TYPEINIT1( XMLPersMixedContentTContext, XMLPersElemContentTContext );
 
-XMLPersMixedContentTContext::XMLPersMixedContentTContext(
-        XMLTransformerBase& rImp,
+XMLPersMixedContentTContext::XMLPersMixedContentTContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName ) :
     XMLPersElemContentTContext( rImp, rQName )
 {
 }
 
-XMLPersMixedContentTContext::XMLPersMixedContentTContext(
-        XMLTransformerBase& rImp,
+XMLPersMixedContentTContext::XMLPersMixedContentTContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName,
        sal_uInt16 nActionMap ) :
     XMLPersElemContentTContext( rImp, rQName, nActionMap )
 {
 }
 
-XMLPersMixedContentTContext::XMLPersMixedContentTContext(
-        XMLTransformerBase& rImp,
+XMLPersMixedContentTContext::XMLPersMixedContentTContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName,
         sal_uInt16 nPrefix,
         ::xmloff::token::XMLTokenEnum eToken ) :
@@ -139,8 +139,8 @@ XMLPersMixedContentTContext::XMLPersMixedContentTContext(
 {
 }
 
-XMLPersMixedContentTContext::XMLPersMixedContentTContext(
-        XMLTransformerBase& rImp,
+XMLPersMixedContentTContext::XMLPersMixedContentTContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName,
         sal_uInt16 nPrefix,
         ::xmloff::token::XMLTokenEnum eToken,

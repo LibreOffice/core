@@ -101,10 +101,10 @@ bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                 switch ( (SvxCellHorJustify)GetValue() )
                 {
                     case SVX_HOR_JUSTIFY_STANDARD: eUno = table::CellHoriJustify_STANDARD; break;
-                    case SVX_HOR_JUSTIFY_LEFT:     eUno = table::CellHoriJustify_LEFT;     break;
+                    case SVX_HOR_JUSTIFY_LEFT:	   eUno = table::CellHoriJustify_LEFT;	   break;
                     case SVX_HOR_JUSTIFY_CENTER:   eUno = table::CellHoriJustify_CENTER;   break;
-                    case SVX_HOR_JUSTIFY_RIGHT:    eUno = table::CellHoriJustify_RIGHT;    break;
-                    case SVX_HOR_JUSTIFY_BLOCK:    eUno = table::CellHoriJustify_BLOCK;    break;
+                    case SVX_HOR_JUSTIFY_RIGHT:	   eUno = table::CellHoriJustify_RIGHT;	   break;
+                    case SVX_HOR_JUSTIFY_BLOCK:	   eUno = table::CellHoriJustify_BLOCK;	   break;
                     case SVX_HOR_JUSTIFY_REPEAT:   eUno = table::CellHoriJustify_REPEAT;   break;
                 }
                 rVal <<= eUno;
@@ -112,8 +112,8 @@ bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             break;
         case MID_HORJUST_ADJUST:
             {
-                //  ParagraphAdjust values, as in SvxAdjustItem
-                //  (same value for ParaAdjust and ParaLastLineAdjust)
+                //	ParagraphAdjust values, as in SvxAdjustItem
+                //	(same value for ParaAdjust and ParaLastLineAdjust)
 
                 sal_Int16 nAdjust = style::ParagraphAdjust_LEFT;
                 switch ( (SvxCellHorJustify)GetValue() )
@@ -121,12 +121,12 @@ bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                     // ParagraphAdjust_LEFT is used for STANDARD and REPEAT
                     case SVX_HOR_JUSTIFY_STANDARD:
                     case SVX_HOR_JUSTIFY_REPEAT:
-                    case SVX_HOR_JUSTIFY_LEFT:   nAdjust = style::ParagraphAdjust_LEFT;   break;
+                    case SVX_HOR_JUSTIFY_LEFT:	 nAdjust = style::ParagraphAdjust_LEFT;	  break;
                     case SVX_HOR_JUSTIFY_CENTER: nAdjust = style::ParagraphAdjust_CENTER; break;
-                    case SVX_HOR_JUSTIFY_RIGHT:  nAdjust = style::ParagraphAdjust_RIGHT;  break;
-                    case SVX_HOR_JUSTIFY_BLOCK:  nAdjust = style::ParagraphAdjust_BLOCK;  break;
+                    case SVX_HOR_JUSTIFY_RIGHT:	 nAdjust = style::ParagraphAdjust_RIGHT;  break;
+                    case SVX_HOR_JUSTIFY_BLOCK:	 nAdjust = style::ParagraphAdjust_BLOCK;  break;
                 }
-                rVal <<= nAdjust;       // as sal_Int16
+                rVal <<= nAdjust;		// as sal_Int16
             }
             break;
     }
@@ -152,10 +152,10 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 switch (eUno)
                 {
                     case table::CellHoriJustify_STANDARD: eSvx = SVX_HOR_JUSTIFY_STANDARD; break;
-                    case table::CellHoriJustify_LEFT:     eSvx = SVX_HOR_JUSTIFY_LEFT;     break;
+                    case table::CellHoriJustify_LEFT:	  eSvx = SVX_HOR_JUSTIFY_LEFT;	   break;
                     case table::CellHoriJustify_CENTER:   eSvx = SVX_HOR_JUSTIFY_CENTER;   break;
-                    case table::CellHoriJustify_RIGHT:    eSvx = SVX_HOR_JUSTIFY_RIGHT;    break;
-                    case table::CellHoriJustify_BLOCK:    eSvx = SVX_HOR_JUSTIFY_BLOCK;    break;
+                    case table::CellHoriJustify_RIGHT:	  eSvx = SVX_HOR_JUSTIFY_RIGHT;	   break;
+                    case table::CellHoriJustify_BLOCK:	  eSvx = SVX_HOR_JUSTIFY_BLOCK;	   break;
                     case table::CellHoriJustify_REPEAT:   eSvx = SVX_HOR_JUSTIFY_REPEAT;   break;
                     default: ; //prevent warning
                 }
@@ -164,7 +164,7 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             break;
         case MID_HORJUST_ADJUST:
             {
-                //  property contains ParagraphAdjust values as sal_Int16
+                //	property contains ParagraphAdjust values as sal_Int16
                 sal_Int16 nVal = sal_Int16();
                 if(!(rVal >>= nVal))
                     return false;
@@ -172,7 +172,7 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 SvxCellHorJustify eSvx = SVX_HOR_JUSTIFY_STANDARD;
                 switch (nVal)
                 {
-                    //  STRETCH is treated as BLOCK
+                    //	STRETCH is treated as BLOCK
                     case style::ParagraphAdjust_LEFT:    eSvx = SVX_HOR_JUSTIFY_LEFT;   break;
                     case style::ParagraphAdjust_RIGHT:   eSvx = SVX_HOR_JUSTIFY_RIGHT;  break;
                     case style::ParagraphAdjust_STRETCH:
@@ -212,7 +212,7 @@ SfxPoolItem* SvxHorJustifyItem::Create( SvStream& rStream, USHORT ) const
 
 USHORT SvxHorJustifyItem::GetValueCount() const
 {
-    return SVX_HOR_JUSTIFY_REPEAT + 1;  // letzter Enum-Wert + 1
+    return SVX_HOR_JUSTIFY_REPEAT + 1;	// letzter Enum-Wert + 1
 }
 
 // class SvxVerJustifyItem -----------------------------------------------
@@ -264,9 +264,9 @@ bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                 style::VerticalAlignment eUno = style::VerticalAlignment_TOP;
                 switch ( (SvxCellVerJustify)GetValue() )
                 {
-                    case SVX_VER_JUSTIFY_TOP:      eUno = style::VerticalAlignment_TOP;     break;
-                    case SVX_VER_JUSTIFY_CENTER:   eUno = style::VerticalAlignment_MIDDLE;  break;
-                    case SVX_VER_JUSTIFY_BOTTOM:   eUno = style::VerticalAlignment_BOTTOM;  break;
+                    case SVX_VER_JUSTIFY_TOP:	   eUno = style::VerticalAlignment_TOP;	    break;
+                    case SVX_VER_JUSTIFY_CENTER:   eUno = style::VerticalAlignment_MIDDLE;	break;
+                    case SVX_VER_JUSTIFY_BOTTOM:   eUno = style::VerticalAlignment_BOTTOM;	break;
                     default: ; //prevent warning
                 }
                 rVal <<= eUno;
@@ -298,7 +298,7 @@ bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     {
         case MID_HORJUST_ADJUST:
             {
-                //  property contains ParagraphAdjust values as sal_Int16
+                //	property contains ParagraphAdjust values as sal_Int16
                 style::VerticalAlignment nVal = style::VerticalAlignment_TOP;
                 if(!(rVal >>= nVal))
                     return false;
@@ -368,7 +368,7 @@ SfxPoolItem* SvxVerJustifyItem::Create( SvStream& rStream, USHORT ) const
 
 USHORT SvxVerJustifyItem::GetValueCount() const
 {
-    return SVX_VER_JUSTIFY_BOTTOM + 1;  // letzter Enum-Wert + 1
+    return SVX_VER_JUSTIFY_BOTTOM + 1;	// letzter Enum-Wert + 1
 }
 
 
@@ -473,7 +473,7 @@ SfxPoolItem* SvxJustifyMethodItem::Create( SvStream& rStream, USHORT ) const
 
 USHORT SvxJustifyMethodItem::GetValueCount() const
 {
-    return SVX_JUSTIFY_METHOD_DISTRIBUTE + 1;   // letzter Enum-Wert + 1
+    return SVX_JUSTIFY_METHOD_DISTRIBUTE + 1;	// letzter Enum-Wert + 1
 }
 
 SvxJustifyMethodItem& SvxJustifyMethodItem::operator=(const SvxJustifyMethodItem& r)

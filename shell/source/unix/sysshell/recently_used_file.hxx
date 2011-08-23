@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 //##################################
 // simple wrapper around the recently_used_file
-
+    
 class recently_used_file
 {
 public:
@@ -47,23 +47,23 @@ public:
     //----------------------------
     // set file pointer to the start of file
     void reset() const;
-
+    
     //----------------------------
     void truncate(off_t length = 0);
-
+    
     //----------------------------
     size_t read(
-        char* buffer,
+        char* buffer, 
         size_t size) const;
-
+    
     //----------------------------
     void write(const char* buffer, size_t size) const;
 
     //----------------------------
     bool eof() const;
-
-private:
-    FILE* file_;
+    
+private:    
+    FILE* file_;    
 };
 
 #endif // INCLUDED_RECENTLY_USED_FILE_HXX

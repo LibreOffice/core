@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace rtl
 
 // class SvxLanguageItem -------------------------------------------------
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Dieses Item beschreibt eine Sprache.
 */
@@ -63,7 +63,7 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
+    virtual SvStream&		Store(SvStream &, USHORT nItemVersion) const;
     virtual USHORT          GetValueCount() const;
 
     inline SvxLanguageItem& operator=(const SvxLanguageItem& rLang)
@@ -73,12 +73,12 @@ public:
         }
 
     // enum cast
-    LanguageType            GetLanguage() const
+    LanguageType 			GetLanguage() const
                                 { return (LanguageType)GetValue(); }
-    void                    SetLanguage( const LanguageType eLang )
+    void 					SetLanguage( const LanguageType eLang )
                                 { SetValue( (USHORT)eLang ); }
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 #endif

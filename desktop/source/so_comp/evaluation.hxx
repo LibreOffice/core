@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,32 +52,32 @@ namespace desktop {
 
 class SOEvaluation : public ::cppu::WeakImplHelper4< XExactName, XMaterialHolder, XComponent, XServiceInfo >
 {
-    ::osl::Mutex                        m_aMutex;
-    ::cppu::OInterfaceContainerHelper   m_aListeners;
-    Reference< XMultiServiceFactory >   m_xServiceManager;
+    ::osl::Mutex						m_aMutex;
+    ::cppu::OInterfaceContainerHelper	m_aListeners;
+    Reference< XMultiServiceFactory >	m_xServiceManager;
 
 public:
                             SOEvaluation( const Reference < XMultiServiceFactory >& xFactory );
     virtual                 ~SOEvaluation();
 
-    static Reference< XSingleServiceFactory >   GetSOEvaluationFactory( Reference< XMultiServiceFactory > & xSMgr );
-    static ::rtl::OUString                      GetImplementationName();
-    static Sequence< rtl::OUString >            GetSupportedServiceNames();
+    static Reference< XSingleServiceFactory >	GetSOEvaluationFactory( Reference< XMultiServiceFactory > & xSMgr );
+    static ::rtl::OUString						GetImplementationName();
+    static Sequence< rtl::OUString >			GetSupportedServiceNames();
 
     // XComponent
-    virtual void SAL_CALL               dispose() throw ( RuntimeException );
-    virtual void SAL_CALL               addEventListener( const Reference< XEventListener > & aListener) throw ( RuntimeException );
-    virtual void SAL_CALL               removeEventListener(const Reference< XEventListener > & aListener) throw ( RuntimeException );
+    virtual void SAL_CALL				dispose() throw ( RuntimeException );
+    virtual void SAL_CALL				addEventListener( const Reference< XEventListener > & aListener) throw ( RuntimeException );
+    virtual void SAL_CALL				removeEventListener(const Reference< XEventListener > & aListener) throw ( RuntimeException );
 
     // XExactName
-    virtual rtl::OUString SAL_CALL      getExactName( const rtl::OUString& rApproximateName ) throw ( RuntimeException );
+    virtual rtl::OUString SAL_CALL		getExactName( const rtl::OUString& rApproximateName ) throw ( RuntimeException );
 
     // XMaterialHolder
-    virtual Any SAL_CALL                getMaterial() throw ( RuntimeException );
+    virtual Any SAL_CALL				getMaterial() throw ( RuntimeException );
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL    getImplementationName() throw ( RuntimeException );
-    virtual sal_Bool SAL_CALL           supportsService( const ::rtl::OUString& rServiceName ) throw ( RuntimeException );
+    virtual ::rtl::OUString SAL_CALL	getImplementationName() throw ( RuntimeException );
+    virtual sal_Bool SAL_CALL			supportsService( const ::rtl::OUString& rServiceName ) throw ( RuntimeException );
     virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw ( RuntimeException );
 
     static const char* interfaces[];

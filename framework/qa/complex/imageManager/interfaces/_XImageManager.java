@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public class _XImageManager {
         this.tEnv = tEnv;
         this.oObj = oObj;
     }
-
+    
     public boolean _getAllImageNames() {
         short s = ImageType.COLOR_NORMAL + ImageType.SIZE_DEFAULT;
         imageNames = oObj.getAllImageNames(s);
@@ -55,7 +55,7 @@ public class _XImageManager {
             System.out.println("###### Image: " + imageNames[i]);
         return imageNames != null;
     }
-
+    
     public boolean _getImages() {
         short s = ImageType.COLOR_NORMAL + ImageType.SIZE_DEFAULT;
         try {
@@ -65,12 +65,12 @@ public class _XImageManager {
         }
         return xGraphicArray != null;
     }
-
+    
     public boolean _hasImage() {
         boolean result = true;
         short s = ImageType.COLOR_NORMAL + ImageType.SIZE_DEFAULT;
         try { // check the first image names, 10 at max
-            for (int i=0; i<(imageNames.length>10?10:imageNames.length); i++)
+            for (int i=0; i<(imageNames.length>10?10:imageNames.length); i++) 
                 result &= oObj.hasImage(s, imageNames[i]);
         }
         catch(com.sun.star.lang.IllegalArgumentException e) {
@@ -79,7 +79,7 @@ public class _XImageManager {
         }
         return result;
     }
-
+    
     public boolean _insertImages() {
         try {
             oObj.insertImages((short)imageNames.length, imageNames, xGraphicArray);
@@ -92,7 +92,7 @@ public class _XImageManager {
         }
         return true;
     }
-
+    
     public boolean _removeImages() {
         try {
             oObj.removeImages((short)(imageNames.length-1), imageNames);
@@ -103,11 +103,11 @@ public class _XImageManager {
         }
         return true;
     }
-
+    
     public boolean _replaceImages() {
         return true;
     }
-
+    
     public boolean _reset() {
         return true;
     }

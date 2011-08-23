@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,10 +55,10 @@ class FmFormShell;
 //========================================================================
 class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
 {
-    sal_Bool        m_bInitialStateChange;
+    sal_Bool		m_bInitialStateChange;
     bool            m_bInStateChange;
     ::rtl::OUString m_sLastActivePage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > 
                         m_xInspectorContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                     m_xORB;
@@ -89,7 +89,7 @@ protected:
 
 public:
     FmPropBrw(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&	_xORB,
         SfxBindings* pBindings,
         SfxChildWindow* pMgr,
         Window* pParent,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 #include "svl/inettype.hxx"
 #include "unotools/pathoptions.hxx"
 
-#include <l10ntools/compilehelp.hxx>
+#include <l10ntools/compilehelp.hxx> 
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
@@ -68,7 +68,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         BackendImpl * getMyBackend() const;
 
 //        HelpBackendDb::Data m_dbData;
-
+        
         // Package
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
@@ -112,15 +112,15 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     Reference< ucb::XSimpleFileAccess > getFileAccess( void );
     Reference< ucb::XSimpleFileAccess > m_xSFA;
-
+    
     const Reference<deployment::XPackageTypeInfo> m_xHelpTypeInfo;
     Sequence< Reference<deployment::XPackageTypeInfo> > m_typeInfos;
     std::auto_ptr<HelpBackendDb> m_backendDb;
-
+    
 public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
-
+    
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
         getSupportedPackageTypes() throw (RuntimeException);
@@ -175,7 +175,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         throw lang::IllegalArgumentException(
             StrCannotDetectMediaType::get() + url,
             static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
-
+    
     String type, subType;
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType_, type, subType, &params ))
@@ -194,7 +194,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     "vnd.sun.star.help"))
             {
                 return new PackageImpl(
-                    this, url, name, m_xHelpTypeInfo, bRemoved,
+                    this, url, name, m_xHelpTypeInfo, bRemoved, 
                     identifier);
             }
         }
@@ -238,7 +238,7 @@ BackendImpl::PackageImpl::PackageImpl(
 {
 //         if (bRemoved)
 //         {
-//             ::boost::optional<HelpBackendDb::Data> opt =
+//             ::boost::optional<HelpBackendDb::Data> opt = 
 //                 getMyBackend()->readDataFromDb(url);
 //             if (opt)
 //                 m_dbData = *opt;
@@ -250,23 +250,23 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
     if (NULL == pBackend)
-    {
+    {    
         //May throw a DisposedException
         check();
         //We should never get here...
         throw RuntimeException(
-            OUSTR("Failed to get the BackendImpl"),
+            OUSTR("Failed to get the BackendImpl"), 
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
     return pBackend;
 }
 
 
-bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
+bool BackendImpl::PackageImpl::extensionContainsCompiledHelp() 
 {
     bool bCompiled = true;
     rtl::OUString aExpandedHelpURL = dp_misc::expandUnoRcUrl(getURL());
-
+    
     ::osl::Directory helpFolder(aExpandedHelpURL);
     if ( helpFolder.open() == ::osl::File::E_None)
     {
@@ -284,7 +284,7 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
             {
                 if (stat.getFileType() != ::osl::FileStatus::Directory)
                     continue;
-
+                
                 //look if there is the folder help.idxl in the language folder
                 OUString compUrl(stat.getFileURL() + OUSTR("/help.idxl"));
                 ::osl::Directory compiledFolder(compUrl);
@@ -307,7 +307,7 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
         {
             //Error
             OSL_ASSERT(0);
-            bCompiled = false;
+            bCompiled = false;    
         }
     }
     return bCompiled;
@@ -355,11 +355,11 @@ beans::Optional< OUString > BackendImpl::PackageImpl::getRegistrationDataURL()
 
     ::boost::optional<HelpBackendDb::Data> data =
           getMyBackend()->readDataFromDb(getURL());
-
+    
     if (data)
         return beans::Optional<OUString>(true, data->dataUrl);
 
-    return beans::Optional<OUString>(true, OUString());
+    return beans::Optional<OUString>(true, OUString());    
 }
 
 
@@ -406,7 +406,7 @@ void BackendImpl::implProcessHelp
             {
                 try
                 {
-                    xInvocation = Reference< script::XInvocation >(
+                    xInvocation = Reference< script::XInvocation >( 
                         xContext->getServiceManager()->createInstanceWithContext( rtl::OUString::createFromAscii(
                                                                                       "com.sun.star.help.HelpIndexer" ), xContext ) , UNO_QUERY );
                 }
@@ -441,12 +441,12 @@ void BackendImpl::implProcessHelp
                     ::dp_misc::create_folder(
                         &langFolderContent,
                         langFolderDest, xCmdEnv);
-
+                
                     rtl::OUString aJarFile(
                         makeURL(sHelpFolder, langFolderURLSegment + aSlash + aHelpStr +
                                 OUSTR(".jar")));
                     aJarFile = ::dp_misc::expandUnoRcUrl(aJarFile);
-
+                
                     rtl::OUString aEncodedJarFilePath = rtl::Uri::encode(
                         aJarFile, rtl_UriCharClassPchar,
                         rtl_UriEncodeIgnoreEscapes,
@@ -487,7 +487,7 @@ void BackendImpl::implProcessHelp
 
                     rtl::OUString aOfficeHelpPath( SvtPathOptions().GetHelpPath() );
                     rtl::OUString aOfficeHelpPathFileURL;
-                    ::osl::File::getFileURLFromSystemPath( aOfficeHelpPath, aOfficeHelpPathFileURL );
+                    ::osl::File::getFileURLFromSystemPath( aOfficeHelpPath, aOfficeHelpPathFileURL ); 
 
                     HelpProcessingErrorInfo aErrorInfo;
                     bool bSuccess = compileExtensionHelp(
@@ -530,8 +530,8 @@ void BackendImpl::implProcessHelp
                         switch( aErrorInfo.m_eErrorClass )
                         {
                         case HELPPROCESSING_GENERAL_ERROR:
-                        case HELPPROCESSING_INTERNAL_ERROR:     nErrStrId = RID_STR_HELPPROCESSING_GENERAL_ERROR; break;
-                        case HELPPROCESSING_XMLPARSING_ERROR:   nErrStrId = RID_STR_HELPPROCESSING_XMLPARSING_ERROR; break;
+                        case HELPPROCESSING_INTERNAL_ERROR:		nErrStrId = RID_STR_HELPPROCESSING_GENERAL_ERROR; break;
+                        case HELPPROCESSING_XMLPARSING_ERROR:	nErrStrId = RID_STR_HELPPROCESSING_XMLPARSING_ERROR; break;
                         default: ;
                         };
 
@@ -627,7 +627,7 @@ Reference< ucb::XSimpleFileAccess > BackendImpl::getFileAccess( void )
         Reference<XComponentContext> const & xContext = getComponentContext();
         if( xContext.is() )
         {
-            m_xSFA = Reference< ucb::XSimpleFileAccess >(
+            m_xSFA = Reference< ucb::XSimpleFileAccess >( 
                 xContext->getServiceManager()->createInstanceWithContext(
                     rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
                     xContext ), UNO_QUERY );
@@ -635,7 +635,7 @@ Reference< ucb::XSimpleFileAccess > BackendImpl::getFileAccess( void )
         if( !m_xSFA.is() )
         {
             throw RuntimeException(
-                ::rtl::OUString::createFromAscii(
+                ::rtl::OUString::createFromAscii( 
                 "dp_registry::backend::help::BackendImpl::getFileAccess(), "
                 "could not instatiate SimpleFileAccess." ),
                 Reference< XInterface >() );

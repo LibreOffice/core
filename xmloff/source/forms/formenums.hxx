@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,14 +67,14 @@ namespace xmloff
         };
 
     private:
-        static const SvXMLEnumMapEntry* s_pEnumMap[KNOWN_ENUM_PROPERTIES];
+        static const SvXMLEnumMapEntry*	s_pEnumMap[KNOWN_ENUM_PROPERTIES];
 
     public:
-        static const SvXMLEnumMapEntry* getEnumMap(EnumProperties _eProperty);
+        static const SvXMLEnumMapEntry*	getEnumMap(EnumProperties _eProperty);
     };
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMENUMS_HXX_

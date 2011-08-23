@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 namespace gio
 {
 
-class OutputStream :
+class OutputStream : 
     public ::com::sun::star::io::XOutputStream,
     public Seekable
 {
@@ -52,7 +52,7 @@ private:
 public:
     OutputStream ( GFileOutputStream *pStream );
     virtual ~OutputStream();
-
+    
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & type )
             throw( ::com::sun::star::uno::RuntimeException );
@@ -65,14 +65,14 @@ public:
                   com::sun::star::io::BufferSizeExceededException,
                   com::sun::star::io::IOException,
                   com::sun::star::uno::RuntimeException);
-
+    
    virtual void SAL_CALL flush( void )
            throw( com::sun::star::io::NotConnectedException,
                   com::sun::star::io::BufferSizeExceededException,
                   com::sun::star::io::IOException,
                   com::sun::star::uno::RuntimeException);
-
-
+    
+    
     virtual void SAL_CALL closeOutput( void )
            throw( com::sun::star::io::NotConnectedException,
                   com::sun::star::io::IOException,

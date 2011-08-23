@@ -17,7 +17,7 @@
 
 struct less_functor
 {
-    bool operator()(const ::rtl::OUString& x,
+    bool operator()(const ::rtl::OUString& x, 
                     const ::rtl::OUString& y) const
     {
         return 0 != (x<y);

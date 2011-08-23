@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,12 +76,12 @@ private:
     static rtl::Reference< ::comphelper::FastPropertySetInfo > getStaticPropertySetInfo();
 
     TableModelRef mxTableModel;
-    sal_Int32   mnColumn;
-    sal_Int32   mnWidth;
-    sal_Bool    mbOptimalWidth;
-    sal_Bool    mbIsVisible;
-    sal_Bool    mbIsStartOfNewPage;
-    ::rtl::OUString maName;
+    sal_Int32	mnColumn;
+    sal_Int32	mnWidth;
+    sal_Bool	mbOptimalWidth;
+    sal_Bool	mbIsVisible;
+    sal_Bool	mbIsStartOfNewPage;
+    ::rtl::OUString	maName;
 };
 
 } }

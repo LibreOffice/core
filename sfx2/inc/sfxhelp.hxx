@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@ class SFX2_DLLPUBLIC SfxHelp : public Help
 {
     String          aTicket;        // for Plugins
     String          aUser;
-    String          aLanguageStr;
-    String          aCountryStr;
-    sal_Bool        bIsDebug;
+    String			aLanguageStr;
+    String			aCountryStr;
+    sal_Bool		bIsDebug;
     SfxHelp_Impl*   pImp;
 
 private:

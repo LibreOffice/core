@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_UIELEMENT_ITEMCONTAINER_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/threadhelpbase.hxx>
@@ -40,14 +40,14 @@
 #include <helper/shareablemutex.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -69,13 +69,13 @@ class ItemContainer :   public ::cppu::WeakImplHelper1< ::com::sun::star::contai
         virtual ~ItemContainer();
 
         //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider
+        //	XInterface, XTypeProvider
         //---------------------------------------------------------------------------------------------------------
         // XUnoTunnel
-        static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
-        static ItemContainer*                                       GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
-        sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-
+        static const ::com::sun::star::uno::Sequence< sal_Int8 >&	GetUnoTunnelId() throw();
+        static ItemContainer*								        GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
+        sal_Int64													SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+        
         // XIndexContainer
         virtual void SAL_CALL insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -108,11 +108,11 @@ class ItemContainer :   public ::cppu::WeakImplHelper1< ::com::sun::star::contai
         ItemContainer();
         void copyItemContainer( const std::vector< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& rSourceVector, const ShareableMutex& rMutex );
         com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > deepCopyContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rSubContainer, const ShareableMutex& rMutex );
-
+        
         mutable ShareableMutex                                                               m_aShareMutex;
         std::vector< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > m_aItemVector;
 };
-
+                            
 }
 
 #endif // #ifndef __FRAMEWORK_UIELEMENT_ITEMCONTAINER_HXX_

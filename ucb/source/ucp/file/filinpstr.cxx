@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ XInputStream_impl::XInputStream_impl( shell* pMyShell,const rtl::OUString& aUncP
     {
         m_nIsOpen = false;
         m_aFile.close();
-
+    
         m_nErrorCode = TASKHANDLING_OPEN_FOR_INPUTSTREAM;
         m_nMinorErrorCode = err;
     }
@@ -79,7 +79,7 @@ XInputStream_impl::~XInputStream_impl()
     catch (uno::RuntimeException const &)
     {
         OSL_ENSURE(false, "unexpected situation");
-    }
+    }	
 }
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,25 +40,25 @@ class SdrObject;
 class SdrPageView;
 class SetOfByte;
 class SdrObjList;
-namespace sdr { namespace contact { class ViewObjectContact; }}
+namespace sdr { namespace contact {	class ViewObjectContact; }}
 namespace basegfx { class B2DPoint; }
 
 /////////////////////////////////////////////////////////////////////
 // Wrappers for classic Sdr* Mode/View classes
 
 SVX_DLLPUBLIC SdrObject* SdrObjectPrimitiveHit(
-    const SdrObject& rObject,
-    const Point& rPnt,
-    sal_uInt16 nTol,
-    const SdrPageView& rSdrPageView,
+    const SdrObject& rObject, 
+    const Point& rPnt, 
+    sal_uInt16 nTol, 
+    const SdrPageView& rSdrPageView, 
     const SetOfByte* pVisiLayer,
     bool bTextOnly);
 
 SVX_DLLPUBLIC SdrObject* SdrObjListPrimitiveHit(
-    const SdrObjList& rList,
-    const Point& rPnt,
-    sal_uInt16 nTol,
-    const SdrPageView& rSdrPageView,
+    const SdrObjList& rList, 
+    const Point& rPnt, 
+    sal_uInt16 nTol, 
+    const SdrPageView& rSdrPageView, 
     const SetOfByte* pVisiLayer,
     bool bTextOnly);
 
@@ -66,8 +66,8 @@ SVX_DLLPUBLIC SdrObject* SdrObjListPrimitiveHit(
 // the pure HitTest based on a VOC
 
 SVX_DLLPUBLIC bool ViewObjectContactPrimitiveHit(
-    const sdr::contact::ViewObjectContact& rVOC,
-    const basegfx::B2DPoint& rHitPosition,
+    const sdr::contact::ViewObjectContact& rVOC, 
+    const basegfx::B2DPoint& rHitPosition, 
     double fLogicHitTolerance,
     bool bTextOnly);
 

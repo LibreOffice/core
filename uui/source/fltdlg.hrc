@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,11 +28,11 @@
 #ifndef UUI_FLTDLG_HRC
 #define UUI_FLTDLG_HRC
 
-#define BTN_OK                      20
-#define BTN_CANCEL                  21
-#define BTN_HELP                    22
+#define BTN_OK						20
+#define BTN_CANCEL					21
+#define BTN_HELP					22
 
-#define FT_URL                      30
-#define LB_FILTERS                  31
+#define	FT_URL						30
+#define LB_FILTERS					31
 
-#endif /* UUI_FLTDLG_HRC */
+#endif /* UUI_FLTDLG_HRC */ 

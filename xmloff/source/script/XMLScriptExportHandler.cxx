@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,8 +60,8 @@ void XMLScriptExportHandler::Export(
     Sequence<PropertyValue> & rValues,
     sal_Bool bUseWhitespace)
 {
-
-    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_LANGUAGE,
+    
+    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_LANGUAGE, 
                          rExport.GetNamespaceMap().GetQNameByKey(
                              XML_NAMESPACE_OOO, GetXMLToken(XML_SCRIPT) ) );
     rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, rEventQName);
@@ -81,8 +81,8 @@ void XMLScriptExportHandler::Export(
         // else: disregard
     }
 
-    SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT,
-                                   XML_EVENT_LISTENER,
+    SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT, 
+                                   XML_EVENT_LISTENER, 
                                    bUseWhitespace, sal_False);
 }
 

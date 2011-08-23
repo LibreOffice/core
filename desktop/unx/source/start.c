@@ -56,7 +56,7 @@
  */
 #define QSEND_AND_REPORT "-qsend-and-report"
 
-#define IMG_SUFFIX       ".png"
+#define IMG_SUFFIX	     ".png"
 #define PIPEDEFAULTPATH      "/tmp"
 #define PIPEALTERNATEPATH    "/var/tmp"
 

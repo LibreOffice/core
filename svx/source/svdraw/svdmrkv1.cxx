@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,7 +135,7 @@ BOOL SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, BOOL bUnmark)
 {
     if (pHdl==NULL || pHdl->IsPlusHdl() || pHdl->GetKind()==HDL_GLUE)
         return FALSE;
-
+    
     if (pHdl->IsSelected() != bUnmark)
         return FALSE;
 
@@ -172,7 +172,7 @@ BOOL SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, BOOL bUnmark)
     pHdl->SetSelected(!bUnmark);
     if (!bPlusHdlAlways)
     {
-        if (!bUnmark)
+        if (!bUnmark) 
         {
             sal_uInt32 nAnz(pObj->GetPlusHdlCount(*pHdl));
             for (sal_uInt32 i=0; i<nAnz; i++)
@@ -186,7 +186,7 @@ BOOL SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, BOOL bUnmark)
                     aHdl.AddHdl(pPlusHdl);
                 }
             }
-        }
+        } 
         else
         {
             for (ULONG i = aHdl.GetHdlCount(); i>0;)
@@ -385,25 +385,25 @@ void SdrMarkView::UndirtyMrkPnt() const
                 // Eintraege die groesser sind als die Punktanzahl des Objekts
                 sal_uInt32 nMax(pObj->GetPointCount());
                 sal_uInt32 nPtNum(0xffffffff);
-
+                
                 pPts->ForceSort();
-
-                for (sal_uInt32 nIndex(pPts->GetCount()); nIndex > 0L && nPtNum >= nMax;)
+                
+                for (sal_uInt32 nIndex(pPts->GetCount()); nIndex > 0L && nPtNum >= nMax;) 
                 {
                     nIndex--;
                     nPtNum = pPts->GetObject(nIndex);
 
-                    if(nPtNum >= nMax)
+                    if(nPtNum >= nMax) 
                     {
                         pPts->Remove(nIndex);
                         bChg = TRUE;
                     }
                 }
-            }
-            else
+            } 
+            else 
             {
                 DBG_ERROR("SdrMarkView::UndirtyMrkPnt(): Markierte Punkte an einem Objekt, dass kein PolyObj ist!");
-                if(pPts && pPts->GetCount())
+                if(pPts && pPts->GetCount()) 
                 {
                     pPts->Clear();
                     bChg = TRUE;
@@ -604,7 +604,7 @@ BOOL SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, USHORT& rn
         const SdrGluePointList* pGPL=pObj->GetGluePointList();
         if (pGPL!=NULL) {
             USHORT nNum=pGPL->HitTest(rPnt,*pOut,pObj,bBack,bNext,nId0);
-            if (nNum!=SDRGLUEPOINT_NOTFOUND)
+            if (nNum!=SDRGLUEPOINT_NOTFOUND) 
             {
                 // #i38892#
                 const SdrGluePoint& rCandidate = (*pGPL)[nNum];

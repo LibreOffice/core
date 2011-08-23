@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,21 +52,21 @@ namespace drawinglayer
             transformation as Child-content. This allows re-usage of the
             refcounted Uno-Api primitives and their existung, buffered
             decompositions.
-
-            It could e.g. be used to show a single object geometry in 1000
-            different, transformed states without the need to create those
+            
+            It could e.g. be used to show a single object geometry in 1000 
+            different, transformed states without the need to create those 
             thousand primitive contents.
          */
         class TransformPrimitive2D : public GroupPrimitive2D
         {
         private:
             // the transformation to apply to the child geometry
-            basegfx::B2DHomMatrix                   maTransformation;
+            basegfx::B2DHomMatrix					maTransformation;
 
         public:
             /// constructor
             TransformPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransformation,
+                const basegfx::B2DHomMatrix& rTransformation, 
                 const Primitive2DSequence& rChildren);
 
             /// data read access

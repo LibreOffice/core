@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,9 +153,9 @@ enum SvxAdjust
 
 struct SvxAdjustStruct
 {
-    SvxAdjust   ParagraphAdjustment MID_PARA_ADJUST;
-    SvxAdjust   LastLineAdjustment  MID_LAST_LINE_ADJUST;
-    BOOL        ExpandSingleWord    MID_EXPAND_SINGLE;
+    SvxAdjust	ParagraphAdjustment	MID_PARA_ADJUST;
+    SvxAdjust	LastLineAdjustment 	MID_LAST_LINE_ADJUST;
+    BOOL		ExpandSingleWord	MID_EXPAND_SINGLE;
 };
 item SvxAdjustStruct SvxAdjustItem;
 
@@ -215,11 +215,11 @@ enum FontPitch
 
 struct SvxFont
 {
-    String      StyleName   MID_FONT_STYLE_NAME;
-    FontPitch   Pitch       MID_FONT_PITCH;         // INT16
-    CharSet     CharSet     MID_FONT_CHAR_SET;      // INT16
-    FontFamily  Family      MID_FONT_FAMILY;        // INT16
-    String      FamilyName  MID_FONT_FAMILY_NAME;
+    String		StyleName	MID_FONT_STYLE_NAME;
+    FontPitch	Pitch		MID_FONT_PITCH;			// INT16
+    CharSet 	CharSet 	MID_FONT_CHAR_SET;		// INT16
+    FontFamily	Family		MID_FONT_FAMILY;		// INT16
+    String		FamilyName	MID_FONT_FAMILY_NAME;
 };
 item SvxFont SvxFontItem;
 
@@ -368,7 +368,7 @@ item SvxShadowLocation      SvxShadowLocationItem;
 
 item INT16                  SvxCharScaleWidthItem;
 item INT16                  SvxParaVertAlignItem;
-item INT16                  SvxCharReliefItem;
+item INT16					SvxCharReliefItem;
 item BOOL                   SvxBlinkItem;
 item BOOL                   SvxAutoKernItem;
 item INT32                  SvxColorItem;
@@ -391,17 +391,17 @@ item BOOL                   SvxPrintItem;
 item UINT16                 SvxPropSizeItem;        // derived from UInt16Item
 item BOOL                   SvxShadowedItem;
 item SvxDrawBezierEnum      SvxDrawBezierItem;
-item SvxDrawAlignEnum       SvxDrawAlignItem;
-item SvxDrawToolEnum        SvxDrawToolItem;
-item BYTE                   SvxWidowsItem;
-item BOOL                   SvxWordLineModeItem;
+item SvxDrawAlignEnum 		SvxDrawAlignItem;
+item SvxDrawToolEnum 		SvxDrawToolItem;
+item BYTE 					SvxWidowsItem;
+item BOOL 					SvxWordLineModeItem;
 item SvxCellHorJustifyEnum  SvxHorJustifyItem;
 item SvxCellVerJustifyEnum  SvxVerJustifyItem;
 item SvxCellOrientationEnum SvxOrientationItem;
 item BOOL                   SdrShadowItem;
 item INT16                  SdrTextFitToSizeTypeItem;  // enum
 item String                 SfxStringListItem;  // serialized into one concatenated string
-item double                 SvxDoubleItem;
+item double					SvxDoubleItem;
 item String                 OfaPtrItem;  // serialized into one concatenated string
 item String                 SvxDashListItem;
 item String                 SvxLineEndListItem;
@@ -409,11 +409,11 @@ item String                 SvxColorTableItem;
 item String                 SvxGradientListItem;
 item String                 SvxHatchListItem;
 item String                 SvxBitmapListItem;
-item String                 SfxLockBytesItem;
-item String                 SvxFontListItem;
-item String                 avmedia_MediaItem;
+item String 				SfxLockBytesItem;
+item String 				SvxFontListItem;
+item String					avmedia_MediaItem;
 
-item BYTE                   SfxGlobalNameItem;
+item BYTE		    		SfxGlobalNameItem;
 
 //-------------------------------------------------------------------------
 
@@ -433,10 +433,10 @@ item SvxTextLine SvxTextLineItem;
 
 struct SvxBrush
 {
-    BOOL        Transparent     MID_GRAPHIC_TRANSPARENT;
-    INT32       BackColor       MID_BACK_COLOR;
-    String      URL             MID_GRAPHIC_URL;
-    String      Filtername      MID_GRAPHIC_FILTER;
+    BOOL		Transparent 	MID_GRAPHIC_TRANSPARENT;
+    INT32		BackColor		MID_BACK_COLOR;
+    String		URL				MID_GRAPHIC_URL;
+    String		Filtername		MID_GRAPHIC_FILTER;
     INT16       Position        MID_GRAPHIC_POSITION;
 };
 item SvxBrush SvxBrushItem;
@@ -445,9 +445,9 @@ item SvxBrush SvxBrushItem;
 
 struct SvxEscapement
 {
-    INT16       Escapement      MID_ESC;
-    BYTE        Height          MID_ESC_HEIGHT;
-    BOOL        Auto            MID_AUTO_ESC;
+    INT16		Escapement 		MID_ESC;
+    BYTE		Height			MID_ESC_HEIGHT;
+    BOOL		Auto			MID_AUTO_ESC;
 };
 item SvxEscapement SvxEscapementItem;
 
@@ -456,7 +456,7 @@ item SvxEscapement SvxEscapementItem;
 struct SvxFontHeight
 {
     float       Height      MID_FONTHEIGHT;         // may be converted to INT32
-    INT16       Prop        MID_FONTHEIGHT_PROP;
+    INT16		Prop		MID_FONTHEIGHT_PROP;
     float       Diff        MID_FONTHEIGHT_DIFF;    // may be converted to INT32
 };
 item SvxFontHeight SvxFontHeightItem;
@@ -465,10 +465,10 @@ item SvxFontHeight SvxFontHeightItem;
 
 struct SvxHyphenZone
 {
-    BOOL        Hyphen      MID_IS_HYPHEN;
-    INT16       MinLead     MID_HYPHEN_MIN_LEAD;
-    INT16       MinTrail    MID_HYPHEN_MIN_TRAIL;
-    INT16       MaxHyphens  MID_HYPHEN_MAX_HYPHENS;
+    BOOL		Hyphen		MID_IS_HYPHEN;
+    INT16		MinLead 	MID_HYPHEN_MIN_LEAD;
+    INT16		MinTrail	MID_HYPHEN_MIN_TRAIL;
+    INT16		MaxHyphens	MID_HYPHEN_MAX_HYPHENS;
 };
 item SvxHyphenZone SvxHyphenZoneItem;
 
@@ -486,14 +486,14 @@ item SvxLine SvxLineItem;
 
 struct SvxLRSpace
 {
-    INT32       LeftMargin          MID_L_MARGIN;               // % or direct
-    INT32       TextLeftMargin      MID_TXT_LMARGIN
-    INT32       RightMargin         MID_R_MARGIN;               // % or direct
-    INT16       LeftRelMargin       MID_L_REL_MARGIN;
-    INT16       RightRelMargin      MID_R_REL_MARGIN;
-    INT32       FirstLineIndent     MID_FIRST_LINE_INDENT;      // % or direct
-    INT32       FirstLineRelIdent   MID_FIRST_LINE_REL_INDENT;
-    BOOL        AutoFirst           MID_FIRST_AUTO;
+    INT32		LeftMargin			MID_L_MARGIN;				// % or direct
+    INT32		TextLeftMargin		MID_TXT_LMARGIN
+    INT32		RightMargin 		MID_R_MARGIN;				// % or direct
+    INT16		LeftRelMargin		MID_L_REL_MARGIN;
+    INT16		RightRelMargin		MID_R_REL_MARGIN;
+    INT32		FirstLineIndent		MID_FIRST_LINE_INDENT;		// % or direct
+    INT32		FirstLineRelIdent	MID_FIRST_LINE_REL_INDENT;
+    BOOL		AutoFirst			MID_FIRST_AUTO;
 };
 item SvxLRSpace SvxLRSpaceItem;
 
@@ -510,9 +510,9 @@ item SvxLineSpacing SvxLineSpacingItem;
 
 struct SvxPage
 {
-    BOOL                Landscape       MID_PAGE_ORIENTATION;
-    INT16               Layout          MID_PAGE_LAYOUT;
-    INT16               NumType         MID_PAGE_NUMTYPE;
+    BOOL				Landscape		MID_PAGE_ORIENTATION;
+    INT16				Layout 			MID_PAGE_LAYOUT;
+    INT16				NumType 		MID_PAGE_NUMTYPE;
 };
 item SvxPage SvxPageItem;
 
@@ -520,10 +520,10 @@ item SvxPage SvxPageItem;
 
 struct SvxPagePosSize
 {
-    INT32               XPos            MID_X;          // ???
-    INT32               YPos            MID_Y;          // ???
-    INT32               Width           MID_WIDTH;      // ???
-    INT32               Height          MID_HEIGHT;     // ???
+    INT32				XPos			MID_X;			// ???
+    INT32				YPos			MID_Y;			// ???
+    INT32				Width			MID_WIDTH;		// ???
+    INT32				Height			MID_HEIGHT;		// ???
 };
 item SvxPagePosSize SvxPagePosSizeItem;
 
@@ -543,10 +543,10 @@ item SvxShadow SvxShadowItem;
 
 struct SvxULSpace
 {
-    INT32               TopMargin       MID_UP_MARGIN;  // % or direct
-    INT32               BottomMargin    MID_LO_MARGIN;  // % or direct
-    INT16               TopRelMargin    MID_UP_REL_MARGIN;
-    INT16               BottomRelMargin MID_LO_REL_MARGIN;
+    INT32				TopMargin		MID_UP_MARGIN;	// % or direct
+    INT32				BottomMargin	MID_LO_MARGIN;	// % or direct
+    INT16				TopRelMargin	MID_UP_REL_MARGIN;
+    INT16				BottomRelMargin	MID_LO_REL_MARGIN;
 };
 item SvxULSpace SvxULSpaceItem
 
@@ -554,8 +554,8 @@ item SvxULSpace SvxULSpaceItem
 
 struct SvxLongLRSpace
 {
-    INT32           Left        MID_LEFT;   // ???
-    INT32           Right       MID_RIGHT;  // ???
+    INT32			Left		MID_LEFT;	// ???
+    INT32			Right		MID_RIGHT;	// ???
 };
 item SvxLongLRSpace SvxLongLRSpaceItem;
 
@@ -563,8 +563,8 @@ item SvxLongLRSpace SvxLongLRSpaceItem;
 
 struct SvxLongULSpace
 {
-    INT32           Upper       MID_UPPER;  // ???
-    INT32           Lower       MID_LOWER;  // ???
+    INT32			Upper		MID_UPPER;	// ???
+    INT32			Lower		MID_LOWER;	// ???
 };
 item SvxLongULSpace SvxLongULSpaceItem;
 

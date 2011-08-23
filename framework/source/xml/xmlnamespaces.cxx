@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
 {
     // xml draft: there is no default namespace for attributes!
 
-    int index;
+    int	index;
     if (( index = aName.indexOf( ':' )) > 0 )
     {
         if ( aName.getLength() > index+1 )
@@ -131,13 +131,13 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
     return aName;
 }
 
-::rtl::OUString XMLNamespaces::applyNSToElementName( const ::rtl::OUString& aName ) const   throw( SAXException )
+::rtl::OUString XMLNamespaces::applyNSToElementName( const ::rtl::OUString& aName ) const	throw( SAXException )
 {
     // xml draft: element names can have a default namespace
 
-    int         index = aName.indexOf( ':' );
-    ::rtl::OUString aNamespace;
-    ::rtl::OUString aElementName = aName;
+    int			index = aName.indexOf( ':' );
+    ::rtl::OUString	aNamespace;
+    ::rtl::OUString	aElementName = aName;
 
     if ( index > 0 )
         aNamespace = getNamespaceValue( aName.copy( 0, index ) );

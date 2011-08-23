@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ namespace connectivity
 
     // typedefs
     typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>    OSQLTable;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>	OSQLTable;
 
     DECLARE_STL_MAP(::rtl::OUString,OSQLTable,comphelper::UStringMixLess,  OSQLTables);
 
@@ -72,10 +72,10 @@ namespace connectivity
     template< class VectorVal > class ORefVector
     {
         std::vector< VectorVal > m_vector;
-        oslInterlockedCount         m_refCount;
+        oslInterlockedCount			m_refCount;
 
     protected:
-        virtual ~ORefVector(){}
+        virtual	~ORefVector(){}
     public:
         typedef std::vector< VectorVal > Vector;
 
@@ -135,7 +135,7 @@ namespace connectivity
     // search from __first to __last the column with the name _rVal
     // when no such column exist __last is returned
     OOO_DLLPUBLIC_DBTOOLS
-    OSQLColumns::Vector::const_iterator find(   OSQLColumns::Vector::const_iterator __first,
+    OSQLColumns::Vector::const_iterator find(	OSQLColumns::Vector::const_iterator __first,
                                         OSQLColumns::Vector::const_iterator __last,
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase);
@@ -143,7 +143,7 @@ namespace connectivity
     // search from __first to __last the column with the realname _rVal
     // when no such column exist __last is returned
     OOO_DLLPUBLIC_DBTOOLS
-    OSQLColumns::Vector::const_iterator findRealName(   OSQLColumns::Vector::const_iterator __first,
+    OSQLColumns::Vector::const_iterator findRealName(	OSQLColumns::Vector::const_iterator __first,
                                                 OSQLColumns::Vector::const_iterator __last,
                                                 const ::rtl::OUString& _rVal,
                                                 const ::comphelper::UStringMixEqual& _rCase);
@@ -154,7 +154,7 @@ namespace connectivity
     // search from __first to __last the column with the property _rProp equals the value _rVal
     // when no such column exist __last is returned
     OOO_DLLPUBLIC_DBTOOLS
-    OSQLColumns::Vector::const_iterator find(   OSQLColumns::Vector::const_iterator __first,
+    OSQLColumns::Vector::const_iterator find(	OSQLColumns::Vector::const_iterator __first,
                                         OSQLColumns::Vector::const_iterator __last,
                                         const ::rtl::OUString& _rProp,
                                         const ::rtl::OUString& _rVal,
@@ -164,17 +164,17 @@ namespace connectivity
 
 
     /** creates a java virtual machine
-        @param  _rxFactory
+        @param	_rxFactory
             The ORB.
         @return
             The JavaVM.
     */
     OOO_DLLPUBLIC_DBTOOLS ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
-    /** return <TRUE/> if the java class exists, otherwise <FALSE/>.
-        @param  _pJVM
+    /**	return <TRUE/> if the java class exists, otherwise <FALSE/>.
+        @param	_pJVM
             The JavaVM.
-        @param  _sClassName
+        @param	_sClassName
             The class name to look for.
     */
     OOO_DLLPUBLIC_DBTOOLS sal_Bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const ::rtl::OUString& _sClassName );
@@ -182,32 +182,32 @@ namespace connectivity
 
 //==================================================================================
 
-#define DECLARE_SERVICE_INFO()  \
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException); \
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException); \
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException) \
+#define DECLARE_SERVICE_INFO()	\
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);	\
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);	\
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)	\
 
-#define IMPLEMENT_SERVICE_INFO(classname, implasciiname, serviceasciiname)  \
-    ::rtl::OUString SAL_CALL classname::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)   \
-    {   \
-        return ::rtl::OUString::createFromAscii(implasciiname); \
-    }   \
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)  \
-    {   \
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);   \
-        aSupported[0] = ::rtl::OUString::createFromAscii(serviceasciiname); \
-        return aSupported;  \
-    }   \
-    sal_Bool SAL_CALL classname::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException) \
-    {   \
-        Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());             \
-        const ::rtl::OUString* pSupported = aSupported.getConstArray();                 \
-        const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();              \
-        for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)   \
-            ;                                                                           \
+#define IMPLEMENT_SERVICE_INFO(classname, implasciiname, serviceasciiname)	\
+    ::rtl::OUString SAL_CALL classname::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)	\
+    {	\
+        return ::rtl::OUString::createFromAscii(implasciiname);	\
+    }	\
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)	\
+    {	\
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);	\
+        aSupported[0] = ::rtl::OUString::createFromAscii(serviceasciiname);	\
+        return aSupported;	\
+    }	\
+    sal_Bool SAL_CALL classname::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)	\
+    {	\
+        Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());				\
+        const ::rtl::OUString* pSupported = aSupported.getConstArray();					\
+        const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();				\
+        for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)	\
+            ;																			\
                                                                                         \
-        return pSupported != pEnd;                                                      \
-    }   \
+        return pSupported != pEnd;														\
+    }	\
 
 //==================================================================================
 

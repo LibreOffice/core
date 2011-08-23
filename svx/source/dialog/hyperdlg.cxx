@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,11 +51,11 @@ struct MyStruct
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
     SfxChildWinFactory* pFact;
-    sal_Bool                bHideNotDelete;
-    sal_Bool                bVisible;
-    sal_Bool                bHideAtToggle;
-    SfxModule*          pContextModule;
-    SfxWorkWindow*      pWorkWin;
+    sal_Bool				bHideNotDelete;
+    sal_Bool				bVisible;
+    sal_Bool				bHideAtToggle;
+    SfxModule*			pContextModule;
+    SfxWorkWindow*		pWorkWin;
 };
 
 SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, USHORT nId,
@@ -74,16 +74,16 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, USHORT nId,
     ((MyStruct*)pImp)->bVisible = FALSE;
 
     Window* pTopWindow = 0;
-    if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 &&
+    if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 && 
             (0 != (pTopWindow = SFX_APP()->GetTopWindow())))
     {
         Size aParentSize( pTopWindow->GetSizePixel() );
-        Size aDlgSize ( GetSizePixel () );
+        Size aDlgSize (	GetSizePixel () );
 
         if( aParentSize.Width() < pInfo->aPos.X() )
             pInfo->aPos.setX( aParentSize.Width()-aDlgSize.Width() < long(0.1*aParentSize.Width()) ?
                               long(0.1*aParentSize.Width()) : aParentSize.Width()-aDlgSize.Width() );
-        if( aParentSize.Height() < pInfo->aPos. Y() )
+        if( aParentSize.Height() < pInfo->aPos.	Y() )
             pInfo->aPos.setY( aParentSize.Height()-aDlgSize.Height() < long(0.1*aParentSize.Height()) ?
                               long(0.1*aParentSize.Height()) : aParentSize.Height()-aDlgSize.Height() );
 

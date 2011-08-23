@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -208,22 +208,22 @@ void SvMetaName::Load( SvPersistStream & rStm )
         DBG_ERROR( "wrong format" );
         return;
     }
-    if( nMask & 0x01 )  rStm >> aName;
+    if( nMask & 0x01 )	rStm >> aName;
     if( nMask & 0x02 )  rStm >> aHelpContext;
-    if( nMask & 0x04 )  rStm >> aHelpText;
-    if( nMask & 0x08 )  rStm >> aConfigName;
-    if( nMask & 0x10 )  rStm >> aDescription;
+    if( nMask & 0x04 )	rStm >> aHelpText;
+    if( nMask & 0x08 )	rStm >> aConfigName;
+    if( nMask & 0x10 )	rStm >> aDescription;
 }
 
 void SvMetaName::Save( SvPersistStream & rStm )
 {
     SvMetaObject::Save( rStm );
     BYTE nMask = 0;
-    if( aName.IsSet() )         nMask |= 0x01;
+    if( aName.IsSet() )			nMask |= 0x01;
     if( aHelpContext.IsSet() )  nMask |= 0x02;
-    if( aHelpText.IsSet() )     nMask |= 0x04;
-    if( aConfigName.IsSet() )   nMask |= 0x08;
-    if( aDescription.IsSet() )  nMask |= 0x10;
+    if( aHelpText.IsSet() )   	nMask |= 0x04;
+    if( aConfigName.IsSet() ) 	nMask |= 0x08;
+    if( aDescription.IsSet() ) 	nMask |= 0x10;
 
     rStm << nMask;
     if( nMask & 0x01 ) rStm << aName;
@@ -634,11 +634,11 @@ void SvMetaExtern::Save( SvPersistStream & rStm )
 
     // Maske erstellen
     BYTE nMask = 0;
-    if( pModule )                   nMask |= 0x01;
-    if( aUUId != SvGlobalName() )   nMask |= 0x02;
-    if( aVersion != SvVersion() )   nMask |= 0x04;
-    if( bReadUUId )                 nMask |= 0x08;
-    if( bReadVersion )              nMask |= 0x10;
+    if( pModule )                	nMask |= 0x01;
+    if( aUUId != SvGlobalName() )	nMask |= 0x02;
+    if( aVersion != SvVersion() )	nMask |= 0x04;
+    if( bReadUUId ) 				nMask |= 0x08;
+    if( bReadVersion )  			nMask |= 0x10;
 
     // Daten schreiben
     rStm << nMask;

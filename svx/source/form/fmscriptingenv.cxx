@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,7 +147,7 @@ namespace svxform
     private:
         DECL_LINK( OnAsyncScriptEvent, ScriptEvent* );
     };
-
+                                    
     //====================================================================
     //= FormScriptingEnvironment
     //====================================================================
@@ -243,7 +243,7 @@ namespace svxform
            ::rtl::OUString::createFromAscii("VBAInterop");
        if ( _rEvent.ScriptType.equals(vbaInterOp) )
            return; // not handled here
-
+    
         if ( impl_isDisposed_nothrow() )
             return;
 
@@ -256,7 +256,7 @@ namespace svxform
         acquire();
         Application::PostUserEvent( LINK( this, FormScriptListener, OnAsyncScriptEvent ), new ScriptEvent( _rEvent ) );
     }
-
+    
     //--------------------------------------------------------------------
     Any SAL_CALL FormScriptListener::approveFiring( const ScriptEvent& _rEvent ) throw (InvocationTargetException, RuntimeException)
     {
@@ -268,7 +268,7 @@ namespace svxform
 
         return aResult;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL FormScriptListener::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
     {
@@ -351,19 +351,19 @@ namespace svxform
     {
         impl_registerOrRevoke_throw( _rxManager, true );
     }
-
+    
     //--------------------------------------------------------------------
     void FormScriptingEnvironment::revokeEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager )
     {
         impl_registerOrRevoke_throw( _rxManager, false );
     }
-
+    
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL FormScriptingEnvironment::acquire()
     {
         return osl_incrementInterlockedCount( &m_refCount );
     }
-
+    
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL FormScriptingEnvironment::release()
     {
@@ -523,7 +523,7 @@ namespace svxform
                 // and it has such a prefix
                 sMacroLocation = sScriptCode.copy( 0, nPrefixLen );
                 DBG_ASSERT( 0 == sMacroLocation.compareToAscii( "document" )
-                        ||  0 == sMacroLocation.compareToAscii( "application" ),
+                        ||	0 == sMacroLocation.compareToAscii( "application" ),
                         "FormScriptingEnvironment::doFireScriptEvent: invalid (unknown) prefix!" );
 
                 // strip the prefix: the SfxObjectShell::CallScript knows nothing about such prefixes
@@ -531,11 +531,11 @@ namespace svxform
             }
 
             if ( sMacroLocation.getLength() )
-            {   // we have a StarBasic macro with fully-qualified macro location
+            {	// we have a StarBasic macro with fully-qualified macro location
                 pScript.reset( new QualifiedBasicScript( *xObjectShell, sMacroLocation, sScriptCode ) );
             }
             else
-            {   // we have a StarBasic macro without qualified location - let the object shell gues ....
+            {	// we have a StarBasic macro without qualified location - let the object shell gues ....
                 pScript.reset( new UnqualifiedBasicScript( *xObjectShell, sScriptCode ) );
             }
         }

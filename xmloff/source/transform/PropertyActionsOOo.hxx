@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,6 +77,6 @@ extern XMLTransformerActionInit aListLevelPropertyOOoAttrActionTable[];
 extern XMLTransformerActionInit aChartPropertyOOoAttrActionTable[];
 extern XMLTransformerActionInit aChartPropertyOOoElemActionTable[];
 
-#endif  //  _XMLOFF_PROPERTYACTIONSOOO_HXX
+#endif	//  _XMLOFF_PROPERTYACTIONSOOO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
