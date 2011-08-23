@@ -76,7 +76,6 @@ ScVbaMultiPage::ScVbaMultiPage(
         const uno::Reference< awt::XControl >& xDialog ) :
     MultiPageImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
-    mxDialogProps.set( xDialog, uno::UNO_QUERY_THROW );
 }
 
 // Attributes
