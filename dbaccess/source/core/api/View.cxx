@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,7 +121,7 @@ namespace dbaccess
 
         Sequence< Type > aTypes( ::comphelper::concatSequences(View_Base::getTypes(),View_IBASE::getTypes()) );
         ::std::vector<Type> aOwnTypes;
-        aOwnTypes.reserve(aTypes.getLength());
+        aOwnTypes.reserve(aTypes.getLength());	
 
         const Type* pIter = aTypes.getConstArray();
         const Type* pEnd = pIter + aTypes.getLength();
@@ -130,7 +130,7 @@ namespace dbaccess
             if( (*pIter != aAlterType || m_xViewAccess.is()) )
                 aOwnTypes.push_back(*pIter);
         }
-
+        
         Type* pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
         return Sequence< Type >(pTypes, aOwnTypes.size());
     }

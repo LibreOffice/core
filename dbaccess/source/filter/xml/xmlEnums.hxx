@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,21 +50,21 @@ namespace dbaxml
     };
     enum XMLDataSource
     {
-        XML_TOK_CONNECTION_RESOURCE,
-        XML_TOK_SUPPRESS_VERSION_COLUMNS,
-        XML_TOK_JAVA_DRIVER_CLASS,
-        XML_TOK_EXTENSION,
-        XML_TOK_IS_FIRST_ROW_HEADER_LINE,
-        XML_TOK_SHOW_DELETED,
-        XML_TOK_IS_TABLE_NAME_LENGTH_LIMITED,
-        XML_TOK_SYSTEM_DRIVER_SETTINGS,
-        XML_TOK_ENABLE_SQL92_CHECK,
-        XML_TOK_APPEND_TABLE_ALIAS_NAME,
-        XML_TOK_PARAMETER_NAME_SUBSTITUTION,
-        XML_TOK_IGNORE_DRIVER_PRIVILEGES,
-        XML_TOK_BOOLEAN_COMPARISON_MODE,
-        XML_TOK_USE_CATALOG,
-        XML_TOK_BASE_DN,
+        XML_TOK_CONNECTION_RESOURCE,			
+        XML_TOK_SUPPRESS_VERSION_COLUMNS,		
+        XML_TOK_JAVA_DRIVER_CLASS,				
+        XML_TOK_EXTENSION,						
+        XML_TOK_IS_FIRST_ROW_HEADER_LINE,		
+        XML_TOK_SHOW_DELETED,					
+        XML_TOK_IS_TABLE_NAME_LENGTH_LIMITED,	
+        XML_TOK_SYSTEM_DRIVER_SETTINGS,		
+        XML_TOK_ENABLE_SQL92_CHECK,			
+        XML_TOK_APPEND_TABLE_ALIAS_NAME,		
+        XML_TOK_PARAMETER_NAME_SUBSTITUTION,	
+        XML_TOK_IGNORE_DRIVER_PRIVILEGES,		
+        XML_TOK_BOOLEAN_COMPARISON_MODE,		
+        XML_TOK_USE_CATALOG,					
+        XML_TOK_BASE_DN,						
         XML_TOK_MAX_ROW_COUNT,
         XML_TOK_LOGIN,
         XML_TOK_TABLE_FILTER,
@@ -126,12 +126,12 @@ namespace dbaxml
     };
     enum XMLComponent
     {
-        XML_TOK_HREF    ,
-        XML_TOK_TYPE    ,
-        XML_TOK_SHOW    ,
+        XML_TOK_HREF	,
+        XML_TOK_TYPE	,
+        XML_TOK_SHOW	,
         XML_TOK_ACTUATE ,
         XML_TOK_AS_TEMPLATE ,
-        XML_TOK_COMPONENT_NAME
+        XML_TOK_COMPONENT_NAME	
     };
     enum XMLType
     {

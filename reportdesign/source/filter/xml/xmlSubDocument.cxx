@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ DBG_NAME( rpt_OXMLSubDocument )
 OXMLSubDocument::OXMLSubDocument( ORptFilter& rImport,
                 sal_uInt16 nPrfx
                 ,const ::rtl::OUString& rLName
-                ,const Reference< XReportComponent > & _xComponent
+                ,const Reference< XReportComponent > & _xComponent 
                 ,OXMLTable* _pContainer
                 ,OXMLCell* _pCellParent) :
     OXMLReportElementBase( rImport, nPrfx, rLName,_xComponent.get(),_pContainer)
@@ -77,7 +77,7 @@ SvXMLImportContext* OXMLSubDocument::_CreateChildContext(
     SvXMLImportContext *pContext = OXMLReportElementBase::_CreateChildContext(_nPrefix,_rLocalName,xAttrList);
     if ( pContext )
         return pContext;
-    const SvXMLTokenMap&    rTokenMap   = static_cast<ORptFilter&>(GetImport()).GetReportElemTokenMap();
+    const SvXMLTokenMap&	rTokenMap	= static_cast<ORptFilter&>(GetImport()).GetReportElemTokenMap();
 
     switch( rTokenMap.Get( _nPrefix, _rLocalName ) )
     {
@@ -121,7 +121,7 @@ void OXMLSubDocument::EndElement()
         {
             // #i94115# this is no longer need.
             // m_pContainer->addCell(m_xComponent.get());
-
+    
             if ( !m_aMasterFields.empty() )
                 m_xComponent->setMasterFields(Sequence< ::rtl::OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
             if ( !m_aDetailFields.empty() )
@@ -129,8 +129,8 @@ void OXMLSubDocument::EndElement()
 
             m_xComponent->setName(m_xFake->getName());
             m_xComponent->setPrintRepeatedValues(m_xFake->getPrintRepeatedValues());
-            uno::Reference< report::XReportControlModel >   xFakeModel(m_xFake,uno::UNO_QUERY);
-            uno::Reference< report::XReportControlModel >   xComponentModel(m_xComponent,uno::UNO_QUERY);
+            uno::Reference< report::XReportControlModel >	xFakeModel(m_xFake,uno::UNO_QUERY);
+            uno::Reference< report::XReportControlModel >	xComponentModel(m_xComponent,uno::UNO_QUERY);
             if ( xComponentModel.is() && xFakeModel.is() )
             {
                 const sal_Int32 nCount = xFakeModel->getCount();
@@ -143,12 +143,12 @@ void OXMLSubDocument::EndElement()
                         ::comphelper::copyProperties(xCond.get(),xNewCond.get());
                         xComponentModel->insertByIndex(xComponentModel->getCount(),uno::makeAny(xNewCond));
                     } // for (sal_Int32 i = 0; i < nCount ; ++i)
-                }
+                } 
                 catch(uno::Exception&)
                 {
                     OSL_ENSURE(0,"Can not access format condition!");
                 }
-
+                
             }
         }
     }

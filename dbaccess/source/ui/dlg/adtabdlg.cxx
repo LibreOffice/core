@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ class TableListFacade : public ::cppu::BaseMutex
 {
     OTableTreeListBox&          m_rTableList;
     Reference< XConnection >    m_xConnection;
-    ::rtl::Reference< comphelper::OContainerListenerAdapter>
+    ::rtl::Reference< comphelper::OContainerListenerAdapter>                    
                                 m_pContainerListener;
     bool                        m_bAllowViews;
 
@@ -93,7 +93,7 @@ public:
     {
     }
     virtual ~TableListFacade();
-
+    
 
 private:
     virtual void    updateTableObjectList( bool _bAllowViews );
@@ -132,8 +132,8 @@ String TableListFacade::getSelectedName( String& _out_rAliasName ) const
     try
     {
         Reference< XDatabaseMetaData > xMeta( m_xConnection->getMetaData(), UNO_QUERY_THROW );
-        if (  !aCatalog.getLength()
-            && aSchema.getLength()
+        if (  !aCatalog.getLength() 
+            && aSchema.getLength() 
             && xMeta->supportsCatalogsInDataManipulation()
             && !xMeta->supportsSchemasInDataManipulation() )
         {
@@ -174,7 +174,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
     try
     {
         Reference< XTablesSupplier > xTableSupp( m_xConnection, UNO_QUERY_THROW );
-
+        
         Reference< XViewsSupplier > xViewSupp;
         Reference< XNameAccess > xTables, xViews;
         Sequence< ::rtl::OUString > sTables, sViews;
@@ -202,12 +202,12 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
         // if no views are allowed remove the views also out the table name filter
         if ( !_bAllowViews )
         {
-            const ::rtl::OUString* pTableBegin  = sTables.getConstArray();
-            const ::rtl::OUString* pTableEnd    = pTableBegin + sTables.getLength();
+            const ::rtl::OUString* pTableBegin	= sTables.getConstArray();
+            const ::rtl::OUString* pTableEnd	= pTableBegin + sTables.getLength();
             ::std::vector< ::rtl::OUString > aTables(pTableBegin,pTableEnd);
 
             const ::rtl::OUString* pViewBegin = sViews.getConstArray();
-            const ::rtl::OUString* pViewEnd   = pViewBegin + sViews.getLength();
+            const ::rtl::OUString* pViewEnd	  = pViewBegin + sViews.getLength();
             ::comphelper::TStringMixEqualFunctor aEqualFunctor;
             for(;pViewBegin != pViewEnd;++pViewBegin)
                 aTables.erase(::std::remove_if(aTables.begin(),aTables.end(),::std::bind2nd(aEqualFunctor,*pViewBegin)),aTables.end());
@@ -248,7 +248,7 @@ class QueryListFacade : public ::cppu::BaseMutex
 {
     SvTreeListBox&              m_rQueryList;
     Reference< XConnection >    m_xConnection;
-    ::rtl::Reference< comphelper::OContainerListenerAdapter>
+    ::rtl::Reference< comphelper::OContainerListenerAdapter>                    
                                 m_pContainerListener;
 
 public:
@@ -512,7 +512,7 @@ BOOL OAddTableDlg::Close()
 //------------------------------------------------------------------------------
 bool OAddTableDlg::impl_isAddAllowed()
 {
-    return  m_rContext.allowAddition();
+    return	m_rContext.allowAddition();
 }
 
 //------------------------------------------------------------------------------

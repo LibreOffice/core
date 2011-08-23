@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,17 +82,17 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
                                            ,const uno::Reference< report::XSection >& _xHoldAlive
                                            ,OReportController* _pController)
     : ModalDialog( _pParent, ModuleRes(RID_DATETIME_DLG) )
-    ,m_aDate(this,           ModuleRes(CB_DATE      ) )
-    ,m_aFTDateFormat(this,   ModuleRes(FT_DATE_FORMAT   ) )
-    ,m_aDateListBox(this,    ModuleRes(LB_DATE_TYPE ) )
-    ,m_aFL0(this,            ModuleRes(FL_SEPARATOR0        ) )
-    ,m_aTime(this,           ModuleRes(CB_TIME      ) )
-    ,m_aFTTimeFormat(this,   ModuleRes(FT_TIME_FORMAT ) )
-    ,m_aTimeListBox(this,    ModuleRes(LB_TIME_TYPE ) )
+    ,m_aDate(this,	 		 ModuleRes(CB_DATE		) )
+    ,m_aFTDateFormat(this,	 ModuleRes(FT_DATE_FORMAT	) )
+    ,m_aDateListBox(this,	 ModuleRes(LB_DATE_TYPE	) )
+    ,m_aFL0(this,            ModuleRes(FL_SEPARATOR0		) )
+    ,m_aTime(this,	         ModuleRes(CB_TIME		) )
+    ,m_aFTTimeFormat(this,	 ModuleRes(FT_TIME_FORMAT ) )
+    ,m_aTimeListBox(this,	 ModuleRes(LB_TIME_TYPE	) )
     ,m_aFL1(this,         ModuleRes(FL_SEPARATOR1) )
-    ,m_aPB_OK(this,     ModuleRes(PB_OK))
-    ,m_aPB_CANCEL(this, ModuleRes(PB_CANCEL))
-    ,m_aPB_Help(this,   ModuleRes(PB_HELP))
+    ,m_aPB_OK(this,		ModuleRes(PB_OK))
+    ,m_aPB_CANCEL(this,	ModuleRes(PB_CANCEL))
+    ,m_aPB_Help(this,	ModuleRes(PB_HELP))
     ,m_aDateControlling()
     ,m_aTimeControlling()
     ,m_pController(_pController)
@@ -135,7 +135,7 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
         ListBox* pListBox = &m_aDateListBox;
         if ( bTime )
             pListBox = &m_aTimeListBox;
-
+        
         const uno::Reference< util::XNumberFormatter> xNumberFormatter = m_pController->getReportNumberFormatter();
         const uno::Reference< util::XNumberFormats> xFormats = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats();
         const uno::Sequence<sal_Int32> aFormatKeys = xFormats->queryKeys(_nNumberFormatId,m_nLocale,sal_True);
@@ -150,7 +150,7 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
 //------------------------------------------------------------------------
 ODateTimeDialog::~ODateTimeDialog()
 {
-    DBG_DTOR( rpt_ODateTimeDialog,NULL);
+    DBG_DTOR( rpt_ODateTimeDialog,NULL);	
 }
 // -----------------------------------------------------------------------------
 short ODateTimeDialog::Execute()
@@ -258,12 +258,12 @@ sal_Int32 ODateTimeDialog::getFormatKey(sal_Bool _bDate) const
     sal_Int32 nFormatKey;
     if ( _bDate )
     {
-         //     nFormat = m_aDateF1.IsChecked() ? i18n::NumberFormatIndex::DATE_SYSTEM_LONG : (m_aDateF2.IsChecked() ? i18n::NumberFormatIndex::DATE_SYS_DMMMYYYY : i18n::NumberFormatIndex::DATE_SYSTEM_SHORT);
+         // 	nFormat = m_aDateF1.IsChecked() ? i18n::NumberFormatIndex::DATE_SYSTEM_LONG : (m_aDateF2.IsChecked() ? i18n::NumberFormatIndex::DATE_SYS_DMMMYYYY : i18n::NumberFormatIndex::DATE_SYSTEM_SHORT);
          nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_aDateListBox.GetEntryData( m_aDateListBox.GetSelectEntryPos() )));
     }
     else
     {
-        //  nFormat = m_aTimeF1.IsChecked() ? i18n::NumberFormatIndex::TIME_HHMMSS : (m_aTimeF2.IsChecked() ? i18n::NumberFormatIndex::TIME_HHMMSSAMPM : i18n::NumberFormatIndex::TIME_HHMM);
+        // 	nFormat = m_aTimeF1.IsChecked() ? i18n::NumberFormatIndex::TIME_HHMMSS : (m_aTimeF2.IsChecked() ? i18n::NumberFormatIndex::TIME_HHMMSSAMPM : i18n::NumberFormatIndex::TIME_HHMM);
          nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_aTimeListBox.GetEntryData( m_aTimeListBox.GetSelectEntryPos() )));
     }
     return nFormatKey;

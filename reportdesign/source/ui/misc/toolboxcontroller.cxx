@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 #include <svtools/menuoptions.hxx>
 #include <vos/mutex.hxx>
 #include <svx/svxids.hrc>
-#define ITEMID_COLOR        1
+#define ITEMID_COLOR	    1
 #define ITEMID_BRUSH        2
 #define ITEMID_FONT         3
 #define ITEMID_FONTHEIGHT   4
@@ -227,7 +227,7 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
         {
             // All other status events will be processed here
             sal_Bool bSetCheckmark      = sal_False;
-            sal_Bool bCheckmark         = sal_False;
+            sal_Bool bCheckmark			= sal_False;
             //m_pToolbarController->GetToolBox().Enable(Event.IsEnabled);
             ToolBox& rTb = m_pToolbarController->GetToolBox();
             for ( USHORT i = 0; i < rTb.GetItemCount(); i++ )

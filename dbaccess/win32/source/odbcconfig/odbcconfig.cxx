@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ typedef SQLRETURN (SQL_API* TSQLManageDataSource) (SQLHWND hwndParent);
 // displays the error text for the last error (GetLastError), and returns this error value
 int displayLastError()
 {
-    DWORD   dwError = GetLastError();
+    DWORD	dwError = GetLastError();
 
     LPVOID lpMsgBuf;
     FormatMessage(

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ using namespace lang;
 using namespace beans;
 using namespace container;
 
-#define LINE_SIZE           50
+#define LINE_SIZE			50
 #define START_SIZE_TASKPANE 30
 #define COLSET_ID           1
 #define REPORT_ID           2
@@ -95,7 +95,7 @@ class OwnSplitWindow : public SplitWindow
 public:
     OwnSplitWindow(Window* pParent) : SplitWindow(pParent,WB_DIALOGCONTROL){SetBackground( );}
 
-    virtual void        Split()
+    virtual void		Split()
     {
         SplitWindow::Split();
         setItemSizes();
@@ -103,7 +103,7 @@ public:
     void setItemSizes()
     {
         const long nOutWidth = GetOutputSizePixel().Width();
-        long    nTaskPaneMinSplitSize = static_cast<OTaskWindow*>(GetItemWindow(TASKPANE_ID))->getMinimumWidth();
+        long	nTaskPaneMinSplitSize = static_cast<OTaskWindow*>(GetItemWindow(TASKPANE_ID))->getMinimumWidth();
         nTaskPaneMinSplitSize = static_cast<long>(nTaskPaneMinSplitSize*100/nOutWidth);
         if ( !nTaskPaneMinSplitSize )
             nTaskPaneMinSplitSize = START_SIZE_TASKPANE;
@@ -113,7 +113,7 @@ public:
         long nReportSize = GetItemSize( REPORT_ID );
         long nTaskPaneSize = GetItemSize( TASKPANE_ID );
 
-        BOOL        bMod = FALSE;
+        BOOL		bMod = FALSE;
         if( nReportSize < nReportMinSplitSize )
         {
             nReportSize = nReportMinSplitSize;
@@ -156,7 +156,7 @@ ODesignView::ODesignView(   Window* pParent,
     ,m_nCurrentPosition(USHRT_MAX)
     ,m_eActObj( OBJ_NONE )
     ,m_bFirstDraw(FALSE)
-    ,m_aGridSizeCoarse( 1000, 1000 )    // #i93595# 100TH_MM changed to grid using coarse 1 cm grid
+    ,m_aGridSizeCoarse( 1000, 1000 )	// #i93595# 100TH_MM changed to grid using coarse 1 cm grid
     ,m_aGridSizeFine( 250, 250 )        // and a 0,25 cm subdivision for better visualisation
     ,m_bGridVisible(TRUE)
     ,m_bGridSnap(TRUE)
@@ -280,8 +280,8 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
         sal_Int32 nSplitPos = getController().getSplitPos();
         if ( 0 != aPlaygroundSize.Width() )
         {
-            if  (   ( -1 == nSplitPos )
-                ||  ( nSplitPos >= aPlaygroundSize.Width() )
+            if	(	( -1 == nSplitPos )
+                ||	( nSplitPos >= aPlaygroundSize.Width() )
                 )
             {
                 long nMinWidth = static_cast<long>(0.1*aPlaygroundSize.Width());

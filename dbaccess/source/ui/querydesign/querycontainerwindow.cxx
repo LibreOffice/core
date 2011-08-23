@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _SV_SVAPP_HXX
+#ifndef _SV_SVAPP_HXX 
 #include <vcl/svapp.hxx>
 #endif
 #ifndef DBAUI_JOINCONTROLLER_HXX
 #include "JoinController.hxx"
 #endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_ 
 #include <toolkit/unohlp.hxx>
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
@@ -79,14 +79,14 @@ namespace dbaui
     //= OQueryContainerWindow
     //=====================================================================
     DBG_NAME(OQueryContainerWindow)
-    OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController& _rController,const Reference< XMultiServiceFactory >& _rFactory)
+    OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController& _rController,const Reference< XMultiServiceFactory >& _rFactory) 
         :ODataView( pParent, _rController, _rFactory )
         ,m_pViewSwitch(NULL)
         ,m_pBeamer(NULL)
     {
         DBG_CTOR(OQueryContainerWindow,NULL);
         m_pViewSwitch = new OQueryViewSwitch( this, _rController, _rFactory );
-
+        
         m_pSplitter = new Splitter(this,WB_VSCROLL);
         m_pSplitter->Hide();
         m_pSplitter->SetSplitHdl( LINK( this, OQueryContainerWindow, SplitHdl ) );
@@ -95,7 +95,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     OQueryContainerWindow::~OQueryContainerWindow()
     {
-        DBG_DTOR(OQueryContainerWindow,NULL);
+        DBG_DTOR(OQueryContainerWindow,NULL);	
         {
             ::std::auto_ptr<OQueryViewSwitch> aTemp(m_pViewSwitch);
             m_pViewSwitch = NULL;
@@ -109,7 +109,7 @@ namespace dbaui
             m_xBeamer = NULL;
             if(xCloseable.is())
                 xCloseable->close(sal_False); // false - holds the owner ship of this frame
-            //  m_xBeamer->setComponent(NULL,NULL);
+            //	m_xBeamer->setComponent(NULL,NULL);
         }
         {
             ::std::auto_ptr<Window> aTemp(m_pSplitter);
@@ -136,8 +136,8 @@ namespace dbaui
         if ( m_pBeamer && m_pBeamer->IsVisible() )
         {
             // calc pos and size of the splitter
-            Point aSplitPos     = m_pSplitter->GetPosPixel();
-            Size aSplitSize     = m_pSplitter->GetOutputSizePixel();
+            Point aSplitPos		= m_pSplitter->GetPosPixel();
+            Size aSplitSize		= m_pSplitter->GetOutputSizePixel();
             aSplitSize.Width() = aPlayground.GetWidth();
 
             if ( aSplitPos.Y() <= aPlayground.Top() )
@@ -148,7 +148,7 @@ namespace dbaui
 
             // set pos and size of the splitter
             m_pSplitter->SetPosSizePixel( aSplitPos, aSplitSize );
-            m_pSplitter->SetDragRectPixel(  aPlayground );
+            m_pSplitter->SetDragRectPixel(	aPlayground );
 
             // set pos and size of the beamer
             Size aBeamerSize( aPlayground.GetWidth(), aSplitPos.Y() );
@@ -241,7 +241,7 @@ namespace dbaui
             {
                 const ::rtl::OUString aLayoutManager( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
                 Reference < XPropertySet > xLMPropSet(xPropSet->getPropertyValue( aLayoutManager ),UNO_QUERY);
-
+        
                 if ( xLMPropSet.is() )
                 {
                     const ::rtl::OUString aAutomaticToolbars( RTL_CONSTASCII_USTRINGPARAM( "AutomaticToolbars" ));
@@ -262,7 +262,7 @@ namespace dbaui
             Size aSize = GetOutputSizePixel();
             Size aBeamer(aSize.Width(),sal_Int32(aSize.Height()*0.33));
 
-            const long  nFrameHeight = LogicToPixel( Size( 0, 3 ), MAP_APPFONT ).Height();
+            const long	nFrameHeight = LogicToPixel( Size( 0, 3 ), MAP_APPFONT ).Height();
             Point aPos(0,aBeamer.Height()+nFrameHeight);
 
             m_pBeamer->SetPosSizePixel(Point(0,0),aBeamer);
@@ -276,13 +276,13 @@ namespace dbaui
             m_pSplitter->Show();
 
             Resize();
-        }
+        }	
     }
     // -----------------------------------------------------------------------------
 
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 

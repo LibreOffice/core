@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
                                  ,::osl::Mutex& _rMutex
                                  ,const Reference< XConnection >& _xCon
                                  ,sal_Bool _bCase
-                                 ,IRefreshListener* _pRefreshListener
+                                 ,IRefreshListener*	_pRefreshListener
                                  ,::dbtools::IWarningsContainer* _pWarningsContainer
                                  ,oslInterlockedCount& _nInAppend)
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer,_nInAppend)
@@ -89,7 +89,7 @@ OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
 //------------------------------------------------------------------------------
 OViewContainer::~OViewContainer()
 {
-    //  dispose();
+    //	dispose();
     DBG_DTOR(OViewContainer, NULL);
 }
 //------------------------------------------------------------------------------
@@ -108,8 +108,8 @@ ObjectType OViewContainer::createObject(const ::rtl::OUString& _rName)
         ::rtl::OUString sCatalog,sSchema,sTable;
         ::dbtools::qualifiedNameComponents(m_xMetaData,
                                             _rName,
-                                            sCatalog,
-                                            sSchema,
+                                            sCatalog, 
+                                            sSchema, 
                                             sTable,
                                             ::dbtools::eInDataManipulation);
         return new View(m_xConnection,
@@ -197,9 +197,9 @@ void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
             Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
             if ( xTable.is() )
             {
-                xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-                xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-                xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
+                xTable->getPropertyValue(PROPERTY_CATALOGNAME)	>>= sCatalog;
+                xTable->getPropertyValue(PROPERTY_SCHEMANAME)	>>= sSchema;
+                xTable->getPropertyValue(PROPERTY_NAME)			>>= sTable;
 
                 sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
             }

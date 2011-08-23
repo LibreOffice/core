@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@ namespace dbaccess
     // we use a snapshot
     class OStaticSet : public OCacheSet
     {
-        ORowSetMatrix           m_aSet;
+        ORowSetMatrix			m_aSet;
         ORowSetMatrix::iterator m_aSetIter;
-        sal_Bool                m_bEnd;
+        sal_Bool				m_bEnd;
         sal_Bool fetchRow();
         void fillAllRows();
     public:

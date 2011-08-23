@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ namespace dbaui
         OQueryTabWinShowUndoAct(OQueryTableView* pOwner);
         ~OQueryTabWinShowUndoAct();
 
-        virtual void    Undo();
-        virtual void    Redo();
+        virtual void	Undo();
+        virtual void	Redo();
     };
 
     // ================================================================================================
@@ -56,8 +56,8 @@ namespace dbaui
         OQueryTabWinDelUndoAct(OQueryTableView* pOwner);
         ~OQueryTabWinDelUndoAct();
 
-        virtual void    Undo();
-        virtual void    Redo();
+        virtual void	Undo();
+        virtual void	Redo();
     };
 }
 #endif // DBAUI_QUERYTABWINSHOWUNDOACT_HXX

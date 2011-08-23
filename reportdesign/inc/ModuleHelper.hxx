@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,18 +49,18 @@ namespace rptui
             // not implemented. OModule is a static class
 
     protected:
-        static ::osl::Mutex s_aMutex;       /// access safety
-        static sal_Int32    s_nClients;     /// number of registered clients
-        static OModuleImpl* s_pImpl;        /// impl class. lives as long as at least one client for the module is registered
+        static ::osl::Mutex	s_aMutex;		/// access safety
+        static sal_Int32	s_nClients;		/// number of registered clients
+        static OModuleImpl*	s_pImpl;		/// impl class. lives as long as at least one client for the module is registered
 
     public:
         /// get the vcl res manager of the module
-        static ResMgr*  getResManager();
+        static ResMgr*	getResManager();
     protected:
         /// register a client for the module
-        static void registerClient();
+        static void	registerClient();
         /// revoke a client for the module
-        static void revokeClient();
+        static void	revokeClient();
 
     private:
         /** ensure that the impl class exists
@@ -72,13 +72,13 @@ namespace rptui
     //=========================================================================
     //= OModuleClient
     //=========================================================================
-    /** base class for objects which uses any global module-specific ressources
+    /** base class for objects which uses any global module-specific ressources 
     */
     class REPORTDESIGN_DLLPUBLIC OModuleClient
     {
     public:
-        inline OModuleClient()      { OModule::registerClient(); }
-        inline ~OModuleClient() { OModule::revokeClient(); }
+        inline OModuleClient()		{ OModule::registerClient(); }
+        inline ~OModuleClient()	{ OModule::revokeClient(); }
     };
 
     //=========================================================================
@@ -92,7 +92,7 @@ namespace rptui
         inline ModuleRes(USHORT _nId) : ResId(_nId, *OModule::getResManager()) { }
     };
 //.........................................................................
-}   // namespace rptui
+}	// namespace rptui
 //.........................................................................
 
 #endif // _RPTUI_MODULE_HELPER_RPT_HXX_

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,17 +56,17 @@ namespace dbaui
                     :public TransferableHelper
                     ,public OJoinExchObj_Base
     {
-        static String           m_sJoinFormat;
-        sal_Bool                m_bFirstEntry;
+        static String			m_sJoinFormat;
+        sal_Bool				m_bFirstEntry;
 
     protected:
-        OJoinExchangeData           m_jxdSourceDescription;
-        IDragTransferableListener*  m_pDragListener;
+        OJoinExchangeData			m_jxdSourceDescription;
+        IDragTransferableListener*	m_pDragListener;
 
         virtual ~OJoinExchObj();
     public:
         OJoinExchObj(const OJoinExchangeData& jxdSource,sal_Bool _bFirstEntry=sal_False);
-
+        
 
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
@@ -78,13 +78,13 @@ namespace dbaui
 
         void StartDrag( Window* pWindow, sal_Int8 nDragSourceActions, IDragTransferableListener* _pListener );
 
-        static OJoinExchangeData    GetSourceDescription(const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxObject);
-        static sal_Bool             isFormatAvailable( const DataFlavorExVector& _rFormats ,SotFormatStringId _nSlotID=SOT_FORMATSTR_ID_SBA_JOIN);
+        static OJoinExchangeData	GetSourceDescription(const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxObject);
+        static sal_Bool				isFormatAvailable( const DataFlavorExVector& _rFormats ,SotFormatStringId _nSlotID=SOT_FORMATSTR_ID_SBA_JOIN);
 
     protected:
-        virtual void                AddSupportedFormats();
-        virtual sal_Bool            GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-        virtual void                DragFinished( sal_Int8 nDropAction );
+        virtual void				AddSupportedFormats();
+        virtual sal_Bool			GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void				DragFinished( sal_Int8 nDropAction );
 
         static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 

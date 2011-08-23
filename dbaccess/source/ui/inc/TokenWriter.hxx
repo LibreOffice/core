@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star { 
     namespace sdbc{
         class XRowUpdate;
     }
@@ -67,28 +67,28 @@ namespace dbaui
         void impl_initializeRowMember_throw();
 
     protected:
-        ::com::sun::star::lang::Locale                                                  m_aLocale;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>                    m_aSelection;
+        ::com::sun::star::lang::Locale	                                                m_aLocale;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>					m_aSelection;
         sal_Bool                                                                        m_bBookmarkSelection;
-        SvStream*                                                                       m_pStream;
-        ::com::sun::star::awt::FontDescriptor                                           m_aFont;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xObject;      // table/query
+        SvStream*																		m_pStream;
+        ::com::sun::star::awt::FontDescriptor											m_aFont;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >		m_xObject;		// table/query
         SharedConnection                                                                m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xResultSet;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >                m_xRow;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >			m_xResultSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >				m_xRow;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate >         m_xRowLocate;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xResultSetMetaData;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >	m_xResultSetMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >   m_xRowSetColumns;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > 	m_xFormatter;	// a number formatter working with the connection's NumberFormatsSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
 
         ::rtl::OUString m_sName;
-        //dyf add 20070601
+        //dyf add 20070601 
         //for transfor the tablename
         ::rtl::OUString m_sDefaultTableName;
         //dyf add end
         ::rtl::OUString m_sDataSourceName;
-        sal_Int32       m_nCommandType;
+        sal_Int32		m_nCommandType;
         bool            m_bNeedToReInitialize;
 
 #if defined UNX
@@ -97,20 +97,20 @@ namespace dbaui
         static const char __FAR_DATA sNewLine[];
 #endif
 
-        ODatabaseExport*    m_pReader;
-        sal_Int32*          m_pRowMarker; // wenn gesetzt, dann nur diese Rows kopieren
+        ODatabaseExport*	m_pReader;
+        sal_Int32*			m_pRowMarker; // wenn gesetzt, dann nur diese Rows kopieren
         rtl_TextEncoding    m_eDestEnc;
-        sal_Bool            m_bInInitialize;
-        sal_Bool            m_bCheckOnly;
+        sal_Bool			m_bInInitialize;
+        sal_Bool			m_bCheckOnly;
 
         // export data
-        ODatabaseImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,
+        ODatabaseImportExport(	const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                 const String& rExchange = String());
 
         // import data
-        ODatabaseImportExport(  const SharedConnection& _rxConnection,
+        ODatabaseImportExport(	const SharedConnection& _rxConnection,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
@@ -149,17 +149,17 @@ namespace dbaui
         void appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCount,sal_Int32& k,sal_Int32& kk);
     public:
         // export data
-        ORTFImportExport(   const ::svx::ODataAccessDescriptor& _aDataDescriptor,
+        ORTFImportExport(	const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                            const String& rExchange = String())
+                            const String& rExchange = String()) 
                             : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange) {};
 
         // import data
-        ORTFImportExport(   const SharedConnection& _rxConnection,
+        ORTFImportExport(	const SharedConnection& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
-                        : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM) 
+                        : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM) 
         {}
 
         virtual BOOL Write();
@@ -173,15 +173,15 @@ namespace dbaui
     class OHTMLImportExport : public ODatabaseImportExport
     {
         // default HtmlFontSz[1-7]
-        static const sal_Int16  nDefaultFontSize[SBA_HTML_FONTSIZES];
+        static const sal_Int16	nDefaultFontSize[SBA_HTML_FONTSIZES];
         // HtmlFontSz[1-7] in s*3.ini [user]
-        static sal_Int16        nFontSize[SBA_HTML_FONTSIZES];
-        static const sal_Int16  nCellSpacing;
+        static sal_Int16		nFontSize[SBA_HTML_FONTSIZES];
+        static const sal_Int16	nCellSpacing;
         static const char __FAR_DATA sIndentSource[];
-        char                    sIndent[nIndentMax+1];
-        sal_Int16               m_nIndent;
+        char					sIndent[nIndentMax+1];
+        sal_Int16				m_nIndent;
     #ifdef DBG_UTIL
-        BOOL                    m_bCheckFont;
+        BOOL					m_bCheckFont;
     #endif
 
         void WriteHeader();
@@ -189,21 +189,21 @@ namespace dbaui
         void WriteTables();
         void WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_Int32 nHeightPixel,const char* pChar,const String& rValue,const char* pHtmlTag);
         void IncIndent( sal_Int16 nVal );
-        const char*         GetIndentStr() { return sIndent; }
+        const char*			GetIndentStr() { return sIndent; }
         void FontOn();
         inline void FontOff();
 
     public:
         // export data
-        OHTMLImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,
+        OHTMLImportExport(	const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const String& rExchange = String());
         // import data
-        OHTMLImportExport(  const SharedConnection& _rxConnection,
+        OHTMLImportExport(	const SharedConnection& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
-                        : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM) 
+                        : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM) 
         {}
 
         virtual BOOL Write();
@@ -216,14 +216,14 @@ namespace dbaui
 
     class ORowSetImportExport : public ODatabaseImportExport
     {
-        OModuleClient       m_aModuleClient;
-        ::std::vector<sal_Int32>    m_aColumnMapping;
-        ::std::vector<sal_Int32>    m_aColumnTypes;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xTargetResultSetUpdate;   //
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >          m_xTargetRowUpdate;         //
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xTargetResultSetMetaData; //
-        Window*                     m_pParent;
-        sal_Bool                    m_bAlreadyAsked;
+        OModuleClient		m_aModuleClient;
+        ::std::vector<sal_Int32>	m_aColumnMapping;
+        ::std::vector<sal_Int32>	m_aColumnTypes;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >	m_xTargetResultSetUpdate;	// 
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >			m_xTargetRowUpdate;			//
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >	m_xTargetResultSetMetaData;	// 
+        Window*						m_pParent;
+        sal_Bool					m_bAlreadyAsked;
 
         sal_Bool insertNewRow();
     protected:
@@ -239,10 +239,10 @@ namespace dbaui
 
         // import data
         ORowSetImportExport(const SharedConnection& _rxConnection,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
-                        : ODatabaseImportExport(_rxConnection,NULL,_rM)
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM) 
+                        : ODatabaseImportExport(_rxConnection,NULL,_rM) 
         {}
-
+        
         virtual BOOL Write();
         virtual BOOL Read();
 

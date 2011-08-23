@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -268,7 +268,7 @@ void OTableCopyHelper::pasteTable( const ::svx::ODataAccessDescriptor& _rPasteDa
 
 // -----------------------------------------------------------------------------
 void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
-                                  ,const TransferableDataHelper& _rTransData
+                                  ,const TransferableDataHelper& _rTransData 
                                   ,const ::rtl::OUString& i_rDestDataSource
                                   ,const SharedConnection& _xConnection)
 {
@@ -290,8 +290,8 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
             else
                 const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SOT_FORMAT_RTF,aTrans.aHtmlRtfStorage);
 
-            aTrans.nType            = E_TABLE;
-            aTrans.bHtml            = SOT_FORMATSTR_ID_HTML == _nFormatId;
+            aTrans.nType			= E_TABLE;
+            aTrans.bHtml			= SOT_FORMATSTR_ID_HTML == _nFormatId;
             aTrans.sDefaultTableName = GetTableNameForAppend();
             if ( !copyTagTable(aTrans,sal_False,_xConnection) )
                 m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
@@ -310,7 +310,7 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
 }
 
 // -----------------------------------------------------------------------------
-void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
+void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData 
                                   ,const ::rtl::OUString& i_rDestDataSource
                                   ,const SharedConnection& _xConnection)
 {
@@ -340,17 +340,17 @@ sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc
     //dyf add 20070601
     //set the selected tablename
     pImport->setSTableName(_rDesc.sDefaultTableName);
-    //dyf add end
+    //dyf add end 
     pImport->setStream(pStream);
     return pImport->Read();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableCopyHelper::isTableFormat(const TransferableDataHelper& _rClipboard)  const
 {
-    sal_Bool bTableFormat   =   _rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
-                ||  _rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
-                ||  _rClipboard.HasFormat(SOT_FORMAT_RTF)
-                ||  _rClipboard.HasFormat(SOT_FORMATSTR_ID_HTML);
+    sal_Bool bTableFormat	=	_rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
+                ||	_rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
+                ||	_rClipboard.HasFormat(SOT_FORMAT_RTF)
+                ||	_rClipboard.HasFormat(SOT_FORMATSTR_ID_HTML);
 
     return bTableFormat;
 }
@@ -368,8 +368,8 @@ sal_Bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedD
         else
             const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(SOT_FORMAT_RTF,_rAsyncDrop.aHtmlRtfStorage);
 
-        _rAsyncDrop.bHtml           = bHtml;
-        _rAsyncDrop.bError          = !copyTagTable(_rAsyncDrop,sal_True,_xConnection);
+        _rAsyncDrop.bHtml			= bHtml;
+        _rAsyncDrop.bError			= !copyTagTable(_rAsyncDrop,sal_True,_xConnection);
 
         bRet = ( !_rAsyncDrop.bError && _rAsyncDrop.aHtmlRtfStorage.Is() );
         if ( bRet )
@@ -410,6 +410,6 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
 }
 // -----------------------------------------------------------------------------
 //........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //........................................................................
 

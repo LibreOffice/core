@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,14 +33,14 @@ namespace rptshared
     */
     struct GroupProperties
     {
-        ::sal_Int32                                                                 m_nGroupInterval;
-        ::rtl::OUString                                                             m_sExpression;
-        ::sal_Int16                                                                 m_nGroupOn;
-        ::sal_Int16                                                                 m_nKeepTogether;
-        ::sal_Bool                                                                  m_eSortAscending;
-        ::sal_Bool                                                                  m_bStartNewColumn;
-        ::sal_Bool                                                                  m_bResetPageNumber;
-
+        ::sal_Int32																	m_nGroupInterval;
+        ::rtl::OUString 															m_sExpression;		
+        ::sal_Int16																	m_nGroupOn;		
+        ::sal_Int16																	m_nKeepTogether;
+        ::sal_Bool																	m_eSortAscending;
+        ::sal_Bool																	m_bStartNewColumn;
+        ::sal_Bool																	m_bResetPageNumber;
+        
         GroupProperties()
         :m_nGroupInterval(1)
         ,m_nGroupOn(0)

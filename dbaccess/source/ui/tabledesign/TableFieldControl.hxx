@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,22 +40,22 @@ namespace dbaui
     //==================================================================
     class OTableFieldControl : public OFieldDescControl
     {
-        OTableEditorCtrl*   GetCtrl() const;
+        OTableEditorCtrl*	GetCtrl() const;
     protected:
-        virtual void        ActivateAggregate( EControlType eType );
-        virtual void        DeactivateAggregate( EControlType eType );
+        virtual void		ActivateAggregate( EControlType eType );
+        virtual void		DeactivateAggregate( EControlType eType );
         // Sind von den abgeleiteten Klassen zu impl.
-        virtual void        CellModified(long nRow, USHORT nColId );
-        virtual BOOL        IsReadOnly();
-        virtual void        SetModified(BOOL bModified);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    GetFormatter() const;
+        virtual void		CellModified(long nRow, USHORT nColId );
+        virtual BOOL		IsReadOnly();
+        virtual void		SetModified(BOOL bModified);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >	GetFormatter() const;
+        
+        virtual ::com::sun::star::lang::Locale	GetLocale() const;
 
-        virtual ::com::sun::star::lang::Locale  GetLocale() const;
-
-        virtual TOTypeInfoSP                    getTypeInfo(sal_Int32 _nPos);
-        virtual const OTypeInfoMap*             getTypeInfo() const;
-        virtual sal_Bool                        isAutoIncrementValueEnabled() const;
-        virtual ::rtl::OUString                 getAutoIncrementValue() const;
+        virtual TOTypeInfoSP					getTypeInfo(sal_Int32 _nPos);
+        virtual const OTypeInfoMap*				getTypeInfo() const;
+        virtual sal_Bool						isAutoIncrementValueEnabled() const;
+        virtual ::rtl::OUString					getAutoIncrementValue() const;
 
     public:
         OTableFieldControl( Window* pParent, OTableDesignHelpBar* pHelpBar);

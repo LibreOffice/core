@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 
 class SdrView;
 namespace rptui
-{
+{	
     class ODesignView;
     class OReportWindow;
     class OSectionView;
@@ -53,18 +53,18 @@ namespace rptui
         the h-ruler and the sections, and end marker. Not the start marker.
     */
     typedef Window OScrollWindowHelper_BASE;
-    class OScrollWindowHelper :     public ::cppu::BaseMutex
+    class OScrollWindowHelper : 	public ::cppu::BaseMutex
                                 ,   public OScrollWindowHelper_BASE/*TabPage*/
-                                ,   public ::comphelper::OPropertyChangeListener
+                                ,	public ::comphelper::OPropertyChangeListener
                                     , public IMarkedSection
     {
-    private:
-        ScrollBar           m_aHScroll;
-        ScrollBar           m_aVScroll;
-        ScrollBarBox        m_aCornerWin;       // window in the bottom right corner
-        Size                m_aTotalPixelSize;
-        ODesignView*        m_pParent;
-        OReportWindow       m_aReportWindow;
+    private:		
+        ScrollBar			m_aHScroll;
+        ScrollBar			m_aVScroll;
+        ScrollBarBox		m_aCornerWin; 		// window in the bottom right corner
+        Size				m_aTotalPixelSize;
+        ODesignView*	    m_pParent;
+        OReportWindow		m_aReportWindow;
         ::rtl::Reference<comphelper::OPropertyChangeMultiplexer >
                             m_pReportDefintionMultiPlexer; // listener for property changes
 
@@ -78,28 +78,28 @@ namespace rptui
     protected:
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
         // window
-        virtual void            Resize();
+        virtual void			Resize();
         virtual long            Notify( NotifyEvent& rNEvt );
         // OPropertyChangeListener
-        virtual void            _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
+        virtual void	        _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
     public:
         OScrollWindowHelper( ODesignView* _pReportDesignView);
         virtual ~OScrollWindowHelper();
 
         /** late ctor
         */
-        void                    initialize();
+        void					initialize();
 
-        inline Point            getThumbPos() const { return Point(m_aHScroll.GetThumbPos(),m_aVScroll.GetThumbPos())/*m_aScrollOffset*/; }
-        inline const OReportWindow& getReportWindow() const { return m_aReportWindow; }
-        void                    setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight);
-        inline Size             getTotalSize() const { return m_aTotalPixelSize; }
-        inline ScrollBar*       GetHScroll() { return &m_aHScroll; }
-        inline ScrollBar*       GetVScroll() { return &m_aVScroll; }
+        inline Point			getThumbPos() const { return Point(m_aHScroll.GetThumbPos(),m_aVScroll.GetThumbPos())/*m_aScrollOffset*/; }
+        inline const OReportWindow&	getReportWindow() const { return m_aReportWindow; }
+        void					setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight);
+        inline Size				getTotalSize() const { return m_aTotalPixelSize; }
+        inline ScrollBar*		GetHScroll() { return &m_aHScroll; }
+        inline ScrollBar*		GetVScroll() { return &m_aVScroll; }
 
         // forwards
-        void                    SetMode( DlgEdMode _eMode );
-        void                    SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
+        void 					SetMode( DlgEdMode _eMode );
+        void					SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
         rtl::OUString           GetInsertObjString() const;
         void                    setGridSnap(BOOL bOn);
         void                    setDragStripes(BOOL bOn);
@@ -107,7 +107,7 @@ namespace rptui
         */
         void Copy();
 
-        /** returns if paste is allowed
+        /**	returns if paste is allowed
         *
         * \return <TRUE/> if paste is allowed
         */
@@ -134,55 +134,55 @@ namespace rptui
         *
         * \param _nPosition Zero based.
         */
-        void                    removeSection(USHORT _nPosition);
+        void					removeSection(USHORT _nPosition);
 
         /** adds a new section at position _nPosition.
             If the section is <NULL/> nothing happens.
             If the position is grater than the current elements, the section will be appended.
         */
-        void                    addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
+        void					addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
                                     ,const ::rtl::OUString& _sColorEntry
                                     ,USHORT _nPosition = USHRT_MAX);
 
-        USHORT                  getSectionCount() const;
+        USHORT					getSectionCount() const;
 
         /** turns the grid on or off
         *
         * \param _bVisible
         */
-        void                    toggleGrid(sal_Bool _bVisible);
+        void					toggleGrid(sal_Bool _bVisible);
 
         /** unmark all objects on the views without the given one.
         *
         * @param _pSectionView The view where the objects should not be unmarked.
         */
-        void                    unmarkAllObjects(OSectionView* _pSectionView);
+        void					unmarkAllObjects(OSectionView* _pSectionView);
 
         /** shows or hides the ruler.
         */
-        void                    showRuler(sal_Bool _bShow);
-
+        void					showRuler(sal_Bool _bShow);
+        
         /** calculate the max width of the markers
         *
-        * @param _bWithEnd  if <TRUE/> the end marker will be used for calculation as well otherwise not.
+        * @param _bWithEnd	if <TRUE/> the end marker will be used for calculation as well otherwise not.
         * \return the max width
         */
-        sal_Int32               getMaxMarkerWidth(sal_Bool _bWithEnd) const;
+        sal_Int32				getMaxMarkerWidth(sal_Bool _bWithEnd) const;
 
         /** checks if the keycode is known by the child windows
-            @param  _rCode  the keycode
+            @param	_rCode	the keycode
             @return <TRUE/> if the keycode is handled otherwise <FALSE/>
         */
-        sal_Bool                handleKeyEvent(const KeyEvent& _rEvent);
+        sal_Bool				handleKeyEvent(const KeyEvent& _rEvent);
 
         /** the the section as marked or not marked
-            @param  _pSectionView   the section where to set the marked flag
-            @param  _bMark  the marked flag
+            @param	_pSectionView	the section where to set the marked flag
+            @param	_bMark	the marked flag
         */
-        void                    setMarked(OSectionView* _pSectionView,sal_Bool _bMark);
-        void                    setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,sal_Bool _bMark);
-        void                    setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
-
+        void					setMarked(OSectionView* _pSectionView,sal_Bool _bMark);
+        void			        setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,sal_Bool _bMark);
+        void			        setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
+        
         // IMarkedSection
         ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const;
         ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
@@ -203,9 +203,9 @@ namespace rptui
 
         /** align all marked objects in all sections
         *
-        * \param eHor
-        * \param eVert
-        * \param bBoundRects
+        * \param eHor 
+        * \param eVert 
+        * \param bBoundRects 
         */
         void alignMarkedObjects(sal_Int32 _nControlModification, bool _bAlignAtSection, bool bBoundRects = false);
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,15 +74,15 @@ class DatabaseDocumentLoader;
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseContext_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::WeakComponentImplHelper8    <   ::com::sun::star::lang::XServiceInfo
-                                            ,   ::com::sun::star::container::XEnumerationAccess
-                                            ,   ::com::sun::star::container::XNameAccess
-                                            ,   ::com::sun::star::uno::XNamingService
-                                            ,   ::com::sun::star::container::XContainer
-                                            ,   ::com::sun::star::lang::XSingleServiceFactory
-                                            ,   ::com::sun::star::lang::XUnoTunnel
-                                            ,   ::com::sun::star::sdb::XDatabaseRegistrations
-                                            >   DatabaseAccessContext_Base;
+typedef ::cppu::WeakComponentImplHelper8	<	::com::sun::star::lang::XServiceInfo
+                                            ,	::com::sun::star::container::XEnumerationAccess
+                                            ,	::com::sun::star::container::XNameAccess
+                                            ,	::com::sun::star::uno::XNamingService
+                                            ,	::com::sun::star::container::XContainer
+                                            ,	::com::sun::star::lang::XSingleServiceFactory
+                                            ,	::com::sun::star::lang::XUnoTunnel
+                                            ,	::com::sun::star::sdb::XDatabaseRegistrations
+                                            >	DatabaseAccessContext_Base;
 
 class ODatabaseContext  :public DatabaseAccessContext_Base
                         ,public ::basic::BasicManagerCreationListener
@@ -91,7 +91,7 @@ private:
     /** loads the given object from the given URL
     @throws WrappedTargetException
         if an error occurs accessing the URL via the UCB
-
+            
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > loadObjectFromURL(const ::rtl::OUString& _rName,const ::rtl::OUString& _sURL);
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getObject( const ::rtl::OUString& _rURL );
@@ -108,7 +108,7 @@ private:
             impl_createNewDataSource();
 
 protected:
-    ::osl::Mutex                    m_aMutex;
+    ::osl::Mutex	                m_aMutex;
     ::comphelper::ComponentContext  m_aContext;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
@@ -117,17 +117,17 @@ protected:
                                     m_xDatabaseRegistrations;
 
     DECLARE_STL_USTRINGACCESS_MAP( ODatabaseModelImpl*, ObjectCache );
-    ObjectCache     m_aDatabaseObjects;
+    ObjectCache		m_aDatabaseObjects;
 
     DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >, PropertyCache );
-    PropertyCache   m_aDatasourceProperties;
+    PropertyCache	m_aDatasourceProperties;
         // as we hold our data sources weak, we have to cache all properties on the data sources which are
         // transient but stored as long as the session lasts. The database context is the session (as it lives
         // as long as the session does), but the data sources may die before the session does, and then be
         // recreated afterwards. So it's our (the context's) responsibility to store the session-persistent
         // properties.
 
-    ::cppu::OInterfaceContainerHelper       m_aContainerListeners;
+    ::cppu::OInterfaceContainerHelper		m_aContainerListeners;
     DatabaseDocumentLoader*                 m_pDatabaseDocumentLoader;
 
 public:
@@ -205,7 +205,7 @@ private:
 };
 
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 
 #endif // _DBA_COREDATAACCESS_DATABASECONTEXT_HXX_

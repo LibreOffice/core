@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,17 +40,17 @@ namespace dbaccess
     class ORowSetDataColumn;
     typedef ::comphelper::OPropertyArrayUsageHelper<ORowSetDataColumn> ORowSetDataColumn_PROP;
 
-    class ORowSetDataColumn :   public ODataColumn,
+    class ORowSetDataColumn :	public ODataColumn,
                                 public OColumnSettings,
                                 public ORowSetDataColumn_PROP
     {
     protected:
-        ORowSetCacheIterator        m_aColumnValue;
-        ::com::sun::star::uno::Any  m_aOldValue;
+        ORowSetCacheIterator		m_aColumnValue;
+        ::com::sun::star::uno::Any	m_aOldValue;
 
         ::rtl::OUString             m_sLabel;
-        ::rtl::OUString             m_aDescription;     // description
-        ORowSetBase*                m_pRowSet;
+        ::rtl::OUString				m_aDescription;		// description
+        ORowSetBase*				m_pRowSet;
 
         virtual ~ORowSetDataColumn();
     public:
@@ -63,7 +63,7 @@ namespace dbaccess
                           const ::rtl::OUString& i_sLabel,
                           const ORowSetCacheIterator& _rColumnValue);
 
-
+        
         // com::sun::star::lang::XTypeProvider
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
         // comphelper::OPropertyArrayUsageHelper
@@ -84,8 +84,8 @@ namespace dbaccess
         using ODataColumn::getFastPropertyValue;
     };
     // -------------------------------------------------------------------------
-//  typedef connectivity::ORefVector< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> >
-//          ORowSetDataColumns_COLLECTION;
+//	typedef connectivity::ORefVector< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> >
+//			ORowSetDataColumns_COLLECTION;
 
     typedef connectivity::sdbcx::OCollection ORowSetDataColumns_BASE;
     class ORowSetDataColumns : public ORowSetDataColumns_BASE

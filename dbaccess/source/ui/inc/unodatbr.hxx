@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,12 +113,12 @@ namespace dbaui
     class ImageProvider;
 
     // =====================================================================
-    typedef ::cppu::ImplHelper5 <   ::com::sun::star::frame::XStatusListener
-                                ,   ::com::sun::star::view::XSelectionSupplier
+    typedef ::cppu::ImplHelper5	<	::com::sun::star::frame::XStatusListener
+                                ,	::com::sun::star::view::XSelectionSupplier
                                 ,   ::com::sun::star::document::XScriptInvocationContext
                                 ,   ::com::sun::star::ui::XContextMenuInterception
                                 ,   ::com::sun::star::sdb::XDatabaseRegistrationsListener
-                                >   SbaTableQueryBrowser_Base;
+                                >	SbaTableQueryBrowser_Base;
     class SbaTableQueryBrowser
                 :public SbaXDataBrowserController
                 ,public SbaTableQueryBrowser_Base
@@ -128,8 +128,8 @@ namespace dbaui
     protected:
 
         // ---------------------------
-        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >   m_xCollator;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >     m_xCurrentFrameParent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >	m_xCollator;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >		m_xCurrentFrameParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xMainToolbar;
 
         // ---------------------------
@@ -147,30 +147,30 @@ namespace dbaui
         typedef ::std::map< sal_uInt16, ExternalFeature, ::std::less< sal_uInt16 > >  ExternalFeaturesMap;
         ExternalFeaturesMap     m_aExternalFeatures;
 
-        ::svx::ODataAccessDescriptor    m_aDocumentDataSource;
+        ::svx::ODataAccessDescriptor	m_aDocumentDataSource;
             // if we're part of a document, this is the state of the DocumentDataSource slot
 
-        ::cppu::OInterfaceContainerHelper   m_aSelectionListeners;
-        ::cppu::OInterfaceContainerHelper   m_aContextMenuInterceptors;
+        ::cppu::OInterfaceContainerHelper	m_aSelectionListeners;
+        ::cppu::OInterfaceContainerHelper	m_aContextMenuInterceptors;
 
         OTableCopyHelper::DropDescriptor    m_aAsyncDrop;
         OTableCopyHelper                    m_aTableCopyHelper;
 
-        ::rtl::OUString         m_sQueryCommand;    // the command of the query currently loaded (if any)
+        ::rtl::OUString			m_sQueryCommand;	// the command of the query currently loaded (if any)
         //::rtl::OUString         m_sToBeLoaded;      // contains the element name which should be loaded if any
 
-        DBTreeView*             m_pTreeView;
-        Splitter*               m_pSplitter;
-        SvLBoxTreeList*         m_pTreeModel;           // contains the datasources of the registry
-        SvLBoxEntry*            m_pCurrentlyDisplayed;
-        ULONG                   m_nAsyncDrop;
+        DBTreeView*				m_pTreeView;
+        Splitter*				m_pSplitter;
+        SvLBoxTreeList*         m_pTreeModel;			// contains the datasources of the registry
+        SvLBoxEntry*			m_pCurrentlyDisplayed;
+        ULONG					m_nAsyncDrop;
 
-        sal_Int16               m_nBorder;              // TRUE when border should be shown
+        sal_Int16				m_nBorder;				// TRUE when border should be shown
 
-        sal_Bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
-        sal_Bool                m_bShowMenu;            // if TRUE the menu should be visible otherwise not
-        sal_Bool                m_bInSuspend;
-        sal_Bool                m_bEnableBrowser;
+        sal_Bool				m_bQueryEscapeProcessing : 1;	// the escape processing flag of the query currently loaded (if any)
+        sal_Bool				m_bShowMenu;			// if TRUE the menu should be visible otherwise not
+        sal_Bool				m_bInSuspend;
+        sal_Bool				m_bEnableBrowser;
         ::boost::optional< bool >
                                 m_aDocScriptSupport;    // relevant if and only if we are associated with exactly one DBDoc
 
@@ -209,7 +209,7 @@ namespace dbaui
         // late construction
         virtual sal_Bool Construct(Window* pParent);
         // XInterface
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any	SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
 
         // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -223,7 +223,7 @@ namespace dbaui
         virtual void SAL_CALL attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::lang::XComponent
-        virtual void        SAL_CALL disposing();
+        virtual void		SAL_CALL disposing();
 
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
@@ -269,7 +269,7 @@ namespace dbaui
         virtual sal_Bool InitializeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
 
         virtual sal_Bool preReloadForm();
-        virtual void     postReloadForm();
+        virtual void	 postReloadForm();
 
         virtual void addModelListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
         virtual void removeModelListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
@@ -281,15 +281,15 @@ namespace dbaui
 
         virtual void criticalFail();
 
-        virtual void            describeSupportedFeatures();
-        virtual FeatureState    GetState(sal_uInt16 nId) const;
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual void			describeSupportedFeatures();
+        virtual FeatureState	GetState(sal_uInt16 nId) const;
+        virtual void			Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         // IControlActionListener overridables
         virtual sal_Bool    requestQuickHelp( const SvLBoxEntry* _pEntry, String& _rText ) const;
-        virtual sal_Bool    requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
-        virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
-        virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt );
+        virtual sal_Bool	requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+        virtual sal_Int8	queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
+        virtual sal_Int8	executeDrop( const ExecuteDropEvent& _rEvt );
 
         // IContextMenuProvider
         virtual PopupMenu*      getContextMenu( Control& _rControl ) const;
@@ -307,18 +307,18 @@ namespace dbaui
         virtual void SelectionChanged();
 
         // methods for showing/hiding the explorer part
-        sal_Bool    haveExplorer() const;
-        void        hideExplorer();
-        void        showExplorer();
-        void        toggleExplorer() { if (haveExplorer()) hideExplorer(); else showExplorer(); }
+        sal_Bool	haveExplorer() const;
+        void		hideExplorer();
+        void		showExplorer();
+        void		toggleExplorer() { if (haveExplorer()) hideExplorer(); else showExplorer(); }
 
         // methods for handling the 'selection' (paintin them bold) of SvLBoxEntries
         // returns <TRUE/> if the entry is selected (which means it's part of the selected path)
-        sal_Bool    isSelected(SvLBoxEntry* _pEntry) const;
+        sal_Bool	isSelected(SvLBoxEntry* _pEntry) const;
         // select the entry (and only the entry, not the whole path)
-        void        select(SvLBoxEntry* _pEntry, sal_Bool _bSelect = sal_True);
+        void		select(SvLBoxEntry* _pEntry, sal_Bool _bSelect = sal_True);
         // select the path of the entry (which must be an entry without children)
-        void        selectPath(SvLBoxEntry* _pEntry, sal_Bool _bSelect = sal_True);
+        void		selectPath(SvLBoxEntry* _pEntry, sal_Bool _bSelect = sal_True);
 
         virtual void loadMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
 
@@ -333,7 +333,7 @@ namespace dbaui
             <p>The slot is available if an external dispatcher is responsible for it, _and_ if this dispatcher
             told us the slot is available.</p>
         */
-        sal_Bool    getExternalSlotState( sal_uInt16 _nId ) const;
+        sal_Bool	getExternalSlotState( sal_uInt16 _nId ) const;
 
         /** add an entry (including the subentries for queries/tables) to the list model
 
@@ -363,17 +363,17 @@ namespace dbaui
         void unloadAndCleanup( sal_Bool _bDisposeConnection = sal_True );
 
         // disposes the connection associated with the given entry (which must represent a data source)
-        void        disposeConnection( SvLBoxEntry* _pDSEntry );
+        void		disposeConnection( SvLBoxEntry* _pDSEntry );
 
         /// flushs and disposes the given connection, and de-registers as listener
         void        impl_releaseConnection( SharedConnection& _rxConnection );
 
         /** close the connection (and collapse the list entries) of the given list entries
         */
-        void        closeConnection(SvLBoxEntry* _pEntry,sal_Bool _bDisposeConnection = sal_True);
+        void		closeConnection(SvLBoxEntry* _pEntry,sal_Bool _bDisposeConnection = sal_True);
 
         void        populateTree(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, EntryType _eEntryType);
-        void        initializeTreeModel();
+        void		initializeTreeModel();
 
         /** search in the tree for query- or tablecontainer equal to this interface and return
             this container entry
@@ -389,22 +389,22 @@ namespace dbaui
         ::std::auto_ptr< ImageProvider >
                 getImageProviderFor( SvLBoxEntry* _pAnyEntry );
 
-        void    implAdministrate( SvLBoxEntry* _pApplyTo );
+        void	implAdministrate( SvLBoxEntry* _pApplyTo );
 
         TransferableHelper*
                 implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection = sal_True );
 
-        EntryType   getEntryType( SvLBoxEntry* _pEntry ) const;
-        EntryType   getChildType( SvLBoxEntry* _pEntry ) const;
-        sal_Bool    isObject( EntryType _eType ) const { return ( etTableOrView== _eType ) || ( etQuery == _eType ); }
-        sal_Bool    isContainer( EntryType _eType ) const { return (etTableContainer == _eType) || (etQueryContainer == _eType); }
-        sal_Bool    isContainer( SvLBoxEntry* _pEntry ) const { return isContainer( getEntryType( _pEntry ) ); }
+        EntryType	getEntryType( SvLBoxEntry* _pEntry ) const;
+        EntryType	getChildType( SvLBoxEntry* _pEntry ) const;
+        sal_Bool	isObject( EntryType _eType ) const { return ( etTableOrView== _eType ) || ( etQuery == _eType ); }
+        sal_Bool	isContainer( EntryType _eType ) const { return (etTableContainer == _eType) || (etQueryContainer == _eType); }
+        sal_Bool	isContainer( SvLBoxEntry* _pEntry ) const { return isContainer( getEntryType( _pEntry ) ); }
 
         // ensure that the xObject for the given entry is set on the user data
-        sal_Bool    ensureEntryObject( SvLBoxEntry* _pEntry );
+        sal_Bool	ensureEntryObject( SvLBoxEntry* _pEntry );
 
         // get the display text of the entry given
-        String      GetEntryText( SvLBoxEntry* _pEntry ) const;
+        String		GetEntryText( SvLBoxEntry* _pEntry ) const;
 
         // is called when a table or a query was selected
         DECL_LINK( OnSelectionChange, void* );
@@ -491,7 +491,7 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connectWithStatus(
             const ::rtl::OUString& _rDataSourceName,
-            void* _pTreeListUserData    // in rela a DBTreeListUserData*, but we do not know this class here ....
+            void* _pTreeListUserData	// in rela a DBTreeListUserData*, but we do not know this class here ....
         );
 
 #ifdef DBG_UTIL
@@ -518,9 +518,9 @@ namespace dbaui
 
 
         /** checks if the currently displayed entry changed
-            @param  _sName
+            @param	_sName
                     Name of the changed entry
-            @param  _pContainer
+            @param	_pContainer
                     The container of the displayed entry
             @return
                     <TRUE/> if it is the currently displayed otherwise <FALSE/>
@@ -534,7 +534,7 @@ namespace dbaui
     };
 
 // .........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 // .........................................................................
 
 #endif // _SBA_UNODATBR_HXX_

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,7 +163,7 @@ namespace dbaui
 
 
 
-    OGenericAdministrationPage* OConnectionTabPageSetup::CreateDbaseTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage*	OConnectionTabPageSetup::CreateDbaseTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         OConnectionTabPageSetup* oDBWizardPage = new OConnectionTabPageSetup( pParent, PAGE_DBWIZARD_DBASE,    _rAttrSet, STR_DBASE_HELPTEXT,    STR_DBASE_HEADERTEXT,    STR_DBASE_PATH_OR_FILE);
         oDBWizardPage->FreeResource();
@@ -171,35 +171,35 @@ namespace dbaui
     }
 
 
-    OGenericAdministrationPage* OConnectionTabPageSetup::CreateMSAccessTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage*	OConnectionTabPageSetup::CreateMSAccessTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         OConnectionTabPageSetup* oDBWizardPage = new OConnectionTabPageSetup( pParent, PAGE_DBWIZARD_MSACCESS, _rAttrSet, STR_MSACCESS_HELPTEXT, STR_MSACCESS_HEADERTEXT, STR_MSACCESS_MDB_FILE);
         oDBWizardPage->FreeResource();
         return oDBWizardPage;
     }
 
-    OGenericAdministrationPage* OConnectionTabPageSetup::CreateAdabasTabPage( Window* pParent,  const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage*	OConnectionTabPageSetup::CreateAdabasTabPage( Window* pParent,	const SfxItemSet& _rAttrSet )
     {
         OConnectionTabPageSetup* oDBWizardPage = new OConnectionTabPageSetup( pParent, PAGE_DBWIZARD_ADABAS, _rAttrSet, STR_ADABAS_HELPTEXT, STR_ADABAS_HEADERTEXT, STR_ADABAS_DATABASE_NAME);
         oDBWizardPage->FreeResource();
         return oDBWizardPage;
     }
 
-    OGenericAdministrationPage* OConnectionTabPageSetup::CreateADOTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage*	OConnectionTabPageSetup::CreateADOTabPage( Window* pParent,	const SfxItemSet& _rAttrSet )
     {
         OConnectionTabPageSetup* oDBWizardPage = new OConnectionTabPageSetup( pParent, PAGE_DBWIZARD_ADO, _rAttrSet, STR_ADO_HELPTEXT, STR_ADO_HEADERTEXT, STR_COMMONURL);
         oDBWizardPage->FreeResource();
         return oDBWizardPage;
     }
 
-    OGenericAdministrationPage* OConnectionTabPageSetup::CreateODBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage*	OConnectionTabPageSetup::CreateODBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         OConnectionTabPageSetup* oDBWizardPage = new OConnectionTabPageSetup( pParent, PAGE_DBWIZARD_ODBC, _rAttrSet, STR_ODBC_HELPTEXT, STR_ODBC_HEADERTEXT, STR_NAME_OF_ODBC_DATASOURCE);
         oDBWizardPage->FreeResource();
         return oDBWizardPage;
     }
 
-    OGenericAdministrationPage* OConnectionTabPageSetup::CreateUserDefinedTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage*	OConnectionTabPageSetup::CreateUserDefinedTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         OConnectionTabPageSetup* oDBWizardPage = new OConnectionTabPageSetup( pParent, PAGE_DBWIZARD_USERDEFINED, _rAttrSet, USHRT_MAX, USHRT_MAX, STR_COMMONURL);
         oDBWizardPage->FreeResource();
@@ -278,12 +278,12 @@ namespace dbaui
         //! TODO
         //if ( m_eType >=  ::dbaccess::DST_USERDEFINE1 )
         //{
-        //  String sDisplayName = m_pCollection->getTypeDisplayName(m_eType);
-        //  FixedText* ppTextControls[] ={&m_aFT_Connection};
-        //  for (size_t i = 0; i < sizeof(ppTextControls)/sizeof(ppTextControls[0]); ++i)
-        //  {
-        //      ppTextControls[i]->SetText(sDisplayName);
-        //  }
+        //	String sDisplayName = m_pCollection->getTypeDisplayName(m_eType);
+        //	FixedText* ppTextControls[] ={&m_aFT_Connection};
+        //	for (size_t i = 0; i < sizeof(ppTextControls)/sizeof(ppTextControls[0]); ++i)
+        //	{
+        //		ppTextControls[i]->SetText(sDisplayName);
+        //	}
         //}
 
         callModifiedHdl();
@@ -315,7 +315,7 @@ namespace dbaui
         return 0L;
     }
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 

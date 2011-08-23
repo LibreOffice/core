@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@
 #ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_ 
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
@@ -101,34 +101,34 @@ namespace dbaui
 class OSaveAsDlgImpl
 {
 public:
-    FixedText           m_aDescription;
-    FixedText           m_aCatalogLbl;
-    OSQLNameComboBox    m_aCatalog;
-    FixedText           m_aSchemaLbl;
-    OSQLNameComboBox    m_aSchema;
-    FixedText           m_aLabel;
-    OSQLNameEdit        m_aTitle;
-    OKButton            m_aPB_OK;
-    CancelButton        m_aPB_CANCEL;
-    HelpButton          m_aPB_HELP;
-    String              m_aQryLabel;
-    String              m_sTblLabel;
+    FixedText			m_aDescription;
+    FixedText			m_aCatalogLbl;
+    OSQLNameComboBox	m_aCatalog;
+    FixedText			m_aSchemaLbl;
+    OSQLNameComboBox	m_aSchema;
+    FixedText			m_aLabel;
+    OSQLNameEdit		m_aTitle;
+    OKButton			m_aPB_OK;
+    CancelButton		m_aPB_CANCEL;
+    HelpButton			m_aPB_HELP;
+    String				m_aQryLabel;
+    String				m_sTblLabel;
     rtl::OUString       m_sCatalog;
-    rtl::OUString       m_sSchema;
-    String              m_aName;
+    rtl::OUString       m_sSchema;	
+    String				m_aName;
     const IObjectNameCheck&
                         m_rObjectNameCheck;
-    String              m_sParentURL;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>            m_xMetaData;
-    sal_Int32           m_nType;
-    sal_Int32           m_nFlags;
+    String				m_sParentURL;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>			m_xMetaData;
+    sal_Int32			m_nType;
+    sal_Int32			m_nFlags;
 
-    OSaveAsDlgImpl( Window * pParent,const sal_Int32& _rType,
+    OSaveAsDlgImpl(	Window * pParent,const sal_Int32& _rType,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                     const String& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags);
-    OSaveAsDlgImpl( Window * pParent,
+    OSaveAsDlgImpl(	Window * pParent,
                     const String& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags);
@@ -303,15 +303,15 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                     ::rtl::OUString sCatalog,sSchema,sTable;
                     ::dbtools::qualifiedNameComponents(m_pImpl->m_xMetaData,
                                                         m_pImpl->m_aName,
-                                                        sCatalog,
-                                                        sSchema,
+                                                        sCatalog, 
+                                                        sSchema, 
                                                         sTable,
                                                         ::dbtools::eInDataManipulation);
 
                     USHORT nPos = m_pImpl->m_aCatalog.GetEntryPos(String(sCatalog));
                     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                         m_pImpl->m_aCatalog.SelectEntryPos(nPos);
-
+                    
                     if ( sSchema.getLength() )
                     {
                         nPos = m_pImpl->m_aSchema.GetEntryPos(String(sSchema));
@@ -339,7 +339,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_pImpl->m_aTitle.setCheck(bCheck); // enable non valid sql chars as well
                 m_pImpl->m_aSchema.setCheck(bCheck); // enable non valid sql chars as well
                 m_pImpl->m_aCatalog.setCheck(bCheck); // enable non valid sql chars as well
-
+                
                 Size aSize = GetSizePixel();
                 aSize.Height() =
                     aPos.Y() + m_pImpl->m_aPB_OK.GetSizePixel().Height() + m_pImpl->m_aTitle.GetSizePixel().Height() / 2;
@@ -365,7 +365,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
 {
     m_pImpl = new OSaveAsDlgImpl(this,rDefault,_rObjectNameCheck,_nFlags);
     implInitOnlyTitle(_sLabel);
-    implInit();
+    implInit();	
 }
 // -----------------------------------------------------------------------------
 OSaveAsDlg::~OSaveAsDlg()
@@ -447,7 +447,7 @@ void OSaveAsDlg::implInit()
         sal_Int32 nMoveUp = m_pImpl->m_aCatalog.GetPosPixel().Y() - m_pImpl->m_aDescription.GetPosPixel().Y();
 
         // loop to all controls and move them ...
-        for (   Window* pChildControl = GetWindow( WINDOW_FIRSTCHILD );
+        for	(	Window* pChildControl = GetWindow( WINDOW_FIRSTCHILD );
                 pChildControl;
                 pChildControl= pChildControl->GetWindow( WINDOW_NEXT )
             )
@@ -473,14 +473,14 @@ void OSaveAsDlg::implInit()
         SetText( String( ModuleRes( STR_TITLE_RENAME ) ) );
         m_pImpl->m_aTitle.SetHelpId(HID_DLG_RENAME);
     }
-
+    
     m_pImpl->m_aPB_OK.SetClickHdl(LINK(this,OSaveAsDlg,ButtonClickHdl));
     m_pImpl->m_aTitle.SetModifyHdl(LINK(this,OSaveAsDlg,EditModifyHdl));
     m_pImpl->m_aTitle.GrabFocus();
     FreeResource();
 }
 // -----------------------------------------------------------------------------
-String OSaveAsDlg::getName() const      { return m_pImpl->m_aName; }
-String OSaveAsDlg::getCatalog() const   { return m_pImpl->m_aCatalog.IsVisible() ? m_pImpl->m_aCatalog.GetText() : String(); }
-String OSaveAsDlg::getSchema() const    { return m_pImpl->m_aSchema.IsVisible() ? m_pImpl->m_aSchema.GetText() : String(); }
+String OSaveAsDlg::getName() const		{ return m_pImpl->m_aName; }
+String OSaveAsDlg::getCatalog() const	{ return m_pImpl->m_aCatalog.IsVisible() ? m_pImpl->m_aCatalog.GetText() : String(); }
+String OSaveAsDlg::getSchema() const	{ return m_pImpl->m_aSchema.IsVisible() ? m_pImpl->m_aSchema.GetText() : String(); }
 

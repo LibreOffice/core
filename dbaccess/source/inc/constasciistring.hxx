@@ -13,17 +13,17 @@
 // string constants
 struct ConstAsciiString
 {
-    const sal_Char* ascii;
-    sal_Int32       length;
+    const sal_Char*	ascii;
+    sal_Int32		length;
 
-    inline  operator const ::rtl::OUString& () const;
-    inline  operator const sal_Char* () const { return ascii; }
+    inline	operator const ::rtl::OUString& () const;
+    inline	operator const sal_Char* () const { return ascii; }
 
     inline ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength);
     inline ~ConstAsciiString();
 
 private:
-    mutable ::rtl::OUString*    ustring;
+    mutable ::rtl::OUString*	ustring;
 };
 
 //------------------------------------------------------------

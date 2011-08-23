@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,12 +69,12 @@ namespace dbaccess
     //************************************************************
     //  OColumn
     //************************************************************
-    typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::lang::XServiceInfo,
+    typedef ::cppu::WeakComponentImplHelper2<	::com::sun::star::lang::XServiceInfo,
                                                 ::com::sun::star::container::XNamed
                                             >   OColumnBase;
 
     //------------------------------------------------------------
-    class OColumn   :public comphelper::OBaseMutex
+    class OColumn	:public comphelper::OBaseMutex
                     ,public OColumnBase
                     ,public ::comphelper::OPropertyContainer
                     ,public IPropertyContainer  // convenience for the derived class which also derive from OColumnSettings
@@ -167,18 +167,18 @@ namespace dbaccess
     class OColumns : public OColumns_BASE
                     ,public TXChild
     {
-        OContainerMediator*     m_pMediator;
+        OContainerMediator*		m_pMediator;
 
     protected:
         // comes from the driver can be null
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDrvColumns;
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >       m_xParent;
-        IColumnFactory*                             m_pColFactoryImpl;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >	m_xDrvColumns;
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >		m_xParent;
+        IColumnFactory*								m_pColFactoryImpl;
         ::connectivity::sdbcx::IRefreshableColumns* m_pRefreshColumns;
 
-        sal_Bool                                    m_bInitialized  : 1;
-        sal_Bool                                    m_bAddColumn    : 1;
-        sal_Bool                                    m_bDropColumn   : 1;
+        sal_Bool									m_bInitialized	: 1;
+        sal_Bool									m_bAddColumn	: 1;
+        sal_Bool									m_bDropColumn	: 1;
 
         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
         virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
@@ -193,17 +193,17 @@ namespace dbaccess
         }
         /** flag which determines whether the container is filled or not
         */
-        inline sal_Bool isInitialized() const { return m_bInitialized; }
-        inline void     setInitialized() {m_bInitialized = sal_True;}
-        inline void     setMediator(OContainerMediator* _pMediator) { m_pMediator = _pMediator; }
+        inline sal_Bool	isInitialized() const { return m_bInitialized; }
+        inline void		setInitialized() {m_bInitialized = sal_True;}
+        inline void		setMediator(OContainerMediator* _pMediator) { m_pMediator = _pMediator; }
 
     public:
         /** constructs an empty container without configuration location.
-            @param      rParent             the parent object. This instance will be used for refcounting, so the parent
+            @param		rParent				the parent object. This instance will be used for refcounting, so the parent
                                             cannot die before the container does.
-            @param      _rMutex             the mutex of the parent.
-            @param      _bCaseSensitive     the initial case sensitivity flag
-            @see        setCaseSensitive
+            @param		_rMutex				the mutex of the parent.
+            @param		_bCaseSensitive		the initial case sensitivity flag
+            @see		setCaseSensitive
         */
         OColumns(
                 ::cppu::OWeakObject& _rParent,
@@ -218,7 +218,7 @@ namespace dbaccess
 
         OColumns(
             ::cppu::OWeakObject& _rParent,
-            ::osl::Mutex& _rMutex,
+            ::osl::Mutex& _rMutex, 
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDrvColumns,
             sal_Bool _bCaseSensitive,
             const ::std::vector< ::rtl::OUString> &_rVector,

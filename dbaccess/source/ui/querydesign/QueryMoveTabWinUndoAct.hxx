@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ namespace dbaui
     class OTableWindow;
     class OJoinMoveTabWinUndoAct : public OQueryDesignUndoAction
     {
-        Point           m_ptNextPosition;
-        OTableWindow*   m_pTabWin;
+        Point			m_ptNextPosition;
+        OTableWindow*	m_pTabWin;
 
     protected:
         void TogglePosition();
@@ -55,8 +55,8 @@ namespace dbaui
     public:
         OJoinMoveTabWinUndoAct(OJoinTableView* pOwner, const Point& ptOriginalPosition, OTableWindow* pTabWin);
 
-        virtual void    Undo() { TogglePosition(); }
-        virtual void    Redo() { TogglePosition(); }
+        virtual void	Undo() { TogglePosition(); }
+        virtual void	Redo() { TogglePosition(); }
     };
 
     // ------------------------------------------------------------------------------------------------

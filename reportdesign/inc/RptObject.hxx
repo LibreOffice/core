@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,8 +60,8 @@ typedef ::std::multimap< sal_Int16, ::rtl::OUString, ::std::less< sal_Int16 > > 
     class REPORTDESIGN_DLLPUBLIC DlgEdHint: public SfxHint
     {
     private:
-        DlgEdHintKind   eHintKind;
-        OUnoObject*     pDlgEdObj;
+        DlgEdHintKind	eHintKind;
+        OUnoObject*		pDlgEdObj;
 
         DlgEdHint(DlgEdHint&);
         void operator =(DlgEdHint&);
@@ -70,8 +70,8 @@ typedef ::std::multimap< sal_Int16, ::rtl::OUString, ::std::less< sal_Int16 > > 
         DlgEdHint( DlgEdHintKind eHint );
         virtual ~DlgEdHint();
 
-        inline DlgEdHintKind    GetKind() const { return eHintKind; }
-        inline OUnoObject*      GetObject() const { return pDlgEdObj; }
+        inline DlgEdHintKind	GetKind() const	{ return eHintKind; }
+        inline OUnoObject*		GetObject() const { return pDlgEdObj; }
     };
 
 
@@ -86,20 +86,20 @@ public:
 protected:
     mutable TMediator                                                                           m_xMediator;
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xPropertyChangeListener;
-    //mutable ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>
-    mutable ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>       m_xReportComponent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>          m_xContainerListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>                       m_xSection;
+    //mutable ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> 
+    mutable ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>		m_xReportComponent;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>	        m_xContainerListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>				        m_xSection;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >                       m_xKeepShapeAlive;
     ::rtl::OUString m_sComponentName;
-    sal_Bool        m_bIsListening;
+    sal_Bool		m_bIsListening;
 
     OObjectBase(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
     OObjectBase(const ::rtl::OUString& _sComponentName);
 
-    virtual ~OObjectBase();
-
-    inline sal_Bool isListening() const { return m_bIsListening; }
+    virtual ~OObjectBase();	
+    
+    inline sal_Bool	isListening() const { return m_bIsListening; }
 
     void SetPropsFromRect(const Rectangle& _rRect);
 
@@ -123,7 +123,7 @@ public:
     virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
     virtual void initializeOle() {}
 
-    sal_Bool        supportsService( const ::rtl::OUString& _sServiceName ) const;
+    sal_Bool		supportsService( const ::rtl::OUString& _sServiceName ) const;	
 
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> getReportComponent() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
@@ -170,8 +170,8 @@ public:
     TYPEINFO();
 
     virtual ~OCustomShape();
-
-    virtual sal_Int32   GetStep() const;
+    
+    virtual sal_Int32	GetStep() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
@@ -198,7 +198,7 @@ public:
 protected:
     OOle2Obj(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,UINT16 _nType);
     OOle2Obj(const ::rtl::OUString& _sComponentName,UINT16 _nType);
-
+    
 
     virtual void NbcMove( const Size& rSize );
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
@@ -212,8 +212,8 @@ public:
     TYPEINFO();
 
     virtual ~OOle2Obj();
-
-    virtual sal_Int32   GetStep() const;
+    
+    virtual sal_Int32	GetStep() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
@@ -240,12 +240,12 @@ protected:
     OUnoObject(const ::rtl::OUString& _sComponentName
                 ,const ::rtl::OUString& rModelName
                 ,sal_uInt16   _nObjectType);
-    OUnoObject(  const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent
+    OUnoObject(	 const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent
                 ,const ::rtl::OUString& rModelName
                 ,sal_uInt16   _nObjectType);
 
     virtual ~OUnoObject();
-
+    
     virtual void NbcMove( const Size& rSize );
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
@@ -257,11 +257,11 @@ protected:
 public:
     TYPEINFO();
 
-    virtual sal_Int32   GetStep() const;
+    virtual sal_Int32	GetStep() const;
     virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
 
     /** creates the m_xMediator when it doesn't already exist.
-        @param  _bReverse   when set to <TRUE/> then the properties from the uno control will be copied into report control
+        @param	_bReverse	when set to <TRUE/> then the properties from the uno control will be copied into report control
     */
     void CreateMediator(sal_Bool _bReverse = sal_False);
 

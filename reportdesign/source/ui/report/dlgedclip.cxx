@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ void OReportExchange::AddSupportedFormats()
 sal_Bool OReportExchange::GetData( const datatransfer::DataFlavor& _rFlavor )
 {
     const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
-    return (nFormatId == getDescriptorFormatId()) ?
+    return (nFormatId == getDescriptorFormatId()) ? 
         SetAny( uno::Any(m_aCopyElements), _rFlavor )
         : sal_False;
 }

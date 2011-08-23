@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ void OCommandDefinition::registerProperties()
 //--------------------------------------------------------------------------
 OCommandDefinition::OCommandDefinition(const Reference< XMultiServiceFactory >& _xORB
                                        ,const Reference< XInterface >& _rxContainer
-                                       ,const TContentPtr& _pImpl)
+                                       ,const TContentPtr& _pImpl) 
     :OComponentDefinition(_xORB,_rxContainer,_pImpl,sal_False)
 {
     DBG_CTOR(OCommandDefinition, NULL);
@@ -102,7 +102,7 @@ OCommandDefinition::~OCommandDefinition()
 }
 
 //--------------------------------------------------------------------------
-OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContainer
+OCommandDefinition::OCommandDefinition(	const Reference< XInterface >& _rxContainer
                                        ,const ::rtl::OUString& _rElementName
                                        ,const Reference< XMultiServiceFactory >& _xORB
                                        ,const TContentPtr& _pImpl)
@@ -174,6 +174,6 @@ void SAL_CALL OCommandDefinition::rename( const ::rtl::OUString& newName ) throw
 }
 // -----------------------------------------------------------------------------
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ void OResultColumn::impl_determineIsRowVersion_nothrow()
     OSL_ENSURE( m_xDBMetaData.is(), "OResultColumn::impl_determineIsRowVersion_nothrow: no DBMetaData!" );
     if ( !m_xDBMetaData.is() )
         return;
-
+    
     try
     {
         ::rtl::OUString sCatalog, sSchema, sTable, sColumnName;
@@ -186,27 +186,27 @@ void OResultColumn::disposing()
 ::cppu::IPropertyArrayHelper* OResultColumn::createArrayHelper( ) const
 {
     BEGIN_PROPERTY_HELPER(21)
-        DECL_PROP1(CATALOGNAME,             ::rtl::OUString,    READONLY);
-        DECL_PROP1(DISPLAYSIZE,             sal_Int32,          READONLY);
-        DECL_PROP1_BOOL(ISAUTOINCREMENT,                        READONLY);
-        DECL_PROP1_BOOL(ISCASESENSITIVE,                        READONLY);
-        DECL_PROP1_BOOL(ISCURRENCY,                             READONLY);
-        DECL_PROP1_BOOL(ISDEFINITELYWRITABLE,                   READONLY);
-        DECL_PROP1(ISNULLABLE,              sal_Int32,          READONLY);
-        DECL_PROP1_BOOL(ISREADONLY,                             READONLY);
+        DECL_PROP1(CATALOGNAME,				::rtl::OUString,	READONLY);
+        DECL_PROP1(DISPLAYSIZE,				sal_Int32,			READONLY);
+        DECL_PROP1_BOOL(ISAUTOINCREMENT,						READONLY);
+        DECL_PROP1_BOOL(ISCASESENSITIVE,						READONLY);
+        DECL_PROP1_BOOL(ISCURRENCY,								READONLY);
+        DECL_PROP1_BOOL(ISDEFINITELYWRITABLE,					READONLY);
+        DECL_PROP1(ISNULLABLE,				sal_Int32,			READONLY);
+        DECL_PROP1_BOOL(ISREADONLY,								READONLY);
         DECL_PROP1_BOOL(ISROWVERSION,                           READONLY);
-        DECL_PROP1_BOOL(ISSEARCHABLE,                           READONLY);
-        DECL_PROP1_BOOL(ISSIGNED,                               READONLY);
-        DECL_PROP1_BOOL(ISWRITABLE,                             READONLY);
-        DECL_PROP1(LABEL,                   ::rtl::OUString,    READONLY);
-        DECL_PROP1(NAME,                    ::rtl::OUString,    READONLY);
-        DECL_PROP1(PRECISION,               sal_Int32,          READONLY);
-        DECL_PROP1(SCALE,                   sal_Int32,          READONLY);
-        DECL_PROP1(SCHEMANAME,              ::rtl::OUString,    READONLY);
-        DECL_PROP1(SERVICENAME,             ::rtl::OUString,    READONLY);
-        DECL_PROP1(TABLENAME,               ::rtl::OUString,    READONLY);
-        DECL_PROP1(TYPE,                    sal_Int32,          READONLY);
-        DECL_PROP1(TYPENAME,                ::rtl::OUString,    READONLY);
+        DECL_PROP1_BOOL(ISSEARCHABLE,							READONLY);
+        DECL_PROP1_BOOL(ISSIGNED,								READONLY);
+        DECL_PROP1_BOOL(ISWRITABLE,								READONLY);
+        DECL_PROP1(LABEL,					::rtl::OUString,	READONLY);
+        DECL_PROP1(NAME,					::rtl::OUString,	READONLY);
+        DECL_PROP1(PRECISION,				sal_Int32,			READONLY);
+        DECL_PROP1(SCALE,					sal_Int32,			READONLY);
+        DECL_PROP1(SCHEMANAME,				::rtl::OUString,	READONLY);
+        DECL_PROP1(SERVICENAME,				::rtl::OUString,	READONLY);
+        DECL_PROP1(TABLENAME,				::rtl::OUString,	READONLY);
+        DECL_PROP1(TYPE,					sal_Int32,			READONLY);
+        DECL_PROP1(TYPENAME,				::rtl::OUString,	READONLY);
     END_PROPERTY_HELPER();
 }
 
@@ -334,12 +334,12 @@ void OResultColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             {
                 sal_Bool bVal = sal_False;
                 rValue.setValue(&bVal, getBooleanCppuType());
-            }   break;
+            }	break;
             case PROPERTY_ID_ISREADONLY:
             {
                 sal_Bool bVal = sal_True;
                 rValue.setValue(&bVal, getBooleanCppuType());
-            }   break;
+            }	break;
             case PROPERTY_ID_SCALE:
             case PROPERTY_ID_PRECISION:
             case PROPERTY_ID_DISPLAYSIZE:

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,13 +40,13 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_ 
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
+#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_ 
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
@@ -140,7 +140,7 @@ namespace dbaui
 
         /** sets the target frame into which the view should be loaded.
 
-            By default, the view is loaded into a top-level frame not being part of the
+            By default, the view is loaded into a top-level frame not being part of the 
             Desktop.
         */
         void setTargetFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame )
@@ -167,7 +167,7 @@ namespace dbaui
                 the data source for which a new object is to be created
             @param _rObjectName
                 the name of the object to be edited
-            @param  _rArgs
+            @param	_rArgs
                 Additional settings which should be forwarded to the frame
             @return
                 the frame into which the view has been loaded
@@ -248,13 +248,13 @@ namespace dbaui
     class ResultSetBrowser : public DatabaseObjectView
     {
     private:
-        sal_Bool    m_bTable;
+        sal_Bool	m_bTable;
 
     protected:
         virtual void fillDispatchArgs(
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const ::com::sun::star::uno::Any& _aDataSource,
-            const ::rtl::OUString& _rQualifiedName
+            const ::rtl::OUString& _rQualifiedName 
         );
 
     public:
@@ -279,7 +279,7 @@ namespace dbaui
         );
     };
 // .........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 // .........................................................................
 
 #endif // DBACCESS_DATABASE_OBJECT_VIEW_HXX

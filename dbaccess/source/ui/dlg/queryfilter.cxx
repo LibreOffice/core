@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -133,26 +133,26 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
                              const Reference< XNameAccess>& _rxCols
                              )
     :ModalDialog( pParent, ModuleRes( DLG_FILTERCRIT ) )
-    ,aLB_WHEREFIELD1    ( this, ModuleRes( LB_WHEREFIELD1 ) )
-    ,aLB_WHERECOMP1     ( this, ModuleRes( LB_WHERECOMP1 ) )
-    ,aET_WHEREVALUE1    ( this, ModuleRes( ET_WHEREVALUE1 ) )
-    ,aLB_WHERECOND2     ( this, ModuleRes( LB_WHERECOND2 ) )
-    ,aLB_WHEREFIELD2    ( this, ModuleRes( LB_WHEREFIELD2 ) )
-    ,aLB_WHERECOMP2     ( this, ModuleRes( LB_WHERECOMP2 ) )
-    ,aET_WHEREVALUE2    ( this, ModuleRes( ET_WHEREVALUE2 ) )
-    ,aLB_WHERECOND3     ( this, ModuleRes( LB_WHERECOND3 ) )
-    ,aLB_WHEREFIELD3    ( this, ModuleRes( LB_WHEREFIELD3 ) )
-    ,aLB_WHERECOMP3     ( this, ModuleRes( LB_WHERECOMP3 ) )
-    ,aET_WHEREVALUE3    ( this, ModuleRes( ET_WHEREVALUE3 ) )
-    ,aFT_WHEREFIELD     ( this, ModuleRes( FT_WHEREFIELD ) )
-    ,aFT_WHERECOMP      ( this, ModuleRes( FT_WHERECOMP ) )
-    ,aFT_WHEREVALUE     ( this, ModuleRes( FT_WHEREVALUE ) )
-    ,aFT_WHEREOPER      ( this, ModuleRes( FT_WHEREOPER ) )
+    ,aLB_WHEREFIELD1	( this, ModuleRes( LB_WHEREFIELD1 ) )
+    ,aLB_WHERECOMP1		( this, ModuleRes( LB_WHERECOMP1 ) )
+    ,aET_WHEREVALUE1	( this, ModuleRes( ET_WHEREVALUE1 ) )
+    ,aLB_WHERECOND2		( this, ModuleRes( LB_WHERECOND2 ) )
+    ,aLB_WHEREFIELD2	( this, ModuleRes( LB_WHEREFIELD2 ) )
+    ,aLB_WHERECOMP2		( this, ModuleRes( LB_WHERECOMP2 ) )
+    ,aET_WHEREVALUE2	( this, ModuleRes( ET_WHEREVALUE2 ) )
+    ,aLB_WHERECOND3		( this, ModuleRes( LB_WHERECOND3 ) )
+    ,aLB_WHEREFIELD3	( this, ModuleRes( LB_WHEREFIELD3 ) )
+    ,aLB_WHERECOMP3		( this, ModuleRes( LB_WHERECOMP3 ) )
+    ,aET_WHEREVALUE3	( this, ModuleRes( ET_WHEREVALUE3 ) )
+    ,aFT_WHEREFIELD		( this, ModuleRes( FT_WHEREFIELD ) )
+    ,aFT_WHERECOMP		( this, ModuleRes( FT_WHERECOMP ) )
+    ,aFT_WHEREVALUE		( this, ModuleRes( FT_WHEREVALUE ) )
+    ,aFT_WHEREOPER		( this, ModuleRes( FT_WHEREOPER ) )
     ,aFL_FIELDS         ( this, ModuleRes( FL_FIELDS ) )
-    ,aBT_OK             ( this, ModuleRes( BT_OK ) )
-    ,aBT_CANCEL         ( this, ModuleRes( BT_CANCEL ) )
-    ,aBT_HELP           ( this, ModuleRes( BT_HELP ) )
-    ,aSTR_NOENTRY       ( ModuleRes( STR_NOENTRY ) )
+    ,aBT_OK				( this, ModuleRes( BT_OK ) )
+    ,aBT_CANCEL			( this, ModuleRes( BT_CANCEL ) )
+    ,aBT_HELP			( this, ModuleRes( BT_HELP ) )
+    ,aSTR_NOENTRY		( ModuleRes( STR_NOENTRY ) )
     ,aSTR_COMPARE_OPERATORS( ModuleRes( STR_COMPARE_OPERATORS ) )
     ,m_xQueryComposer(_rxComposer)
     ,m_xColumns( _rxCols )
@@ -266,8 +266,8 @@ DlgFilterCrit::~DlgFilterCrit()
     DBG_DTOR(DlgFilterCrit,NULL);
 }
 
-#define LbText(x)       ((x).GetSelectEntry())
-#define LbPos(x)        ((x).GetSelectEntryPos())
+#define LbText(x)		((x).GetSelectEntry())
+#define LbPos(x)		((x).GetSelectEntryPos())
 
 //------------------------------------------------------------------------------
 sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const String& _rSelectedPredicate ) const
@@ -380,7 +380,7 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
             {
                 if ( xInfo->hasPropertyByName(PROPERTY_TABLENAME) )
                 {
-                    xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
+                    xColumn->getPropertyValue(PROPERTY_TABLENAME)	>>= sTableName;
                     if ( sTableName.getLength() )
                     {
                         // properly quote all parts of the table name, so e.g. <schema>.<table> becomes "<schema>"."<table>"
@@ -389,7 +389,7 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
                         sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, sal_True, ::dbtools::eInDataManipulation );
                     }
                 }
-                xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= _rFilter.Name;
+                xColumn->getPropertyValue(PROPERTY_REALNAME)	>>= _rFilter.Name;
                 static ::rtl::OUString sAgg(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction"));
                 if ( xInfo->hasPropertyByName(sAgg) )
                     xColumn->getPropertyValue(sAgg) >>= bHaving;
@@ -399,7 +399,7 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
             }
             if ( !bFunction )
             {
-                const ::rtl::OUString aQuote    = m_xMetaData.is() ? m_xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
+                const ::rtl::OUString aQuote	= m_xMetaData.is() ? m_xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
                 _rFilter.Name = ::dbtools::quoteName(aQuote,_rFilter.Name);
                 if ( sTableName.getLength() )
                 {
@@ -439,14 +439,14 @@ Reference< XPropertySet > DlgFilterCrit::getColumn( const ::rtl::OUString& _rFie
         {
             Sequence< ::rtl::OUString> aSeq = xColumns->getElementNames();
             const ::rtl::OUString* pIter = aSeq.getConstArray();
-            const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+            const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
             for(;pIter != pEnd;++pIter)
             {
                 Reference<XPropertySet> xProp(xColumns->getByName(*pIter),UNO_QUERY);
                 if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME) )
                 {
                     ::rtl::OUString sRealName;
-                    xProp->getPropertyValue(PROPERTY_REALNAME)  >>= sRealName;
+                    xProp->getPropertyValue(PROPERTY_REALNAME)	>>= sRealName;
                     if ( sRealName == _rFieldName )
                     {
                         if ( m_xColumns.is() && m_xColumns->hasByName( *pIter ) )
@@ -532,7 +532,7 @@ IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Edit*, _pField )
 void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Bool _bOr  )
 {
     DBG_CHKTHIS(DlgFilterCrit,NULL);
-    ::rtl::OUString aCondition;
+    ::rtl::OUString	aCondition;
     _rItem.Value >>= aCondition;
     String aStr = aCondition.getStr();
     ::Replace_SQL_PlaceHolder(aStr);
@@ -544,7 +544,7 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
     switch(_rItem.Handle)
     {
         case SQLFilterOperator::EQUAL:
-            //  aStr.Erase(0,1);
+            //	aStr.Erase(0,1);
             break;
         case SQLFilterOperator::NOT_EQUAL:
             aStr.Erase(0,2);
@@ -631,11 +631,11 @@ void DlgFilterCrit::SelectField( ListBox& rBox, const String& rField )
 {
     DBG_CHKTHIS(DlgFilterCrit,NULL);
     sal_uInt16 nCnt = rBox.GetEntryCount();
-    //  sal_Bool bCase = m_rIterator.TablesAreSensitive();
+    //	sal_Bool bCase = m_rIterator.TablesAreSensitive();
 
     for( sal_uInt16 i=0 ; i<nCnt ; i++ )
     {
-        //  if(bCase ? rBox.GetEntry(i) == rField : rBox.GetEntry(i).EqualsIgnoreCaseAscii(rField))
+        //	if(bCase ? rBox.GetEntry(i) == rField : rBox.GetEntry(i).EqualsIgnoreCaseAscii(rField))
         if(rBox.GetEntry(i) == rField)
         {
             rBox.SelectEntryPos(i);
@@ -826,7 +826,7 @@ void DlgFilterCrit::BuildWherePart()
     Sequence<Sequence<PropertyValue> > aFilter,aHaving;
     aFilter.realloc(1);
     aHaving.realloc(1);
-    //  ::rtl::OUString aFilter;
+    //	::rtl::OUString aFilter;
 
     if( LbPos(aLB_WHEREFIELD1) != 0 )
     {
@@ -904,13 +904,13 @@ void DlgFilterCrit::BuildWherePart()
 void DlgFilterCrit::fillLines(const Sequence<Sequence<PropertyValue > >& _aValues)
 {
     const Sequence<PropertyValue >* pOrIter = _aValues.getConstArray();
-    const Sequence<PropertyValue >* pOrEnd   = pOrIter + _aValues.getLength();
+    const Sequence<PropertyValue >* pOrEnd	 = pOrIter + _aValues.getLength();
     sal_Bool bOr = sal_True;
     for(sal_uInt16 i=0;pOrIter != pOrEnd; ++pOrIter)
     {
         bOr = sal_True;
-        const PropertyValue* pAndIter   = pOrIter->getConstArray();
-        const PropertyValue* pAndEnd    = pAndIter + pOrIter->getLength();
+        const PropertyValue* pAndIter	= pOrIter->getConstArray();
+        const PropertyValue* pAndEnd	= pAndIter + pOrIter->getLength();
         for(;pAndIter != pAndEnd; ++pAndIter)
         {
             SetLine( i++,*pAndIter,bOr);

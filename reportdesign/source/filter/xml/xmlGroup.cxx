@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ DBG_NAME( rpt_OXMLGroup )
 OXMLGroup::OXMLGroup( ORptFilter& _rImport
                 ,sal_uInt16 nPrfx
                 ,const ::rtl::OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList
+                ,const Reference< XAttributeList > & _xAttrList 
                 ) :
     SvXMLImportContext( _rImport, nPrfx, _sLocalName )
 {
@@ -69,7 +69,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
     m_xGroups = _rImport.getReportDefinition()->getGroups();
     OSL_ENSURE(m_xGroups.is(),"Groups is NULL!");
     m_xGroup = m_xGroups->createGroup();
-
+    
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
 
     const SvXMLNamespaceMap& rMap = _rImport.GetNamespaceMap();
@@ -102,7 +102,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                         sal_Int32 nLen = sValue.getLength();
                         if ( nLen )
                         {
-
+                            
                             const static ::rtl::OUString s_sChanged(RTL_CONSTASCII_USTRINGPARAM("rpt:HASCHANGED(\""));
                             sal_Int32 nPos = sValue.indexOf(s_sChanged);
                             if ( nPos == -1 )
@@ -118,7 +118,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                     sValue = sValue.replaceAt(nIndex,2,s_sSingleQuote);
                                     nIndex = sValue.indexOf(s_sQuote,nIndex+2);
                                 }
-                                nLen = sValue.getLength() - 1;
+                                nLen = sValue.getLength() - 1;                                
                             }
                             sValue = sValue.copy(nPos,nLen-nPos-1);
                             const ORptFilter::TGroupFunctionMap& aFunctions = _rImport.getFunctions();
@@ -148,7 +148,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                 {
                                     nGroupOn = report::GroupOn::MONTH;
                                 }
-                                else if ( sCompleteFormula.matchIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:INT((MONTH")),0)
+                                else if ( sCompleteFormula.matchIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:INT((MONTH")),0) 
                                        && sCompleteFormula.endsWithIgnoreAsciiCaseAsciiL("-1)/3)+1",8) )
                                 {
                                     nGroupOn = report::GroupOn::QUARTAL;
@@ -166,7 +166,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                     nGroupOn = report::GroupOn::INTERVAL;
                                     _rImport.removeFunction(sExpression);
                                     sExpression = sExpression.copy(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INT_count_")).getLength());
-
+                                    
                                     nIndex = 0;
                                     ::rtl::OUString sInterval = sCompleteFormula.getToken(1,'/',nIndex);
                                     nIndex = 0;
@@ -175,7 +175,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                 }
 
                                 m_xGroup->setGroupOn(nGroupOn);
-
+    
                                 _rImport.removeFunction(sValue);
                                 sValue = sExpression;
                             }
@@ -211,7 +211,7 @@ SvXMLImportContext* OXMLGroup::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
     ORptFilter& rImport = GetOwnImport();
-    const SvXMLTokenMap&    rTokenMap   = rImport.GetGroupElemTokenMap();
+    const SvXMLTokenMap&	rTokenMap	= rImport.GetGroupElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {

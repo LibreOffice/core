@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,14 +93,14 @@ namespace dbaui
         RadioButton         m_aCaseTables;
         RadioButton         m_aCaseQueries;
 
-        OTableTreeListBox   m_aTableList;
+        OTableTreeListBox	m_aTableList;
         SvTreeListBox       m_aQueryList;
         ::std::auto_ptr< TableObjectListFacade >
                             m_pCurrentList;
 
-        PushButton          aAddButton;
-        CancelButton        aCloseButton;
-        HelpButton          aHelpButton;
+        PushButton			aAddButton;
+        CancelButton		aCloseButton;
+        HelpButton			aHelpButton;
 
         IAddTableDialogContext&
                             m_rContext;

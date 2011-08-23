@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@ namespace dbaccess
     class ORowSetColumn;
     class ORowSetColumn :public ORowSetDataColumn
                         ,public ::comphelper::OPropertyArrayUsageHelper< ORowSetColumn >
-
+                            
     {
     public:
-        ORowSetColumn(  const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
+        ORowSetColumn(	const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
                         const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRow >& _xRow,
                         sal_Int32 _nPos,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,

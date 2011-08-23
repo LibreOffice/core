@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 #ifndef DBAUI_VERTSPLITVIEW_HXX
 #define DBAUI_VERTSPLITVIEW_HXX
 
-#ifndef _SV_SPLIT_HXX
+#ifndef _SV_SPLIT_HXX 
 #include <vcl/split.hxx>
 #endif
 
@@ -36,10 +36,10 @@ namespace dbaui
     //==================================================================
     class OSplitterView : public Window
     {
-        Splitter*                           m_pSplitter;
-        Window*                             m_pLeft;
-        Window*                             m_pRight;
-        sal_Bool                            m_bVertical;
+        Splitter*							m_pSplitter;
+        Window*								m_pLeft;
+        Window*								m_pRight;
+        sal_Bool							m_bVertical;
 
         void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
         DECL_LINK( SplitHdl, Splitter* );

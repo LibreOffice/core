@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,46 +40,46 @@
 #endif
 
 
-#define STR_DBASE_HELPTEXT                  28
-#define STR_MSACCESS_HELPTEXT               29
-#define STR_TEXT_HELPTEXT                   30
+#define STR_DBASE_HELPTEXT				    28
+#define STR_MSACCESS_HELPTEXT				29
+#define STR_TEXT_HELPTEXT				    30
     // FREE
-#define STR_ADO_HELPTEXT                    32
-#define STR_JDBC_HELPTEXT                   33
-#define STR_ODBC_HELPTEXT                   34
-#define STR_MYSQLJDBC_HELPTEXT              35
-#define STR_SPREADSHEET_HELPTEXT            36
+#define STR_ADO_HELPTEXT				    32
+#define STR_JDBC_HELPTEXT				    33
+#define STR_ODBC_HELPTEXT				    34
+#define STR_MYSQLJDBC_HELPTEXT				35
+#define STR_SPREADSHEET_HELPTEXT			36
     // FREE
-#define STR_FINAL_HELPTEXT                  38
-#define STR_ADABAS_HELPTEXT                 39
-#define STR_ORACLE_HELPTEXT                 40
-#define STR_DBASE_HEADERTEXT                41
-#define STR_MSACCESS_HEADERTEXT             42
-#define STR_TEXT_HEADERTEXT                 43
+#define STR_FINAL_HELPTEXT				    38
+#define STR_ADABAS_HELPTEXT				    39
+#define STR_ORACLE_HELPTEXT				    40
+#define STR_DBASE_HEADERTEXT				41
+#define STR_MSACCESS_HEADERTEXT				42
+#define STR_TEXT_HEADERTEXT				    43
     // FREE
-#define STR_ADO_HEADERTEXT                  45
-#define STR_JDBC_HEADERTEXT                 46
-#define STR_ODBC_HEADERTEXT                 47
+#define STR_ADO_HEADERTEXT				    45
+#define STR_JDBC_HEADERTEXT				    46
+#define STR_ODBC_HEADERTEXT				    47
 #define STR_MYSQLJDBC_HEADERTEXT            48
     // FREE
-#define STR_SPREADSHEET_HEADERTEXT          50
-#define STR_FINAL_HEADERTEXT                52
-#define STR_ADABAS_HEADERTEXT               53
-#define STR_ORACLE_HEADERTEXT               54
+#define STR_SPREADSHEET_HEADERTEXT			50
+#define STR_FINAL_HEADERTEXT				52
+#define STR_ADABAS_HEADERTEXT				53
+#define STR_ORACLE_HEADERTEXT				54
 #define STR_GENERAL_HEADERTEXT              55
 #define STR_DBWIZARDTITLE                   56
 
-#define STR_DEFAULTLDAPPORTNUMBER           60
+#define STR_DEFAULTLDAPPORTNUMBER			60
 
-#define STR_ADABASNAME                  61
-//#define STR_ADOURL                    62
-#define STR_ODBCDATASOURCENAME          63
-#define STR_SPREADSHEETPATH             64
-#define STR_DBLOCATIONLABEL             65
-#define STR_ADMIN_HELPTEXT              66
+#define STR_ADABASNAME					61
+//#define STR_ADOURL					62
+#define STR_ODBCDATASOURCENAME			63
+#define STR_SPREADSHEETPATH				64
+#define STR_DBLOCATIONLABEL				65
+#define STR_ADMIN_HELPTEXT				66
 
 #define STR_ORACLE_DEFAULT              67
-#define STR_PAGETITLE_INTROPAGE         69
+#define STR_PAGETITLE_INTROPAGE			69
 #define STR_PAGETITLE_DBASE             70
 #define STR_PAGETITLE_TEXT              71
 #define STR_PAGETITLE_MSACCESS          72
@@ -101,15 +101,15 @@
 
 
 #define FT_PORTNUMBERDEFAULT            1
-#define FT_LDAP_HELPTEXT                2
-#define FT_MYSQL_HELPTEXT               3
-#define FT_MYSQL_HEADERTEXT             4
-#define FT_MYSQLCONNECTIONMODE          5
-#define FT_BROWSEURL                    6
-#define FT_AUTHENTIFICATIONHELPTEXT     7
+#define FT_LDAP_HELPTEXT		        2
+#define FT_MYSQL_HELPTEXT		        3
+#define FT_MYSQL_HEADERTEXT		        4
+#define FT_MYSQLCONNECTIONMODE	        5
+#define FT_BROWSEURL		            6
+#define FT_AUTHENTIFICATIONHELPTEXT	    7
 #define FT_AUTHENTIFICATIONHEADERTEXT   8
-#define FT_LDAP_HEADERTEXT              9
-#define FT_GENERALUSERNAME              10
+#define FT_LDAP_HEADERTEXT		        9
+#define FT_GENERALUSERNAME	            10
 #define FT_FINALHEADER                  11
 #define FT_FINALTEXT                    12
 #define FT_FINALHELPTEXT                13
@@ -117,19 +117,19 @@
 #define FT_SETUP_WIZARD_HEADER          15
 #define FT_SETUP_WIZARD_HELP            16
 
-#define ET_GENERALUSERNAME          1
+#define ET_GENERALUSERNAME	        1
 
-#define PB_TESTCONNECTION           1
+#define PB_TESTCONNECTION		    1
 
-#define RB_CONNECTVIAODBC           1
-#define RB_CONNECTVIAJDBC           2
+#define RB_CONNECTVIAODBC		    1
+#define RB_CONNECTVIAJDBC		    2
 #define RB_REGISTERDATASOURCE       3
 #define RB_DONTREGISTERDATASOURCE   4
 #define RB_CONNECTVIANATIVE         5
 
 #define CB_WIZ_USESSL                       1
-#define CB_STARTTABLEWIZARD                 2
-#define CB_OPENAFTERWARDS                   3
+#define CB_STARTTABLEWIZARD             	2
+#define CB_OPENAFTERWARDS               	3
 #define CB_SPREADSHEETPASSWORDREQUIRED      4
 #define CB_GENERALPASSWORDREQUIRED          5
 

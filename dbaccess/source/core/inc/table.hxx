@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,10 +55,10 @@ namespace dbaccess
     //==========================================================================
     class ODBTable;
     class OContainerMediator;
-    typedef ::comphelper::OIdPropertyArrayUsageHelper< ODBTable >   ODBTable_PROP;
-    typedef ::connectivity::OTableHelper                            OTable_Base;
+    typedef ::comphelper::OIdPropertyArrayUsageHelper< ODBTable >	ODBTable_PROP;
+    typedef ::connectivity::OTableHelper							OTable_Base;
 
-    class ODBTable  :public ODataSettings_Base
+    class ODBTable	:public ODataSettings_Base
                     ,public ODBTable_PROP
                     ,public OTable_Base
                     ,public IColumnFactory
@@ -67,36 +67,36 @@ namespace dbaccess
         ::rtl::Reference< OContainerMediator >                                          m_pColumnMediator;
 
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumnDefinitions;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDriverColumns;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >	m_xColumnDefinitions;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >	m_xDriverColumns;
 
     // <properties>
-        sal_Int32                                                                       m_nPrivileges;
+        sal_Int32																		m_nPrivileges;
     // </properties>
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
 
         // IColumnFactory
-        virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
+        virtual OColumn*	createColumn(const ::rtl::OUString& _rName) const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor();
         virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor );
         virtual void columnDropped(const ::rtl::OUString& _sName);
 
         /** creates the column collection for the table
-            @param  _rNames
+            @param	_rNames
                 The column names.
         */
         virtual ::connectivity::sdbcx::OCollection* createColumns(const ::connectivity::TStringVector& _rNames);
 
         /** creates the key collection for the table
-            @param  _rNames
+            @param	_rNames
                 The key names.
         */
         virtual ::connectivity::sdbcx::OCollection* createKeys(const ::connectivity::TStringVector& _rNames);
 
         /** creates the index collection for the table
-            @param  _rNames
+            @param	_rNames
                 The index names.
         */
         virtual ::connectivity::sdbcx::OCollection* createIndexes(const ::connectivity::TStringVector& _rNames);
@@ -105,13 +105,13 @@ namespace dbaccess
         virtual void SAL_CALL disposing(void);
     public:
         /** constructs a wrapper supporting the com.sun.star.sdb.Table service.<BR>
-            @param          _rxConn         the connection the table belongs to
-            @param          _rxTable        the table from the driver can be null
-            @param          _rCatalog       the name of the catalog the table belongs to. May be empty.
-            @param          _rSchema        the name of the schema the table belongs to. May be empty.
-            @param          _rName          the name of the table
-            @param          _rType          the type of the table, as supplied by the driver
-            @param          _rDesc          the description of the table, as supplied by the driver
+            @param			_rxConn			the connection the table belongs to
+            @param			_rxTable		the table from the driver can be null
+            @param			_rCatalog		the name of the catalog the table belongs to. May be empty.
+            @param			_rSchema		the name of the schema the table belongs to. May be empty.
+            @param			_rName			the name of the table
+            @param			_rType			the type of the table, as supplied by the driver
+            @param			_rDesc			the description of the table, as supplied by the driver
         */
         ODBTable(connectivity::sdbcx::OCollection* _pTables
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn
@@ -142,7 +142,7 @@ namespace dbaccess
         DECLARE_SERVICE_INFO();
 
     // com::sun::star::beans::XPropertySet
-        //  virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+        //	virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
 
     // ::com::sun::star::sdbcx::XRename,

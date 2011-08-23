@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ ORowSetCacheIterator& ORowSetCacheIterator::operator =(const ORowSetCacheIterato
         return *this;
 
     m_pCache = _rRH.m_pCache;
-    m_aIter  = _rRH.m_aIter;
+    m_aIter	 = _rRH.m_aIter;
     m_pRowSet = _rRH.m_pRowSet;
 
     return *this;
@@ -122,7 +122,7 @@ bool ORowSetCacheIterator::operator ==(const ORowSetMatrix::iterator& _rRH) cons
     return m_aIter->second.aIterator == _rRH;
 }
 // -----------------------------------------------------------------------------
-void ORowSetCacheIterator::setBookmark(const ::com::sun::star::uno::Any&    _rBookmark)
+void ORowSetCacheIterator::setBookmark(const ::com::sun::star::uno::Any&	_rBookmark)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCacheIterator::setBookmark" );
     m_aIter->second.aBookmark = _rBookmark;
@@ -136,7 +136,7 @@ sal_Bool ORowSetCacheIterator::isNull() const
     {
         ORowSetCacheIterator_Helper aHelper = m_aIter->second;
         bRet = ( m_pRowSet->isInsertRow()
-            ?
+            ? 
             m_aIter->second.aIterator == m_pCache->m_pInsertMatrix->end()
             :
             m_aIter->second.aIterator == m_pCache->m_pMatrix->end()

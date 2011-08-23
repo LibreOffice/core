@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #ifndef _COM_SUN_STAR_SDB_APPLICATION_NAMEDDATABASEOBJECT_HPP_
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #endif
-#ifndef _SV_FIXED_HXX
+#ifndef _SV_FIXED_HXX 
 #include <vcl/fixed.hxx>
 #endif
 #ifndef _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
@@ -72,9 +72,9 @@ namespace dbaui
     //==================================================================
     class OAppBorderWindow : public Window
     {
-        OTitleWindow*                       m_pPanel;
-        OApplicationDetailView*             m_pDetailView;
-        OApplicationView*                   m_pView;
+        OTitleWindow*						m_pPanel;
+        OApplicationDetailView*				m_pDetailView;
+        OApplicationView*					m_pView;
 
         void ImplInitSettings();
     protected:
@@ -85,12 +85,12 @@ namespace dbaui
         virtual ~OAppBorderWindow();
 
         // window overloads
-        virtual void GetFocus();
+        virtual void GetFocus();		
         virtual void Resize();
 
-        OApplicationView*       getView() const;
-        OApplicationSwapWindow* getPanel() const;
-        OApplicationDetailView* getDetailView() const;
+        OApplicationView*		getView() const;
+        OApplicationSwapWindow*	getPanel() const;
+        OApplicationDetailView*	getDetailView() const;
     };
 
     //==================================================================
@@ -105,18 +105,18 @@ namespace dbaui
             NONE
         };
     private:
-        ::com::sun::star::lang::Locale      m_aLocale;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        ::com::sun::star::lang::Locale		m_aLocale;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >	
                                             m_xObject;
-        OAppBorderWindow*                   m_pWin;
+        OAppBorderWindow*					m_pWin;		
         IApplicationController&             m_rAppController;
-        ChildFocusState                     m_eChildFocus;
+        ChildFocusState						m_eChildFocus;
 
         IClipboardTest* getActiveChild() const;
 
         void ImplInitSettings();
     protected:
-
+        
 
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect);
@@ -127,7 +127,7 @@ namespace dbaui
         // Window
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
     public:
-        OApplicationView(   Window* pParent
+        OApplicationView(	Window* pParent
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
                             ,IApplicationController&            _rAppController
                             ,PreviewMode _ePreviewMode
@@ -145,7 +145,7 @@ namespace dbaui
         virtual void GetFocus();
 
         inline IApplicationController&                  getAppController() const { return m_rAppController; }
-        inline const ::com::sun::star::lang::Locale&    getLocale() const { return m_aLocale;}
+        inline const ::com::sun::star::lang::Locale&	getLocale() const { return m_aLocale;}
 
         // IClipboardTest
         virtual sal_Bool isCutAllowed();
@@ -157,13 +157,13 @@ namespace dbaui
         virtual void paste();
 
         /// get the left panel
-        inline OApplicationSwapWindow*  getPanel()      const { return m_pWin->getPanel(); }
+        inline OApplicationSwapWindow*	getPanel()		const { return m_pWin->getPanel(); }
         /// get the detail page
-        inline OApplicationDetailView*  getDetailView() const { return m_pWin->getDetailView(); }
+        inline OApplicationDetailView*	getDetailView() const { return m_pWin->getDetailView(); }
 
         /** return the qualified name.
-            @param  _pEntry
-                The entry of a table, or query, form, report to get the qualified name.
+            @param	_pEntry
+                The entry of a table, or query, form, report to get the qualified name. 
                 If the entry is <NULL/>, the first selected is chosen.
             @return
                 the qualified name
@@ -210,13 +210,13 @@ namespace dbaui
         sal_Int32 getSelectionCount();
 
         /** clears the detail page and the selection on the left side.
-            @param  _bTaskAlso
+            @param	_bTaskAlso
                 If <TRUE/> the task window will also be cleared.
         */
         void clearPages(sal_Bool _bTaskAlso = sal_True);
 
         /** returns the element names which are selected
-            @param  _rNames
+            @param	_rNames
                 The list will be filled.
         */
         void getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const;
@@ -242,13 +242,13 @@ namespace dbaui
         void selectElements(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _aNames);
 
         /** adds a new object to the detail page.
-            @param  _eType
+            @param	_eType
                 The type where the entry shold be appended.
-            @param  _rName
+            @param	_rName
                 The name of the object to be inserted
-            @param  _rObject
+            @param	_rObject
                 The object to add.
-            @param  _rxConn
+            @param	_rxConn
                 If we insert a table, the connection must be set.
         */
         SvLBoxEntry* elementAdded(ElementType _eType
@@ -256,13 +256,13 @@ namespace dbaui
                         ,const ::com::sun::star::uno::Any& _rObject );
 
         /** replaces a objects name with a new one
-            @param  _eType
+            @param	_eType
                 The type where the entry shold be appended.
-            @param  _rOldName
+            @param	_rOldName
                 The old name of the object to be replaced
-            @param  _rNewName
+            @param	_rNewName
                 The new name of the object to be replaced
-            @param  _rxConn
+            @param	_rxConn
                 If we insert a table, the connection must be set.
             @param  _xObject
                 The object which was replaced
@@ -272,11 +272,11 @@ namespace dbaui
                         ,const ::rtl::OUString& _rNewName );
 
         /** removes an element from the detail page.
-            @param  _eType
+            @param	_eType
                 The type where the entry shold be appended.
-            @param  _rName
+            @param	_rName
                 The name of the element to be removed.
-            @param  _rxConn
+            @param	_rxConn
                 If we remove a table, the connection must be set.
         */
         void elementRemoved(ElementType _eType
@@ -284,7 +284,7 @@ namespace dbaui
 
 
         /** changes the container which should be displayed. The select handler will also be called.
-            @param  _eType
+            @param	_eType
                 Which container to show.
         */
         void selectContainer(ElementType _eType);
@@ -296,29 +296,29 @@ namespace dbaui
         sal_Bool isPreviewEnabled();
 
         /** switches to the given preview mode
-            @param  _eMode
+            @param	_eMode
                 the mode to set for the preview
         */
         void switchPreview(PreviewMode _eMode);
 
         /** shows the Preview of the content when it is enabled.
-            @param  _xContent
+            @param	_xContent
                 The content which must support the "preview" command.
         */
         void showPreview(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xContent);
 
         /** shows the Preview of a table or query
-            @param  _sDataSourceName
+            @param	_sDataSourceName
                 the name of the data source
-            @param  _xConnection
+            @param	_xConnection
                 the connection which will be shared
-            @param  _sName
+            @param	_sName
                 the name of table or query
-            @param  _bTable
+            @param	_bTable
                 <TRUE/> if it is a table, otherwise <FALSE/>
-            @return void
+            @return	void
         */
-        void showPreview(   const ::rtl::OUString& _sDataSourceName,
+        void showPreview(	const ::rtl::OUString& _sDataSourceName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                             const ::rtl::OUString& _sName,
                             sal_Bool _bTable);

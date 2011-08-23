@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,16 +82,16 @@ namespace com { namespace sun { namespace star { namespace util {
 
 namespace dbaccess
 {
-    typedef ::cppu::ImplHelper5<    ::com::sun::star::sdb::XSingleSelectQueryComposer,
+    typedef ::cppu::ImplHelper5<	::com::sun::star::sdb::XSingleSelectQueryComposer,
                                     ::com::sun::star::sdb::XParametersSupplier,
                                     ::com::sun::star::sdbcx::XColumnsSupplier,
                                     ::com::sun::star::sdbcx::XTablesSupplier,
-                                    ::com::sun::star::lang::XServiceInfo    > OSingleSelectQueryComposer_BASE;
+                                    ::com::sun::star::lang::XServiceInfo	> OSingleSelectQueryComposer_BASE;
 
     class OPrivateColumns;
     class OPrivateTables;
 
-    class OSingleSelectQueryComposer :   public ::comphelper::OMutexAndBroadcastHelper
+    class OSingleSelectQueryComposer :	 public ::comphelper::OMutexAndBroadcastHelper
                                         ,public OSubComponent
                                         ,public ::comphelper::OPropertyContainer
                                         ,public ::comphelper::OPropertyArrayUsageHelper < OSingleSelectQueryComposer >
@@ -109,42 +109,42 @@ namespace dbaccess
         inline void incSQLPart( SQLPart& e ) { e = (SQLPart)(1 + (size_t)e); }
         enum EColumnType
         {
-            SelectColumns       = 0,
-            GroupByColumns      = 1,
-            OrderColumns        = 2,
-            ParameterColumns    = 3
+            SelectColumns		= 0,
+            GroupByColumns		= 1,
+            OrderColumns		= 2,
+            ParameterColumns	= 3
         };
         typedef ::std::const_mem_fun_t< const ::connectivity::OSQLParseNode*, ::connectivity::OSQLParseTreeIterator >
                                                 TGetParseNode;
-        ::connectivity::OSQLParser              m_aSqlParser;
-        ::connectivity::OSQLParseTreeIterator   m_aSqlIterator;         // the iterator for the complete statement
-        ::connectivity::OSQLParseTreeIterator   m_aAdditiveIterator;    // the iterator for the "additive statement" (means without the clauses of the elementary statement)
-        ::std::vector<OPrivateColumns*>         m_aColumnsCollection;   // used for columns and parameters of old queries
-        ::std::vector<OPrivateTables*>          m_aTablesCollection;
+        ::connectivity::OSQLParser				m_aSqlParser;
+        ::connectivity::OSQLParseTreeIterator	m_aSqlIterator;         // the iterator for the complete statement
+        ::connectivity::OSQLParseTreeIterator	m_aAdditiveIterator;    // the iterator for the "additive statement" (means without the clauses of the elementary statement)
+        ::std::vector<OPrivateColumns*>			m_aColumnsCollection;   // used for columns and parameters of old queries
+        ::std::vector<OPrivateTables*>			m_aTablesCollection;
 
         ::std::vector< ::rtl::OUString >        m_aElementaryParts;     // the filter/groupby/having/order of the elementary statement
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>              m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>        m_xMetaData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xConnectionTables;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xConnectionQueries;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xColumns;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>				m_xConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>		m_xMetaData;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>			m_xConnectionTables;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>			m_xConnectionQueries;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >	m_xNumberFormatsSupplier;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>			m_xColumns;
         ::comphelper::ComponentContext                                                      m_aContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >        m_xTypeConverter;
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >		m_xTypeConverter;
 
-        ::std::vector<OPrivateColumns*>         m_aCurrentColumns;
-        OPrivateTables*                         m_pTables;      // currently used tables
+        ::std::vector<OPrivateColumns*>			m_aCurrentColumns;
+        OPrivateTables*							m_pTables;		// currently used tables
 
-        ::rtl::OUString                         m_aPureSelectSQL;   // the pure select statement, without filter/order/groupby/having
-        ::rtl::OUString                         m_sDecimalSep;
-        ::rtl::OUString                         m_sCommand;
-        ::com::sun::star::lang::Locale          m_aLocale;
-        sal_Int32                               m_nBoolCompareMode; // how to compare bool values
-        sal_Int32                               m_nCommandType;
+        ::rtl::OUString							m_aPureSelectSQL;   // the pure select statement, without filter/order/groupby/having
+        ::rtl::OUString							m_sDecimalSep;
+        ::rtl::OUString							m_sCommand;
+        ::com::sun::star::lang::Locale			m_aLocale;
+        sal_Int32								m_nBoolCompareMode; // how to compare bool values
+        sal_Int32								m_nCommandType;
 
         // <properties>
-        ::rtl::OUString                         m_sOrignal;
+        ::rtl::OUString							m_sOrignal;
         // </properties>
 
 
@@ -176,7 +176,7 @@ namespace dbaccess
                                 ,sal_Int32 filterOperator);
 
         /** getStructuredCondition returns the structured condition for the where or having clause
-            @param  _aGetFunctor
+            @param	_aGetFunctor
                 A member function to get the correct parse node.
 
             @return
@@ -193,9 +193,9 @@ namespace dbaccess
         inline bool implSetHavingClause(::rtl::OUString _sFilter) { setHavingClause(_sFilter); return true;}
 
         /** returns the part of the seelect statement
-            @param  _ePart
+            @param	_ePart
                 Which part should be returned.
-            @param  _bWithKeyword
+            @param	_bWithKeyword
                 If <TRUE/> the keyword will be added too. Otherwise not.
             @param _rIterator
                 The iterator to use.
@@ -225,7 +225,7 @@ namespace dbaccess
         virtual ~OSingleSelectQueryComposer();
     public:
 
-        OSingleSelectQueryComposer( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTableSupplier,
+        OSingleSelectQueryComposer(	const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTableSupplier,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                         const ::comphelper::ComponentContext& _rContext);
 

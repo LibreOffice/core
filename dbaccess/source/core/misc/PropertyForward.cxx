@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace dbaccess
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::lang;
 
-    DBG_NAME(OPropertyForward)
+    DBG_NAME(OPropertyForward)	
 
     //------------------------------------------------------------------------
     OPropertyForward::OPropertyForward( const Reference< XPropertySet>& _xSource, const Reference< XNameAccess>& _xDestContainer,
@@ -61,7 +61,7 @@ namespace dbaccess
         ,m_sName( _sName )
         ,m_bInInsert( sal_False )
     {
-        DBG_CTOR(OPropertyForward,NULL);
+        DBG_CTOR(OPropertyForward,NULL);	
 
         osl_incrementInterlockedCount(&m_refCount);
         try
@@ -86,7 +86,7 @@ namespace dbaccess
     // -----------------------------------------------------------------------------
     OPropertyForward::~OPropertyForward()
     {
-        DBG_DTOR(OPropertyForward,NULL);
+        DBG_DTOR(OPropertyForward,NULL);	
     }
 
     // -----------------------------------------------------------------------------
@@ -168,6 +168,6 @@ namespace dbaccess
     }
 
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 

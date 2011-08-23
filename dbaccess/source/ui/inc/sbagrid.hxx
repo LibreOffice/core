@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef _SBA_GRID_HXX
 #define _SBA_GRID_HXX
 
-//  #include <sdb/tools.hxx>
+//	#include <sdb/tools.hxx>
 
 #ifndef _SVX_FMGRIDCL_HXX
 #include <svx/fmgridcl.hxx>
@@ -79,7 +79,7 @@ namespace dbaui
     // SbaXGridControl
     //==================================================================
 
-    //  class ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > ;
+    //	class ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > ;
     FORWARD_DECLARE_INTERFACE(lang,XMultiServiceFactory)
 
     class SbaXStatusMultiplexer;
@@ -88,7 +88,7 @@ namespace dbaui
                 ,public ::com::sun::star::frame::XDispatch
     {
         DECLARE_STL_MAP(::com::sun::star::util::URL, SbaXStatusMultiplexer*, SbaURLCompare,StatusMultiplexerArray);
-        StatusMultiplexerArray      m_aStatusMultiplexer;
+        StatusMultiplexerArray		m_aStatusMultiplexer;
 
     public:
         SbaXGridControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
@@ -96,7 +96,7 @@ namespace dbaui
 
         // UNO
         DECLARE_UNO3_DEFAULTS(SbaXGridControl, FmXGridControl);
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any	SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
 
         // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -122,7 +122,7 @@ namespace dbaui
         virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > & rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > & rParentPeer) throw( ::com::sun::star::uno::RuntimeException );
 
     protected:
-        virtual FmXGridPeer*    imp_CreatePeer(Window* pParent);
+        virtual FmXGridPeer*	imp_CreatePeer(Window* pParent);
     };
 
     //==================================================================
@@ -133,7 +133,7 @@ namespace dbaui
                 :public FmXGridPeer
                 ,public ::com::sun::star::frame::XDispatch
     {
-        ::cppu::OMultiTypeInterfaceContainerHelperVar< ::com::sun::star::util::URL,SbaURLHash , SbaURLCompare>  m_aStatusListeners;
+        ::cppu::OMultiTypeInterfaceContainerHelperVar< ::com::sun::star::util::URL,SbaURLHash , SbaURLCompare>	m_aStatusListeners;
 
     public:
         SbaXGridPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
@@ -142,7 +142,7 @@ namespace dbaui
         // UNO
         virtual void SAL_CALL  acquire() throw() { FmXGridPeer::acquire(); }
         virtual void SAL_CALL release() throw() { FmXGridPeer::release(); }
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any	SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
 
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
 
@@ -162,7 +162,7 @@ namespace dbaui
         virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException );
 
     protected:
-        virtual FmGridControl*  imp_CreateControl(Window* pParent, WinBits nStyle);
+        virtual FmGridControl*	imp_CreateControl(Window* pParent, WinBits nStyle);
 #if defined(_MSC_VER) && (_MSC_VER >= 1310 )
         typedef ::com::sun::star::frame::XStatusListener xstlist_type;
         typedef ::com::sun::star::uno::Reference< xstlist_type > xlistener_type;
@@ -175,10 +175,10 @@ namespace dbaui
         // for asny execution of XDispatch::dispatch
         struct DispatchArgs
         {
-            ::com::sun::star::util::URL                                                 aURL;
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   aArgs;
+            ::com::sun::star::util::URL													aURL;
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >	aArgs;
         };
-        ::std::queue< DispatchArgs >    m_aDispatchArgs;
+        ::std::queue< DispatchArgs >	m_aDispatchArgs;
         DECL_LINK( OnDispatchEvent, void* );
 
         // for dynamic states of our 4 dispatchable URLs
@@ -194,7 +194,7 @@ namespace dbaui
         DispatchType classifyDispatchURL( const ::com::sun::star::util::URL& _rURL );
 
         DECLARE_STL_STDKEY_MAP( DispatchType, sal_Bool, MapDispatchToBool );
-        MapDispatchToBool   m_aDispatchStates;
+        MapDispatchToBool	m_aDispatchStates;
     };
 
     //==================================================================
@@ -211,8 +211,8 @@ namespace dbaui
     protected:
 
         // FmGridHeader overridables
-        virtual void    PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu);
-        virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
+        virtual void	PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu);
+        virtual	void	PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
 
     private:
         // DragSourceHelper overridables
@@ -233,13 +233,13 @@ namespace dbaui
     class SbaGridListener
     {
     public:
-        virtual void RowChanged()       = 0;
-        virtual void ColumnChanged()    = 0;
-        virtual void SelectionChanged() = 0;
-        virtual void CellActivated()    = 0;
-        virtual void CellDeactivated()  = 0;
-        virtual void BeforeDrop()       = 0;
-        virtual void AfterDrop()        = 0;
+        virtual void RowChanged()		= 0;
+        virtual void ColumnChanged()	= 0;
+        virtual void SelectionChanged()	= 0;
+        virtual void CellActivated()	= 0;
+        virtual void CellDeactivated()	= 0;
+        virtual void BeforeDrop()		= 0;
+        virtual void AfterDrop()		= 0;
     };
 
     //==================================================================
@@ -254,19 +254,19 @@ namespace dbaui
 
     // Attributes
     protected:
-        ::svx::ODataAccessDescriptor    m_aDataDescriptor;
-        SbaGridListener*                m_pMasterListener;
+        ::svx::ODataAccessDescriptor	m_aDataDescriptor;
+        SbaGridListener*	            m_pMasterListener;
 
-        sal_Int32                       m_nAsyncDropEvent;
+        sal_Int32			            m_nAsyncDropEvent;
 
         USHORT                          m_nCurrentActionColId;
             // ui actions (e.g. a context menu) may be performed on columns which aren't the current one
             // and aren't selected, so we have to track this column id
 
-        sal_Bool                        m_bActivatingForDrop;
+        sal_Bool	                    m_bActivatingForDrop;
     // Attribute Access
     public:
-        sal_uInt16  GetCurrentActionColumn() const  { return m_nCurrentActionColId; }
+        sal_uInt16	GetCurrentActionColumn() const	{ return m_nCurrentActionColId; }
 
     public:
         SbaGridControl(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >,Window* pParent, FmXGridPeer* _pPeer, WinBits nBits = WB_TABSTOP);
@@ -275,9 +275,9 @@ namespace dbaui
         virtual void Command( const CommandEvent& rCEvt );
         virtual void Select();
 
-        void SetMasterListener(SbaGridListener* pListener)  { m_pMasterListener = pListener; }
+        void SetMasterListener(SbaGridListener* pListener)	{ m_pMasterListener = pListener; }
 
-        virtual void ActivateCell(long nRow, sal_uInt16 nCol, sal_Bool bSetCellFocus = sal_True);
+        virtual void ActivateCell(long nRow, sal_uInt16	nCol, sal_Bool bSetCellFocus = sal_True);
         virtual void DeactivateCell(sal_Bool bUpdate = sal_True);
         void ActivateCell() { FmGridControl::ActivateCell(); }
 
@@ -286,9 +286,9 @@ namespace dbaui
         HeaderBar* GetHeaderBar() const { return FmGridControl::GetHeaderBar(); }
 
         /** return the description of the specified object.
-            @param  eObjType
+            @param	eObjType
                 The type to ask for
-            @param  _nPosition
+            @param	_nPosition
                 The position of a tablecell (index position), header bar  colum/row cell
             @return
                 The description of the specified object.
@@ -308,10 +308,10 @@ namespace dbaui
         virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
 
         // BrowseBox overridables
-        virtual void    CursorMoved();
+        virtual void	CursorMoved();
         virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt );
         virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt );
-        virtual void    MouseButtonDown( const BrowserMouseEvent& rMEvt);
+        virtual void	MouseButtonDown( const BrowserMouseEvent& rMEvt);
 
         // EditBrowseBox overridables
         virtual BrowserHeader* imp_CreateHeaderBar(BrowseBox* pParent);
@@ -350,7 +350,7 @@ namespace dbaui
         DECL_LINK(AsynchDropEvent, void*);
 
     private:
-        sal_Bool    IsReadOnlyDB() const;
+        sal_Bool	IsReadOnlyDB() const;
         void implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfClipboardFalseIfDrag );
 
     private:

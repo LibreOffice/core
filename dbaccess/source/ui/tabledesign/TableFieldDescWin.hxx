@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 #ifndef DBAUI_TABLEFIELDDESCRIPTION_HXX
 #define DBAUI_TABLEFIELDDESCRIPTION_HXX
 
-#ifndef _SV_TABPAGE_HXX
+#ifndef _SV_TABPAGE_HXX 
 #include <vcl/tabpage.hxx>
 #endif
 #ifndef DBAUI_TABLEFIELDDESCGENPAGE_HXX
@@ -56,10 +56,10 @@ namespace dbaui
             NONE
         };
     private:
-        OTableDesignHelpBar*    m_pHelpBar;
-        OFieldDescGenWin*       m_pGenPage;
-        FixedText*              m_pHeader;
-        ChildFocusState         m_eChildFocus;
+        OTableDesignHelpBar*	m_pHelpBar;
+        OFieldDescGenWin*		m_pGenPage;
+        FixedText*				m_pHeader;
+        ChildFocusState			m_eChildFocus;
 
         IClipboardTest* getActiveChild() const;
 
@@ -87,11 +87,11 @@ namespace dbaui
         String GetControlText( USHORT nControlId )
                 { return m_pGenPage->GetControlText(nControlId); }
 
-        //  short GetFormatCategory(OFieldDescription* pFieldDescr) { return m_pGenPage ? m_pGenPage->GetFormatCategory(pFieldDescr) : -1; }
+        //	short GetFormatCategory(OFieldDescription* pFieldDescr) { return m_pGenPage ? m_pGenPage->GetFormatCategory(pFieldDescr) : -1; }
             // liefert zum am Feld eingestellten Format einen der CAT_xxx-Werte (CAT_NUMBER, CAT_DATE ...)
 
-        String  BoolStringPersistent(const String& rUIString) const { return m_pGenPage->BoolStringPersistent(rUIString); }
-        String  BoolStringUI(const String& rPersistentString) const { return m_pGenPage->BoolStringUI(rPersistentString); }
+        String	BoolStringPersistent(const String& rUIString) const { return m_pGenPage->BoolStringPersistent(rUIString); }
+        String	BoolStringUI(const String& rPersistentString) const { return m_pGenPage->BoolStringUI(rPersistentString); }
 
         // IClipboardTest
         virtual sal_Bool isCutAllowed();
@@ -104,7 +104,7 @@ namespace dbaui
         virtual void paste();
 
         inline OFieldDescGenWin* getGenPage() const { return m_pGenPage; }
-        inline OTableDesignHelpBar* getHelpBar() const { return m_pHelpBar; }
+        inline OTableDesignHelpBar*	getHelpBar() const { return m_pHelpBar; }
 
     };
 }

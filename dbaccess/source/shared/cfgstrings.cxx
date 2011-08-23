@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace dbacfg
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_DBLINK_PASSWORDREQUIRED, "IsPasswordRequired");
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_DBLINK_SUPPRESSVERSIONCL, "SuppressVersionColumns");
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_DBLINK_BOOKMARKS, "Bookmarks");
-
+    
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_COMMAND, "Command");
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_ESCAPE_PROCESSING, "EscapeProcessing");
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_UPDATE_TABLENAME, "UpdateTableName");

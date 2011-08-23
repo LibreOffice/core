@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ OColumnControlModel::OColumnControlModel(const Reference<XMultiServiceFactory>& 
     ,m_nWidth(50)
 {
     DBG_CTOR(OColumnControlModel,NULL);
-    registerProperties();
+    registerProperties();	
 }
 // -----------------------------------------------------------------------------
 OColumnControlModel::OColumnControlModel(const OColumnControlModel* _pSource,const Reference<XMultiServiceFactory>& _rxFactory)
@@ -115,7 +115,7 @@ OColumnControlModel::~OColumnControlModel()
     {
         acquire();
         dispose();
-    }
+    }	
 }
 // -----------------------------------------------------------------------------
 void OColumnControlModel::registerProperties()
@@ -124,8 +124,8 @@ void OColumnControlModel::registerProperties()
         &m_xConnection, ::getCppuType( &m_xConnection ) );
     Any a;
     a <<= m_xColumn;
-//  registerMayBeVoidProperty( PROPERTY_COLUMN, PROPERTY_ID_COLUMN, PropertyAttribute::TRANSIENT | PropertyAttribute::BOUND| PropertyAttribute::MAYBEVOID,
-//          &a, ::getCppuType( &m_xColumn ) );
+//	registerMayBeVoidProperty( PROPERTY_COLUMN, PROPERTY_ID_COLUMN, PropertyAttribute::TRANSIENT | PropertyAttribute::BOUND| PropertyAttribute::MAYBEVOID,
+//			&a, ::getCppuType( &m_xColumn ) );
     registerProperty( PROPERTY_COLUMN, PROPERTY_ID_COLUMN, PropertyAttribute::TRANSIENT | PropertyAttribute::BOUND,
             &m_xColumn, ::getCppuType( &m_xColumn ) );
 
@@ -144,7 +144,7 @@ void OColumnControlModel::registerProperties()
 //------------------------------------------------------------------------------
 Reference< XCloneable > SAL_CALL OColumnControlModel::createClone( ) throw (RuntimeException)
 {
-    return new OColumnControlModel( this, getORB() );
+    return new OColumnControlModel( this, getORB() ); 
 }
 //------------------------------------------------------------------------------
 IMPLEMENT_TYPEPROVIDER2(OColumnControlModel,OColumnControlModel_BASE,comphelper::OPropertyContainer)
@@ -153,7 +153,7 @@ IMPLEMENT_SERVICE_INFO2_STATIC(OColumnControlModel,"com.sun.star.comp.dbu.OColum
 IMPLEMENT_FORWARD_REFCOUNT( OColumnControlModel, OColumnControlModel_BASE )
 //------------------------------------------------------------------------------
 Any SAL_CALL OColumnControlModel::queryInterface( const Type& _rType ) throw (RuntimeException)
-{
+{ 
     return OColumnControlModel_BASE::queryInterface( _rType );
 }
 // -----------------------------------------------------------------------------
@@ -183,6 +183,6 @@ void OColumnControlModel::read(const Reference<XObjectInputStream>& /*_rxInStrea
 }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,35 +109,35 @@ public:
     DECLARE_STL_USTRINGACCESS_MAP(Sequence<PropertyValue>,TPropertyNameMap);
     typedef ::std::vector< ::com::sun::star::beans::PropertyValue> TInfoSequence;
 private:
-    TPropertyNameMap                                m_aQuerySettings;
-    TPropertyNameMap                                m_aTablesSettings;
+    TPropertyNameMap								m_aQuerySettings;
+    TPropertyNameMap								m_aTablesSettings;    
     TInfoSequence                                   m_aInfoSequence;
-    Reference< XComponent >                         m_xSrcDoc;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDatabaseElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDataSourceElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pLoginElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDatabaseDescriptionElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDataSourceInfoElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDocumentsElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pComponentElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pQueryElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pColumnElemTokenMap;
+    Reference< XComponent >							m_xSrcDoc;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pDocElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pDatabaseElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pDataSourceElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pLoginElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pDatabaseDescriptionElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pDataSourceInfoElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pDocumentsElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pComponentElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pQueryElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pColumnElemTokenMap;
 
-    mutable UniReference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
-    mutable UniReference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
-    mutable UniReference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
-    Reference<XPropertySet>                         m_xDataSource;
-    sal_Int32                                       m_nPreviewMode;
+    mutable UniReference < XMLPropertySetMapper >	m_xTableStylesPropertySetMapper;
+    mutable UniReference < XMLPropertySetMapper >	m_xColumnStylesPropertySetMapper;
+    mutable UniReference < XMLPropertySetMapper >	m_xCellStylesPropertySetMapper;
+    Reference<XPropertySet>							m_xDataSource;
+    sal_Int32										m_nPreviewMode;
     bool                                            m_bNewFormat;
 
-    sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
+    sal_Bool							implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
 
 
     /** fills the map with the Properties
-        @param  _rValue
+        @param	_rValue
             The Any where the sequence resists in.
-        @param  _rMap
+        @param	_rMap
             The map to fill.
     */
     void fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap);
@@ -152,9 +152,9 @@ protected:
                                       const ::rtl::OUString& rLocalName,
                                       const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    virtual ~ODBFilter()  throw();
+    virtual	~ODBFilter()  throw();
 public:
-
+    
     ODBFilter( const Reference< XMultiServiceFactory >& _rxMSF );
 
     // XFilter
@@ -189,7 +189,7 @@ public:
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const;
 
     /** add a Info to the sequence which will be appened to the data source
-        @param  _rInfo The property to append.
+        @param	_rInfo The property to append.
     */
     inline void addInfo(const ::com::sun::star::beans::PropertyValue& _rInfo)
     {

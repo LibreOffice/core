@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ ORelationTableView::ORelationTableView( Window* pParent, ORelationDesignView* pV
     , ::comphelper::OContainerListener(m_aMutex)
     ,m_pExistingConnection(NULL)
     ,m_bInRemove(false)
-
+    
 {
     DBG_CTOR(ORelationTableView,NULL);
     SetHelpId(HID_CTL_RELATIONTAB);
@@ -151,7 +151,7 @@ void ORelationTableView::ReSync()
             continue;
         }
 
-        (*GetTabWinMap())[pData->GetComposedName()] = pTabWin;  // am Anfang einfuegen, da ich die DataList ja rueckwaerts durchlaufe
+        (*GetTabWinMap())[pData->GetComposedName()] = pTabWin;	// am Anfang einfuegen, da ich die DataList ja rueckwaerts durchlaufe
         // wenn in den Daten keine Position oder Groesse steht -> Default
         if (!pData->HasPosition() && !pData->HasSize())
             SetDefaultTabWinPosSize(pTabWin);
@@ -175,12 +175,12 @@ void ORelationTableView::ReSync()
             bInvalid = bInvalid || ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
 
             if (bInvalid)
-            {   // nein -> Pech gehabt, die Connection faellt weg
+            {	// nein -> Pech gehabt, die Connection faellt weg
                 pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter),pTabConnDataList->end() );
                 continue;
             }
         } // if ( !arrInvalidTables.empty() )
-
+        
         addConnection( new ORelationTableConnection(this, *aConIter), sal_False ); // don't add the data again
     }
 
@@ -217,7 +217,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     }
     // insert table connection into view
 
-    TTableConnectionData::value_type pTabConnData(new ORelationTableConnectionData(pSourceWin->GetData(),
+    TTableConnectionData::value_type pTabConnData(new ORelationTableConnectionData(pSourceWin->GetData(), 
                                                                                    pDestWin->GetData()));
 
     // die Namen der betroffenen Felder
@@ -342,7 +342,7 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
     //////////////////////////////////////////////////////////////////
     // Neue Datenstruktur in DocShell eintragen
     TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
-    pNewTabWinData->ShowAll(FALSE);
+    pNewTabWinData->ShowAll(FALSE);	
 
     //////////////////////////////////////////////////////////////////
     // Neues Fenster in Fensterliste eintragen
@@ -359,7 +359,7 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
         modified();
 
         if ( m_pAccessible )
-            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
+            m_pAccessible->notifyAccessibleEvent(	AccessibleEventId::CHILD,
                                                     Any(),
                                                     makeAny(pNewTabWin->GetAccessible()));
     }
@@ -377,7 +377,7 @@ void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
     {
         m_pView->getController().getUndoMgr()->Clear();
         OJoinTableView::RemoveTabWin( pTabWin );
-
+        
         m_pView->getController().InvalidateFeature(SID_RELATION_ADD_RELATION);
         m_pView->getController().InvalidateFeature(ID_BROWSER_UNDO);
         m_pView->getController().InvalidateFeature(ID_BROWSER_REDO);
@@ -388,14 +388,14 @@ void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
 //{
 //    class OReleationAskDialog : public ButtonDialog
 //    {
-//        FixedImage        m_aInfoImage;
-//        FixedText     m_aTitle;
-//      FixedText       m_aMessage;
+//        FixedImage		m_aInfoImage;
+//        FixedText		m_aTitle;
+//	    FixedText		m_aMessage;
 //    public:
 //        OReleationDialog(Window* _pParent) : ButtonDialog(_pParent,WB_HORZ | WB_STDDIALOG)
 //            ,m_aInfoImage(this)
 //            ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
-//          ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
+//	        ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
 //        {
 //            m_aMessage.SetText(ModuleRes(STR_QUERY_REL_EDIT_RELATION));
 //            m_aMessage.Show();
@@ -457,7 +457,7 @@ bool ORelationTableView::allowQueries() const
 // -----------------------------------------------------------------------------
 void ORelationTableView::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(::com::sun::star::uno::RuntimeException)
 {
-
+    
 }
 // -----------------------------------------------------------------------------
 void ORelationTableView::_elementRemoved( const container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException)
@@ -471,7 +471,7 @@ void ORelationTableView::_elementRemoved( const container::ContainerEvent& _rEve
         {
             m_pView->getController().getUndoMgr()->Clear();
             OJoinTableView::RemoveTabWin( pTableWindow );
-
+            
             m_pView->getController().InvalidateFeature(SID_RELATION_ADD_RELATION);
             m_pView->getController().InvalidateFeature(ID_BROWSER_UNDO);
             m_pView->getController().InvalidateFeature(ID_BROWSER_REDO);

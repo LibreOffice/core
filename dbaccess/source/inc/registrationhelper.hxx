@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,20 +34,20 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rServiceManager,
             const ::rtl::OUString & _rComponentName,
             ::cppu::ComponentInstantiation _pCreateFunction,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString > & _rServiceNames,
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString > & _rServiceNames, 
             rtl_ModuleCount* _p
         );
 
 //==========================================================================
 class OModuleRegistration
 {
-    static  ::com::sun::star::uno::Sequence< ::rtl::OUString >*
+    static	::com::sun::star::uno::Sequence< ::rtl::OUString >*
         s_pImplementationNames;
-    static  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > >*
+    static	::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > >*
         s_pSupportedServices;
-    static  ::com::sun::star::uno::Sequence< sal_Int64 >*
+    static	::com::sun::star::uno::Sequence< sal_Int64 >*
         s_pCreationFunctionPointers;
-    static  ::com::sun::star::uno::Sequence< sal_Int64 >*
+    static	::com::sun::star::uno::Sequence< sal_Int64 >*
         s_pFactoryFunctionPointers;
 
     // no direct instantiation, only static members/methods
@@ -55,10 +55,10 @@ class OModuleRegistration
 
 public:
     /** register a component implementing a service with the given data.
-        @param      _rImplementationName        the implementation name of the component
-        @param      _rServiceNames              the services the component supports
-        @param      _pCreateFunction            a function for creating an instance of the component
-        @param      _pFactoryFunction           a function for creating a factory for that component
+        @param		_rImplementationName		the implementation name of the component
+        @param		_rServiceNames				the services the component supports
+        @param		_pCreateFunction			a function for creating an instance of the component
+        @param		_pFactoryFunction			a function for creating a factory for that component
         @see revokeComponent
     */
     static void registerComponent(
@@ -68,25 +68,25 @@ public:
         FactoryInstantiation _pFactoryFunction);
 
     /** revoke the registration for the specified component
-        @param      _rImplementationName        the implementation name of the component
+        @param		_rImplementationName		the implementation name of the component
     */
     static void revokeComponent(
         const ::rtl::OUString& _rImplementationName);
 
     /** writes the registration information of all components which are currently registered into the specified registry.
         Usually used from within component_writeInfo.
-        @param      _rxServiceManager   the service manager
-        @param      _rRootKey           the registry key under which the information will be stored
-        @return                         sal_True if the registration of all implementations was successfull, sal_False otherwise
+        @param		_rxServiceManager	the service manager
+        @param		_rRootKey			the registry key under which the information will be stored
+        @return							sal_True if the registration of all implementations was successfull, sal_False otherwise
     */
     static sal_Bool writeComponentInfos(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceManager,
         const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rRootKey);
 
     /** creates a Factory for the component with the given implementation name. Usually used from within component_getFactory.
-        @param      _rxServiceManager       a pointer to an XMultiServiceFactory interface as got in component_getFactory
-        @param      _pImplementationName    the implementation name of the component
-        @return                             the XInterface access to a factory for the component
+        @param		_rxServiceManager		a pointer to an XMultiServiceFactory interface as got in component_getFactory
+        @param		_pImplementationName	the implementation name of the component
+        @return								the XInterface access to a factory for the component
     */
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getComponentFactory(
         const ::rtl::OUString& _rImplementationName,

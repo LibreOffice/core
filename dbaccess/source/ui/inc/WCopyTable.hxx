@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ namespace dbaui
         {
             m_pColumns = _pColumns;
         }
-        inline bool operator()(const ::rtl::OUString& _sColumnName) const
+        inline bool operator()(const ::rtl::OUString& _sColumnName)	const
         {
             return m_pColumns->find(_sColumnName) != m_pColumns->end();
         }
@@ -82,7 +82,7 @@ namespace dbaui
             ,m_pVector(_pVector)
         {
         }
-        inline bool operator()(const ::rtl::OUString& _sColumnName) const
+        inline bool operator()(const ::rtl::OUString& _sColumnName)	const
         {
             return ::std::find_if(m_pVector->begin(),m_pVector->end(),
                 ::std::bind2nd(m_aCase, _sColumnName)) != m_pVector->end();
@@ -125,7 +125,7 @@ namespace dbaui
 
         /** copies the filter and sorting
         *
-        * \return
+        * \return 
         */
         virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const = 0;
 
@@ -219,11 +219,11 @@ namespace dbaui
     // ========================================================
     class OCopyTableWizard : public WizardDialog
     {
-        friend class        OWizColumnSelect;
-        friend class        OWizTypeSelect;
-        friend class        OWizTypeSelectControl;
-        friend class        OCopyTable;
-        friend class        OWizNameMatching;
+        friend class		OWizColumnSelect;
+        friend class		OWizTypeSelect;
+        friend class		OWizTypeSelectControl;
+        friend class		OCopyTable;
+        friend class		OWizNameMatching;
 
     public:
         DECLARE_STL_MAP(::rtl::OUString,::rtl::OUString,::comphelper::UStringMixLess,TNameMapping);
@@ -238,54 +238,54 @@ namespace dbaui
         };
 
     private:
-        ODatabaseExport::TColumns       m_vDestColumns; // contains the columns
-        ODatabaseExport::TColumnVector  m_aDestVec;     // the order to insert the columns
-        ODatabaseExport::TColumns       m_vSourceColumns;
-        ODatabaseExport::TColumnVector  m_vSourceVec;
+        ODatabaseExport::TColumns		m_vDestColumns; // contains the columns
+        ODatabaseExport::TColumnVector	m_aDestVec;		// the order to insert the columns
+        ODatabaseExport::TColumns		m_vSourceColumns;
+        ODatabaseExport::TColumnVector	m_vSourceVec;
 
         HelpButton              m_pbHelp;
-        CancelButton            m_pbCancel;
-        PushButton              m_pbPrev;
-        PushButton              m_pbNext;
-        OKButton                m_pbFinish;
+        CancelButton			m_pbCancel;
+        PushButton				m_pbPrev;
+        PushButton				m_pbNext;
+        OKButton				m_pbFinish;
 
-        OTypeInfoMap                            m_aTypeInfo;
+        OTypeInfoMap				            m_aTypeInfo;
         ::std::vector<OTypeInfoMap::iterator>   m_aTypeInfoIndex;
-        OTypeInfoMap                            m_aDestTypeInfo;
+        OTypeInfoMap				            m_aDestTypeInfo;
         ::std::vector<OTypeInfoMap::iterator>   m_aDestTypeInfoIndex;
-        TNameMapping                            m_mNameMapping;
+        TNameMapping				            m_mNameMapping;
 
-        ODatabaseExport::TPositions             m_vColumnPos;
-        ::std::vector<sal_Int32>                m_vColumnTypes;
+        ODatabaseExport::TPositions	            m_vColumnPos;
+        ::std::vector<sal_Int32>	            m_vColumnTypes;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xDestConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >			m_xDestConnection;
 
         const ICopyTableSourceObject&                                                   m_rSourceObject;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >	m_xFormatter;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler>  m_xInteractionHandler;
 
-        String                  m_sTypeNames;       // these type names are the ones out of the resource file
-        sal_uInt32              m_nPageCount;
-        sal_Bool                m_bDeleteSourceColumns;
+        String					m_sTypeNames;		// these type names are the ones out of the resource file
+        sal_uInt32				m_nPageCount;
+        sal_Bool				m_bDeleteSourceColumns;
         bool                    m_bInterConnectionCopy;    // are we copying between different connections?
 
-        ::com::sun::star::lang::Locale  m_aLocale;
-        ::rtl::OUString                 m_sName;    // for a table the name is composed
-        ::rtl::OUString                 m_sSourceName;
-        ::rtl::OUString                 m_aKeyName;
-        TOTypeInfoSP                    m_pTypeInfo; // default type
-        sal_Bool                        m_bAddPKFirstTime;
+        ::com::sun::star::lang::Locale	m_aLocale;
+        ::rtl::OUString					m_sName;	// for a table the name is composed
+        ::rtl::OUString 				m_sSourceName;
+        ::rtl::OUString					m_aKeyName;
+        TOTypeInfoSP					m_pTypeInfo; // default type
+        sal_Bool						m_bAddPKFirstTime;
         sal_Int16                       m_nOperation;
-        Wizard_Button_Style             m_ePressed;
-        sal_Bool                        m_bCreatePrimaryKeyColumn;
+        Wizard_Button_Style	            m_ePressed;
+        sal_Bool			            m_bCreatePrimaryKeyColumn;
         sal_Bool                        m_bUseHeaderLine;
 
     private:
-        DECL_LINK( ImplPrevHdl  , PushButton* );
-        DECL_LINK( ImplNextHdl  , PushButton* );
-        DECL_LINK( ImplOKHdl    , OKButton* );
+        DECL_LINK( ImplPrevHdl	, PushButton* );
+        DECL_LINK( ImplNextHdl	, PushButton* );
+        DECL_LINK( ImplOKHdl	, OKButton* );
         DECL_LINK( ImplActivateHdl, WizardDialog* );
         sal_Bool CheckColumns(sal_Int32& _rnBreakPos);
         void loadData( const ICopyTableSourceObject& _rSourceObject,
@@ -307,8 +307,8 @@ namespace dbaui
             const ::rtl::OUString& _rDefaultName,
             sal_Int16 _nOperation,
             const ICopyTableSourceObject&                                                           _rSourceObject,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&          _xSourceConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&          _xConnection,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&			_xSourceConnection,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&			_xConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler>&   _xInteractionHandler
         );
@@ -321,7 +321,7 @@ namespace dbaui
             const ODatabaseExport::TColumns& _rDestColumns,
             const ODatabaseExport::TColumnVector& _rSourceColVec,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _xFormatter,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >&	_xFormatter,
             TypeSelectionPageFactory _pTypeSelectionPageFactory,
             SvStream& _rTypeSelectionPageArg,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM
@@ -329,36 +329,36 @@ namespace dbaui
 
         virtual ~OCopyTableWizard();
 
-        virtual long        DeactivatePage();
-        OKButton&           GetOKButton() { return m_pbFinish; }
+        virtual long		DeactivatePage();
+        OKButton&			GetOKButton() { return m_pbFinish; }
         Wizard_Button_Style GetPressedButton() const { return m_ePressed; }
-        void                EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable);
-        void                AddWizardPage(OWizardPage* pPage); // Page wird von OCopyTableWizard gelöscht
-        void                RemoveWizardPage(OWizardPage* pPage); // Page goes again to user
-        void                CheckButtons(); // checks which button can be disabled, enabled
+        void				EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable);
+        void				AddWizardPage(OWizardPage* pPage); // Page wird von OCopyTableWizard gelöscht
+        void				RemoveWizardPage(OWizardPage* pPage); // Page goes again to user
+        void				CheckButtons(); // checks which button can be disabled, enabled
 
         // returns a vector where the position of a column and if the column is in the selection
         // when not the value is COLUMN_POSITION_NOT_FOUND == (sal_uInt32)-1
-        ODatabaseExport::TPositions GetColumnPositions()    const { return m_vColumnPos; }
-        ::std::vector<sal_Int32>    GetColumnTypes()        const { return m_vColumnTypes; }
+        ODatabaseExport::TPositions	GetColumnPositions()	const { return m_vColumnPos; }
+        ::std::vector<sal_Int32>	GetColumnTypes()		const { return m_vColumnTypes; }
         sal_Bool                    UseHeaderLine()         const { return m_bUseHeaderLine; }
         void                        setUseHeaderLine(sal_Bool _bUseHeaderLine) { m_bUseHeaderLine = _bUseHeaderLine; }
 
         void insertColumn(sal_Int32 _nPos,OFieldDescription* _pField);
 
         /** replaces a field description with another one. The name must not be known so far.
-            @param  _nPos
+            @param	_nPos
                 The pos inside the vector, 0 based.
-            @param  _pField
+            @param	_pField
                 The field to set.
-            @param  _sOldName
+            @param	_sOldName
                 The name of column to be replaced.
         */
         void replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,const ::rtl::OUString& _sOldName);
 
         /** returns whether a primary key should be created in the target database
         */
-        sal_Bool        shouldCreatePrimaryKey() const;
+        sal_Bool		shouldCreatePrimaryKey() const;
         void            setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUString& _rSuggestedName );
 
         static bool     supportsPrimaryKey( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
@@ -371,23 +371,23 @@ namespace dbaui
             @return
                 The name of the primary key.
         */
-        ::rtl::OUString getPrimaryKeyName() const { return m_aKeyName; }
+        ::rtl::OUString	getPrimaryKeyName() const { return m_aKeyName; }
 
-        TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos)        const { return m_aTypeInfoIndex[_nPos]->second; }
-        const OTypeInfoMap* getTypeInfo()                       const { return &m_aTypeInfo; }
+        TOTypeInfoSP		getTypeInfo(sal_Int32 _nPos)		const { return m_aTypeInfoIndex[_nPos]->second; }
+        const OTypeInfoMap*	getTypeInfo()						const { return &m_aTypeInfo; }
 
-        TOTypeInfoSP        getDestTypeInfo(sal_Int32 _nPos)    const { return m_aDestTypeInfoIndex[_nPos]->second; }
-        const OTypeInfoMap* getDestTypeInfo()                   const { return &m_aDestTypeInfo; }
+        TOTypeInfoSP		getDestTypeInfo(sal_Int32 _nPos)	const { return m_aDestTypeInfoIndex[_nPos]->second; }
+        const OTypeInfoMap*	getDestTypeInfo()					const { return &m_aDestTypeInfo; }
 
-        ::com::sun::star::lang::Locale  GetLocale() const { return m_aLocale; }
+        ::com::sun::star::lang::Locale	GetLocale() const { return m_aLocale; }
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const { return m_xFormatter; }
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> GetFactory() const { return m_xFactory; }
 
-        const ODatabaseExport::TColumns*        getSourceColumns() const{ return &m_vSourceColumns; }
-        const ODatabaseExport::TColumnVector*   getSrcVector() const    { return &m_vSourceVec; }
-        ODatabaseExport::TColumns*              getDestColumns()        { return &m_vDestColumns; }
-        const ODatabaseExport::TColumnVector*   getDestVector() const   { return &m_aDestVec; }
-        ::rtl::OUString getName() const { return m_sName; }
+        const ODatabaseExport::TColumns*		getSourceColumns() const{ return &m_vSourceColumns; }
+        const ODatabaseExport::TColumnVector*	getSrcVector() const	{ return &m_vSourceVec; }
+        ODatabaseExport::TColumns*				getDestColumns()		{ return &m_vDestColumns; }
+        const ODatabaseExport::TColumnVector*	getDestVector() const	{ return &m_aDestVec; }
+        ::rtl::OUString	getName() const { return m_sName; }
 
         /** clears the dest vectors
         */
@@ -400,10 +400,10 @@ namespace dbaui
         void setOperation( const sal_Int16 _nOperation );
         sal_Int16 getOperation() const;
 
-        ::rtl::OUString convertColumnName(  const TColumnFindFunctor&   _rCmpFunctor,
-                                            const ::rtl::OUString&  _sColumnName,
-                                            const ::rtl::OUString&  _sExtraChars,
-                                            sal_Int32               _nMaxNameLen);
+        ::rtl::OUString convertColumnName(	const TColumnFindFunctor&	_rCmpFunctor,
+                                            const ::rtl::OUString&	_sColumnName,
+                                            const ::rtl::OUString&	_sExtraChars,
+                                            sal_Int32				_nMaxNameLen);
         TOTypeInfoSP convertType(const TOTypeInfoSP&_pType,sal_Bool& _bNotConvert);
 
         ::rtl::OUString createUniqueName(const ::rtl::OUString& _sName);

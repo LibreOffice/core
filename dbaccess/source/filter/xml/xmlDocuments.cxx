@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ SvXMLImportContext* OXMLDocuments::CreateChildContext(
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
-    const SvXMLTokenMap&    rTokenMap   = GetOwnImport().GetDocumentsElemTokenMap();
+    const SvXMLTokenMap&	rTokenMap	= GetOwnImport().GetDocumentsElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
@@ -126,7 +126,7 @@ SvXMLImportContext* OXMLDocuments::CreateChildContext(
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = new OXMLComponent( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,m_sComponentServiceName );
             break;
-        //  case XML_TOK_QUERY_COLLECTION:
+        //	case XML_TOK_QUERY_COLLECTION:
         case XML_TOK_COMPONENT_COLLECTION:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = new OXMLHierarchyCollection( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,m_sCollectionServiceName,m_sComponentServiceName );

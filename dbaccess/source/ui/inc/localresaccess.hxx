@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef _DBAUI_LOCALRESACCESS_HXX_
 #define _DBAUI_LOCALRESACCESS_HXX_
 
-#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
+#ifndef _SVTOOLS_LOCALRESACCESS_HXX_ 
 #include <svtools/localresaccess.hxx>
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
@@ -57,7 +57,7 @@ public:
 };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_LOCALRESACCESS_HXX_

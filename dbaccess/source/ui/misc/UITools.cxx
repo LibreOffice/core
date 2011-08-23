@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -187,12 +187,12 @@
 #include <svx/svxids.hrc>
 #endif
 
-#define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
-#define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY
+#define ITEMID_HORJUSTIFY		SID_ATTR_ALIGN_HOR_JUSTIFY
+#define ITEMID_VERJUSTIFY		SID_ATTR_ALIGN_VER_JUSTIFY
 //#define ITEMID_ORIENTATION     SID_ATTR_ALIGN_ORIENTATION
-#define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
-#define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
-#define ITEMID_NUMBERINFO       SID_ATTR_NUMBERFORMAT_INFO
+#define ITEMID_LINEBREAK		SID_ATTR_ALIGN_LINEBREAK
+#define ITEMID_MARGIN			SID_ATTR_ALIGN_MARGIN
+#define ITEMID_NUMBERINFO		SID_ATTR_NUMBERFORMAT_INFO
 
 #ifndef _SFXITEMPOOL_HXX
 #include <svl/itempool.hxx>
@@ -319,7 +319,7 @@ using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING;
 using ::com::sun::star::frame::XModel;
 
 // -----------------------------------------------------------------------------
-SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
+SQLExceptionInfo createConnection(	const ::rtl::OUString& _rsDataSourceName,
                                      const Reference< ::com::sun::star::container::XNameAccess >& _xDatabaseContext,
                                     const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF,
                                     Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
@@ -338,7 +338,7 @@ SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
     return createConnection(xProp,_rMF,_rEvtLst,_rOUTConnection);
 }
 // -----------------------------------------------------------------------------
-SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XPropertySet>& _xDataSource,
+SQLExceptionInfo createConnection(	const Reference< ::com::sun::star::beans::XPropertySet>& _xDataSource,
                                     const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF,
                                     Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
                                     Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection )
@@ -367,14 +367,14 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     try
     {
         if(bPwdReq && !sPwd.getLength())
-        {   // password required, but empty -> connect using an interaction handler
+        {	// password required, but empty -> connect using an interaction handler
             Reference<XCompletedConnection> xConnectionCompletion(_xDataSource, UNO_QUERY);
             if (!xConnectionCompletion.is())
             {
                 OSL_ENSURE(0,"createConnection: missing an interface ... need an error message here!");
             }
             else
-            {   // instantiate the default SDB interaction handler
+            {	// instantiate the default SDB interaction handler
                 Reference< XInteractionHandler > xHandler(_rMF->createInstance(SERVICE_TASK_INTERACTION_HANDLER), UNO_QUERY);
                 if (!xHandler.is())
                 {
@@ -401,7 +401,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
     catch(Exception&) { OSL_ENSURE(0,"SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
 
-    //  showError(aInfo);
+    //	showError(aInfo);
 
     return aInfo;
 }
@@ -534,24 +534,24 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
         {
             // search the best matching type
     #ifdef DBG_UTIL
-            ::rtl::OUString sDBTypeName         = aIter->second->aTypeName;         (void)sDBTypeName;
-            sal_Int32       nDBTypePrecision    = aIter->second->nPrecision;        (void)nDBTypePrecision;
-            sal_Int32       nDBTypeScale        = aIter->second->nMaximumScale;     (void)nDBTypeScale;
-            sal_Bool        bDBAutoIncrement    = aIter->second->bAutoIncrement;    (void)bDBAutoIncrement;
+            ::rtl::OUString sDBTypeName			= aIter->second->aTypeName;         (void)sDBTypeName;
+            sal_Int32		nDBTypePrecision	= aIter->second->nPrecision;        (void)nDBTypePrecision;
+            sal_Int32		nDBTypeScale		= aIter->second->nMaximumScale;     (void)nDBTypeScale;
+            sal_Bool		bDBAutoIncrement	= aIter->second->bAutoIncrement;    (void)bDBAutoIncrement;
     #endif
-            if  (   (
+            if	(	(
                         !_sTypeName.getLength()
-                    ||  (aIter->second->aTypeName.equalsIgnoreAsciiCase(_sTypeName))
+                    ||	(aIter->second->aTypeName.equalsIgnoreAsciiCase(_sTypeName))
                     )
-                &&  (
+                &&	(
                         (
                                 !aIter->second->aCreateParams.getLength()
-                            &&  !_sCreateParams.getLength()
+                            &&	!_sCreateParams.getLength()
                         )
-                    ||  (
-                                (aIter->second->nPrecision      >= _nPrecision)
-                            &&  (aIter->second->nMaximumScale   >= _nScale)
-                            &&  ( (_bAutoIncrement && aIter->second->bAutoIncrement) || !_bAutoIncrement )
+                    ||	(
+                                (aIter->second->nPrecision		>= _nPrecision)
+                            &&	(aIter->second->nMaximumScale	>= _nScale)
+                            &&	( (_bAutoIncrement && aIter->second->bAutoIncrement) || !_bAutoIncrement )
                         )
                     )
                 )
@@ -565,33 +565,33 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                 sal_Int32 nPrec = aIter->second->nPrecision;
                 sal_Int32 nScale = aIter->second->nMaximumScale;
                 // search the best matching type (now comparing the local names)
-                if  (   (aIter->second->aLocalTypeName.equalsIgnoreAsciiCase(_sTypeName))
-                    &&  (nPrec  >= _nPrecision)
-                    &&  (nScale >= _nScale)
-                    &&  ( (_bAutoIncrement && aIter->second->bAutoIncrement) || !_bAutoIncrement )
+                if	(	(aIter->second->aLocalTypeName.equalsIgnoreAsciiCase(_sTypeName))
+                    &&	(nPrec	>= _nPrecision)
+                    &&	(nScale	>= _nScale)
+                    &&	( (_bAutoIncrement && aIter->second->bAutoIncrement) || !_bAutoIncrement )
                     )
                 {
                     OSL_ENSURE(sal_False,
-                        (   ::rtl::OString("getTypeInfoFromType: assuming column type ")
-                        +=  ::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), gsl_getSystemTextEncoding())
-                        +=  ::rtl::OString("\" (expected type name ")
-                        +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
-                        +=  ::rtl::OString(" matches the type's local name).")).getStr());
+                        (	::rtl::OString("getTypeInfoFromType: assuming column type ")
+                        +=	::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), gsl_getSystemTextEncoding())
+                        +=	::rtl::OString("\" (expected type name ")
+                        +=	::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
+                        +=	::rtl::OString(" matches the type's local name).")).getStr());
                     break;
                 }
             }
         }
 
         if (aIter == aPair.second)
-        {   // no match for the names, no match for the local names
+        {	// no match for the names, no match for the local names
             // -> drop the precision and the scale restriction, accept any type with the property
             // type id (nType)
 
             //OSL_ENSURE(sal_False,
-            //  (   ::rtl::OString("getTypeInfoFromType: did not find a matching type")
-            //  +=  ::rtl::OString(" (expected type name: ")
-            //  +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
-            //  +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
+            //	(	::rtl::OString("getTypeInfoFromType: did not find a matching type")
+            //	+=	::rtl::OString(" (expected type name: ")
+            //	+=	::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
+            //	+=	::rtl::OString(")! Defaulting to the first matching type.")).getStr());
             for(aIter = aPair.first; aIter != aPair.second; ++aIter)
             {
                 // search the best matching type (now comparing the local names)
@@ -600,9 +600,9 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
 #endif
                 sal_Int32 nPrec = aIter->second->nPrecision;
                 sal_Int32 nScale = aIter->second->nMaximumScale;
-                if  (   (nPrec  >= _nPrecision)
-                    &&  (nScale >= _nScale)
-                    &&  ( (_bAutoIncrement && aIter->second->bAutoIncrement) || !_bAutoIncrement )
+                if	(	(nPrec	>= _nPrecision)
+                    &&	(nScale	>= _nScale)
+                    &&	( (_bAutoIncrement && aIter->second->bAutoIncrement) || !_bAutoIncrement )
                     )
                     break;
             }
@@ -618,8 +618,8 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                     ::rtl::OUString sDBTypeName = aIter->second->aTypeName;
 #endif
                     sal_Int32 nScale = aIter->second->nMaximumScale;
-                    if  (   (nScale >= _nScale)
-                        &&  (aIter->second->bAutoIncrement  == _bAutoIncrement)
+                    if	(	(nScale	>= _nScale)
+                        &&	(aIter->second->bAutoIncrement	== _bAutoIncrement)
                         )
                         break;
                 }
@@ -667,7 +667,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
     return pTypeInfo;
 }
 // -----------------------------------------------------------------------------
-void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
+void fillTypeInfo(	const Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
                     const String& _rsTypeNames,
                     OTypeInfoMap& _rTypeInfoMap,
                     ::std::vector<OTypeInfoMap::iterator>& _rTypeInfoIters)
@@ -706,49 +706,49 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
             }
 
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->aTypeName        = aValue;
+            pInfo->aTypeName		= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->nType            = aValue;
+            pInfo->nType			= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->nPrecision       = aValue;
+            pInfo->nPrecision		= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->aLiteralPrefix   = aValue;
+            pInfo->aLiteralPrefix	= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->aLiteralSuffix   = aValue;
+            pInfo->aLiteralSuffix	= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->aCreateParams    = aValue;
+            pInfo->aCreateParams	= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->bNullable        = (sal_Int32)aValue == ColumnValue::NULLABLE;
+            pInfo->bNullable		= (sal_Int32)aValue == ColumnValue::NULLABLE;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->bCaseSensitive   = (sal_Bool)aValue;
+            pInfo->bCaseSensitive	= (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->nSearchType      = aValue;
+            pInfo->nSearchType		= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->bUnsigned        = (sal_Bool)aValue;
+            pInfo->bUnsigned		= (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->bCurrency        = (sal_Bool)aValue;
+            pInfo->bCurrency		= (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->bAutoIncrement   = (sal_Bool)aValue;
+            pInfo->bAutoIncrement	= (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->aLocalTypeName   = aValue;
+            pInfo->aLocalTypeName	= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->nMinimumScale    = aValue;
+            pInfo->nMinimumScale	= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->nMaximumScale    = aValue;
+            pInfo->nMaximumScale	= aValue;
             nPos = 18;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
 
@@ -968,9 +968,9 @@ sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
     switch (_eAlignment)
     {
         case SVX_HOR_JUSTIFY_STANDARD:
-        case SVX_HOR_JUSTIFY_LEFT:      nAlignment = ::com::sun::star::awt::TextAlign::LEFT;    break;
-        case SVX_HOR_JUSTIFY_CENTER:    nAlignment = ::com::sun::star::awt::TextAlign::CENTER;  break;
-        case SVX_HOR_JUSTIFY_RIGHT:     nAlignment = ::com::sun::star::awt::TextAlign::RIGHT;   break;
+        case SVX_HOR_JUSTIFY_LEFT:		nAlignment = ::com::sun::star::awt::TextAlign::LEFT;	break;
+        case SVX_HOR_JUSTIFY_CENTER:	nAlignment = ::com::sun::star::awt::TextAlign::CENTER;	break;
+        case SVX_HOR_JUSTIFY_RIGHT:		nAlignment = ::com::sun::star::awt::TextAlign::RIGHT;	break;
         default:
             OSL_ENSURE(0,"Invalid TextAlign!");
     }
@@ -982,9 +982,9 @@ SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment)
     SvxCellHorJustify eJustify = SVX_HOR_JUSTIFY_LEFT;
     switch (_nAlignment)
     {
-        case ::com::sun::star::awt::TextAlign::LEFT     : eJustify = SVX_HOR_JUSTIFY_LEFT; break;
-        case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
-        case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
+        case ::com::sun::star::awt::TextAlign::LEFT		: eJustify = SVX_HOR_JUSTIFY_LEFT; break;
+        case ::com::sun::star::awt::TextAlign::CENTER	: eJustify = SVX_HOR_JUSTIFY_CENTER; break;
+        case ::com::sun::star::awt::TextAlign::RIGHT	: eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
         default:
             OSL_ENSURE(0,"Invalid TextAlign!");
     }
@@ -1048,24 +1048,24 @@ float ConvertFontWidth( ::FontWidth eWidth )
 ::com::sun::star::awt::FontDescriptor CreateFontDescriptor( const Font& rFont )
 {
     ::com::sun::star::awt::FontDescriptor aFD;
-    aFD.Name            = rFont.GetName();
-    aFD.StyleName       = rFont.GetStyleName();
-    aFD.Height          = (sal_Int16)rFont.GetSize().Height();
-    aFD.Width           = (sal_Int16)rFont.GetSize().Width();
-    aFD.Family          = sal::static_int_cast< sal_Int16 >(rFont.GetFamily());
-    aFD.CharSet         = rFont.GetCharSet();
-    aFD.Pitch           = sal::static_int_cast< sal_Int16 >(rFont.GetPitch());
-    aFD.CharacterWidth  = ConvertFontWidth( rFont.GetWidthType() );
-    aFD.Weight          = ConvertFontWeight( rFont.GetWeight() );
-    aFD.Slant           = (::com::sun::star::awt::FontSlant)rFont.GetItalic();
-    aFD.Underline       = sal::static_int_cast< sal_Int16 >(
+    aFD.Name			= rFont.GetName();
+    aFD.StyleName		= rFont.GetStyleName();
+    aFD.Height			= (sal_Int16)rFont.GetSize().Height();
+    aFD.Width			= (sal_Int16)rFont.GetSize().Width();
+    aFD.Family			= sal::static_int_cast< sal_Int16 >(rFont.GetFamily());
+    aFD.CharSet			= rFont.GetCharSet();
+    aFD.Pitch			= sal::static_int_cast< sal_Int16 >(rFont.GetPitch());
+    aFD.CharacterWidth	= ConvertFontWidth( rFont.GetWidthType() );
+    aFD.Weight			= ConvertFontWeight( rFont.GetWeight() );
+    aFD.Slant			= (::com::sun::star::awt::FontSlant)rFont.GetItalic();
+    aFD.Underline		= sal::static_int_cast< sal_Int16 >(
         rFont.GetUnderline());
-    aFD.Strikeout       = sal::static_int_cast< sal_Int16 >(
+    aFD.Strikeout		= sal::static_int_cast< sal_Int16 >(
         rFont.GetStrikeout());
-    aFD.Orientation     = rFont.GetOrientation();
-    aFD.Kerning         = rFont.IsKerning();
-    aFD.WordLineMode    = rFont.IsWordLineMode();
-    aFD.Type            = 0;   // ??? => Nur an Metric...
+    aFD.Orientation		= rFont.GetOrientation();
+    aFD.Kerning			= rFont.IsKerning();
+    aFD.WordLineMode	= rFont.IsWordLineMode();
+    aFD.Type			= 0;   // ??? => Nur an Metric...
     return aFD;
 }
 // -----------------------------------------------------------------------------
@@ -1111,7 +1111,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
                                 sal_Int32 _nDataType,
                                 sal_Int32& _nFormatKey,
                                 SvxCellHorJustify& _eJustify,
-                                sal_uInt16& _nFlags,
+                                sal_uInt16&	_nFlags,
                                 sal_Bool  _bHasFormat)
 {
     sal_Bool bRet = sal_False;
@@ -1126,10 +1126,10 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
     static SfxItemInfo aItemInfos[] =
     {
         { 0, 0 },
-        { SID_ATTR_NUMBERFORMAT_VALUE,      SFX_ITEM_POOLABLE },
-        { SID_ATTR_ALIGN_HOR_JUSTIFY,       SFX_ITEM_POOLABLE },
-        { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SFX_ITEM_POOLABLE },
-        { SID_ATTR_NUMBERFORMAT_INFO,       SFX_ITEM_POOLABLE }
+        { SID_ATTR_NUMBERFORMAT_VALUE,		SFX_ITEM_POOLABLE },
+        { SID_ATTR_ALIGN_HOR_JUSTIFY,		SFX_ITEM_POOLABLE },
+        { SID_ATTR_NUMBERFORMAT_ONE_AREA,	SFX_ITEM_POOLABLE },
+        { SID_ATTR_NUMBERFORMAT_INFO,		SFX_ITEM_POOLABLE }
     };
     static sal_uInt16 aAttrMap[] =
     {
@@ -1149,8 +1149,8 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
     };
 
     SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
-    pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );    // ripped, don't understand why
-    pPool->FreezeIdRanges();                        // the same
+    pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );	// ripped, don't understand why
+    pPool->FreezeIdRanges();						// the same
 
     SfxItemSet* pFormatDescriptor = new SfxItemSet(*pPool, aAttrMap);
     // fill it
@@ -1178,7 +1178,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
         pFormatDescriptor->Put(aFormatter);
     }
 
-    {   // want the dialog to be destroyed before our set
+    {	// want the dialog to be destroyed before our set
         SbaSbAttrDlg aDlg(_pParent, pFormatDescriptor, _pFormatter, _nFlags);
         if (RET_OK == aDlg.Execute())
         {
@@ -1322,7 +1322,7 @@ sal_Bool isHiContrast(Window* _pWindow)
 {
     OSL_ENSURE(_pWindow,"Window must be not null!");
     Window* pIter = _pWindow;
-    //  while( pIter &&  pIter->GetBackground().GetColor().GetColor() == COL_TRANSPARENT )
+    //	while( pIter &&  pIter->GetBackground().GetColor().GetColor() == COL_TRANSPARENT )
     while( pIter )
     {
         if ( pIter->GetBackground().GetColor().GetColor() == COL_TRANSPARENT )
@@ -1351,7 +1351,7 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
     {
         sal_Int32 nValue = aColumnSizeDlg.GetValue();
         if ( -1 == nValue )
-        {   // default width
+        {	// default width
             nValue = _pBox->GetDefaultColumnWidth( _pBox->GetColumnTitle( _nColId ) );
         }
         else
@@ -1498,7 +1498,7 @@ namespace
 } // annonymous
 // .........................................................................
 // -----------------------------------------------------------------------------
-::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHelpId)
+::com::sun::star::util::URL	createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHelpId)
 {
     ::com::sun::star::util::URL aURL;
     aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ) );
@@ -1550,8 +1550,8 @@ TOTypeInfoSP queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo)
         // because we don't have the possiblity to know how to create
         // such auto increment column later on
         // so until we know how to do it, we create a column without autoincrement
-        //  if ( !aIter->second->bAutoIncrement )
-        {   // therefor we have searched
+        //	if ( !aIter->second->bAutoIncrement )
+        {	// therefor we have searched
             if ( aIter->second->nType == DataType::INTEGER )
             {
                 pTypeInfo = aIter->second; // alternative
@@ -1799,7 +1799,7 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XMultiService
             // here we have everything needed to create a new query object ...
             HierarchicalNameCheck aNameChecker( _xNames.get(), sName );
             // ... ehm, except a new name
-            OSaveAsDlg aAskForName( _pParent,
+            OSaveAsDlg aAskForName(	_pParent,
                                     _rxORB,
                                     sTargetName,
                                     sLabel,

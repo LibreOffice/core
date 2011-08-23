@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,24 +109,24 @@ namespace dbaccess
     //************************************************************
     //  OResultSet
     //************************************************************
-    class OResultSet :  public comphelper::OBaseMutex,
+    class OResultSet :	public comphelper::OBaseMutex,
                         public OResultSetBase,
                         public ::cppu::OPropertySetHelper,
                         public ::comphelper::OPropertyArrayUsageHelper < OResultSet >
     {
     protected:
-        ONoWeakStatement                m_aStatement;
+        ONoWeakStatement				m_aStatement;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xDelegatorResultSet;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xDelegatorResultSetUpdate;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >                m_xDelegatorRow;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >          m_xDelegatorRowUpdate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >	        m_xDelegatorResultSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >	m_xDelegatorResultSetUpdate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >		        m_xDelegatorRow;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >	        m_xDelegatorRowUpdate;
 
         ::dbtools::WarningsContainer    m_aWarnings;
-        OColumns*                       m_pColumns;
-        sal_Int32                       m_nResultSetType;
-        sal_Int32                       m_nResultSetConcurrency;
-        sal_Bool                        m_bIsBookmarkable : 1;
+        OColumns*					    m_pColumns;
+        sal_Int32					    m_nResultSetType;
+        sal_Int32					    m_nResultSetConcurrency;
+        sal_Bool					    m_bIsBookmarkable : 1;
 
     public:
         OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xResultSet,

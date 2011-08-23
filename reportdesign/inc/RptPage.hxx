@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
     std::vector<SdrObject*> m_aTemporaryObjectList;
 
     OReportPage(const OReportPage&);
-
+    
     // methode to remove temporary objects, created by 'special mode'
     // (BegDragObj)
     void removeTempObject(SdrObject *_pToRemoveObj);
@@ -64,7 +64,7 @@ public:
     OReportPage( OReportModel& rModel
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
                 ,FASTBOOL bMasterPage=FALSE );
-
+    
 
     virtual SdrPage* Clone() const;
     using SdrPage::Clone;
@@ -73,12 +73,12 @@ public:
     virtual SdrObject* RemoveObject(ULONG nObjNum);
 
     /** returns the index inside the object list which belongs to the report component.
-        @param  _xObject    the report component
+        @param	_xObject	the report component
     */
     ULONG getIndexOf(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xObject);
 
     /** removes the SdrObject which belongs to the report component.
-        @param  _xObject    the report component
+        @param	_xObject	the report component
     */
     void removeSdrObject(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xObject);
 
@@ -88,7 +88,7 @@ public:
     void resetSpecialMode();
 
     /** insert a new SdrObject which belongs to the report component.
-        @param  _xObject    the report component
+        @param	_xObject	the report component
     */
     void insertObject(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xObject);
 

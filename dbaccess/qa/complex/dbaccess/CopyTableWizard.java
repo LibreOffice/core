@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,7 +100,7 @@ public class CopyTableWizard extends CRMBasedTestCase
     }
     // --------------------------------------------------------------------------------------------------------
 
-
+    
 
     class CopyThread implements Runnable
     {
@@ -141,7 +141,7 @@ public class CopyTableWizard extends CRMBasedTestCase
     }
 
     public void copyTableDbase() throws Exception, IOException, java.lang.Exception
-    {
+    {        
         copyTable(source,dest);
     }
     public void copyTable(final DatabaseApplication sourceDb,final DatabaseApplication destDb) throws Exception, IOException, java.lang.Exception

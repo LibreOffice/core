@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@
 #endif
 /** === end UNO includes === **/
 
-#ifndef _COMPHELPER_TYPES_HXX_
+#ifndef _COMPHELPER_TYPES_HXX_ 
 #include <comphelper/types.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
@@ -161,7 +161,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
         }
 
         m_xCommandDefinition->addPropertyChangeListener(::rtl::OUString(), this);
-        //  m_xCommandDefinition->addPropertyChangeListener(PROPERTY_NAME, this);
+        //	m_xCommandDefinition->addPropertyChangeListener(PROPERTY_NAME, this);
         m_xCommandPropInfo = m_xCommandDefinition->getPropertySetInfo();
     }
     DBG_ASSERT(m_xConnection.is(), "OQuery::OQuery : invalid connection !");
@@ -355,10 +355,10 @@ void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _r
     ODataSettings::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
     ::rtl::OUString sAggPropName;
     sal_Int16 nAttr = 0;
-    if (getInfoHelper().fillPropertyMembersByHandle(&sAggPropName,&nAttr,_nHandle) &&
+    if (getInfoHelper().fillPropertyMembersByHandle(&sAggPropName,&nAttr,_nHandle) && 
         m_xCommandPropInfo.is() &&
         m_xCommandPropInfo->hasPropertyByName(sAggPropName))
-    {   // the base class holds the property values itself, but we have to forward this to our CommandDefinition
+    {	// the base class holds the property values itself, but we have to forward this to our CommandDefinition
 
         m_eDoingCurrently = SETTING_PROPERTIES;
         OAutoActionReset(this);
@@ -372,7 +372,7 @@ void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _r
 }
 
 //--------------------------------------------------------------------------
-Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(  ) throw(RuntimeException)
+Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(	) throw(RuntimeException)
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
@@ -440,6 +440,6 @@ void OQuery::registerProperties()
 
 // -----------------------------------------------------------------------------
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 

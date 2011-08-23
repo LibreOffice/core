@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,16 +53,16 @@ namespace comphelper
 namespace rptui
 {
     /** returns the position of the object inside the index container
-        @param  _xReportDefinition  the report definition to get the groups
-        @param  _xGroup the group to search
+        @param	_xReportDefinition	the report definition to get the groups
+        @param	_xGroup	the group to search
         @return returns the position of the group in the list, otherwise -1
     */
-    template<typename T> sal_Int32 getPositionInIndexAccess(
+    template<typename T> sal_Int32 getPositionInIndexAccess(	 
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _xCollection
                                 ,const ::com::sun::star::uno::Reference< T >& _xSearch)
     {
         sal_Int32 nCount = _xCollection->getCount();
-        sal_Int32 i = (nCount == 0) ? -1 : 0;
+        sal_Int32 i = (nCount == 0) ? -1 : 0;		
         for (;i<nCount ; ++i)
         {
             ::com::sun::star::uno::Reference< T > xObject(_xCollection->getByIndex(i),::com::sun::star::uno::UNO_QUERY);
@@ -73,15 +73,15 @@ namespace rptui
     }
 
     /** set the name of the header and footer of the group by the expression appended by the localized name of the section
-        @param  _xGroup the group where the header/footer name is set by the expression of the group
+        @param	_xGroup	the group where the header/footer name is set by the expression of the group
     */
     void adjustSectionName(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xGroup,sal_Int32 _nPos);
 
     /** add a listener for the properties size, left margin, right margin to the page style
     *
-    * \param _xReportDefinition
-    * \param _pListener
-    * \return
+    * \param _xReportDefinition 
+    * \param _pListener 
+    * \return 
     */
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> addStyleListener( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition
                                                                 ,::comphelper::OPropertyChangeListener* _pListener);
@@ -96,7 +96,7 @@ namespace rptui
 
     /** opens the area dialog for shapes
     */
-    bool openAreaDialog(
+    bool openAreaDialog( 
              const ::com::sun::star::uno::Reference< ::com::sun::star::report::XShape >& _xShape
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _xWindow
             );
@@ -123,11 +123,11 @@ namespace rptui
             );
 
     /** notifySystemWindow adds or remove the given window _pToRegister at the Systemwindow found when search _pWindow.
-        @param  _pWindow
+        @param	_pWindow
             The window which is used to search for the SystemWindow.
-        @param  _pToRegister
+        @param	_pToRegister
             The window which should be added or removed on the TaskPaneList.
-        @param  _rMemFunc
+        @param	_rMemFunc
             The member function which should be called at the SystemWindow when found.
             Possible values are:
             ::comphelper::mem_fun(&TaskPaneList::AddWindow)
@@ -140,8 +140,8 @@ namespace rptui
 
     /** checks whether the given rectangle overlapps another OUnoObject object in that view.
     *
-    * \param _rRect
-    * \param _rPage
+    * \param _rRect 
+    * \param _rPage 
     * \param _bAllObjects  if <TRUE/> all objects are taken into account, otherwise only not marked ones
     * \return the object which is overlapped, otherwise <NULL/>
     */
@@ -151,9 +151,9 @@ namespace rptui
 
     /** checks whether the given OUnoObject object rectangle overlapps another object in that view.
     *
-    * \param _pObj
-    * \param _rPage
-    * \param _rView
+    * \param _pObj 
+    * \param _rPage 
+    * \param _rView 
     * \param _bAllObjects  if <TRUE/> all objects are taken into account, otherwise only not marked ones
     * \return the object which is overlapped, otherwise <NULL/>. If the given object is not of type OUnoObject <NULL/> will be returned.
     */

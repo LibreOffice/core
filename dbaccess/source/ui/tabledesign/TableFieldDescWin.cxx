@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 #ifndef DBAUI_TABLEDESIGNHELPBAR_HXX
 #include "TableDesignHelpBar.hxx"
 #endif
-#ifndef _SV_FIXED_HXX
+#ifndef _SV_FIXED_HXX 
 #include <vcl/fixed.hxx>
 #endif
 #ifndef _DBA_DBACCESS_HELPID_HRC_
@@ -57,21 +57,21 @@
 #endif
 #include <memory>
 
-#define STANDARD_MARGIN                  6
-#define DETAILS_HEADER_HEIGHT           25
-#define CONTROL_SPACING_X   18  // 6
-#define CONTROL_SPACING_Y   5
-#define CONTROL_HEIGHT      20
-#define CONTROL_WIDTH_1     140 // 100
-#define CONTROL_WIDTH_2     100 // 60
-#define CONTROL_WIDTH_3     250
-#define CONTROL_WIDTH_4     (CONTROL_WIDTH_3 - CONTROL_HEIGHT - 5)
-#define DETAILS_OPT_PAGE_WIDTH          (CONTROL_WIDTH_1 + CONTROL_SPACING_X + CONTROL_WIDTH_4 + 50)
-#define DETAILS_OPT_PAGE_HEIGHT         ((CONTROL_HEIGHT + CONTROL_SPACING_Y) * 5)
-#define DETAILS_MIN_HELP_WIDTH          100
-#define DETAILS_OPT_HELP_WIDTH          200
-#define DETAILS_MIN_HELP_HEIGHT         50
-#define DETAILS_OPT_HELP_HEIGHT         100
+#define STANDARD_MARGIN					 6
+#define DETAILS_HEADER_HEIGHT			25
+#define CONTROL_SPACING_X	18	// 6
+#define	CONTROL_SPACING_Y	5
+#define CONTROL_HEIGHT		20
+#define CONTROL_WIDTH_1		140	// 100
+#define CONTROL_WIDTH_2		100 // 60
+#define CONTROL_WIDTH_3		250
+#define CONTROL_WIDTH_4		(CONTROL_WIDTH_3 - CONTROL_HEIGHT - 5)
+#define DETAILS_OPT_PAGE_WIDTH			(CONTROL_WIDTH_1 + CONTROL_SPACING_X + CONTROL_WIDTH_4 + 50)
+#define DETAILS_OPT_PAGE_HEIGHT			((CONTROL_HEIGHT + CONTROL_SPACING_Y) * 5)
+#define DETAILS_MIN_HELP_WIDTH			100
+#define DETAILS_OPT_HELP_WIDTH			200
+#define DETAILS_MIN_HELP_HEIGHT			50
+#define DETAILS_OPT_HELP_HEIGHT			100
 
 
 using namespace dbaui;
@@ -86,7 +86,7 @@ OTableFieldDescWin::OTableFieldDescWin( Window* pParent)
     DBG_CTOR(OTableFieldDescWin,NULL);
     //////////////////////////////////////////////////////////////////////
     // Header
-    m_pHeader = new FixedText( this, WB_CENTER | WB_INFO ); //  | WB_3DLOOK
+    m_pHeader = new FixedText( this, WB_CENTER | WB_INFO );	//  | WB_3DLOOK
     m_pHeader->SetText( String(ModuleRes(STR_TAB_PROPERTIES)) );
     m_pHeader->Show();
 
@@ -190,11 +190,11 @@ void OTableFieldDescWin::Resize()
 
     // passen beide nebeneinander (Rand + Page + Rand + Help) ?
     if (STANDARD_MARGIN + DETAILS_OPT_PAGE_WIDTH + STANDARD_MARGIN + DETAILS_MIN_HELP_WIDTH <= nOutputWidth)
-    {   // ja -> dann ist die Frage, ob man der Hilfe ihre Optimal-Breite geben kann
+    {	// ja -> dann ist die Frage, ob man der Hilfe ihre Optimal-Breite geben kann
         nHelpWidth = DETAILS_OPT_HELP_WIDTH;
         nPageWidth = nOutputWidth - nHelpWidth - STANDARD_MARGIN - STANDARD_MARGIN;
         if (nPageWidth < DETAILS_OPT_PAGE_WIDTH)
-        {   // dann doch lieber die Hilfe von ihrer optimalen in Richtung auf die minimale Groesse
+        {	// dann doch lieber die Hilfe von ihrer optimalen in Richtung auf die minimale Groesse
             long nTransfer = DETAILS_OPT_PAGE_WIDTH - nPageWidth;
             nPageWidth += nTransfer;
             nHelpWidth -= nTransfer;
@@ -206,26 +206,26 @@ void OTableFieldDescWin::Resize()
         nPageHeight = nOutputHeight - STANDARD_MARGIN - DETAILS_HEADER_HEIGHT - STANDARD_MARGIN;
     }
     else
-    {   // nebeneinander geht nicht, also untereinander (Rand + Header + Page + Help)
+    {	// nebeneinander geht nicht, also untereinander (Rand + Header + Page + Help)
         if (STANDARD_MARGIN + DETAILS_HEADER_HEIGHT + DETAILS_OPT_PAGE_HEIGHT + DETAILS_MIN_HELP_HEIGHT <= nOutputHeight)
-        {   // es reicht zumindest, um beide untereinander (Page optimal, Help minimal) unterzubringen
+        {	// es reicht zumindest, um beide untereinander (Page optimal, Help minimal) unterzubringen
             nHelpHeight = DETAILS_OPT_HELP_HEIGHT;
             nPageHeight = nOutputHeight - nHelpHeight - DETAILS_HEADER_HEIGHT - STANDARD_MARGIN;
             if (nPageHeight < DETAILS_OPT_PAGE_HEIGHT)
-            {   // wie oben : Page optimal, Hilfe soviel wie eben bleibt (das ist groesser/gleich ihrem Minimum)
+            {	// wie oben : Page optimal, Hilfe soviel wie eben bleibt (das ist groesser/gleich ihrem Minimum)
                 long nTransfer = DETAILS_OPT_PAGE_HEIGHT - nPageHeight;
                 nPageHeight += nTransfer;
                 nHelpHeight -= nTransfer;
             }
             nHelpY = nOutputHeight - nHelpHeight;
             // und ueber die ganze Breite
-            nHelpX = 0;                 // ohne Margin, da das HelpCtrl einen eigenen hat
-            nHelpWidth = nOutputWidth;  // dito
+            nHelpX = 0;					// ohne Margin, da das HelpCtrl einen eigenen hat
+            nHelpWidth = nOutputWidth;	// dito
             nPageWidth = nOutputWidth - STANDARD_MARGIN - STANDARD_MARGIN;
         }
         else
-        {   // dummerweise reicht es nicht mal, um Page optimal und Help minimal zu zeigen
-            nHelpX = nHelpY = nHelpWidth = nHelpHeight = 0; // -> kein Help-Fenster
+        {	// dummerweise reicht es nicht mal, um Page optimal und Help minimal zu zeigen
+            nHelpX = nHelpY = nHelpWidth = nHelpHeight = 0;	// -> kein Help-Fenster
             nPageWidth = nOutputWidth - STANDARD_MARGIN - STANDARD_MARGIN;
             nPageHeight = nOutputHeight - STANDARD_MARGIN - DETAILS_HEADER_HEIGHT - STANDARD_MARGIN;
         }
@@ -233,20 +233,20 @@ void OTableFieldDescWin::Resize()
 
     m_pHeader->SetPosSizePixel( Point(0, STANDARD_MARGIN), Size(nOutputWidth, 15) );
 
-    getGenPage()->SetPosSizePixel(Point (   STANDARD_MARGIN,
+    getGenPage()->SetPosSizePixel(Point	(	STANDARD_MARGIN,
                                         STANDARD_MARGIN + DETAILS_HEADER_HEIGHT
                                     ),
-                              Size  (   nPageWidth,
+                              Size	(	nPageWidth,
                                         nPageHeight
                                     )
                              );
     if (nHelpHeight)
     {
         m_pHelpBar->Show();
-        m_pHelpBar->SetPosSizePixel(Point   (   nHelpX,
+        m_pHelpBar->SetPosSizePixel(Point	(	nHelpX,
                                             nHelpY
                                         ),
-                                  Size  (   nHelpWidth,
+                                  Size	(	nHelpWidth,
                                             nHelpHeight
                                         )
                                  );
@@ -266,7 +266,7 @@ IClipboardTest* OTableFieldDescWin::getActiveChild() const
         case DESCRIPTION:
             pTest = getGenPage();
             break;
-        default:
+        default:		
             pTest = getHelpBar();
             break;
     }
@@ -307,15 +307,15 @@ void OTableFieldDescWin::paste()
 }
 // -----------------------------------------------------------------------------
 void OTableFieldDescWin::GetFocus()
-{
+{ 
     if ( getGenPage() )
-        getGenPage()->GetFocus();
+        getGenPage()->GetFocus(); 
 }
 // -----------------------------------------------------------------------------
 void OTableFieldDescWin::LoseFocus()
-{
+{ 
     if ( getGenPage() )
-        getGenPage()->LoseFocus();
+        getGenPage()->LoseFocus(); 
 }
 // -----------------------------------------------------------------------------
 long OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
@@ -330,7 +330,7 @@ long OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
                 m_eChildFocus = HELP;
             break;
     }
-
+    
     return bHandled ? 1L : TabPage::PreNotify(rNEvt);
 }
 

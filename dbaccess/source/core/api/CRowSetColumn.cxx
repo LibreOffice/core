@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace dbaccess
 //..............................................................................
 
 //------------------------------------------------------------------------------
-ORowSetColumn::ORowSetColumn(   const Reference < XResultSetMetaData >& _xMetaData, const Reference < XRow >& _xRow, sal_Int32 _nPos,
+ORowSetColumn::ORowSetColumn(	const Reference < XResultSetMetaData >& _xMetaData, const Reference < XRow >& _xRow, sal_Int32 _nPos,
                 const Reference< XDatabaseMetaData >& _rxDBMeta, const ::rtl::OUString& _rDescription, const ::rtl::OUString& i_sLabel,ORowSetCacheIterator& _rColumnValue )
     :ORowSetDataColumn( _xMetaData, _xRow, NULL, _nPos, _rxDBMeta, _rDescription, i_sLabel,_rColumnValue )
 {
@@ -68,7 +68,7 @@ ORowSetColumn::ORowSetColumn(   const Reference < XResultSetMetaData >& _xMetaDa
     DECL_PROP1_BOOL( ISAUTOINCREMENT,                           READONLY );
     DECL_PROP1_BOOL( ISCASESENSITIVE,                           READONLY );
     DECL_PROP1_BOOL( ISCURRENCY,                                READONLY );
-    DECL_PROP1_BOOL( ISDEFINITELYWRITABLE,                      READONLY );
+    DECL_PROP1_BOOL( ISDEFINITELYWRITABLE,                      READONLY );        
     DECL_PROP1( ISNULLABLE,                 sal_Int32,          READONLY );
     DECL_PROP1_BOOL( ISREADONLY,                                BOUND );
     DECL_PROP1_BOOL( ISROWVERSION,                              READONLY );

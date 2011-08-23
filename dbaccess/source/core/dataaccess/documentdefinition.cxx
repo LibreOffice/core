@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -316,13 +316,13 @@ namespace dbaccess
     //==================================================================
     // OEmbedObjectHolder
     //==================================================================
-    typedef ::cppu::WeakComponentImplHelper1<   embed::XStateChangeListener > TEmbedObjectHolder;
-    class OEmbedObjectHolder :   public ::comphelper::OBaseMutex
+    typedef ::cppu::WeakComponentImplHelper1<	embed::XStateChangeListener > TEmbedObjectHolder;
+    class OEmbedObjectHolder :	 public ::comphelper::OBaseMutex
                                 ,public TEmbedObjectHolder
     {
         Reference< XEmbeddedObject >    m_xBroadCaster;
-        ODocumentDefinition*            m_pDefinition;
-        bool                            m_bInStateChange;
+        ODocumentDefinition*			m_pDefinition;
+        bool							m_bInStateChange;
         bool                            m_bInChangingState;
     protected:
         virtual void SAL_CALL disposing();
@@ -504,14 +504,14 @@ namespace dbaccess
     //==================================================================
     class ODocumentSaveContinuation : public OInteraction< XInteractionDocumentSave >
     {
-        ::rtl::OUString     m_sName;
-        Reference<XContent> m_xParentContainer;
+        ::rtl::OUString		m_sName;
+        Reference<XContent>	m_xParentContainer;
 
     public:
         ODocumentSaveContinuation() { }
 
-        inline Reference<XContent>  getContent() const { return m_xParentContainer; }
-        inline ::rtl::OUString      getName() const { return m_sName; }
+        inline Reference<XContent>	getContent() const { return m_xParentContainer; }
+        inline ::rtl::OUString		getName() const { return m_sName; }
 
         // XInteractionDocumentSave
         virtual void SAL_CALL setName( const ::rtl::OUString& _sName,const Reference<XContent>& _xParent) throw(RuntimeException);
@@ -1424,10 +1424,10 @@ void ODocumentDefinition::onCommandInsert( const ::rtl::OUString& _sURL, const R
     }
 
 //  @@@
-//  storeData();
+//	storeData();
 
     aGuard.clear();
-//  inserted();
+//	inserted();
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
@@ -1569,16 +1569,7 @@ sal_Bool ODocumentDefinition::saveAs()
                 Reference<XNameContainer> xNC(pDocuSave->getContent(),UNO_QUERY);
                 if ( xNC.is() )
                 {
-                    if ( m_pImpl->m_aProps.aTitle == pDocuSave->getName() )
-                    {
-                        Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
-                        if ( xPersist.is() )
-                        {
-                            xPersist->storeOwn();
-                            notifyDataSourceModified();
-                        }
-                    }
-                    else
+                    if ( m_pImpl->m_aProps.aTitle != pDocuSave->getName() )
                     {
                         try
                         {
@@ -1617,6 +1608,12 @@ sal_Bool ODocumentDefinition::saveAs()
                         {
                             DBG_UNHANDLED_EXCEPTION();
                         }
+                    }
+                    Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
+                    if ( xPersist.is() )
+                    {
+                        xPersist->storeOwn();
+                        notifyDataSourceModified();
                     }
                 }
             }
@@ -2332,7 +2329,7 @@ void ODocumentDefinition::updateDocumentTitle()
             if ( xUntitledProvider.is() )
                 sName += ::rtl::OUString::valueOf( xUntitledProvider->leaseNumber(getComponent()) );
         }
-
+    
         Reference< XTitle > xDatabaseDocumentModel(m_pImpl->m_pDataSource->getModel_noCreate(),uno::UNO_QUERY);
         if ( xDatabaseDocumentModel.is() )
             sName = xDatabaseDocumentModel->getTitle() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" : ")) + sName;
@@ -2402,6 +2399,6 @@ void NameChangeNotifier::impl_fireEvent_throw( const sal_Bool i_bVetoable )
 }
 
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 

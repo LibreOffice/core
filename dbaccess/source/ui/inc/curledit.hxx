@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,9 +55,9 @@ class OConnectionURLEdit : public Edit
 {
     ::dbaccess::ODsnTypeCollection*
                         m_pTypeCollection;
-    FixedText*          m_pForcedPrefix;
-    String              m_sSaveValueNoPrefix;
-    BOOL                m_bShowPrefix; // when <TRUE> the prefix will be visible, otherwise not
+    FixedText*			m_pForcedPrefix;
+    String				m_sSaveValueNoPrefix;
+    BOOL				m_bShowPrefix; // when <TRUE> the prefix will be visible, otherwise not
 
 public:
     OConnectionURLEdit(Window* pParent, const ResId& rResId,BOOL _bShowPrefix = FALSE);
@@ -65,28 +65,28 @@ public:
 
 public:
     // Edit overridables
-    virtual void    SetText(const String& _rStr);
-    virtual void    SetText(const String& _rStr, const Selection& _rNewSelection);
-    virtual String  GetText() const;
+    virtual void	SetText(const String& _rStr);
+    virtual void	SetText(const String& _rStr, const Selection& _rNewSelection);
+    virtual String	GetText() const;
 
 
     /** Showsthe Prefix
-        @param  _bShowPrefix
+        @param	_bShowPrefix
             If <TRUE/> than the prefix will be visible, otherwise not.
     */
     void ShowPrefix(BOOL _bShowPrefix);
     /// get the currently set text, excluding the prefix indicating the type
-    virtual String  GetTextNoPrefix() const;
+    virtual String	GetTextNoPrefix() const;
     /// set a new text, leave the current prefix unchanged
-    virtual void    SetTextNoPrefix(const String& _rText);
+    virtual void	SetTextNoPrefix(const String& _rText);
 
-    inline void     SaveValueNoPrefix()             { m_sSaveValueNoPrefix = GetTextNoPrefix(); }
-    inline String   GetSavedValueNoPrefix() const   { return m_sSaveValueNoPrefix; }
+    inline void		SaveValueNoPrefix()				{ m_sSaveValueNoPrefix = GetTextNoPrefix(); }
+    inline String	GetSavedValueNoPrefix() const	{ return m_sSaveValueNoPrefix; }
     inline void     SetTypeCollection(::dbaccess::ODsnTypeCollection* _pTypeCollection) { m_pTypeCollection = _pTypeCollection; }
 };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_CURLEDIT_HXX_

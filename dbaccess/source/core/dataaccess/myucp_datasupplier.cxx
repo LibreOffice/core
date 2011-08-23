@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,11 +79,11 @@ namespace dbaccess
 
 struct ResultListEntry
 {
-    rtl::OUString                       aId;
-    Reference< XContentIdentifier >     xId;
-    ::rtl::Reference< OContentHelper >  xContent;
-    Reference< XRow >                   xRow;
-    const ContentProperties&            rData;
+    rtl::OUString						aId;
+    Reference< XContentIdentifier >		xId;
+    ::rtl::Reference< OContentHelper > 	xContent;
+    Reference< XRow > 					xRow;
+    const ContentProperties& 			rData;
 
     ResultListEntry( const ContentProperties& rEntry ) : rData( rEntry ) {}
 };
@@ -104,12 +104,12 @@ typedef std::vector< ResultListEntry* > ResultList;
 
 struct DataSupplier_Impl
 {
-    osl::Mutex                                   m_aMutex;
-    ResultList                                   m_aResults;
-    rtl::Reference< ODocumentContainer >             m_xContent;
-    Reference< XMultiServiceFactory >            m_xSMgr;
-      sal_Int32                                  m_nOpenMode;
-      sal_Bool                                   m_bCountFinal;
+    osl::Mutex					                 m_aMutex;
+    ResultList					                 m_aResults;
+    rtl::Reference< ODocumentContainer >     	     m_xContent;
+    Reference< XMultiServiceFactory >			 m_xSMgr;
+      sal_Int32					                 m_nOpenMode;
+      sal_Bool					                 m_bCountFinal;
 
     DataSupplier_Impl( const Reference< XMultiServiceFactory >& rxSMgr,
                         const rtl::Reference< ODocumentContainer >& rContent,
@@ -196,7 +196,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 
 //=========================================================================
 // virtual
-Reference< XContentIdentifier >
+Reference< XContentIdentifier > 
 DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -223,7 +223,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 
 //=========================================================================
 // virtual
-Reference< XContent >
+Reference< XContent > 
 DataSupplier::queryContent( sal_uInt32 _nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -249,7 +249,7 @@ DataSupplier::queryContent( sal_uInt32 _nIndex )
             sName = sName.getToken(0,'/',nIndex);
 
             m_pImpl->m_aResults[ _nIndex ]->xContent = m_pImpl->m_xContent->getContent(sName);
-
+            
             xContent = m_pImpl->m_aResults[ _nIndex ]->xContent.get();
             return xContent;
 
@@ -289,7 +289,7 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
     if ( nIndex < sal::static_int_cast< sal_uInt32 >( aSeq.getLength() ) )
     {
         const ::rtl::OUString* pIter = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+        const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
         for(pIter = pIter + nPos;pIter != pEnd;++pIter,++nPos)
         {
             m_pImpl->m_aResults.push_back(
@@ -338,7 +338,7 @@ sal_uInt32 DataSupplier::totalCount()
     // @@@ Obtain data and put it into result list...
     Sequence< ::rtl::OUString> aSeq = m_pImpl->m_xContent->getElementNames();
     const ::rtl::OUString* pIter = aSeq.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+    const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
     for(;pIter != pEnd;++pIter)
         m_pImpl->m_aResults.push_back(
                         new ResultListEntry( m_pImpl->m_xContent->getContent(*pIter)->getContentProperties() ) );
@@ -377,7 +377,7 @@ sal_Bool DataSupplier::isCountFinal()
 
 //=========================================================================
 // virtual
-Reference< XRow >
+Reference< XRow > 
 DataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,21 +67,21 @@ namespace dbaui
         SvtMiscOptions().RemoveListenerLink( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
         Application::RemoveEventListener( LINK( this, OToolBoxHelper, SettingsChanged ) );
         DBG_DTOR(OToolBoxHelper,NULL);
-    }
-
+    }	
+    
     // -----------------------------------------------------------------------------
     void OToolBoxHelper::checkImageList()
     {
         if ( m_pToolBox )
         {
             sal_Int16 nCurSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
-            if ( nCurSymbolsSize != m_nSymbolsSize ||
+            if ( nCurSymbolsSize != m_nSymbolsSize || 
                 m_bIsHiContrast != m_pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode() )
             {
-                m_nSymbolsSize  = nCurSymbolsSize;
+                m_nSymbolsSize	= nCurSymbolsSize;
                 m_bIsHiContrast = m_pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
 
-
+                
                 m_pToolBox->SetImageList( getImageList(m_nSymbolsSize,m_bIsHiContrast) );
                 Size aTbOldSize = m_pToolBox->GetSizePixel();
                 adjustToolBoxSize(m_pToolBox);
@@ -112,11 +112,11 @@ namespace dbaui
         if ( m_pToolBox && _pEvt && _pEvt->GetId() == VCLEVENT_APPLICATION_DATACHANGED )
         {
             DataChangedEvent* pData = reinterpret_cast<DataChangedEvent*>(_pEvt->GetData());
-            if ( pData && ((( pData->GetType() == DATACHANGED_SETTINGS  )   ||
-            ( pData->GetType() == DATACHANGED_DISPLAY   ))  &&
-            ( pData->GetFlags() & SETTINGS_STYLE        )))
+            if ( pData && ((( pData->GetType() == DATACHANGED_SETTINGS	)	||
+            ( pData->GetType() == DATACHANGED_DISPLAY	))	&&
+            ( pData->GetFlags() & SETTINGS_STYLE		)))
                 // check if imagelist changed
-                checkImageList();
+                checkImageList();	
         }
 
         return 0L;
@@ -128,7 +128,7 @@ namespace dbaui
         m_pToolBox = _pTB;
         if ( m_pToolBox )
         {
-            //  m_bIsHiContrast = m_pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
+            //	m_bIsHiContrast = m_pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
             ConfigOptionsChanged(NULL);
             if ( bFirstTime )
                 adjustToolBoxSize(m_pToolBox);

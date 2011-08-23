@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -329,22 +329,22 @@ Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeExcepti
     if(m_xDrvColumns.is())
     {
         aRet = m_xDrvColumns->queryInterface(rType);
-        if ( aRet.hasValue() )
+        if ( aRet.hasValue() ) 
             aRet = OColumns_BASE::queryInterface( rType);
-        if ( !aRet.hasValue() )
+        if ( !aRet.hasValue() ) 
             aRet = TXChild::queryInterface( rType);
         return aRet;
     }
     else if(!m_pTable || (m_pTable && !m_pTable->isNew()))
     {
-        if(!m_bAddColumn    && rType == getCppuType( (Reference<XAppend>*)0))
+        if(!m_bAddColumn	&& rType == getCppuType( (Reference<XAppend>*)0))
             return Any();
-        if(!m_bDropColumn   && rType == getCppuType( (Reference<XDrop>*)0))
+        if(!m_bDropColumn	&& rType == getCppuType( (Reference<XDrop>*)0))
             return Any();
     }
 
     aRet = OColumns_BASE::queryInterface( rType);
-    if ( !aRet.hasValue() )
+    if ( !aRet.hasValue() ) 
         aRet = TXChild::queryInterface( rType);
     return aRet;
 }
@@ -355,7 +355,7 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
 
     sal_Int32 nSize = 0;
     Type aAppendType = getCppuType( (Reference<XAppend>*)0);
-    Type aDropType   = getCppuType( (Reference<XDrop>*)0);
+    Type aDropType	 = getCppuType( (Reference<XDrop>*)0);
     if(m_xDrvColumns.is())
     {
         Reference<XTypeProvider> xTypes(m_xDrvColumns,UNO_QUERY);
@@ -380,8 +380,8 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
         nSize = ((m_pTable && m_pTable->isNew()) ? 0 :
                     ((m_bDropColumn ?
                         (m_bAddColumn ? 0 : 1) : (m_bAddColumn ? 1 : 2))));
-        bDropFound      = (m_pTable && m_pTable->isNew()) || m_bDropColumn;
-        bAppendFound    = (m_pTable && m_pTable->isNew()) || m_bAddColumn;
+        bDropFound		= (m_pTable && m_pTable->isNew()) || m_bDropColumn;
+        bAppendFound	= (m_pTable && m_pTable->isNew()) || m_bAddColumn;
     }
     Sequence< Type > aTypes(::comphelper::concatSequences(OColumns_BASE::getTypes(),TXChild::getTypes()));
     Sequence< Type > aRet(aTypes.getLength() - nSize);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
-#ifndef _TOOLS_RCID_H
+#ifndef _TOOLS_RCID_H 
 #include <tools/rcid.h>
 #endif
 #ifndef _DBAUI_LOCALRESACCESS_HXX_
@@ -167,7 +167,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    const OCharsetDisplay::ExtendedCharsetIterator& OCharsetDisplay::ExtendedCharsetIterator::operator++()
+    const OCharsetDisplay::ExtendedCharsetIterator&	OCharsetDisplay::ExtendedCharsetIterator::operator++()
     {
         DBG_ASSERT( m_aPosition != m_pContainer->OCharsetDisplay_Base::end(), "OCharsetDisplay::ExtendedCharsetIterator::operator++ : invalid position!");
         if ( m_aPosition != m_pContainer->OCharsetDisplay_Base::end() )
@@ -176,7 +176,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    const OCharsetDisplay::ExtendedCharsetIterator& OCharsetDisplay::ExtendedCharsetIterator::operator--()
+    const OCharsetDisplay::ExtendedCharsetIterator&	OCharsetDisplay::ExtendedCharsetIterator::operator--()
     {
         DBG_ASSERT( m_aPosition != m_pContainer->OCharsetDisplay_Base::begin(), "OCharsetDisplay::ExtendedCharsetIterator::operator-- : invalid position!");
         if ( m_aPosition != m_pContainer->OCharsetDisplay_Base::begin() )
@@ -191,6 +191,6 @@ namespace dbaui
     }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 

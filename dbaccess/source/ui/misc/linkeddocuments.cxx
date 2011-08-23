@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,13 @@
 #ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
 #include <comphelper/namedvaluecollection.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_ 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
+#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_ 
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
@@ -76,13 +76,13 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
-#ifndef _COMPHELPER_TYPES_HXX_
+#ifndef _COMPHELPER_TYPES_HXX_ 
 #include <comphelper/types.hxx>
 #endif
-#ifndef _SV_MSGBOX_HXX
+#ifndef _SV_MSGBOX_HXX 
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _UCBHELPER_CONTENT_HXX
+#ifndef _UCBHELPER_CONTENT_HXX 
 #include <ucbhelper/content.hxx>
 #endif
 #ifndef _DBU_MISC_HRC_
@@ -94,10 +94,10 @@
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
-#ifndef _SFXNEW_HXX
+#ifndef _SFXNEW_HXX 
 #include <sfx2/new.hxx>
 #endif
-#ifndef _SVTOOLS_TEMPLDLG_HXX
+#ifndef _SVTOOLS_TEMPLDLG_HXX 
 #include <svtools/templdlg.hxx>
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
@@ -105,22 +105,22 @@
 #endif
 // -----------------
 // for calling basic
-#ifndef _SFXAPP_HXX
+#ifndef _SFXAPP_HXX 
 #include <sfx2/app.hxx>
 #endif
-#ifndef _SBXCLASS_HXX
+#ifndef _SBXCLASS_HXX 
 #include <basic/sbx.hxx>
 #endif
-#ifndef _SB_SBUNO_HXX
+#ifndef _SB_SBUNO_HXX 
 #include <basic/sbuno.hxx>
 #endif
-#ifndef _SFX_MACROCONF_HXX
+#ifndef _SFX_MACROCONF_HXX 
 #include <sfx2/macrconf.hxx>
 #endif
-#ifndef _EHDL_HXX
+#ifndef _EHDL_HXX 
 #include <svtools/ehdl.hxx>
 #endif
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_ 
 #include <svx/dataaccessdescriptor.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMECONTAINER_HPP_
@@ -188,7 +188,7 @@ namespace dbaui
     //==================================================================
     //= OLinkedDocumentsAccess
     //==================================================================
-    DBG_NAME(OLinkedDocumentsAccess)
+    DBG_NAME(OLinkedDocumentsAccess)	
     //------------------------------------------------------------------
     OLinkedDocumentsAccess::OLinkedDocumentsAccess( Window* _pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
         const Reference< XMultiServiceFactory >& _rxORB, const Reference< XNameAccess >& _rxContainer,
@@ -200,14 +200,14 @@ namespace dbaui
         ,m_pDialogParent(_pDialogParent)
         ,m_sDataSourceName(_sDataSourceName)
     {
-        DBG_CTOR(OLinkedDocumentsAccess,NULL);
+        DBG_CTOR(OLinkedDocumentsAccess,NULL);		
         OSL_ENSURE(m_xORB.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid service factory!");
         OSL_ENSURE(m_pDialogParent, "OLinkedDocumentsAccess::OLinkedDocumentsAccess: really need a dialog parent!");
     }
     //------------------------------------------------------------------
     OLinkedDocumentsAccess::~OLinkedDocumentsAccess()
     {
-        DBG_DTOR(OLinkedDocumentsAccess,NULL);
+        DBG_DTOR(OLinkedDocumentsAccess,NULL);		
     }
     //------------------------------------------------------------------
     Reference< XComponent> OLinkedDocumentsAccess::impl_open( const ::rtl::OUString& _rLinkName, Reference< XComponent >& _xDefinition,
@@ -245,7 +245,7 @@ namespace dbaui
 
         aArguments.put( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, m_xConnection );
         try
-        {
+        {	
             Reference<XHierarchicalNameContainer> xHier(m_xDocumentContainer,UNO_QUERY);
             if ( xHier.is() && xHier->hasByHierarchicalName(_rLinkName) )
             {
@@ -256,7 +256,7 @@ namespace dbaui
 
             xRet = xComponentLoader->loadComponentFromURL( _rLinkName, ::rtl::OUString(), 0, aArguments.getPropertyValues() );
         }
-        catch(Exception& e)
+        catch(Exception& e) 
         {
             (void)e;
             throw;
@@ -283,7 +283,7 @@ namespace dbaui
             }
 
             aArgs.put( "DocumentUI", m_xDocumentUI );
-
+            
             Reference< XJobExecutor > xWizard;
             {
                 WaitObject aWaitCursor( m_pDialogParent );
@@ -316,7 +316,7 @@ namespace dbaui
     void OLinkedDocumentsAccess::newTableWithPilot()
     {
         impl_newWithPilot( "com.sun.star.wizards.table.CallTableWizard", -1, ::rtl::OUString() );
-    }
+    }    
     //------------------------------------------------------------------
     void OLinkedDocumentsAccess::newQueryWithPilot()
     {
@@ -363,8 +363,8 @@ namespace dbaui
         // load the document as template
         Reference< XComponent > xNewDocument;
         try
-        {   // get the desktop object
-
+        {	// get the desktop object
+        
             Reference<XMultiServiceFactory> xORB(m_xDocumentContainer,UNO_QUERY);
             if ( xORB.is() )
             {
@@ -412,10 +412,10 @@ namespace dbaui
     //------------------------------------------------------------------
     Reference< XComponent > OLinkedDocumentsAccess::open( const ::rtl::OUString& _rLinkName, Reference< XComponent >& _xDefinition,
         ElementOpenMode _eOpenMode, const ::comphelper::NamedValueCollection& _rAdditionalArgs )
-    {
+    {	
         dbtools::SQLExceptionInfo aInfo;
         Reference< XComponent > xRet;
-        try
+        try 
         {
             xRet = impl_open( _rLinkName, _xDefinition, _eOpenMode, _rAdditionalArgs );
             if ( !xRet.is() )
@@ -431,7 +431,7 @@ namespace dbaui
             return xRet;
         }
         catch (com::sun::star::io::WrongFormatException e)
-        {
+        { 
             com::sun::star::sdbc::SQLException aSQLException;
             aSQLException.Message = e.Message;
             aSQLException.Context = e.Context;
@@ -444,9 +444,9 @@ namespace dbaui
 
             String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
             sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
-            aInfo.prepend(sMessage);
+            aInfo.prepend(sMessage);            
         }
-        catch(Exception& e)
+        catch(Exception& e) 
         {
             Any aAny = ::cppu::getCaughtException();
             com::sun::star::sdbc::SQLException a;
@@ -456,10 +456,10 @@ namespace dbaui
                 aSQLException.Message = e.Message;
                 aSQLException.Context = e.Context;
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);
-
+                
                 // more like a hack, insert an empty message
                 aInfo.prepend(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" \n")));
-
+                
                 String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
                 sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
                 aInfo.prepend(sMessage);
@@ -471,9 +471,9 @@ namespace dbaui
         }
         return xRet;
     }
-
+    
 
 //......................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //......................................................................
 

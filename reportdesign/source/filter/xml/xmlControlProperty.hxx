@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace rptxml
         ::com::sun::star::beans::PropertyValue m_aSetting;
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> m_aSequence;
         OXMLControlProperty* m_pContainer;
-        ::com::sun::star::uno::Type m_aPropType;            // the type of the property the instance imports currently
+        ::com::sun::star::uno::Type	m_aPropType;			// the type of the property the instance imports currently
         sal_Bool m_bIsList;
 
         ORptFilter& GetOwnImport();
@@ -70,7 +70,7 @@ namespace rptxml
 
 
         /** adds value to property
-            @param  _sValue
+            @param	_sValue
                 The value to add.
         */
         void addValue(const ::rtl::OUString& _sValue);

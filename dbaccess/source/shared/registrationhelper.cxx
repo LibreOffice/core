@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,10 +36,10 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-uno::Sequence< ::rtl::OUString >*                   OModuleRegistration::s_pImplementationNames = NULL;
-uno::Sequence< uno::Sequence< ::rtl::OUString > >*  OModuleRegistration::s_pSupportedServices = NULL;
-uno::Sequence< sal_Int64 >*                 OModuleRegistration::s_pCreationFunctionPointers = NULL;
-uno::Sequence< sal_Int64 >*                 OModuleRegistration::s_pFactoryFunctionPointers = NULL;
+uno::Sequence< ::rtl::OUString >*				    OModuleRegistration::s_pImplementationNames = NULL;
+uno::Sequence< uno::Sequence< ::rtl::OUString > >*	OModuleRegistration::s_pSupportedServices = NULL;
+uno::Sequence< sal_Int64 >*		            OModuleRegistration::s_pCreationFunctionPointers = NULL;
+uno::Sequence< sal_Int64 >*				    OModuleRegistration::s_pFactoryFunctionPointers = NULL;
 
 //--------------------------------------------------------------------------
 void OModuleRegistration::registerComponent(
@@ -60,9 +60,9 @@ void OModuleRegistration::registerComponent(
     OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
         "OModuleRegistration::registerComponent : inconsistent state (the pointers (2)) !");
 
-    OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+    OSL_ENSURE(	(s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+                &&	(s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
+                &&	(s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
         "OModuleRegistration::registerComponent : inconsistent state !");
 
     sal_Int32 nOldLen = s_pImplementationNames->getLength();
@@ -87,9 +87,9 @@ void OModuleRegistration::revokeComponent(const ::rtl::OUString& _rImplementatio
     }
     OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
         "OModuleRegistration::revokeComponent : inconsistent state (the pointers) !");
-    OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+    OSL_ENSURE(	(s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+                &&	(s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
+                &&	(s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
         "OModuleRegistration::revokeComponent : inconsistent state !");
 
     sal_Int32 nLen = s_pImplementationNames->getLength();
@@ -129,9 +129,9 @@ sal_Bool OModuleRegistration::writeComponentInfos(
     }
     OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
         "OModuleRegistration::writeComponentInfos : inconsistent state (the pointers) !");
-    OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+    OSL_ENSURE(	(s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+                &&	(s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
+                &&	(s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
         "OModuleRegistration::writeComponentInfos : inconsistent state !");
 
     sal_Int32 nLen = s_pImplementationNames->getLength();
@@ -178,9 +178,9 @@ uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
     }
     OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
         "OModuleRegistration::getComponentFactory : inconsistent state (the pointers) !");
-    OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+    OSL_ENSURE(	(s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+                &&	(s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
+                &&	(s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
         "OModuleRegistration::getComponentFactory : inconsistent state !");
 
 

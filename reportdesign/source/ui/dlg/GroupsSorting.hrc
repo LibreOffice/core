@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,32 +27,32 @@
 #ifndef RPTUI_GROUPSSORTING_HRC
 #define RPTUI_GROUPSSORTING_HRC
 
-#define FT_HEADER           (1)
-#define LST_HEADERLST       (2)
-#define FT_FOOTER           (3)
-#define LST_FOOTERLST       (4)
-#define FT_GROUPON          (5)
-#define LST_GROUPONLST      (6)
-#define FT_GROUPINTERVAL    (7)
+#define FT_HEADER			(1)
+#define LST_HEADERLST		(2)
+#define FT_FOOTER			(3)
+#define LST_FOOTERLST		(4)
+#define FT_GROUPON			(5)
+#define LST_GROUPONLST		(6)
+#define FT_GROUPINTERVAL	(7)
 #define ED_GROUPINTERVALLST (8)
-#define FT_KEEPTOGETHER     (9)
-#define LST_KEEPTOGETHERLST (10)
-#define PB_OK               (11)
-#define PB_CANCEL           (12)
-#define PB_HELP             (13)
-#define WND_CONTROL         (14)
-#define HELP_FIELD          (15)
-#define FT_ORDER            (16)
-#define LST_ORDER           (17)
-#define FL_SEPARATOR1       (18)
-#define FT_MOVELABEL        (19)
-#define PB_UP               (20)
-#define PB_DOWN             (21)
-#define FL_SEPARATOR2       (22)
-#define FL_SEPARATOR3       (23)
-//BTN #define IMG_UP_H          (24)
-//BTN #define IMG_DOWN_H            (25)
-//BTN #define PB_DELETE         (26)
+#define FT_KEEPTOGETHER		(9)
+#define LST_KEEPTOGETHERLST	(10)
+#define PB_OK				(11)
+#define PB_CANCEL			(12)
+#define PB_HELP				(13)
+#define WND_CONTROL			(14)
+#define HELP_FIELD			(15)
+#define FT_ORDER			(16)
+#define LST_ORDER			(17)
+#define FL_SEPARATOR1		(18)
+#define FT_MOVELABEL		(19)
+#define PB_UP				(20)
+#define PB_DOWN				(21)
+#define FL_SEPARATOR2		(22)
+#define FL_SEPARATOR3		(23)
+//BTN #define IMG_UP_H			(24)
+//BTN #define IMG_DOWN_H			(25)
+//BTN #define PB_DELETE			(26)
 #define TB_TOOLBOX                      (27)
 
 // #define IMG_GROUPSORT_MOVE_DOWN     (28)
@@ -63,17 +63,17 @@
 // #define IMG_GROUPSORT_DELETE_H      (33)
 
 
-#define CHECKBOX_HEIGHT      8
-#define FIXEDTEXT_HEIGHT     8
-#define FIXEDTEXT_WIDTH     60
-#define RELATED_CONTROLS     4
-#define UNRELATED_CONTROLS   7
-#define EDIT_HEIGHT         12
-#define BUTTON_HEIGHT       14
-#define BUTTON_WIDTH        50
-#define BROWSER_HEIGHT      75
-#define PAGE_WIDTH          120
-#define PAGE_HEIGHT         ( 13*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 11*FIXEDTEXT_HEIGHT )
-#define LISTBOX_WIDTH       PAGE_WIDTH - 4*UNRELATED_CONTROLS - FIXEDTEXT_WIDTH
+#define CHECKBOX_HEIGHT		 8
+#define FIXEDTEXT_HEIGHT	 8
+#define FIXEDTEXT_WIDTH		60
+#define RELATED_CONTROLS	 4
+#define UNRELATED_CONTROLS	 7
+#define EDIT_HEIGHT			12
+#define BUTTON_HEIGHT		14
+#define BUTTON_WIDTH		50
+#define BROWSER_HEIGHT		75
+#define PAGE_WIDTH			120
+#define PAGE_HEIGHT			( 13*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 11*FIXEDTEXT_HEIGHT )
+#define LISTBOX_WIDTH		PAGE_WIDTH - 4*UNRELATED_CONTROLS - FIXEDTEXT_WIDTH
 
 #endif // RPTUI_GROUPSSORTING_HRC

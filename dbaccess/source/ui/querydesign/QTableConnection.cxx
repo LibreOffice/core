@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,13 +89,13 @@ sal_Bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare
     OQueryTableConnectionData* pCompData = static_cast<OQueryTableConnectionData*>(rCompare.GetData().get());
 
     // Connections werden als gleich angesehen, wenn sie in Source-/Dest-Fenstername und Source-/Dest-FieldIndex uebereinstimmen ...
-    return  (   (   (pMyData->getReferencedTable() == pCompData->getReferencedTable()) &&
+    return	(	(	(pMyData->getReferencedTable() == pCompData->getReferencedTable()) &&
                     (pMyData->getReferencingTable() == pCompData->getReferencingTable()) &&
                     (pMyData->GetFieldIndex(JTCS_TO) == pCompData->GetFieldIndex(JTCS_TO)) &&
                     (pMyData->GetFieldIndex(JTCS_FROM) == pCompData->GetFieldIndex(JTCS_FROM))
                 )
-                ||  // ... oder diese Uebereinstimmung ueber Kreuz besteht
-                (   (pMyData->getReferencingTable() == pCompData->getReferencedTable()) &&
+                ||	// ... oder diese Uebereinstimmung ueber Kreuz besteht
+                (	(pMyData->getReferencingTable() == pCompData->getReferencedTable()) &&
                     (pMyData->getReferencedTable() == pCompData->getReferencingTable()) &&
                     (pMyData->GetFieldIndex(JTCS_TO) == pCompData->GetFieldIndex(JTCS_FROM)) &&
                     (pMyData->GetFieldIndex(JTCS_FROM) == pCompData->GetFieldIndex(JTCS_TO))

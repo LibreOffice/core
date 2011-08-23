@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,17 +47,17 @@ namespace dbaui
     class OWizTypeSelectControl : public OFieldDescControl
     {
     protected:
-        virtual void        ActivateAggregate( EControlType eType );
-        virtual void        DeactivateAggregate( EControlType eType );
+        virtual void		ActivateAggregate( EControlType eType );
+        virtual void		DeactivateAggregate( EControlType eType );
 
-        virtual void        CellModified(long nRow, sal_uInt16 nColId );
+        virtual void		CellModified(long nRow, sal_uInt16 nColId );
 
-        virtual ::com::sun::star::lang::Locale  GetLocale() const;
+        virtual ::com::sun::star::lang::Locale	GetLocale() const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const;
-        virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos);
-        virtual const OTypeInfoMap* getTypeInfo() const;
-        virtual sal_Bool            isAutoIncrementValueEnabled() const;
-        virtual ::rtl::OUString     getAutoIncrementValue() const;
+        virtual TOTypeInfoSP		getTypeInfo(sal_Int32 _nPos);
+        virtual const OTypeInfoMap*	getTypeInfo() const;
+        virtual sal_Bool			isAutoIncrementValueEnabled() const;
+        virtual ::rtl::OUString		getAutoIncrementValue() const;
 
     public:
         OWizTypeSelectControl(Window* pParent, const ResId& rResId,OTableDesignHelpBar* pHelpBar=NULL);
@@ -74,17 +74,17 @@ namespace dbaui
     // ========================================================
     class OWizTypeSelectList : public MultiListBox
     {
-        sal_Bool                m_bPKey;
-        sal_Bool                IsPrimaryKeyAllowed() const;
-        void                    setPrimaryKey(  OFieldDescription* _pFieldDescr,
+        sal_Bool				m_bPKey;
+        sal_Bool				IsPrimaryKeyAllowed() const;
+        void					setPrimaryKey(	OFieldDescription* _pFieldDescr,
                                                 sal_uInt16 _nPos,
                                                 sal_Bool _bSet=sal_False);
     protected:
-        virtual long            PreNotify( NotifyEvent& rNEvt );
+        virtual long			PreNotify( NotifyEvent& rNEvt );
     public:
         OWizTypeSelectList( Window* pParent, WinBits nStyle = WB_BORDER ) : MultiListBox(pParent,nStyle) {};
         OWizTypeSelectList( Window* pParent, const ResId& rResId ) : MultiListBox(pParent,rResId) {};
-        void                    SetPKey(sal_Bool bPKey) { m_bPKey = bPKey; }
+        void					SetPKey(sal_Bool bPKey) { m_bPKey = bPKey; }
     };
 
     // ========================================================
@@ -100,31 +100,31 @@ namespace dbaui
         DECL_LINK( ColumnSelectHdl, MultiListBox* );
         DECL_LINK( ButtonClickHdl, Button * );
     protected:
-        OWizTypeSelectList      m_lbColumnNames;
+        OWizTypeSelectList		m_lbColumnNames;
         FixedLine               m_flColumns;
-        OWizTypeSelectControl   m_aTypeControl;
+        OWizTypeSelectControl	m_aTypeControl;
         FixedLine               m_flAutoType;
-        FixedText               m_ftAuto;
-        NumericField            m_etAuto;
-        PushButton              m_pbAuto;
+        FixedText				m_ftAuto;
+        NumericField			m_etAuto;
+        PushButton				m_pbAuto;
 
-        Image                   m_imgPKey;
-        SvStream*               m_pParserStream; // stream to read the tokens from or NULL
-        ::rtl::OUString         m_sAutoIncrementValue;
-        sal_Int32               m_nDisplayRow;
-        sal_Bool                m_bAutoIncrementEnabled;
-        sal_Bool                m_bDuplicateName;
+        Image					m_imgPKey;
+        SvStream*				m_pParserStream; // stream to read the tokens from or NULL
+        ::rtl::OUString			m_sAutoIncrementValue;
+        sal_Int32				m_nDisplayRow;
+        sal_Bool				m_bAutoIncrementEnabled;
+        sal_Bool				m_bDuplicateName;
 
-        void                    fillColumnList(sal_uInt32 nRows);
-        virtual SvParser*       createReader(sal_Int32 _nRows) = 0;
+        void					fillColumnList(sal_uInt32 nRows);
+        virtual SvParser*		createReader(sal_Int32 _nRows) = 0;
 
-        void                    EnableAuto(sal_Bool bEnable);
+        void					EnableAuto(sal_Bool bEnable);
     public:
-        virtual void            Reset ( );
-        virtual void            ActivatePage( );
-        virtual void            Resize();
-        virtual sal_Bool        LeavePage();
-        virtual String          GetTitle() const;
+        virtual	void			Reset ( );
+        virtual void			ActivatePage( );
+        virtual void			Resize();
+        virtual sal_Bool		LeavePage();
+        virtual String			GetTitle() const;
 
         OWizTypeSelect(Window* pParent, SvStream* _pStream = NULL );
         virtual ~OWizTypeSelect();

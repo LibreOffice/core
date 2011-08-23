@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ OConnectionURLEdit::~OConnectionURLEdit()
     Edit* pSubEdit = GetSubEdit();
     SetSubEdit(NULL);
     delete pSubEdit;
-    delete m_pForcedPrefix;
+    delete m_pForcedPrefix;	
 }
 
 //-------------------------------------------------------------------------
@@ -131,7 +131,7 @@ void OConnectionURLEdit::SetText(const String& _rStr, const Selection& /*_rNewSe
     GetSubEdit()->Show();
 
     // do the real SetTex
-//  Edit::SetText(bIsEmpty ? _rStr : m_pTypeCollection->cutPrefix(_rStr), _rNewSelection);
+//	Edit::SetText(bIsEmpty ? _rStr : m_pTypeCollection->cutPrefix(_rStr), _rNewSelection);
     String sNewText( _rStr );
     if ( !bIsEmpty )
         sNewText  = m_pTypeCollection->cutPrefix( _rStr );
@@ -153,6 +153,6 @@ void OConnectionURLEdit::ShowPrefix(BOOL _bShowPrefix)
         m_pForcedPrefix->Show(m_bShowPrefix);
 }
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 

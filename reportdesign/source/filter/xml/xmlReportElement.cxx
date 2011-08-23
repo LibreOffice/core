@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ OXMLReportElement::OXMLReportElement( ORptFilter& rImport,
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
-                case XML_TOK_PRINT_ONLY_WHEN_GROUP_CHANGE:
+                case XML_TOK_PRINT_ONLY_WHEN_GROUP_CHANGE: 
                     m_xComponent->setPrintWhenGroupChange(s_sTRUE == sValue);
                     break;
                    case XML_TOK_PRINT_REPEATED_VALUES:
@@ -103,7 +103,7 @@ SvXMLImportContext* OXMLReportElement::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
     ORptFilter& rImport = GetOwnImport();
-    const SvXMLTokenMap&    rTokenMap   = rImport.GetReportElementElemTokenMap();
+    const SvXMLTokenMap&	rTokenMap	= rImport.GetReportElementElemTokenMap();
 
     switch( rTokenMap.Get( _nPrefix, _rLocalName ) )
     {
