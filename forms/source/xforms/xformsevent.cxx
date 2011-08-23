@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,12 +34,12 @@
 namespace com {
 namespace sun {
 namespace star {
-namespace xforms {
+namespace xforms {  
 
 using rtl::OUString;
 using com::sun::star::uno::RuntimeException;
 
-void SAL_CALL XFormsEventConcrete::initXFormsEvent(const OUString& typeArg,
+void SAL_CALL XFormsEventConcrete::initXFormsEvent(const OUString& typeArg, 
     sal_Bool canBubbleArg, sal_Bool cancelableArg)
     throw (RuntimeException)
 {
@@ -90,7 +90,7 @@ void SAL_CALL XFormsEventConcrete::preventDefault() throw (RuntimeException)
 {
 }
 
-void SAL_CALL XFormsEventConcrete::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
+void SAL_CALL XFormsEventConcrete::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg, 
     sal_Bool cancelableArg) throw (RuntimeException)
 {
     m_eventType = eventTypeArg;

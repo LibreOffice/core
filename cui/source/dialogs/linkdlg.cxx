@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,10 +57,10 @@
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 
-#define MAX_FILENAME    18
-#define MAX_LINKNAME    18
-#define MAX_TYPENAME    15
-#define MAX_UPDATENAME  10
+#define MAX_FILENAME	18
+#define MAX_LINKNAME	18
+#define MAX_TYPENAME	15
+#define MAX_UPDATENAME	10
 
 #define FILEOBJECT ( OBJECT_CLIENT_FILE & ~OBJECT_CLIENT_SO )
 
@@ -70,7 +70,7 @@ SV_DECL_IMPL_REF_LIST(SvBaseLink,SvBaseLink*)
 
 // Achtung im Code wird dieses Array direkt (0, 1, ...) indiziert
 static long nTabs[] =
-    {   4, // Number of Tabs
+    {	4, // Number of Tabs
         0, 77, 144, 209
     };
 
@@ -143,9 +143,9 @@ SvBaseLinksDlg::~SvBaseLinksDlg()
 /*************************************************************************
 |*    SvBaseLinksDlg::Handler()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 14.06.94
-|*    Letzte Aenderung  JP 30.05.95
+|*	  Beschreibung
+|*	  Ersterstellung	MM 14.06.94
+|*	  Letzte Aenderung	JP 30.05.95
 *************************************************************************/
 IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
 {
@@ -637,7 +637,7 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, USHORT nPos, sal_Bool
     INetURLObject aPath( sFileNm, INET_PROT_FILE );
     String aFileName = aPath.getName();
     aFileName = INetURLObject::decode(aFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
-
+    
     if( aFileName.Len() > aTxt.Len() )
         aTxt = aFileName;
     else if( aTxt.Search( aFileName, aTxt.Len() - aFileName.Len() ) == STRING_NOTFOUND )

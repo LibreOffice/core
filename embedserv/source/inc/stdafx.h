@@ -39,6 +39,6 @@ using ::std::max;
 #pragma warning(pop)
 #endif
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

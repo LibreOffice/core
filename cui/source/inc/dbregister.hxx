@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,18 +53,18 @@ namespace svx
     {
     private:
         FixedLine           aStdBox;
-        FixedText           aTypeText;
-        FixedText           aPathText;
-        SvxControlFocusHelper   aPathCtrl;
-        PushButton          m_aNew;
-        PushButton          m_aEdit;
-        PushButton          m_aDelete;
+        FixedText			aTypeText;
+        FixedText			aPathText;
+        SvxControlFocusHelper	aPathCtrl;
+        PushButton			m_aNew;
+        PushButton			m_aEdit;
+        PushButton      	m_aDelete;
 
-        HeaderBar*          pHeaderBar;
-        ::svx::OptHeaderTabListBox* pPathBox;
-        SvLBoxEntry*        m_pCurEntry;
-        ULONG               m_nOldCount;
-        BOOL                m_bModified;
+        HeaderBar*			pHeaderBar;
+        ::svx::OptHeaderTabListBox*	pPathBox;
+        SvLBoxEntry*		m_pCurEntry;
+        ULONG				m_nOldCount;
+        BOOL				m_bModified;
 
 #ifdef SVX_DBREGISTER_HXX
         DECL_LINK( NewHdl, void * );
@@ -79,25 +79,25 @@ namespace svx
 
 
         /** inserts a new entry in the tablistbox
-            @param  _sName
+            @param	_sName
                 The name of the entry.
-            @param  _sLocation
+            @param	_sLocation
                 The location of the file.
         */
         void insertNewEntry( const ::rtl::OUString& _sName,const ::rtl::OUString& _sLocation, const bool bReadOnly );
 
         /** opens the LinkDialog to create a register pair
-            @param  _sOldName
+            @param	_sOldName
                 The old name of the entry may be empty.
-            @param  _sOldLocation
+            @param	_sOldLocation
                 The old location of the entry may be empty.
-            @param  _pEntry
+            @param	_pEntry
                 The entry to remove if the entry will be changed
         */
         void openLinkDialog(const String& _sOldName,const String& _sOldLocation,SvLBoxEntry* _pEntry = NULL);
 
         /** opens a file pciker to select a database file
-            @param  _sLocation
+            @param	_sLocation
                 If set, the file picker use it as default directory
             @return
                 the location of the database file
@@ -109,11 +109,11 @@ namespace svx
         DbRegistrationOptionsPage( Window* pParent, const SfxItemSet& rSet );
         virtual ~DbRegistrationOptionsPage();
 
-        static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-        static USHORT*      GetRanges();
+        static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rSet );
+        static USHORT*		GetRanges();
 
-        virtual BOOL        FillItemSet( SfxItemSet& rSet );
-        virtual void        Reset( const SfxItemSet& rSet );
+        virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+        virtual	void 		Reset( const SfxItemSet& rSet );
         virtual void        FillUserData();
     };
 
@@ -148,11 +148,11 @@ namespace svx
         DatabaseRegistrationDialog( Window* pParent, const SfxItemSet& rAttr );
         ~DatabaseRegistrationDialog();
 
-        virtual short   Execute();
+        virtual short	Execute();
     };
 
 //........................................................................
-}   // namespace svx
+}	// namespace svx
 //........................................................................
 
 #endif // SVX_DBREGISTER_HXX

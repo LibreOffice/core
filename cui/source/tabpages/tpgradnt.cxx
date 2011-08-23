@@ -61,7 +61,7 @@
 
 /*************************************************************************
 |*
-|*  Dialog zum Aendern und Definieren der Farbverlaeufe
+|*	Dialog zum Aendern und Definieren der Farbverlaeufe
 |*
 \************************************************************************/
 
@@ -70,20 +70,20 @@ SvxGradientTabPage::SvxGradientTabPage
     Window* pParent,
     const SfxItemSet& rInAttrs
 ) :
-    SfxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_GRADIENT ), rInAttrs ),
+    SfxTabPage			( pParent, CUI_RES( RID_SVXPAGE_GRADIENT ), rInAttrs ),
 
     aFlProp             ( this, CUI_RES( FL_PROP ) ),
     aFtType             ( this, CUI_RES( FT_TYPE ) ),
-    aLbGradientType     ( this, CUI_RES( LB_GRADIENT_TYPES ) ),
-    aFtCenterX          ( this, CUI_RES( FT_CENTER_X ) ),
-    aMtrCenterX         ( this, CUI_RES( MTR_CENTER_X ) ),
-    aFtCenterY          ( this, CUI_RES( FT_CENTER_Y ) ),
-    aMtrCenterY         ( this, CUI_RES( MTR_CENTER_Y ) ),
-    aFtAngle            ( this, CUI_RES( FT_ANGLE ) ),
-    aMtrAngle           ( this, CUI_RES( MTR_ANGLE ) ),
-    aFtBorder           ( this, CUI_RES( FT_BORDER ) ),
-    aMtrBorder          ( this, CUI_RES( MTR_BORDER ) ),
-    aFtColorFrom        ( this, CUI_RES( FT_COLOR_FROM ) ),
+    aLbGradientType		( this, CUI_RES( LB_GRADIENT_TYPES ) ),
+    aFtCenterX			( this, CUI_RES( FT_CENTER_X ) ),
+    aMtrCenterX			( this, CUI_RES( MTR_CENTER_X ) ),
+    aFtCenterY			( this, CUI_RES( FT_CENTER_Y ) ),
+    aMtrCenterY			( this, CUI_RES( MTR_CENTER_Y ) ),
+    aFtAngle			( this, CUI_RES( FT_ANGLE ) ),
+    aMtrAngle			( this, CUI_RES( MTR_ANGLE ) ),
+    aFtBorder			( this, CUI_RES( FT_BORDER ) ),
+    aMtrBorder			( this, CUI_RES( MTR_BORDER ) ),
+    aFtColorFrom		( this, CUI_RES( FT_COLOR_FROM ) ),
     aLbColorFrom        ( this, CUI_RES( LB_COLOR_FROM ) ),
     aMtrColorFrom       ( this, CUI_RES( MTR_COLOR_FROM ) ),
     aFtColorTo          ( this, CUI_RES( FT_COLOR_TO ) ),
@@ -91,11 +91,11 @@ SvxGradientTabPage::SvxGradientTabPage
     aMtrColorTo         ( this, CUI_RES( MTR_COLOR_TO ) ),
     aLbGradients        ( this, CUI_RES( LB_GRADIENTS ) ),
     aCtlPreview         ( this, CUI_RES( CTL_PREVIEW ) ),
-    aBtnAdd             ( this, CUI_RES( BTN_ADD ) ),
-    aBtnModify          ( this, CUI_RES( BTN_MODIFY ) ),
-    aBtnDelete          ( this, CUI_RES( BTN_DELETE ) ),
-    aBtnLoad            ( this, CUI_RES( BTN_LOAD ) ),
-    aBtnSave            ( this, CUI_RES( BTN_SAVE ) ),
+    aBtnAdd				( this, CUI_RES( BTN_ADD ) ),
+    aBtnModify			( this, CUI_RES( BTN_MODIFY ) ),
+    aBtnDelete			( this, CUI_RES( BTN_DELETE ) ),
+    aBtnLoad			( this, CUI_RES( BTN_LOAD ) ),
+    aBtnSave			( this, CUI_RES( BTN_SAVE ) ),
 
     rOutAttrs           ( rInAttrs ),
 
@@ -218,8 +218,8 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
-            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-            INetURLObject   aURL( pGradientList->GetPath() );
+            String			aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+            INetURLObject	aURL( pGradientList->GetPath() );
 
             aURL.Append( pGradientList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
@@ -338,9 +338,9 @@ BOOL SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
     {
         // CheckChanges(); <-- doppelte Abfrage ?
 
-        XGradient*  pXGradient = NULL;
-        String      aString;
-        USHORT      nPos = aLbGradients.GetSelectEntryPos();
+        XGradient*	pXGradient = NULL;
+        String	  	aString;
+        USHORT	  	nPos = aLbGradients.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             pXGradient = new XGradient( pGradientList->GetGradient( nPos )->GetGradient() );
@@ -513,7 +513,7 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 #ifdef WNT
         // hack: #31355# W.P.
         Rectangle aRect( aLbGradients.GetPosPixel(), aLbGradients.GetSizePixel() );
-        if( TRUE ) {                // ??? overlapped with pDlg
+        if( TRUE ) {				// ??? overlapped with pDlg
                                     // and srolling
             Invalidate( aRect );
             //aLbGradients.Invalidate();
@@ -771,8 +771,8 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
-        INetURLObject   aURL( aDlg.GetPath() );
-        INetURLObject   aPathURL( aURL );
+        INetURLObject	aURL( aDlg.GetPath() );
+        INetURLObject	aPathURL( aURL );
 
         aPathURL.removeSegment();
         aPathURL.removeFinalSlash();

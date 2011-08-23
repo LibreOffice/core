@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ namespace frm
             _rCompareOp
         );
         if ((aExistentPos != _rArray.end()) && (*aExistentPos == _rNewElement))
-        {   // we have a valid "lower or equal" element and it's really "equal"
+        {	// we have a valid "lower or equal" element and it's really "equal"
             nPos = aExistentPos - _rArray.begin();
             return sal_True;
         }
@@ -106,11 +106,11 @@ namespace frm
 //========================================================================
 class OGroupComp
 {
-    ::rtl::OUString m_aName;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xComponent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>     m_xControlModel;
-    sal_Int32   m_nPos;
-    sal_Int16   m_nTabIndex;
+    ::rtl::OUString	m_aName;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> 	m_xComponent;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> 	m_xControlModel;
+    sal_Int32	m_nPos;
+    sal_Int16	m_nTabIndex;
 
     friend class OGroupCompLess;
 
@@ -122,10 +122,10 @@ public:
     sal_Bool operator==( const OGroupComp& rComp ) const;
 
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& GetComponent() const { return m_xComponent; }
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>&   GetControlModel() const { return m_xControlModel; }
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>&	GetControlModel() const { return m_xControlModel; }
 
-    sal_Int32   GetPos() const { return m_nPos; }
-    sal_Int16   GetTabIndex() const { return m_nTabIndex; }
+    sal_Int32	GetPos() const { return m_nPos; }
+    sal_Int16	GetTabIndex() const { return m_nTabIndex; }
     ::rtl::OUString GetName() const { return m_aName; }
 };
 
@@ -135,9 +135,9 @@ DECLARE_STL_VECTOR(OGroupComp, OGroupCompArr);
 class OGroupComp;
 class OGroupCompAcc
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xComponent;
-
-    OGroupComp                                      m_aGroupComp;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> 	m_xComponent;
+    
+    OGroupComp										m_aGroupComp;
 
     friend class OGroupCompAccLess;
 
@@ -146,8 +146,8 @@ public:
 
     sal_Bool operator==( const OGroupCompAcc& rCompAcc ) const;
 
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>&  GetComponent() const { return m_xComponent; }
-    const OGroupComp&   GetGroupComponent() const { return m_aGroupComp; }
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>&	GetComponent() const { return m_xComponent; }
+    const OGroupComp&	GetGroupComponent() const { return m_aGroupComp; }
 };
 
 DECLARE_STL_VECTOR(OGroupCompAcc, OGroupCompAccArr);
@@ -155,18 +155,18 @@ DECLARE_STL_VECTOR(OGroupCompAcc, OGroupCompAccArr);
 //========================================================================
 class OGroup
 {
-    OGroupCompArr       m_aCompArray;
-    OGroupCompAccArr    m_aCompAccArray;
+    OGroupCompArr		m_aCompArray;
+    OGroupCompAccArr	m_aCompAccArray;
 
     ::rtl::OUString m_aGroupName;
-    sal_uInt16  m_nInsertPos;               // Die Einfugeposition der GroupComps wird von der Gruppe bestimmt.
+    sal_uInt16	m_nInsertPos;				// Die Einfugeposition der GroupComps wird von der Gruppe bestimmt.
 
     friend class OGroupLess;
 
 public:
     OGroup( const ::rtl::OUString& rGroupName );
 #ifdef DBG_UTIL
-    OGroup( const OGroup& _rSource );   // just to ensure the DBG_CTOR call
+    OGroup( const OGroup& _rSource );	// just to ensure the DBG_CTOR call
 #endif
     virtual ~OGroup();
 
@@ -186,11 +186,11 @@ DECLARE_STL_USTRINGACCESS_MAP(OGroup, OGroupArr);
 DECLARE_STL_VECTOR(OGroupArr::iterator, OActiveGroups);
 
 //========================================================================
-class OGroupManager : public ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertyChangeListener, ::com::sun::star::container::XContainerListener>
+class OGroupManager	: public ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertyChangeListener, ::com::sun::star::container::XContainerListener>
 {
-    OGroup*         m_pCompGroup;           // Alle Components nach TabIndizes sortiert
-    OGroupArr       m_aGroupArr;            // Alle Components nach Gruppen sortiert
-    OActiveGroups   m_aActiveGroupMap;      // In dieser Map werden die Indizes aller Gruppen gehalten,
+    OGroup*			m_pCompGroup;			// Alle Components nach TabIndizes sortiert
+    OGroupArr		m_aGroupArr;			// Alle Components nach Gruppen sortiert
+    OActiveGroups	m_aActiveGroupMap;		// In dieser Map werden die Indizes aller Gruppen gehalten,
                                         // die mehr als 1 Element haben
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >
@@ -227,7 +227,7 @@ public:
 
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 #endif // _FRM_GROUPMANAGER_HXX_

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include "componentmodule.hxx"
 #include <vcl/waitobj.hxx>
 
-
+ 
 //.........................................................................
 namespace abp
 {
@@ -114,7 +114,7 @@ namespace abp
             }
 
             if (xDialog.is())
-            {   // execute it
+            {	// execute it
                 if (xDialog->execute())
                     return sal_True;
             }
@@ -129,7 +129,7 @@ namespace abp
     }
 
 //.........................................................................
-}   // namespace abp
+}	// namespace abp
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

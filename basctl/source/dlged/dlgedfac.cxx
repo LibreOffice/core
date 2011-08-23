@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
         }
         bNeedsInit = sal_False;
     }
-
+    
     if( (pObjFactory->nInventor == DlgInventor) &&
         (pObjFactory->nIdentifier >= OBJ_DLG_PUSHBUTTON) &&
         (pObjFactory->nIdentifier <= OBJ_DLG_TREECONTROL)    )
@@ -92,7 +92,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlListBoxModel") , xDialogSFact );
                  break;
             case OBJ_DLG_COMBOBOX:
-            {
+            {	 
                  DlgEdObj* pNew = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlComboBoxModel") , xDialogSFact );
                  pObjFactory->pNewObj = pNew;
                  try
@@ -107,7 +107,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  catch(...)
                  {
                  }
-            }    break;
+            }	 break;
             case OBJ_DLG_GROUPBOX:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlGroupBoxModel") , xDialogSFact );
                  break;
@@ -122,7 +122,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  break;
             case OBJ_DLG_PROGRESSBAR:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlProgressBarModel") , xDialogSFact );
-                 break;
+                 break;            
             case OBJ_DLG_HSCROLLBAR:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlScrollBarModel") , xDialogSFact );
                  break;
@@ -130,7 +130,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
             {
                  DlgEdObj* pNew = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlScrollBarModel") , xDialogSFact );
                  pObjFactory->pNewObj = pNew;
-                 // set vertical orientation
+                 // set vertical orientation	
                  try
                  {
                     uno::Reference< beans::XPropertySet >  xPSet(pNew->GetUnoControlModel(), uno::UNO_QUERY);
@@ -144,7 +144,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  catch(...)
                  {
                  }
-            }    break;
+            }	 break;
             case OBJ_DLG_HFIXEDLINE:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFixedLineModel") , xDialogSFact );
                  break;
@@ -152,7 +152,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
             {
                  DlgEdObj* pNew = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFixedLineModel") , xDialogSFact );
                  pObjFactory->pNewObj = pNew;
-                 // set vertical orientation
+                 // set vertical orientation	
                  try
                  {
                     uno::Reference< beans::XPropertySet >  xPSet(pNew->GetUnoControlModel(), uno::UNO_QUERY);
@@ -166,28 +166,28 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  catch(...)
                  {
                  }
-            }    break;
+            }	 break;
             case OBJ_DLG_DATEFIELD:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlDateFieldModel") , xDialogSFact );
-                 break;
+                 break;            
             case OBJ_DLG_TIMEFIELD:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlTimeFieldModel") , xDialogSFact );
-                 break;
+                 break;            
             case OBJ_DLG_NUMERICFIELD:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlNumericFieldModel") , xDialogSFact );
-                 break;
+                 break;            
             case OBJ_DLG_CURRENCYFIELD:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlCurrencyFieldModel") , xDialogSFact );
-                 break;
+                 break;            
             case OBJ_DLG_FORMATTEDFIELD:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFormattedFieldModel") , xDialogSFact );
-                 break;
+                 break;            
             case OBJ_DLG_PATTERNFIELD:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlPatternFieldModel") , xDialogSFact );
-                 break;
+                 break;            
             case OBJ_DLG_FILECONTROL:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFileControlModel") , xDialogSFact );
-                 break;
+                 break;            
             case OBJ_DLG_TREECONTROL:
                  DlgEdObj* pNew = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.tree.TreeControlModel") , xDialogSFact );
                  pObjFactory->pNewObj = pNew;
@@ -206,12 +206,12 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                         // gets the service manager from the office
                         Reference< XMultiComponentFactory > xMultiComponentFactoryServer( xComponentContext->getServiceManager() );
 
-
+                        
                         // gets the TreeDataModel
                         Reference< XMutableTreeDataModel > xTreeDataModel;
 
                         xTreeDataModel = Reference< XMutableTreeDataModel >(
-                         xMultiComponentFactoryServer->createInstanceWithContext(
+                         xMultiComponentFactoryServer->createInstanceWithContext( 
                         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.tree.MutableTreeDataModel" ) ), xComponentContext ), UNO_QUERY_THROW );
 
                         // now fill it with some sample data
@@ -228,7 +228,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                         xChildNode_1->setDataValue( sNode_1 );
                         xChildNode_1->setExpandedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_down.png" ) ) );
                         xChildNode_1->setCollapsedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_right.png" ) ) );
-
+                        
                         xNode->appendChild( xChildNode_1 );
 
                         const OUString sNode_1_1( RTL_CONSTASCII_USTRINGPARAM( "Node_1_1" ) );
@@ -237,7 +237,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                         xChildNode_1_1->setDataValue( sNode_1_1 );
                         xChildNode_1_1->setExpandedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_down.png" ) ) );
                         xChildNode_1_1->setCollapsedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_right.png" ) ) );
-
+                        
                         xChildNode_1->appendChild( xChildNode_1_1 );
 
                         const OUString sNode_1_1( RTL_CONSTASCII_USTRINGPARAM( "Node_2" ) );
@@ -246,10 +246,10 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                         xChildNode_2->setDataValue( sNode_2 );
                         xChildNode_2->setNodeGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM("private:graphicrepository/sw/imglst/nc20010.png") ) );
                         xNode->appendChild( xChildNode_2 );
-
+                            
                         xTreeDataModel->setRoot( xNode );
-
-
+                        
+                        
                         const OUString sDataModel( RTL_CONSTASCII_USTRINGPARAM( "DataModel" ) );
 
                         xPSet->setPropertyValue( sDataModel, xTreeDataModel );
@@ -258,7 +258,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  catch(...)
                  {
                  }*/
-                 break;
+                 break;            
         }
     }
 

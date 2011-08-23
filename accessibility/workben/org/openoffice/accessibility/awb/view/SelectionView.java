@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -184,20 +184,20 @@ class SelectionView
                 {
                     XAccessible xChild = mxContext.getAccessibleChild(i);
                     XAccessibleContext xChildContext = xChild.getAccessibleContext();
-
+                    
                     String sName = i + " " + xChildContext.getAccessibleName();
                     JToggleButton aChild;
                     aChild = new JCheckBox (sName);
                     aChild.setFont (maContainer.GetViewFont());
 
-                    XAccessibleStateSet aChildStateSet =
+                    XAccessibleStateSet aChildStateSet = 
                         mxContext.getAccessibleStateSet();
-                    aChild.setSelected (aChildStateSet!=null
+                    aChild.setSelected (aChildStateSet!=null 
                         && aChildStateSet.contains(AccessibleStateType.SELECTED));
-
+                    
                     aChild.addActionListener (this);
                     maChildrenSelector.add (aChild);
-
+                    
                 }
                 catch (IndexOutOfBoundsException e)
                 {
@@ -216,7 +216,7 @@ class SelectionView
     {
         mxSelection.clearAccessibleSelection();
     }
-
+        
 
 
     /** Call the function associated with the pressed button.

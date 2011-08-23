@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,11 @@ import com.sun.star.accessibility.XAccessibleContext;
 public class DynamicAccessibilityModel extends AccessibilityModel implements TreeExpansionListener, TreeWillExpandListener {
 
     /* Creates a AccessibilityNode object for a window */
-    protected AccessibilityNode createWindowNode(XAccessible xAccessible,
+    protected AccessibilityNode createWindowNode(XAccessible xAccessible, 
             XAccessibleContext xAccessibleContext) {
         if (xAccessible != null) {
-            // Some objects inherit XAccessible, but should not appear in
-            // the hierarchy as toplevels (like sub-menus), so they don't
+            // Some objects inherit XAccessible, but should not appear in 
+            // the hierarchy as toplevels (like sub-menus), so they don't 
             // return an accessible context.
             if (xAccessibleContext != null) {
                 AccessibilityNode node = new AccessibilityNode(this);
@@ -59,12 +59,12 @@ public class DynamicAccessibilityModel extends AccessibilityModel implements Tre
         }
         return null;
     }
-
+        
     /* Creates a DynamicAccessibilityNode object */
     protected AccessibilityNode createNode(XAccessible xAccessible) {
         if (xAccessible != null) {
             try {
-                // Some objects inherit XAccessible, but should not appear in
+                // Some objects inherit XAccessible, but should not appear in 
                 // the hierarchy as toplevels (like sub-menus), so they don't
                 // return an accessible context.
                 XAccessibleContext xAccessibleContext = xAccessible.getAccessibleContext();
@@ -80,7 +80,7 @@ public class DynamicAccessibilityModel extends AccessibilityModel implements Tre
         }
         return null;
     }
-
+    
     public void treeCollapsed(javax.swing.event.TreeExpansionEvent treeExpansionEvent) {
         TreeNode node = (TreeNode) treeExpansionEvent.getPath().getLastPathComponent();
         if (node instanceof DynamicAccessibilityNode) {
@@ -88,7 +88,7 @@ public class DynamicAccessibilityModel extends AccessibilityModel implements Tre
             dynode.clear();
         }
     }
-
+    
     public void treeExpanded(javax.swing.event.TreeExpansionEvent treeExpansionEvent) {
         TreeNode node = (TreeNode) treeExpansionEvent.getPath().getLastPathComponent();
         if (node instanceof AccessibilityNode) {
@@ -99,7 +99,7 @@ public class DynamicAccessibilityModel extends AccessibilityModel implements Tre
             }
         }
     }
-
+    
     public void treeWillCollapse(javax.swing.event.TreeExpansionEvent treeExpansionEvent)
             throws javax.swing.tree.ExpandVetoException {
         TreeNode node = (TreeNode) treeExpansionEvent.getPath().getLastPathComponent();
@@ -111,8 +111,8 @@ public class DynamicAccessibilityModel extends AccessibilityModel implements Tre
             }
         }
     }
-
-    public void treeWillExpand(javax.swing.event.TreeExpansionEvent treeExpansionEvent)
+    
+    public void treeWillExpand(javax.swing.event.TreeExpansionEvent treeExpansionEvent) 
             throws javax.swing.tree.ExpandVetoException {
         TreeNode node = (TreeNode) treeExpansionEvent.getPath().getLastPathComponent();
         if (node instanceof DynamicAccessibilityNode) {

@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,20 +60,20 @@ namespace
             result = path_sub->substituteVariables(result, sal_False);
         return result;
     }
-
+    
     static bool isZipfile(const OUString& fileurl)
     {
         static const OUString file_extension = OUString::createFromAscii(".zip");
-        return fileurl.match(file_extension, fileurl.getLength()-file_extension.getLength());
+        return fileurl.match(file_extension, fileurl.getLength()-file_extension.getLength()); 
     };
-
+    
     static bool isLogfile(const OUString& fileurl)
     {
         static const OUString file_extension = OUString::createFromAscii(".csv");
         static const OUString current = OUString::createFromAscii("Current.csv");
         return
             fileurl.match(file_extension, fileurl.getLength()-file_extension.getLength())
-            && !fileurl.match(current, fileurl.getLength()-current.getLength());
+            && !fileurl.match(current, fileurl.getLength()-current.getLength()); 
     };
 
     static bool isZipOrLogFile(const OUString& fileurl)
@@ -88,9 +88,9 @@ namespace
             UNO_QUERY_THROW);
         return file_access->getFolderContents(
             getLogPathFromCfg(sf),
-            false);
+            false);   
     };
-
+    
     static vector<OUString> getLogStoragefiles(
         const Reference<XMultiServiceFactory>& sf,
         bool (*condition)(const OUString& path))
@@ -102,7 +102,7 @@ namespace
             if(condition(candidates[idx]))
                 result.push_back(candidates[idx]);
         return result;
-    };
+    }; 
 
     static void assureLogStorageExists(const Reference<XMultiServiceFactory>& sf)
     {
@@ -121,7 +121,7 @@ namespace oooimprovement
     LogStorage::LogStorage(const Reference<XMultiServiceFactory>& sf)
         : m_ServiceFactory(sf)
     {}
-
+    
     void LogStorage::assureExists()
     {
         assureLogStorageExists(m_ServiceFactory);
@@ -141,9 +141,9 @@ namespace oooimprovement
 
     const vector<OUString> LogStorage::getUnzippedLogFiles() const
     { return getLogStoragefiles(m_ServiceFactory, &isLogfile); }
-
+    
     const vector<OUString> LogStorage::getZippedLogFiles() const
     { return getLogStoragefiles(m_ServiceFactory, &isZipfile); }
-}
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

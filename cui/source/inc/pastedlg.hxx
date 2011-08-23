@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,22 +61,22 @@ class SvPasteObjectDialog : public ModalDialog
     CancelButton aCancelButton1;
     HelpButton aHelpButton1;
     String aSObject;
-    Table           aSupplementTable;
-    SvGlobalName    aObjClassName;
-    String          aObjName;
-    USHORT          nAspect;
-    BOOL            bLink;
+    Table       	aSupplementTable;
+    SvGlobalName	aObjClassName;
+    String			aObjName;
+    USHORT      	nAspect;
+    BOOL        	bLink;
 
-    ListBox&        ObjectLB()      { return aLbInsertList; }
-    FixedText&      ObjectSource()  { return aFtObjectSource; }
-    RadioButton&    PasteLink()     { return aRbPasteLink; }
-    CheckBox&       AsIconBox()     { return aCbDisplayAsIcon; }
+    ListBox&		ObjectLB()		{ return aLbInsertList; }
+    FixedText&		ObjectSource()	{ return aFtObjectSource; }
+    RadioButton&	PasteLink()		{ return aRbPasteLink; }
+    CheckBox&		AsIconBox()		{ return aCbDisplayAsIcon; }
 
-    const String&   GetObjString()  { return aSObject; }
-    void            SelectObject();
+    const String& 	GetObjString()	{ return aSObject; }
+    void			SelectObject();
     DECL_LINK( SelectHdl, ListBox * );
     DECL_LINK( DoubleClickHdl, ListBox * );
-    void            SetDefault();
+    void        	SetDefault();
     USHORT      GetAspect() const { return nAspect; }
     BOOL        ShouldLink() const { return bLink; }
 

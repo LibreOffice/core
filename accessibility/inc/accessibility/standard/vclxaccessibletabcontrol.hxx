@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,37 +37,37 @@
 class TabControl;
 
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleTabControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXAccessibleTabControl
+//	----------------------------------------------------
 
-typedef ::cppu::ImplHelper1 <
-    ::com::sun::star::accessibility::XAccessibleSelection > VCLXAccessibleTabControl_BASE;
+typedef ::cppu::ImplHelper1	<	
+    ::com::sun::star::accessibility::XAccessibleSelection >	VCLXAccessibleTabControl_BASE;
 
-class VCLXAccessibleTabControl :    public VCLXAccessibleComponent,
-                                    public VCLXAccessibleTabControl_BASE
+class VCLXAccessibleTabControl :	public VCLXAccessibleComponent,
+                                    public VCLXAccessibleTabControl_BASE		
 {
 private:
-    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > > AccessibleChildren;
+    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >	> AccessibleChildren;
 
-    AccessibleChildren      m_aAccessibleChildren;
-    TabControl*             m_pTabControl;
+    AccessibleChildren		m_aAccessibleChildren;
+    TabControl*				m_pTabControl;
 
 protected:
-    void                    UpdateFocused();
-    void                    UpdateSelected( sal_Int32 i, bool bSelected );
+    void					UpdateFocused();
+    void					UpdateSelected( sal_Int32 i, bool bSelected );
     void                    UpdatePageText( sal_Int32 i );
     void                    UpdateTabPage( sal_Int32 i, bool bNew );
 
-    void                    InsertChild( sal_Int32 i );
-    void                    RemoveChild( sal_Int32 i );
+    void					InsertChild( sal_Int32 i );
+    void					RemoveChild( sal_Int32 i );
 
-    virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual void            ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    virtual void			ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void			ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void			FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
     // XComponent
-    virtual void SAL_CALL   disposing();
+    virtual void SAL_CALL	disposing();
 
 public:
     VCLXAccessibleTabControl( VCLXWindow* pVCLXWindow );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,10 +27,10 @@
 
 package com.sun.star.comp.beans;
 
-/** This exception is called when a method is called which
+/**	This exception is called when a method is called which
      needs an established connection but no connection is
     established yet or anymore.
-
+ 
     @since OOo 2.0.0
  */
 public class NoConnectionException extends Exception

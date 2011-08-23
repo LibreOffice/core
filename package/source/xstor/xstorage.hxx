@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,13 +58,13 @@
 
 #include "mutexholder.hxx"
 
-#define RELINFO_NO_INIT             1
-#define RELINFO_READ                2
-#define RELINFO_CHANGED             3
-#define RELINFO_CHANGED_STREAM      4
-#define RELINFO_CHANGED_STREAM_READ 5
-#define RELINFO_BROKEN              6
-#define RELINFO_CHANGED_BROKEN      7
+#define RELINFO_NO_INIT				1
+#define RELINFO_READ				2
+#define RELINFO_CHANGED				3
+#define RELINFO_CHANGED_STREAM		4
+#define RELINFO_CHANGED_STREAM_READ	5
+#define RELINFO_BROKEN				6
+#define RELINFO_CHANGED_BROKEN		7
 
 #define STOR_MESS_PRECOMMIT 1
 #define STOR_MESS_COMMITED  2
@@ -85,14 +85,14 @@ struct OWriteStream_Impl;
 
 struct SotElement_Impl
 {
-    ::rtl::OUString             m_aName;
+    ::rtl::OUString             m_aName;        
     ::rtl::OUString             m_aOriginalName;
     sal_Bool                    m_bIsRemoved;
     sal_Bool                    m_bIsInserted;
-    sal_Bool                    m_bIsStorage;
-
-    OStorage_Impl*              m_pStorage;
-    OWriteStream_Impl*          m_pStream;
+    sal_Bool					m_bIsStorage;
+    
+    OStorage_Impl*				m_pStorage;
+    OWriteStream_Impl*			m_pStream;
 
 public:
                                 SotElement_Impl( const ::rtl::OUString& rName, sal_Bool bStor, sal_Bool bNew );
@@ -131,12 +131,12 @@ typedef ::std::list< StorageHolder_Impl > OStorageList_Impl;
 class SwitchablePersistenceStream;
 struct OStorage_Impl
 {
-    SotMutexHolderRef           m_rMutexRef;
+    SotMutexHolderRef			m_rMutexRef;
 
-    OStorage*                   m_pAntiImpl;         // only valid if external references exists
-    OStorageList_Impl           m_aReadOnlyWrapList; // only valid if readonly external reference exists
+    OStorage*					m_pAntiImpl;    	 // only valid if external references exists
+    OStorageList_Impl			m_aReadOnlyWrapList; // only valid if readonly external reference exists
 
-    sal_Int32                   m_nStorageMode; // open mode ( read/write/trunc/nocreate )
+    sal_Int32					m_nStorageMode; // open mode ( read/write/trunc/nocreate )
     sal_Bool                    m_bIsModified;  // only modified elements will be sent to the original content
     sal_Bool                    m_bBroadcastModified;  // will be set if notification is required
     sal_Bool                    m_bCommited;    // sending the streams is coordinated by the root storage of the package
@@ -145,8 +145,8 @@ struct OStorage_Impl
     sal_Bool                    m_bListCreated;
 
 
-    SotElementList_Impl                         m_aChildrenList;
-    SotElementList_Impl                         m_aDeletedList;
+    SotElementList_Impl							m_aChildrenList;
+    SotElementList_Impl							m_aDeletedList;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xPackageFolder;
     ::com::sun::star::uno::Reference< ::com::sun::star::logging::XSimpleLogRing >  m_xLogRing;
@@ -164,11 +164,11 @@ struct OStorage_Impl
     // must be empty in case of root storage
     OStorage_Impl* m_pParent;
 
-    sal_Bool        m_bControlMediaType;
+    sal_Bool		m_bControlMediaType;
     ::rtl::OUString m_aMediaType;
-    sal_Bool        m_bMTFallbackUsed;
+    sal_Bool		m_bMTFallbackUsed;
 
-    sal_Bool        m_bControlVersion;
+    sal_Bool		m_bControlVersion;
     ::rtl::OUString m_aVersion;
 
     SwitchablePersistenceStream* m_pSwitchStream;
@@ -176,7 +176,7 @@ struct OStorage_Impl
     sal_Int32 m_nStorageType; // the mode in wich the storage is used
 
     // the _rels substorage that is handled in a special way in embed::StorageFormats::OFOPXML
-    SotElement_Impl* m_pRelStorElement;
+    SotElement_Impl* m_pRelStorElement; 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xRelStorage;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > m_aRelInfo;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xNewRelInfoStream;
@@ -185,20 +185,20 @@ struct OStorage_Impl
     //////////////////////////////////////////
     // Constructors
 
-    OStorage_Impl(  ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
+    OStorage_Impl(	::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
                     sal_Int32 nMode,
                     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
                     sal_Int32 nStorageType );
 
-    OStorage_Impl(  ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream,
+    OStorage_Impl(	::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream,
                     sal_Int32 nMode,
                     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
                     sal_Int32 nStorageType );
 
     // constructor for a substorage
-    OStorage_Impl(  OStorage_Impl* pParent,
+    OStorage_Impl(	OStorage_Impl* pParent,
                     sal_Int32 nMode,
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xPackageFolder,
                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > xPackage,
@@ -289,7 +289,7 @@ struct OStorage_Impl
 };
 
 
-class OStorage  : public ::com::sun::star::lang::XTypeProvider
+class OStorage	: public ::com::sun::star::lang::XTypeProvider
                 , public ::com::sun::star::embed::XStorage
                 , public ::com::sun::star::embed::XStorageRawAccess
                 , public ::com::sun::star::embed::XTransactedObject
@@ -304,7 +304,7 @@ class OStorage  : public ::com::sun::star::lang::XTypeProvider
                 , public ::com::sun::star::embed::XHierarchicalStorageAccess
                 , public ::cppu::OWeakObject
 {
-    OStorage_Impl*  m_pImpl;
+    OStorage_Impl*	m_pImpl;
     StorInternalData_Impl* m_pData;
 
 protected:
@@ -322,19 +322,19 @@ protected:
 
 public:
 
-    OStorage(   ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
+    OStorage(	::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
                 sal_Int32 nMode,
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
                 sal_Int32 nStorageType );
 
-    OStorage(   ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream,
+    OStorage(	::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream,
                 sal_Int32 nMode,
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
                 sal_Int32 nStorageType );
 
-    OStorage(   OStorage_Impl* pImpl, sal_Bool bReadOnlyWrap );
+    OStorage(	OStorage_Impl* pImpl, sal_Bool bReadOnlyWrap );
 
     virtual ~OStorage();
 
@@ -345,10 +345,10 @@ public:
     sal_Int32 GetRefCount_Impl() { return m_refCount; }
 
     //____________________________________________________________________________________________________
-    //  XInterface
+    //	XInterface
     //____________________________________________________________________________________________________
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType ) 
         throw( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL acquire() throw();
@@ -356,7 +356,7 @@ public:
     virtual void SAL_CALL release() throw();
 
     //____________________________________________________________________________________________________
-    //  XTypeProvider
+    //	XTypeProvider
     //____________________________________________________________________________________________________
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
@@ -366,7 +366,7 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
-    //  XStorage
+    //	XStorage
     //____________________________________________________________________________________________________
 
     virtual void SAL_CALL copyToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest )
@@ -376,7 +376,7 @@ public:
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL openStreamElement(
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL openStreamElement( 
             const ::rtl::OUString& aStreamName, sal_Int32 nOpenMode )
         throw ( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
@@ -385,7 +385,7 @@ public:
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL openEncryptedStreamElement(
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL openEncryptedStreamElement( 
             const ::rtl::OUString& aStreamName, sal_Int32 nOpenMode, const ::rtl::OUString& aPass )
         throw ( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
@@ -395,7 +395,7 @@ public:
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > SAL_CALL openStorageElement(
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > SAL_CALL openStorageElement( 
             const ::rtl::OUString& aStorName, sal_Int32 nStorageMode )
         throw ( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
@@ -403,7 +403,7 @@ public:
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL cloneStreamElement(
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL cloneStreamElement( 
             const ::rtl::OUString& aStreamName )
         throw ( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
@@ -412,7 +412,7 @@ public:
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL cloneEncryptedStreamElement(
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL cloneEncryptedStreamElement( 
             const ::rtl::OUString& aStreamName, const ::rtl::OUString& aPass )
         throw ( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
@@ -468,7 +468,7 @@ public:
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL copyElementTo(    const ::rtl::OUString& aElementName,
+    virtual void SAL_CALL copyElementTo(	const ::rtl::OUString& aElementName, 
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest,
                                         const ::rtl::OUString& aNewName )
         throw ( ::com::sun::star::embed::InvalidStorageException,
@@ -479,7 +479,7 @@ public:
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL moveElementTo(    const ::rtl::OUString& aElementName,
+    virtual void SAL_CALL moveElementTo(	const ::rtl::OUString& aElementName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest,
                                         const ::rtl::OUString& rNewName )
         throw ( ::com::sun::star::embed::InvalidStorageException,
@@ -491,7 +491,7 @@ public:
                 ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
-    //  XStorageRawAccess
+    //	XStorageRawAccess
     //____________________________________________________________________________________________________
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getPlainRawStreamElement(
@@ -550,7 +550,7 @@ public:
         throw ( ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
-    //  XModifiable
+    //	XModifiable
     //____________________________________________________________________________________________________
 
     virtual sal_Bool SAL_CALL isModified()
@@ -569,7 +569,7 @@ public:
         throw ( ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
-    //  XNameAccess
+    //	XNameAccess
     //____________________________________________________________________________________________________
 
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
@@ -590,7 +590,7 @@ public:
         throw ( ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
-    //  XComponent
+    //	XComponent
     //____________________________________________________________________________________________________
 
     virtual void SAL_CALL dispose()
@@ -605,7 +605,7 @@ public:
         throw ( ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
-    //  XEncryptionProtectedSource
+    //	XEncryptionProtectedSource
     //____________________________________________________________________________________________________
 
     virtual void SAL_CALL setEncryptionPassword( const ::rtl::OUString& aPass )
@@ -617,7 +617,7 @@ public:
                 ::com::sun::star::io::IOException );
 
     //____________________________________________________________________________________________________
-    //  XPropertySet
+    //	XPropertySet
     //____________________________________________________________________________________________________
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
@@ -635,7 +635,7 @@ public:
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL addPropertyChangeListener(
+    virtual void SAL_CALL addPropertyChangeListener( 
             const ::rtl::OUString& aPropertyName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener )
         throw ( ::com::sun::star::beans::UnknownPropertyException,
@@ -662,7 +662,7 @@ public:
                 ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
-    //  XOptimizedStorage
+    //	XOptimizedStorage
     //____________________________________________________________________________________________________
     virtual void SAL_CALL insertRawNonEncrStreamElementDirect( const ::rtl::OUString& sStreamName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream )
         throw ( ::com::sun::star::embed::InvalidStorageException,
@@ -680,7 +680,7 @@ public:
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
-
+                
     virtual void SAL_CALL copyElementDirectlyTo( const ::rtl::OUString& sSourceName, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XOptimizedStorage >& xTargetStorage, const ::rtl::OUString& sTargetName )
         throw ( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
@@ -776,7 +776,7 @@ public:
     // XHierarchicalStorageAccess
     //____________________________________________________________________________________________________
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream > SAL_CALL openStreamElementByHierarchicalName( const ::rtl::OUString& sStreamPath, ::sal_Int32 nOpenMode )
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream > SAL_CALL openStreamElementByHierarchicalName( const ::rtl::OUString& sStreamPath, ::sal_Int32 nOpenMode ) 
         throw ( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::packages::WrongPasswordException,
@@ -784,7 +784,7 @@ public:
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream > SAL_CALL openEncryptedStreamElementByHierarchicalName( const ::rtl::OUString& sStreamName, ::sal_Int32 nOpenMode, const ::rtl::OUString& sPassword )
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream > SAL_CALL openEncryptedStreamElementByHierarchicalName( const ::rtl::OUString& sStreamName, ::sal_Int32 nOpenMode, const ::rtl::OUString& sPassword ) 
         throw ( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::packages::NoEncryptionException,
@@ -793,7 +793,7 @@ public:
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL removeStreamElementByHierarchicalName( const ::rtl::OUString& sElementPath )
+    virtual void SAL_CALL removeStreamElementByHierarchicalName( const ::rtl::OUString& sElementPath ) 
         throw ( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::container::NoSuchElementException,

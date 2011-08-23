@@ -12,7 +12,7 @@ import javax.swing.tree.TreePath;
 /** Observe the mouse and highlight shapes of the canvas when clicked.
 */
 public class MouseObserver
-    implements MouseListener,
+    implements MouseListener, 
                MouseMotionListener
 {
     public MouseObserver (Canvas aCanvas)
@@ -66,7 +66,7 @@ public class MouseObserver
     }
 
 
-    /** Search for the smallest shape that contains the mouse position.
+    /** Search for the smallest shape that contains the mouse position.  
     */
     protected CanvasShape FindCanvasShapeUnderMouse (MouseEvent e)
     {

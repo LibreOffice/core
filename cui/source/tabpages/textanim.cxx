@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,8 +63,8 @@ __EXPORT SvxTextTabDialog::SvxTextTabDialog( Window* pParent,
                                 const SfxItemSet* pAttr,
                                 const SdrView* pSdrView ) :
         SfxTabDialog        ( pParent, CUI_RES( RID_SVXDLG_TEXT ), pAttr ),
-        rOutAttrs           ( *pAttr ),
-        pView               ( pSdrView )
+        rOutAttrs			( *pAttr ),
+        pView				( pSdrView )
 {
     FreeResource();
 
@@ -105,36 +105,36 @@ void __EXPORT SvxTextTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 \************************************************************************/
 
 SvxTextAnimationPage::SvxTextAnimationPage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SfxTabPage      ( pWindow, CUI_RES( RID_SVXPAGE_TEXTANIMATION ),
+                SfxTabPage		( pWindow, CUI_RES( RID_SVXPAGE_TEXTANIMATION ),
                                   rInAttrs ),
-                aFlEffect       ( this, CUI_RES(FL_EFFECT)),
-                aFtEffects      ( this, CUI_RES(FT_EFFECTS)),
-                aLbEffect       ( this, CUI_RES( LB_EFFECT ) ),
-                //aCtlEffect        ( this, CUI_RES( CTL_EFFECT ) ),
-                aFtDirection    ( this, CUI_RES(FT_DIRECTION) ),
-                aBtnUp          ( this, CUI_RES( BTN_UP ) ),
-                aBtnLeft        ( this, CUI_RES( BTN_LEFT ) ),
-                aBtnRight       ( this, CUI_RES( BTN_RIGHT ) ),
-                aBtnDown        ( this, CUI_RES( BTN_DOWN ) ),
+                aFlEffect		( this, CUI_RES(FL_EFFECT)),
+                aFtEffects		( this, CUI_RES(FT_EFFECTS)),
+                aLbEffect		( this, CUI_RES( LB_EFFECT ) ),
+                //aCtlEffect		( this, CUI_RES( CTL_EFFECT ) ),
+                aFtDirection	( this, CUI_RES(FT_DIRECTION) ),
+                aBtnUp   		( this, CUI_RES( BTN_UP ) ),
+                aBtnLeft  		( this, CUI_RES( BTN_LEFT ) ),
+                aBtnRight 		( this, CUI_RES( BTN_RIGHT ) ),
+                aBtnDown		( this, CUI_RES( BTN_DOWN ) ),
 
                 aFlProperties   ( this, CUI_RES(FL_PROPERTIES)),
-                aTsbStartInside ( this, CUI_RES( TSB_START_INSIDE ) ),
-                aTsbStopInside  ( this, CUI_RES( TSB_STOP_INSIDE ) ),
+                aTsbStartInside	( this, CUI_RES( TSB_START_INSIDE ) ),
+                aTsbStopInside	( this, CUI_RES( TSB_STOP_INSIDE ) ),
 
-                aFtCount        ( this, CUI_RES(FT_COUNT)),
-                aTsbEndless     ( this, CUI_RES( TSB_ENDLESS ) ),
-                aNumFldCount    ( this, CUI_RES( NUM_FLD_COUNT ) ),
+                aFtCount		( this, CUI_RES(FT_COUNT)),
+                aTsbEndless		( this, CUI_RES( TSB_ENDLESS ) ),
+                aNumFldCount	( this, CUI_RES( NUM_FLD_COUNT ) ),
 
-                aFtAmount       ( this, CUI_RES(FT_AMOUNT)),
-                aTsbPixel       ( this, CUI_RES( TSB_PIXEL ) ),
-                aMtrFldAmount   ( this, CUI_RES( MTR_FLD_AMOUNT ) ),
+                aFtAmount		( this, CUI_RES(FT_AMOUNT)),
+                aTsbPixel		( this, CUI_RES( TSB_PIXEL ) ),
+                aMtrFldAmount	( this, CUI_RES( MTR_FLD_AMOUNT ) ),
 
-                aFtDelay        ( this, CUI_RES(FT_DELAY)),
-                aTsbAuto        ( this, CUI_RES( TSB_AUTO ) ),
-                aMtrFldDelay    ( this, CUI_RES( MTR_FLD_DELAY ) ),
+                aFtDelay		( this, CUI_RES(FT_DELAY)),
+                aTsbAuto   		( this, CUI_RES( TSB_AUTO ) ),
+                aMtrFldDelay	( this, CUI_RES( MTR_FLD_DELAY ) ),
 
-                rOutAttrs       ( rInAttrs ),
-                eAniKind        ( SDRTEXTANI_NONE )
+                rOutAttrs		( rInAttrs ),
+                eAniKind		( SDRTEXTANI_NONE )
 {
     FreeResource();
 
@@ -494,7 +494,7 @@ void SvxTextAnimationPage::Construct()
 |*
 \************************************************************************/
 
-USHORT* SvxTextAnimationPage::GetRanges()
+USHORT*	SvxTextAnimationPage::GetRanges()
 {
     return( pRanges );
 }

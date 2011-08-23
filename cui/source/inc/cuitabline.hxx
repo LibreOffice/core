@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ public:
     XLineEndList*       GetNewLineEndList() const { return pNewLineEndList; }
     const XLineEndList* GetLineEndList() const { return pLineEndList; }
 
-    void                SetNewColorTable( XColorTable* pColTab ) { mpNewColorTab = pColTab; }
+    void				SetNewColorTable( XColorTable* pColTab ) { mpNewColorTab = pColTab; }
     XColorTable*        GetNewColorTable() const { return mpNewColorTab; }
     const XColorTable*  GetColorTable() const { return pColorTab; }
 };
@@ -134,27 +134,27 @@ private:
 
     //#58425# Symbole auf einer Linie (z.B. StarChart) ->
     SdrObjList*         pSymbolList; //a list of symbols to be shown in menu. Symbol at position SID_ATTR_SYMBOLTYPE is to be shown in preview. The list position is to be used cyclic.
-    bool                bNewSize;
-    Graphic             aAutoSymbolGraphic; //a graphic to be displayed in the preview in case that an automatic symbol is choosen
-    long                nNumMenuGalleryItems;
-    long                nSymbolType;
+    bool				bNewSize;
+    Graphic				aAutoSymbolGraphic; //a graphic to be displayed in the preview in case that an automatic symbol is choosen
+    long				nNumMenuGalleryItems;
+    long				nSymbolType;
     SfxItemSet*         pSymbolAttr; //attributes for the shown symbols; only necessary if not equal to line properties
-    FixedLine           aFlSymbol;
+    FixedLine			aFlSymbol;
     MenuButton          aSymbolMB;
     FixedText           aSymbolWidthFT;
-    MetricField         aSymbolWidthMF;
-    FixedText           aSymbolHeightFT;
-    MetricField         aSymbolHeightMF;
-    CheckBox            aSymbolRatioCB;
-    List                aGrfNames;
-    List                aGrfBrushItems;
-    String              sNumCharFmtName;
-    BOOL                bLastWidthModified;
-    Size                aSymbolLastSize;
-    Graphic             aSymbolGraphic;
-    Size                aSymbolSize;
-    BOOL                bSymbols;
-
+    MetricField			aSymbolWidthMF;
+    FixedText			aSymbolHeightFT;
+    MetricField			aSymbolHeightMF;
+    CheckBox			aSymbolRatioCB;
+    List				aGrfNames;
+    List				aGrfBrushItems;
+    String				sNumCharFmtName;
+    BOOL				bLastWidthModified;
+    Size				aSymbolLastSize;
+    Graphic				aSymbolGraphic;
+    Size				aSymbolSize;
+    BOOL				bSymbols;
+    
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
     BOOL                bObjSelected;
@@ -174,16 +174,16 @@ private:
     ChangeType*         pnLineEndListState;
     ChangeType*         pnDashListState;
     ChangeType*         pnColorTableState;
-    UINT16             nPageType; //add CHINA001
-    UINT16             nDlgType; //add CHINA001
+    UINT16             nPageType; //add CHINA001 
+    UINT16             nDlgType; //add CHINA001 
     USHORT*             pPosDashLb;
     USHORT*             pPosLineEndLb;
 
     SfxMapUnit          ePoolUnit;
 
     // #63083#
-    INT32               nActLineWidth;
-
+    INT32				nActLineWidth;
+    
     //Handler für Gallery-Popup-Menue-Button + Size
     DECL_LINK( GraphicHdl_Impl, MenuButton * );
     DECL_LINK( MenuCreateHdl_Impl, MenuButton * );
@@ -235,15 +235,15 @@ public:
     void    SetObjSelected( BOOL bHasObj ) { bObjSelected = bHasObj; }
 
     void    SetPageType( UINT16 nInType ) { nPageType = nInType; }//CHINA001 void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
-    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }    //CHINA001 void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
+    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }	//CHINA001 void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
     void    SetPosDashLb( USHORT* pInPos ) { pPosDashLb = pInPos; }
     void    SetPosLineEndLb( USHORT* pInPos ) { pPosLineEndLb = pInPos; }
 
     void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }
     void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
-    void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
+    void	SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
 
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
 

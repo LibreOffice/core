@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,23 +36,23 @@ class VclWindowEvent;
 class Window;
 
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleMenuBar
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXAccessibleMenuBar
+//	----------------------------------------------------
 
-class VCLXAccessibleMenuBar :   public OAccessibleMenuComponent
+class VCLXAccessibleMenuBar :	public OAccessibleMenuComponent
 {
 protected:
-    Window*                 m_pWindow;
+    Window*					m_pWindow;
 
-    virtual sal_Bool        IsFocused();
+    virtual sal_Bool		IsFocused();
 
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
-    virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void			ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 
     // XComponent
-    virtual void SAL_CALL   disposing();
+    virtual void SAL_CALL	disposing();
 
 public:
     VCLXAccessibleMenuBar( Menu* pMenu );

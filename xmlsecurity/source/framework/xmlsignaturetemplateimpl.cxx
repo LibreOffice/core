@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ using ::rtl::OUString ;
 using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
 using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;
 
-XMLSignatureTemplateImpl :: XMLSignatureTemplateImpl( const Reference< XMultiServiceFactory >& aFactory )
+XMLSignatureTemplateImpl :: XMLSignatureTemplateImpl( const Reference< XMultiServiceFactory >& aFactory ) 
     :m_xTemplate( NULL ),
      m_xServiceManager( aFactory ),
      m_nStatus ( ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN )
@@ -52,40 +52,40 @@ XMLSignatureTemplateImpl :: ~XMLSignatureTemplateImpl() {
 }
 
 /* XXMLSignatureTemplate */
-void SAL_CALL XMLSignatureTemplateImpl :: setTemplate( const Reference< XXMLElementWrapper >& aTemplate )
+void SAL_CALL XMLSignatureTemplateImpl :: setTemplate( const Reference< XXMLElementWrapper >& aTemplate ) 
     throw( com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException)
 {
     m_xTemplate = aTemplate ;
 }
 
 /* XXMLSignatureTemplate */
-Reference< XXMLElementWrapper > SAL_CALL XMLSignatureTemplateImpl :: getTemplate()
+Reference< XXMLElementWrapper > SAL_CALL XMLSignatureTemplateImpl :: getTemplate() 
     throw (com::sun::star::uno::RuntimeException)
 {
     return m_xTemplate ;
 }
 
-void SAL_CALL XMLSignatureTemplateImpl :: setTarget( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper >& aXmlElement )
+void SAL_CALL XMLSignatureTemplateImpl :: setTarget( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper >& aXmlElement ) 
     throw( com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException)
 {
     targets.push_back( aXmlElement );
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > > SAL_CALL XMLSignatureTemplateImpl :: getTargets()
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > > SAL_CALL XMLSignatureTemplateImpl :: getTargets() 
     throw (com::sun::star::uno::RuntimeException)
 {
     sal_Int32 length = targets.size();
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper >
         > aTargets (length);
-
+        
     sal_Int32 i;
-
+    
     for (i=0; i<length; i++)
     {
         aTargets[i] = targets[i];
     }
-
+    
     return aTargets;
 }
 

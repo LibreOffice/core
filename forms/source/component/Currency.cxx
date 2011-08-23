@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,15 +112,15 @@ void OCurrencyModel::implConstruct()
             sal_Bool bPrependCurrencySymbol;
             switch ( aLocaleInfo.getCurrPositiveFormat() )
             {
-                case 0: // $1
+                case 0:	// $1
                     sCurrencySymbol = String(aLocaleInfo.getCurrSymbol());
                     bPrependCurrencySymbol = sal_True;
                     break;
-                case 1: // 1$
+                case 1:	// 1$
                     sCurrencySymbol = String(aLocaleInfo.getCurrSymbol());
                     bPrependCurrencySymbol = sal_False;
                     break;
-                case 2: // $ 1
+                case 2:	// $ 1
                     sCurrencySymbol = ::rtl::OUString(String(aLocaleInfo.getCurrSymbol())) + ::rtl::OUString::createFromAscii(" ");
                     bPrependCurrencySymbol = sal_True;
                     break;
@@ -199,17 +199,17 @@ void OCurrencyModel::describeFixedProperties( Sequence< Property >& _rProps ) co
 {
     BEGIN_DESCRIBE_PROPERTIES( 2, OEditBaseModel )
         // Value auf transient setzen
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_VALUE, PropertyAttribute::TRANSIENT, 0);
+//		ModifyPropertyAttributes(_rAggregateProps, PROPERTY_VALUE, PropertyAttribute::TRANSIENT, 0);
 
-        DECL_PROP3(DEFAULT_VALUE,       double,             BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP1(TABINDEX,        sal_Int16,              BOUND);
+        DECL_PROP3(DEFAULT_VALUE,		double,				BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP1(TABINDEX,		sal_Int16,				BOUND);
     END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OCurrencyModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return FRM_COMPONENT_CURRENCYFIELD; // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_CURRENCYFIELD;	// old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
@@ -264,7 +264,7 @@ void OCurrencyModel::resetNoBroadcast()
 }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

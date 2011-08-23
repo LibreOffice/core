@@ -30,17 +30,17 @@ make_tempfile() {
     touch $TMPCMD
     echo $TMPCMD
   fi
-
+  
 }
 
-#
+# 
 # make_command_file - generate a command file to pass to xterm & co
 #
 run_in_terminal () {
 
   TMPCMD=`make_tempfile 'OpenOffice.org-Online-Update'`
-
-  cat >> $TMPCMD
+  
+  cat >> $TMPCMD 
 
   cat >> $TMPCMD << \EOF
 if [ $? -eq 0 -a ! -z "$DISPLAY" ]; then
@@ -59,7 +59,7 @@ EOF
 }
 
 #
-# run the command line passed as positional parameters either via
+# run the command line passed as positional parameters either via 
 # gksu/kdesu or via su command in a terminal emulator.
 #
 elevate() {
@@ -100,7 +100,7 @@ elevate() {
 
 update_pkg() {
   ADMINFILE=`make_tempfile 'LibreOffice-Online-Update-admin'`
-
+  
 cat >> $ADMINFILE << EOF
 action=nocheck
 conflict=nocheck
@@ -109,15 +109,15 @@ idepend=nocheck
 rdepend=nocheck
 mail=
 EOF
-
+  
   PKGLIST=""
   for i in `cd $1; ls -d *`; do
     pkginfo -q $i && PKGLIST="$PKGLIST $i"
   done
-
+  
   pkgrm -n -a $ADMINFILE $PKGLIST
   pkgadd -n -a $ADMINFILE -d $1 $PKGLIST
-
+  
   rm -f $ADMINFILE
 }
 
@@ -192,4 +192,4 @@ if [ "$CMD" = "update" ]; then
   fi
 else
   Usage
-fi
+fi    

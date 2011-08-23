@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,13 +51,13 @@ namespace pcr
         ~ControlCharacterDialog();
 
         /// creates an item set to be used with this dialog
-        static SfxItemSet*  createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults);
+        static SfxItemSet*	createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults);
 
         /// destroys an item previously created with <method>createItemSet</method>
-        static void         destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults);
+        static void			destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults);
 
         /// fills the given item set with values obtained from the given property set
-        static void         translatePropertiesToItems(
+        static void			translatePropertiesToItems(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel,
             SfxItemSet* _pSet);
 
@@ -77,7 +77,7 @@ namespace pcr
         virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage);
     };
 //............................................................................
-}   // namespace pcr
+}	// namespace pcr
 //............................................................................
 
 #endif // _EXTENSIONS_PROPCTRLR_FONTDIALOG_HXX_

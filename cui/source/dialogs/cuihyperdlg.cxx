@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,9 +102,9 @@ void SvxHlinkCtrl::StateChanged( USHORT nSID, SfxItemState eState,
 |************************************************************************/
 
 SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
-:   IconChoiceDialog( pParent, CUI_RES ( RID_SVXDLG_NEWHYPERLINK ) ),
-    maCtrl          ( SID_HYPERLINK_GETLINK, *pBindings, this ),
-    mpBindings      ( pBindings ),
+:	IconChoiceDialog( pParent, CUI_RES ( RID_SVXDLG_NEWHYPERLINK ) ),
+    maCtrl			( SID_HYPERLINK_GETLINK, *pBindings, this ),
+    mpBindings		( pBindings ),
     mbReadOnly      ( sal_False ),
     mbIsHTMLDoc     ( sal_False )
 {
@@ -138,7 +138,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
 
     // all tab pages set -> create mnemonics
-    //  CreateIconTextAutoMnemonics();  #99671# not useful, because this is not what user expects when using mnemonics on the pages
+    //	CreateIconTextAutoMnemonics();	#99671# not useful, because this is not what user expects when using mnemonics on the pages
 
     // create itemset for tabpages
     mpItemSet = new SfxItemSet( SFX_APP()->GetPool(), SID_HYPERLINK_GETLINK,
@@ -201,7 +201,7 @@ void SvxHpLinkDlg::Move()
     {
         // Pos&Size of this dialog-window
         Point aDlgPos ( GetPosPixel () );
-        Size aDlgSize ( GetSizePixel () );
+        Size aDlgSize (	GetSizePixel () );
 
         // Size of Office-Main-Window
         Size aWindowSize( SFX_APP()->GetTopWindow()->GetSizePixel() );

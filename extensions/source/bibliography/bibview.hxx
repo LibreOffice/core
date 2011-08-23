@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,8 @@
 #include "formcontrolcontainer.hxx"
 #include "bibshortcuthandler.hxx"
 
-class   BibGeneralPage;
-class   BibDataManager;
+class	BibGeneralPage;
+class	BibDataManager;
 
 namespace com{ namespace sun{ namespace star{ namespace awt{ class XFocusListener;}}}}
 
@@ -47,39 +47,39 @@ namespace bib
     class BibView : public BibWindow, public FormControlContainer
     {
     private:
-        BibDataManager*                                                             m_pDatMan;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable>        m_xDatMan;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener>    m_xGeneralPage;
-        BibGeneralPage*                                                             m_pGeneralPage;
+        BibDataManager*																m_pDatMan;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable> 		m_xDatMan;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener> 	m_xGeneralPage;
+        BibGeneralPage*																m_pGeneralPage;
 
     private:
         DECL_STATIC_LINK(BibView, CallMappingHdl, BibView*);
 
     protected:
         // Window overridables
-            virtual void    Resize();
+            virtual void	Resize();
 
         // FormControlContainer
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+        virtual	::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
                             getControlContainer();
 
         // XLoadListener equivalents
-        virtual void        _loaded( const ::com::sun::star::lang::EventObject& _rEvent );
-        virtual void        _reloaded( const ::com::sun::star::lang::EventObject& _rEvent );
+        virtual void		_loaded( const ::com::sun::star::lang::EventObject& _rEvent );
+        virtual void		_reloaded( const ::com::sun::star::lang::EventObject& _rEvent );
 
     public:
                             BibView( Window* _pParent, BibDataManager* _pDatMan, WinBits nStyle = WB_3DLOOK );
                             ~BibView();
 
-        void                UpdatePages();
+        void				UpdatePages();
 
-        virtual void        GetFocus();
+        virtual void		GetFocus();
 
-        virtual BOOL        HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
+        virtual BOOL		HandleShortCutKey( const KeyEvent& rKeyEvent );	// returns true, if key was handled
     };
 
 //.........................................................................
-}   // namespace bib
+}	// namespace bib
 //.........................................................................
 
 #endif

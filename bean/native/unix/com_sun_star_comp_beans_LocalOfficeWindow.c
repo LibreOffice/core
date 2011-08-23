@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,8 +75,8 @@ static void ThrowException(JNIEnv * env, char const * type, char const * msg) {
 JNIEXPORT jint JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindowSystemType
   (JNIEnv * env, jobject obj_this)
 {
-    (void) env; /* avoid warning about unused parameter */
-    (void) obj_this; /* avoid warning about unused parameter */
+    (void) env; /* avoid warning about unused parameter */ 
+    (void) obj_this; /* avoid warning about unused parameter */ 
     return (SYSTEM_XWINDOW);
 }
 
@@ -106,23 +106,23 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
     result = JAWT_GetAWT(env, &awt);
     if (result == JNI_FALSE)
         ThrowException(env, "java/lang/RuntimeException", "JAWT_GetAWT failed");
-
+    
                                 /* Get the drawing surface */
     if ((ds = awt.GetDrawingSurface(env, obj_this)) == NULL)
         return 0L;
-
+        
     /* Lock the drawing surface */
     lock = ds->Lock(ds);
     if ( (lock & JAWT_LOCK_ERROR) != 0)
         ThrowException(env, "java/lang/RuntimeException",
                        "Could not get AWT drawing surface.");
-
+    
     /* Get the drawing surface info */
     dsi = ds->GetDrawingSurfaceInfo(ds);
 
     /* Get the platform-specific drawing info */
     dsi_x11 = (JAWT_X11DrawingSurfaceInfo*)dsi->platformInfo;
-
+    
     drawable = dsi_x11->drawable;
     display  = dsi_x11->display;
 

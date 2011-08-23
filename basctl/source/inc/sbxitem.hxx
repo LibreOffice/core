@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,21 +31,21 @@
 #include "scriptdocument.hxx"
 #include <svl/poolitem.hxx>
 
-const USHORT BASICIDE_TYPE_UNKNOWN  =   0;
-const USHORT BASICIDE_TYPE_SHELL    =   1;
-const USHORT BASICIDE_TYPE_LIBRARY  =   2;
-const USHORT BASICIDE_TYPE_MODULE   =   3;
-const USHORT BASICIDE_TYPE_DIALOG   =   4;
-const USHORT BASICIDE_TYPE_METHOD   =   5;
+const USHORT BASICIDE_TYPE_UNKNOWN	=	0;
+const USHORT BASICIDE_TYPE_SHELL	=	1;
+const USHORT BASICIDE_TYPE_LIBRARY	=	2;
+const USHORT BASICIDE_TYPE_MODULE	=	3;
+const USHORT BASICIDE_TYPE_DIALOG	=	4;
+const USHORT BASICIDE_TYPE_METHOD	=	5;
 
 
 class SbxItem : public SfxPoolItem
 {
     ScriptDocument          m_aDocument;
-    String                  m_aLibName;
-    String                  m_aName;
-    String                  m_aMethodName;
-    USHORT                  m_nType;
+    String					m_aLibName;
+    String					m_aName;
+    String					m_aMethodName;
+    USHORT					m_nType; 
 
 public:
     TYPEINFO();
@@ -53,24 +53,24 @@ public:
     SbxItem( USHORT nWhich, const ScriptDocument& rDocument, const String& aLibName, const String& aName, const String& aMethodName, USHORT nType );
     SbxItem( const SbxItem& );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int				operator==( const SfxPoolItem& ) const;
 
     const ScriptDocument&
                             GetDocument() const { return m_aDocument; }
-    void                    SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
+    void					SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
-    const String&           GetLibName() const { return m_aLibName; }
-    void                    SetLibName( const String& aLibName ) { m_aLibName = aLibName; }
+    const String&			GetLibName() const { return m_aLibName; }
+    void					SetLibName( const String& aLibName ) { m_aLibName = aLibName; }
 
-    const String&           GetName() const { return m_aName; }
-    void                    SetName( const String& aName ) { m_aName = aName; }
+    const String&			GetName() const { return m_aName; }
+    void					SetName( const String& aName ) { m_aName = aName; }
 
-    const String&           GetMethodName() const { return m_aMethodName; }
-    void                    SetMethodName( const String& aMethodName ) { m_aMethodName = aMethodName; }
+    const String&			GetMethodName() const { return m_aMethodName; }
+    void					SetMethodName( const String& aMethodName ) { m_aMethodName = aMethodName; }
 
-    USHORT                  GetType() const { return m_nType; }
-    void                    SetType( USHORT nType ) { m_nType = nType; }
+    USHORT					GetType() const { return m_nType; }
+    void					SetType( USHORT nType ) { m_nType = nType; }
 };
 
 

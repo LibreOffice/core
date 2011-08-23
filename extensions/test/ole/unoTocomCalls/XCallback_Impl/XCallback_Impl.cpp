@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 
 
 // Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL,
+//      To build a separate proxy/stub DLL, 
 //      run nmake -f XCallback_Implps.mk in the project directory.
 
 #include "stdafx.h"

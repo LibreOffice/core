@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,25 +48,25 @@ public class XMLPackageDescription {
      * fill the package description tree by handling the SAXParser events
      */
     private class PackageDescriptionHandler extends DefaultHandler {
-
+        
         private XMLPackageDescription root;
         private Stack stack;
-
+        
         public PackageDescriptionHandler(XMLPackageDescription base) {
             root  = base;
             stack = new Stack();
         }
-
+        
         private PackageDescriptionHandler() {
             /* forbidden */
         }
-
+        
         public XMLPackageDescription getDescription() {
             return root;
         }
-
+        
         /* implement the DefaultHandler interface */
-
+        
         public void characters(char[] ch, int start, int length) {
             XMLPackageDescription entity = (XMLPackageDescription) stack.peek();
             entity.value = entity.value == null ? new String(ch, start, length)
@@ -81,12 +81,12 @@ public class XMLPackageDescription {
         public void startElement(String uri, String localName, String qName, Attributes attributes) {
             XMLPackageDescription parent = (XMLPackageDescription) stack.peek();
             XMLPackageDescription entity = new XMLPackageDescription();
-
+            
             entity.key = qName;
             for (int i = 0; i < attributes.getLength(); i++) {
                 entity.attributes.put(attributes.getQName(i), attributes.getValue(i));
             }
-
+            
             parent.add(entity);
             stack.push(entity);
         }
@@ -106,11 +106,11 @@ public class XMLPackageDescription {
             System.err.println("Warning:" + e);
         }
     }
-
+    
     /**
      * general storage for XML elements
      */
-
+    
     private String key;             /* XML element name       */
     private String value;           /* XML element characters */
     private Hashtable attributes;   /* XML element attributes */
@@ -122,11 +122,11 @@ public class XMLPackageDescription {
         attributes = new Hashtable();
         children   = new Vector();
     }
-
+    
     private void add(XMLPackageDescription p) {
         children.add(p);
     }
-
+    
     /**
      * helper routines to find content information
      */
@@ -134,12 +134,12 @@ public class XMLPackageDescription {
         return key;
     }
     protected String getAttribute(String key) {
-        return (String) attributes.get(key);
+        return (String) attributes.get(key);        
     }
     protected String getValue() {
         return value;
     }
-    protected XMLPackageDescription getElement(String key) {
+    protected XMLPackageDescription getElement(String key) {        
         return getElement(key, null, null);
     }
     protected XMLPackageDescription getElement(String key, String attrKey, String attrValue) {
@@ -165,7 +165,7 @@ public class XMLPackageDescription {
 
         if ((self != null) && self.equals(name))
             return this;
-
+        
         XMLPackageDescription found = null;
         for (Enumeration e = children.elements(); e.hasMoreElements();) {
             XMLPackageDescription child = (XMLPackageDescription) e.nextElement();
@@ -175,24 +175,24 @@ public class XMLPackageDescription {
                     break;
                 }
             }
-        }
+        }        
         return found;
     }
-
-    /**
+    
+    /** 
      * adjust the tree so that all children have a matching parent and not just
      * the ones they got by reading files in random order
      */
-    private void adjust(XMLPackageDescription root) {
+    private void adjust(XMLPackageDescription root) {        
         String self = (String) attributes.get("name");
-
+        
         for (int i = children.size() - 1; i >= 0; --i) {
             XMLPackageDescription child = (XMLPackageDescription) children.elementAt(i);
             String childParentName = child.getAttribute("parent");
             if (childParentName != null) {
-
+                
                 child.adjust(root);
-
+                
                 if ((childParentName != null) && (childParentName.length() > 0) && (! childParentName.equals(self))) {
                     XMLPackageDescription newParent = root.findPackage(childParentName);
                     if (newParent != null) {
@@ -203,10 +203,10 @@ public class XMLPackageDescription {
             }
         }
     }
-
+    
     protected void read() {
         PackageDescriptionHandler handler = new PackageDescriptionHandler(this);
-
+        
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser parser = factory.newSAXParser();
@@ -236,36 +236,36 @@ public class XMLPackageDescription {
         } catch (SAXException ex) {
             ex.printStackTrace();
         }
-
+        
         adjust(this);
     }
-
+    
     /* provide an iterator through the children */
     protected class Elements implements Enumeration {
-
+        
         Enumeration e;
 
         protected Elements() {
             e = children.elements();
-        }
+        }         
         public boolean hasMoreElements() {
             return e.hasMoreElements();
         }
         public Object nextElement() {
             return e.nextElement();
-        }
+        }     
     }
-
+    
     protected Enumeration elements() {
         return new Elements();
     }
-
-
+    
+    
     // FIXME: remove it, dump() is for testing only
     public void dump() {
         dump("");
     }
-
+    
     // FIXME: remove it, dump(String) is for testing only
     public void dump(String indent) {
         final String space = "    ";
@@ -280,7 +280,7 @@ public class XMLPackageDescription {
         if (key != null) {
             System.out.print(">");
         }
-
+        
         if ((value != null) && (value.length() > 0)) {
             String trimmedValue = value.trim();
             if (trimmedValue.length() > 60) {
@@ -290,7 +290,7 @@ public class XMLPackageDescription {
                 System.out.print(trimmedValue);
             }
         }
-
+        
         for (Enumeration e = children.elements() ; e.hasMoreElements() ;) {
             XMLPackageDescription current = (XMLPackageDescription) e.nextElement();
             System.out.println();
@@ -301,7 +301,7 @@ public class XMLPackageDescription {
             System.out.print(indent);
         }
         if (key != null) {
-           System.out.print("</" + key + ">");
+           System.out.print("</" + key + ">"); 
         }
     }
 }

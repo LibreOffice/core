@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -185,7 +185,7 @@ public class DocumentHelper
      *  of the document, they will become invalid.
      *  The Model instance itself, at which you called reload, will still be valid, it will
      *  automatically update its internal state after the reload.
-     *
+     * 
      *  Another consequence is that if the document does not have a view at all, it cannot
      *  be reloaded.
      */

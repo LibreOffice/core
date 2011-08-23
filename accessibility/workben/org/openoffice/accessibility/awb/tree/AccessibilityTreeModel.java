@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ public class AccessibilityTreeModel
 
 
     /** Calls to this method are dispatched to the given node but are
-        observed for exceptions.
+        observed for exceptions.  
     */
     synchronized public boolean isLeaf (Object aObject)
     {
@@ -89,7 +89,7 @@ public class AccessibilityTreeModel
             }
             catch (Exception aException)
             {
-                System.err.println ("caught exception in AccessibilityTreeModel.isLeaf():"
+                System.err.println ("caught exception in AccessibilityTreeModel.isLeaf():" 
                     + aException);
                 aException.printStackTrace (System.err);
             }
@@ -116,7 +116,7 @@ public class AccessibilityTreeModel
     synchronized public Object getChild (Object aParent, final int nIndex)
     {
         AccessibilityNode aChild = null;
-
+        
         final AccessibilityNode aParentNode = (AccessibilityNode)aParent;
 
         // Try to get an existing child from the super class object.
@@ -173,7 +173,7 @@ public class AccessibilityTreeModel
     }
 
 
-
+    
 
     /** Add a new child to the root node.
     */

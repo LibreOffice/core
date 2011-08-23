@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,8 +60,8 @@ int IconcDlgCmpUS_Impl( const void* p1, const void* p2 )
 }
 
 // some stuff for easier changes for SvtViewOptions
-static const sal_Char*      pViewOptDataName = "dialog data";
-#define VIEWOPT_DATANAME    ::rtl::OUString::createFromAscii( pViewOptDataName )
+static const sal_Char*		pViewOptDataName = "dialog data";
+#define VIEWOPT_DATANAME	::rtl::OUString::createFromAscii( pViewOptDataName )
 
 static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const String& rData )
 {
@@ -92,11 +92,11 @@ static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
 
 IconChoicePage::IconChoicePage( Window *pParent, const ResId &rResId,
                                 const SfxItemSet &rAttrSet )
-:   TabPage                   ( pParent, rResId ),
-    pSet                      ( &rAttrSet ),
-    bHasExchangeSupport       ( FALSE ),
-    pDialog                   ( NULL ),
-    bStandard                 ( FALSE )
+:	TabPage					  ( pParent, rResId ),
+    pSet					  ( &rAttrSet ),
+    bHasExchangeSupport		  ( FALSE ),
+    pDialog					  ( NULL ),
+    bStandard				  ( FALSE )
 {
     SetStyle ( GetStyle()  | WB_DIALOGCONTROL | WB_HIDE );
 }
@@ -269,7 +269,7 @@ void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
 IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
                                      const EIconChoicePos ePos,
                                      const SfxItemSet *pItemSet )//, BOOL bEditFmt, const String *pUserButtonText = 0 )
-:   ModalDialog         ( pParent, rResId ),
+: 	ModalDialog			( pParent, rResId ),
     meChoicePos     ( ePos ),
     maIconCtrl      ( this, WB_3DLOOK | WB_ICON | WB_BORDER |
                             WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
@@ -277,9 +277,9 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     mnCurrentPageId ( USHRT_MAX ),
 
     aOKBtn          ( this, WB_DEFBUTTON ),
-    aCancelBtn      ( this, WB_DEFBUTTON ),
-    aHelpBtn        ( this ),
-    aResetBtn       ( this ),
+    aCancelBtn		( this, WB_DEFBUTTON ),
+    aHelpBtn		( this ),
+    aResetBtn		( this ),
     pSet            ( pItemSet ),
     pOutSet         ( NULL ),
     pExampleSet     ( NULL ),
@@ -287,9 +287,9 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     nResId          ( rResId.GetId() ),
 
     bHideResetBtn   ( FALSE ),
-    bModal          ( FALSE ),
-    bInOK           ( FALSE ),
-    bModified       ( FALSE ),
+    bModal			( FALSE ),
+    bInOK			( FALSE ),
+    bModified		( FALSE ),
     bItemsReset     ( FALSE )
 {
     // IconChoiceCtrl-Settings
@@ -311,7 +311,7 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     }
 
     // Buttons
-    aOKBtn.SetClickHdl   ( LINK( this, IconChoiceDialog, OkHdl ) );
+    aOKBtn.SetClickHdl	 ( LINK( this, IconChoiceDialog, OkHdl ) );
     aOKBtn.SetHelpId( HID_ICCDIALOG_OK_BTN );
     aCancelBtn.SetHelpId( HID_ICCDIALOG_CANCEL_BTN );
     aResetBtn.SetClickHdl( LINK( this, IconChoiceDialog, ResetHdl ) );
@@ -331,15 +331,15 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
 IconChoiceDialog ::IconChoiceDialog ( SfxViewFrame *pViewFrame, Window* pParent, const ResId &rResId,
                    const SfxItemSet * = 0, BOOL bEditFmt = FALSE,
                    const String *pUserButtonText = 0 )
-:   meChoicePos     ( PosLeft ),    // Default erst ma Links
-    maIconCtrl      ( this, Die_Winbits ),
-    aOKBtn          ( this ),
-    pUserBtn        ( pUserButtonText? new PushButton(this): 0 ),
-    aCancelBtn      ( this ),
-    aHelpBtn        ( this ),
-    aResetBtn       ( this ),
-    aBaseFmtBtn     ( this ),
-    mnCurrentPageId ( 0 )
+: 	meChoicePos		( PosLeft ),	// Default erst ma Links
+    maIconCtrl		( this, Die_Winbits ),
+    aOKBtn			( this ),
+    pUserBtn		( pUserButtonText? new PushButton(this): 0 ),
+    aCancelBtn		( this ),
+    aHelpBtn		( this ),
+    aResetBtn		( this ),
+    aBaseFmtBtn		( this ),
+    mnCurrentPageId	( 0 )
 {
     FreeResource();
 }
@@ -382,7 +382,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
     }
 
     // remove Pagelist
-/*  for ( i=0; i<maPageList.Count(); i++ )
+/*	for ( i=0; i<maPageList.Count(); i++ )
     {
         IconChoicePageData* pData = (IconChoicePageData*)maPageList.GetObject ( i );
 
@@ -429,7 +429,7 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage( USHORT nId, const String& 
     pData->bOnDemand = bItemsOnDemand;
 
     USHORT *pId = new USHORT ( nId );
-    SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.InsertEntry( rIconText, rChoiceIcon );
+    SvxIconChoiceCtrlEntry*	pEntry = maIconCtrl.InsertEntry( rIconText, rChoiceIcon );
     pEntry->SetUserData ( (void*) pId );
     return pEntry;
 }
@@ -450,7 +450,7 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage( USHORT nId, const String& 
     pData->bOnDemand = bItemsOnDemand;
 
     USHORT *pId = new USHORT ( nId );
-    SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.InsertEntry( rIconText, rChoiceIcon, rChoiceIconHC );
+    SvxIconChoiceCtrlEntry*	pEntry = maIconCtrl.InsertEntry( rIconText, rChoiceIcon, rChoiceIconHC );
     pEntry->SetUserData ( (void*) pId );
     return pEntry;
 }
@@ -625,10 +625,10 @@ void IconChoiceDialog::ShowPage( USHORT nId )
 |
 \**********************************************************************/
 
-#define ICONCTRL_WIDTH_PIXEL       110
-#define ICONCTRL_HEIGHT_PIXEL       75
-#define MINSIZE_BUTTON_WIDTH        70
-#define MINSIZE_BUTTON_HEIGHT       22
+#define ICONCTRL_WIDTH_PIXEL	   110
+#define ICONCTRL_HEIGHT_PIXEL	    75
+#define MINSIZE_BUTTON_WIDTH		70
+#define MINSIZE_BUTTON_HEIGHT		22
 
 void IconChoiceDialog::Resize()
 {
@@ -1145,7 +1145,7 @@ void IconChoiceDialog::SetInputSet( const SfxItemSet* pInSet )
 
 // -----------------------------------------------------------------------
 
-//  Liefert die Pages, die ihre Sets onDemand liefern, das OutputItemSet.
+//	Liefert die Pages, die ihre Sets onDemand liefern, das OutputItemSet.
 const SfxItemSet* IconChoiceDialog::GetOutputItemSet ( USHORT nId )
 {
     IconChoicePageData * pData = GetPageData ( nId );
@@ -1361,7 +1361,7 @@ short IconChoiceDialog::Ok()
     if ( !pOutSet )
     {
         if ( !pExampleSet && pSet )
-            pOutSet = pSet->Clone( FALSE ); // ohne Items
+            pOutSet = pSet->Clone( FALSE );	// ohne Items
         else if ( pExampleSet )
             pOutSet = new SfxItemSet( *pExampleSet );
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -242,7 +242,7 @@ public class FilterComponent
             {
                 final String serviceName = "com.sun.star.beans.PropertyBag";
                 final XPropertyContainer column = (XPropertyContainer) UnoRuntime.queryInterface(XPropertyContainer.class, oQueryMetaData.xMSF.createInstance(serviceName));
-
+                
                 column.addProperty("Type", PropertyAttribute.BOUND, DataType.VARCHAR);
                 column.addProperty("Name", PropertyAttribute.BOUND, "");
                 column.addProperty("Value", (short)( PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE ), null );
@@ -388,7 +388,7 @@ public class FilterComponent
      * @param iWidth
      * @param FilterCount
      * @param _oQueryMetaData
-     * @param _firstHelpID
+     * @param _firstHelpID 
      */
     public FilterComponent(WizardDialog CurUnoDialog, XMultiServiceFactory _xMSF, int iStep, int iPosX, int iPosY, int iWidth, int FilterCount, QueryMetaData _oQueryMetaData, int _firstHelpID)
     {
@@ -525,8 +525,8 @@ public class FilterComponent
     }
 
     // -------------------------------------------------------------------------
-    //
-    //
+    // 
+    // 
     // -------------------------------------------------------------------------
     final class ControlRow
     {
@@ -719,7 +719,7 @@ public class FilterComponent
 
         /**
          * @returns true if the current condition is complete, all needed fields are filled with values.
-         * So we can enable the next.
+         * So we can enable the next. 
          */
         boolean isConditionComplete()
         {

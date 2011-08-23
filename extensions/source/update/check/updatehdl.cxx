@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -262,7 +262,7 @@ void UpdateHandler::setDownloadFile( const rtl::OUString& rFilePath )
     sal_Int32 nLast = rFilePath.lastIndexOf( '/' );
     if ( nLast != -1 )
     {
-        msDownloadFile = rFilePath.copy( nLast+1 );
+        msDownloadFile = rFilePath.copy( nLast+1 ); 
         const rtl::OUString aDownloadURL = rFilePath.copy( 0, nLast );
         osl::FileBase::getSystemPathFromFileURL( aDownloadURL, msDownloadPath );
     }
@@ -397,7 +397,7 @@ void SAL_CALL UpdateHandler::windowClosing( const lang::EventObject& e )
     awt::ActionEvent aActionEvt;
     aActionEvt.ActionCommand = COMMAND_CLOSE;
     aActionEvt.Source = e.Source;
-
+    
     actionPerformed( aActionEvt );
 }
 
@@ -449,8 +449,8 @@ void SAL_CALL UpdateHandler::handle( uno::Reference< task::XInteractionRequest >
             throw uno::RuntimeException( UNISTRING( "UpdateHandler: unable to obtain service manager from component context" ), *this );
 
         mxInteractionHdl = uno::Reference<task::XInteractionHandler> (
-                                xServiceManager->createInstanceWithContext(
-                                    UNISTRING( "com.sun.star.task.InteractionHandler" ),
+                                xServiceManager->createInstanceWithContext( 
+                                    UNISTRING( "com.sun.star.task.InteractionHandler" ), 
                                     mxContext),
                                 uno::UNO_QUERY_THROW);
         if( !mxInteractionHdl.is() )
@@ -514,7 +514,7 @@ void SAL_CALL UpdateHandler::notifyTermination( const lang::EventObject& )
 
         uno::Reference< lang::XComponent > xComponent( mxUpdDlg, uno::UNO_QUERY );
         if ( xComponent.is() )
-            xComponent->dispose();
+            xComponent->dispose(); 
 
         mxUpdDlg.clear();
     }
@@ -739,7 +739,7 @@ void UpdateHandler::loadStrings()
     msPauseBtn      = loadString( xBundle, RID_UPDATE_BTN_PAUSE );
     msResumeBtn     = loadString( xBundle, RID_UPDATE_BTN_RESUME );
     msCancelBtn     = loadString( xBundle, RID_UPDATE_BTN_CANCEL );
-
+    
     // all update states before UPDATESTATE_UPDATE_AVAIL don't have a bubble
     // so we can ignore them
     for ( int i=0; i < (int)(UPDATESTATES_COUNT - UPDATESTATE_UPDATE_AVAIL); i++ )
@@ -864,13 +864,13 @@ void UpdateHandler::setFullVersion( rtl::OUString& rString )
         throw uno::RuntimeException( UNISTRING( "getProductName: empty component context" ), *this );
 
     uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager() );
-
+    
     if( !xServiceManager.is() )
         throw uno::RuntimeException( UNISTRING( "getProductName: unable to obtain service manager from component context" ), *this );
-
-    uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
-        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.configuration.ConfigurationProvider" ), mxContext ),
-        uno::UNO_QUERY_THROW);
+    
+    uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider( 
+        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.configuration.ConfigurationProvider" ), mxContext ), 
+        uno::UNO_QUERY_THROW); 
 
     beans::PropertyValue aProperty;
     aProperty.Name  = UNISTRING( "nodepath" );
@@ -881,7 +881,7 @@ void UpdateHandler::setFullVersion( rtl::OUString& rString )
 
     uno::Reference< uno::XInterface > xConfigAccess;
     xConfigAccess = xConfigurationProvider->createInstanceWithArguments( UNISTRING("com.sun.star.configuration.ConfigurationAccess"),
-                                                                         aArgumentList );
+                                                                         aArgumentList );                                    
 
     uno::Reference< container::XNameAccess > xNameAccess( xConfigAccess, uno::UNO_QUERY_THROW );
 
@@ -942,7 +942,7 @@ bool UpdateHandler::showWarning( const rtl::OUString &rWarningText ) const
 
     uno::Reference< awt::XControl > xControl( mxUpdDlg, uno::UNO_QUERY );
     if ( !xControl.is() ) return bRet;
-
+ 
     uno::Reference< awt::XWindowPeer > xPeer = xControl->getPeer();
     if ( !xPeer.is() ) return bRet;
 
@@ -977,7 +977,7 @@ bool UpdateHandler::showWarning( const rtl::OUString &rWarningText ) const
 
     uno::Reference< lang::XComponent > xComponent( xMsgBox, uno::UNO_QUERY );
     if ( xComponent.is() )
-        xComponent->dispose();
+        xComponent->dispose(); 
 
     return bRet;
 }
@@ -991,7 +991,7 @@ bool UpdateHandler::showWarning( const rtl::OUString &rWarningText,
 
     uno::Reference< awt::XControl > xControl( mxUpdDlg, uno::UNO_QUERY );
     if ( !xControl.is() ) return bRet;
-
+ 
     uno::Reference< awt::XWindowPeer > xPeer = xControl->getPeer();
     if ( !xPeer.is() ) return bRet;
 
@@ -1048,7 +1048,7 @@ bool UpdateHandler::showWarning( const rtl::OUString &rWarningText,
 
     uno::Reference< lang::XComponent > xComponent( xMsgBox, uno::UNO_QUERY );
     if ( xComponent.is() )
-        xComponent->dispose();
+        xComponent->dispose(); 
 
     return bRet;
 }
@@ -1114,7 +1114,7 @@ void UpdateHandler::showControls( short nControls )
         nShiftMe = (short)(nControls >> i);
         showControl( msButtonIDs[i], (bool)(nShiftMe & 0x01) );
     }
-
+        
     nShiftMe = (short)(nControls >> THROBBER_CTRL);
     startThrobber( (bool)(nShiftMe & 0x01) );
 
@@ -1145,10 +1145,10 @@ void UpdateHandler::createDialog()
     }
 
     uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager() );
-
+    
     if( xServiceManager.is() )
     {
-        uno::Reference< frame::XDesktop > xDesktop(
+        uno::Reference< frame::XDesktop > xDesktop( 
                 xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.frame.Desktop"), mxContext ),
                 uno::UNO_QUERY );
         if ( xDesktop.is() )

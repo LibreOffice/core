@@ -40,9 +40,9 @@
 #include <CRC32.hxx>
 #include <mutexholder.hxx>
 
-#define UNBUFF_STREAM_DATA          0
-#define UNBUFF_STREAM_RAW           1
-#define UNBUFF_STREAM_WRAPPEDRAW    2
+#define UNBUFF_STREAM_DATA			0
+#define UNBUFF_STREAM_RAW			1
+#define UNBUFF_STREAM_WRAPPEDRAW	2
 
 class EncryptionData;
 typedef void* rtlCipher;

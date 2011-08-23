@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,13 +69,13 @@ namespace dbp
     //---------------------------------------------------------------------
     OTableSelectionPage::OTableSelectionPage(OControlWizard* _pParent)
         :OControlWizardPage(_pParent, ModuleRes(RID_PAGE_TABLESELECTION))
-        ,m_aData            (this, ModuleRes(FL_DATA))
-        ,m_aExplanation     (this, ModuleRes(FT_EXPLANATION))
-        ,m_aDatasourceLabel (this, ModuleRes(FT_DATASOURCE))
-        ,m_aDatasource      (this, ModuleRes(LB_DATASOURCE))
-        ,m_aSearchDatabase  (this, ModuleRes(PB_FORMDATASOURCE))
-        ,m_aTableLabel      (this, ModuleRes(FT_TABLE))
-        ,m_aTable           (this, ModuleRes(LB_TABLE))
+        ,m_aData			(this, ModuleRes(FL_DATA))
+        ,m_aExplanation		(this, ModuleRes(FT_EXPLANATION))
+        ,m_aDatasourceLabel	(this, ModuleRes(FT_DATASOURCE))
+        ,m_aDatasource		(this, ModuleRes(LB_DATASOURCE))
+        ,m_aSearchDatabase	(this, ModuleRes(PB_FORMDATASOURCE))
+        ,m_aTableLabel		(this, ModuleRes(FT_TABLE))
+        ,m_aTable			(this, ModuleRes(LB_TABLE))
     {
         FreeResource();
 
@@ -234,7 +234,7 @@ namespace dbp
     IMPL_LINK( OTableSelectionPage, OnListboxSelection, ListBox*, _pBox )
     {
         if (&m_aDatasource == _pBox)
-        {   // new data source selected
+        {	// new data source selected
             implFillTables();
         }
         else
@@ -296,7 +296,7 @@ namespace dbp
                     }
 
                     if (m_xDSContext->getByName(sCurrentDatasource) >>= xDatasource)
-                    {   // connect
+                    {	// connect
                         // get the default SDB interaction handler
                         Reference< XInteractionHandler > xHandler = getDialog()->getInteractionHandler(this);
                         if (!xHandler.is() )
@@ -353,7 +353,7 @@ namespace dbp
 
 
         if ( aSQLException.hasValue() )
-        {   // an SQLException (or derivee) was thrown ...
+        {	// an SQLException (or derivee) was thrown ...
             Reference< XInteractionRequest > xRequest = new OInteractionRequest(aSQLException);
             try
             {
@@ -466,12 +466,12 @@ namespace dbp
     //---------------------------------------------------------------------
     ODBFieldPage::ODBFieldPage( OControlWizard* _pParent )
         :OMaybeListSelectionPage(_pParent, ModuleRes(RID_PAGE_OPTION_DBFIELD))
-        ,m_aFrame           (this, ModuleRes(FL_DATABASEFIELD_EXPL))
-        ,m_aDescription     (this, ModuleRes(FT_DATABASEFIELD_EXPL))
-        ,m_aQuestion        (this, ModuleRes(FT_DATABASEFIELD_QUEST))
-        ,m_aStoreYes        (this, ModuleRes(RB_STOREINFIELD_YES))
-        ,m_aStoreNo         (this, ModuleRes(LB_STOREINFIELD))
-        ,m_aStoreWhere      (this, ModuleRes(RB_STOREINFIELD_NO))
+        ,m_aFrame			(this, ModuleRes(FL_DATABASEFIELD_EXPL))
+        ,m_aDescription		(this, ModuleRes(FT_DATABASEFIELD_EXPL))
+        ,m_aQuestion		(this, ModuleRes(FT_DATABASEFIELD_QUEST))
+        ,m_aStoreYes		(this, ModuleRes(RB_STOREINFIELD_YES))
+        ,m_aStoreNo			(this, ModuleRes(LB_STOREINFIELD))
+        ,m_aStoreWhere		(this, ModuleRes(RB_STOREINFIELD_NO))
     {
         FreeResource();
         announceControls(m_aStoreYes, m_aStoreNo, m_aStoreWhere);
@@ -501,7 +501,7 @@ namespace dbp
     }
 
 //.........................................................................
-}   // namespace dbp
+}	// namespace dbp
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

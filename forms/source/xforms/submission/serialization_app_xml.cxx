@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@
 
 CSerializationAppXML::CSerializationAppXML()
     : m_aFactory(utl::getProcessServiceFactory())
-    , m_aPipe(CSS::uno::Reference< CSS::io::XOutputStream > (m_aFactory->createInstance(
+    , m_aPipe(CSS::uno::Reference< CSS::io::XOutputStream > (m_aFactory->createInstance( 
         rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), CSS::uno::UNO_QUERY))
 {
     OSL_ENSURE(m_aPipe.is(), "cannot create Pipe");
 }
 
-CSS::uno::Reference< CSS::io::XInputStream >
+CSS::uno::Reference< CSS::io::XInputStream > 
 CSerializationAppXML::getInputStream()
 {
     // The pipes output is provided through it's
@@ -58,7 +58,7 @@ CSerializationAppXML::getInputStream()
     return CSS::uno::Reference< CSS::io::XInputStream >(m_aPipe, CSS::uno::UNO_QUERY);
 }
 
-void
+void 
 CSerializationAppXML::serialize_node(const CSS::uno::Reference< CSS::xml::dom::XNode >& rNode)
 {
     CSS::uno::Reference< CSS::xml::dom::XNode > aNode = rNode;
@@ -66,13 +66,13 @@ CSerializationAppXML::serialize_node(const CSS::uno::Reference< CSS::xml::dom::X
     {
         CSS::uno::Reference< CSS::xml::dom::XDocument > aDoc(rNode, CSS::uno::UNO_QUERY_THROW);
         aNode = CSS::uno::Reference< CSS::xml::dom::XNode >(aDoc->getDocumentElement(), CSS::uno::UNO_QUERY_THROW);
-    }
+    } 
     if (aNode->getNodeType() != CSS::xml::dom::NodeType_ELEMENT_NODE)
         return;
 
     // clone the node to a new document and serialize that document
     CSS::uno::Reference< CSS::lang::XUnoTunnel > aTunnel(aNode, CSS::uno::UNO_QUERY);
-    if (aTunnel.is())
+    if (aTunnel.is()) 
     {
         xmlNodePtr aNodePtr = reinterpret_cast< xmlNodePtr >( aTunnel->getSomething(CSS::uno::Sequence< sal_Int8 >()) );
         xmlDocPtr aDocPtr = xmlNewDoc((xmlChar*)"1.0");
@@ -82,9 +82,9 @@ CSerializationAppXML::serialize_node(const CSS::uno::Reference< CSS::xml::dom::X
             xmlChar *buffer = NULL;
             sal_Int32 size = 0;
             xmlDocDumpMemory(aDocPtr, &buffer, (int*)&size);
-
+        
             // write the xml into the pipe through it's XOutputStream interface
-            m_aPipe->writeBytes(CSS::uno::Sequence< sal_Int8 >((sal_Int8*)buffer, size));
+            m_aPipe->writeBytes(CSS::uno::Sequence< sal_Int8 >((sal_Int8*)buffer, size));            
             xmlFree(buffer);
         }
 
@@ -109,7 +109,7 @@ CSerializationAppXML::serialize_nodeset()
 
 void
 CSerializationAppXML::serialize()
-{
+{    
     if (!m_aFragment.is()) return;
 
     CSS::uno::Reference< CSS::xml::dom::XNode > cur = m_aFragment->getFirstChild();

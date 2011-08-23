@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@ import com.sun.star.form.binding.*;
  */
 public class TextValidator extends integration.forms.ControlValidator
 {
-
+    
     /** Creates a new instance of NumericValidator */
     public TextValidator( )
     {
@@ -56,7 +56,7 @@ public class TextValidator extends integration.forms.ControlValidator
         }
         return "";
     }
-
+    
     public boolean isValid( Object Value )
     {
         try
@@ -73,7 +73,7 @@ public class TextValidator extends integration.forms.ControlValidator
         }
         return false;
     }
-
+    
     private boolean isProperChunks( String value )
     {
         return ( value.length() % 3 ) == 0;

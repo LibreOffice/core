@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ public class AcceptLicenseCtrl extends PanelController {
         super("AcceptLicense", new AcceptLicense());
         helpFile = "String_Helpfile_AcceptLicense";
     }
-
+    
     public String getNext() {
         InstallData data = InstallData.getInstance();
 
@@ -48,23 +48,23 @@ public class AcceptLicenseCtrl extends PanelController {
             if ( data.olderVersionExists() ) {
                 return new String("InstallationImminent");
             } else if ( data.sameVersionExists() ) {
-                return new String("ChooseComponents");
+                return new String("ChooseComponents");            
             } else {
                 return new String("ChooseInstallationType");
             }
         } else {
-            return new String("ChooseDirectory");
+            return new String("ChooseDirectory");            
         }
     }
-
+    
     public String getPrevious() {
         return new String("Prologue");
-    }
+    }  
 
     public final String getHelpFileName () {
         return this.helpFile;
     }
-
+ 
     public void beforeShow() {
         String StringInstall = ResourceManager.getString("String_AcceptLicense");
         getSetupFrame().setButtonText(StringInstall, getSetupFrame().BUTTON_NEXT);
@@ -73,5 +73,5 @@ public class AcceptLicenseCtrl extends PanelController {
 
         getSetupFrame().setButtonSelected(getSetupFrame().BUTTON_CANCEL);
     }
-
+    
 }

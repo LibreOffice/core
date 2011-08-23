@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,48 +87,48 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *, void *)
     return JNI_VERSION_1_2;
 }
 
-JNIEXPORT jbyteArray JNICALL
+JNIEXPORT jbyteArray JNICALL 
 Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_getProcessID(JNIEnv *pJNIEnv, jclass clazz)
 {
     // Initialize global class and method references
-    g_jcWindowsAccessBridgeAdapter =
+    g_jcWindowsAccessBridgeAdapter = 
         static_cast< jclass > (pJNIEnv->NewGlobalRef(clazz));
     if (NULL == g_jcWindowsAccessBridgeAdapter) {
         return 0; /* jni error occured */
     }
-    g_jmRegisterTopWindow =
+    g_jmRegisterTopWindow = 
         pJNIEnv->GetStaticMethodID(clazz, "registerTopWindow", "(ILcom/sun/star/accessibility/XAccessible;)V");
     if (0 == g_jmRegisterTopWindow) {
         return 0; /* jni error occured */
     }
-    g_jmRevokeTopWindow =
+    g_jmRevokeTopWindow = 
         pJNIEnv->GetStaticMethodID(clazz, "revokeTopWindow", "(ILcom/sun/star/accessibility/XAccessible;)V");
     if (0 == g_jmRevokeTopWindow) {
         return 0; /* jni error occured */
     }
-
+    
     // Use the special protocol of XJavaVM.getJavaVM:  If the passed in
     // process ID has an extra 17th byte of value one, the returned any
     // contains a pointer to a jvmaccess::UnoVirtualMachine, instead of
     // the underlying JavaVM pointer:
     jbyte processID[17];
     rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8 *> (processID));
-    // #i51265# we need a jvmaccess::UnoVirtualMachine pointer for the
-    // uno_getEnvironment() call later.
+    // #i51265# we need a jvmaccess::UnoVirtualMachine pointer for the 
+    // uno_getEnvironment() call later. 
     processID[16] = 1;
-
+    
     // Copy the result into a java byte[] and return.
     jbyteArray jbaProcessID = pJNIEnv->NewByteArray(17);
     pJNIEnv->SetByteArrayRegion(jbaProcessID, 0, 17, processID);
     return jbaProcessID;
 }
 
-JNIEXPORT jboolean JNICALL
+JNIEXPORT jboolean JNICALL 
 Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEnv *, jclass, jlong pointer)
 {
     uno_Environment * pJava_environment = NULL;
     uno_Environment * pUno_environment = NULL;
-
+    
     try {
         // We get a non-refcounted pointer to a jvmaccess::VirtualMachine
         // from the XJavaVM service (the pointer is guaranteed to be valid
@@ -136,7 +136,7 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEn
         // convert the non-refcounted pointer into a refcounted one
         // immediately:
         g_xUnoVirtualMachine = reinterpret_cast< jvmaccess::UnoVirtualMachine * >(pointer);
-
+        
         if ( g_xUnoVirtualMachine.is() )
         {
             OUString sJava(RTL_CONSTASCII_USTRINGPARAM("java"));
@@ -144,21 +144,21 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEn
 
             OUString sCppu_current_lb_name(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
             uno_getEnvironment(&pUno_environment, sCppu_current_lb_name.pData, NULL);
-
+            
             if ( pJava_environment && pUno_environment )
             {
                 g_unoMapping = Mapping(pUno_environment, pJava_environment);
                 getCppuType((::com::sun::star::uno::Reference< XAccessible > *) 0).getDescription((typelib_TypeDescription **) & g_pTypeDescription);
             }
-
+            
             if ( pJava_environment )
             {
                 // release java environment
                 pJava_environment->release(pJava_environment);
                 pJava_environment = NULL;
             }
-
-            if ( pUno_environment )
+            
+            if ( pUno_environment ) 
             {
                 // release uno environment
                 pUno_environment->release(pUno_environment);
@@ -166,12 +166,12 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEn
             }
         }
     }
-
+    
     catch ( RuntimeException e)
     {
         OSL_TRACE("RuntimeException caught while initializing the mapping");
     }
-
+    
     if ( (0 != g_jmRegisterTopWindow) && (0 != g_jmRevokeTopWindow) )
     {
         ::Application::AddEventListener(g_aEventListenerLink);
@@ -192,13 +192,13 @@ JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *jvm, void *)
             g_jcWindowsAccessBridgeAdapter = NULL;
         }
     }
-
+    
     if ( NULL != g_pTypeDescription )
     {
         typelib_typedescription_release( reinterpret_cast< typelib_TypeDescription * > (g_pTypeDescription) );
         g_pTypeDescription = NULL;
     }
-
+    
     g_unoMapping.clear();
     g_xUnoVirtualMachine.clear();
 }
@@ -218,13 +218,13 @@ void handleWindowEvent(Window * pWindow, bool bShow)
     if ( pWindow && pWindow->IsTopWindow() )
     {
         ::com::sun::star::uno::Reference< XAccessible > xAccessible;
-
+    
         // Test for combo box - drop down floating windows first
         Window * pParentWindow = pWindow->GetParent();
 
         if ( pParentWindow )
         {
-            try
+            try 
             {
                 // The parent window of a combo box floating window should have the role COMBO_BOX
                 ::com::sun::star::uno::Reference< XAccessible > xParentAccessible(pParentWindow->GetAccessible());
@@ -261,7 +261,7 @@ void handleWindowEvent(Window * pWindow, bool bShow)
         }
 
         // We have to rely on the fact that Window::GetAccessible()->getAccessibleContext() returns a valid XAccessibleContext
-        // also for other menus than menubar or toplevel popup window. Otherwise we had to traverse the hierarchy to find the
+        // also for other menus than menubar or toplevel popup window. Otherwise we had to traverse the hierarchy to find the 
         // context object to this menu floater. This makes the call to Window->IsMenuFloatingWindow() obsolete.
         if ( ! xAccessible.is() )
             xAccessible = pWindow->GetAccessible();
@@ -280,8 +280,8 @@ void handleWindowEvent(Window * pWindow, bool bShow)
                 {
                     // g_jmRegisterTopWindow and g_jmRevokeTopWindow are ensured to be != 0 - otherwise
                     // the event listener would not have been attached.
-                    pJNIEnv->CallStaticVoidMethod(g_jcWindowsAccessBridgeAdapter,
-                        (bShow) ? g_jmRegisterTopWindow : g_jmRevokeTopWindow,
+                    pJNIEnv->CallStaticVoidMethod(g_jcWindowsAccessBridgeAdapter, 
+                        (bShow) ? g_jmRegisterTopWindow : g_jmRevokeTopWindow, 
                         (jint) GetHWND(pWindow), joXAccessible );
 
                     // Clear any exception that might have been occured.
@@ -297,7 +297,7 @@ void handleWindowEvent(Window * pWindow, bool bShow)
 long VCLEventListenerLinkFunc(void *, void * pData)
 {
     ::VclSimpleEvent const * pEvent = (::VclSimpleEvent const *) pData;
-
+    
     switch (pEvent->GetId())
     {
     case VCLEVENT_WINDOW_SHOW:
@@ -307,7 +307,7 @@ long VCLEventListenerLinkFunc(void *, void * pData)
         handleWindowEvent(((::VclWindowEvent const *) pEvent)->GetWindow(), false);
         break;
     }
-
+    
     return 0;
 }
 

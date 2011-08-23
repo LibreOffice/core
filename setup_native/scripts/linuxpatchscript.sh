@@ -4,7 +4,7 @@ MYUID=`id | sed "s/(.*//g" | sed "s/.*=//"`
 
 if [ $MYUID -ne 0 ]
 then
-    echo You need to have super-user permissions to run this patch script
+    echo You need to have super-user permissions to run this patch script 
     exit 1
 fi
 
@@ -57,7 +57,7 @@ if [ "x$KDERPM" != "x" ]; then
 fi
 
 echo
-rpm --upgrade -v --hash --prefix $PRODUCTINSTALLLOCATION --notriggers $RPMLIST
+rpm --upgrade -v --hash --prefix $PRODUCTINSTALLLOCATION --notriggers $RPMLIST 
 echo
 
 # Some RPM versions have problems with -U and --prefix

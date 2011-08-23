@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,7 +166,7 @@ namespace frm
     void OFormNavigationHelper::updateDispatches()
     {
         if ( !m_nConnectedFeatures )
-        {   // we don't have any dispatchers yet -> do the initial connect
+        {	// we don't have any dispatchers yet -> do the initial connect
             connectDispatchers();
             return;
         }
@@ -211,7 +211,7 @@ namespace frm
     void OFormNavigationHelper::connectDispatchers()
     {
         if ( m_nConnectedFeatures )
-        {   // already connected -> just do an update
+        {	// already connected -> just do an update
             updateDispatches();
             return;
         }
@@ -251,7 +251,7 @@ namespace frm
             {
                 if ( aFeature->second.xDispatcher.is() )
                     aFeature->second.xDispatcher->removeStatusListener( static_cast< XStatusListener* >( this ), aFeature->second.aURL );
-
+            
                 aFeature->second.xDispatcher = NULL;
                 aFeature->second.bCachedState = sal_False;
                 aFeature->second.aCachedAdditionalState.clear();

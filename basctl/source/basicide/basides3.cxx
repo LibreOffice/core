@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #include <baside2.hxx>
 #include <baside3.hxx>
 #include <basobj.hxx>
-#include <localizationmgr.hxx>
+#include <localizationmgr.hxx> 
 #include <dlgedview.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -59,7 +59,7 @@ using namespace ::com::sun::star::io;
 DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName )
 {
     bCreatingWindow = TRUE;
-
+    
     ULONG nKey = 0;
     DialogWindow* pWin = 0;
     String aLibName( rLibName );
@@ -80,7 +80,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
     {
         try
         {
-            Reference< io::XInputStreamProvider > xISP;
+            Reference< io::XInputStreamProvider > xISP;			
             if ( rDocument.hasDialog( aLibName, aDlgName ) )
                 rDocument.getDialog( aLibName, aDlgName, xISP );
             else
@@ -108,7 +108,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
         catch ( uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
-        }
+        }						
     }
     else
     {
@@ -144,7 +144,7 @@ DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const 
     {
         if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( DialogWindow ) ) )
         {
-            if ( !rLibName.Len() )  // nur irgendeins finden...
+            if ( !rLibName.Len() )	// nur irgendeins finden...
                 pDlgWin = (DialogWindow*)pWin;
             else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rDlgName )
                 pDlgWin = (DialogWindow*)pWin;

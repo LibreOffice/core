@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne, const SfxItemSet* 
         bOne = pItem->GetValue();
 
     mpCharMapData =  new SvxCharMapData( this, bOne, &CUI_MGR() );
-
+    
     SFX_ITEMSET_ARG( pSet, pCharItem, SfxInt32Item, SID_ATTR_CHAR, FALSE );
     if ( pCharItem )
         SetChar( pCharItem->GetValue() );

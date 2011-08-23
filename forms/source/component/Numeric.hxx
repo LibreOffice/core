@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ class ONumericModel
                 :public OEditBaseModel
 {
 private:
-    ::com::sun::star::uno::Any          m_aSaveValue;
+    ::com::sun::star::uno::Any			m_aSaveValue;
 protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
@@ -93,7 +93,7 @@ public:
 };
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 #endif // _FORMS_NUMERIC_HXX_

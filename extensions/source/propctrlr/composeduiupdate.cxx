@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,9 +65,9 @@ namespace pcr
     //====================================================================
     namespace
     {
-        struct HandlerLess : public ::std::binary_function  <   Reference< XPropertyHandler >
+        struct HandlerLess : public ::std::binary_function  <	Reference< XPropertyHandler >
                                                             ,   Reference< XPropertyHandler >
-                                                            ,   bool
+                                                            ,	bool
                                                             >
         {
             bool operator()( const Reference< XPropertyHandler >& lhs, const Reference< XPropertyHandler >& rhs) const
@@ -379,7 +379,7 @@ namespace pcr
             // register listeners themself
         m_rMaster.getDelegatorUI()->registerControlObserver( _Observer );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL CachedInspectorUI::revokeControlObserver( const Reference< XPropertyControlObserver >& _Observer ) throw (RuntimeException)
     {

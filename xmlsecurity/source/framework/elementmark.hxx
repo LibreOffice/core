@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,38 +38,38 @@ class ElementMark
 /****** elementmark.hxx/CLASS ElementMark *************************************
  *
  *   NAME
- *  ElementMark -- Class to manipulate an element mark
+ *	ElementMark -- Class to manipulate an element mark
  *
  *   FUNCTION
- *  This class maintains the security id, buffer id and its type for a
- *  buffer node.
+ *	This class maintains the security id, buffer id and its type for a
+ *	buffer node.
  *
  *   HISTORY
- *  05.01.2004 -    implemented
+ *	05.01.2004 -	implemented
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
 protected:
     /* the BufferNode maintained by this object */
     BufferNode* m_pBufferNode;
-
+    
     /* the security Id */
     sal_Int32 m_nSecurityId;
-
+    
     /* the buffer Id */
     sal_Int32 m_nBufferId;
-
+    
     /*
      * the type value, is one of following values:
-     * TYPEOFELEMENTMARK - the default value, represents an blocker if
+     * TYPEOFELEMENTMARK - the default value, represents an blocker if 
      *                     not changed
      * TYPEOFELEMENTCOLLECTOR - represents an ElementCollector
      */
     com::sun::star::xml::crypto::sax::ElementMarkType m_type;
-
+    
 public:
     ElementMark(sal_Int32 nSecurityId, sal_Int32 nBufferId);
     virtual ~ElementMark() {};

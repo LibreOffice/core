@@ -120,7 +120,7 @@ public class HelpWindow
         {}
     }
 
-    public void actionPerformed (java.awt.event.ActionEvent e)
+    public void actionPerformed (java.awt.event.ActionEvent e) 
     {
         if (e.getActionCommand().equals("Prev"))
         {

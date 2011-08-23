@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,16 +39,16 @@
 class OfaMSFilterTabPage : public SfxTabPage
 {
     FixedLine       aMSWordGB;
-    CheckBox        aWBasicCodeCB;
-    CheckBox        aWBasicWbctblCB;
-    CheckBox        aWBasicStgCB;
+    CheckBox		aWBasicCodeCB;
+    CheckBox		aWBasicWbctblCB;
+    CheckBox		aWBasicStgCB;
     FixedLine       aMSExcelGB;
-    CheckBox        aEBasicCodeCB;
-    CheckBox        aEBasicExectblCB;
-    CheckBox        aEBasicStgCB;
+    CheckBox		aEBasicCodeCB;
+    CheckBox		aEBasicExectblCB;
+    CheckBox		aEBasicStgCB;
     FixedLine       aMSPPointGB;
-    CheckBox        aPBasicCodeCB;
-    CheckBox        aPBasicStgCB;
+    CheckBox		aPBasicCodeCB;
+    CheckBox		aPBasicStgCB;
 
     OfaMSFilterTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage();
@@ -57,11 +57,11 @@ class OfaMSFilterTabPage : public SfxTabPage
     DECL_LINK( LoadExcelBasicCheckHdl_Impl, CheckBox* );
 public:
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
 class OfaMSFilterTabPage2 : public SfxTabPage
@@ -74,10 +74,10 @@ class OfaMSFilterTabPage2 : public SfxTabPage
 
         void            CheckEntryPos(ULONG nPos, USHORT nCol, BOOL bChecked);
         SvButtonState   GetCheckButtonState( SvLBoxEntry*, USHORT nCol ) const;
-        void            SetCheckButtonState( SvLBoxEntry*, USHORT nCol, SvButtonState );
+        void			SetCheckButtonState( SvLBoxEntry*, USHORT nCol, SvButtonState );
     protected:
-        virtual void    SetTabs();
-        virtual void    HBarClick();
+        virtual void	SetTabs();
+        virtual void	HBarClick();
         virtual void    KeyInput( const KeyEvent& rKEvt );
 
     public:
@@ -92,7 +92,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
            sChgToFromWriter,
            sChgToFromCalc,
            sChgToFromImpress;
-    SvLBoxButtonData*   pCheckButtonData;
+    SvLBoxButtonData*	pCheckButtonData;
 
     OfaMSFilterTabPage2( Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage2();
@@ -104,8 +104,8 @@ public:
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
 

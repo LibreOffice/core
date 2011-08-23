@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 #define _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 
-#define EDITOR_LIST_APPEND              (sal_uInt16)-1
+#define EDITOR_LIST_APPEND	            (sal_uInt16)-1
 #define EDITOR_LIST_REPLACE_EXISTING    (sal_uInt16)-1
 
 /** === begin UNO includes === **/

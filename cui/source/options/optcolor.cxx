@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ using namespace ::svtools;
 #define GROUP_CALC      3
 #define GROUP_DRAW      4
 #define GROUP_BASIC     5
-#define GROUP_SQL       6
+#define GROUP_SQL		6
 
 class SvxExtFixedText_Impl : public FixedText
 {
@@ -228,13 +228,13 @@ class ColorConfigWindow_Impl : public Window
     ColorListBox    aSQLCommentLB;
     Window          aSQLCommentWN;
 
-    ::std::vector< SvxExtFixedText_Impl*>   aChapters;
-    ::std::vector< Window* >                aChapterWins;
-    ::std::vector< FixedText* >             aFixedTexts;
-    ::std::vector< CheckBox* >              aCheckBoxes;
-    ::std::vector< ColorListBox* >          aColorBoxes;
-    ::std::vector< Window* >                aWindows; // [ColorConfigEntryCount]
-    ::std::vector< ::boost::shared_ptr<SvxExtFixedText_Impl> >  m_aExtensionTitles;
+    ::std::vector< SvxExtFixedText_Impl*>	aChapters;
+    ::std::vector< Window* >				aChapterWins;
+    ::std::vector< FixedText* >				aFixedTexts;
+    ::std::vector< CheckBox* >				aCheckBoxes;
+    ::std::vector< ColorListBox* >			aColorBoxes;
+    ::std::vector< Window* >				aWindows; // [ColorConfigEntryCount]
+    ::std::vector< ::boost::shared_ptr<SvxExtFixedText_Impl> >	m_aExtensionTitles;
 
     SvtModuleOptions    m_aModuleOptions;
 
@@ -581,14 +581,14 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aFixedTexts[BASICSTRING     ] = &aBasicStringFT;
     aFixedTexts[BASICOPERATOR   ] = &aBasicOperatorFT;
     aFixedTexts[BASICKEYWORD    ] = &aBasicKeywordFT;
-    aFixedTexts[BASICERROR      ] = &aBasicErrorFT;
-    aFixedTexts[SQLIDENTIFIER   ] = &aSQLIdentifierFT;
-    aFixedTexts[SQLNUMBER       ] = &aSQLNumberFT;
-    aFixedTexts[SQLSTRING       ] = &aSQLStringFT;
-    aFixedTexts[SQLOPERATOR     ] = &aSQLOperatorFT;
-    aFixedTexts[SQLKEYWORD      ] = &aSQLKeywordFT;
-    aFixedTexts[SQLPARAMETER    ] = &aSQLParameterFT;
-    aFixedTexts[SQLCOMMENT      ] = &aSQLCommentFT;
+    aFixedTexts[BASICERROR		] = &aBasicErrorFT;
+    aFixedTexts[SQLIDENTIFIER	] = &aSQLIdentifierFT;
+    aFixedTexts[SQLNUMBER		] = &aSQLNumberFT;
+    aFixedTexts[SQLSTRING		] = &aSQLStringFT;
+    aFixedTexts[SQLOPERATOR		] = &aSQLOperatorFT;
+    aFixedTexts[SQLKEYWORD		] = &aSQLKeywordFT;
+    aFixedTexts[SQLPARAMETER	] = &aSQLParameterFT;
+    aFixedTexts[SQLCOMMENT		] = &aSQLCommentFT;
 
     aColorBoxes[DOCCOLOR            ] = &aDocColorLB             ;
     aColorBoxes[DOCBOUNDARIES       ] = &aDocBoundLB             ;
@@ -620,20 +620,20 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aColorBoxes[CALCREFERENCE       ] = &aCalcReferenceLB        ;
     aColorBoxes[CALCNOTESBACKGROUND     ] = &aCalcNotesBackLB            ;
     aColorBoxes[DRAWGRID            ] = &aDrawGridLB             ;
-    aColorBoxes[BASICIDENTIFIER     ] = &aBasicIdentifierLB;
-    aColorBoxes[BASICCOMMENT        ] = &aBasicCommentLB;
-    aColorBoxes[BASICNUMBER         ] = &aBasicNumberLB;
-    aColorBoxes[BASICSTRING         ] = &aBasicStringLB;
-    aColorBoxes[BASICOPERATOR       ] = &aBasicOperatorLB;
-    aColorBoxes[BASICKEYWORD        ] = &aBasicKeywordLB;
-    aColorBoxes[BASICERROR          ] = &aBasicErrorLB;
-    aColorBoxes[SQLIDENTIFIER       ] = &aSQLIdentifierLB;
-    aColorBoxes[SQLNUMBER           ] = &aSQLNumberLB;
-    aColorBoxes[SQLSTRING           ] = &aSQLStringLB;
-    aColorBoxes[SQLOPERATOR         ] = &aSQLOperatorLB;
-    aColorBoxes[SQLKEYWORD          ] = &aSQLKeywordLB;
-    aColorBoxes[SQLPARAMETER        ] = &aSQLParameterLB;
-    aColorBoxes[SQLCOMMENT          ] = &aSQLCommentLB;
+    aColorBoxes[BASICIDENTIFIER		] = &aBasicIdentifierLB;
+    aColorBoxes[BASICCOMMENT		] = &aBasicCommentLB;
+    aColorBoxes[BASICNUMBER			] = &aBasicNumberLB;
+    aColorBoxes[BASICSTRING			] = &aBasicStringLB;
+    aColorBoxes[BASICOPERATOR		] = &aBasicOperatorLB;
+    aColorBoxes[BASICKEYWORD		] = &aBasicKeywordLB;
+    aColorBoxes[BASICERROR			] = &aBasicErrorLB;
+    aColorBoxes[SQLIDENTIFIER		] = &aSQLIdentifierLB;
+    aColorBoxes[SQLNUMBER			] = &aSQLNumberLB;
+    aColorBoxes[SQLSTRING			] = &aSQLStringLB;
+    aColorBoxes[SQLOPERATOR			] = &aSQLOperatorLB;
+    aColorBoxes[SQLKEYWORD			] = &aSQLKeywordLB;
+    aColorBoxes[SQLPARAMETER		] = &aSQLParameterLB;
+    aColorBoxes[SQLCOMMENT			] = &aSQLCommentLB;
 
     aWindows[DOCCOLOR            ] = &aDocColorWN             ;
     aWindows[DOCBOUNDARIES       ] = &aDocBoundWN             ;
@@ -672,13 +672,13 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aWindows[BASICOPERATOR       ] = &aBasicOperatorWN;
     aWindows[BASICKEYWORD        ] = &aBasicKeywordWN;
     aWindows[BASICERROR          ] = &aBasicErrorWN;
-    aWindows[SQLIDENTIFIER       ] = &aSQLIdentifierWN;
-    aWindows[SQLNUMBER           ] = &aSQLNumberWN;
-    aWindows[SQLSTRING           ] = &aSQLStringWN;
-    aWindows[SQLOPERATOR         ] = &aSQLOperatorWN;
-    aWindows[SQLKEYWORD          ] = &aSQLKeywordWN;
-    aWindows[SQLPARAMETER        ] = &aSQLParameterWN;
-    aWindows[SQLCOMMENT          ] = &aSQLCommentWN;
+    aWindows[SQLIDENTIFIER		 ] = &aSQLIdentifierWN;
+    aWindows[SQLNUMBER			 ] = &aSQLNumberWN;
+    aWindows[SQLSTRING			 ] = &aSQLStringWN;
+    aWindows[SQLOPERATOR	     ] = &aSQLOperatorWN;
+    aWindows[SQLKEYWORD		     ] = &aSQLKeywordWN;
+    aWindows[SQLPARAMETER	     ] = &aSQLParameterWN;
+    aWindows[SQLCOMMENT		     ] = &aSQLCommentWN;
 
     aChapters.push_back(&aGeneralFT); aChapterWins.push_back(&aGeneralBackWN);
     aChapters.push_back(&aWriterFT);  aChapterWins.push_back(&aWriterBackWN);
@@ -961,8 +961,8 @@ class ColorConfigCtrl_Impl : public Control
     String                  sPreview;
     ColorConfigWindow_Impl  aScrollWindow;
 
-    EditableColorConfig*            pColorConfig;
-    EditableExtendedColorConfig*    pExtColorConfig;
+    EditableColorConfig*			pColorConfig;
+    EditableExtendedColorConfig*	pExtColorConfig;
 
     long            nScrollPos;
 
@@ -1329,7 +1329,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ColorListBox*, pBox)
             }
             else
             {
-                Color aColor = pBox->GetSelectEntryColor();     // #i14869# no Color&, 'cause it's a ref to a temp object on the stack!
+                Color aColor = pBox->GetSelectEntryColor();		// #i14869# no Color&, 'cause it's a ref to a temp object on the stack!
                 aColorEntry.nColor = aColor.GetColor();
                 if(aScrollWindow.aWindows[i])
                     aScrollWindow.aWindows[i]->SetBackground(Wallpaper(aColor));
@@ -1354,7 +1354,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ColorListBox*, pBox)
             if(pBox && aScrollWindow.aColorBoxes[i] == pBox)
             {
                 ExtendedColorConfigValue aColorEntry = pExtColorConfig->GetComponentColorConfigValue(sComponentName,k);
-                Color aColor = pBox->GetSelectEntryColor();     // #i14869# no Color&, 'cause it's a ref to a temp object on the stack!
+                Color aColor = pBox->GetSelectEntryColor();		// #i14869# no Color&, 'cause it's a ref to a temp object on the stack!
                 aColorEntry.setColor(aColor.GetColor());
                 if( !pBox->GetSelectEntryPos() ) // auto color
                 {

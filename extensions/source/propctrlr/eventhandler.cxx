@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -525,14 +525,14 @@ namespace pcr
     {
         return getImplementationName_static();
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL EventHandler::supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException)
     {
         StlSyntaxSequence< ::rtl::OUString > aAllServices( getSupportedServiceNames() );
         return ::std::find( aAllServices.begin(), aAllServices.end(), ServiceName ) != aAllServices.end();
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL EventHandler::getSupportedServiceNames(  ) throw (RuntimeException)
     {
@@ -544,7 +544,7 @@ namespace pcr
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.EventHandler" ) );
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL EventHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
@@ -552,7 +552,7 @@ namespace pcr
         aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.inspection.EventHandler" ) );
         return aSupported;
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL EventHandler::Create( const Reference< XComponentContext >& _rxContext )
     {
@@ -626,7 +626,7 @@ namespace pcr
 
         return makeAny( aPropertyValue );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL EventHandler::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
@@ -659,7 +659,7 @@ namespace pcr
         aEvent.NewValue <<= aNewScriptEvent;
         m_aPropertyListeners.notify( aEvent, &XPropertyChangeListener::propertyChange );
     }
-
+    
     //--------------------------------------------------------------------
     Any SAL_CALL EventHandler::convertToPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
@@ -687,7 +687,7 @@ namespace pcr
         aAssignedScript.ScriptCode = sNewScriptCode;
         return makeAny( aAssignedScript );
     }
-
+    
     //--------------------------------------------------------------------
     Any SAL_CALL EventHandler::convertToControlValue( const ::rtl::OUString& /*_rPropertyName*/, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {
@@ -752,13 +752,13 @@ namespace pcr
 
         return makeAny( sScript );
     }
-
+    
     //--------------------------------------------------------------------
     PropertyState SAL_CALL EventHandler::getPropertyState( const ::rtl::OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
     {
         return PropertyState_DIRECT_VALUE;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL EventHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException)
     {
@@ -767,14 +767,14 @@ namespace pcr
             throw NullPointerException();
         m_aPropertyListeners.addListener( _rxListener );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL EventHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_aPropertyListeners.removeListener( _rxListener );
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< Property > SAL_CALL EventHandler::getSupportedProperties() throw (RuntimeException)
     {
@@ -848,21 +848,21 @@ namespace pcr
             ::std::select2nd< ::std::map< EventId, Property >::value_type >() );
         return aReturn;
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL EventHandler::getSupersededProperties( ) throw (RuntimeException)
     {
         // none
         return Sequence< ::rtl::OUString >( );
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL EventHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         // none
         return Sequence< ::rtl::OUString >( );
     }
-
+    
     //--------------------------------------------------------------------
     LineDescriptor SAL_CALL EventHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
@@ -886,13 +886,13 @@ namespace pcr
         aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Events" ) );
         return aDescriptor;
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL EventHandler::isComposable( const ::rtl::OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
     {
         return sal_False;
     }
-
+    
     //--------------------------------------------------------------------
     InteractiveSelectionResult SAL_CALL EventHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
@@ -967,13 +967,13 @@ namespace pcr
 
         return InteractiveSelectionResult_Success;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL EventHandler::actuatingPropertyChanged( const ::rtl::OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
         DBG_ERROR( "EventHandler::actuatingPropertyChanged: no actuating properties -> no callback (well, this is how it *should* be!)" );
     }
-
+    
     //--------------------------------------------------------------------
     IMPLEMENT_FORWARD_XCOMPONENT( EventHandler, EventHandler_Base )
 

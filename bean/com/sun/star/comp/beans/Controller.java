@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public class Controller
     //==============================================================
     // com.sun.star.frame.XController
     //--------------------------------------------------------------
-
+    
     public void attachFrame( /*IN*/ com.sun.star.frame.XFrame xFrame )
     {
         xController.attachFrame( xFrame );
@@ -92,16 +92,16 @@ public class Controller
     //==============================================================
     // com.sun.star.frame.XDispatchProvider
     //--------------------------------------------------------------
-
-    public com.sun.star.frame.XDispatch queryDispatch(
-            /*IN*/ com.sun.star.util.URL aURL,
-            /*IN*/ String aTargetFrameName,
+    
+    public com.sun.star.frame.XDispatch queryDispatch( 
+            /*IN*/ com.sun.star.util.URL aURL, 
+            /*IN*/ String aTargetFrameName, 
             /*IN*/ int nSearchFlags )
     {
         return xDispatchProvider.queryDispatch( aURL, aTargetFrameName, nSearchFlags );
     }
 
-    public com.sun.star.frame.XDispatch[] queryDispatches(
+    public com.sun.star.frame.XDispatch[] queryDispatches( 
             /*IN*/ com.sun.star.frame.DispatchDescriptor[] aRequests )
     {
         return xDispatchProvider.queryDispatches( aRequests );

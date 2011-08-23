@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,23 +51,23 @@ public class UninstallationCompletedCtrl extends PanelController {
     public void beforeShow() {
         InstallData installData = InstallData.getInstance();
         ProductDescription productData = SetupDataProvider.getProductDescription();
-
+        
         getSetupFrame().setButtonEnabled(false, getSetupFrame().BUTTON_PREVIOUS);
         getSetupFrame().setButtonEnabled(false, getSetupFrame().BUTTON_CANCEL);
         getSetupFrame().setButtonEnabled(false, getSetupFrame().BUTTON_HELP);
         getSetupFrame().removeButtonIcon(getSetupFrame().BUTTON_NEXT);
         getSetupFrame().setButtonSelected(getSetupFrame().BUTTON_NEXT);
-
+        
         UninstallationCompleted panel = (UninstallationCompleted)getPanel();
         panel.setDetailsButtonActionCommand(getSetupFrame().ACTION_DETAILS);
         panel.addDetailsButtonActionListener(getSetupFrame().getSetupActionListener());
-
+        
         if (( installData.isCustomInstallation() ) && ( ! installData.isMaskedCompleteUninstallation() )) {
             String dialogText = ResourceManager.getString("String_UninstallationCompleted2_Partial");
-            panel.setDialogText(dialogText);
+            panel.setDialogText(dialogText);            
         }
-
-        if ( installData.isAbortedInstallation() ) {
+        
+        if ( installData.isAbortedInstallation() ) { 
             String titleText = ResourceManager.getString("String_UninstallationCompleted1_Abort");
             panel.setTitleText(titleText);
             String dialogText = ResourceManager.getString("String_UninstallationCompleted2_Abort");
@@ -76,26 +76,26 @@ public class UninstallationCompletedCtrl extends PanelController {
             String titleText = ResourceManager.getString("String_UninstallationCompleted1_Error");
             panel.setTitleText(titleText);
             String dialogText = ResourceManager.getString("String_UninstallationCompleted2_Error");
-            panel.setDialogText(dialogText);
+            panel.setDialogText(dialogText);            
         }
 
         htmlInfoText = InfoCtrl.setHtmlFrame("header", htmlInfoText);
         htmlInfoText = InfoCtrl.setInstallLogInfoText(productData, htmlInfoText);
         htmlInfoText = InfoCtrl.setHtmlFrame("end", htmlInfoText);
     }
-
+    
     public String getNext() {
         return null;
     }
-
+    
     public String getPrevious() {
         return null;
     }
-
+    
     public final String getHelpFileName () {
         return this.helpFile;
     }
-
+    
     public String getDialogText() {
         return htmlInfoText;
     }

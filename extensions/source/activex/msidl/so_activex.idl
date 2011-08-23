@@ -29,36 +29,36 @@ import "ocidl.idl";
 ]
 interface ISOComWindowPeer : IDispatch
 {
-    [id(1), helpstring("method getWindowHandle")]
+    [id(1), helpstring("method getWindowHandle")] 
                 HRESULT getWindowHandle( [in] SAFEARRAY(VARIANT) procId,
                                          [in] short s,
                                          [out,retval] long* ret);
 
-    [id(2), helpstring("method getToolkit")]
+    [id(2), helpstring("method getToolkit")] 
                 HRESULT getToolkit( [out,retval] IDispatch** retVal );
 
-    [id(3), helpstring("method setPointer")]
+    [id(3), helpstring("method setPointer")] 
                 HRESULT setPointer( [in] IDispatch* xPointer );
 
-    [id(4), helpstring("method setBackground")]
+    [id(4), helpstring("method setBackground")] 
                 HRESULT setBackground( [in] int nColor );
 
-    [id(5), helpstring("method invalidate")]
+    [id(5), helpstring("method invalidate")] 
                 HRESULT invalidate( [in] short );
 
-    [id(6), helpstring("method invalidateRect")]
+    [id(6), helpstring("method invalidateRect")] 
                 HRESULT invalidateRect( [in] IDispatch* aRect, [in] short nFlags );
 
-    [id(7), helpstring("method dispose")]
+    [id(7), helpstring("method dispose")] 
                 HRESULT dispose();
 
-    [id(8), helpstring("method addEventListener")]
+    [id(8), helpstring("method addEventListener")] 
                 HRESULT addEventListener( [in] IDispatch* xListener );
 
-    [id(9), helpstring("method removeEventListener")]
+    [id(9), helpstring("method removeEventListener")] 
                 HRESULT removeEventListener( [in] IDispatch* xListener );
 
-    [propget, id(10), helpstring("property_implementedInterfaces")]
+    [propget, id(10), helpstring("property_implementedInterfaces")] 
                 HRESULT Bridge_implementedInterfaces([out, retval] SAFEARRAY(BSTR) *pVal);
 };
 
@@ -71,20 +71,20 @@ interface ISOComWindowPeer : IDispatch
 ]
 interface ISODispatchInterceptor : IDispatch
 {
-//com.sun.star.frame.XDispatchProviderInterceptor
+//com.sun.star.frame.XDispatchProviderInterceptor 
 
     [id(1), helpstring("method getSlaveDispatchProvider")]
                 HRESULT getSlaveDispatchProvider( [out,retval] IDispatch** retVal );
 
-    [id(2), helpstring("method setSlaveDispatchProvider")]
+    [id(2), helpstring("method setSlaveDispatchProvider")] 
                 HRESULT setSlaveDispatchProvider( [in] IDispatch* xNewDispatchProvider );
 
-    [id(3), helpstring("method getMasterDispatchProvider")]
+    [id(3), helpstring("method getMasterDispatchProvider")] 
                 HRESULT getMasterDispatchProvider( [out,retval] IDispatch** retVal );
 
-    [id(4), helpstring("method setMasterDispatchProvider")]
+    [id(4), helpstring("method setMasterDispatchProvider")] 
                 HRESULT setMasterDispatchProvider( [in] IDispatch* xNewSupplier );
-
+ 
 // com.sun.star.frame.XDispatchProvider
 
     [id(5), helpstring("method queryDispatch")]
@@ -93,7 +93,7 @@ interface ISODispatchInterceptor : IDispatch
                                        [in] long nSearchFlags,
                                        [out,retval] IDispatch** retVal );
 
-    [id(6), helpstring("method queryDispatches")]
+    [id(6), helpstring("method queryDispatches")] 
                 HRESULT queryDispatches( [in] SAFEARRAY(IDispatch*) aDescripts,
                                          [out,retval] SAFEARRAY(VARIANT)* retVal );
 
@@ -104,14 +104,14 @@ interface ISODispatchInterceptor : IDispatch
                 HRESULT dispatch( [in] IDispatch* aURL,
                                   [in] SAFEARRAY(VARIANT) aArgs );
 
-    [id(8), helpstring("method addStatusListener")]
+    [id(8), helpstring("method addStatusListener")] 
                 HRESULT addStatusListener( [in] IDispatch* xControl,
                                            [in] IDispatch* aURL );
 
-    [id(9), helpstring("method removeStatusListener")]
+    [id(9), helpstring("method removeStatusListener")] 
                 HRESULT removeStatusListener( [in] IDispatch* xControl,
                                               [in] IDispatch* aURL );
-
+ 
 // com.sun.star.frame.XInterceptorInfo
 
 
@@ -119,7 +119,7 @@ interface ISODispatchInterceptor : IDispatch
                 HRESULT getInterceptedURLs( [out,retval] SAFEARRAY(BSTR)* pVal );
 
 // the common UNO-COM staff
-    [propget, id(11), helpstring("property_implementedInterfaces")]
+    [propget, id(11), helpstring("property_implementedInterfaces")] 
                 HRESULT Bridge_implementedInterfaces([out, retval] SAFEARRAY(BSTR) *pVal);
 
 };
@@ -138,12 +138,12 @@ interface ISOActionsApproval : IDispatch
 {
 //com.sun.star.embed.XActionsApproval
 
-    [id(1), helpstring("method approveAction")]
+    [id(1), helpstring("method approveAction")] 
                 HRESULT approveAction( [in] long aActionID,
                                         [out,retval] boolean* pbApproval );
 
 // the common UNO-COM staff
-    [propget, id(2), helpstring("property_implementedInterfaces")]
+    [propget, id(2), helpstring("property_implementedInterfaces")] 
                 HRESULT Bridge_implementedInterfaces([out, retval] SAFEARRAY(BSTR) *pVal);
 };
 

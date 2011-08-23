@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Vector;
 
 public class Converter {
-
+    
     private Converter() {
     }
 
@@ -44,7 +44,7 @@ public class Converter {
 
         Iterator m = map.entrySet().iterator();
         int counter = 0;
-
+        
         while ( m.hasNext() ) {
             Map.Entry entry = (Map.Entry) m.next();
             String env = entry.getKey() + "=" + entry.getValue();
@@ -54,14 +54,14 @@ public class Converter {
 
         return myStringArray;
     }
-
+    
     static public HashMap convertVectorToHashmap(Vector vec) {
         HashMap map = new HashMap();
 
         for (int i = 0; i < vec.size(); i++) {
             String key = null;
             String value = null;
-
+            
             String line = (String)vec.get(i);
             int position = line.indexOf("=");
             if ( position > -1 ) {
@@ -69,12 +69,12 @@ public class Converter {
                 value = line.substring(position + 1, line.length());
             } else {
                 key = line;
-                value = null;
+                value = null;                
             }
-
+            
             map.put(key, value);
         }
-
+        
         return map;
     }
 
@@ -82,7 +82,7 @@ public class Converter {
         Vector vec = new Vector();
 
         Iterator m = hash.entrySet().iterator();
-
+        
         while ( m.hasNext() ) {
             Map.Entry entry = (Map.Entry) m.next();
             String line = entry.getKey() + "=" + entry.getValue();

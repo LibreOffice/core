@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@
 
 #ifdef UNICODE
 #define _UNICODE
-#define _tstring    wstring
+#define _tstring	wstring
 #else
-#define _tstring    string
+#define _tstring	string
 #endif
 #include <tchar.h>
 #include <string>
@@ -56,14 +56,14 @@
 #include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
 
-#define WININIT_FILENAME    "wininit.ini"
-#define RENAME_SECTION      "rename"
+#define	WININIT_FILENAME	"wininit.ini"
+#define RENAME_SECTION		"rename"
 
 #ifdef DEBUG
 inline void OutputDebugStringFormat( LPCTSTR pFormat, ... )
 {
-    _TCHAR  buffer[1024];
-    va_list args;
+    _TCHAR	buffer[1024];
+    va_list	args;
 
     va_start( args, pFormat );
     _vsntprintf( buffer, SAL_N_ELEMENTS(buffer), pFormat, args );
@@ -77,9 +77,9 @@ static inline void OutputDebugStringFormat( LPCTSTR, ... )
 
 static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 {
-    std::_tstring   result;
-    TCHAR   szDummy[1] = TEXT("");
-    DWORD   nChars = 0;
+    std::_tstring	result;
+    TCHAR	szDummy[1] = TEXT("");
+    DWORD	nChars = 0;
 
     if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
     {
@@ -87,14 +87,14 @@ static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sPro
         LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
         ZeroMemory( buffer, nBytes );
         MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
-        result = buffer;
+        result = buffer;			
     }
 
-    return  result;
+    return	result;
 }
-
+    
 static inline bool IsSetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty)
-{
+{   
     std::_tstring value = GetMsiProperty(handle, sProperty);
     return (value.length() > 0);
 }
@@ -111,30 +111,30 @@ static inline void SetMsiProperty(MSIHANDLE handle, const std::_tstring& sProper
 
 static BOOL MoveFileEx9x( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, DWORD dwFlags )
 {
-    BOOL    fSuccess = FALSE;   // assume failure
+    BOOL	fSuccess = FALSE;	// assume failure
 
     // Windows 9x has a special mechanism to move files after reboot
 
     if ( dwFlags & MOVEFILE_DELAY_UNTIL_REBOOT )
     {
-        CHAR    szExistingFileNameA[MAX_PATH];
-        CHAR    szNewFileNameA[MAX_PATH] = "NUL";
+        CHAR	szExistingFileNameA[MAX_PATH];
+        CHAR	szNewFileNameA[MAX_PATH] = "NUL";
 
         // Path names in WININIT.INI must be in short path name form
 
-        if (
+        if ( 
             GetShortPathNameA( lpExistingFileNameA, szExistingFileNameA, MAX_PATH ) &&
             (!lpNewFileNameA || GetShortPathNameA( lpNewFileNameA, szNewFileNameA, MAX_PATH ))
             )
         {
-            CHAR    szBuffer[32767];    // The buffer size must not exceed 32K
-            DWORD   dwBufLen = GetPrivateProfileSectionA( RENAME_SECTION, szBuffer, SAL_N_ELEMENTS(szBuffer), WININIT_FILENAME );
+            CHAR	szBuffer[32767];	// The buffer size must not exceed 32K
+            DWORD	dwBufLen = GetPrivateProfileSectionA( RENAME_SECTION, szBuffer, SAL_N_ELEMENTS(szBuffer), WININIT_FILENAME );
 
-            CHAR    szRename[MAX_PATH]; // This is enough for at most to times 67 chracters
+            CHAR	szRename[MAX_PATH];	// This is enough for at most to times 67 chracters
             strcpy( szRename, szNewFileNameA );
             strcat( szRename, "=" );
             strcat( szRename, szExistingFileNameA );
-            size_t  lnRename = strlen(szRename);
+            size_t	lnRename = strlen(szRename);
 
             if ( dwBufLen + lnRename + 2 <= SAL_N_ELEMENTS(szBuffer) )
             {
@@ -156,7 +156,7 @@ static BOOL MoveFileEx9x( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, DWO
         if ( !fSuccess && GetLastError() != ERROR_ACCESS_DENIED &&
             0 != (dwFlags & (MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING)) )
         {
-            BOOL    bFailIfExist = 0 == (dwFlags & MOVEFILE_REPLACE_EXISTING);
+            BOOL	bFailIfExist = 0 == (dwFlags & MOVEFILE_REPLACE_EXISTING);
 
             fSuccess = CopyFileA( lpExistingFileNameA, lpNewFileNameA, bFailIfExist );
 
@@ -179,22 +179,22 @@ static BOOL MoveFileExImpl( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, D
 
 extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
 {
-    std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
-    std::_tstring   sResourceDir = sInstDir + TEXT("Basis\\program\\resource\\");
-    std::_tstring   sPattern = sResourceDir + TEXT("vcl*.res");
+    std::_tstring	sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
+    std::_tstring	sResourceDir = sInstDir + TEXT("Basis\\program\\resource\\");
+    std::_tstring	sPattern = sResourceDir + TEXT("vcl*.res");
 
-    WIN32_FIND_DATA aFindFileData;
-    HANDLE  hFind = FindFirstFile( sPattern.c_str(), &aFindFileData );
+    WIN32_FIND_DATA	aFindFileData;
+    HANDLE	hFind = FindFirstFile( sPattern.c_str(), &aFindFileData );
 
     if ( IsValidHandle(hFind) )
     {
-        BOOL    fSuccess = false;
-        bool    fRenameSucceeded;
+        BOOL	fSuccess = false;
+        bool	fRenameSucceeded;
 
         do
         {
-            std::_tstring   sResourceFile = sResourceDir + aFindFileData.cFileName;
-            std::_tstring   sIntermediate = sResourceFile + TEXT(".tmp");
+            std::_tstring	sResourceFile = sResourceDir + aFindFileData.cFileName;
+            std::_tstring	sIntermediate = sResourceFile + TEXT(".tmp");
 
             fRenameSucceeded = MoveFileExImpl( sResourceFile.c_str(), sIntermediate.c_str(), MOVEFILE_REPLACE_EXISTING );
             if ( fRenameSucceeded )

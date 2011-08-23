@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,7 +123,7 @@ public class OfficeDocument
      * @param desktop
      * @param frame
      * @param sDocumentType e.g. swriter, scalc, ( simpress, scalc : not tested)
-     * @return the document Component (implements XComponent) object ( XTextDocument, or XSpreadsheedDocument )
+     * @return the document Component (implements XComponent) object ( XTextDocument, or XSpreadsheedDocument )  
      */
     public static Object createNewDocument(XFrame frame, String sDocumentType, boolean preview, boolean readonly)
     {

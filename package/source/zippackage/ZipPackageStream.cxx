@@ -89,16 +89,16 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
     this->mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
 
     SetFolder ( sal_False );
-    aEntry.nVersion     = -1;
-    aEntry.nFlag        = 0;
-    aEntry.nMethod      = -1;
-    aEntry.nTime        = -1;
-    aEntry.nCrc         = -1;
-    aEntry.nCompressedSize  = -1;
-    aEntry.nSize        = -1;
-    aEntry.nOffset      = -1;
-    aEntry.nPathLen     = -1;
-    aEntry.nExtraLen    = -1;
+    aEntry.nVersion		= -1;
+    aEntry.nFlag		= 0;
+    aEntry.nMethod		= -1;
+    aEntry.nTime		= -1;
+    aEntry.nCrc			= -1;
+    aEntry.nCompressedSize	= -1;
+    aEntry.nSize		= -1;
+    aEntry.nOffset		= -1;
+    aEntry.nPathLen		= -1;
+    aEntry.nExtraLen	= -1;
 
     Sequence < sal_Int8 > &rCachedImplId = lcl_CachedImplId::get();
     if ( !rCachedImplId.getLength() )

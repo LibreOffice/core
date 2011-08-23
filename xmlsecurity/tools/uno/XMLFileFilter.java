@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,31 +36,31 @@ import javax.swing.filechooser.FileFilter;
  */
 class XMLFileFilter extends FileFilter
 {
-    public static String getExtension(File f)
+    public static String getExtension(File f) 
     {
         String ext = null;
         String s = f.getName();
         int i = s.lastIndexOf('.');
-
+        
         if (i > 0 &&  i < s.length() - 1) {
             ext = s.substring(i+1).toLowerCase();
         }
-
+        
         return ext;
     }
-
-    public boolean accept(File f)
+    
+    public boolean accept(File f) 
     {
         boolean rc = false;
-
-        if (f.isDirectory())
+        
+        if (f.isDirectory()) 
         {
             rc = true;
         }
         else
         {
             String extension = getExtension(f);
-            if (extension != null)
+            if (extension != null) 
             {
                 if (extension.equals("xml") || extension.equals("txt"))
                 {
@@ -68,10 +68,10 @@ class XMLFileFilter extends FileFilter
                 }
             }
         }
-
+        
         return rc;
     }
-
+    
     public String getDescription()
     {
         return "XML and batch files (.xml,.txt)";

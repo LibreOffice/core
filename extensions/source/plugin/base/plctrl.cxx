@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,11 +99,11 @@ void PluginControl_Impl::dispose(void)
 void PluginControl_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags )
     throw( RuntimeException )
 {
-    _nX         = nX_ >=0 ? nX_ : 0;
-    _nY         = nY_ >=0 ? nY_ : 0;
-    _nWidth     = nWidth_ >=0 ? nWidth_ : 0;
-    _nHeight    = nHeight_ >=0 ? nHeight_ : 0;
-    _nFlags     = nFlags;
+    _nX			= nX_ >=0 ? nX_ : 0;
+    _nY			= nY_ >=0 ? nY_ : 0;
+    _nWidth		= nWidth_ >=0 ? nWidth_ : 0;
+    _nHeight	= nHeight_ >=0 ? nHeight_ : 0;
+    _nFlags		= nFlags;
 
     if (_xPeerWindow.is())
         _xPeerWindow->setPosSize( _nX, _nY, _nWidth, _nHeight, nFlags );
@@ -124,7 +124,7 @@ void PluginControl_Impl::setVisible( sal_Bool bVisible )
     if (_xPeerWindow.is())
         _xPeerWindow->setVisible( _bVisible && !_bInDesignMode );
 }
-
+    
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::setEnable( sal_Bool bEnable )
     throw( RuntimeException )
@@ -133,7 +133,7 @@ void PluginControl_Impl::setEnable( sal_Bool bEnable )
     if (_xPeerWindow.is())
         _xPeerWindow->setEnable( _bEnable );
 }
-
+    
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::setFocus(void) throw( RuntimeException )
 {
@@ -149,9 +149,9 @@ void PluginControl_Impl::releasePeer()
     {
         _xParentWindow->removeFocusListener( this );
         _xPeerWindow->dispose();
-        _pSysChild      = NULL;
-        _xPeerWindow    = Reference< ::com::sun::star::awt::XWindow > ();
-        _xPeer          = Reference< ::com::sun::star::awt::XWindowPeer > ();
+        _pSysChild		= NULL;
+        _xPeerWindow	= Reference< ::com::sun::star::awt::XWindow > ();
+        _xPeer			= Reference< ::com::sun::star::awt::XWindowPeer > ();
         getMultiplexer()->setPeer( Reference< ::com::sun::star::awt::XWindow > () );
     }
 }
@@ -169,20 +169,20 @@ void PluginControl_Impl::createPeer( const Reference< ::com::sun::star::awt::XTo
     _xParentPeer = xParentPeer;
     _xParentWindow = Reference< ::com::sun::star::awt::XWindow > ( xParentPeer, UNO_QUERY );
     DBG_ASSERT( _xParentWindow.is(), "### no parent peer window!" );
-
+    
     Window* pImpl = VCLUnoHelper::GetWindow( xParentPeer );
     if (pImpl)
     {
         _pSysChild = new SystemChildWindow( pImpl, WB_CLIPCHILDREN );
         if (pImpl->HasFocus())
             _pSysChild->GrabFocus();
-
+        
         // get peer
-        _xPeer          = Reference< ::com::sun::star::awt::XWindowPeer > ( _pSysChild->GetComponentInterface() );
-        _xPeerWindow    = Reference< ::com::sun::star::awt::XWindow > ( _xPeer, UNO_QUERY );
+        _xPeer			= Reference< ::com::sun::star::awt::XWindowPeer > ( _pSysChild->GetComponentInterface() );
+        _xPeerWindow	= Reference< ::com::sun::star::awt::XWindow > ( _xPeer, UNO_QUERY );
         // !_BOTH_ MUST BE VALID!
         DBG_ASSERT( (_xPeer.is() && _xPeerWindow.is()), "### no peer!" );
-
+        
         _xParentWindow->addFocusListener( this );
         _xPeerWindow->setPosSize( _nX, _nY, _nWidth, _nHeight, _nFlags );
         _xPeerWindow->setEnable( _bEnable );
@@ -220,7 +220,7 @@ void PluginControl_Impl::removePaintListener( const Reference< ::com::sun::star:
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
-void PluginControl_Impl::addWindowListener( const Reference< ::com::sun::star::awt::XWindowListener > & l )
+void PluginControl_Impl::addWindowListener(	const Reference< ::com::sun::star::awt::XWindowListener > & l )
     throw( RuntimeException )
 {
     getMultiplexer()->advise( ::getCppuType((const Reference< ::com::sun::star::awt::XWindowListener >*)0), l );

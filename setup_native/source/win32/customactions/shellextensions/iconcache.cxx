@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@ extern "C" UINT __stdcall RebuildShellIconCache(MSIHANDLE)
 {
     // Rebuild icon cache on windows OS prior XP
 
-    OSVERSIONINFO   osverinfo;
+    OSVERSIONINFO	osverinfo;
 
     osverinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
-    if (
-        GetVersionEx( &osverinfo ) &&
+    if ( 
+        GetVersionEx( &osverinfo ) && 
         VER_PLATFORM_WIN32_NT == osverinfo.dwPlatformId &&
         (
         5 < osverinfo.dwMajorVersion ||
@@ -58,17 +58,17 @@ extern "C" UINT __stdcall RebuildShellIconCache(MSIHANDLE)
         return ERROR_SUCCESS;
     }
 
-    HKEY    hKey;
-    DWORD   dwDispostion;
-    LONG    lError = RegCreateKeyEx( HKEY_CURRENT_USER, TEXT("Control Panel\\Desktop\\WindowMetrics"), 0, NULL, REG_OPTION_VOLATILE, KEY_SET_VALUE | KEY_QUERY_VALUE, NULL, &hKey, &dwDispostion );
+    HKEY	hKey;
+    DWORD	dwDispostion;
+    LONG	lError = RegCreateKeyEx( HKEY_CURRENT_USER, TEXT("Control Panel\\Desktop\\WindowMetrics"), 0, NULL, REG_OPTION_VOLATILE, KEY_SET_VALUE | KEY_QUERY_VALUE, NULL, &hKey, &dwDispostion );
 
     if ( ERROR_SUCCESS == lError )
     {
-        TCHAR   szValue[256];
-        TCHAR   szTempValue[256];
-        DWORD   cbValue = sizeof(szValue);
-        DWORD   dwType;
-        int     iSize = 0;
+        TCHAR	szValue[256];
+        TCHAR	szTempValue[256];
+        DWORD	cbValue = sizeof(szValue);
+        DWORD	dwType;
+        int		iSize = 0;
 
         lError = RegQueryValueEx( hKey, TEXT("Shell Icon Size"), 0, &dwType, (LPBYTE)szValue, &cbValue );
 
@@ -86,7 +86,7 @@ extern "C" UINT __stdcall RebuildShellIconCache(MSIHANDLE)
         itoa( iSize + 1, szTempValue, 10 );
         lError = RegSetValueEx( hKey, TEXT("Shell Icon Size"), 0, dwType, (LPBYTE)szTempValue, strlen( szTempValue ) + 1 );
 
-        LRESULT lResult = SendMessageTimeout(
+        LRESULT	lResult = SendMessageTimeout(
              HWND_BROADCAST,
              WM_SETTINGCHANGE,
              SPI_SETNONCLIENTMETRICS,

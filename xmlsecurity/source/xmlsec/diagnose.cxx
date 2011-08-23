@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ struct UseDiagnose : public rtl::StaticWithInit<
 void xmlsec_trace(const char* pszFormat, ...)
 {
     bool bDebug = false;
-
+     
 #if OSL_DEBUG_LEVEL > 1
     bDebug = true;
 #endif
@@ -67,7 +67,7 @@ void xmlsec_trace(const char* pszFormat, ...)
         va_start(args, pszFormat);
         vfprintf(stderr, pszFormat, args);
         va_end(args);
-
+        
         fprintf(stderr,"\n");
         fflush(stderr);
     }

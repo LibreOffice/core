@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -168,7 +168,7 @@ public class FormLayer
     }
 
     /** creates a pair of controls, namely a label control, and another control labeled by it
-     *
+     * 
      * @param _formComponentServiceName
      *      the service name for the control which is not the label control
      * @param _label
@@ -203,7 +203,7 @@ public class FormLayer
 
         return field;
     }
-
+        
     /* ------------------------------------------------------------------ */
     /** creates a line of controls, consisting of a label and a field for data input.
 

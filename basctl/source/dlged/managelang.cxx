@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ namespace {
     long getLongestWordWidth( const String& rText, const Window& rWin )
     {
         long nWidth = 0;
-        Reference< XBreakIterator > xBreakIter( vcl::unohelper::CreateBreakIterator() );
+        Reference< XBreakIterator >	xBreakIter( vcl::unohelper::CreateBreakIterator() );
         sal_Int32 nStartPos = 0;
         const Locale aLocale = Application::GetSettings().GetUILocale();
         Boundary aBoundary = xBreakIter->getWordBoundary(
@@ -99,19 +99,19 @@ ManageLanguageDialog::ManageLanguageDialog( Window* pParent, LocalizationMgr* _p
 
     ModalDialog( pParent, IDEResId( RID_DLG_MANAGE_LANGUAGE ) ),
 
-    m_aLanguageFT       ( this, IDEResId( FT_LANGUAGE ) ),
-    m_aLanguageLB       ( this, IDEResId( LB_LANGUAGE ) ),
-    m_aAddPB            ( this, IDEResId( PB_ADD_LANG ) ),
-    m_aDeletePB         ( this, IDEResId( PB_DEL_LANG ) ),
-    m_aMakeDefPB        ( this, IDEResId( PB_MAKE_DEFAULT ) ),
-    m_aInfoFT           ( this, IDEResId( FT_INFO ) ),
-    m_aBtnLine          ( this, IDEResId( FL_BUTTONS ) ),
-    m_aHelpBtn          ( this, IDEResId( PB_HELP ) ),
-    m_aCloseBtn         ( this, IDEResId( PB_CLOSE ) ),
-    m_pLocalizationMgr  ( _pLMgr ),
-    m_sDefLangStr       (       IDEResId( STR_DEF_LANG ) ),
-    m_sDeleteStr        (       IDEResId( STR_DELETE ) ),
-    m_sCreateLangStr    (       IDEResId( STR_CREATE_LANG ) )
+    m_aLanguageFT		( this, IDEResId( FT_LANGUAGE ) ),
+    m_aLanguageLB		( this, IDEResId( LB_LANGUAGE ) ),
+    m_aAddPB			( this, IDEResId( PB_ADD_LANG ) ),
+    m_aDeletePB			( this, IDEResId( PB_DEL_LANG ) ),
+    m_aMakeDefPB		( this, IDEResId( PB_MAKE_DEFAULT ) ),
+    m_aInfoFT			( this, IDEResId( FT_INFO ) ),
+    m_aBtnLine			( this, IDEResId( FL_BUTTONS ) ),
+    m_aHelpBtn			( this, IDEResId( PB_HELP ) ),
+    m_aCloseBtn			( this, IDEResId( PB_CLOSE ) ),
+    m_pLocalizationMgr	( _pLMgr ),
+    m_sDefLangStr		( 		IDEResId( STR_DEF_LANG ) ),
+    m_sDeleteStr		( 		IDEResId( STR_DELETE ) ),
+    m_sCreateLangStr	(		IDEResId( STR_CREATE_LANG ) )
 
 {
     FreeResource();
@@ -304,14 +304,14 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog( Window* pParent, Localizatio
 
     ModalDialog( pParent, IDEResId( RID_DLG_SETDEF_LANGUAGE ) ),
 
-    m_aLanguageFT   ( this, IDEResId( FT_DEF_LANGUAGE ) ),
-    m_pLanguageLB   ( new SvxLanguageBox( this, IDEResId( LB_DEF_LANGUAGE ) ) ),
-    m_pCheckLangLB  ( NULL ),
-    m_aInfoFT       ( this, IDEResId( FT_DEF_INFO ) ),
-    m_aBtnLine      ( this, IDEResId( FL_DEF_BUTTONS ) ),
-    m_aOKBtn        ( this, IDEResId( PB_DEF_OK ) ),
-    m_aCancelBtn    ( this, IDEResId( PB_DEF_CANCEL ) ),
-    m_aHelpBtn      ( this, IDEResId( PB_DEF_HELP ) ),
+    m_aLanguageFT	( this, IDEResId( FT_DEF_LANGUAGE ) ),
+    m_pLanguageLB	( new SvxLanguageBox( this, IDEResId( LB_DEF_LANGUAGE ) ) ),
+    m_pCheckLangLB	( NULL ),
+    m_aInfoFT		( this, IDEResId( FT_DEF_INFO ) ),
+    m_aBtnLine		( this, IDEResId( FL_DEF_BUTTONS ) ),
+    m_aOKBtn		( this, IDEResId( PB_DEF_OK ) ),
+    m_aCancelBtn	( this, IDEResId( PB_DEF_CANCEL ) ),
+    m_aHelpBtn		( this, IDEResId( PB_DEF_HELP ) ),
 
     m_pLocalizationMgr( _pLMgr )
 

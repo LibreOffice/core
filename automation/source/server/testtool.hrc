@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,32 +24,32 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define TTSTART             12345
+#define TTSTART				12345
 
-#define DisplayHidToolBox   ( TTSTART + 0 )
-#define TT_SHOW             1
-#define TT_SHOW2            ( TTSTART + 1 )
-#define TT_OUTPUT           3
-#define TT_SEND_DATA        4
-#define TT_ALLWIN           5
-#define TT_KURZNAME         6
-#define TT_LANGNAME         7
+#define DisplayHidToolBox	( TTSTART + 0 )
+#define TT_SHOW				1
+#define TT_SHOW2			( TTSTART + 1 )
+#define TT_OUTPUT			3
+#define TT_SEND_DATA		4
+#define TT_ALLWIN			5
+#define TT_KURZNAME			6
+#define TT_LANGNAME			7
 #define TT_ALTERNATE_CAPTION ( TTSTART + 2 )
 
 #define TT_INLINE_TRANSLATION ( TTSTART + 3)
-#define TT_GB_TRANSLATION   1
-#define TT_E_NEW            2
-#define TT_FT_OLD           3
-#define TT_GB_COMMENT       4
-#define TT_E_COMMENT        5
+#define TT_GB_TRANSLATION	1
+#define TT_E_NEW			2
+#define TT_FT_OLD			3
+#define TT_GB_COMMENT		4
+#define TT_E_COMMENT		5
 
-#define TT_PB_SELECT        6
-#define TT_PB_RESTORE       7
-#define TT_PB_ACCEPT        8
-#define TT_PB_NEXT          9
+#define TT_PB_SELECT		6
+#define TT_PB_RESTORE		7
+#define TT_PB_ACCEPT		8
+#define TT_PB_NEXT			9
 
 #define TT_DISCARD_CHANGED_DATA ( TTSTART + 4 )
-#define TT_NO_CONTROL       ( TTSTART + 5 )
+#define TT_NO_CONTROL		( TTSTART + 5 )
 
 
-#define TT_GPF              ( TTSTART + 6 )
+#define TT_GPF				( TTSTART + 6 )

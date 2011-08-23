@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,19 +25,19 @@
  *
  ************************************************************************/
 
-package com.sun.star.wizards.agenda;
-
+package com.sun.star.wizards.agenda; 
+      
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Resource;
 
 public class AgendaWizardDialogResources extends Resource  {
-
+      
   final static String UNIT_NAME = "dbwizres";
   final static String MODULE_NAME = "dbw";
   final static int RID_AGENDAWIZARDDIALOG_START = 5000;
   final static int RID_COMMON_START = 500;
-
-
+  
+      
   String resAgendaWizardDialog_title;
   String resoptMakeChanges_value;
   String reslblTemplateName_value;
@@ -74,31 +74,31 @@ public class AgendaWizardDialogResources extends Resource  {
   String reschkBring_value;
   String reschkNotes_value;
   String reslblHelp3_value;
-
+  
   String reslblDate_value;
   String reslblHelpPg6_value;
   String reslblPageDesign_value;
-
+  
   String resDefaultFilename;
   String resDefaultTitle;
-
+  
   String resErrSaveTemplate;
-
+  
   String resPlaceHolderTitle;
   String resPlaceHolderDate;
   String resPlaceHolderTime;
   String resPlaceHolderLocation;
   String resPlaceHolderHint;
-
+  
   String resStep1;
   String resStep2;
   String resStep3;
   String resStep4;
   String resStep5;
   String resStep6;
-
+  
   String resErrOpenTemplate;
-
+  
   String itemMeetingType;
   String itemRead;
   String itemBring;
@@ -110,25 +110,25 @@ public class AgendaWizardDialogResources extends Resource  {
   String itemAttendees;
   String itemObservers;
   String itemResource;
-
+  
   String resButtonInsert;
   String resButtonRemove;
   String resButtonUp;
   String resButtonDown;
-
-
-
-
-  // *** common resources ***
-
+  
+  
+  
+  
+  // *** common resources *** 
+  
   String resFileExists;
-
+  
 public AgendaWizardDialogResources(XMultiServiceFactory xmsf) {
   super(xmsf,UNIT_NAME,MODULE_NAME);
-
+  
   /**
-   * Delete the String, uncomment the getResText method
-   *
+   * Delete the String, uncomment the getResText method 
+   * 
    */
     resAgendaWizardDialog_title =           getResText(RID_AGENDAWIZARDDIALOG_START + 1);
     resoptMakeChanges_value =               getResText(RID_AGENDAWIZARDDIALOG_START + 2);
@@ -172,27 +172,27 @@ public AgendaWizardDialogResources(XMultiServiceFactory xmsf) {
 
     resDefaultFilename =                    getResText(RID_AGENDAWIZARDDIALOG_START + 41);
     resDefaultFilename = resDefaultFilename.substring(0,resDefaultFilename.length()-4) + ".ott";
-
+    
     resDefaultTitle =                       getResText(RID_AGENDAWIZARDDIALOG_START + 42);
-
+    
     resErrSaveTemplate =                    getResText(RID_AGENDAWIZARDDIALOG_START + 43);
-
+  
     resPlaceHolderTitle =                   getResText(RID_AGENDAWIZARDDIALOG_START + 44);
     resPlaceHolderDate =                    getResText(RID_AGENDAWIZARDDIALOG_START + 45);
     resPlaceHolderTime =                    getResText(RID_AGENDAWIZARDDIALOG_START + 46);
     resPlaceHolderLocation =                getResText(RID_AGENDAWIZARDDIALOG_START + 47);
     resPlaceHolderHint =                    getResText(RID_AGENDAWIZARDDIALOG_START + 48);
-
-
+    
+    
     resStep1 = getResText(RID_AGENDAWIZARDDIALOG_START + 50);
     resStep2 = getResText(RID_AGENDAWIZARDDIALOG_START + 51);
     resStep3 = getResText(RID_AGENDAWIZARDDIALOG_START + 52);
     resStep4 = getResText(RID_AGENDAWIZARDDIALOG_START + 53);
     resStep5 = getResText(RID_AGENDAWIZARDDIALOG_START + 54);
     resStep6 = getResText(RID_AGENDAWIZARDDIALOG_START + 55);
-
+    
     resErrOpenTemplate = getResText(RID_AGENDAWIZARDDIALOG_START + 56);
-
+    
      itemMeetingType = getResText(RID_AGENDAWIZARDDIALOG_START + 57);
      itemBring = getResText(RID_AGENDAWIZARDDIALOG_START + 58);
      itemRead = getResText(RID_AGENDAWIZARDDIALOG_START + 59);
@@ -205,17 +205,17 @@ public AgendaWizardDialogResources(XMultiServiceFactory xmsf) {
      itemTimekeeper = getResText(RID_AGENDAWIZARDDIALOG_START + 65);
      itemObservers = getResText(RID_AGENDAWIZARDDIALOG_START + 66);
      itemResource = getResText(RID_AGENDAWIZARDDIALOG_START + 67);
-
+    
      resButtonInsert = getResText(RID_AGENDAWIZARDDIALOG_START + 68);
      resButtonRemove  = getResText(RID_AGENDAWIZARDDIALOG_START + 69);
      resButtonUp  = getResText(RID_AGENDAWIZARDDIALOG_START + 70);
      resButtonDown  = getResText(RID_AGENDAWIZARDDIALOG_START + 71);
-
+       
     /*
      * Common resources
      */
-
+    
     resFileExists = getResText(RID_COMMON_START + 19);
-
+    
   }
 }

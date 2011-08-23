@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -23,11 +23,11 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/#define sHelpButton   1000
-#define sCancelButton   1001
-#define sBackButton 1002
-#define sNextButton 1003
-#define sBeginButton    1004
+ ************************************************************************/#define sHelpButton	1000
+#define sCancelButton	1001
+#define sBackButton	1002
+#define sNextButton	1003
+#define sBeginButton	1004
 #define sCloseButton    1005
 #define sWelcometextLabel1  1006
 #define sWelcometextLabel2  1007
@@ -45,9 +45,9 @@
 #define sTextImportLabel 1033
 #define sTextExportLabel 1034
 #define sGroupnameDefault   1036
-#define sProgressDesc1  1039
-#define sProgressOneDoc 1040
-#define sProgressMoreDocs   1041
+#define sProgressDesc1	1039
+#define sProgressOneDoc	1040
+#define sProgressMoreDocs	1041
 #define sProgressMoreTemplates 1042
 #define sNoDirCreation  1050
 #define sMsgDirNotThere    1051
@@ -67,8 +67,8 @@
 #define sPathErrorStarDoc_1_    1065
 #define sPathErrorStarDoc_2_    1066
 #define sPathErrorStarDoc_3_    1067
-#define sOverwriteallFiles  1070
-#define sreeditMacro    1071
+#define sOverwriteallFiles 	1070
+#define sreeditMacro 	1071
 #define scouldNotsaveDocument 1072
 #define scouldNotopenDocument 1073
 #define sPathDialogMessage  1080
@@ -95,7 +95,7 @@
 #define sCreateLogfile          2032
 #define sLogfileHelpText        2033
 #define sLogfileSummary         2034
-#define sshowLogfile            2035
+#define sshowLogfile			2035
 
 #define sSumInclusiveSubDir     3000
 #define sSumSaveDokumente       3001

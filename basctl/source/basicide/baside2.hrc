@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,19 +32,19 @@
 // Diese Dateien enthaelt nur die lokalen ID's.
 
 // RID_POPUP_BRKPROPS
-#define RID_BRKPROPS            1
-#define RID_ACTIV               2
+#define RID_BRKPROPS			1
+#define RID_ACTIV				2
 
 // RID_POPUP_BRKDLG
-#define RID_BRKDLG              1
+#define RID_BRKDLG				1
 
 // RID_POPUP_TABBAR
-#define RID_INSERT              1
+#define RID_INSERT				1
 
 // ModulWindowLayout
-#define IMGID_BRKENABLED        ( SID_BASICIDE_IMAGESTART + 20 )
-#define IMGID_BRKDISABLED       ( SID_BASICIDE_IMAGESTART + 21 )
-#define IMGID_STEPMARKER        ( SID_BASICIDE_IMAGESTART + 22 )
-#define IMGID_ERRORMARKER       ( SID_BASICIDE_IMAGESTART + 23 )
+#define IMGID_BRKENABLED		( SID_BASICIDE_IMAGESTART + 20 )
+#define IMGID_BRKDISABLED		( SID_BASICIDE_IMAGESTART + 21 )
+#define IMGID_STEPMARKER		( SID_BASICIDE_IMAGESTART + 22 )
+#define IMGID_ERRORMARKER		( SID_BASICIDE_IMAGESTART + 23 )
 
-#endif  // _BASIDE2_HRC
+#endif	// _BASIDE2_HRC

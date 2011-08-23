@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 class CommunicationManagerClientViaSocket;
 class CommunicationLink;
 
-class CommunicationWrapper : public SbxObject   // Einer für Manager und Links
+class CommunicationWrapper : public SbxObject	// Einer für Manager und Links
 {
     // Definition eines Tabelleneintrags. Dies wird hier gemacht,
     // da dadurch die Methoden und Properties als private deklariert
@@ -51,17 +51,17 @@ private:
 #endif
 
     struct Methods {
-        const char* pName;      // Name des Eintrags
-        SbxDataType eType;      // Datentyp
-        pMeth pFunc;            // Function Pointer
-        short nArgs;            // Argumente und Flags
+        const char* pName;		// Name des Eintrags
+        SbxDataType eType;		// Datentyp
+        pMeth pFunc;			// Function Pointer
+        short nArgs;			// Argumente und Flags
     };
-    static Methods aManagerMethods[];   // Methodentabelle
-    static Methods aLinkMethods[];      // Methodentabelle
-    Methods *m_pMethods;    // Aktuelle Methodentabelle
+    static Methods aManagerMethods[];	// Methodentabelle
+    static Methods aLinkMethods[];		// Methodentabelle
+    Methods *m_pMethods;	// Aktuelle Methodentabelle
 
     // Methoden
-    //      Manager
+    //		Manager
     void MStartCommunication( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
     void MStopAllCommunication( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
     void MIsCommunicationRunning( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
@@ -69,7 +69,7 @@ private:
     void MIsLinkValid( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
     void MSetCommunicationEventHandler( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
 
-    //      Link
+    //		Link
     void LStopCommunication( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
     void LGetMyName( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
     void LGetHostName( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
@@ -79,7 +79,7 @@ private:
     // Interne Member und Methoden
     CommunicationManagerClientViaSocket *m_pManager;
     CommunicationLink *m_pLink;
-    BOOL m_bIsManager;  // Ist es kein Manager, so ist es ein Link
+    BOOL m_bIsManager;	// Ist es kein Manager, so ist es ein Link
 
     // Kram für Manager
     DECL_LINK( Open, CommunicationLink* );

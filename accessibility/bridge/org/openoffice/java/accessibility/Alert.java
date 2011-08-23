@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,22 +24,22 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 package org.openoffice.java.accessibility;
 
 import javax.accessibility.AccessibleRole;
 import com.sun.star.accessibility.*;
 
 public class Alert extends Dialog {
-
+    
     protected Alert(java.awt.Frame owner, XAccessibleComponent xAccessibleComponent) {
         super(owner, xAccessibleComponent);
     }
-
+    
     protected Alert(java.awt.Frame owner, String name, XAccessibleComponent xAccessibleComponent) {
         super(owner, name, xAccessibleComponent);
     }
-
+    
     protected Alert(java.awt.Frame owner, String name, boolean modal, XAccessibleComponent xAccessibleComponent) {
         super(owner, name, modal, xAccessibleComponent);
     }
@@ -52,13 +52,13 @@ public class Alert extends Dialog {
         }
         return accessibleContext;
     }
-
+    
     protected class AccessibleAlert extends AccessibleDialog {
-
+        
         protected AccessibleAlert() {
             super();
         }
-
+        
         public AccessibleRole getAccessibleRole() {
             return AccessibleRole.ALERT;
         }

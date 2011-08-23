@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,13 +31,13 @@ import org.openoffice.setup.InstallData;
 import java.util.Vector;
 
 public class AbortInstaller {
-
+    
     private AbortInstaller() {
     }
 
     static public void abortInstallProcess() {
         InstallData installData = InstallData.getInstance();
-        installData.setIsAbortedInstallation(true);
+        installData.setIsAbortedInstallation(true);      
 
         if ( installData.isInstallationMode() ) {
             String log = "<b>Installation was aborted</b><br>";

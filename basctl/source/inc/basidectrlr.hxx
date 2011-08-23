@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,12 +47,12 @@ private:
     // properties
     sal_Int32   m_nIconId;
 
-public:
+public:    
     BasicIDEController( BasicIDEShell* pViewShell );
     virtual ~BasicIDEController();
 
     // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);	
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
 
@@ -71,6 +71,6 @@ protected:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 };
 
-#endif  // _BASCTL_BASICIDECTRLR_HXX
+#endif	// _BASCTL_BASICIDECTRLR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

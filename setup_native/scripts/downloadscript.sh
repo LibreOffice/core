@@ -62,7 +62,7 @@ if [ -x /usr/bin/sum ] ; then
 
     sum=`$tail_prog +$linenum $0 | /usr/bin/sum`
     sum=`echo $sum | awk '{ print $1 }'`
-
+    
     if [ $sum != $checksum ]; then
         echo "The download file appears to be corrupted. Please download PRODUCTNAMEPLACEHOLDER again."
         exit 1

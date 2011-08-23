@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ ModalDialog RID_SVXDLG_OBJECT_NAME
         Size = MAP_APPFONT ( 168 , 12 ) ;
         TabStop = TRUE ;
     };
-
+    
     // divider
     FixedLine FL_SEPARATOR_A
     {

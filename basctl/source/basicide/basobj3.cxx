@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -223,7 +223,7 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
         DBG_ASSERT( nId, "No entry in Tabbar!" );
         if ( nId )
         {
-            BasicIDETabBar* pTabBar = (BasicIDETabBar*)pIDEShell->GetTabBar();
+            BasicIDETabBar*	pTabBar = (BasicIDETabBar*)pIDEShell->GetTabBar();
             pTabBar->SetPageText( nId, rNewName );
             pTabBar->Sort();
             pTabBar->MakeVisible( pTabBar->GetCurPageId() );
