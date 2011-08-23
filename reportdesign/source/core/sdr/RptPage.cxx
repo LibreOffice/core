@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,17 +134,17 @@ SdrObject* OReportPage::RemoveObject(ULONG nObjNum)
 //----------------------------------------------------------------------------
 //namespace
 //{
-//  ::rtl::OUString lcl_getControlName(const uno::Reference< lang::XServiceInfo >& _xServiceInfo)
-//  {
-//      if ( _xServiceInfo->supportsService( SERVICE_FIXEDTEXT ))
-//          return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText"));
+//	::rtl::OUString lcl_getControlName(const uno::Reference< lang::XServiceInfo >& _xServiceInfo)
+//	{
+//		if ( _xServiceInfo->supportsService( SERVICE_FIXEDTEXT ))
+//			return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText"));
 //        if ( _xServiceInfo->supportsService( SERVICE_FORMATTEDFIELD ))
-//          return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FormattedField"));
-//      if ( _xServiceInfo->supportsService( SERVICE_IMAGECONTROL))
-//          return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.DatabaseImageControl"));
-//
-//      return ::rtl::OUString();
-//  }
+//			return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FormattedField"));
+//		if ( _xServiceInfo->supportsService( SERVICE_IMAGECONTROL))
+//			return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.DatabaseImageControl"));
+//        
+//		return ::rtl::OUString();
+//	}
 //}
 //----------------------------------------------------------------------------
 void OReportPage::insertObject(const uno::Reference< report::XReportComponent >& _xObject)
@@ -197,14 +197,14 @@ void OReportPage::resetSpecialMode()
     const sal_Bool bChanged = rModel.IsChanged();
     ::std::vector<SdrObject*>::iterator aIter = m_aTemporaryObjectList.begin();
     ::std::vector<SdrObject*>::iterator aEnd = m_aTemporaryObjectList.end();
-
+     
     for (; aIter != aEnd; ++aIter)
     {
          removeTempObject(*aIter);
     }
     m_aTemporaryObjectList.clear();
     rModel.SetChanged(bChanged);
-
+    
     m_bSpecialInsertMode = false;
 }
 // -----------------------------------------------------------------------------
@@ -218,7 +218,7 @@ void OReportPage::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertRe
         m_aTemporaryObjectList.push_back(pObj);
         return;
     }
-
+    
     if ( pUnoObj )
     {
         pUnoObj->CreateMediator();

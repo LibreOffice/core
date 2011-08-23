@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ uno::Reference< uno::XInterface > OFormatCondition::create(uno::Reference< uno::
 DBG_NAME( rpt_OFormatCondition )
 // -----------------------------------------------------------------------------
 OFormatCondition::OFormatCondition(uno::Reference< uno::XComponentContext > const & _xContext)
-:FormatConditionBase(m_aMutex)
+:FormatConditionBase(m_aMutex) 
 ,FormatConditionPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< ::rtl::OUString >())
 ,m_bEnabled(sal_True)
 {
@@ -65,10 +65,10 @@ OFormatCondition::~OFormatCondition()
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_XINTERFACE2(OFormatCondition,FormatConditionBase,FormatConditionPropertySet)
 // -----------------------------------------------------------------------------
-void SAL_CALL OFormatCondition::dispose() throw(uno::RuntimeException)
+void SAL_CALL OFormatCondition::dispose() throw(uno::RuntimeException) 
 {
     FormatConditionPropertySet::dispose();
-    cppu::WeakComponentImplHelperBase::dispose();
+    cppu::WeakComponentImplHelperBase::dispose(); 
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OFormatCondition::getImplementationName_Static(  ) throw(uno::RuntimeException)
@@ -86,7 +86,7 @@ uno::Sequence< ::rtl::OUString > OFormatCondition::getSupportedServiceNames_Stat
 {
     uno::Sequence< ::rtl::OUString > aServices(1);
     aServices.getArray()[0] = SERVICE_FORMATCONDITION;
-
+    
     return aServices;
 }
 //--------------------------------------------------------------------------

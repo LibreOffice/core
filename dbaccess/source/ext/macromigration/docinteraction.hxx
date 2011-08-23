@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ namespace dbmm
         /** requests a document password
             @param _rDocumentName
                 the document name
-            @param _io_rPassword
+            @param _io_rPassword    
                 the initial password on method entry, the password as entered by the user on method leave
             @return
                 <TRUE/> if and only if the user entered a password, and confirmed with OK, <FALSE/>

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace dbaui
     class ORelationTableConnectionData;
     class OConnectionLineData;
     class ORelationController;
-
+    
     class ORelationDesignView : public OJoinDesignView
     {
     public:
@@ -56,7 +56,7 @@ namespace dbaui
         virtual void Construct();
         virtual void initialize();
 
-
+                
         virtual long PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
     };

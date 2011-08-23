@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace dbaui
                             ,public IClipboardTest
     {
 
-        OTableFieldControl  *m_pFieldControl;
+        OTableFieldControl	*m_pFieldControl;
     protected:
         virtual void Resize();
 
@@ -62,7 +62,7 @@ namespace dbaui
 #if OSL_DEBUG_LEVEL > 0
         OTableEditorCtrl* GetEditorCtrl();
 #endif
-        //  short GetFormatCategory(OFieldDescription* pFieldDescr);
+        //	short GetFormatCategory(OFieldDescription* pFieldDescr);
             // liefert zum am Feld eingestellten Format einen der CAT_xxx-Werte (CAT_NUMBER, CAT_DATE ...)
 
         String BoolStringPersistent(const String& rUIString) const;
@@ -78,7 +78,7 @@ namespace dbaui
         virtual void cut();
         virtual void paste();
 
-        inline OTableFieldControl*  getFieldControl() const { return m_pFieldControl; }
+        inline OTableFieldControl*	getFieldControl() const { return m_pFieldControl; }
     };
 }
 #endif // DBAUI_TABLEFIELDDESCGENPAGE_HXX

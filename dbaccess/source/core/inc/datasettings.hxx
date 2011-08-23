@@ -41,25 +41,25 @@ namespace dbaccess
 
 //==========================================================================
 //= ODataSettings_Base - a base class which implements the property member
-//=                 for an object implementing the sdb::DataSettings
-//=                 service
-//= the properties have to to be registered when used
+//=					for an object implementing the sdb::DataSettings
+//=					service
+//=	the properties have to to be registered when used
 //==========================================================================
 class ODataSettings_Base
 {
 public:
 // <properties>
-    ::rtl::OUString                             m_sFilter;
-    ::rtl::OUString                             m_sHavingClause;
-    ::rtl::OUString                             m_sGroupBy;
-    ::rtl::OUString                             m_sOrder;
-    sal_Bool                                    m_bApplyFilter;     // no BitField ! the base class needs a pointer to this member !
-    ::com::sun::star::awt::FontDescriptor       m_aFont;
-    ::com::sun::star::uno::Any                  m_aRowHeight;
-    ::com::sun::star::uno::Any                  m_aTextColor;
-    ::com::sun::star::uno::Any                  m_aTextLineColor;
-    sal_Int16                                   m_nFontEmphasis;
-    sal_Int16                                   m_nFontRelief;
+    ::rtl::OUString								m_sFilter;
+    ::rtl::OUString								m_sHavingClause;
+    ::rtl::OUString								m_sGroupBy;
+    ::rtl::OUString								m_sOrder;
+    sal_Bool									m_bApplyFilter;		// no BitField ! the base class needs a pointer to this member !
+    ::com::sun::star::awt::FontDescriptor		m_aFont;
+    ::com::sun::star::uno::Any					m_aRowHeight;
+    ::com::sun::star::uno::Any					m_aTextColor;
+    ::com::sun::star::uno::Any					m_aTextLineColor;
+    sal_Int16									m_nFontEmphasis;
+    sal_Int16									m_nFontRelief;
 // </properties>
 
 protected:
@@ -69,8 +69,8 @@ protected:
 };
 //==========================================================================
 //= ODataSettings - a base class which implements the property handling
-//=                 for an object implementing the sdb::DataSettings
-//=                 service
+//=					for an object implementing the sdb::DataSettings
+//=					service
 //==========================================================================
 
 class ODataSettings : public ::comphelper::OPropertyStateContainer
@@ -82,13 +82,13 @@ protected:
     virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const;
 
     /** register the properties from the param given. The parameter instance must be alive as long as tis object live.
-        @param  _pItem
+        @param	_pItem
             The database settings, can be <br>this</br>
     */
     void registerPropertiesFor(ODataSettings_Base* _pItem);
 };
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 
 #endif // _DBA_CORE_DATASETTINGS_HXX_
 

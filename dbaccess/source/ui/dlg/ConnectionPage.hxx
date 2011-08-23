@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,24 +48,24 @@ namespace dbaui
     */
     class OConnectionTabPage : public OConnectionHelper
     {
-        sal_Bool            m_bUserGrabFocus : 1;
+        sal_Bool			m_bUserGrabFocus : 1;
     protected:
-        // connection
-        FixedLine           m_aFL1;
+        // connection 
+        FixedLine			m_aFL1;
         // user authentification
-        FixedLine           m_aFL2;
-        FixedText           m_aUserNameLabel;
-        Edit                m_aUserName;
-        CheckBox            m_aPasswordRequired;
+        FixedLine			m_aFL2;
+        FixedText			m_aUserNameLabel;
+        Edit				m_aUserName;
+        CheckBox			m_aPasswordRequired;
 
         // jdbc driver
-        FixedLine           m_aFL3;
-        FixedText           m_aJavaDriverLabel;
-        Edit                m_aJavaDriver;
-        PushButton          m_aTestJavaDriver;
+        FixedLine			m_aFL3;
+        FixedText			m_aJavaDriverLabel;
+        Edit				m_aJavaDriver;
+        PushButton			m_aTestJavaDriver;
 
         // connection test
-        PushButton          m_aTestConnection;
+        PushButton			m_aTestConnection;
 
 
         // called when the test connection button was clicked
@@ -73,10 +73,10 @@ namespace dbaui
         DECL_LINK(OnEditModified,Edit*);
 
     public:
-        static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
-        virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
+        static	SfxTabPage*	Create( Window* pParent, const SfxItemSet& _rAttrSet );
+        virtual	BOOL		FillItemSet	(SfxItemSet& _rCoreAttrs);
 
-        virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+        virtual void		implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
         inline void enableConnectionURL() { m_aConnectionURL.SetReadOnly(sal_False); }
         inline void disableConnectionURL() { m_aConnectionURL.SetReadOnly(); }
@@ -101,7 +101,7 @@ namespace dbaui
         virtual bool checkTestConnection();
     };
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_DETAILPAGES_HXX_

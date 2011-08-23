@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,14 +44,14 @@ using namespace ::com::sun::star::beans;
 //========================================================================
 DBG_NAME(OTableRow)
 //------------------------------------------------------------------------------
-OTableRow::OTableRow()
+OTableRow::OTableRow() 
     :m_pActFieldDescr( NULL )
     ,m_nPos( -1 )
     ,m_bReadOnly( false )
     ,m_bOwnsDescriptions(false)
 {
     DBG_CTOR(OTableRow,NULL);
-}
+}												 
 //------------------------------------------------------------------------------
 OTableRow::OTableRow(const Reference< XPropertySet >& xAffectedCol)
     :m_pActFieldDescr( NULL )
@@ -84,7 +84,7 @@ OTableRow::~OTableRow()
 {
     DBG_DTOR(OTableRow,NULL);
     if(m_bOwnsDescriptions)
-        delete m_pActFieldDescr;
+        delete m_pActFieldDescr;	
 }
 
 //------------------------------------------------------------------------------
@@ -140,7 +140,7 @@ namespace dbaui
                 _rStr << sal_Int32(1);
                 _rStr << nValue;
             }
-            else
+            else 
             {
                 _rStr << sal_Int32(2);
                 _rStr.WriteByteString(::comphelper::getString(aValue));
@@ -168,13 +168,13 @@ namespace dbaui
         sal_Int32 nValue = 0;
         _rStr >> nValue;
         if ( nValue )
-        {
+        {		
             OFieldDescription* pFieldDesc = new OFieldDescription();
             _rRow.m_pActFieldDescr = pFieldDesc;
             String sValue;
             _rStr.ReadByteString(sValue);
             pFieldDesc->SetName(sValue);
-
+            
             _rStr.ReadByteString(sValue);
             pFieldDesc->SetDescription(sValue);
             _rStr.ReadByteString(sValue);
@@ -199,7 +199,7 @@ namespace dbaui
 
             pFieldDesc->SetControlDefault(aControlDefault);
 
-
+            
             _rStr >> nValue;
             pFieldDesc->SetTypeValue(nValue);
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,8 +55,8 @@ namespace rptui
     class ODesignView;
     class OViewsWindow;
     class OSectionWindow :      public Window
-                            ,   public ::cppu::BaseMutex
-                            ,   public ::comphelper::OPropertyChangeListener
+                            ,	public ::cppu::BaseMutex
+                            ,	public ::comphelper::OPropertyChangeListener
     {
         OViewsWindow*   m_pParent;
         OStartMarker    m_aStartMarker;
@@ -72,20 +72,20 @@ namespace rptui
 
         /** set the title of the group header or footer
         *
-        * \param _xGroup
-        * \param _nResId
-        * \param _pGetSection
-        * \param _pIsSectionOn
+        * \param _xGroup 
+        * \param _nResId 
+        * \param _pGetSection 
+        * \param _pIsSectionOn 
         * @return TRUE when title was set otherwise FALSE
         */
         bool setGroupSectionTitle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup,USHORT _nResId,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<sal_Bool, OGroupHelper> _pIsSectionOn);
 
         /** set the title of the (report/page) header or footer
         *
-        * \param _xGroup
-        * \param _nResId
-        * \param _pGetSection
-        * \param _pIsSectionOn
+        * \param _xGroup 
+        * \param _nResId 
+        * \param _pGetSection 
+        * \param _pIsSectionOn 
         * @return TRUE when title was set otherwise FALSE
         */
         bool setReportSectionTitle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,USHORT _nResId,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OReportHelper> _pGetSection,::std::mem_fun_t<sal_Bool, OReportHelper> _pIsSectionOn);
@@ -100,9 +100,9 @@ namespace rptui
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
         // windows overload
         virtual void Resize();
-
+        
     protected:
-        virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
+        virtual void	_propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
     public:
         OSectionWindow( OViewsWindow* _pParent
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
@@ -114,17 +114,17 @@ namespace rptui
         inline OEndMarker&      getEndMarker()      { return m_aEndMarker;       }
         inline OViewsWindow*    getViewsWindow()    { return m_pParent;          }
 
-        void    setCollapsed(sal_Bool _bCollapsed);
+        void	setCollapsed(sal_Bool _bCollapsed);
 
         /** triggers the property browser with the section
-            @param  _pStartMarker
+            @param	_pStartMarker
         */
-        void            showProperties();
+        void			showProperties();
 
         /** set the marker as marked or not marked
-            @param  _bMark  set the new state of the marker
+            @param	_bMark	set the new state of the marker
         */
-        void    setMarked(sal_Bool _bMark);
+        void	setMarked(sal_Bool _bMark);
 
         OViewsWindow* getViewsWindow() const { return m_pParent; }
 

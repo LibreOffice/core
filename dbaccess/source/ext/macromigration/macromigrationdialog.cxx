@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ namespace dbmm
         bool                                    bMigrationFailure;
         bool                                    bMigrationSuccess;
 
-        MacroMigrationDialog_Data(
+        MacroMigrationDialog_Data( 
                 const ::comphelper::ComponentContext& _rContext,
                 const Reference< XOfficeDatabaseDocument >& _rxDocument )
             :aContext( _rContext )

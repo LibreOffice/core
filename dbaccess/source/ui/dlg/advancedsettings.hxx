@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ namespace dbaui
         CheckBox*           m_pIndexAppendix;
         CheckBox*           m_pDosLineEnds;
         CheckBox*           m_pCheckRequiredFields;
-        CheckBox*           m_pIgnoreCurrency;
+        CheckBox*			m_pIgnoreCurrency;
         CheckBox*           m_pEscapeDateTime;
         CheckBox*           m_pPrimaryKeySupport;
 
@@ -127,7 +127,7 @@ namespace dbaui
 
         GeneratedValuesPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
-
+        
             // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
         virtual ~GeneratedValuesPage();
 

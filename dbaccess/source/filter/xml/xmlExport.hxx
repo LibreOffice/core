@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,86 +103,86 @@ class ODBExport : public SvXMLExport
         }
     };
 
-    ::std::auto_ptr< TStringPair >                  m_aAutoIncrement;
-    ::std::auto_ptr< TDelimiter >                   m_aDelimiter;
+    ::std::auto_ptr< TStringPair >					m_aAutoIncrement;
+    ::std::auto_ptr< TDelimiter >					m_aDelimiter;
     ::std::vector< TypedPropertyValue >             m_aDataSourceSettings;
     ::std::vector< XMLPropertyState >               m_aCurrentPropertyStates;
-    TPropertyStyleMap                               m_aAutoStyleNames;
-    TPropertyStyleMap                               m_aCellAutoStyleNames;
-    TPropertyStyleMap                               m_aRowAutoStyleNames;
+    TPropertyStyleMap								m_aAutoStyleNames;
+    TPropertyStyleMap								m_aCellAutoStyleNames;
+    TPropertyStyleMap								m_aRowAutoStyleNames;
     TTableColumnMap                                 m_aTableDummyColumns;
-    ::rtl::OUString                                 m_sCharSet;
-    UniReference < SvXMLExportPropertyMapper>       m_xExportHelper;
-    UniReference < SvXMLExportPropertyMapper>       m_xColumnExportHelper;
-    UniReference < SvXMLExportPropertyMapper>       m_xCellExportHelper;
-    UniReference < SvXMLExportPropertyMapper>       m_xRowExportHelper;
+    ::rtl::OUString									m_sCharSet;
+    UniReference < SvXMLExportPropertyMapper>		m_xExportHelper;
+    UniReference < SvXMLExportPropertyMapper>		m_xColumnExportHelper;
+    UniReference < SvXMLExportPropertyMapper>		m_xCellExportHelper;
+    UniReference < SvXMLExportPropertyMapper>		m_xRowExportHelper;
 
-    mutable UniReference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
-    mutable UniReference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
-    mutable UniReference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
-    mutable UniReference < XMLPropertySetMapper >   m_xRowStylesPropertySetMapper;
-
-    Reference<XPropertySet>                         m_xDataSource;
+    mutable UniReference < XMLPropertySetMapper >	m_xTableStylesPropertySetMapper;
+    mutable UniReference < XMLPropertySetMapper >	m_xColumnStylesPropertySetMapper;
+    mutable UniReference < XMLPropertySetMapper >	m_xCellStylesPropertySetMapper;
+    mutable UniReference < XMLPropertySetMapper >	m_xRowStylesPropertySetMapper;
+    
+    Reference<XPropertySet>							m_xDataSource;
     ::dbaccess::ODsnTypeCollection                  m_aTypeCollection;
     sal_Bool                                        m_bAllreadyFilled;
 
-    void                    exportDataSource();
+    void					exportDataSource();
     void                    exportConnectionData();
     void                    exportDriverSettings(const TSettingsMap& _aSettings);
     void                    exportApplicationConnectionSettings(const TSettingsMap& _aSettings);
-    void                    exportLogin();
-    void                    exportSequence(const Sequence< ::rtl::OUString>& _aValue
+    void					exportLogin();
+    void					exportSequence(const Sequence< ::rtl::OUString>& _aValue
                                         ,::xmloff::token::XMLTokenEnum _eTokenFilter
                                         ,::xmloff::token::XMLTokenEnum _eTokenType);
-    void                    exportDelimiter();
-    void                    exportAutoIncrement();
-    void                    exportCharSet();
-    void                    exportDataSourceSettings();
-    void                    exportForms();
-    void                    exportReports();
-    void                    exportQueries(sal_Bool _bExportContext);
-    void                    exportTables(sal_Bool _bExportContext);
-    void                    exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt);
+    void					exportDelimiter();
+    void					exportAutoIncrement();
+    void					exportCharSet();
+    void					exportDataSourceSettings();
+    void					exportForms();
+    void					exportReports();
+    void					exportQueries(sal_Bool _bExportContext);
+    void					exportTables(sal_Bool _bExportContext);
+    void					exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt);
     void                    exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,const Reference<XPropertySet>& _xProp,SvXMLAttributeList& _rAtt,TPropertyStyleMap& _rMap);
-    void                    exportCollection(const Reference< XNameAccess >& _xCollection
+    void					exportCollection(const Reference< XNameAccess >& _xCollection
                                             ,enum ::xmloff::token::XMLTokenEnum _eComponents
                                             ,enum ::xmloff::token::XMLTokenEnum _eSubComponents
                                             ,sal_Bool _bExportContext
                                             ,const ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >& _aMemFunc
                                             );
-    void                    exportComponent(XPropertySet* _xProp);
-    void                    exportQuery(XPropertySet* _xProp);
-    void                    exportTable(XPropertySet* _xProp);
-    void                    exportFilter(XPropertySet* _xProp
+    void					exportComponent(XPropertySet* _xProp);
+    void					exportQuery(XPropertySet* _xProp);
+    void					exportTable(XPropertySet* _xProp);
+    void					exportFilter(XPropertySet* _xProp
                                         ,const ::rtl::OUString& _sProp
                                         ,enum ::xmloff::token::XMLTokenEnum _eStatementType);
-    void                    exportTableName(XPropertySet* _xProp,sal_Bool _bUpdate);
-    void                    exportAutoStyle(XPropertySet* _xProp);
-    void                    exportColumns(const Reference<XColumnsSupplier>& _xColSup);
+    void					exportTableName(XPropertySet* _xProp,sal_Bool _bUpdate);
+    void					exportAutoStyle(XPropertySet* _xProp);
+    void					exportColumns(const Reference<XColumnsSupplier>& _xColSup);
     void                    collectComponentStyles();
 
-    ::rtl::OUString         implConvertAny(const Any& _rValue);
+    ::rtl::OUString			implConvertAny(const Any& _rValue);
 
     UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const;
-
+    
 private:
                             ODBExport();
 protected:
 
-    virtual void                    _ExportStyles( BOOL bUsed );
-    virtual void                    _ExportAutoStyles();
-    virtual void                    _ExportContent();
-    virtual void                    _ExportMasterStyles();
-    virtual void                    _ExportFontDecls();
-    virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass );
-    virtual SvXMLAutoStylePoolP*    CreateAutoStylePool();
+    virtual void					_ExportStyles( BOOL bUsed );
+    virtual void					_ExportAutoStyles();
+    virtual void					_ExportContent();
+    virtual void					_ExportMasterStyles();
+    virtual void					_ExportFontDecls();
+    virtual sal_uInt32				exportDoc( enum ::xmloff::token::XMLTokenEnum eClass );
+    virtual SvXMLAutoStylePoolP*	CreateAutoStylePool();
 
     virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
     virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
-
-    virtual                 ~ODBExport(){};
-public:
-
+    
+    virtual					~ODBExport(){};
+public:						
+                            
     ODBExport(const Reference< XMultiServiceFactory >& _rxMSF, sal_uInt16 nExportFlag = EXPORT_CONTENT | EXPORT_AUTOSTYLES | EXPORT_PRETTY | EXPORT_FONTDECLS | EXPORT_SCRIPTS );
     // XServiceInfo
     DECLARE_SERVICE_INFO_STATIC( );

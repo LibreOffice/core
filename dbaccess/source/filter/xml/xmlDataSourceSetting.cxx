@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ DBG_NAME(OXMLDataSourceSetting)
 OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
                 ,const ::rtl::OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList
+                ,const Reference< XAttributeList > & _xAttrList 
                 ,OXMLDataSourceSetting* _pContainer) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_pContainer(_pContainer)
@@ -82,13 +82,13 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                     static MapString2Type s_aTypeNameMap;
                     if (!s_aTypeNameMap.size())
                     {
-                        s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = ::getBooleanCppuType();
-                        s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = ::getCppuType( static_cast< double* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]    = ::getCppuType( static_cast< double* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_STRING)]    = ::getCppuType( static_cast< ::rtl::OUString* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_INT)]       = ::getCppuType( static_cast< sal_Int32* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_SHORT)]     = ::getCppuType( static_cast< sal_Int16* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_VOID)]      = ::getVoidCppuType();
+                        s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]	= ::getBooleanCppuType();
+                        s_aTypeNameMap[GetXMLToken( XML_FLOAT)]		= ::getCppuType( static_cast< double* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]	= ::getCppuType( static_cast< double* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_STRING)]	= ::getCppuType( static_cast< ::rtl::OUString* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_INT)]		= ::getCppuType( static_cast< sal_Int32* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_SHORT)]		= ::getCppuType( static_cast< sal_Int16* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_VOID)]		= ::getVoidCppuType();
                     }
 
                     const ConstMapString2TypeIterator aTypePos = s_aTypeNameMap.find(sValue);
@@ -102,7 +102,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                 break;
         }
     }
-
+    
 }
 // -----------------------------------------------------------------------------
 
@@ -117,7 +117,7 @@ SvXMLImportContext* OXMLDataSourceSetting::CreateChildContext(
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
-    const SvXMLTokenMap&    rTokenMap   = GetOwnImport().GetDataSourceInfoElemTokenMap();
+    const SvXMLTokenMap&	rTokenMap	= GetOwnImport().GetDataSourceInfoElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
@@ -167,7 +167,7 @@ void OXMLDataSourceSetting::addValue(const ::rtl::OUString& _sValue)
 
     if ( !m_bIsList )
         m_aSetting.Value = aValue;
-    else
+    else 
     {
         sal_Int32 nPos = m_aInfoSequence.getLength();
         m_aInfoSequence.realloc(nPos+1);
@@ -186,7 +186,7 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
     Any aReturn;
     switch (_rExpectedType.getTypeClass())
     {
-        case TypeClass_BOOLEAN:     // sal_Bool
+        case TypeClass_BOOLEAN:		// sal_Bool
         {
             bool bValue;
         #if OSL_DEBUG_LEVEL > 0
@@ -195,14 +195,14 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
             rImporter.GetMM100UnitConverter().convertBool(bValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
                     ::rtl::OString("OXMLDataSourceSetting::convertString: could not convert \"")
-                +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                +=  ::rtl::OString("\" into a boolean!"));
+                +=	::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                +=	::rtl::OString("\" into a boolean!"));
             aReturn <<= bValue;
         }
         break;
-        case TypeClass_SHORT:       // sal_Int16
-        case TypeClass_LONG:        // sal_Int32
-            {   // it's a real int32/16 property
+        case TypeClass_SHORT:		// sal_Int16
+        case TypeClass_LONG:		// sal_Int32
+            {	// it's a real int32/16 property
                 sal_Int32 nValue(0);
         #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
@@ -210,8 +210,8 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
                 rImporter.GetMM100UnitConverter().convertNumber(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
                         ::rtl::OString("OXMLDataSourceSetting::convertString: could not convert \"")
-                    +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                    +=  ::rtl::OString("\" into an integer!"));
+                    +=	::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                    +=	::rtl::OString("\" into an integer!"));
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
                     aReturn <<= (sal_Int16)nValue;
                 else
@@ -232,8 +232,8 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
             rImporter.GetMM100UnitConverter().convertDouble(nValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
                     ::rtl::OString("OXMLDataSourceSetting::convertString: could not convert \"")
-                +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                +=  ::rtl::OString("\" into a double!"));
+                +=	::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                +=	::rtl::OString("\" into a double!"));
             aReturn <<= (double)nValue;
         }
         break;

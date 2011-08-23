@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,13 +32,13 @@ namespace dbaui
 {
 
     //==================================================================
-    // ConnData     ---------->*    ConnLineData
-    //    ^1                            ^1
-    //    |                             |
-    //  Conn        ---------->*    ConnLine
+    // ConnData		---------->*	ConnLineData
+    //    ^1							^1
+    //    |								|
+    //	Conn		---------->*	ConnLine
     //==================================================================
 
-
+    
 }
 #endif // DBAUI_CONNECTIONDATA_HXX
 
@@ -54,7 +54,7 @@ DECLARE_LIST( OConnectionLineList, OConnectionLine* );
 DECLARE_LIST( OTableConnectionDataList, OTableConnectionData* );
 
 //==================================================================
-const USHORT MAX_CONN_COUNT     = 2;
+const USHORT MAX_CONN_COUNT		= 2;
 
 class SbaJoinTabWin;
 class SbaJoinTabWinCont;

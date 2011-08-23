@@ -63,18 +63,18 @@ namespace dbaccess
     public:
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
             interface.<BR>
-            @param          _rParent            the object which acts as parent for the container.
+            @param			_rParent			the object which acts as parent for the container.
                                                 all refcounting is rerouted to this object
-            @param          _rMutex             the access safety object of the parent
-            @param          _rTableFilter       restricts the visible tables by name
-            @param          _rTableTypeFilter   restricts the visible tables by type
-            @see            construct
+            @param			_rMutex				the access safety object of the parent
+            @param			_rTableFilter		restricts the visible tables by name
+            @param			_rTableTypeFilter	restricts the visible tables by type
+            @see			construct
         */
         OViewContainer( ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
                         sal_Bool _bCase,
-                        IRefreshListener*   _pRefreshListener,
+                        IRefreshListener*	_pRefreshListener,
                         ::dbtools::IWarningsContainer* _pWarningsContainer,
                         oslInterlockedCount& _nInAppend
                         );
@@ -99,8 +99,8 @@ namespace dbaccess
         virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
 
         // ::connectivity::sdbcx::OCollection
-        virtual ::connectivity::sdbcx::ObjectType       createObject(const ::rtl::OUString& _rName);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   createDescriptor();
+        virtual ::connectivity::sdbcx::ObjectType		createObject(const ::rtl::OUString& _rName);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >	createDescriptor();
         virtual connectivity::sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
         virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
 

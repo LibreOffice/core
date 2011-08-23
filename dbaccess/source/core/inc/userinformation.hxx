@@ -35,12 +35,12 @@
 
 class UserInformation
 {
-    ::com::sun::star::lang::Locale  m_aUserLocale;
+    ::com::sun::star::lang::Locale	m_aUserLocale;
 
 public:
     UserInformation();
 
-    ::com::sun::star::lang::Locale      getUserLanguage() const { return m_aUserLocale; }
+    ::com::sun::star::lang::Locale		getUserLanguage() const { return m_aUserLocale; }
 };
 
 #endif // _DBA_CORE_USERINFORMATION_HXX_

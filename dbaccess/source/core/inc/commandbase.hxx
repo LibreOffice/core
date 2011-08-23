@@ -37,7 +37,7 @@ namespace dbaccess
 
 //==========================================================================
 //= OCommandBase - a base class (in fact just a container for some members)
-//=                 for classes implementing the sdb.CommandDefinition service
+//=					for classes implementing the sdb.CommandDefinition service
 //==========================================================================
 class OCommandBase
 {
@@ -45,11 +45,11 @@ public: // need public access
 // <properties>
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
                                                 m_aLayoutInformation;
-    ::rtl::OUString                             m_sCommand;
-    sal_Bool                                    m_bEscapeProcessing;        // no BitField ! so it can be used with a OPropertyStateContainer
-    ::rtl::OUString                             m_sUpdateTableName;
-    ::rtl::OUString                             m_sUpdateSchemaName;
-    ::rtl::OUString                             m_sUpdateCatalogName;
+    ::rtl::OUString								m_sCommand;
+    sal_Bool									m_bEscapeProcessing;		// no BitField ! so it can be used with a OPropertyStateContainer
+    ::rtl::OUString								m_sUpdateTableName;
+    ::rtl::OUString								m_sUpdateSchemaName;
+    ::rtl::OUString								m_sUpdateCatalogName;
 // </properties>
 
 protected:
@@ -57,7 +57,7 @@ protected:
 
 };
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 
 #endif // _DBA_CORE_COMMANDBASE_HXX_
 

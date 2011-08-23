@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,7 +135,7 @@ void OXMLColumn::EndElement()
 
             if ( m_aDefaultValue.hasValue() )
                 xProp->setPropertyValue(PROPERTY_CONTROLDEFAULT,m_aDefaultValue);
-
+            
             Reference<XAppend> xAppend(m_xParentContainer,UNO_QUERY);
             if ( xAppend.is() )
                 xAppend->appendByDescriptor(xProp);
@@ -167,7 +167,7 @@ void OXMLColumn::EndElement()
                     }
                 }
             }
-
+            
         }
     } // if ( xFac.is() && m_sName.getLength() )
     else if ( m_sCellStyleName.getLength() )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@ namespace rptxml
     class OXMLComponent : public SvXMLImportContext
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >  m_xComponent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >	m_xComponent;
         ::rtl::OUString m_sName;
         ::rtl::OUString m_sTextStyleName;
-
+    
         OXMLComponent(const OXMLComponent&);
         void operator =(const OXMLComponent&);
     public:

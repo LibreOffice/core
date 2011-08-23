@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ SvXMLImportContext* OXMLMasterFields::CreateChildContext(
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
-    const SvXMLTokenMap&    rTokenMap   = static_cast<ORptFilter&>(GetImport()).GetSubDocumentElemTokenMap();
+    const SvXMLTokenMap&	rTokenMap	= static_cast<ORptFilter&>(GetImport()).GetSubDocumentElemTokenMap();
 
     switch( rTokenMap.Get( _nPrefix, _rLocalName ) )
     {

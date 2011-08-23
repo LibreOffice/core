@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ namespace dbaui
     class ColorChanger
     {
     protected:
-        OutputDevice*   m_pDev;
+        OutputDevice*	m_pDev;
 
     public:
         ColorChanger( OutputDevice* _pDev, const Color& _rNewLineColor, const Color& _rNewFillColor )
@@ -77,9 +77,9 @@ namespace dbaui
 
     DBG_NAME(ODataView)
     // -------------------------------------------------------------------------
-    ODataView::ODataView(   Window* pParent,
+    ODataView::ODataView(	Window* pParent, 
                             IController& _rController,
-                            const Reference< XMultiServiceFactory >& _rFactory,
+                            const Reference< XMultiServiceFactory >& _rFactory, 
                             WinBits nStyle)
         :Window(pParent,nStyle)
         ,m_xServiceFactory(_rFactory)
@@ -102,7 +102,7 @@ namespace dbaui
         DBG_DTOR(ODataView,NULL);
 
         enableSeparator( sal_False );
-        m_rController.release();
+        m_rController.release();		
     }
 
     // -------------------------------------------------------------------------
@@ -176,7 +176,7 @@ namespace dbaui
         {
             case EVENT_KEYINPUT:
             {
-                const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
+                const KeyEvent* pKeyEvent =	_rNEvt.GetKeyEvent();
                 const KeyCode& aKeyCode = pKeyEvent->GetKeyCode();
                 if ( m_pAccel.get() && m_pAccel->execute( aKeyCode ) )
                     // the accelerator consumed the event

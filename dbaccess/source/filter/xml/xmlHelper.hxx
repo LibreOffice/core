@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,21 +34,21 @@
 
 #include <memory>
 
-#define CTF_DB_ROWHEIGHT                            (XML_DB_CTF_START + 1)
-#define CTF_DB_ISVISIBLE                            (XML_DB_CTF_START + 2)
-#define CTF_DB_MASTERPAGENAME                       (XML_DB_CTF_START + 3)
-#define CTF_DB_NUMBERFORMAT                         (XML_DB_CTF_START + 4)
-#define CTF_DB_COLUMN_TEXT_ALIGN                    (XML_DB_CTF_START + 5)
+#define CTF_DB_ROWHEIGHT							(XML_DB_CTF_START + 1)
+#define CTF_DB_ISVISIBLE							(XML_DB_CTF_START + 2)
+#define CTF_DB_MASTERPAGENAME						(XML_DB_CTF_START + 3)
+#define CTF_DB_NUMBERFORMAT							(XML_DB_CTF_START + 4)
+#define CTF_DB_COLUMN_TEXT_ALIGN					(XML_DB_CTF_START + 5)
 
-#define XML_DB_TYPE_EQUAL                           (XML_DB_TYPES_START + 1)
+#define XML_DB_TYPE_EQUAL							(XML_DB_TYPES_START + 1)
 
 namespace dbaxml
 {
     class OPropertyHandlerFactory : public ::xmloff::OControlPropertyHandlerFactory
     {
     protected:
-        mutable ::std::auto_ptr<XMLConstantsPropertyHandler>    m_pDisplayHandler;
-        mutable ::std::auto_ptr<XMLPropertyHandler>             m_pTextAlignHandler;
+        mutable ::std::auto_ptr<XMLConstantsPropertyHandler>	m_pDisplayHandler;
+        mutable ::std::auto_ptr<XMLPropertyHandler>				m_pTextAlignHandler;
     public:
         OPropertyHandlerFactory();
         virtual ~OPropertyHandlerFactory();

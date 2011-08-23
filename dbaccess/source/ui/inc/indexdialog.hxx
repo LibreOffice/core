@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,9 +55,9 @@ namespace dbaui
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
-        Link        m_aSelectHdl;
-        Link        m_aEndEditHdl;
-        sal_Bool    m_bSuspendSelectHdl;
+        Link		m_aSelectHdl;
+        Link		m_aEndEditHdl;
+        sal_Bool	m_bSuspendSelectHdl;
 
     public:
         DbaIndexList(Window* _pParent, const ResId& _rId);
@@ -92,27 +92,27 @@ namespace dbaui
     //==================================================================
     class IndexFieldsControl;
     class OIndexCollection;
-    class DbaIndexDialog :  public ModalDialog,
+    class DbaIndexDialog :	public ModalDialog,
                             public OToolBoxHelper
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
-        SvtViewOptions          m_aGeometrySettings;
+        SvtViewOptions			m_aGeometrySettings;
 
-        ToolBox                 m_aActions;
-        DbaIndexList            m_aIndexes;
-        FixedLine               m_aIndexDetails;
-        FixedText               m_aDescriptionLabel;
-        FixedText               m_aDescription;
-        CheckBox                m_aUnique;
-        FixedText               m_aFieldsLabel;
-        IndexFieldsControl*     m_pFields;
-        PushButton              m_aClose;
-        HelpButton              m_aHelp;
+        ToolBox					m_aActions;
+        DbaIndexList			m_aIndexes;
+        FixedLine				m_aIndexDetails;
+        FixedText				m_aDescriptionLabel;
+        FixedText				m_aDescription;
+        CheckBox				m_aUnique;
+        FixedText				m_aFieldsLabel;
+        IndexFieldsControl*		m_pFields;
+        PushButton				m_aClose;
+        HelpButton				m_aHelp;
 
-        OIndexCollection*       m_pIndexes;
-        SvLBoxEntry*            m_pPreviousSelection;
-        sal_Bool                m_bEditAgain;
+        OIndexCollection*		m_pIndexes;
+        SvLBoxEntry*			m_pPreviousSelection;
+        sal_Bool				m_bEditAgain;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                 m_xORB;
@@ -131,9 +131,9 @@ namespace dbaui
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
         /** will be called whenthe id of the image list is needed.
-            @param  _eBitmapSet
+            @param	_eBitmapSet
                 <svtools/imgdef.hxx>
-            @param  _bHiContast
+            @param	_bHiContast
                 <TRUE/> when in high contrast mode.
         */
         virtual ImageList getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const;
@@ -177,7 +177,7 @@ namespace dbaui
     };
 
 //......................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //......................................................................
 
 #endif // _DBAUI_INDEXDIALOG_HXX_

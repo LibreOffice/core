@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@ namespace dbaui
     class OWizHTMLExtend : public OWizTypeSelect
     {
     protected:
-        virtual SvParser*   createReader(sal_Int32 _nRows);
+        virtual SvParser*	createReader(sal_Int32 _nRows);
     public:
-        OWizHTMLExtend(Window* pParent, SvStream& _rStream)
+        OWizHTMLExtend(Window* pParent, SvStream& _rStream) 
             : OWizTypeSelect( pParent, &_rStream )
         {
         }
@@ -58,7 +58,7 @@ namespace dbaui
     protected:
         virtual SvParser* createReader(sal_Int32 _nRows);
     public:
-        OWizRTFExtend(Window* pParent,SvStream& _rStream)
+        OWizRTFExtend(Window* pParent,SvStream&	_rStream) 
             : OWizTypeSelect( pParent, &_rStream )
         {
         }

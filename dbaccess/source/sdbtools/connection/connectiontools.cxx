@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,14 +92,14 @@ namespace sdbtools
         EntryGuard aGuard( *this );
         return new TableName( getContext(), getConnection() );
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XObjectNames > SAL_CALL ConnectionTools::getObjectNames() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         return new ObjectNames( getContext(), getConnection() );
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XDataSourceMetaData > SAL_CALL ConnectionTools::getDataSourceMetaData() throw (RuntimeException)
     {
@@ -130,7 +130,7 @@ namespace sdbtools
     {
         return getImplementationName_static();
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL ConnectionTools::supportsService(const ::rtl::OUString & _ServiceName) throw (RuntimeException)
     {
@@ -139,7 +139,7 @@ namespace sdbtools
         const ::rtl::OUString* end = aSupported.getConstArray() + aSupported.getLength();
         return ::std::find( begin, end, _ServiceName ) != end;
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ConnectionTools::getSupportedServiceNames() throw (RuntimeException)
     {
@@ -151,7 +151,7 @@ namespace sdbtools
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.dbaccess.ConnectionTools" ) );
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ConnectionTools::getSupportedServiceNames_static()
     {
@@ -159,13 +159,13 @@ namespace sdbtools
         aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.tools.ConnectionTools" ) );
         return aSupported;
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL ConnectionTools::Create(const Reference< XComponentContext >& _rxContext )
     {
         return *( new ConnectionTools( ::comphelper::ComponentContext( _rxContext ) ) );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL ConnectionTools::initialize(const Sequence< Any > & _rArguments) throw (RuntimeException, Exception)
     {

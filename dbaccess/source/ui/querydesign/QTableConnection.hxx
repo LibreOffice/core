@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ namespace dbaui
     class OQueryTableView;
     class OQueryTableConnection : public OTableConnection
     {
-        sal_Bool m_bVisited;    // is true if the conn was already visited through the join algorithm
+        sal_Bool m_bVisited;	// is true if the conn was already visited through the join algorithm
     public:
         OQueryTableConnection(OQueryTableView* pContainer, const TTableConnectionData::value_type& pTabConnData);
         OQueryTableConnection(const OQueryTableConnection& rConn);
@@ -47,10 +47,10 @@ namespace dbaui
         OQueryTableConnection& operator=(const OQueryTableConnection& rConn);
         sal_Bool operator==(const OQueryTableConnection& rCompare);
 
-        inline ::rtl::OUString  GetAliasName(EConnectionSide nWhich) const { return static_cast<OQueryTableConnectionData*>(GetData().get())->GetAliasName(nWhich); }
+        inline ::rtl::OUString	GetAliasName(EConnectionSide nWhich) const { return static_cast<OQueryTableConnectionData*>(GetData().get())->GetAliasName(nWhich); }
 
-        inline sal_Bool IsVisited() const               { return m_bVisited; }
-        inline void     SetVisited(sal_Bool bVisited)   { m_bVisited = bVisited; }
+        inline sal_Bool	IsVisited() const				{ return m_bVisited; }
+        inline void		SetVisited(sal_Bool bVisited)	{ m_bVisited = bVisited; }
 
     };
 }

@@ -41,7 +41,7 @@ namespace dbaccess
 
     {
     public:
-        ORowSetColumn(  const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
+        ORowSetColumn(	const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
                         const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRow >& _xRow,
                         sal_Int32 _nPos,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,

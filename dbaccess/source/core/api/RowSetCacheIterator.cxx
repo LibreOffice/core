@@ -53,7 +53,7 @@ ORowSetCacheIterator& ORowSetCacheIterator::operator =(const ORowSetCacheIterato
         return *this;
 
     m_pCache = _rRH.m_pCache;
-    m_aIter  = _rRH.m_aIter;
+    m_aIter	 = _rRH.m_aIter;
     m_pRowSet = _rRH.m_pRowSet;
 
     return *this;
@@ -117,7 +117,7 @@ bool ORowSetCacheIterator::operator ==(const ORowSetMatrix::iterator& _rRH) cons
     return m_aIter->second.aIterator == _rRH;
 }
 
-void ORowSetCacheIterator::setBookmark(const ::com::sun::star::uno::Any&    _rBookmark)
+void ORowSetCacheIterator::setBookmark(const ::com::sun::star::uno::Any&	_rBookmark)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCacheIterator::setBookmark" );
     m_aIter->second.aBookmark = _rBookmark;

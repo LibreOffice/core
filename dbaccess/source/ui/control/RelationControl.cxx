@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@
 
 #include <algorithm>
 
-#define SOURCE_COLUMN   1
-#define DEST_COLUMN     2
+#define SOURCE_COLUMN	1
+#define DEST_COLUMN		2
 
 namespace dbaui
 {
@@ -67,20 +67,20 @@ namespace dbaui
         friend class OTableListBoxControl;
 
         ::std::auto_ptr< ::svt::ListBoxControl> m_pListCell;
-        TTableConnectionData::value_type        m_pConnData;
-        const OJoinTableView::OTableWindowMap*  m_pTableMap;
-        OTableListBoxControl*                   m_pBoxControl;
-        long                                    m_nDataPos;
-        Reference< XPropertySet>                m_xSourceDef;
-        Reference< XPropertySet>                m_xDestDef;
+        TTableConnectionData::value_type		m_pConnData;
+        const OJoinTableView::OTableWindowMap*	m_pTableMap;
+        OTableListBoxControl*					m_pBoxControl;
+        long									m_nDataPos;
+        Reference< XPropertySet>				m_xSourceDef;
+        Reference< XPropertySet>				m_xDestDef;
 
 
         void fillListBox(const Reference< XPropertySet>& _xDest,long nRow,USHORT nColumnId);
         /** returns the column id for the editbrowsebox
-            @param  _nColId
+            @param	_nColId
                     the column id SOURCE_COLUMN or DEST_COLUMN
 
-            @return the current column id eihter SOURCE_COLUMN or DEST_COLUMN depends on the connection data
+            @return	the current column id eihter SOURCE_COLUMN or DEST_COLUMN depends on the connection data
         */
         USHORT getColumnIdent( USHORT _nColId ) const;
     public:
@@ -88,9 +88,9 @@ namespace dbaui
         virtual ~ORelationControl();
 
         /** searches for a connection between these two tables
-            @param  _pSource
+            @param	_pSource	
                     the left table
-            @param  _pDest
+            @param	_pDest		
                     the right window
         */
         void setWindowTables(const OTableWindow* _pSource,const OTableWindow* _pDest);
@@ -125,7 +125,7 @@ namespace dbaui
     private:
 
         DECL_LINK( AsynchActivate, void* );
-
+        
     };
 
     //========================================================================
@@ -177,12 +177,12 @@ namespace dbaui
 
             //////////////////////////////////////////////////////////////////////
             // set browse mode
-            SetMode(    BROWSER_COLUMNSELECTION |
-                        BROWSER_HLINESFULL      |
-                        BROWSER_VLINESFULL      |
-                        BROWSER_HIDECURSOR      |
-                        BROWSER_HIDESELECT      |
-                        BROWSER_AUTO_HSCROLL    |
+            SetMode(	BROWSER_COLUMNSELECTION |
+                        BROWSER_HLINESFULL		| 
+                        BROWSER_VLINESFULL		|
+                        BROWSER_HIDECURSOR		| 
+                        BROWSER_HIDESELECT		|
+                        BROWSER_AUTO_HSCROLL	|
                         BROWSER_AUTO_VSCROLL);
         }
         else
@@ -209,7 +209,7 @@ namespace dbaui
             PostUserEvent(LINK(this, ORelationControl, AsynchDeactivate));
         else if (rNEvt.GetType() == EVENT_GETFOCUS)
             PostUserEvent(LINK(this, ORelationControl, AsynchActivate));
-
+        
         return EditBrowseBox::PreNotify(rNEvt);
     }
 
@@ -234,8 +234,8 @@ namespace dbaui
         long nRow = GetCurRow();
         USHORT nCol = GetCurColumnId();
 
-        BOOL bRet = !((     ( bForward && (nCol == DEST_COLUMN)     && (nRow == GetRowCount() - 1)))
-                        ||  (!bForward && (nCol == SOURCE_COLUMN)   && (nRow == 0)));
+        BOOL bRet = !((		( bForward && (nCol == DEST_COLUMN)		&& (nRow == GetRowCount() - 1))) 
+                        ||	(!bForward && (nCol == SOURCE_COLUMN)	&& (nRow == 0)));
 
         return bRet && EditBrowseBox::IsTabAllowed(bForward);
     }
@@ -304,18 +304,18 @@ namespace dbaui
     void ORelationControl::InitController( CellControllerRef& /*rController*/, long nRow, USHORT nColumnId )
     {
         DBG_CHKTHIS(ORelationControl,NULL);
-
+        
         ULONG nHelpId = HID_RELATIONDIALOG_LEFTFIELDCELL;
 
         Reference< XPropertySet> xDef;
         switch ( getColumnIdent(nColumnId) )
         {
             case SOURCE_COLUMN:
-                xDef    = m_xSourceDef;
+                xDef	= m_xSourceDef;
                 nHelpId = HID_RELATIONDIALOG_LEFTFIELDCELL;
                 break;
             case DEST_COLUMN:
-                xDef    = m_xDestDef;
+                xDef	= m_xDestDef;
                 nHelpId = HID_RELATIONDIALOG_RIGHTFIELDCELL;
                 break;
             default:
@@ -359,7 +359,7 @@ namespace dbaui
         DBG_CHKTHIS(ORelationControl,NULL);
         String aText  =const_cast< ORelationControl*>(this)->GetCellText( m_nDataPos, nColumnId );
 
-        Point aPos( rRect.TopLeft() );
+        Point aPos( rRect.TopLeft() );			
         Size aTextSize( GetDataWindow().GetTextHeight(),GetDataWindow().GetTextWidth( aText ));
 
         if( aPos.X() < rRect.Right() || aPos.X() + aTextSize.Width() > rRect.Right() ||
@@ -409,7 +409,7 @@ namespace dbaui
         {
             m_xSourceDef = _pSource->GetTable();
             SetColumnTitle(1, _pSource->GetName());
-
+        
 
             m_xDestDef = _pDest->GetTable();
             SetColumnTitle(2, _pDest->GetName());
@@ -465,11 +465,11 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
                                             ,IRelationControlInterface* _pParentDialog)
      : Window(_pParent,_rResId)
      , m_aFL_InvolvedTables(    this, ResId(FL_INVOLVED_TABLES,*_rResId.GetResMgr()))
-     , m_lmbLeftTable(          this, ResId(LB_LEFT_TABLE,*_rResId.GetResMgr()))
-     , m_lmbRightTable(         this, ResId(LB_RIGHT_TABLE,*_rResId.GetResMgr()))
+     , m_lmbLeftTable(			this, ResId(LB_LEFT_TABLE,*_rResId.GetResMgr()))
+     , m_lmbRightTable(			this, ResId(LB_RIGHT_TABLE,*_rResId.GetResMgr()))
      , m_aFL_InvolvedFields(    this, ResId(FL_INVOLVED_FIELDS,*_rResId.GetResMgr()))
      , m_pTableMap(_pTableMap)
-     , m_pParentDialog(_pParentDialog)
+     , m_pParentDialog(_pParentDialog) 
     {
         m_pRC_Tables = new ORelationControl( this,m_pTableMap );
         m_pRC_Tables->SetHelpId(HID_RELDLG_KEYFIELDS);
@@ -530,7 +530,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         m_pRC_Tables->setWindowTables(pInitialLeft,pInitialRight);
 
         // die in einer ComboBox ausgewaehlte Tabelle darf nicht in der anderen zur Verfuegung stehen
-
+        
         if ( m_pTableMap->size() > 2 )
         {
             m_lmbLeftTable.RemoveEntry(m_strCurrentRight);
@@ -547,8 +547,8 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
     IMPL_LINK( OTableListBoxControl, OnTableChanged, ListBox*, pListBox )
     {
         String strSelected(pListBox->GetSelectEntry());
-        OTableWindow* pLeft     = NULL;
-        OTableWindow* pRight    = NULL;
+        OTableWindow* pLeft		= NULL;
+        OTableWindow* pRight	= NULL;
 
         // eine Sonderbehandlung : wenn es nur zwei Tabellen gibt, muss ich bei Wechsel in einer LB auch in der anderen umschalten
         if ( m_pTableMap->size() == 2 )
@@ -567,13 +567,13 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
 
             if ( m_lmbLeftTable.GetSelectEntry() == String(pFirst->GetName()) )
             {
-                pLeft   = pFirst;
-                pRight  = pSecond;
+                pLeft	= pFirst;
+                pRight	= pSecond;
             }
             else
             {
-                pLeft   = pSecond;
-                pRight  = pFirst;
+                pLeft	= pSecond;
+                pRight	= pFirst;
             }
         }
         else
@@ -592,10 +592,10 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
                 m_lmbRightTable.InsertEntry(m_strCurrentLeft);
                 // und den jetzt selektierten raus
                 m_lmbRightTable.RemoveEntry(strSelected);
-                m_strCurrentLeft    = strSelected;
-
+                m_strCurrentLeft	= strSelected;
+                
                 pLeft = pLoop;
-
+                
                 OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->find(m_lmbRightTable.GetSelectEntry());
                 OSL_ENSURE( aIter != m_pTableMap->end(), "Invalid name");
                 if ( aIter != m_pTableMap->end() )
@@ -700,8 +700,8 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         return bRet;
     }
     // -----------------------------------------------------------------------------
-    TTableWindowData::value_type OTableListBoxControl::getReferencingTable()    const
-    {
+    TTableWindowData::value_type OTableListBoxControl::getReferencingTable()	const 
+    { 
         return m_pRC_Tables->getData()->getReferencingTable();
     }
     // -----------------------------------------------------------------------------
@@ -710,7 +710,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         if ( !_bEnable )
             PostUserEvent(LINK(m_pRC_Tables, ORelationControl, AsynchDeactivate));
         m_pRC_Tables->Enable(_bEnable);
-
+        
     }
     // -----------------------------------------------------------------------------
 }

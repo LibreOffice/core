@@ -45,11 +45,11 @@ using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
-//  using namespace ::com::sun::star::sdb;
+//	using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-//  using namespace ::cppu;
+//	using namespace ::cppu;
 using namespace ::osl;
 
 void OStaticSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 /*_nPosition*/)
@@ -255,7 +255,7 @@ sal_Bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, Runt
             }
 
             if(row > (sal_Int32)m_aSet.size())
-                m_aSetIter = m_aSet.end();  // check again
+                m_aSetIter = m_aSet.end();	// check again
             else
                 m_aSetIter = m_aSet.begin() + row;
         }
@@ -314,8 +314,8 @@ Sequence< sal_Int32 > SAL_CALL OStaticSet::deleteRows( const Sequence< Any >& ro
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::deleteRows" );
     Sequence< sal_Int32 > aRet(rows.getLength());
-    const Any* pBegin   = rows.getConstArray();
-    const Any* pEnd     = pBegin + rows.getLength();
+    const Any* pBegin	= rows.getConstArray();
+    const Any* pEnd		= pBegin + rows.getLength();
     for(sal_Int32 i=0;pBegin != pEnd; ++pBegin,++i)
     {
         deleteRow(*(m_aSet.begin() + comphelper::getINT32(*pBegin)),_xTable);

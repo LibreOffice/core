@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 #include <vcl/svapp.hxx>
 // ---
 
-#define THISREF()   static_cast< XServiceInfo* >(this)
+#define THISREF()	static_cast< XServiceInfo* >(this)
 
 //.........................................................................
 namespace dbaui
@@ -119,7 +119,7 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
 }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,28 +42,28 @@
 
 namespace dbaccess
 {
-typedef ::cppu::ImplHelper5 <   ::com::sun::star::frame::XComponentLoader
-                            ,   ::com::sun::star::lang::XMultiServiceFactory
-                            ,   ::com::sun::star::container::XHierarchicalNameContainer
-                            ,   ::com::sun::star::container::XHierarchicalName
-                            ,   ::com::sun::star::embed::XTransactedObject
-                            >   ODocumentContainer_Base;
+typedef ::cppu::ImplHelper5 <	::com::sun::star::frame::XComponentLoader
+                            ,	::com::sun::star::lang::XMultiServiceFactory
+                            ,	::com::sun::star::container::XHierarchicalNameContainer
+                            ,	::com::sun::star::container::XHierarchicalName
+                            ,	::com::sun::star::embed::XTransactedObject
+                            >	ODocumentContainer_Base;
 //==========================================================================
-//= ODocumentContainer -    collections of database documents (reports/forms)
+//= ODocumentContainer -	collections of database documents (reports/forms)
 //==========================================================================
-class ODocumentContainer    : public ODefinitionContainer
+class ODocumentContainer	: public ODefinitionContainer
                             , public ODocumentContainer_Base
                             , public ::comphelper::OPropertyStateContainer
                             , public ::comphelper::OPropertyArrayUsageHelper< ODocumentContainer >
 {
-    sal_Bool        m_bFormsContainer;
+    sal_Bool		m_bFormsContainer;
 
 public:
     /** constructs the container.<BR>
     */
     ODocumentContainer(
           const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
-        , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&  _xParentContainer
+        , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&	_xParentContainer
         ,const TContentPtr& _pImpl
         , sal_Bool _bFormsContainer
         );
@@ -139,7 +139,7 @@ protected:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 };
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 
 #endif // _DBA_COREDATAACCESS_DOCUMENTCONTAINER_HXX_
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 
 namespace rptui
 {
-#define SECTION_OFFSET  3
+#define SECTION_OFFSET	3
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
@@ -78,8 +78,8 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
     m_aSplitter.SetEndSplitHdl(LINK(this, OSectionWindow,EndSplitHdl));
     m_aSplitter.SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
     m_aSplitter.SetSplitPosPixel(m_aSplitter.LogicToPixel(Size(0,_xSection->getHeight())).Height());
-
-
+    
+    
     m_aStartMarker.setCollapsedHdl(LINK(this,OSectionWindow,Collapsed));
 
     m_aStartMarker.zoom(rMapMode.GetScaleX());
@@ -108,7 +108,7 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
         aEvent.Source = xGroup;
         aEvent.PropertyName = PROPERTY_EXPRESSION;
     }
-
+    
     _propertyChanged(aEvent);
     SetPaintTransparent(TRUE);
 }
@@ -125,7 +125,7 @@ OSectionWindow::~OSectionWindow()
     }
     catch (uno::Exception&)
     {
-    }
+    }	
 }
 // -----------------------------------------------------------------------------
 void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException)
@@ -152,7 +152,7 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         else if ( _rEvent.PropertyName.equals(PROPERTY_NAME) && !xSection->getGroup().is() )
         {
             uno::Reference< report::XReportDefinition > xReport = xSection->getReportDefinition();
-            if (    setReportSectionTitle(xReport,RID_STR_REPORT_HEADER,::std::mem_fun(&OReportHelper::getReportHeader),::std::mem_fun(&OReportHelper::getReportHeaderOn))
+            if (    setReportSectionTitle(xReport,RID_STR_REPORT_HEADER,::std::mem_fun(&OReportHelper::getReportHeader),::std::mem_fun(&OReportHelper::getReportHeaderOn)) 
                 ||  setReportSectionTitle(xReport,RID_STR_REPORT_FOOTER,::std::mem_fun(&OReportHelper::getReportFooter),::std::mem_fun(&OReportHelper::getReportFooterOn))
                 ||  setReportSectionTitle(xReport,RID_STR_PAGE_HEADER,::std::mem_fun(&OReportHelper::getPageHeader),::std::mem_fun(&OReportHelper::getPageHeaderOn))
                 ||  setReportSectionTitle(xReport,RID_STR_PAGE_FOOTER,::std::mem_fun(&OReportHelper::getPageFooter),::std::mem_fun(&OReportHelper::getPageFooterOn)) )
@@ -223,15 +223,15 @@ void OSectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings();
+        ImplInitSettings();		
         Invalidate();
     }
 }
 //------------------------------------------------------------------------------
 void OSectionWindow::Resize()
 {
-    Window::Resize();
-
+    Window::Resize();	
+    
     Size aOutputSize = GetOutputSizePixel();
     Fraction aEndWidth(long(REPORT_ENDMARKER_WIDTH));
     aEndWidth *= GetMapMode().GetScaleX();
@@ -246,9 +246,9 @@ void OSectionWindow::Resize()
         m_aStartMarker.SetPosSizePixel(aPos,aOutputSize);
     }
     else
-    {
+    {	
         const bool bShowEndMarker = m_pParent->getView()->GetTotalWidth() <= (aThumbPos.X() +  aOutputSize.Width() );
-
+        
         Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
         aStartWidth *= GetMapMode().GetScaleX();
 
@@ -331,13 +331,13 @@ void OSectionWindow::zoom(const Fraction& _aZoom)
 IMPL_LINK( OSectionWindow, StartSplitHdl, Splitter*,  )
 {
     const String sEmpty(ModuleRes(RID_STR_UNDO_CHANGE_SIZE));
-    getViewsWindow()->getView()->getReportView()->getController().getUndoMgr()->EnterListAction(sEmpty,String());
+    getViewsWindow()->getView()->getReportView()->getController().getUndoMgr()->EnterListAction(sEmpty,String()); 
     return 0L;
 }
 //------------------------------------------------------------------------------
 IMPL_LINK( OSectionWindow, EndSplitHdl, Splitter*,  )
 {
-    getViewsWindow()->getView()->getReportView()->getController().getUndoMgr()->LeaveListAction();
+    getViewsWindow()->getView()->getReportView()->getController().getUndoMgr()->LeaveListAction(); 
     /*getViewsWindow()->Resize();*/
     return 0L;
 }
@@ -351,12 +351,12 @@ IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
 
     sal_Int32 nSplitPos = _pSplitter->GetSplitPosPixel();
     const Point aPos = _pSplitter->GetPosPixel();
-
+    
 
     const uno::Reference< report::XSection> xSection = m_aReportSection.getSection();
     nSplitPos = m_aSplitter.PixelToLogic(Size(0,nSplitPos)).Height();
     // nSplitPos = xSection->getHeight() + m_aSplitter.PixelToLogic(Size(0,nSplitPos - aPos.Y() )).Height();
-
+    
     const sal_Int32 nCount = xSection->getCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
@@ -404,10 +404,10 @@ void OSectionWindow::scrollChildren(long _nX)
         //OWindowPositionCorrector aCorrector(&m_aReportSection,-aDelta.Width(),0);
         lcl_scroll(m_aReportSection,aDiff);
     }
-
+    
     //lcl_setOrigin(m_aEndMarker,_nDeltaX, 0);
     lcl_scroll(m_aEndMarker,m_aEndMarker.PixelToLogic(Point(_nX,0)));
-
+    
     lcl_setOrigin(m_aSplitter,_nX, 0);
     lcl_scroll(m_aSplitter,aDiff);
 

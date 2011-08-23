@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,12 +116,12 @@ RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
     XMLTextMasterStylesContext( rImport, nPrfx, rLName, xAttrList )
     ,m_rImport(rImport)
 {
-    DBG_CTOR(rpt_RptMLMasterStylesContext_Impl,NULL);
+    DBG_CTOR(rpt_RptMLMasterStylesContext_Impl,NULL);    
 }
 
 RptMLMasterStylesContext_Impl::~RptMLMasterStylesContext_Impl()
 {
-    DBG_DTOR(rpt_RptMLMasterStylesContext_Impl,NULL);
+    DBG_DTOR(rpt_RptMLMasterStylesContext_Impl,NULL);    
 }
 
 void RptMLMasterStylesContext_Impl::EndElement()
@@ -182,10 +182,10 @@ sal_Int32 ReadThroughComponent(
     {
         xParser->parseStream( aParserInput );
     }
-    catch( SAXParseException&
+    catch( SAXParseException& 
 
 #if OSL_DEBUG_LEVEL > 1
-r
+r 
 #endif
 )
     {
@@ -240,7 +240,7 @@ sal_Int32 ReadThroughComponent(
     {
         uno::Reference< io::XStream > xDocStream;
         sal_Bool bEncrypted = sal_False;
-
+        
         try
         {
             // open stream (and set parser input)
@@ -249,7 +249,7 @@ sal_Int32 ReadThroughComponent(
             {
                 // stream name not found! Then try the compatibility name.
                 // if no stream can be opened, return immediatly with OK signal
-
+        
                 // do we even have an alternative name?
                 if ( NULL == pCompatibilityStreamName )
                     return 0;
@@ -330,7 +330,7 @@ Sequence< ::rtl::OUString > ORptImportHelper::getSupportedServiceNames_Static(  
 //---------------------------------------------------------------------
 Reference< XInterface > ORptContentImportHelper::create(const Reference< XComponentContext > & xContext)
 {
-    return static_cast< XServiceInfo* >(new ORptFilter(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY),IMPORT_AUTOSTYLES |   IMPORT_CONTENT | IMPORT_SCRIPTS |
+    return static_cast< XServiceInfo* >(new ORptFilter(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY),IMPORT_AUTOSTYLES |	IMPORT_CONTENT | IMPORT_SCRIPTS |
         IMPORT_FONTDECLS ));
 }
 //---------------------------------------------------------------------
@@ -389,10 +389,10 @@ Sequence< ::rtl::OUString > ORptMetaImportHelper::getSupportedServiceNames_Stati
 // - ORptFilter -
 // -------------
 DBG_NAME(rpt_ORptFilter)
-ORptFilter::ORptFilter( const uno::Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nImportFlags )
+ORptFilter::ORptFilter( const uno::Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nImportFlags ) 
     :SvXMLImport(_rxMSF,nImportFlags)
 {
-    DBG_CTOR(rpt_ORptFilter,NULL);
+    DBG_CTOR(rpt_ORptFilter,NULL);    
     GetMM100UnitConverter().setCoreMeasureUnit(MAP_100TH_MM);
     GetMM100UnitConverter().setXMLMeasureUnit(MAP_CM);
     GetNamespaceMap().Add( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__rpt) ),
@@ -414,7 +414,7 @@ ORptFilter::ORptFilter( const uno::Reference< XMultiServiceFactory >& _rxMSF,sal
 
 ORptFilter::~ORptFilter() throw()
 {
-    DBG_DTOR(rpt_ORptFilter,NULL);
+    DBG_DTOR(rpt_ORptFilter,NULL);    
 }
 //------------------------------------------------------------------------------
 uno::Reference< XInterface > ORptFilter::create(uno::Reference< XComponentContext > const & xContext)
@@ -438,7 +438,7 @@ uno::Sequence< ::rtl::OUString > ORptFilter::getSupportedServiceNames_Static(  )
 {
     uno::Sequence< ::rtl::OUString > aServices(1);
     aServices.getArray()[0] = SERVICE_IMPORTFILTER;
-
+    
     return aServices;
 }
 
@@ -453,7 +453,7 @@ sal_Bool SAL_CALL ORptFilter::supportsService(const ::rtl::OUString& ServiceName
     return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL ORptFilter::filter( const Sequence< PropertyValue >& rDescriptor )
+sal_Bool SAL_CALL ORptFilter::filter( const Sequence< PropertyValue >& rDescriptor ) 
     throw (RuntimeException)
 {
     Window*     pFocusWindow = Application::GetFocusWindow();
@@ -475,11 +475,11 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
     ::rtl::OUString                     sFileName;
-    uno::Reference< embed::XStorage >   xStorage;
+    uno::Reference< embed::XStorage >	xStorage;
     uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier;
-
+    
     const PropertyValue* pIter = rDescriptor.getConstArray();
-    const PropertyValue* pEnd   = pIter + rDescriptor.getLength();
+    const PropertyValue* pEnd	= pIter + rDescriptor.getLength();
     for(;pIter != pEnd;++pIter)
     {
         if( pIter->Name.equalsAscii( "FileName" ) )
@@ -491,7 +491,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             Sequence< PropertyValue > aComponent;
             pIter->Value >>= aComponent;
             const PropertyValue* pComponentIter = aComponent.getConstArray();
-            const PropertyValue* pComponentEnd  = pComponentIter + aComponent.getLength();
+            const PropertyValue* pComponentEnd	= pComponentIter + aComponent.getLength();
             for(;pComponentIter != pComponentEnd;++pComponentIter)
             {
                 if( pComponentIter->Name.equalsAscii( "ActiveConnection" ) )
@@ -503,20 +503,20 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             }
         }
     }
-
+    
     if ( sFileName.getLength() != 0 )
     {
         uno::Reference<XComponent> xCom(GetModel(),UNO_QUERY);
 
         SfxMediumRef pMedium = new SfxMedium(
                 sFileName, ( STREAM_READ | STREAM_NOCREATE ), FALSE, 0 );
-
+        
         if( pMedium )
         {
             try
             {
                 xStorage = pMedium->GetStorage();
-                //  nError = pMedium->GetError();
+                //	nError = pMedium->GetError();
             }
             catch(const Exception&)
             {
@@ -535,13 +535,13 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
         uno::Sequence< ::rtl::OUString> aSeq = xAccess->getElementNames();
         const ::rtl::OUString* pDebugIter = aSeq.getConstArray();
-        const ::rtl::OUString* pDebugEnd      = pDebugIter + aSeq.getLength();
+        const ::rtl::OUString* pDebugEnd	  = pDebugIter + aSeq.getLength();
         for(;pDebugIter != pDebugEnd;++pDebugIter)
         {
             (void)*pDebugIter;
         }
 #endif
-
+        
         Reference< document::XGraphicObjectResolver > xGraphicObjectResolver;
         uno::Reference<document::XEmbeddedObjectResolver> xEmbeddedObjectResolver;
         uno::Reference< lang::XMultiServiceFactory > xServiceFactory( getServiceFactory(), uno::UNO_QUERY);
@@ -560,8 +560,8 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         static const ::rtl::OUString s_sOld(RTL_CONSTASCII_USTRINGPARAM("OldFormat"));
         static comphelper::PropertyMapEntry pMap[] =
-        {
-            { MAP_LEN( "OldFormat" ), 1,    &::getCppuType((const sal_Bool*)0),                 beans::PropertyAttribute::BOUND,     0 },
+        { 
+            { MAP_LEN( "OldFormat" ), 1,	&::getCppuType((const sal_Bool*)0),                 beans::PropertyAttribute::BOUND,     0 },
             { MAP_LEN( "StreamName"), 0,    &::getCppuType( (::rtl::OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN("PrivateData"), 0,    &::getCppuType( (uno::Reference<XInterface> *)0 ),  beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "BaseURI"),    0,    &::getCppuType( (::rtl::OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
@@ -590,7 +590,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xProp
                                     );
 
-
+        
         try
         {
             xProp->setPropertyValue(s_sOld,uno::makeAny(!(xStorage->hasByName(s_sMeta) || xStorage->isStreamElement( s_sMeta ))));
@@ -642,11 +642,11 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xProp
                                     );
         }
-
+        
 
         bRet = nRet == 0;
 
-        if ( bRet )
+        if ( bRet ) 
         {
             m_xReportDefinition->setModified(sal_False);
         }
@@ -740,22 +740,22 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
 // -----------------------------------------------------------------------------
 const SvXMLTokenMap& ORptFilter::GetDocElemTokenMap() const
 {
-    if ( !m_pDocElemTokenMap.get() )
+    if ( !m_pDocElemTokenMap.get() ) 
     {
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
-            //{ XML_NAMESPACE_OOO,    XML_SETTINGS,         XML_TOK_DOC_SETTINGS    },
-            { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES      },
-            //{ XML_NAMESPACE_OOO,    XML_STYLES,               XML_TOK_DOC_STYLES      },
-            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
-            //{ XML_NAMESPACE_OOO,    XML_AUTOMATIC_STYLES, XML_TOK_DOC_AUTOSTYLES  },
-            { XML_NAMESPACE_OFFICE, XML_REPORT,             XML_TOK_DOC_REPORT      },
-            { XML_NAMESPACE_OOO,    XML_REPORT,             XML_TOK_DOC_REPORT      },
-            { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS   },
-            { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES    },
-            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,      XML_TOK_DOC_META        },
-            //{ XML_NAMESPACE_OOO,    XML_FONT_FACE_DECLS,  XML_TOK_DOC_FONTDECLS   },
+            { XML_NAMESPACE_OFFICE, XML_SETTINGS,			XML_TOK_DOC_SETTINGS	},
+            //{ XML_NAMESPACE_OOO,    XML_SETTINGS,			XML_TOK_DOC_SETTINGS	},
+            { XML_NAMESPACE_OFFICE, XML_STYLES,				XML_TOK_DOC_STYLES		},
+            //{ XML_NAMESPACE_OOO,    XML_STYLES,				XML_TOK_DOC_STYLES		},
+            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,	XML_TOK_DOC_AUTOSTYLES	},
+            //{ XML_NAMESPACE_OOO,    XML_AUTOMATIC_STYLES,	XML_TOK_DOC_AUTOSTYLES	},
+            { XML_NAMESPACE_OFFICE, XML_REPORT,				XML_TOK_DOC_REPORT		},
+            { XML_NAMESPACE_OOO,    XML_REPORT,				XML_TOK_DOC_REPORT		},
+            { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,	XML_TOK_DOC_FONTDECLS	},
+            { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,	    XML_TOK_DOC_MASTERSTYLES	},
+            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,	    XML_TOK_DOC_META	    },
+            //{ XML_NAMESPACE_OOO,    XML_FONT_FACE_DECLS,	XML_TOK_DOC_FONTDECLS	},
             XML_TOKEN_MAP_END
         };
         m_pDocElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -765,7 +765,7 @@ const SvXMLTokenMap& ORptFilter::GetDocElemTokenMap() const
 // -----------------------------------------------------------------------------
 const SvXMLTokenMap& ORptFilter::GetReportElemTokenMap() const
 {
-    if ( !m_pReportElemTokenMap.get() )
+    if ( !m_pReportElemTokenMap.get() ) 
         m_pReportElemTokenMap.reset(OXMLHelper::GetReportElemTokenMap());
     return *m_pReportElemTokenMap;
 }
@@ -783,11 +783,11 @@ const SvXMLTokenMap& ORptFilter::GetFunctionElemTokenMap() const
     {
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_REPORT, XML_NAME,           XML_TOK_FUNCTION_NAME   },
-            { XML_NAMESPACE_REPORT, XML_FORMULA,        XML_TOK_FUNCTION_FORMULA},
-            { XML_NAMESPACE_REPORT, XML_PRE_EVALUATED,  XML_TOK_PRE_EVALUATED   },
-            { XML_NAMESPACE_REPORT, XML_INITIAL_FORMULA,XML_TOK_INITIAL_FORMULA   },
-            { XML_NAMESPACE_REPORT, XML_DEEP_TRAVERSING,XML_TOK_DEEP_TRAVERSING   },
+            { XML_NAMESPACE_REPORT,	XML_NAME,	        XML_TOK_FUNCTION_NAME   },
+            { XML_NAMESPACE_REPORT,	XML_FORMULA,	    XML_TOK_FUNCTION_FORMULA},
+            { XML_NAMESPACE_REPORT,	XML_PRE_EVALUATED,	XML_TOK_PRE_EVALUATED   },
+            { XML_NAMESPACE_REPORT,	XML_INITIAL_FORMULA,XML_TOK_INITIAL_FORMULA   },
+            { XML_NAMESPACE_REPORT,	XML_DEEP_TRAVERSING,XML_TOK_DEEP_TRAVERSING   },
             XML_TOKEN_MAP_END
         };
         m_pFunctionElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -801,15 +801,15 @@ const SvXMLTokenMap& ORptFilter::GetFormatElemTokenMap() const
     {
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_REPORT, XML_ENABLED                     ,   XML_TOK_ENABLED                     },
-            { XML_NAMESPACE_REPORT, XML_FORMULA                     ,   XML_TOK_FORMULA                     },
-            { XML_NAMESPACE_REPORT, XML_STYLE_NAME                  ,   XML_TOK_FORMAT_STYLE_NAME           },
+            { XML_NAMESPACE_REPORT,	XML_ENABLED						,   XML_TOK_ENABLED		                },
+            { XML_NAMESPACE_REPORT,	XML_FORMULA					    ,   XML_TOK_FORMULA		                },
+            { XML_NAMESPACE_REPORT,	XML_STYLE_NAME  			    ,   XML_TOK_FORMAT_STYLE_NAME		    },
             XML_TOKEN_MAP_END
         };
         m_pFormatElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
     }
     return *m_pFormatElemTokenMap;
-}
+}     
 // -----------------------------------------------------------------------------
 const SvXMLTokenMap& ORptFilter::GetGroupElemTokenMap() const
 {
@@ -817,19 +817,19 @@ const SvXMLTokenMap& ORptFilter::GetGroupElemTokenMap() const
     {
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_REPORT, XML_START_NEW_COLUMN            ,   XML_TOK_START_NEW_COLUMN            },
-            { XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER           ,   XML_TOK_RESET_PAGE_NUMBER           },
-            { XML_NAMESPACE_REPORT, XML_PRINT_HEADER_ON_EACH_PAGE   ,   XML_TOK_PRINT_HEADER_ON_EACH_PAGE   },
-            { XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER           ,   XML_TOK_RESET_PAGE_NUMBER           },
-            { XML_NAMESPACE_REPORT, XML_GROUP_EXPRESSION            ,   XML_TOK_GROUP_EXPRESSION            },
-            { XML_NAMESPACE_REPORT, XML_GROUP_HEADER                ,   XML_TOK_GROUP_HEADER                },
-            { XML_NAMESPACE_REPORT, XML_GROUP                       ,   XML_TOK_GROUP_GROUP                 },
-            { XML_NAMESPACE_REPORT, XML_DETAIL                      ,   XML_TOK_GROUP_DETAIL                },
-            { XML_NAMESPACE_REPORT, XML_GROUP_FOOTER                ,   XML_TOK_GROUP_FOOTER                },
-            { XML_NAMESPACE_REPORT, XML_SORT_ASCENDING              ,   XML_TOK_SORT_ASCENDING              },
-            { XML_NAMESPACE_REPORT, XML_KEEP_TOGETHER               ,   XML_TOK_GROUP_KEEP_TOGETHER         },
-            { XML_NAMESPACE_REPORT, XML_FUNCTION                    ,   XML_TOK_GROUP_FUNCTION              },
-            //{ XML_NAMESPACE_REPORT,   XML_            ,   XML_TOK_            },
+            { XML_NAMESPACE_REPORT,	XML_START_NEW_COLUMN			,	XML_TOK_START_NEW_COLUMN			},
+            { XML_NAMESPACE_REPORT,	XML_RESET_PAGE_NUMBER			,	XML_TOK_RESET_PAGE_NUMBER			},
+            { XML_NAMESPACE_REPORT,	XML_PRINT_HEADER_ON_EACH_PAGE	,	XML_TOK_PRINT_HEADER_ON_EACH_PAGE	},
+            { XML_NAMESPACE_REPORT,	XML_RESET_PAGE_NUMBER			,	XML_TOK_RESET_PAGE_NUMBER			},
+            { XML_NAMESPACE_REPORT,	XML_GROUP_EXPRESSION			,	XML_TOK_GROUP_EXPRESSION			},
+            { XML_NAMESPACE_REPORT,	XML_GROUP_HEADER				,	XML_TOK_GROUP_HEADER				},
+            { XML_NAMESPACE_REPORT,	XML_GROUP                       ,   XML_TOK_GROUP_GROUP                 },
+            { XML_NAMESPACE_REPORT,	XML_DETAIL		                ,   XML_TOK_GROUP_DETAIL			    },
+            { XML_NAMESPACE_REPORT,	XML_GROUP_FOOTER				,	XML_TOK_GROUP_FOOTER				},
+            { XML_NAMESPACE_REPORT,	XML_SORT_ASCENDING				,	XML_TOK_SORT_ASCENDING				},
+            { XML_NAMESPACE_REPORT,	XML_KEEP_TOGETHER				,	XML_TOK_GROUP_KEEP_TOGETHER			},
+            { XML_NAMESPACE_REPORT,	XML_FUNCTION    				,	XML_TOK_GROUP_FUNCTION				},
+            //{ XML_NAMESPACE_REPORT,	XML_			,	XML_TOK_			},
             XML_TOKEN_MAP_END
         };
         m_pGroupElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -843,11 +843,11 @@ const SvXMLTokenMap& ORptFilter::GetReportElementElemTokenMap() const
     {
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_REPORT, XML_PRINT_REPEATED_VALUES       ,XML_TOK_PRINT_REPEATED_VALUES              },
-            { XML_NAMESPACE_REPORT, XML_PRINT_ONLY_WHEN_GROUP_CHANGE,XML_TOK_PRINT_ONLY_WHEN_GROUP_CHANGE       },
-            { XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION,XML_TOK_REP_CONDITIONAL_PRINT_EXPRESSION   },
-            { XML_NAMESPACE_REPORT, XML_REPORT_COMPONENT            ,XML_TOK_COMPONENT                          },
-            { XML_NAMESPACE_REPORT, XML_FORMAT_CONDITION            ,XML_TOK_FORMATCONDITION                    },
+            { XML_NAMESPACE_REPORT,	XML_PRINT_REPEATED_VALUES		,XML_TOK_PRINT_REPEATED_VALUES				},
+            { XML_NAMESPACE_REPORT,	XML_PRINT_ONLY_WHEN_GROUP_CHANGE,XML_TOK_PRINT_ONLY_WHEN_GROUP_CHANGE		},
+            { XML_NAMESPACE_REPORT,	XML_CONDITIONAL_PRINT_EXPRESSION,XML_TOK_REP_CONDITIONAL_PRINT_EXPRESSION	},
+            { XML_NAMESPACE_REPORT,	XML_REPORT_COMPONENT	        ,XML_TOK_COMPONENT			                },
+            { XML_NAMESPACE_REPORT,	XML_FORMAT_CONDITION	        ,XML_TOK_FORMATCONDITION	                },
             XML_TOKEN_MAP_END
         };
         m_pElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -861,15 +861,15 @@ const SvXMLTokenMap& ORptFilter::GetControlElemTokenMap() const
     {
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_FORM,   XML_LABEL               ,XML_TOK_LABEL              },
-            { XML_NAMESPACE_FORM,   XML_PROPERTIES          ,XML_TOK_PROPERTIES         },
-            { XML_NAMESPACE_FORM,   XML_SIZE                ,XML_TOK_SIZE               },
-            { XML_NAMESPACE_FORM,   XML_IMAGE_DATA          ,XML_TOK_IMAGE_DATA         },
-            { XML_NAMESPACE_REPORT, XML_SCALE               ,XML_TOK_SCALE              },
-            { XML_NAMESPACE_REPORT, XML_REPORT_ELEMENT      ,XML_TOK_REPORT_ELEMENT     },
-            { XML_NAMESPACE_REPORT, XML_FORMULA             ,XML_TOK_DATA_FORMULA       },
-            { XML_NAMESPACE_REPORT, XML_PRESERVE_IRI        ,XML_TOK_PRESERVE_IRI       },
-            { XML_NAMESPACE_REPORT, XML_SELECT_PAGE         ,XML_TOK_SELECT_PAGE        },
+            { XML_NAMESPACE_FORM,	XML_LABEL				,XML_TOK_LABEL				},	
+            { XML_NAMESPACE_FORM,	XML_PROPERTIES			,XML_TOK_PROPERTIES			},
+            { XML_NAMESPACE_FORM,	XML_SIZE				,XML_TOK_SIZE				},
+            { XML_NAMESPACE_FORM,	XML_IMAGE_DATA			,XML_TOK_IMAGE_DATA			},
+            { XML_NAMESPACE_REPORT,	XML_SCALE			    ,XML_TOK_SCALE      		},
+            { XML_NAMESPACE_REPORT,	XML_REPORT_ELEMENT		,XML_TOK_REPORT_ELEMENT		},
+            { XML_NAMESPACE_REPORT,	XML_FORMULA             ,XML_TOK_DATA_FORMULA       },
+            { XML_NAMESPACE_REPORT,	XML_PRESERVE_IRI        ,XML_TOK_PRESERVE_IRI       },
+            { XML_NAMESPACE_REPORT,	XML_SELECT_PAGE         ,XML_TOK_SELECT_PAGE        },
             XML_TOKEN_MAP_END
         };
         m_pControlElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -883,15 +883,15 @@ const SvXMLTokenMap& ORptFilter::GetControlPropertyElemTokenMap() const
     {
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_FORM,   XML_PROPERTY_NAME   ,XML_TOK_PROPERTY_NAME          },
-            { XML_NAMESPACE_OOO,    XML_VALUE_TYPE      ,XML_TOK_VALUE_TYPE             },
-            { XML_NAMESPACE_FORM,   XML_LIST_PROPERTY   ,XML_TOK_LIST_PROPERTY          },
-            { XML_NAMESPACE_OOO,    XML_VALUE           ,XML_TOK_VALUE                  },
-            { XML_NAMESPACE_OOO,    XML_CURRENCY        ,XML_TOK_CURRENCY               },
-            { XML_NAMESPACE_OOO,    XML_DATE_VALUE      ,XML_TOK_DATE_VALUE             },
-            { XML_NAMESPACE_OOO,    XML_TIME_VALUE      ,XML_TOK_TIME_VALUE             },
-            { XML_NAMESPACE_OOO,    XML_STRING_VALUE    ,XML_TOK_STRING_VALUE           },
-            { XML_NAMESPACE_OOO,    XML_BOOLEAN_VALUE   ,XML_TOK_BOOLEAN_VALUE          },
+            { XML_NAMESPACE_FORM,	XML_PROPERTY_NAME	,XML_TOK_PROPERTY_NAME			},	
+            { XML_NAMESPACE_OOO,	XML_VALUE_TYPE		,XML_TOK_VALUE_TYPE				},
+            { XML_NAMESPACE_FORM,	XML_LIST_PROPERTY	,XML_TOK_LIST_PROPERTY			},
+            { XML_NAMESPACE_OOO,	XML_VALUE			,XML_TOK_VALUE					},
+            { XML_NAMESPACE_OOO,	XML_CURRENCY		,XML_TOK_CURRENCY				},
+            { XML_NAMESPACE_OOO,	XML_DATE_VALUE		,XML_TOK_DATE_VALUE				},
+            { XML_NAMESPACE_OOO,	XML_TIME_VALUE		,XML_TOK_TIME_VALUE				},
+            { XML_NAMESPACE_OOO,	XML_STRING_VALUE	,XML_TOK_STRING_VALUE			},
+            { XML_NAMESPACE_OOO,	XML_BOOLEAN_VALUE	,XML_TOK_BOOLEAN_VALUE			},
             XML_TOKEN_MAP_END
         };
         m_pControlElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -905,9 +905,9 @@ const SvXMLTokenMap& ORptFilter::GetComponentElemTokenMap() const
     {
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_DRAW,   XML_NAME                        ,   XML_TOK_NAME                        },
-            { XML_NAMESPACE_DRAW,   XML_TEXT_STYLE_NAME             ,   XML_TOK_TEXT_STYLE_NAME             },
-            { XML_NAMESPACE_REPORT, XML_TRANSFORM                   ,   XML_TOK_TRANSFORM                   },
+            { XML_NAMESPACE_DRAW,	XML_NAME						,	XML_TOK_NAME						},
+            { XML_NAMESPACE_DRAW,	XML_TEXT_STYLE_NAME				,	XML_TOK_TEXT_STYLE_NAME				},			
+            { XML_NAMESPACE_REPORT,	XML_TRANSFORM					,	XML_TOK_TRANSFORM					},
             XML_TOKEN_MAP_END
         };
         m_pComponentElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -921,17 +921,17 @@ const SvXMLTokenMap& ORptFilter::GetColumnTokenMap() const
     {
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_TABLE,  XML_NAME                        ,   XML_TOK_NAME                        },
-            { XML_NAMESPACE_TABLE,  XML_STYLE_NAME                  ,   XML_TOK_COLUMN_STYLE_NAME           },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN                ,   XML_TOK_COLUMN                      },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_ROW                   ,   XML_TOK_ROW                         },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_CELL                  ,   XML_TOK_CELL                        },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMNS               ,   XML_TOK_TABLE_COLUMNS               },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_ROWS                  ,   XML_TOK_TABLE_ROWS                  },
-            { XML_NAMESPACE_TABLE,  XML_COVERED_TABLE_CELL          ,   XML_TOK_COV_CELL                    },
-            { XML_NAMESPACE_TABLE,  XML_NUMBER_COLUMNS_SPANNED      ,   XML_TOK_NUMBER_COLUMNS_SPANNED      },
-            { XML_NAMESPACE_TABLE,  XML_NUMBER_ROWS_SPANNED         ,   XML_TOK_NUMBER_ROWS_SPANNED         },
-            { XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION,   XML_TOK_CONDITIONAL_PRINT_EXPRESSION},
+            { XML_NAMESPACE_TABLE,	XML_NAME						,	XML_TOK_NAME        				},
+            { XML_NAMESPACE_TABLE,	XML_STYLE_NAME					,	XML_TOK_COLUMN_STYLE_NAME		    },
+            { XML_NAMESPACE_TABLE,	XML_TABLE_COLUMN			    ,	XML_TOK_COLUMN  		            },
+            { XML_NAMESPACE_TABLE,	XML_TABLE_ROW			        ,	XML_TOK_ROW  			            },
+            { XML_NAMESPACE_TABLE,	XML_TABLE_CELL			        ,	XML_TOK_CELL  			            },
+            { XML_NAMESPACE_TABLE,	XML_TABLE_COLUMNS				,	XML_TOK_TABLE_COLUMNS				},
+            { XML_NAMESPACE_TABLE,	XML_TABLE_ROWS					,	XML_TOK_TABLE_ROWS		    		},
+            { XML_NAMESPACE_TABLE,	XML_COVERED_TABLE_CELL	        ,	XML_TOK_COV_CELL  		            },
+            { XML_NAMESPACE_TABLE,	XML_NUMBER_COLUMNS_SPANNED	    ,	XML_TOK_NUMBER_COLUMNS_SPANNED  	},
+            { XML_NAMESPACE_TABLE,	XML_NUMBER_ROWS_SPANNED 	    ,	XML_TOK_NUMBER_ROWS_SPANNED         },
+            { XML_NAMESPACE_REPORT,	XML_CONDITIONAL_PRINT_EXPRESSION,	XML_TOK_CONDITIONAL_PRINT_EXPRESSION},
             XML_TOKEN_MAP_END
         };
         m_pColumnTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -945,15 +945,15 @@ const SvXMLTokenMap& ORptFilter::GetSectionElemTokenMap() const
     {
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_TABLE,  XML_TABLE                       ,   XML_TOK_TABLE                       },
-            { XML_NAMESPACE_TABLE,  XML_NAME                        ,   XML_TOK_SECTION_NAME                },
-            { XML_NAMESPACE_REPORT, XML_VISIBLE                     ,   XML_TOK_VISIBLE                     },
-            { XML_NAMESPACE_REPORT, XML_FORCE_NEW_PAGE              ,   XML_TOK_FORCE_NEW_PAGE              },
-            { XML_NAMESPACE_REPORT, XML_FORCE_NEW_COLUMN            ,   XML_TOK_FORCE_NEW_COLUMN            },
-            { XML_NAMESPACE_REPORT, XML_KEEP_TOGETHER               ,   XML_TOK_KEEP_TOGETHER               },
-            { XML_NAMESPACE_REPORT, XML_REPEAT_SECTION              ,   XML_TOK_REPEAT_SECTION              },
-            { XML_NAMESPACE_TABLE,  XML_STYLE_NAME                  ,   XML_TOK_SECT_STYLE_NAME             },
-            { XML_NAMESPACE_REPORT, XML_PAGE_PRINT_OPTION           ,   XML_TOK_PAGE_PRINT_OPTION           },
+            { XML_NAMESPACE_TABLE,	XML_TABLE						,	XML_TOK_TABLE       				},
+            { XML_NAMESPACE_TABLE,	XML_NAME						,	XML_TOK_SECTION_NAME   				},
+            { XML_NAMESPACE_REPORT,	XML_VISIBLE						,	XML_TOK_VISIBLE						},
+            { XML_NAMESPACE_REPORT,	XML_FORCE_NEW_PAGE				,	XML_TOK_FORCE_NEW_PAGE				},
+            { XML_NAMESPACE_REPORT,	XML_FORCE_NEW_COLUMN			,	XML_TOK_FORCE_NEW_COLUMN			},
+            { XML_NAMESPACE_REPORT,	XML_KEEP_TOGETHER				,	XML_TOK_KEEP_TOGETHER				},
+            { XML_NAMESPACE_REPORT,	XML_REPEAT_SECTION				,	XML_TOK_REPEAT_SECTION				},
+            { XML_NAMESPACE_TABLE,	XML_STYLE_NAME					,	XML_TOK_SECT_STYLE_NAME				},			
+            { XML_NAMESPACE_REPORT,	XML_PAGE_PRINT_OPTION           ,	XML_TOK_PAGE_PRINT_OPTION           },
 
             XML_TOKEN_MAP_END
         };
@@ -968,18 +968,18 @@ const SvXMLTokenMap& ORptFilter::GetCellElemTokenMap() const
     {
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_TEXT,   XML_P                           ,   XML_TOK_P                           },
-            { XML_NAMESPACE_REPORT, XML_FIXED_CONTENT               ,   XML_TOK_FIXED_CONTENT               },
-            { XML_NAMESPACE_REPORT, XML_FORMATTED_TEXT              ,   XML_TOK_FORMATTED_TEXT              },
-            { XML_NAMESPACE_REPORT, XML_IMAGE                       ,   XML_TOK_IMAGE                       },
-            { XML_NAMESPACE_REPORT, XML_SUB_DOCUMENT                ,   XML_TOK_SUB_DOCUMENT                },
-            { XML_NAMESPACE_DRAW,   XML_CUSTOM_SHAPE                ,   XML_TOK_CUSTOM_SHAPE                },
-            { XML_NAMESPACE_DRAW,   XML_FRAME                       ,   XML_TOK_FRAME                       },
-            { XML_NAMESPACE_TEXT,   XML_PAGE_NUMBER                 ,   XML_TOK_PAGE_NUMBER                 },
-            { XML_NAMESPACE_TEXT,   XML_PAGE_COUNT                  ,   XML_TOK_PAGE_COUNT                  },
-            { XML_NAMESPACE_TEXT,   XML_TAB                         ,   XML_TOK_TEXT_TAB_STOP               },
-            { XML_NAMESPACE_TEXT,   XML_LINE_BREAK                  ,   XML_TOK_TEXT_LINE_BREAK             },
-            { XML_NAMESPACE_TEXT,   XML_S                           ,   XML_TOK_TEXT_S                      },
+            { XML_NAMESPACE_TEXT,	XML_P						    ,	XML_TOK_P           				},
+            { XML_NAMESPACE_REPORT,	XML_FIXED_CONTENT				,	XML_TOK_FIXED_CONTENT			    },
+            { XML_NAMESPACE_REPORT,	XML_FORMATTED_TEXT				,	XML_TOK_FORMATTED_TEXT				},
+            { XML_NAMESPACE_REPORT,	XML_IMAGE						,	XML_TOK_IMAGE						},
+            { XML_NAMESPACE_REPORT,	XML_SUB_DOCUMENT                ,	XML_TOK_SUB_DOCUMENT                },
+            { XML_NAMESPACE_DRAW,	XML_CUSTOM_SHAPE                ,	XML_TOK_CUSTOM_SHAPE                },
+            { XML_NAMESPACE_DRAW,	XML_FRAME                       ,	XML_TOK_FRAME                       },
+            { XML_NAMESPACE_TEXT,	XML_PAGE_NUMBER 			    ,	XML_TOK_PAGE_NUMBER      			},
+            { XML_NAMESPACE_TEXT,	XML_PAGE_COUNT				    ,	XML_TOK_PAGE_COUNT      		    },
+            { XML_NAMESPACE_TEXT,	XML_TAB				            ,	XML_TOK_TEXT_TAB_STOP      		    },
+            { XML_NAMESPACE_TEXT,	XML_LINE_BREAK				    ,	XML_TOK_TEXT_LINE_BREAK      		},
+            { XML_NAMESPACE_TEXT,	XML_S				            ,	XML_TOK_TEXT_S      		        },
             XML_TOKEN_MAP_END
         };
         m_pCellElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -1004,7 +1004,7 @@ SvXMLImportContext* ORptFilter::CreateStylesContext(const ::rtl::OUString& rLoca
     return pContext;
 }
 // -----------------------------------------------------------------------------
-SvXMLImport&         ORptFilter::getGlobalContext()
+SvXMLImport&		 ORptFilter::getGlobalContext()
 {
     return *this;
 }

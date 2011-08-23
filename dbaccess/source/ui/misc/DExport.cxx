@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -125,7 +125,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     ,m_bAppendFirstLine(false)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::ODatabaseExport" );
-    DBG_CTOR(ODatabaseExport,NULL);
+    DBG_CTOR(ODatabaseExport,NULL); 
 
     m_nRows += nRows;
     sal_Int32 nCount = 0;
@@ -182,7 +182,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     ,m_bAppendFirstLine(false)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::ODatabaseExport" );
-    DBG_CTOR(ODatabaseExport,NULL);
+    DBG_CTOR(ODatabaseExport,NULL); 
     try
     {
         SvtSysLocale aSysLocale;
@@ -232,53 +232,53 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             sal_Int32 nType = aValue;
             ++nPos;
-
+            
             if( nType == DataType::VARCHAR )
             {
-                m_pTypeInfo                 = TOTypeInfoSP(new OTypeInfo());
-
-                m_pTypeInfo->aTypeName      = sTypeName;
-                m_pTypeInfo->nType          = nType;
-
+                m_pTypeInfo					= TOTypeInfoSP(new OTypeInfo());
+                
+                m_pTypeInfo->aTypeName		= sTypeName;
+                m_pTypeInfo->nType			= nType;
+                
                 OSL_ENSURE((nPos) < static_cast<sal_Int32>(aTypes.size()),"aTypes: Illegal index for vector");
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->nPrecision     = aValue;
+                m_pTypeInfo->nPrecision		= aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->aLiteralPrefix = aValue;
+                m_pTypeInfo->aLiteralPrefix	= aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->aLiteralSuffix = aValue;
+                m_pTypeInfo->aLiteralSuffix	= aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->aCreateParams  = aValue;
+                m_pTypeInfo->aCreateParams	= aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->bNullable      = (sal_Int32)aValue == ColumnValue::NULLABLE;
+                m_pTypeInfo->bNullable		= (sal_Int32)aValue == ColumnValue::NULLABLE;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->bCaseSensitive = (sal_Bool)aValue;
+                m_pTypeInfo->bCaseSensitive	= (sal_Bool)aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->nSearchType        = aValue;
+                m_pTypeInfo->nSearchType		= aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->bUnsigned      = (sal_Bool)aValue;
+                m_pTypeInfo->bUnsigned		= (sal_Bool)aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->bCurrency      = (sal_Bool)aValue;
+                m_pTypeInfo->bCurrency		= (sal_Bool)aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->bAutoIncrement = (sal_Bool)aValue;
+                m_pTypeInfo->bAutoIncrement	= (sal_Bool)aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->aLocalTypeName = aValue;
+                m_pTypeInfo->aLocalTypeName	= aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->nMinimumScale  = aValue;
+                m_pTypeInfo->nMinimumScale	= aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->nMaximumScale  = aValue;
+                m_pTypeInfo->nMaximumScale	= aValue;
 
                 // check if values are less than zero like it happens in a oracle jdbc driver
                 if( m_pTypeInfo->nPrecision < 0)
@@ -292,13 +292,13 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
         }
     } // if(xSet.is())
     if ( !m_pTypeInfo )
-        m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
+        m_pTypeInfo	= TOTypeInfoSP(new OTypeInfo());
     SetColumnTypes(pList,_pInfoMap);
 }
 //---------------------------------------------------------------------------
 ODatabaseExport::~ODatabaseExport()
 {
-    DBG_DTOR(ODatabaseExport,NULL);
+    DBG_DTOR(ODatabaseExport,NULL); 
     m_pFormatter = NULL;
     ODatabaseExport::TColumns::iterator aIter = m_aDestColumns.begin();
     ODatabaseExport::TColumns::iterator aEnd  = m_aDestColumns.end();
@@ -306,7 +306,7 @@ ODatabaseExport::~ODatabaseExport()
     for(;aIter != aEnd;++aIter)
         delete aIter->second;
     m_vDestVector.clear();
-    m_aDestColumns.clear();
+    m_aDestColumns.clear();	
 }
 // -----------------------------------------------------------------------------
 void ODatabaseExport::insertValueIntoColumn()
@@ -357,7 +357,7 @@ void ODatabaseExport::insertValueIntoColumn()
                             {
                                 Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
                                 Reference<XNumberFormatTypes> xNumType(xSupplier->getNumberFormats(),UNO_QUERY);
-                                sal_Int16 nFormats[] = {
+                                sal_Int16 nFormats[] = { 
                                     NumberFormat::DATETIME
                                     ,NumberFormat::DATE
                                     ,NumberFormat::TIME
@@ -454,7 +454,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
             xProp->getPropertyValue(PROPERTY_TYPE) >>= nNumberFormat;
         }
         else
-        {
+        {           
             Reference<XNumberFormatTypes> xNumType(xFormats,UNO_QUERY);
             sal_Int32 nFormatKey = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::ALL,m_aLocale),aCheckToken);
             fOutNumber = m_xFormatter->convertStringToNumber(nFormatKey,aCheckToken);
@@ -462,7 +462,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
             Reference<XPropertySet> xProp = xFormats->getByKey(nFormatKey);
             sal_Int16 nType = 0;
             xProp->getPropertyValue(PROPERTY_TYPE) >>= nType;
-
+            
             switch(nType)
             {
                 case NumberFormat::ALL:
@@ -590,15 +590,15 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
             sal_Int32 nDataType;
             sal_Int32 nLength(0),nScale(0);
             sal_Int16 nType = m_vNumberFormat[i] & ~NumberFormat::DEFINED;
-
+            
             switch ( nType )
             {
                 case NumberFormat::ALL:
                     nDataType  = DataType::DOUBLE;
                     break;
                 case NumberFormat::DEFINED:
-                    nDataType   = DataType::VARCHAR;
-                    nLength     = ((m_vColumnSize[i] % 10 ) ? m_vColumnSize[i]/ 10 + 1: m_vColumnSize[i]/ 10) * 10;
+                    nDataType	= DataType::VARCHAR;
+                    nLength		= ((m_vColumnSize[i] % 10 ) ? m_vColumnSize[i]/ 10 + 1: m_vColumnSize[i]/ 10) * 10;
                     break;
                 case NumberFormat::DATE:
                     nDataType  = DataType::DATE;
@@ -611,8 +611,8 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
                     break;
                 case NumberFormat::CURRENCY:
                     nDataType  = DataType::NUMERIC;
-                    nScale      = 4;
-                    nLength     = 19;
+                    nScale		= 4;
+                    nLength		= 19;
                     break;
                 case NumberFormat::NUMBER:
                 case NumberFormat::SCIENTIFIC:
@@ -625,7 +625,7 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
                 case NumberFormat::LOGICAL:
                 default:
                     nDataType  = DataType::VARCHAR;
-                    nLength     = ((m_vColumnSize[i] % 10 ) ? m_vColumnSize[i]/ 10 + 1: m_vColumnSize[i]/ 10) * 10;
+                    nLength		= ((m_vColumnSize[i] % 10 ) ? m_vColumnSize[i]/ 10 + 1: m_vColumnSize[i]/ 10) * 10;
                     break;
             }
             OTypeInfoMap::const_iterator aFind = _pInfoMap->find(nDataType);
@@ -651,7 +651,7 @@ void ODatabaseExport::CreateDefaultColumn(const ::rtl::OUString& _rColumnName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::CreateDefaultColumn" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
-    Reference< XDatabaseMetaData>  xDestMetaData(m_xConnection->getMetaData());
+    Reference< XDatabaseMetaData>  xDestMetaData(m_xConnection->getMetaData());	
     sal_Int32 nMaxNameLen(xDestMetaData->getMaxColumnNameLength());
     ::rtl::OUString aAlias = _rColumnName;
     if ( isSQL92CheckEnabled(m_xConnection) )
@@ -659,7 +659,7 @@ void ODatabaseExport::CreateDefaultColumn(const ::rtl::OUString& _rColumnName)
 
     if(nMaxNameLen && aAlias.getLength() > nMaxNameLen)
         aAlias = aAlias.copy(0, ::std::min<sal_Int32>( nMaxNameLen-1, aAlias.getLength() ) );
-
+    
     ::rtl::OUString sName(aAlias);
     if(m_aDestColumns.find(sName) != m_aDestColumns.end())
     {
@@ -747,10 +747,10 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _rTableName,const
                             if(_aTextColor.hasValue())
                                 m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,_aTextColor);
                         }
-                        m_bIsAutoIncrement  = aWizard.shouldCreatePrimaryKey();
-                        m_vColumns          = aWizard.GetColumnPositions();
-                        m_vColumnTypes      = aWizard.GetColumnTypes();
-                        m_bAppendFirstLine  = !aWizard.UseHeaderLine();
+                        m_bIsAutoIncrement	= aWizard.shouldCreatePrimaryKey();
+                        m_vColumns			= aWizard.GetColumnPositions();
+                        m_vColumnTypes		= aWizard.GetColumnTypes();
+                        m_bAppendFirstLine	= !aWizard.UseHeaderLine();
                     }
                     break;
                 default:
@@ -763,9 +763,9 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _rTableName,const
         if(!bError)
             bError = !createRowSet();
     }
-    catch( const SQLException&)
+    catch( const SQLException&) 
     {
-        ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), &aWizard, m_xFactory );
+        ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), &aWizard, m_xFactory ); 
         bError = sal_True;
     }
     catch( const Exception& )

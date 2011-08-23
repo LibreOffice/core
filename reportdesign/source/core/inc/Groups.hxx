@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,24 +45,24 @@ namespace reportdesign
     class OGroups : public comphelper::OBaseMutex,
                     public GroupsBase
     {
-        typedef ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup > > TGroups;
-        ::cppu::OInterfaceContainerHelper                                                       m_aContainerListeners;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XReportDefinition >     m_xParent;
-        TGroups                                                                                 m_aGroups;
+        typedef ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup > >	TGroups;
+        ::cppu::OInterfaceContainerHelper														m_aContainerListeners;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >			m_xContext;
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XReportDefinition >		m_xParent;
+        TGroups																					m_aGroups;
     private:
         OGroups& operator=(const OGroups&);
         OGroups(const OGroups&);
         void checkIndex(sal_Int32 _nIndex);
     protected:
-        // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+        // TODO: VirtualFunctionFinder: This is virtual function! 
+        // 
         virtual ~OGroups();
 
         /** this function is called upon disposing the component
         */
-        // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+        // TODO: VirtualFunctionFinder: This is virtual function! 
+        // 
         virtual void SAL_CALL disposing();
     public:
         OGroups( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xParent
@@ -92,15 +92,15 @@ namespace reportdesign
     // XContainer
         virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-
+        
         // XComponent
         virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        {
+        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException) 
+        { 
             cppu::WeakComponentImplHelperBase::addEventListener(aListener);
         }
         virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        {
+        { 
             cppu::WeakComponentImplHelperBase::removeEventListener(aListener);
         }
     };

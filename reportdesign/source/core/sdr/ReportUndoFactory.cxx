@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,12 +54,12 @@ DBG_NAME( rpt_OReportUndoFactory )
 // -----------------------------------------------------------------------------
 OReportUndoFactory::OReportUndoFactory() : m_pUndoFactory(new SdrUndoFactory)
 {
-    DBG_CTOR( rpt_OReportUndoFactory,NULL);
+    DBG_CTOR( rpt_OReportUndoFactory,NULL);    
 }
 // -----------------------------------------------------------------------------
 OReportUndoFactory::~OReportUndoFactory()
 {
-    DBG_DTOR( rpt_OReportUndoFactory,NULL);
+    DBG_DTOR( rpt_OReportUndoFactory,NULL);    
 }
 ///////////////////////////////////////////////////////////////////////
 // shapes
@@ -146,7 +146,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoMoveLayer(sal_uInt16 nLayerNum, Sdr
 }
 
 // page
-SdrUndoAction*  OReportUndoFactory::CreateUndoDeletePage(SdrPage& rPage)
+SdrUndoAction*	OReportUndoFactory::CreateUndoDeletePage(SdrPage& rPage)
 {
     return m_pUndoFactory->CreateUndoDeletePage( rPage );
 }
@@ -177,7 +177,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoPageChangeMasterPage(SdrPage& rChan
 }
 
 //==================================================================
-}   //rptui
+}	//rptui
 //==================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

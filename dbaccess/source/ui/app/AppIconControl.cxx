@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ using namespace ::dbaui;
 // class OApplicationIconControl
 DBG_NAME(OApplicationIconControl)
 //==================================================================
-OApplicationIconControl::OApplicationIconControl(Window* _pParent)
+OApplicationIconControl::OApplicationIconControl(Window* _pParent) 
     : SvtIconChoiceCtrl(_pParent,WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | /*!WB_NOSELECTION |*/
                                 WB_TABSTOP | WB_CLIPCHILDREN | WB_NOVSCROLL | WB_SMART_ARRANGE | WB_NOHSCROLL | WB_CENTER)
     ,DropTargetHelper(this)
@@ -69,7 +69,7 @@ OApplicationIconControl::OApplicationIconControl(Window* _pParent)
             String( ModuleRes( aCategories[i].nLabelResId ) ),
             Image( ModuleRes( aCategories[i].nImageResId ) ),
             Image( ModuleRes( aCategories[i].nImageResIdHC ) ) );
-        if ( pEntry )
+        if ( pEntry ) 
             pEntry->SetUserData( new ElementType( aCategories[i].eType ) );
     }
 
@@ -98,8 +98,8 @@ sal_Int8 OApplicationIconControl::AcceptDrop( const AcceptDropEvent& _rEvt )
     sal_Int8 nDropOption = DND_ACTION_NONE;
     if ( m_pActionListener )
     {
-
-        SvxIconChoiceCtrlEntry* pEntry = GetEntry(_rEvt.maPosPixel);
+        
+        SvxIconChoiceCtrlEntry*	pEntry = GetEntry(_rEvt.maPosPixel);
         if ( pEntry )
         {
             SetCursor(pEntry);

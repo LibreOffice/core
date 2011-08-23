@@ -140,7 +140,7 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
         m_pKeyColumnNames->insert(pKeyColumNames->begin(),pKeyColumNames->end());
     }
 
-    // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
+    // the first row is empty because it's now easier for us to distinguish	when we are beforefirst or first
     // without extra variable to be set
     m_aKeyMap.insert(OKeySetMatrix::value_type(0,OKeySetValue(NULL,::std::pair<sal_Int32,Reference<XRow> >(0,NULL))));
     m_aKeyIter = m_aKeyMap.begin();
@@ -188,7 +188,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
         throw SQLException();
     // list all cloumns that should be set
     static ::rtl::OUString s_sPara(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    ::rtl::OUString aQuote	= getIdentifierQuoteString();
     static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
     ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
     ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
@@ -276,7 +276,7 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
     TSQLStatements aParameter;
     TSQLStatements aKeyConditions;
     ::std::map< ::rtl::OUString,bool > aResultSetChanged;
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    ::rtl::OUString aQuote	= getIdentifierQuoteString();
     static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
     ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
     ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
@@ -385,7 +385,7 @@ void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const conne
     ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
     ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
     static const ::rtl::OUString s_sAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    ::rtl::OUString aQuote	= getIdentifierQuoteString();
     ::rtl::OUString aColumnName;
     ::rtl::OUStringBuffer sKeyCondition,sIndexCondition;
     ::std::vector<sal_Int32> aIndexColumnPositions;
@@ -662,7 +662,7 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
     TSQLStatements aSql;
     TSQLStatements aKeyConditions;
     ::std::map< ::rtl::OUString,bool > aResultSetChanged;
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    ::rtl::OUString aQuote	= getIdentifierQuoteString();
     static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
     ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
     ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));

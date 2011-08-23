@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,14 +33,14 @@
 
 namespace dbaui
 {
-    class OColumnControl :  public UnoControl
+    class OColumnControl :	public UnoControl
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xORB;
     public:
         OColumnControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
         // UnoControl
-        virtual ::rtl::OUString GetComponentServiceName();
+        virtual ::rtl::OUString	GetComponentServiceName();
 
         // XServiceInfo
         DECLARE_SERVICE_INFO_STATIC();
@@ -49,7 +49,7 @@ namespace dbaui
         virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& _rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent) throw(::com::sun::star::uno::RuntimeException);
     };
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // DBAUI_COLUMNCONTROL_HXX

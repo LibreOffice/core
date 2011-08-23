@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,11 +69,11 @@ namespace adabasui
 {
     class ODatabaseCreator : public ::osl::Thread
     {
-        Link                                m_aTerminateHandler;
-        Sequence< PropertyValue>            m_aValues;
-        Reference<XCreateCatalog>           m_xCreateCatalog;
-        Reference< XMultiServiceFactory >   m_xORB;
-        Window*                             m_pErrorWindow;
+        Link								m_aTerminateHandler;
+        Sequence< PropertyValue>			m_aValues;
+        Reference<XCreateCatalog>			m_xCreateCatalog;
+        Reference< XMultiServiceFactory >	m_xORB;
+        Window*								m_pErrorWindow;
     public:
         ODatabaseCreator(const Reference<XCreateCatalog>& _rxCreateCatalog
                         ,Window* _pErrorWindow
@@ -107,7 +107,7 @@ namespace adabasui
         catch(Exception&)
         {
             OSL_ASSERT(0);
-            //  showError(::dbtools::SQLExceptionInfo(e),this,);
+            //	showError(::dbtools::SQLExceptionInfo(e),this,);
         }
     }
     void SAL_CALL ODatabaseCreator::onTerminated()
@@ -120,7 +120,7 @@ DBG_NAME( OAdabasNewDbDlg )
 //========================================================================
 OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
                                  const Reference<XCreateCatalog>& _rxCreateCatalog,
-                                 const Reference< XMultiServiceFactory >&   _rxORB,
+                                 const Reference< XMultiServiceFactory >&	_rxORB,
                                  BOOL _bRestore)
     :ModalDialog( pParent, ModuleRes( DLG_ADABAS_NEWDB ))
     ,m_FT_DATABASENAME(         this, ModuleRes( FT_DATABASENAME        ) )
@@ -202,8 +202,8 @@ OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
         m_ET_SYSUSR.SetText(String::CreateFromAscii("DUMMY"));
         m_BMP_SYS.Hide();
         m_BMP_DOMAIN.Hide();
-        m_ET_RESTORE.SetModifyHdl(              LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
-        m_ET_RESTORE.SetLoseFocusHdl(           LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
+        m_ET_RESTORE.SetModifyHdl(				LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
+        m_ET_RESTORE.SetLoseFocusHdl(			LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
         m_ET_RESTORE.SetMaxTextLen(40);
     }
     else
@@ -212,24 +212,24 @@ OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
         m_ET_RESTORE.Hide();
         m_PB_RESTORE.Hide();
 
-        m_ET_SYSUSR.SetModifyHdl(               LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
-        m_ET_CONUSR.SetModifyHdl(               LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
+        m_ET_SYSUSR.SetModifyHdl(				LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
+        m_ET_CONUSR.SetModifyHdl(				LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
         m_ET_DOMAIN_USR.Enable(FALSE);
 
     }
 
 
-    m_ET_SYSDEVSPACE.SetLoseFocusHdl(       LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
-    m_ET_TRANSACTIONLOG.SetLoseFocusHdl(    LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
-    m_ET_DATADEVSPACE.SetLoseFocusHdl(      LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
+    m_ET_SYSDEVSPACE.SetLoseFocusHdl(		LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
+    m_ET_TRANSACTIONLOG.SetLoseFocusHdl(	LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
+    m_ET_DATADEVSPACE.SetLoseFocusHdl(		LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
 
     m_ET_SYSDEVSPACE.SetMaxTextLen(40);
     m_ET_TRANSACTIONLOG.SetMaxTextLen(40);
     m_ET_DATADEVSPACE.SetMaxTextLen(40);
 
-    m_NF_TRANSACTIONLOG_SIZE.SetModifyHdl(  LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
-    m_NF_DATADEVSPACE_SIZE.SetModifyHdl(    LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
-    m_NF_CACHE_SIZE.SetModifyHdl(           LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
+    m_NF_TRANSACTIONLOG_SIZE.SetModifyHdl(	LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
+    m_NF_DATADEVSPACE_SIZE.SetModifyHdl(	LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
+    m_NF_CACHE_SIZE.SetModifyHdl(			LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
 
     m_NF_TRANSACTIONLOG_SIZE.SetMin(10);
     m_NF_DATADEVSPACE_SIZE.SetMin(10);
@@ -249,19 +249,19 @@ OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
 
     m_ET_DATABASENAME.SetMaxTextLen( 8 );
 
-    m_PB_CONPWD.SetClickHdl(            LINK(this,OAdabasNewDbDlg,PwdClickHdl));
-    m_PB_SYSPWD.SetClickHdl(            LINK(this,OAdabasNewDbDlg,PwdClickHdl));
-    m_PB_DOMAINPWD.SetClickHdl(         LINK(this,OAdabasNewDbDlg,PwdClickHdl));
+    m_PB_CONPWD.SetClickHdl(			LINK(this,OAdabasNewDbDlg,PwdClickHdl));
+    m_PB_SYSPWD.SetClickHdl(			LINK(this,OAdabasNewDbDlg,PwdClickHdl));
+    m_PB_DOMAINPWD.SetClickHdl(			LINK(this,OAdabasNewDbDlg,PwdClickHdl));
 
-    m_PB_RESTORE.SetClickHdl(           LINK(this,OAdabasNewDbDlg,LoadButtonClickHdl));
+    m_PB_RESTORE.SetClickHdl(			LINK(this,OAdabasNewDbDlg,LoadButtonClickHdl));
 
-    m_PB_SYSDEVSPACE.SetClickHdl(       LINK(this,OAdabasNewDbDlg,ButtonClickHdl));
-    m_PB_TRANSACTIONLOG.SetClickHdl(    LINK(this,OAdabasNewDbDlg,ButtonClickHdl));
-    m_PB_DATADEVSPACE.SetClickHdl(      LINK(this,OAdabasNewDbDlg,ButtonClickHdl));
+    m_PB_SYSDEVSPACE.SetClickHdl(		LINK(this,OAdabasNewDbDlg,ButtonClickHdl));
+    m_PB_TRANSACTIONLOG.SetClickHdl(	LINK(this,OAdabasNewDbDlg,ButtonClickHdl));
+    m_PB_DATADEVSPACE.SetClickHdl(		LINK(this,OAdabasNewDbDlg,ButtonClickHdl));
 
-    m_BMP_CON.SetImage(     ModuleRes(UNCHECK_RED) );
-    m_BMP_SYS.SetImage(     ModuleRes(UNCHECK_RED) );
-    m_BMP_DOMAIN.SetImage(  ModuleRes(UNCHECK_RED) );
+    m_BMP_CON.SetImage(		ModuleRes(UNCHECK_RED) );
+    m_BMP_SYS.SetImage(		ModuleRes(UNCHECK_RED) );
+    m_BMP_DOMAIN.SetImage(	ModuleRes(UNCHECK_RED) );
 
     static String s_sRoot(RTL_CONSTASCII_USTRINGPARAM("DBROOT"));
     static String s_sConfig(RTL_CONSTASCII_USTRINGPARAM("DBCONFIG"));
@@ -344,7 +344,7 @@ OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
     m_PB_OK.SetClickHdl(LINK(this,OAdabasNewDbDlg,ImplOKHdl));
     m_PB_OK.Enable(FALSE);
 
-    m_ET_DATABASENAME.SetModifyHdl( LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
+    m_ET_DATABASENAME.SetModifyHdl(	LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
 
 }
 // -----------------------------------------------------------------------
@@ -378,11 +378,11 @@ IMPL_LINK(OAdabasNewDbDlg, OnNoAccessRights, void*, /*_pArg*/)
 // -----------------------------------------------------------------------
 IMPL_LINK( OAdabasNewDbDlg, ImplOKHdl, OKButton*, /*EMPTYARG*/ )
 {
-    m_SYSDEV_File   = m_ET_SYSDEVSPACE.GetText();
+    m_SYSDEV_File 	= m_ET_SYSDEVSPACE.GetText();
     m_TRANSDEV_File = m_ET_TRANSACTIONLOG.GetText();
-    m_DATADEV_File  = m_ET_DATADEVSPACE.GetText();
+    m_DATADEV_File	= m_ET_DATADEVSPACE.GetText();
 
-    m_Backup_File   = m_ET_RESTORE.GetText();
+    m_Backup_File	= m_ET_RESTORE.GetText();
     if(m_bRestore)
     {
         INetURLObject aURL;
@@ -463,36 +463,36 @@ IMPL_LINK( OAdabasNewDbDlg, ImplOKHdl, OKButton*, /*EMPTYARG*/ )
 
     sal_Int32 nPos = 0;
     Sequence< PropertyValue> aCreateArgs(m_bRestore ? 14 : 12);
-    aCreateArgs[nPos].Name      = PROPERTY_CONTROL_USER;
+    aCreateArgs[nPos].Name		= PROPERTY_CONTROL_USER;
     aCreateArgs[nPos++].Value  <<= ::rtl::OUString(m_ET_CONUSR.GetText().ToUpperAscii());
-    aCreateArgs[nPos].Name      = PROPERTY_CONTROL_PASSWORD;
+    aCreateArgs[nPos].Name		= PROPERTY_CONTROL_PASSWORD;
     aCreateArgs[nPos++].Value  <<= ::rtl::OUString(m_ConPwd);
-    aCreateArgs[nPos].Name      = PROPERTY_USER;
+    aCreateArgs[nPos].Name		= PROPERTY_USER;
     aCreateArgs[nPos++].Value  <<= ::rtl::OUString(m_ET_SYSUSR.GetText().ToUpperAscii());
-    aCreateArgs[nPos].Name      = PROPERTY_PASSWORD;
+    aCreateArgs[nPos].Name		= PROPERTY_PASSWORD;
     aCreateArgs[nPos++].Value  <<= ::rtl::OUString(m_SysPwd);
-    aCreateArgs[nPos].Name      = PROPERTY_DOMAINPASSWORD;
+    aCreateArgs[nPos].Name		= PROPERTY_DOMAINPASSWORD;
     aCreateArgs[nPos++].Value  <<= ::rtl::OUString(m_DomainPwd);
-    aCreateArgs[nPos].Name      = PROPERTY_CACHESIZE;
+    aCreateArgs[nPos].Name		= PROPERTY_CACHESIZE;
     aCreateArgs[nPos++].Value  <<= ::rtl::OUString::valueOf(sal_Int32(m_NF_CACHE_SIZE.GetValue()*256));
-    aCreateArgs[nPos].Name      = PROPERTY_DATABASENAME;
+    aCreateArgs[nPos].Name		= PROPERTY_DATABASENAME;
     aCreateArgs[nPos++].Value  <<= ::rtl::OUString(m_ET_DATABASENAME.GetText().ToUpperAscii());
-    aCreateArgs[nPos].Name      = PROPERTY_DATADEVSPACE;
+    aCreateArgs[nPos].Name		= PROPERTY_DATADEVSPACE;
     aCreateArgs[nPos++].Value  <<= ::rtl::OUString(m_DATADEV_File);
-    aCreateArgs[nPos].Name      = PROPERTY_SYSDEVSPACE;
+    aCreateArgs[nPos].Name		= PROPERTY_SYSDEVSPACE;
     aCreateArgs[nPos++].Value  <<= ::rtl::OUString(m_SYSDEV_File);
-    aCreateArgs[nPos].Name      = PROPERTY_TRANSACTION_LOG;
+    aCreateArgs[nPos].Name		= PROPERTY_TRANSACTION_LOG;
     aCreateArgs[nPos++].Value  <<= ::rtl::OUString(m_TRANSDEV_File);
-    aCreateArgs[nPos].Name      = PROPERTY_DATADEVSIZE;
+    aCreateArgs[nPos].Name		= PROPERTY_DATADEVSIZE;
     aCreateArgs[nPos++].Value  <<= sal_Int32(m_NF_DATADEVSPACE_SIZE.GetValue()*256);
-    aCreateArgs[nPos].Name      = PROPERTY_LOGDEVSIZE;
-    aCreateArgs[nPos++].Value  <<=  sal_Int32(m_NF_TRANSACTIONLOG_SIZE.GetValue()*256);
+    aCreateArgs[nPos].Name		= PROPERTY_LOGDEVSIZE;
+    aCreateArgs[nPos++].Value  <<= 	sal_Int32(m_NF_TRANSACTIONLOG_SIZE.GetValue()*256);
 
     if(m_bRestore)
     {
-        aCreateArgs[nPos].Name      = PROPERTY_RESTOREDATABASE;
+        aCreateArgs[nPos].Name		= PROPERTY_RESTOREDATABASE;
         aCreateArgs[nPos++].Value  <<= ::cppu::bool2any(sal_True);
-        aCreateArgs[nPos].Name      = PROPERTY_BACKUPNAME;
+        aCreateArgs[nPos].Name		= PROPERTY_BACKUPNAME;
         aCreateArgs[nPos++].Value  <<= ::rtl::OUString(m_Backup_File);
     }
 
@@ -574,8 +574,8 @@ IMPL_LINK( OAdabasNewDbDlg, LoadButtonClickHdl, Button *, /*pButton*/ )
 //------------------------------------------------------------------------
 IMPL_LINK( OAdabasNewDbDlg, ButtonClickHdl, Button *, pButton )
 {
-    WinBits nBits(WB_3DLOOK|WB_STDMODAL|WB_SAVEAS);
-    ::sfx2::FileDialogHelper aFileDlg( static_cast<sal_uInt32>(nBits) ); // new FileDialog( this, nBits );
+    WinBits	nBits(WB_3DLOOK|WB_STDMODAL|WB_SAVEAS);
+    ::sfx2::FileDialogHelper aFileDlg( static_cast<sal_uInt32>(nBits) ); //	new FileDialog( this, nBits );
 
     String aPath;
     if(pButton == &m_PB_SYSDEVSPACE)
