@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,12 +46,12 @@ class HF_IdlEnum : public HtmlFactory_Idl
                             Xml::Element &      o_rOut );
     virtual             ~HF_IdlEnum();
 
-    void                Produce_byData(
+    void                Produce_byData(    
                             const client &      ce ) const;
   private:
     HF_NaviSubRow &     make_Navibar(
                             const client &      ce ) const;
-    virtual void        produce_MemberDetails(
+    virtual void        produce_MemberDetails( 
                             HF_SubTitleTable &  o_table,
                             const client &      ce ) const;
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,8 +69,8 @@ class CodeExplorer : private TokenProcessing_Types
                         ~CodeExplorer();
 
     void                StartNewFile();
-    void                Process_Token(
-                            DYN cpp::Token &    let_drToken );
+    void				Process_Token(
+                            DYN cpp::Token &	let_drToken );
     // ACCESS
     FileScope_EventHandler &
                         FileEventHandler()      { return aGlobalParseContext; }
@@ -79,21 +79,21 @@ class CodeExplorer : private TokenProcessing_Types
   private:
     typedef std::vector< cpp::Cpp_PE* >      EnvironmentStack;
 
-    void                AcknowledgeResult();
-    const Token &       CurToken() const;
-    Cpp_PE &            CurEnv() const;
-    Cpp_PE &            PushEnv() const;
+    void				AcknowledgeResult();
+    const Token &		CurToken() const;
+    Cpp_PE &	        CurEnv() const;
+    Cpp_PE &			PushEnv() const;
     TokenProcessing_Result &
                         CurResult()             { return aGlobalParseContext.CurResult(); }
 
     // DATA
     ContextForAry       aGlobalParseContext;
 
-    EnvironmentStack    aEnvironments;
+    EnvironmentStack	aEnvironments;
     Dyn<PE_File>        pPE_File;
 
-    ary::cpp::Gate *    pGate;
-    cpp::Token *        dpCurToken;
+    ary::cpp::Gate *	pGate;
+    cpp::Token *		dpCurToken;
 };
 
 

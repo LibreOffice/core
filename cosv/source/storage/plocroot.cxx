@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -179,7 +179,7 @@ Create_WindowsRoot( const char * &  o_sPathAfterRoot,
              return new WinRootDir;
         }
     }
-    else if (i_sPath[1] == ':')
+    else if (i_sPath[1] == ':')                     
     {
         if ( i_sPath[2] == '\\')
         {

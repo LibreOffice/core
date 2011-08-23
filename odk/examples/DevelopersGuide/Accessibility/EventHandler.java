@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import java.util.Vector;
@@ -93,7 +93,7 @@ public class EventHandler
             XAccessibleContext xContext = xAccessible.getAccessibleContext();
             if (xContext != null)
             {
-                MessageArea.println ("new top level window has accessible name "
+                MessageArea.println ("new top level window has accessible name " 
                     + xContext.getAccessibleName());
 
                 // Register at all accessible objects of the new window.
@@ -141,14 +141,14 @@ public class EventHandler
     {
         if (xContext != null)
         {
-            MessageArea.println ("focusGained: " + xContext.getAccessibleName()
+            MessageArea.println ("focusGained: " + xContext.getAccessibleName() 
                 + " with role "
                 + NameProvider.getRoleName (xContext.getAccessibleRole()));
 
             // Tell the object displays to update their views.
             for (int i=0; i<maObjectDisplays.size(); i++)
             {
-                IAccessibleObjectDisplay aDisplay =
+                IAccessibleObjectDisplay aDisplay = 
                     (IAccessibleObjectDisplay)maObjectDisplays.get(i);
                 if (aDisplay != null)
                     aDisplay.setAccessibleObject (xContext);
@@ -163,7 +163,7 @@ public class EventHandler
 
 
 
-
+ 
     /** Print a message that the given object just lost the focus.  Call
         all accessible object diplays and tell them to update.
     */
@@ -171,15 +171,15 @@ public class EventHandler
     {
         if (xContext != null)
         {
-            MessageArea.println ("focusLost: "
-                + xContext.getAccessibleName()
+            MessageArea.println ("focusLost: " 
+                + xContext.getAccessibleName() 
                 + " with role "
                 + NameProvider.getRoleName (xContext.getAccessibleRole()));
 
             // Tell the object displays to update their views.
             for (int i=0; i<maObjectDisplays.size(); i++)
             {
-                IAccessibleObjectDisplay aDisplay =
+                IAccessibleObjectDisplay aDisplay = 
                     (IAccessibleObjectDisplay)maObjectDisplays.get(i);
                 if (aDisplay != null)
                     aDisplay.setAccessibleObject (null);
@@ -196,7 +196,7 @@ public class EventHandler
     /** Handle a change of the caret position.  Ignore this on all objects
         but the one currently focused.
     */
-    private void handleCaretEvent (XAccessibleContext xContext,
+    private void handleCaretEvent (XAccessibleContext xContext, 
         long nOldPosition, long nNewPosition)
     {
         if (xContext == mxFocusedObject)
@@ -231,7 +231,7 @@ public class EventHandler
         }
 
         // Print a message about the changed state.
-        MessageArea.print ("setting state " + NameProvider.getStateName(nState)
+        MessageArea.print ("setting state " + NameProvider.getStateName(nState) 
             + " to " + aNewValue);
         if (xContext != null)
         {
@@ -241,7 +241,7 @@ public class EventHandler
         else
             MessageArea.println (" at null");
 
-        // Further handling of some states
+        // Further handling of some states 
         switch (nState)
         {
             case AccessibleStateType.FOCUSED:
@@ -259,7 +259,7 @@ public class EventHandler
         single child.
     */
     private void handleChildEvent (
-        XAccessibleContext aOldChild,
+        XAccessibleContext aOldChild, 
         XAccessibleContext aNewChild)
     {
         if (aOldChild != null)
@@ -285,7 +285,7 @@ public class EventHandler
         if (mxFocusedObject != null)
             for (int i=0; i<maObjectDisplays.size(); i++)
             {
-                IAccessibleObjectDisplay aDisplay =
+                IAccessibleObjectDisplay aDisplay = 
                     (IAccessibleObjectDisplay)maObjectDisplays.get(i);
                 if (aDisplay != null)
                     aDisplay.updateAccessibleObject (mxFocusedObject);
@@ -300,19 +300,19 @@ public class EventHandler
     */
     private void handleGenericEvent (
         int nEventId,
-        Object aSource,
-        Object aOldValue,
+        Object aSource, 
+        Object aOldValue, 
         Object aNewValue)
     {
         // Print event to message area.
-        MessageArea.print ("received event "
+        MessageArea.print ("received event " 
             + NameProvider.getEventName (nEventId) + " from ");
         XAccessibleContext xContext = objectToContext (aSource);
         if (xContext != null)
             MessageArea.print (xContext.getAccessibleName());
         else
             MessageArea.print ("null");
-        MessageArea.println (" / "
+        MessageArea.println (" / " 
             + NameProvider.getRoleName(xContext.getAccessibleRole()));
     }
 
@@ -339,14 +339,14 @@ public class EventHandler
                 {
                     short nOldState = -1;
                     short nNewState = -1;
-                    try
+                    try 
                     {
                         if (AnyConverter.isShort (aEvent.NewValue))
                             nNewState = AnyConverter.toShort (aEvent.NewValue);
                         if (AnyConverter.isShort (aEvent.OldValue))
                             nOldState = AnyConverter.toShort (aEvent.OldValue);
                     }
-                    catch (com.sun.star.lang.IllegalArgumentException e)
+                    catch (com.sun.star.lang.IllegalArgumentException e) 
                     {}
                     handleStateChange (
                         objectToContext (aEvent.Source),
@@ -359,7 +359,7 @@ public class EventHandler
                 case AccessibleEventId.BOUNDRECT_CHANGED:
                     handleVisibleDataEvent (objectToContext (aEvent.Source));
                     break;
-
+                
                 case AccessibleEventId.CARET_CHANGED:
                     try
                     {
@@ -368,7 +368,7 @@ public class EventHandler
                             AnyConverter.toLong(aEvent.OldValue),
                             AnyConverter.toLong(aEvent.NewValue));
                     }
-                    catch (com.sun.star.lang.IllegalArgumentException e)
+                    catch (com.sun.star.lang.IllegalArgumentException e) 
                     {}
                     break;
 

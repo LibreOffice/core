@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,16 +56,16 @@ namespace cpp
 class OperationSignature
 {
   public:
-    typedef std::vector<Type_id>    ParameterTypeList;
+    typedef std::vector<Type_id>	ParameterTypeList;
 
                         OperationSignature(
                             ParameterTypeList   i_parameterTypes,  // Non const, because it will be swapped with aParameterTypes.
                             E_ConVol            i_conVol );
 
-    bool                operator==(
+    bool				operator==(
                             const OperationSignature &
                                                 i_rSig ) const;
-    bool                operator<(
+    bool				operator<(
                             const OperationSignature &
                                                 i_rSig ) const;
 
@@ -74,17 +74,17 @@ class OperationSignature
                         Parameters() const;
     E_ConVol            ConVol() const;
 
-    /** Compares the signatures by length an then by ids of
+    /**	Compares the signatures by length an then by ids of
         parameter types. So the result is not always human
         reconstructable.
         @return like in strcmp().
     */
-    int                 Compare(
+    int					Compare(
                             const OperationSignature &
                                                 i_rSig ) const;
   private:
     // DATA
-    ParameterTypeList   aParameterTypes;
+    ParameterTypeList	aParameterTypes;
     E_ConVol            eConVol;
 };
 

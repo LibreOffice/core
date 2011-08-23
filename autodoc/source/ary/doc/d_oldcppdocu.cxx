@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ typedef DYN StdTag * (F_CREATE)();
 
 
 OldCppDocu::OldCppDocu()
-    :   Node(docnt::nt_OldCppDocu),
+    :	Node(docnt::nt_OldCppDocu),
         bIsObsolete(false),
         bIsInternal(false),
         bIsInterface(false)
@@ -307,7 +307,7 @@ OldCppDocu::NewTag(UINT8 i_nIndex)
 }
 
 AtTag &
-OldCppDocu::GetTag( UINT8   i_nIndex )
+OldCppDocu::GetTag( UINT8	i_nIndex )
 {
     csv_assert( i_nIndex < C_eAtTag_NrOfClasses );
     csv_assert( nTags[i_nIndex] != C_ucNO_INDEX );

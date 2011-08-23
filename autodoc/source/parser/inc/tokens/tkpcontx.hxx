@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 class CharacterSource;
 class TkpNullContext;
 
-/** @task
+/**	@task
     Specifies a context within which tokens are interpreted in a special
     way. For example in parsing C++ there could be a context for code,
     one for comments and a third one for preprocessor statements, because
@@ -54,7 +54,7 @@ class TkpContext
 {
   public:
     // LIFECYCLE
-    virtual                 ~TkpContext() {}
+    virtual					~TkpContext() {}
 
     // OPERATIONS
     /** @descr
@@ -75,8 +75,8 @@ class TkpContext
         passes the parsed token to the internally known receiver and
         returns true. The token is cut from io_rText.
     **/
-    virtual void        ReadCharChain(
-                            CharacterSource &   io_rText ) = 0;
+    virtual void		ReadCharChain(
+                            CharacterSource &	io_rText ) = 0;
     /** Has to pass the parsed token to a known receiver.
         If the token is to be parsed further in a different context,
         PassNewToken() returns false, but the token is NOT cut from io_rText.
@@ -85,7 +85,7 @@ class TkpContext
                 false, if the token was not parsed completely by this context
                        or if the token is to be ignored.
     */
-    virtual bool        PassNewToken() = 0;
+    virtual bool		PassNewToken() = 0;
     virtual TkpContext &
                         FollowUpContext() = 0;
 
@@ -101,10 +101,10 @@ class StateMachineContext
     virtual ~StateMachineContext() {}
 
     /// Is used by StmBoundsStatus only.
-    virtual void        PerformStatusFunction(
-                            uintt               i_nStatusSignal,
-                            F_CRTOK             i_fTokenCreateFunction,
-                            CharacterSource &   io_rText ) = 0;
+    virtual	void		PerformStatusFunction(
+                            uintt				i_nStatusSignal,
+                            F_CRTOK		        i_fTokenCreateFunction,
+                            CharacterSource &	io_rText ) = 0;
 };
 
 class TkpNullContext : public TkpContext
@@ -112,9 +112,9 @@ class TkpNullContext : public TkpContext
   public:
                         ~TkpNullContext();
 
-    virtual void        ReadCharChain(
-                            CharacterSource &   io_rText );
-    virtual bool        PassNewToken();
+    virtual void		ReadCharChain(
+                            CharacterSource &	io_rText );
+    virtual bool		PassNewToken();
     virtual TkpContext &
                         FollowUpContext();
 };
@@ -125,13 +125,13 @@ namespace autodoc
 class TkpDocuContext : public TkpContext
 {
   public:
-    virtual void        SetParentContext(
-                            TkpContext &        io_rParentContext,
-                            const char *        i_sMultiLineEndToken ) = 0;
-    virtual void        AssignDealer(
-                            TokenDealer &       o_rDealer ) = 0;
-    virtual void        SetMode_IsMultiLine(
-                            bool                i_bTrue ) = 0;
+    virtual void	  	SetParentContext(
+                            TkpContext &		io_rParentContext,
+                            const char *		i_sMultiLineEndToken ) = 0;
+    virtual void	  	AssignDealer(
+                            TokenDealer &		o_rDealer ) = 0;
+    virtual void	   	SetMode_IsMultiLine(
+                            bool				i_bTrue ) = 0;
 };
 
 } // namespace autodoc

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,30 +48,30 @@ namespace xml
 {
 
 
-/*  Basics:
+/*	Basics:
     Item, Attribute, Element, TextContext
 */
 
 class Item
 {
   public:
-    virtual             ~Item() {}
-    void                WriteOut(
-                            csv::bostream &     io_aFile ) const;
+    virtual				~Item() {}
+    void				WriteOut(
+                            csv::bostream &		io_aFile ) const;
   private:
-    virtual void        do_WriteOut(
-                            csv::bostream &     io_aFile ) const = 0;
+    virtual void		do_WriteOut(
+                            csv::bostream &		io_aFile ) const = 0;
 };
 
-typedef csv::SweList_dyn< Item >            ItemList;
+typedef csv::SweList_dyn< Item >			ItemList;
 
 class Attribute
 {
   public:
-    virtual             ~Attribute() {}
+    virtual				~Attribute() {}
 
-    void                WriteOut(
-                            csv::bostream &     io_aFile ) const;
+    void				WriteOut(
+                            csv::bostream &		io_aFile ) const;
 
     const ::csv::String& Name() const;
     const ::csv::String& Value() const;
@@ -83,39 +83,39 @@ class Attribute
                         inq_Value() const = 0;
 };
 
-typedef csv::SweList_dyn< Attribute >   AttrList;
+typedef csv::SweList_dyn< Attribute >	AttrList;
 
 
 class Element : public Item
 {
   public:
-    Element &           operator<<(             /// For multiple content items.
-                            DYN Item *          let_dpItem );
-    Element &           operator<<(             /// For multiple content items.
+    Element &			operator<<(				/// For multiple content items.
+                            DYN Item *			let_dpItem );
+    Element &			operator<<(				/// For multiple content items.
                             const ::csv::String& let_drText );
-    Element &           operator<<(             /// For multiple content items.
-                            const char *        let_dpText );
-    Element &           operator<<(
-                            DYN Attribute *     let_dpAttr );
+    Element &			operator<<(				/// For multiple content items.
+                            const char *		let_dpText );
+    Element &			operator<<(
+                            DYN Attribute *		let_dpAttr );
 
-    Element &           operator>>(             /// For multiple content items. @return the child Element.
-                            DYN Element &       let_drElement );
+    Element &			operator>>(				/// For multiple content items. @return the child Element.
+                            DYN Element &		let_drElement );
 
 
-    Item *              SetContent(             /// For only one content item.
-                            DYN Item *          let_dpItem );       /// Replaces previous content. May be 0, then all content is deleted.
+    Item *				SetContent(             /// For only one content item.
+                            DYN Item *			let_dpItem );   	/// Replaces previous content. May be 0, then all content is deleted.
   private:
     // Interface Item:
-    virtual void        do_WriteOut(
-                            csv::bostream &     io_aFile ) const;
+    virtual void		do_WriteOut(
+                            csv::bostream &		io_aFile ) const;
     // Local
-    virtual void        op_streamout(
-                            DYN Item *          let_dpItem ) = 0;
-    virtual void        op_streamout(
-                            DYN Attribute *     let_dpAttr ) = 0;
+    virtual void	  	op_streamout(
+                            DYN Item *			let_dpItem ) = 0;
+    virtual void	  	op_streamout(
+                            DYN Attribute *		let_dpAttr ) = 0;
 
-    virtual void        do_SetContent(
-                            DYN Item *          let_dpItem ) = 0;
+    virtual void	  	do_SetContent(
+                            DYN Item *			let_dpItem ) = 0;
     // Helpers
     virtual const ::csv::String &
                         inq_TagName() const = 0;
@@ -124,10 +124,10 @@ class Element : public Item
     virtual const AttrList *
                         inq_Attrs() const = 0;
 
-    virtual bool        FinishEmptyTag_XmlStyle() const;    /// Defaulted to: true
+    virtual bool		FinishEmptyTag_XmlStyle() const;    /// Defaulted to: true
 
-    virtual bool        LineBreakAfterBeginTag() const;     /// Defaulted to: false
-    virtual bool        LineBreakAfterEndTag() const;       /// Defaulted to: true, if LineBreakAfterBeginTag()
+    virtual bool		LineBreakAfterBeginTag() const;	    /// Defaulted to: false
+    virtual bool		LineBreakAfterEndTag() const;	    /// Defaulted to: true, if LineBreakAfterBeginTag()
 };
 
 class TextContent : public Item
@@ -135,7 +135,7 @@ class TextContent : public Item
 };
 
 
-/*  Implementation simplifiers:
+/*	Implementation simplifiers:
     EmptyElement, PureElement, SglTag
 */
 
@@ -143,31 +143,31 @@ class EmptyElement : public Element
 {
   private:
     // Interface Element:
-    virtual void        op_streamout(          /// does nothing
-                            DYN Item *          let_dpItem );
-    virtual void        op_streamout(
-                            DYN Attribute *     let_dpAttr );
-    virtual void        do_SetContent(          /// does nothing
-                            DYN Item *          let_dpItem );
+    virtual void	  	op_streamout(          /// does nothing
+                            DYN Item *			let_dpItem );
+    virtual void	  	op_streamout(
+                            DYN Attribute *		let_dpAttr );
+    virtual void	  	do_SetContent(          /// does nothing
+                            DYN Item *			let_dpItem );
     virtual const Item *
-                        inq_Content() const;    /// @return 0
+                        inq_Content() const;	/// @return 0
     virtual const AttrList *
                         inq_Attrs() const;
 
     // Local
-    virtual AttrList &  inq_RefAttrs() = 0;
+    virtual AttrList &	inq_RefAttrs() = 0;
 };
 
 class PureElement : public Element
 {
   private:
     // Interface Element:
-    virtual void        op_streamout(
-                            DYN Item *          let_dpItem );
-    virtual void        op_streamout(          /// does nothing
-                            DYN Attribute *     let_dpAttr );
-    virtual void        do_SetContent(
-                            DYN Item *          let_dpItem );
+    virtual void	  	op_streamout(
+                            DYN Item *			let_dpItem );
+    virtual void	  	op_streamout(          /// does nothing
+                            DYN Attribute *		let_dpAttr );
+    virtual void	  	do_SetContent(
+                            DYN Item *			let_dpItem );
     virtual const Item *
                         inq_Content() const;
     virtual const AttrList *
@@ -181,21 +181,21 @@ class SglTag : public Element
 {
   private:
     // Interface Element:
-    virtual void        op_streamout(          /// does nothing
-                            DYN Item *          let_dpItem );
-    virtual void        op_streamout(          /// does nothing
-                            DYN Attribute *     let_dpAttr );
-    virtual void        do_SetContent(          /// does nothing
-                            DYN Item *          let_dpItem );
+    virtual void	  	op_streamout(          /// does nothing
+                            DYN Item *			let_dpItem );
+    virtual void	  	op_streamout(          /// does nothing
+                            DYN Attribute *		let_dpAttr );
+    virtual void	  	do_SetContent(          /// does nothing
+                            DYN Item *			let_dpItem );
     virtual const Item *
-                        inq_Content() const;    /// @return 0
+                        inq_Content() const;	/// @return 0
     virtual const AttrList *
                         inq_Attrs() const;      /// @return 0
 };
 
 
 
-/*  Standard Element implementations, if there are not any
+/* 	Standard Element implementations, if there are not any
     specialized ones.
 */
 
@@ -209,12 +209,12 @@ class AnElement : public Element
                         ~AnElement();
   private:
     // Interface Element
-    virtual void        op_streamout(
-                            DYN Item *          let_dpItem );
-    virtual void        op_streamout(
-                            DYN Attribute *     let_dpAttr );
-    virtual void        do_SetContent(
-                            DYN Item *          let_dpItem );
+    virtual void	  	op_streamout(
+                            DYN Item *			let_dpItem );
+    virtual void	  	op_streamout(
+                            DYN Attribute *		let_dpAttr );
+    virtual void	  	do_SetContent(
+                            DYN Item *			let_dpItem );
     virtual const ::csv::String &
                         inq_TagName() const;
     virtual const Item *
@@ -223,8 +223,8 @@ class AnElement : public Element
                         inq_Attrs() const;
     // DATA
     ::csv::String       sTagName;
-    Dyn< Item >         pContent;
-    AttrList            aAttrs;
+    Dyn< Item >			pContent;
+    AttrList			aAttrs;
 };
 
 
@@ -241,18 +241,18 @@ class AnEmptyElement : public EmptyElement
     virtual const ::csv::String &
                         inq_TagName() const;
     // Interface EmptyElement:
-    virtual AttrList &  inq_RefAttrs();
+    virtual AttrList &	inq_RefAttrs();
 
     // DATA
-    ::csv::String       sTagName;
-    AttrList            aAttrs;
+    ::csv::String	    sTagName;
+    AttrList			aAttrs;
 };
 
 class APureElement : public PureElement
 {
   public:
                         APureElement(
-                            const ::csv::String &   i_sTagName );
+                            const ::csv::String &	i_sTagName );
                         APureElement(
                             const char *            i_sTagName );
                         ~APureElement();
@@ -265,7 +265,7 @@ class APureElement : public PureElement
                         inq_RefContent();
     // DATA
     ::csv::String       sTagName;
-    Dyn< Item >         pContent;
+    Dyn< Item >			pContent;
 };
 
 class ASglTag : public SglTag
@@ -310,10 +310,10 @@ class AnAttribute : public Attribute
 
 
 
-/*  Implementations of TextContent:
+/*	Implementations of TextContent:
 
-    Text        ( reserved characters will be replaced and appear unchanged )
-    XmlCode     ( reserved characters stay and are interpreted
+    Text  		( reserved characters will be replaced and appear unchanged )
+    XmlCode		( reserved characters stay and are interpreted
                   by the XML-viewer )
 */
 class Text : public TextContent
@@ -322,11 +322,11 @@ class Text : public TextContent
                         Text(
                             const ::csv::String & i_sText );
                         Text(
-                            const char *        i_sText );
+                            const char *		i_sText );
                         ~Text();
   private:
-    virtual void        do_WriteOut(
-                            csv::bostream &     io_aFile ) const;
+    virtual void		do_WriteOut(
+                            csv::bostream &		io_aFile ) const;
     // DATA
     ::csv::String         sText;
 };
@@ -341,8 +341,8 @@ class XmlCode : public TextContent
                             const char *          i_sText );
                         ~XmlCode();
   private:
-    virtual void        do_WriteOut(
-                            csv::bostream &     io_aFile ) const;
+    virtual void		do_WriteOut(
+                            csv::bostream &		io_aFile ) const;
     // DATA
     ::csv::String         sText;
 };
@@ -352,7 +352,7 @@ class XmlCode : public TextContent
 // IMPLEMENTATION
 
 inline void
-Item::WriteOut( csv::bostream & io_aFile ) const
+Item::WriteOut( csv::bostream &	io_aFile ) const
     { do_WriteOut(io_aFile); }
 
 inline const ::csv::String &
@@ -363,7 +363,7 @@ Attribute::Value() const
     { return inq_Value(); }
 
 inline Element &
-Element::operator<<( DYN Item * let_dpItem )
+Element::operator<<( DYN Item *	let_dpItem )
     { op_streamout(let_dpItem); return *this; }
 inline Element &
 Element::operator<<( const ::csv::String & let_drText )
@@ -378,7 +378,7 @@ inline Element &
 Element::operator>>( DYN Element & let_drElement )
     { op_streamout(&let_drElement); return let_drElement; }
 inline Item *
-Element::SetContent( DYN Item * let_dpItem )
+Element::SetContent( DYN Item *	let_dpItem )
     { do_SetContent(let_dpItem); return let_dpItem; }
 
 

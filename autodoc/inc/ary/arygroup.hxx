@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,10 +64,10 @@ class AryGroup
 {
   public:
     // LIFECYCLE
-    virtual             ~AryGroup() {}
+    virtual			   	~AryGroup() {}
 
     // INQUIRY
-    Gid                 Id_Group() const;
+    Gid 		        Id_Group() const;
     const cpp::CppEntity &
                         RE_Group() const;
     const group::SlotList &
@@ -77,7 +77,7 @@ class AryGroup
 
 
   private:
-    virtual Gid         inq_Id_Group() const = 0;
+    virtual Gid 		inq_Id_Group() const = 0;
     virtual const cpp::CppEntity &
                         inq_RE_Group() const = 0;
     virtual const group::SlotList &

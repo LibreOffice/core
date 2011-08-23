@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,45 +62,45 @@ class PE_Base : public Cpp_PE
                             Cpp_PE *            i_pParent );
                         ~PE_Base();
 
-    const BaseList &    Result_BaseIds() const;
+    const BaseList &	Result_BaseIds() const;
 
-    virtual void        Call_Handler(
-                            const cpp::Token &  i_rTok );
+    virtual void		Call_Handler(
+                            const cpp::Token &	i_rTok );
 
   private:
-    typedef SubPe< PE_Base, PE_Type >           SP_Type;
-    typedef SubPeUse< PE_Base, PE_Type>         SPU_BaseName;
+    typedef SubPe< PE_Base, PE_Type >		 	SP_Type;
+    typedef SubPeUse< PE_Base, PE_Type> 		SPU_BaseName;
 
-    void                Setup_StatusFunctions();
-    virtual void        InitData();
-    virtual void        TransferData();
-    void                Hdl_SyntaxError( const char *);
+    void				Setup_StatusFunctions();
+    virtual void		InitData();
+    virtual void		TransferData();
+    void  				Hdl_SyntaxError( const char *);
 
-    void                SpReturn_BaseName();
+    void				SpReturn_BaseName();
 
-    void                On_startOfNext_Identifier(const char *);
-    void                On_startOfNext_public(const char *);
-    void                On_startOfNext_protected(const char *);
-    void                On_startOfNext_private(const char *);
-    void                On_startOfNext_virtual(const char *);
-    void                On_startOfNext_DoubleColon(const char *);
+    void				On_startOfNext_Identifier(const char *);
+    void				On_startOfNext_public(const char *);
+    void				On_startOfNext_protected(const char *);
+    void				On_startOfNext_private(const char *);
+    void				On_startOfNext_virtual(const char *);
+    void				On_startOfNext_DoubleColon(const char *);
 
-    void                On_inName_Identifier(const char *);
-    void                On_inName_virtual(const char *);
-    void                On_inName_SwBracket_Left(const char *);
-    void                On_inName_DoubleColon(const char *);
-    void                On_inName_Comma(const char *);
+    void				On_inName_Identifier(const char *);
+    void				On_inName_virtual(const char *);
+    void				On_inName_SwBracket_Left(const char *);
+    void				On_inName_DoubleColon(const char *);
+    void				On_inName_Comma(const char *);
 
-    Base &              CurObject();
+    Base &				CurObject();
 
     // DATA
     Dyn< PeStatusArray<PE_Base> >
                         pStati;
 
-    Dyn<SP_Type>        pSpType;            /// till "{" incl.
-    Dyn<SPU_BaseName>   pSpuBaseName;
+    Dyn<SP_Type>	    pSpType;      		/// till "{" incl.
+    Dyn<SPU_BaseName> 	pSpuBaseName;
 
-    BaseList            aBaseIds;
+    BaseList			aBaseIds;
 };
 
 

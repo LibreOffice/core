@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,43 +45,43 @@ namespace html
 
 
 
-/** <BODY>
+/**	<BODY>
 */
 class Body : public csi::xml::AnElement
 {
   public:
                         Body()
-                                :   csi::xml::AnElement( "body" ) {}
+                                : 	csi::xml::AnElement( "body" ) {}
   private:
-    virtual bool        LineBreakAfterBeginTag() const;
+    virtual bool		LineBreakAfterBeginTag() const;
 };
 
 
 #ifdef COMPATIBLE_NETSCAPE_47
-/** <BR>
+/**	<BR>
 */
 class HorizontalLine : public xml::XmlCode
 {
   public:
                         HorizontalLine()
-                                :   xml::XmlCode("<hr>\n") {}
+                                : 	xml::XmlCode("<hr>\n") {}
 };
 
 #else
-/** <HR>
+/**	<HR>
 */
 class HorizontalLine : public csi::xml::AnEmptyElement
 {
   public:
                         HorizontalLine()
-                                :   csi::xml::AnEmptyElement("hr") {}
+                                : 	csi::xml::AnEmptyElement("hr") {}
   private:
-    virtual bool        LineBreakAfterBeginTag() const;
+    virtual bool		LineBreakAfterBeginTag() const;
 };
 #endif
 
 
-/** <IMG .... >
+/**	<IMG .... >
 */
 class Image : public csi::xml::AnEmptyElement
 {
@@ -94,119 +94,119 @@ class Image : public csi::xml::AnEmptyElement
                             const ::csv::String & i_sBorder );
 };
 
-/** <A name="">
+/**	<A name="">
 */
 class Label : public csi::xml::AnElement
 {
   public:
                         Label(
                             const ::csv::String & i_sLabel )
-                                :   csi::xml::AnElement("a")
+                                : 	csi::xml::AnElement("a")
                                 { *this << new csi::xml::AnAttribute(String("name"), i_sLabel); }
 };
 
-/** <p>
+/**	<p>
 */
 class Paragraph : public csi::xml::AnElement
 {
   public:
                         Paragraph()
-                                :   csi::xml::AnElement("p") {}
+                                : 	csi::xml::AnElement("p") {}
   private:
-    virtual bool        LineBreakAfterEndTag() const;
+    virtual bool		LineBreakAfterEndTag() const;
 };
 
-/** <H1-6>
+/**	<H1-6>
 */
 class Headline : public csi::xml::APureElement
 {
   public:
                         Headline(
                             int                 i_nNr )
-                                :   csi::xml::APureElement(sTags[i_nNr-1]) { csv_assert(1 <= i_nNr AND i_nNr < 7); }
+                                : 	csi::xml::APureElement(sTags[i_nNr-1]) { csv_assert(1 <= i_nNr AND i_nNr < 7); }
   private:
     static const char * sTags[6];
-    virtual bool        LineBreakAfterEndTag() const;
+    virtual bool		LineBreakAfterEndTag() const;
 };
 
 #ifdef COMPATIBLE_NETSCAPE_47
-/** <BR>
+/**	<BR>
 */
 class LineBreak : public xml::XmlCode
 {
   public:
                         LineBreak()
-                                :   xml::XmlCode("<br>\n") {}
+                                : 	xml::XmlCode("<br>\n") {}
 };
 
 #else
-/** <BR>
+/**	<BR>
 */
 class LineBreak : public csi::xml::ASglTag
 {
   public:
                         LineBreak()
-                                :   csi::xml::ASglTag("br") {}
+                                : 	csi::xml::ASglTag("br") {}
   private:
-    virtual bool        LineBreakAfterBeginTag() const;
+    virtual bool		LineBreakAfterBeginTag() const;
 };
 #endif
 
 
-/** <b>
+/**	<b>
 */
 class Bold : public csi::xml::APureElement
 {
   public:
                         Bold()
-                                :   csi::xml::APureElement("b") {}
+                                : 	csi::xml::APureElement("b") {}
 };
 
-/** <i>
+/**	<i>
 */
 class Italic : public csi::xml::APureElement
 {
   public:
                         Italic()
-                                :   csi::xml::APureElement("i") {}
+                                : 	csi::xml::APureElement("i") {}
 };
 
-/** <strong>
+/**	<strong>
 */
 class Strong : public csi::xml::APureElement
 {
   public:
                         Strong()
-                                :   csi::xml::APureElement("strong") {}
+                                : 	csi::xml::APureElement("strong") {}
 };
 
-/** <em>
+/**	<em>
 */
 class Emphasized : public csi::xml::APureElement
 {
   public:
                         Emphasized()
-                                :   csi::xml::APureElement("em") {}
+                                : 	csi::xml::APureElement("em") {}
 };
 
-/** <font>
+/**	<font>
 */
 class Font : public csi::xml::AnElement
 {
   public:
                         Font()
-                                :   csi::xml::AnElement("font") {}
+                                : 	csi::xml::AnElement("font") {}
 };
 
 
-/** <A href="">
+/**	<A href="">
 */
 class Link : public csi::xml::AnElement
 {
   public:
                         Link(
                             const ::csv::String &i_sDestinaton )
-                                :   csi::xml::AnElement("a")
+                                : 	csi::xml::AnElement("a")
                                 { *this << new csi::xml::AnAttribute(String("href"), i_sDestinaton); }
 };
 
@@ -214,39 +214,39 @@ class TableCell : public csi::xml::AnElement
 {
   public:
                         TableCell()
-                                :   csi::xml::AnElement("td") {}
+                                : 	csi::xml::AnElement("td") {}
   private:
-    virtual bool        LineBreakAfterEndTag() const;
+    virtual bool		LineBreakAfterEndTag() const;
 };
 
 class TableRow  : public csi::xml::AnElement
 {
   public:
                         TableRow()
-                                :   csi::xml::AnElement("tr") {}
+                                : 	csi::xml::AnElement("tr") {}
 
-    TableCell &         AddCell(
+    TableCell &			AddCell(
                             DYN csi::xml::Item* let_dpItem = 0 );
   private:
-    virtual bool        LineBreakAfterBeginTag() const;
+    virtual bool		LineBreakAfterBeginTag() const;
 };
 
-/** <table ....>
+/**	<table ....>
 */
 class Table : public csi::xml::AnElement
 {
   public:
                         Table()
-                                :   csi::xml::AnElement("table") {}
+                                : 	csi::xml::AnElement("table") {}
                         Table(
                             const ::csv::String & i_sBorder,
                             const ::csv::String & i_sWidth,
                             const ::csv::String & i_sCellPadding,
                             const ::csv::String & i_sCellSpacing  );
-    TableRow &          AddRow();
+    TableRow &			AddRow();
   private:
-    virtual bool        FinishEmptyTag_XmlStyle() const;
-    virtual bool        LineBreakAfterBeginTag() const;
+    virtual bool		FinishEmptyTag_XmlStyle() const;
+    virtual bool		LineBreakAfterBeginTag() const;
 };
 
 
@@ -255,35 +255,35 @@ class DefListTerm : public csi::xml::AnElement
 {
   public:
                         DefListTerm()
-                                :   csi::xml::AnElement("dt") {}
+                                : 	csi::xml::AnElement("dt") {}
   private:
-    virtual bool        LineBreakAfterEndTag() const;
+    virtual bool		LineBreakAfterEndTag() const;
 };
 
 class DefListDefinition : public csi::xml::AnElement
 {
   public:
                         DefListDefinition()
-                                :   csi::xml::AnElement("dd") {}
+                                : 	csi::xml::AnElement("dd") {}
   private:
-    virtual bool        LineBreakAfterEndTag() const;
+    virtual bool		LineBreakAfterEndTag() const;
 };
 
-/** <DL>
+/**	<DL>
 */
 class DefList : public csi::xml::AnElement
 {
   public:
                         DefList()
-                                :   csi::xml::AnElement("dl") {}
+                                : 	csi::xml::AnElement("dl") {}
 
-    DefListTerm &       AddTerm(
+    DefListTerm &		AddTerm(
                             DYN csi::xml::Item* let_dpItem = 0 );
-    DefListDefinition & AddDefinition(
+    DefListDefinition &	AddDefinition(
                             DYN csi::xml::Item* let_dpItem = 0 );
   private:
-    virtual bool        LineBreakAfterBeginTag() const;
-    virtual bool        FinishEmptyTag_XmlStyle() const;
+    virtual bool		LineBreakAfterBeginTag() const;
+    virtual bool		FinishEmptyTag_XmlStyle() const;
 };
 
 
@@ -291,9 +291,9 @@ class ListItem : public csi::xml::AnElement
 {
   public:
                         ListItem()
-                                :   csi::xml::AnElement("li") {}
+                                : 	csi::xml::AnElement("li") {}
   private:
-    virtual bool        LineBreakAfterEndTag() const;
+    virtual bool		LineBreakAfterEndTag() const;
 };
 
 /** <OL>
@@ -302,26 +302,26 @@ class NumeratedList : public csi::xml::AnElement
 {
   public:
                         NumeratedList()
-                                :   csi::xml::AnElement("ol") {}
+                                : 	csi::xml::AnElement("ol") {}
 
-    ListItem &          AddItem(
+    ListItem &			AddItem(
                             DYN csi::xml::Item* let_dpItem = 0 );
   private:
-    virtual bool        LineBreakAfterBeginTag() const;
+    virtual bool		LineBreakAfterBeginTag() const;
 };
 
-/** <UL>
+/**	<UL>
 */
 class SimpleList : public csi::xml::AnElement
 {
   public:
                         SimpleList()
-                                :   csi::xml::AnElement("ul") {}
+                                : 	csi::xml::AnElement("ul") {}
 
-    ListItem &          AddItem(
+    ListItem &			AddItem(
                             DYN csi::xml::Item* let_dpItem = 0 );
   private:
-    virtual bool        LineBreakAfterBeginTag() const;
+    virtual bool		LineBreakAfterBeginTag() const;
 };
 
 

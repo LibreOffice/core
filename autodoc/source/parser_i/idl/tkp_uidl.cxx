@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@ namespace uidl
 {
 
 
-TokenParser_Uidl::TokenParser_Uidl( Token_Receiver &        o_rUidlReceiver,
-                                    DYN ::TkpDocuContext &  let_drDocuContext )
-    :   pBaseContext(new Context_UidlCode(o_rUidlReceiver, let_drDocuContext)),
+TokenParser_Uidl::TokenParser_Uidl( Token_Receiver &		o_rUidlReceiver,
+                                    DYN ::TkpDocuContext &	let_drDocuContext )
+    :	pBaseContext(new Context_UidlCode(o_rUidlReceiver, let_drDocuContext)),
         pCurContext(0)
 {
     SetStartContext();

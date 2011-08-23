@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ Display::DisplaySlot_Rid( ary::Rid i_nId )
 
 void
 Display::DisplaySlot_LocalCe( ary::cpp::Ce_id   i_nId,
-                              const String  &   i_sName )
+                              const String  &	i_sName )
 {
     const cpp::Gate *
         pGate = Get_ReFinder();
@@ -101,7 +101,7 @@ Display::do_DisplaySlot_Rid( ary::Rid )
 
 void
 Display::do_DisplaySlot_LocalCe( ary::cpp::Ce_id    ,
-                                 const String  &    )
+                                 const String  &	)
 {
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,50 +49,50 @@ class TokBuiltInType;
 class TokPunctuation;
 class Tok_Documentation;
 
-class ParseEnvState : public    TokenInterpreter,
+class ParseEnvState : public   	TokenInterpreter,
                       virtual protected TokenProcessing_Types
 {
   public:
-    virtual void        Process_Identifier(
+    virtual void		Process_Identifier(
                             const TokIdentifier &
                                                 i_rToken );
-    virtual void        Process_NameSeparator();
-    virtual void        Process_Punctuation(
+    virtual void		Process_NameSeparator(); 
+    virtual void		Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
-    virtual void        Process_BuiltInType(
+    virtual void		Process_BuiltInType(
                             const TokBuiltInType &
                                                 i_rToken );
-    virtual void        Process_TypeModifier(
+    virtual void		Process_TypeModifier(
                             const TokTypeModifier &
                                                 i_rToken );
-    virtual void        Process_MetaType(
-                            const TokMetaType & i_rToken );
-    virtual void        Process_Stereotype(
+    virtual void		Process_MetaType(
+                            const TokMetaType &	i_rToken );
+    virtual void		Process_Stereotype(
                             const TokStereotype &
                                                 i_rToken );
-    virtual void        Process_ParameterHandling(
+    virtual void		Process_ParameterHandling(
                             const TokParameterHandling &
                                                 i_rToken );
-    virtual void        Process_Raises();
-    virtual void        Process_Needs();
-    virtual void        Process_Observes();
-    virtual void        Process_Assignment(
+    virtual void		Process_Raises();
+    virtual void		Process_Needs();
+    virtual void		Process_Observes();
+    virtual void		Process_Assignment(
                             const TokAssignment &
                                                 i_rToken );
-    virtual void        Process_EOL();
+    virtual void		Process_EOL();
 
-    virtual void        On_SubPE_Left();
+    virtual void		On_SubPE_Left();
 
-    virtual void        Process_Default();
+    virtual void		Process_Default();
 
   protected:
-                        ParseEnvState()         :   bDefaultIsError(true) {}
-    void                SetDefault2Ignore()     { bDefaultIsError = false; }
+                        ParseEnvState() 		:	bDefaultIsError(true) {}
+    void				SetDefault2Ignore()		{ bDefaultIsError = false; }
 
   private:
-    virtual UnoIDL_PE & MyPE() = 0;
-    bool                bDefaultIsError;
+    virtual UnoIDL_PE &	MyPE() = 0;
+    bool				bDefaultIsError;
 };
 
 

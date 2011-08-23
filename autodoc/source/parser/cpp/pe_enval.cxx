@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ PE_EnumValue::~PE_EnumValue()
 }
 
 void
-PE_EnumValue::Call_Handler( const cpp::Token &  i_rTok )
+PE_EnumValue::Call_Handler( const cpp::Token &	i_rTok )
 {
     pStati->Cur().Call_Handler(i_rTok.TypeId(), i_rTok.Text());
 }
@@ -66,21 +66,21 @@ PE_EnumValue::Call_Handler( const cpp::Token &  i_rTok )
 void
 PE_EnumValue::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_EnumValue>::F_Tok   F_Tok;
+    typedef CallFunction<PE_EnumValue>::F_Tok	F_Tok;
 
-    static F_Tok stateF_start[] =           { &PE_EnumValue::On_start_Identifier };
-    static INT16 stateT_start[] =           { Tid_Identifier };
+    static F_Tok stateF_start[] =			{ &PE_EnumValue::On_start_Identifier };
+    static INT16 stateT_start[] =			{ Tid_Identifier };
 
-    static F_Tok stateF_afterName[] =       { &PE_EnumValue::On_afterName_SwBracket_Right,
+    static F_Tok stateF_afterName[] =		{ &PE_EnumValue::On_afterName_SwBracket_Right,
                                               &PE_EnumValue::On_afterName_Comma,
                                               &PE_EnumValue::On_afterName_Assign };
-    static INT16 stateT_afterName[] =       { Tid_SwBracket_Right,
+    static INT16 stateT_afterName[] =     	{ Tid_SwBracket_Right,
                                               Tid_Comma,
                                               Tid_Assign };
 
-    static F_Tok stateF_expectFinish[] =    { &PE_EnumValue::On_expectFinish_SwBracket_Right,
+    static F_Tok stateF_expectFinish[] =	{ &PE_EnumValue::On_expectFinish_SwBracket_Right,
                                               &PE_EnumValue::On_expectFinish_Comma };
-    static INT16 stateT_expectFinish[] =    { Tid_SwBracket_Right,
+    static INT16 stateT_expectFinish[] =   	{ Tid_SwBracket_Right,
                                               Tid_Comma };
 
     SEMPARSE_CREATE_STATUS(PE_EnumValue, start, Hdl_SyntaxError);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -313,7 +313,7 @@ MainDisplay_Idl::WriteGlobalIndices()
         Guard_CurFactoryPtr gFactory(pCurFactory,aFactory);
 
         aFactory.Produce_Page( ary::idl::alphabetical_index::E_Letter(*pLetter) );
-    }   // end for
+    }	// end for
 }
 
 

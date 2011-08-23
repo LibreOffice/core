@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,22 +58,22 @@ class PE_Defines : public cpp::Cpp_PE
     };
 
                         PE_Defines(
-                            Cpp_PE *            i_pParent );
+                            Cpp_PE *			i_pParent );
                         ~PE_Defines();
 
-    virtual void        Call_Handler(
-                            const cpp::Token &  i_rTok );
+    virtual void		Call_Handler(
+                            const cpp::Token &	i_rTok );
 
   private:
-    void                Setup_StatusFunctions();
-    virtual void        InitData();
-    virtual void        TransferData();
-    void                Hdl_SyntaxError( const char *);
+    void				Setup_StatusFunctions();
+    virtual void		InitData();
+    virtual void		TransferData();
+    void  				Hdl_SyntaxError( const char *);
 
-    void                On_expectName_DefineName( const char * );
-    void                On_expectName_MacroName( const char * );
+    void				On_expectName_DefineName( const char * );
+    void				On_expectName_MacroName( const char * );
 
-    void                On_gotDefineName_PreProDefinition( const char * );
+    void				On_gotDefineName_PreProDefinition( const char * );
 
     void                On_expectMacroParameters_MacroParameter( const char * );
     void                On_expectMacroParameters_PreProDefinition( const char * );

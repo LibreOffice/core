@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -187,7 +187,7 @@ LesserGlobal::operator()(   GlobalId            i_1,
                             {
                                 return i_1.Class() < i_2.Class();
                             }
-
+ 
                             return Ce_GlobalCompare::Lesser_(
                                         rCes[i_1.Id()],
                                         rCes[i_2.Id()] );

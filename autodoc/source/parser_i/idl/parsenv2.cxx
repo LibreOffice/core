@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,8 +60,8 @@ UnoIDL_PE::~UnoIDL_PE()
 }
 
 void
-UnoIDL_PE::EstablishContacts( UnoIDL_PE *               io_pParentPE,
-                              ary::Repository &         io_rRepository,
+UnoIDL_PE::EstablishContacts( UnoIDL_PE *				io_pParentPE,
+                              ary::Repository &	        io_rRepository,
                               TokenProcessing_Result &  o_rResult )
 {
     pRepository = &io_rRepository;
@@ -69,15 +69,15 @@ UnoIDL_PE::EstablishContacts( UnoIDL_PE *               io_pParentPE,
 }
 
 //void
-//UnoIDL_PE::EstablishContacts( UnoIDL_PE *             io_pParentPE,
-//                            ary::idl::Gate &          io_rGate,
-//                            TokenProcessing_Result &  o_rResult )
+//UnoIDL_PE::EstablishContacts( UnoIDL_PE *				io_pParentPE,
+//							  ary::idl::Gate &          io_rGate,
+//							  TokenProcessing_Result &  o_rResult )
 //{
-//  aMyNode.EstablishContacts(io_pParentPE, io_rGate, o_rResult);
+//	aMyNode.EstablishContacts(io_pParentPE, io_rGate, o_rResult);
 //}
 
 void
-UnoIDL_PE::Enter( E_EnvStackAction  i_eWayOfEntering )
+UnoIDL_PE::Enter( E_EnvStackAction	i_eWayOfEntering )
 {
     switch (i_eWayOfEntering)
     {
@@ -95,11 +95,11 @@ UnoIDL_PE::Enter( E_EnvStackAction  i_eWayOfEntering )
                 // no break because of throw
         default:
             csv_assert(false);
-    }   // end switch
+    }	// end switch
 }
 
 void
-UnoIDL_PE::Leave( E_EnvStackAction  i_eWayOfLeaving )
+UnoIDL_PE::Leave( E_EnvStackAction	i_eWayOfLeaving )
 {
     switch (i_eWayOfLeaving)
     {
@@ -116,7 +116,7 @@ UnoIDL_PE::Leave( E_EnvStackAction  i_eWayOfLeaving )
                 // no break because of throw
         default:
             csv_assert(false);
-    }   // end switch
+    }	// end switch
 }
 
 void

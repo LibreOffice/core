@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,37 +55,37 @@ class TokenParser
   public:
     // LIFECYCLE
                         TokenParser();
-    virtual             ~TokenParser() {}
+    virtual				~TokenParser() {}
 
     // OPERATIONS
     /** Start parsing a character source. Any previously parsed sources
         are discarded.
     */
-    virtual void        Start(
+    virtual void   		Start(
                             CharacterSource &
                                             i_rSource );
 
-    /** @short  Gets the next identifiable token out of the
+    /** @short	Gets the next identifiable token out of the
         source code.
     */
-    void                GetNextToken();
+    void				GetNextToken();
 
     /// @return true, if there are more tokens to parse.
-    bool                HasMore() const         { return bHasMore; }
+    bool				HasMore() const			{ return bHasMore; }
 
   private:
     void                InitSource(
                             CharacterSource &
                                             i_rSource );
 
-    virtual void        SetStartContext() = 0;
+    virtual void		SetStartContext() = 0;
     virtual void        SetCurrentContext(
-                            TkpContext &        io_rContext ) = 0;
+                            TkpContext &		io_rContext ) = 0;
     virtual TkpContext &
                         CurrentContext() = 0;
     // DATA
-    CharacterSource *   pChars;
-    bool                bHasMore;
+    CharacterSource *	pChars;
+    bool				bHasMore;
 };
 
 

@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import java.awt.event.ActionListener;
@@ -44,7 +44,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.accessibility.*;
 import com.sun.star.awt.XExtendedToolkit;
 
-/** This class is used as a thread and registers or unregsiters a listener
+/** This class is used as a thread and registers or unregsiters a listener 
     given the constructor at all nodes of a tree of accessibility objects.
 */
 public class RegistrationThread
@@ -61,8 +61,8 @@ public class RegistrationThread
             This flag decides whether to add or remove the listener.
     */
     public RegistrationThread (
-        EventListenerProxy aListener,
-        XAccessibleContext xRoot,
+        EventListenerProxy aListener, 
+        XAccessibleContext xRoot, 
         boolean bRegister,
         boolean bShowMessages)
     {
@@ -90,7 +90,7 @@ public class RegistrationThread
         {
             if ( ! mbRegister)
                 MessageArea.print ("un");
-            MessageArea.println ("registered at " + nNodeCount
+            MessageArea.println ("registered at " + nNodeCount 
                 + " objects in accessibility tree of " + mxRoot.getAccessibleName());
         }
     }
@@ -111,7 +111,7 @@ public class RegistrationThread
             // Register the root node.
             XAccessibleEventBroadcaster xBroadcaster =
                 (XAccessibleEventBroadcaster) UnoRuntime.queryInterface (
-                    XAccessibleEventBroadcaster.class,
+                    XAccessibleEventBroadcaster.class, 
                     xRoot);
             if (xBroadcaster != null)
             {
@@ -121,7 +121,7 @@ public class RegistrationThread
                     xBroadcaster.removeEventListener (maListener);
                 nNodeCount += 1;
             }
-
+            
             // Call this method recursively to register all sub-trees.
             try
             {

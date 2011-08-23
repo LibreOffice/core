@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,50 +50,50 @@ class Enum // : public Template_Base
 {
   public:
     // TYPES
-    typedef Enum< DIFF >    self;
+    typedef Enum< DIFF >	self;
 
     // LIFECYCLE
                         Enum(
-                            DIFF                i_nValue,
-                            const char *        i_sText )
-                                                :   nValue(i_nValue) { Values_()[nValue] = i_sText;
+                            DIFF				i_nValue,
+                            const char *		i_sText )
+                                                :	nValue(i_nValue) { Values_()[nValue] = i_sText;
                                                                        // Sequence_().insert(
-                                                                       //       std::lower_bound( Sequence_().begin(), Sequence_().end(), i_nValue ),
-                                                                       //       i_nValue );
+                                                                       //		std::lower_bound( Sequence_().begin(), Sequence_().end(), i_nValue ),
+                                                                       //		i_nValue );
                                                                      }
                         Enum(
-                            DIFF                i_nValue )
-                                                :   nValue(i_nValue) { ; }
+                            DIFF				i_nValue )
+                                                :	nValue(i_nValue) { ; }
                         Enum(
-                            intt                i_nValue = 0 )
-                                                :   nValue(i_nValue) { if ( NOT CheckIntt(i_nValue) ) { csv_assert(false); } }
+                            intt				i_nValue = 0 )
+                                                :	nValue(i_nValue) { if ( NOT CheckIntt(i_nValue) ) { csv_assert(false); } }
                         Enum(
-                            const self &        i_rEnum )
-                                                :   nValue(i_rEnum.nValue) {;}
+                            const self &		i_rEnum )
+                                                :	nValue(i_rEnum.nValue) {;}
 
-    self &              operator=(
-                            DIFF                i_nValue )
+    self &				operator=(
+                            DIFF				i_nValue )
                                                 { nValue = i_nValue; return *this; }
-    self &              operator=(
-                            intt                i_nValue )
+    self &				operator=(
+                            intt				i_nValue )
                                                 { if ( CheckIntt(i_nValue) ) {nValue = DIFF(i_nValue);}
                                                   else {csv_assert(false);} return *this; }
-    self &              operator=(
-                            const self &        i_rEnum )
+    self &				operator=(
+                            const self &		i_rEnum )
                                                 { nValue = i_rEnum.nValue; return *this; }
-                        operator DIFF() const   { return DIFF(nValue); }
+                        operator DIFF() const 	{ return DIFF(nValue); }
 
-    DIFF                operator()() const      { return nValue; }
-    const String  &     Text() const            { return Values_()[nValue]; }
+    DIFF                operator()() const		{ return nValue; }
+    const String  &		Text() const			{ return Values_()[nValue]; }
 
   private:
     static EnumValueMap &
                         Values_();
-    bool                CheckIntt(
-                            intt                i_nNumber )
+    bool				CheckIntt(
+                            intt				i_nNumber )
                                                 { return Values_().find(i_nNumber) != Values_().end(); }
     // DATA
-    intt                nValue;
+    intt				nValue;
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,32 +47,32 @@ class Cpp_PE : public ::ParseEnvironment,
                public TokenInterpreter
 {
   public:
-    typedef cpp::PeEnvironment  EnvData;
+    typedef cpp::PeEnvironment	EnvData;
 
-    void                SetTokenResult(
-                            E_TokenDone         i_eDone,
-                            E_EnvStackAction    i_eWhat2DoWithEnvStack,
-                            ParseEnvironment *  i_pParseEnv2Push = 0 );
+    void				SetTokenResult(
+                            E_TokenDone			i_eDone,
+                            E_EnvStackAction	i_eWhat2DoWithEnvStack,
+                            ParseEnvironment *	i_pParseEnv2Push = 0 );
 
     virtual Cpp_PE *    Handle_ChildFailure();  // Defaulted to 0.
 
   protected:
                         Cpp_PE(
-                            Cpp_PE *            io_pParent );
+                            Cpp_PE *			io_pParent );
                         Cpp_PE(
-                            EnvData &           i_rEnv );
+                            EnvData &			i_rEnv );
 
-    EnvData &           Env() const;
+    EnvData &			Env() const;
 
     void                StdHandlingOfSyntaxError(
                             const char *        i_sText );
 
   private:
     // DATA
-    EnvData &           rMyEnv;
+    EnvData &			rMyEnv;
 };
 
-inline  Cpp_PE::EnvData &
+inline 	Cpp_PE::EnvData &
 Cpp_PE::Env() const
     { return rMyEnv; }
 

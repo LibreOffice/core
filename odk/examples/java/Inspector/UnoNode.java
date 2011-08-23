@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import com.sun.star.beans.PropertyValue;
@@ -56,8 +56,8 @@ import java.util.List;
 import java.util.Vector;
 
 public class UnoNode{
-
-    String sPath = null;
+    
+    String sPath = null;    
     Object m_oUnoObject;
     private XMultiComponentFactory m_xMultiComponentFactory;
     private XComponentContext m_xComponentContext;
@@ -65,54 +65,54 @@ public class UnoNode{
     private int m_nNodeType = XUnoNode.nOTHERS;
     private Type aType = null;
     private String sLabel = "";
-
-
-
+    
+    
+    
     /** Creates a new instance of UnoNode */
     public UnoNode(Object _oUnoObject) {
         m_xComponentContext = Introspector.getIntrospector().getXComponentContext();
-        m_xMultiComponentFactory = m_xComponentContext.getServiceManager();
+        m_xMultiComponentFactory = m_xComponentContext.getServiceManager();        
         m_oUnoObject = _oUnoObject;
     }
-
+        
     public UnoNode(Object _oUnoObject, Type _aType) {
         this(_oUnoObject);
         aType = _aType;
         m_nNodeType = XUnoNode.nINTERFACE;
     }
-
+    
     public Object getUnoObject(){
         return m_oUnoObject;
-    }
-
-
+    }    
+    
+    
     protected XComponentContext getXComponentContext(){
         return m_xComponentContext;
     }
-
-
+    
+    
     protected XMultiComponentFactory getXMultiComponentFactory(){
         return m_xMultiComponentFactory;
     }
-
-
+    
+    
     private static XTypeDescriptionEnumerationAccess getXTypeDescriptionEnumerationAccess(){
        return Introspector.getIntrospector().getXTypeDescriptionEnumerationAccess();
     }
 
-
+    
     public String getAnchor(){
         return "";
     }
-
+        
     public int getNodeType(){
         return m_nNodeType;
     }
-
+    
     public void setNodeType(int _nNodeType){
         m_nNodeType = _nNodeType;
     }
-
+    
     public String getClassName(){
         String sClassName = "";
         if (m_nNodeType == XUnoNode.nINTERFACE){
@@ -123,8 +123,8 @@ public class UnoNode{
         }
         return sClassName;
     }
-
-
+    
+    
     public Type getUnoType(){
         return aType;
     }
@@ -132,7 +132,7 @@ public class UnoNode{
     protected void  setLabel(String _sLabel){
         sLabel = _sLabel;
     }
-
+    
     public void openIdlDescription(String _sIDLUrl, String _sClassName, String _sAnchor){
     try{
         String sIDLUrl = _sIDLUrl;
@@ -164,7 +164,7 @@ public class UnoNode{
         getXDispatcher(openHyperlink).dispatch(openHyperlink, new PropertyValue[] {pv});
     } catch(Exception exception) {
         exception.printStackTrace(System.out);
-    }}
+    }}        
 
 
     private com.sun.star.util.URL getDispatchURL(String _sURL){
@@ -204,7 +204,7 @@ public class UnoNode{
     } catch (Exception e) {
         e.printStackTrace(System.out);
         return null;
-    }}
+    }}                
 
 
     private PropertyValue[] loadArgs(String url) {
@@ -212,21 +212,21 @@ public class UnoNode{
         pv.Name = "URL";
         pv.Value = url;
         return new PropertyValue[] {pv};
-    }
-
-
-
+    }               
+    
+    
+    
     public boolean isFilterApplicable(String _sFilter, String _sName){
         boolean bFilterDoesApply = true;
         if (_sFilter.length() > 0){
-            if (_sName.indexOf(_sFilter) == -1){
+            if (_sName.indexOf(_sFilter) == -1){            
                 bFilterDoesApply = false;
             }
         }
         return bFilterDoesApply;
     }
-
-
+                 
+    
 //    public static String getServiceDescription(Object _oUnoObject){
 //        String sClassName = "";
 //        XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, _oUnoObject);
@@ -238,15 +238,15 @@ public class UnoNode{
 //        }
 //        return sClassName;
 //    }
-
-
-
+    
+        
+    
     private static String[] getMandatoryServiceNames(String _sServiceName){
     String[] sMandatoryServiceNames  = new String[]{};
     try {
         TypeClass[] eTypeClasses = new com.sun.star.uno.TypeClass[1];
         eTypeClasses[0] = com.sun.star.uno.TypeClass.SERVICE;
-        XTypeDescriptionEnumeration xTDEnumeration = getXTypeDescriptionEnumerationAccess().createTypeDescriptionEnumeration(Introspector.getModuleName(_sServiceName), eTypeClasses, TypeDescriptionSearchDepth.INFINITE);
+        XTypeDescriptionEnumeration xTDEnumeration = getXTypeDescriptionEnumerationAccess().createTypeDescriptionEnumeration(Introspector.getModuleName(_sServiceName), eTypeClasses, TypeDescriptionSearchDepth.INFINITE);       
         while (xTDEnumeration.hasMoreElements()) {
             XTypeDescription xTD = xTDEnumeration.nextTypeDescription();
             if (xTD.getName().equals(_sServiceName)){
@@ -257,16 +257,16 @@ public class UnoNode{
                 for (int i = 0; i < nlength; i++){
                     sMandatoryServiceNames[i] = xMandatoryServiceTypeDescriptions[i].getName();
                 }
-
-            }
-        }
+                
+            }            
+        }            
     } catch ( java.lang.Exception e) {
         System.out.println(System.out);
     }
         return sMandatoryServiceNames;
     }
-
-
+    
+    
     private static String[] removeMandatoryServiceNames(String[] _sServiceNames){
     try{
         List aList = java.util.Arrays.asList(_sServiceNames);
@@ -288,8 +288,8 @@ public class UnoNode{
     }
         return new String[]{};
     }
-
-
+    
+    
     public  static String getDisplayValueOfPrimitiveType(Object _objectElement){
     String sValue ="";
     try{
@@ -297,41 +297,41 @@ public class UnoNode{
             sValue = AnyConverter.toString(_objectElement);
         }
         else if (AnyConverter.isBoolean(_objectElement)){
-            sValue += AnyConverter.toBoolean(_objectElement);
+            sValue += AnyConverter.toBoolean(_objectElement);                                    
         }
         else if (AnyConverter.isByte(_objectElement)){
-            sValue += AnyConverter.toByte(_objectElement);
+            sValue += AnyConverter.toByte(_objectElement);                                    
         }
         else if (AnyConverter.isChar(_objectElement)){
-            sValue += AnyConverter.toChar(_objectElement);
+            sValue += AnyConverter.toChar(_objectElement);                                    
         }
         else if (AnyConverter.isDouble(_objectElement)){
-            sValue += AnyConverter.toDouble(_objectElement);
+            sValue += AnyConverter.toDouble(_objectElement);                                    
         }
         else if (AnyConverter.isFloat(_objectElement)){
-            sValue += AnyConverter.toFloat(_objectElement);
+            sValue += AnyConverter.toFloat(_objectElement);                                    
         }
         else if (AnyConverter.isInt(_objectElement)){
-            sValue += AnyConverter.toInt(_objectElement);
+            sValue += AnyConverter.toInt(_objectElement);                                    
         }
         else if (AnyConverter.isLong(_objectElement)){
-            sValue += AnyConverter.toLong(_objectElement);
+            sValue += AnyConverter.toLong(_objectElement);                                    
         }
         else if (AnyConverter.isShort(_objectElement)){
-            sValue += AnyConverter.toShort(_objectElement);
-        }
+            sValue += AnyConverter.toShort(_objectElement);                                    
+        }    
     }
     catch( Exception e ) {
         System.err.println( e );
     }
         return sValue;
     }
-
+    
     protected static String[] getDisplayValuesofPrimitiveArray(Object _oUnoObject){
     String[] sDisplayValues = null;
     try{
         Type aType = AnyConverter.getType(_oUnoObject);
-        TypeClass aTypeClass = aType.getTypeClass();
+        TypeClass aTypeClass = aType.getTypeClass();   
         int nTypeValue = aTypeClass.getValue();
         if (nTypeValue == TypeClass.SEQUENCE_value){
             nTypeValue = (sequenceComponentType(aType)).getTypeClass().getValue();
@@ -387,7 +387,7 @@ public class UnoNode{
                 }
                 break;
             case TypeClass.CHAR_value:
-                break;
+                break;                
             default:
                 System.out.println("Value could not be retrieved: " + aType.getTypeClass().getClass().getName());
             }
@@ -396,9 +396,9 @@ public class UnoNode{
     catch( Exception e ) {
         System.err.println( e );
         return null;
-    }}
-
-
+    }}    
+    
+    
     private static Type sequenceComponentType(Type sequenceType) {
 //        assert sequenceType.getTypeClass() == TypeClass.SEQUENCE;
         String n = sequenceType.getTypeName();
@@ -406,15 +406,15 @@ public class UnoNode{
 //        assert n.startsWith(PREFIX);
         return new Type(n.substring(PREFIX.length()));
     }
-
-
+    
+    
     public static String getNodeDescription(Object _oUnoObject, int _nIndex){
         return getNodeDescription(_oUnoObject) + "[" + (_nIndex + 1) + "]";
     }
 
 
     public static String getNodeDescription(Object _oUnoObject){
-        XServiceInfo xServiceInfo = ( XServiceInfo ) UnoRuntime.queryInterface( XServiceInfo.class, _oUnoObject );
+        XServiceInfo xServiceInfo = ( XServiceInfo ) UnoRuntime.queryInterface( XServiceInfo.class, _oUnoObject );                
         if ( xServiceInfo != null ) {
             return xServiceInfo.getImplementationName();
         }
@@ -425,13 +425,13 @@ public class UnoNode{
         else{
             return _oUnoObject.getClass().getName();
         }
-    }
-
+    }       
+        
     public void setParameterObjects(Object[] _oParamObjects){
         m_oParamObjects = _oParamObjects;
     }
-
+    
     public Object[] getParameterObjects(){
         return m_oParamObjects;
-    }
+    }        
 }

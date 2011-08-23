@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ Persistent::Exists() const
 #ifndef __SUNPRO_CC
 #include <unistd.h>
 #else
-#define F_OK    0   // Test for existence of File
+#define	F_OK	0	// Test for existence of File
 extern int access(const char *, int);
 #endif
 */

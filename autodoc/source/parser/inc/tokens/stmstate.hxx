@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,21 +36,21 @@
 class StmArrayStatus;
 class StmBoundsStatus;
 
-/** A StmStatus is a state within a StateMachine.
+/**	A StmStatus is a state within a StateMachine.
     There are two kinds of it.  Either its an array of pointers to
     other states within the state machine - an ArrayStatus.
 
     Or it is a BoundsStatus, which shows, the token cannot be
     followed further within the StateMachine.
 **/
-class StmStatus // := "State machine status"
+class StmStatus	// := "State machine status"
 {
   public:
-    typedef intt        Branch;         /// Values >= 0 give a next #Status' ID.
+    typedef intt		Branch;			/// Values >= 0 give a next #Status' ID.
                                         /// Values <= 0 tell, that a token is finished.
                                         /// a value < 0 returns the status back to an upper level state machine.
         // LIFECYCLE
-    virtual             ~StmStatus() {}
+    virtual 			~StmStatus() {}
 
         // OPERATIONS
     virtual StmArrayStatus *
@@ -59,7 +59,7 @@ class StmStatus // := "State machine status"
                         AsBounds();
 
         // INQUIRY
-    virtual bool        IsADefault() const = 0;
+    virtual bool		IsADefault() const = 0;
 };
 
 

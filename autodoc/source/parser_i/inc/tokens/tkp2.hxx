@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,29 +54,29 @@ class TokenParse2
   public:
     // LIFECYCLE
                         TokenParse2();
-    virtual             ~TokenParse2() {}
+    virtual				~TokenParse2() {}
 
     // OPERATIONS
-    virtual void        Start(
+    virtual void   		Start(
                             CharacterSource &
                                             i_rSource );
 
-    /** @short  Gets the next identifiable token out of the
+    /** @short	Gets the next identifiable token out of the
         source code.
         @return true, if there was passed a valid token.
                 false, if the parsed stream is finished or
-                       an error occured.
+                       an error occured.	
     */
-    bool                GetNextToken();
+    bool				GetNextToken();
 
   private:
-    virtual void        SetStartContext() = 0;
+    virtual void		SetStartContext() = 0;
     virtual void        SetCurrentContext(
-                            TkpContext &        io_rContext ) = 0;
+                            TkpContext &		io_rContext ) = 0;
     virtual TkpContext &
                         CurrentContext() = 0;
     // DATA
-    CharacterSource *   pChars;
+    CharacterSource *	pChars;
 };
 
 

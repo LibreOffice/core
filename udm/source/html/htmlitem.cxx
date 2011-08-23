@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@ using namespace csi::xml;
 
 template <class ELEM>
 inline ELEM &
-PushElem( Element &     i_rMain,
-          DYN ELEM *    let_dpSub,
-          DYN Item *    let_dpItem )
+PushElem( Element & 	i_rMain,
+          DYN ELEM * 	let_dpSub,
+          DYN Item *	let_dpItem )
 {
     i_rMain << let_dpSub;
     if ( let_dpItem != 0 )
@@ -72,7 +72,7 @@ Image::Image( const String &   i_sSrc,
               const String &   i_sHeight,
               const String &   i_sAlign,
               const String &   i_sBorder )
-    :   AnEmptyElement( "img" )
+    :	AnEmptyElement( "img" )
 {
     *this << new AnAttribute(String("src"),i_sSrc)
           << new AnAttribute(String("width"),i_sWidth)
@@ -130,7 +130,7 @@ Table::Table( const String &   i_sBorder,
               const String &   i_sWidth,
               const String &   i_sCellPadding,
               const String &   i_sCellSpacing  )
-    :   csi::xml::AnElement("table")
+    : 	csi::xml::AnElement("table")
 {
     if ( i_sBorder.length() > 0 )
         *this << new AnAttribute(String("border"),i_sBorder);

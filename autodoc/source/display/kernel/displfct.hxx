@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class DisplayToolsFactory : public autodoc::DisplayToolsFactory_Ifc
 {
   public:
                         DisplayToolsFactory();
-    virtual             ~DisplayToolsFactory();
+    virtual				~DisplayToolsFactory();
 
 //    virtual DYN autodoc::TextDisplay_FunctionList_Ifc *
 //                        Create_TextDisplay_FunctionList() const;

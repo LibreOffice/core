@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,11 +54,11 @@ class PE_Variable : public Cpp_PE
     {
         afterName,                  //
         afterSize,                  // after ]
-        expectFinish,               // after InitExpression
+        expectFinish,		        // after InitExpression
         size_of_states
     };
                         PE_Variable(
-                            Cpp_PE *            i_pParent );
+                            Cpp_PE *			i_pParent );
                         ~PE_Variable();
 
     /** @return
@@ -67,33 +67,33 @@ class PE_Variable : public Cpp_PE
     */
     UINT16              Result_Pattern() const;
     const String  &     Result_SizeExpression() const;
-    const String  &     Result_InitExpression() const;
+    const String  &	    Result_InitExpression() const;
 
-    virtual void        Call_Handler(
-                            const cpp::Token &  i_rTok );
+    virtual void		Call_Handler(
+                            const cpp::Token &	i_rTok );
 
   private:
-    typedef SubPe< PE_Variable, PE_Expression >         SP_Expression;
-    typedef SubPeUse< PE_Variable, PE_Expression>       SPU_Expression;
+    typedef SubPe< PE_Variable, PE_Expression >		 	SP_Expression;
+    typedef SubPeUse< PE_Variable, PE_Expression> 		SPU_Expression;
 
-    void                Setup_StatusFunctions();
-    virtual void        InitData();
-    virtual void        TransferData();
-    void                Hdl_SyntaxError(const char *);
+    void				Setup_StatusFunctions();
+    virtual void		InitData();
+    virtual void		TransferData();
+    void				Hdl_SyntaxError(const char *);
 
     void                SpReturn_ArraySizeExpression();
     void                SpReturn_InitExpression();
 
-    void                On_afterName_ArrayBracket_Left(const char * i_sText);
-    void                On_afterName_Semicolon(const char * i_sText);
-    void                On_afterName_Comma(const char * i_sText);
-    void                On_afterName_Assign(const char * i_sText);
+    void				On_afterName_ArrayBracket_Left(const char * i_sText);
+    void				On_afterName_Semicolon(const char * i_sText);
+    void				On_afterName_Comma(const char * i_sText);
+    void				On_afterName_Assign(const char * i_sText);
 
-    void                On_afterSize_ArrayBracket_Right(const char * i_sText);
+    void				On_afterSize_ArrayBracket_Right(const char * i_sText);
 
-    void                On_expectFinish_Semicolon(const char * i_sText);
-    void                On_expectFinish_Comma(const char * i_sText);
-    void                On_expectFinish_Bracket_Right(const char * i_sText);
+    void				On_expectFinish_Semicolon(const char * i_sText);
+    void				On_expectFinish_Comma(const char * i_sText);
+    void				On_expectFinish_Bracket_Right(const char * i_sText);
 
     // DATA
     Dyn< PeStatusArray<PE_Variable> >

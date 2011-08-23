@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,9 @@ class Boolean : public Node
 {
   public:
     // LIFECYCLE
-    explicit            Boolean(
+    explicit    		Boolean(
                             nodetype::id        i_type );
-    virtual             ~Boolean();
+    virtual				~Boolean();
 
     // OPERATIONS
     void                Set(
@@ -64,7 +64,7 @@ class Boolean : public Node
     virtual void        do_Accept(
                             csv::ProcessorIfc & io_processor ) const;
     // DATA
-    bool                b;
+    bool				b;
 };
 
 

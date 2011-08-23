@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 // Template for an Office Calc add-in Java implementation file.
@@ -61,7 +61,7 @@ import org.openoffice.sheet.addin.XCalcAddins;
  * information about the component (__writeRegistryServiceInfo()).
  */
 public class CalcAddins {
-
+    
 /** This inner class provides the component as a concrete implementation
  * of the service description. It implements the needed interfaces.
  * @implements XCalcAddins, XAddIn, XServiceName, XServiceInfo, XTypeProvider
@@ -72,15 +72,15 @@ public class CalcAddins {
                                             XServiceName,
                                             XServiceInfo
     {
-
+        
 /** The component will be registered under this name.
  */
         static private final String __serviceName = "org.openoffice.sheet.addin.CalcAddins";
-
+        
         static private final String ADDIN_SERVICE = "com.sun.star.sheet.AddIn";
-
+        
         private Locale aFuncLoc;
-
+        
         private static final String[] stringFunctionName = {
 /** TO DO:
  * You should replace these method names by the method names of your interface.
@@ -88,19 +88,19 @@ public class CalcAddins {
             "getMyFirstValue",
             "getMySecondValue"
         };
-
+        
         private static final short shortINVALID = -1;
-
+        
 /** TO DO:
  * For each of your methods you should make up a new constant with a different value.
  */
         private static final short shortGETMYFIRSTVALUE = 0;
         private static final short shortGETMYSECONDVALUE = 1;
-
-
+        
+        
 /** TO DO:
  * This is where you implement all methods of your interface. The parameters have to
- * be the same as in your IDL file and their types have to be the correct
+ * be the same as in your IDL file and their types have to be the correct 
  * IDL-to-Java mappings of their types in the IDL file.
  */
         public int getMyFirstValue(
@@ -108,39 +108,39 @@ public class CalcAddins {
         ) {
             return (int) 1;
         }
-
+        
         public int getMySecondValue(
             com.sun.star.beans.XPropertySet xOptions,
             int intDummy
         ) {
             return( (int) ( 2 + intDummy ) );
         }
-
-
+        
+        
         // Implement method from interface XServiceName
         public String getServiceName() {
             return( __serviceName );
         }
-
+        
         // Implement methods from interface XServiceInfo
         public boolean supportsService(String stringServiceName) {
             return( stringServiceName.equals( ADDIN_SERVICE ) ||
                     stringServiceName.equals( __serviceName ) );
         }
-
+        
         public String getImplementationName() {
             return( _CalcAddins.class.getName() );
         }
-
+        
         public String[] getSupportedServiceNames() {
             String[] stringSupportedServiceNames = { ADDIN_SERVICE, __serviceName };
             return( stringSupportedServiceNames );
         }
-
+        
         // Implement methods from interface XAddIn
         public String getDisplayArgumentName(String stringProgrammaticFunctionName,int intArgument) {
             String stringReturn = "";
-
+            
             switch( this.getFunctionID( stringProgrammaticFunctionName ) ) {
 /** TO DO:
  * You should list all argument names for each of your methods, here.
@@ -165,10 +165,10 @@ public class CalcAddins {
             }
             return( stringReturn );
         }
-
+        
         public String getDisplayFunctionName(String stringProgrammaticName) {
             String stringReturn = "";
-
+            
             switch( this.getFunctionID( stringProgrammaticName ) ) {
 /** TO DO:
  * Assign the name of each of your methods.
@@ -180,21 +180,21 @@ public class CalcAddins {
                     stringReturn = "getMySecondValue";
                     break;
             }
-
+            
             return( stringReturn );
         }
-
+        
         public String getProgrammaticCategoryName(String p1) {
             return( "Add-In" );
         }
-
+        
         public String getDisplayCategoryName(String p1) {
             return( "Add-In" );
         }
-
+        
         public String getFunctionDescription(String stringProgrammaticName) {
             String stringReturn = "";
-
+            
             switch( this.getFunctionID( stringProgrammaticName ) ) {
 /** TO DO:
  * Enter a description for each of your methods that office users will understand.
@@ -206,13 +206,13 @@ public class CalcAddins {
                     stringReturn = "This is your second method.";
                     break;
             }
-
+            
             return( stringReturn );
         }
-
+        
         public String getArgumentDescription(String stringProgrammaticFunctionName,int intArgument) {
             String stringReturn = "";
-
+            
             switch( this.getFunctionID( stringProgrammaticFunctionName ) ) {
 /** TO DO:
  * Enter a description for every argument of every method. Make them so that office users will understand.
@@ -237,20 +237,20 @@ public class CalcAddins {
             }
             return( stringReturn );
         }
-
+        
         public String getProgrammaticFuntionName(String p1) {
             return( "" );
         }
-
+        
         // Implement methods from interface XLocalizable
         public Locale getLocale() {
             return( aFuncLoc );
         }
-
+        
         public void setLocale(Locale p1) {
             aFuncLoc = p1;
         }
-
+        
         // Auxiliary functions
         private short getFunctionID( String stringProgrammaticName ) {
             for ( int i = 0; i < stringFunctionName.length; i++ ) {
@@ -258,11 +258,11 @@ public class CalcAddins {
                     return( ( short ) i );
                 }
             }
-
+            
             return( -1 );
         }
     }
-
+    
     /**
      * Returns a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -277,16 +277,16 @@ public class CalcAddins {
     XMultiServiceFactory multiFactory,
     XRegistryKey regKey) {
         XSingleServiceFactory xSingleServiceFactory = null;
-
+        
         if (implName.equals(_CalcAddins.class.getName()) )
             xSingleServiceFactory = FactoryHelper.getServiceFactory(_CalcAddins.class,
             _CalcAddins.__serviceName,
             multiFactory,
             regKey);
-
+        
         return xSingleServiceFactory;
     }
-
+    
     /**
      * Writes the service information into the given registry key.
      * This method is called by the <code>JavaLoader</code>

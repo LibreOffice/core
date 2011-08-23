@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import com.sun.star.uno.*;
@@ -48,9 +48,9 @@ import com.sun.star.sdbc.*;
 
 class LockControlModels extends ComponentTreeTraversal
 {
-    private String  m_sDataField;
-    private Boolean m_aLockIt;
-    private int     m_nLevel;   // nesting level relative to the form we started with
+    private String	m_sDataField;
+    private Boolean	m_aLockIt;
+    private int		m_nLevel;	// nesting level relative to the form we started with
 
     /* ------------------------------------------------------------------ */
     public LockControlModels( String sDataField, boolean bLockIt )
@@ -64,7 +64,7 @@ class LockControlModels extends ComponentTreeTraversal
     protected boolean shouldStepInto( XIndexContainer xContainer ) throws com.sun.star.uno.Exception
     {
         if ( !super.shouldStepInto( xContainer ) )
-            return false;   // don't try to be more clever than our base class
+            return false;	// don't try to be more clever than our base class
 
         XForm xForm = (XForm)UnoRuntime.queryInterface( XForm.class, xContainer );
         if ( ( null != xForm ) && ( m_nLevel > 1 ) )
@@ -88,10 +88,10 @@ class LockControlModels extends ComponentTreeTraversal
             xPSI = xCompProps.getPropertySetInfo();
 
         if ( ( null != xPSI ) && xPSI.hasPropertyByName( "DataField" ) )
-        {   // indeed it has ....
+        {	// indeed it has ....
             String sDataField = (String)xCompProps.getPropertyValue( "DataField" );
             if ( sDataField.equals( m_sDataField ) )
-            {   // we found a control model which is bound to what we're looking for
+            {	// we found a control model which is bound to what we're looking for
                 xCompProps.setPropertyValue( "ReadOnly", m_aLockIt );
             }
         }
@@ -112,10 +112,10 @@ class LockControlModels extends ComponentTreeTraversal
 */
 class ControlLock implements XRowSetListener
 {
-    private XPropertySet    m_xForm;
-    private String          m_sDataField;
-    private boolean         m_bLockingEnabled;
-    private boolean         m_bPreviousRoundLock;
+    private	XPropertySet	m_xForm;
+    private	String			m_sDataField;
+    private boolean			m_bLockingEnabled;
+    private boolean			m_bPreviousRoundLock;
 
     /* ------------------------------------------------------------------ */
     ControlLock( XPropertySet xForm, String sBoundDataField )
