@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ public:
 
 
 
-
+    
 OUString DebugGetDescription (const AnimationNodeSharedPtr& rpNode)
 {
     if (::boost::dynamic_pointer_cast<BaseContainerNode>(rpNode))
@@ -137,7 +137,7 @@ void DebugShowState (const AnimationNodeSharedPtr& rpNode)
             sStateColor = OUString::createFromAscii("slategray3");
             break;
     }
-
+    
     const uno::Any aBegin (rpNode->getXAnimationNode()->getBegin());
     OUString sTrigger;
     if (aBegin.hasValue())
@@ -217,7 +217,7 @@ AnimationNodeSharedPtr DebugGetTreeRoot (const BaseNodeSharedPtr& rpNode)
 void Debug_ShowNodeTree (const AnimationNodeSharedPtr& rpNode)
 {
     DebugTraceScope aTraceScope ("NodeTree");
-
+    
     DebugShowState(DebugGetTreeRoot(::boost::dynamic_pointer_cast<BaseNode>(rpNode)));
 }
 
@@ -239,7 +239,7 @@ extern "C" {
               maTime()
         {
         }
-
+        
         int mnIndentation;
         FILE* mpFile;
         ::canvas::tools::ElapsedTime maTime;
@@ -272,7 +272,7 @@ extern "C" {
 
 } // end of anonymous namespace
 
-
+    
 } // end of extern "C"
 
 void SAL_CALL DebugTraceBegin (const sal_Char* sFormat, ...)
@@ -282,7 +282,7 @@ void SAL_CALL DebugTraceBegin (const sal_Char* sFormat, ...)
     DebugTrace(+1,sFormat, args);
     va_end(args);
 }
-
+    
 void SAL_CALL DebugTraceEnd (const sal_Char* sFormat, ...)
 {
     va_list args;
@@ -306,7 +306,7 @@ DebugTraceScope::DebugTraceScope (const sal_Char* sFormat, ...)
 {
     va_list args;
     va_start(args, sFormat);
-
+        
     msMessage[mnBufferSize-1] = 0;
     snprintf(msMessage, mnBufferSize-1, sFormat, args);
     TRACE_BEGIN("[ %s", msMessage);

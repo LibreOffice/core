@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,9 +58,9 @@
 \************************************************************************/
 
 SdPresLayoutDlg::SdPresLayoutDlg(
-    ::sd::DrawDocShell* pDocShell,
-    ::sd::ViewShell* pViewShell,
-    ::Window* pWindow,
+    ::sd::DrawDocShell* pDocShell, 
+    ::sd::ViewShell* pViewShell, 
+    ::Window* pWindow, 
     const SfxItemSet& rInAttrs ):
                 ModalDialog         (pWindow, SdResId(DLG_PRESLT)),
                 mpDocSh              ( pDocShell ),
@@ -70,11 +70,11 @@ SdPresLayoutDlg::SdPresLayoutDlg(
                 maBtnOK              (this, SdResId(BTN_OK)),
                 maBtnCancel          (this, SdResId(BTN_CANCEL)),
                 maBtnHelp            (this, SdResId(BTN_HELP)),
-                maCbxMasterPage     (this, SdResId(CBX_MASTER_PAGE)),
-                maCbxCheckMasters   (this, SdResId(CBX_CHECK_MASTERS)),
+                maCbxMasterPage		(this, SdResId(CBX_MASTER_PAGE)),
+                maCbxCheckMasters	(this, SdResId(CBX_CHECK_MASTERS)),
                 maBtnLoad            (this, SdResId(BTN_LOAD)),
                 mrOutAttrs           (rInAttrs),
-                maStrNone           ( SdResId( STR_NULL ) )
+                maStrNone			( SdResId( STR_NULL ) )
 {
     FreeResource();
 
@@ -88,7 +88,7 @@ SdPresLayoutDlg::SdPresLayoutDlg(
 
 /*************************************************************************
 |*
-|*  Dtor
+|*	Dtor
 |*
 *************************************************************************/
 
@@ -106,7 +106,7 @@ SdPresLayoutDlg::~SdPresLayoutDlg()
 
 /*************************************************************************
 |*
-|*    Initialisierung
+|*	  Initialisierung
 |*
 *************************************************************************/
 
@@ -147,7 +147,7 @@ void SdPresLayoutDlg::Reset()
 
 /*************************************************************************
 |*
-|*    Fuellt uebergebenen Item-Set mit Dialogbox-Attributen
+|*	  Fuellt uebergebenen Item-Set mit Dialogbox-Attributen
 |*
 *************************************************************************/
 
@@ -309,7 +309,7 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
                 {
                     ::sd::DrawDocShell*  pTemplDocSh= pTemplDoc->GetDocSh();
 
-/*                  SdPage* pMaster = pTemplDoc->GetMasterSdPage( 0, PK_STANDARD );
+/*					SdPage* pMaster = pTemplDoc->GetMasterSdPage( 0, PK_STANDARD );
                     mpLayoutNames->Insert( new String( maName ), LIST_APPEND );
 
                     Bitmap aBitmap( pTemplDocSh->GetPagePreviewBitmap( pMaster, 90 ) );

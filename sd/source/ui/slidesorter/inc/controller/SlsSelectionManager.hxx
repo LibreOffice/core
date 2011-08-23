@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ public:
     /** Create a new SelectionManger for the given slide sorter.
     */
     SelectionManager (SlideSorter& rSlideSorter);
-
+    
     ~SelectionManager (void);
 
     /** Delete the currently selected slides.  When this method returns the
@@ -80,7 +80,7 @@ public:
         moved to the visible area of the slide sorter view.
     */
     bool IsMakeSelectionVisiblePending (void) const;
-
+    
     enum SelectionHint { SH_FIRST, SH_LAST, SH_RECENT };
 
     /** Try to make all currently selected page objects visible, i.e. set

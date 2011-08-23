@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,23 +71,23 @@ using namespace ::com::sun::star;
 // class SdLayer
 //=============================================================================
 
-#define WID_LAYER_LOCKED    1
-#define WID_LAYER_PRINTABLE 2
-#define WID_LAYER_VISIBLE   3
-#define WID_LAYER_NAME      4
-#define WID_LAYER_TITLE     5
-#define WID_LAYER_DESC      6
+#define WID_LAYER_LOCKED	1
+#define WID_LAYER_PRINTABLE	2
+#define WID_LAYER_VISIBLE	3
+#define WID_LAYER_NAME		4
+#define WID_LAYER_TITLE		5
+#define WID_LAYER_DESC		6
 
 const SvxItemPropertySet* ImplGetSdLayerPropertySet()
 {
     static const SfxItemPropertyMapEntry aSdLayerPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN(UNO_NAME_LAYER_LOCKED),      WID_LAYER_LOCKED,   &::getBooleanCppuType(),            0, 0 },
-        { MAP_CHAR_LEN(UNO_NAME_LAYER_PRINTABLE),   WID_LAYER_PRINTABLE,&::getBooleanCppuType(),            0, 0 },
-        { MAP_CHAR_LEN(UNO_NAME_LAYER_VISIBLE),     WID_LAYER_VISIBLE,  &::getBooleanCppuType(),            0, 0 },
-        { MAP_CHAR_LEN(UNO_NAME_LAYER_NAME),        WID_LAYER_NAME,     &::getCppuType((const OUString*)0), 0, 0 },
-        { MAP_CHAR_LEN("Title"),                    WID_LAYER_TITLE,    &::getCppuType((const OUString*)0), 0, 0 },
-        { MAP_CHAR_LEN("Description"),              WID_LAYER_DESC,     &::getCppuType((const OUString*)0), 0, 0 },
+        { MAP_CHAR_LEN(UNO_NAME_LAYER_LOCKED),		WID_LAYER_LOCKED,	&::getBooleanCppuType(),			0, 0 },
+        { MAP_CHAR_LEN(UNO_NAME_LAYER_PRINTABLE),	WID_LAYER_PRINTABLE,&::getBooleanCppuType(),			0, 0 },
+        { MAP_CHAR_LEN(UNO_NAME_LAYER_VISIBLE),		WID_LAYER_VISIBLE,	&::getBooleanCppuType(),			0, 0 },
+        { MAP_CHAR_LEN(UNO_NAME_LAYER_NAME),		WID_LAYER_NAME,		&::getCppuType((const OUString*)0),	0, 0 },
+        { MAP_CHAR_LEN("Title"),					WID_LAYER_TITLE,	&::getCppuType((const OUString*)0),	0, 0 },
+        { MAP_CHAR_LEN("Description"),				WID_LAYER_DESC,		&::getCppuType((const OUString*)0),	0, 0 },
         { 0,0,0,0,0,0}
     };
     static SvxItemPropertySet aSDLayerPropertySet_Impl( aSdLayerPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
@@ -125,23 +125,23 @@ String SdLayer::convertToInternalName( const OUString& rName )
 OUString SdLayer::convertToExternalName( const String& rName )
 {
     const String aCompare( rName );
-    if( rName == String( SdResId( STR_LAYER_BCKGRND ) ) )
+    if( rName == String( SdResId( STR_LAYER_BCKGRND ) ) ) 
     {
         return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_background) );
     }
-    else if( rName == String( SdResId( STR_LAYER_BCKGRNDOBJ ) ) )
+    else if( rName == String( SdResId( STR_LAYER_BCKGRNDOBJ ) ) ) 
     {
         return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_background_objects) );
     }
-    else if( rName == String( SdResId( STR_LAYER_LAYOUT ) ) )
+    else if( rName == String( SdResId( STR_LAYER_LAYOUT ) ) ) 
     {
         return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_layout) );
     }
-    else if( rName == String( SdResId( STR_LAYER_CONTROLS ) ) )
+    else if( rName == String( SdResId( STR_LAYER_CONTROLS ) ) ) 
     {
         return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_controls) );
     }
-    else if( rName == String( SdResId( STR_LAYER_MEASURELINES ) ) )
+    else if( rName == String( SdResId( STR_LAYER_MEASURELINES ) ) ) 
     {
         return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_measurelines) );
     }
@@ -238,7 +238,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
         OUString aName;
         if(!(aValue >>= aName))
             throw lang::IllegalArgumentException();
-
+    
         pLayer->SetName(SdLayer::convertToInternalName( aName ) );
         pLayerManager->UpdateLayerView();
         break;
@@ -249,7 +249,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
         OUString sTitle;
         if(!(aValue >>= sTitle))
             throw lang::IllegalArgumentException();
-
+    
         pLayer->SetTitle(sTitle);
         break;
     }
@@ -259,7 +259,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
         OUString sDescription;
         if(!(aValue >>= sDescription))
             throw lang::IllegalArgumentException();
-
+    
         pLayer->SetDescription(sDescription);
         break;
     }
@@ -269,8 +269,8 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
     }
 
 #ifndef SVX_LIGHT
-    if( pLayerManager->GetDocShell() )
-        pLayerManager->GetDocShell()->SetModified();
+    if(	pLayerManager->GetDocShell() )
+        pLayerManager->GetDocShell()->SetModified();		
 #endif
 }
 
@@ -337,9 +337,9 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
             String aLayerName = pLayer->GetName();
             switch(what)
             {
-            case VISIBLE:   return pSdrPageView->IsLayerVisible(aLayerName);
-            case PRINTABLE: return pSdrPageView->IsLayerPrintable(aLayerName);
-            case LOCKED:    return pSdrPageView->IsLayerLocked(aLayerName);
+            case VISIBLE:	return pSdrPageView->IsLayerVisible(aLayerName);
+            case PRINTABLE:	return pSdrPageView->IsLayerPrintable(aLayerName);
+            case LOCKED:   	return pSdrPageView->IsLayerLocked(aLayerName);
             }
         }
 
@@ -351,9 +351,9 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
             if(pFrameView)
                 switch(what)
                 {
-                case VISIBLE:   return pFrameView->GetVisibleLayers().IsSet(pLayer->GetID());
-                case PRINTABLE: return pFrameView->GetPrintableLayers().IsSet(pLayer->GetID());
-                case LOCKED:    return pFrameView->GetLockedLayers().IsSet(pLayer->GetID());
+                case VISIBLE:	return pFrameView->GetVisibleLayers().IsSet(pLayer->GetID());
+                case PRINTABLE:	return pFrameView->GetPrintableLayers().IsSet(pLayer->GetID());
+                case LOCKED:	return pFrameView->GetLockedLayers().IsSet(pLayer->GetID());
                 }
         }
 #endif
@@ -376,11 +376,11 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
             String aLayerName(pLayer->GetName());
             switch(what)
             {
-            case VISIBLE:   pSdrPageView->SetLayerVisible(aLayerName,flag);
+            case VISIBLE:	pSdrPageView->SetLayerVisible(aLayerName,flag);
                             break;
-            case PRINTABLE: pSdrPageView->SetLayerPrintable(aLayerName,flag);
+            case PRINTABLE:	pSdrPageView->SetLayerPrintable(aLayerName,flag);
                             break;
-            case LOCKED:    pSdrPageView->SetLayerLocked(aLayerName,flag);
+            case LOCKED:	pSdrPageView->SetLayerLocked(aLayerName,flag);
                             break;
             }
         }
@@ -396,11 +396,11 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
                 SetOfByte aNewLayers;
                 switch(what)
                 {
-                case VISIBLE:   aNewLayers = pFrameView->GetVisibleLayers();
+                case VISIBLE:	aNewLayers = pFrameView->GetVisibleLayers();
                                 break;
-                case PRINTABLE: aNewLayers = pFrameView->GetPrintableLayers();
+                case PRINTABLE:	aNewLayers = pFrameView->GetPrintableLayers();
                                 break;
-                case LOCKED:    aNewLayers = pFrameView->GetLockedLayers();
+                case LOCKED:	aNewLayers = pFrameView->GetLockedLayers();
                                 break;
                 }
 
@@ -408,11 +408,11 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
 
                 switch(what)
                 {
-                case VISIBLE:   pFrameView->SetVisibleLayers(aNewLayers);
+                case VISIBLE:	pFrameView->SetVisibleLayers(aNewLayers);
                                 break;
-                case PRINTABLE: pFrameView->SetPrintableLayers(aNewLayers);
+                case PRINTABLE:	pFrameView->SetPrintableLayers(aNewLayers);
                                 break;
-                case LOCKED:    pFrameView->SetLockedLayers(aNewLayers);
+                case LOCKED:	pFrameView->SetLockedLayers(aNewLayers);
                                 break;
                 }
                 return;
@@ -428,7 +428,7 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
 
 //=====  ::com::sun::star::container::XChild  =================================
 
-uno::Reference<uno::XInterface> SAL_CALL SdLayer::getParent (void)
+uno::Reference<uno::XInterface> SAL_CALL SdLayer::getParent (void) 
     throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -440,8 +440,8 @@ uno::Reference<uno::XInterface> SAL_CALL SdLayer::getParent (void)
 }
 
 
-void SAL_CALL SdLayer::setParent (const uno::Reference<uno::XInterface >& )
-    throw (::com::sun::star::lang::NoSupportException,
+void SAL_CALL SdLayer::setParent (const uno::Reference<uno::XInterface >& ) 
+    throw (::com::sun::star::lang::NoSupportException, 
         ::com::sun::star::uno::RuntimeException)
 {
     throw lang::NoSupportException ();
@@ -718,7 +718,7 @@ uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()
 sal_Bool SAL_CALL SdLayerManager::hasByName( const OUString& aName ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-
+    
     if( mpModel == 0 )
         throw lang::DisposedException();
 

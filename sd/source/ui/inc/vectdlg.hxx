@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,43 +51,43 @@ class DrawDocShell;
 
 class SdVectorizeDlg : public ModalDialog
 {
-    ::sd::DrawDocShell *    mpDocSh;
-    FixedLine           aGrpSettings;
-    FixedText           aFtLayers;
-    NumericField        aNmLayers;
-    FixedText           aFtReduce;
-    MetricField         aMtReduce;
-    FixedText           aFtFillHoles;
-    MetricField         aMtFillHoles;
-    CheckBox            aCbFillHoles;
+    ::sd::DrawDocShell *	mpDocSh;
+    FixedLine			aGrpSettings;
+    FixedText			aFtLayers;
+    NumericField		aNmLayers;
+    FixedText			aFtReduce;
+    MetricField			aMtReduce;
+    FixedText			aFtFillHoles;
+    MetricField			aMtFillHoles;
+    CheckBox			aCbFillHoles;
 
-    FixedText           aFtOriginal;
-    GraphCtrl           aBmpWin;
+    FixedText			aFtOriginal;
+    GraphCtrl			aBmpWin;
 
-    FixedText           aFtVectorized;
-    GraphCtrl           aMtfWin;
+    FixedText			aFtVectorized;
+    GraphCtrl			aMtfWin;
 
-    FixedText           aGrpPrgs;
-    ProgressBar         aPrgs;
+    FixedText			aGrpPrgs;
+    ProgressBar			aPrgs;
 
-    OKButton            aBtnOK;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
-    PushButton          aBtnPreview;
+    OKButton			aBtnOK;
+    CancelButton		aBtnCancel;
+    HelpButton			aBtnHelp;
+    PushButton			aBtnPreview;
 
-    Bitmap              aBmp;
-    Bitmap              aPreviewBmp;
-    GDIMetaFile         aMtf;
+    Bitmap				aBmp;
+    Bitmap				aPreviewBmp;
+    GDIMetaFile			aMtf;
 
-    void                LoadSettings();
-    void                SaveSettings() const;
-    void                InitPreviewBmp();
-    void                UpdatePreviewMtf();
+    void				LoadSettings();
+    void				SaveSettings() const;
+    void				InitPreviewBmp();
+    void				UpdatePreviewMtf();
 
-    Rectangle           GetRect( const Size& rDispSize, const Size& rBmpSize ) const;
-    Bitmap              GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale );
-    void                Calculate( Bitmap& rBmp, GDIMetaFile& rMtf );
-    void                AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
+    Rectangle			GetRect( const Size& rDispSize, const Size& rBmpSize ) const;
+    Bitmap				GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale );
+    void				Calculate( Bitmap& rBmp, GDIMetaFile& rMtf );
+    void				AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
                                  long nPosX, long nPosY, long nWidth, long nHeight );
 
                         DECL_LINK( ProgressHdl, void* );
@@ -101,7 +101,7 @@ public:
                         SdVectorizeDlg( Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell );
                         ~SdVectorizeDlg();
 
-    const GDIMetaFile&  GetGDIMetaFile() const { return aMtf; }
+    const GDIMetaFile&	GetGDIMetaFile() const { return aMtf; }
 };
 
 #endif

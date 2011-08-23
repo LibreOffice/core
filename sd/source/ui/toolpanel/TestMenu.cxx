@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,15 +60,15 @@ ColorMenu::ColorMenu (::Window* i_pParent)
       maSet (this),
       mnPreferredColumnCount(2)
 {
-    WinBits aStyle =
-        WB_ITEMBORDER
-        | WB_DOUBLEBORDER
-        | WB_NAMEFIELD
+    WinBits aStyle = 
+        WB_ITEMBORDER 
+        | WB_DOUBLEBORDER 
+        | WB_NAMEFIELD 
         | WB_FLATVALUESET
         | WB_TABSTOP
         | WB_VSCROLL;
 
-    maSet.SetStyle (maSet.GetStyle() | aStyle);
+    maSet.SetStyle (maSet.GetStyle() | aStyle); 
     maSet.SetExtraSpacing(2);
 
     Fill ();
@@ -118,7 +118,7 @@ sal_Int32 ColorMenu::GetPreferredWidth (sal_Int32 nHeight)
             int nRowCount = nHeight / aItemSize.Height();
             if (nRowCount <= 0)
                 nRowCount = 1;
-            int nColumnCount = (maSet.GetItemCount() + nRowCount-1)
+            int nColumnCount = (maSet.GetItemCount() + nRowCount-1) 
                 / nRowCount;
             nPreferredWidth = nColumnCount * aItemSize.Width();
         }
@@ -144,7 +144,7 @@ sal_Int32 ColorMenu::GetPreferredHeight (sal_Int32 nWidth)
                 nColumnCount = 1;
             else if (nColumnCount > 4)
                 nColumnCount = 4;
-            int nRowCount = (maSet.GetItemCount() + nColumnCount-1)
+            int nRowCount = (maSet.GetItemCount() + nColumnCount-1) 
                 / nColumnCount;
             nPreferredHeight = nRowCount * aItemSize.Height();
         }
@@ -195,7 +195,7 @@ void ColorMenu::Resize (void)
                 nColumnCount = 4;
 
             USHORT nRowCount = (USHORT)CalculateRowCount (aItemSize, nColumnCount);
-
+            
             maSet.SetColCount ((USHORT)nColumnCount);
             maSet.SetLineCount (nRowCount);
         }

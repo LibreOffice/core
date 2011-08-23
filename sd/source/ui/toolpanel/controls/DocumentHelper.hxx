@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ private:
         SdDrawDocument& rTargetDocument,
         SdPage* pMasterPage,
         const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList);
-
+    
     /** Assign the given master page to the given page.
         @param pMasterPage
             In contrast to AssignMasterPageToPageList() this page is assumed

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,14 +78,14 @@ public:
         mpActivity(rActivity),
         mrActivityQueue( rActivityQueue )
     {}
-
+    
     virtual void dispose() {}
     virtual bool fire()
     {
         ActivitySharedPtr pActivity( mpActivity.lock() );
         if( !pActivity )
             return false;
-
+        
         return mrActivityQueue.addActivity( pActivity );
     }
 
@@ -93,16 +93,16 @@ public:
     virtual double getActivationTime( double nCurrentTime ) const
     {
         const double nElapsedTime( maTimer.getElapsedTime() );
-
+        
         return ::std::max( nCurrentTime,
                            nCurrentTime - nElapsedTime + mnNextTime );
-    }
+    } 
 
     /// Start the internal timer
     void start() { maTimer.reset(); }
-
+    
     /** Set the next timeout this object should generate.
-
+        
         @param nextTime
         Absolute time, measured from the last start() call,
         when this event should wakeup the Activity again. If
@@ -110,7 +110,7 @@ public:
         every setNextTimeout() call.
     */
     void setNextTimeout( double nextTime ) { mnNextTime = nextTime; }
-
+    
 private:
     ::canvas::tools::ElapsedTime    maTimer;
     double                          mnNextTime;
@@ -118,15 +118,15 @@ private:
     ActivitiesQueue&                mrActivityQueue;
 };
 
-class RehearseTimingsActivity::MouseHandler : public MouseEventHandler,
+class RehearseTimingsActivity::MouseHandler : public MouseEventHandler, 
                                               private boost::noncopyable
 {
 public:
     explicit MouseHandler( RehearseTimingsActivity& rta );
-
+    
     void reset();
     bool hasBeenClicked() const { return mbHasBeenClicked; }
-
+    
     // MouseEventHandler
     virtual bool handleMousePressed( awt::MouseEvent const & evt );
     virtual bool handleMouseReleased( awt::MouseEvent const & evt );
@@ -134,7 +134,7 @@ public:
     virtual bool handleMouseExited( awt::MouseEvent const & evt );
     virtual bool handleMouseDragged( awt::MouseEvent const & evt );
     virtual bool handleMouseMoved( awt::MouseEvent const & evt );
-
+    
 private:
     bool isInArea( com::sun::star::awt::MouseEvent const & evt ) const;
     void updatePressedState( const bool pressedState ) const;
@@ -194,7 +194,7 @@ RehearseTimingsActivity::~RehearseTimingsActivity()
     {
         stop();
     }
-    catch (uno::Exception &)
+    catch (uno::Exception &) 
     {
         OSL_ENSURE( false, rtl::OUStringToOString(
                         comphelper::anyToString(
@@ -209,9 +209,9 @@ boost::shared_ptr<RehearseTimingsActivity> RehearseTimingsActivity::create(
     boost::shared_ptr<RehearseTimingsActivity> pActivity(
         new RehearseTimingsActivity( rContext ));
 
-    pActivity->mpMouseHandler.reset(
+    pActivity->mpMouseHandler.reset( 
         new MouseHandler(*pActivity.get()) );
-    pActivity->mpWakeUpEvent.reset(
+    pActivity->mpWakeUpEvent.reset( 
         new WakeupEvent( rContext.mrEventQueue.getTimer(),
                          pActivity,
                          rContext.mrActivitiesQueue ));
@@ -309,7 +309,7 @@ void RehearseTimingsActivity::dequeued()
 
 void RehearseTimingsActivity::end()
 {
-    if (isActive())
+    if (isActive()) 
     {
         stop();
         mbActive = false;
@@ -318,7 +318,7 @@ void RehearseTimingsActivity::end()
 
 basegfx::B2DRange RehearseTimingsActivity::calcSpriteRectangle( UnoViewSharedPtr const& rView ) const
 {
-    const Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(),
+    const Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(), 
                                                  UNO_QUERY );
     if( !xBitmap.is() )
         return basegfx::B2DRange();
@@ -350,10 +350,10 @@ void RehearseTimingsActivity::viewAdded( const UnoViewSharedPtr& rView )
                              1001.0 )); // sprite should be in front of all
                                         // other sprites
     sprite->setAlpha( 0.8 );
-    const basegfx::B2DRange spriteRectangle(
+    const basegfx::B2DRange spriteRectangle( 
         calcSpriteRectangle( rView ) );
     sprite->move( basegfx::B2DPoint(
-                      spriteRectangle.getMinX(),
+                      spriteRectangle.getMinX(), 
                       spriteRectangle.getMinY() ) );
 
     if( maViews.empty() )
@@ -383,22 +383,22 @@ void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )
     // find entry corresponding to modified view
     ViewsVecT::iterator aModifiedEntry(
         std::find_if(
-            maViews.begin(),
+            maViews.begin(), 
             maViews.end(),
             boost::bind(
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
-                // select view:
+                // select view: 
                 boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ))));
-
+        
     OSL_ASSERT( aModifiedEntry != maViews.end() );
     if( aModifiedEntry == maViews.end() )
         return;
 
     // new sprite pos, transformation might have changed:
     maSpriteRectangle = calcSpriteRectangle( rView );
-
-    // reposition sprite:
+    
+    // reposition sprite:  
     aModifiedEntry->second->move( maSpriteRectangle.getMinimum() );
 
     // sprites changed, need screen update
@@ -408,16 +408,16 @@ void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )
 void RehearseTimingsActivity::viewsChanged()
 {
     if( !maViews.empty() )
-    {
+    {        
         // new sprite pos, transformation might have changed:
         maSpriteRectangle = calcSpriteRectangle( maViews.front().first );
-
+    
         // reposition sprites
         for_each_sprite( boost::bind( &cppcanvas::Sprite::move,
                                       _1,
                                       boost::cref(maSpriteRectangle.getMinimum())) );
 
-        // sprites changed, need screen update
+        // sprites changed, need screen update  
         mrScreenUpdater.notifyUpdate();
     }
 }
@@ -464,13 +464,13 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     Rectangle rect = Rectangle( 0,0,
                                 maSpriteSizePixel.getX(),
                                 maSpriteSizePixel.getY());
-    if (mbDrawPressed)
+    if (mbDrawPressed) 
     {
         blackHole.SetTextColor( COL_BLACK );
         blackHole.SetFillColor( COL_LIGHTGRAY );
         blackHole.SetLineColor( COL_GRAY );
     }
-    else
+    else 
     {
         blackHole.SetTextColor( COL_BLACK );
         blackHole.SetFillColor( COL_WHITE );

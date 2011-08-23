@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ void PageSelector::DeselectAllPages (void)
     int nPageCount = mrModel.GetPageCount();
     for (int nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
         DeselectPage (nPageIndex);
-    DBG_ASSERT (mnSelectedPageCount==0,
+    DBG_ASSERT (mnSelectedPageCount==0, 
         "PageSelector::DeselectAllPages: the selected pages counter is not 0");
     mnSelectedPageCount = 0;
     mpMostRecentlySelectedPage.reset();

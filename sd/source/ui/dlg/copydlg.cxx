@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,10 +65,10 @@ namespace sd {
 \************************************************************************/
 
 CopyDlg::CopyDlg(
-    ::Window* pWindow,
+    ::Window* pWindow, 
     const SfxItemSet& rInAttrs,
-    XColorTable* pColTab,
-    ::sd::View* pInView )
+    XColorTable* pColTab, 
+    ::sd::View* pInView ) 
     : SfxModalDialog     ( pWindow, SdResId( DLG_COPY ) ),
       maFtCopies           ( this, SdResId( FT_COPIES ) ),
       maNumFldCopies       ( this, SdResId( NUM_FLD_COPIES ) ),
@@ -94,10 +94,10 @@ CopyDlg::CopyDlg(
       maBtnCancel          ( this, SdResId( BTN_CANCEL ) ),
       maBtnHelp            ( this, SdResId( BTN_HELP ) ),
       maBtnSetDefault      ( this, SdResId( BTN_SET_DEFAULT ) ),
-      mrOutAttrs            ( rInAttrs ),
-      mpColorTab            ( pColTab ),
+      mrOutAttrs			( rInAttrs ),
+      mpColorTab			( pColTab ),
       maUIScale(pInView->GetDoc()->GetUIScale()),
-      mpView                ( pInView )
+      mpView				( pInView )
 {
     FreeResource();
 
@@ -315,7 +315,7 @@ IMPL_LINK( CopyDlg, SetViewData, void*, EMPTYARG )
                                     maUIScale, SFX_MAPUNIT_100TH_MM);
 
     // Farb-Attribut setzen
-    const SfxPoolItem*  pPoolItem = NULL;
+    const SfxPoolItem*	pPoolItem = NULL;
     if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
     {
         Color aColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
@@ -343,7 +343,7 @@ IMPL_LINK( CopyDlg, SetDefault, void*, EMPTYARG )
     SetMetricValue( maMtrFldHeight, Fraction(nValue) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
     // Farb-Attribut setzen
-    const SfxPoolItem*  pPoolItem = NULL;
+    const SfxPoolItem*	pPoolItem = NULL;
     if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
     {
         Color aColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();

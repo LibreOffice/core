@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@
 #include <svtools/embedtransfer.hxx>
 #include <tools/diagnose_ex.h>
 #include <ViewShell.hxx>
-
+    
 using namespace com::sun::star;
 
 class SdPageObjsTLB::IconProvider
@@ -86,8 +86,8 @@ public:
 BOOL SD_DLLPRIVATE SdPageObjsTLB::bIsInDrag = FALSE;
 
 BOOL SdPageObjsTLB::IsInDrag()
-{
-    return bIsInDrag;
+{ 
+    return bIsInDrag; 
 }
 
 sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::mnListBoxDropFormatId = SAL_MAX_UINT32;
@@ -96,8 +96,8 @@ sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::mnListBoxDropFormatId = SAL_MA
 // - SdPageObjsTLB::SdPageObjsTransferable -
 // -----------------------------------------
 
-SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable(
-    SdPageObjsTLB& rParent,
+SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable( 
+    SdPageObjsTLB& rParent, 
         const INetBookmark& rBookmark,
     ::sd::DrawDocShell& rDocShell,
     NavigatorDragType eDragType,
@@ -109,7 +109,7 @@ SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable(
       meDragType( eDragType ),
       maTreeListBoxData( rTreeListBoxData )
 {
-}
+}	
 
 
 
@@ -121,7 +121,7 @@ SdPageObjsTLB::SdPageObjsTransferable::~SdPageObjsTransferable()
 // -----------------------------------------------------------------------------
 
 void SdPageObjsTLB::SdPageObjsTransferable::AddSupportedFormats()
-{
+{ 
     AddFormat(SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK);
     AddFormat(SOT_FORMATSTR_ID_TREELISTBOX);
     AddFormat(GetListBoxDropFormatId());
@@ -239,19 +239,19 @@ sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId (void)
 |*
 \************************************************************************/
 
-SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
-:   SvTreeListBox       ( pParentWin, rSdResId )
-,   mpParent            ( pParentWin )
-,   mpDoc               ( NULL )
-,   mpBookmarkDoc       ( NULL )
-,   mpMedium            ( NULL )
-,   mpOwnMedium         ( NULL )
-,   maImgOle             ( BitmapEx( SdResId( BMP_OLE ) ) )
-,   maImgGraphic         ( BitmapEx( SdResId( BMP_GRAPHIC ) ) )
-,   maImgOleH            ( BitmapEx( SdResId( BMP_OLE_H ) ) )
-,   maImgGraphicH        ( BitmapEx( SdResId( BMP_GRAPHIC_H ) ) )
-,   mbLinkableSelected  ( FALSE )
-,   mpDropNavWin        ( NULL )
+SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId ) 
+:	SvTreeListBox       ( pParentWin, rSdResId )
+,	mpParent 		    ( pParentWin )
+,	mpDoc			    ( NULL )
+,	mpBookmarkDoc	    ( NULL )
+,	mpMedium 	    	( NULL )
+,	mpOwnMedium		    ( NULL )
+,	maImgOle             ( BitmapEx( SdResId( BMP_OLE ) ) )
+,	maImgGraphic         ( BitmapEx( SdResId( BMP_GRAPHIC ) ) )
+,	maImgOleH            ( BitmapEx( SdResId( BMP_OLE_H ) ) )
+,	maImgGraphicH        ( BitmapEx( SdResId( BMP_GRAPHIC_H ) ) )
+,	mbLinkableSelected  ( FALSE )
+,	mpDropNavWin		( NULL )
 ,   mbShowAllShapes     ( false )
 ,   mbShowAllPages      ( false )
 
@@ -402,7 +402,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
     mbShowAllPages = (bAllPages == TRUE);
     mpMedium = NULL;
 
-    SdPage*      pPage = NULL;
+    SdPage* 	 pPage = NULL;
 
     IconProvider aIconProvider;
 
@@ -632,10 +632,10 @@ BOOL SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
     if( !mpDoc )
         return( FALSE );
 
-    SdrObject*   pObj = NULL;
-    SdPage*      pPage = NULL;
+    SdrObject*	 pObj = NULL;
+    SdPage* 	 pPage = NULL;
     SvLBoxEntry* pEntry = First();
-    String       aName;
+    String		 aName;
 
     // Alle Pages incl. Objekte vergleichen
     USHORT nPage = 0;
@@ -708,7 +708,7 @@ String SdPageObjsTLB::GetSelectEntry()
 
 List* SdPageObjsTLB::GetSelectEntryList( USHORT nDepth )
 {
-    List*        pList  = NULL;
+    List*		 pList	= NULL;
     SvLBoxEntry* pEntry = FirstSelected();
 
     while( pEntry )
@@ -740,8 +740,8 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
     {
         if( GetBookmarkDoc() )
         {
-            SdrObject*   pObj = NULL;
-            SdPage*      pPage = NULL;
+            SdrObject*	 pObj = NULL;
+            SdPage* 	 pPage = NULL;
             SvLBoxEntry* pPageEntry = NULL;
 
             Image aImgPage=Image( BitmapEx( SdResId( BMP_PAGE ) ) );
@@ -823,8 +823,8 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
 
 /*************************************************************************
 |*
-|*  Prueft, ob es sich um eine Draw-Datei handelt und oeffnet anhand des
-|*  uebergebenen Docs das BookmarkDoc
+|*	Prueft, ob es sich um eine Draw-Datei handelt und oeffnet anhand des
+|*	uebergebenen Docs das BookmarkDoc
 |*
 \************************************************************************/
 
@@ -975,10 +975,10 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
 {
     (void)nAction;
     (void)rPosPixel;
-
+    
     SdNavigatorWin* pNavWin = NULL;
     SvLBoxEntry* pEntry = GetEntry(rPosPixel);
-
+    
     if( mpFrame->HasChildWindow( SID_NAVIGATOR ) )
         pNavWin = (SdNavigatorWin*) ( mpFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
 
@@ -1037,16 +1037,16 @@ void SdPageObjsTLB::DoDrag()
     {
         ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
         String aURL = INetURLObject( pDocShell->GetMedium()->GetPhysicalName(), INET_PROT_FILE ).GetMainURL( INetURLObject::NO_DECODE );
-        NavigatorDragType   eDragType = mpDropNavWin->GetNavigatorDragType();
+        NavigatorDragType	eDragType = mpDropNavWin->GetNavigatorDragType();
 
         aURL.Append( '#' );
         aURL.Append( GetSelectEntry() );
 
-        INetBookmark    aBookmark( aURL, GetSelectEntry() );
-        sal_Int8        nDNDActions = DND_ACTION_COPYMOVE;
+        INetBookmark	aBookmark( aURL, GetSelectEntry() );
+        sal_Int8		nDNDActions = DND_ACTION_COPYMOVE;
 
         if( eDragType == NAVIGATOR_DRAGTYPE_LINK )
-            nDNDActions = DND_ACTION_LINK;  // #93240# Either COPY *or* LINK, never both!
+            nDNDActions = DND_ACTION_LINK;	// #93240# Either COPY *or* LINK, never both!
 
         SvTreeListBox::ReleaseMouse();
 
@@ -1060,7 +1060,7 @@ void SdPageObjsTLB::DoDrag()
         ::com::sun::star::uno::Sequence<sal_Int8> aSequence (sizeof(SvLBoxDDInfo));
         memcpy(aSequence.getArray(), (sal_Char*)&aDDInfo, sizeof(SvLBoxDDInfo));
         ::com::sun::star::uno::Any aTreeListBoxData (aSequence);
-
+        
         // object is destroyed by internal reference mechanism
         SdTransferable* pTransferable = new SdPageObjsTLB::SdPageObjsTransferable(
             *this, aBookmark, *pDocShell, eDragType, aTreeListBoxData);
@@ -1141,7 +1141,7 @@ void SdPageObjsTLB::OnDragFinished( sal_uInt8 )
 sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
 {
     sal_Int8 nResult (DND_ACTION_NONE);
-
+    
     if ( !bIsInDrag && IsDropFormatSupported( FORMAT_FILE ) )
     {
         nResult = rEvent.mnAction;
@@ -1170,11 +1170,11 @@ sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
             }
         }
     }
-
+    
     // Hide emphasis when there is no valid drop action.
     if (nResult == DND_ACTION_NONE)
         ImplShowTargetEmphasis(pTargetEntry, FALSE);
-
+    
     return nResult;
 }
 
@@ -1193,16 +1193,16 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
         if( !bIsInDrag )
         {
             SdNavigatorWin* pNavWin = NULL;
-            USHORT          nId = SID_NAVIGATOR;
-
+            USHORT			nId = SID_NAVIGATOR;
+            
             if( mpFrame->HasChildWindow( nId ) )
                 pNavWin = (SdNavigatorWin*)( mpFrame->GetChildWindow( nId )->GetContextWindow( SD_MOD() ) );
-
+            
             if( pNavWin && ( pNavWin == mpParent ) )
             {
-                TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
-                String                  aFile;
-
+                TransferableDataHelper	aDataHelper( rEvt.maDropEvent.Transferable );
+                String					aFile;
+                
                 if( aDataHelper.GetString( FORMAT_FILE, aFile ) &&
                     ( (SdNavigatorWin*) mpParent)->InsertFile( aFile ) )
                 {
@@ -1231,8 +1231,8 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 IMPL_STATIC_LINK(SdPageObjsTLB, ExecDragHdl, void*, EMPTYARG)
 {
-    //  als Link, damit asynchron ohne ImpMouseMoveMsg auf dem Stack auch der
-    //  Navigator geloescht werden darf
+    //	als Link, damit asynchron ohne ImpMouseMoveMsg auf dem Stack auch der
+    //	Navigator geloescht werden darf
     pThis->DoDrag();
     return 0;
 }
@@ -1335,7 +1335,7 @@ SvLBoxEntry* SdPageObjsTLB::GetDropTarget (const Point& rLocation)
     if (pEntry == NULL)
         return NULL;
 
-        OSL_TRACE("entry is %s",
+        OSL_TRACE("entry is %s", 
             ::rtl::OUStringToOString(GetEntryText(pEntry), RTL_TEXTENCODING_UTF8).getStr());
     if (GetParent(pEntry) == NULL)
     {
@@ -1359,7 +1359,7 @@ SvLBoxEntry* SdPageObjsTLB::GetDropTarget (const Point& rLocation)
             else
                 break;
         }
-        OSL_TRACE("returning %s",
+        OSL_TRACE("returning %s", 
             ::rtl::OUStringToOString(GetEntryText(pEntry), RTL_TEXTENCODING_UTF8).getStr());
     }
 
@@ -1373,7 +1373,7 @@ bool SdPageObjsTLB::IsDropAllowed (SvLBoxEntry* pEntry)
 {
     if (pEntry == NULL)
         return false;
-
+    
     if ( ! IsDropFormatSupported(SdPageObjsTransferable::GetListBoxDropFormatId()))
         return false;
 
@@ -1425,7 +1425,7 @@ void SdPageObjsTLB::AddShapeToTransferable (
     Point aDragPos (rObject.GetCurrentBoundRect().Center());
     //Point aDragPos (0,0);
     aObjectDescriptor.maDragStartPos = aDragPos;
-    //  aObjectDescriptor.maSize = GetAllMarkedRect().GetSize();
+    //	aObjectDescriptor.maSize = GetAllMarkedRect().GetSize();
     if (pDocShell != NULL)
         aObjectDescriptor.maDisplayName = pDocShell->GetMedium()->GetURLObject().GetURLNoPass();
     else

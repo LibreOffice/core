@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,63 +73,63 @@ enum ShowWindowMode
 class ShowWindow
     : public ::sd::Window
 {
-//  friend class ShowWindowImpl;
+//	friend class ShowWindowImpl;
 public:
     ShowWindow ( const ::rtl::Reference< ::sd::SlideshowImpl >& xController, ::Window* pParent );
     virtual ~ShowWindow (void);
 
-       BOOL         SetEndMode();
-    BOOL            SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeoutSec = SLIDE_NO_TIMEOUT, Graphic* pLogo = NULL );
-    BOOL            SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlankColor );
+       BOOL			SetEndMode();
+    BOOL			SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeoutSec = SLIDE_NO_TIMEOUT, Graphic* pLogo = NULL );
+    BOOL			SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlankColor );
 
-    const Color&        GetBlankColor() const { return maShowBackground.GetColor(); }
+    const Color&		GetBlankColor() const { return maShowBackground.GetColor(); }
 
-    void            SetPreviewMode();
-    void            SetPresentationArea( const Rectangle& rPresArea );
+    void			SetPreviewMode();
+    void			SetPresentationArea( const Rectangle& rPresArea );
 
-    void            SetMouseAutoHide( bool bMouseAutoHide ) { mbMouseAutoHide = bMouseAutoHide; }
+    void			SetMouseAutoHide( bool bMouseAutoHide ) { mbMouseAutoHide = bMouseAutoHide; }
 
     ShowWindowMode  GetShowWindowMode() const { return meShowWindowMode; }
 
-    void            RestartShow( sal_Int32 nPageIndexToRestart );
+    void			RestartShow( sal_Int32 nPageIndexToRestart );
 
-    virtual void    Move();
-    virtual void    Resize();
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
-//  virtual void    GrabFocus();
+    virtual void	Move();
+    virtual void	Resize();
+    virtual void	GetFocus();
+    virtual void	LoseFocus();
+//	virtual void	GrabFocus();
 
-    virtual void    KeyInput(const KeyEvent& rKEvt);
-    virtual void    MouseMove(const MouseEvent& rMEvt);
-    virtual void    MouseButtonUp(const MouseEvent& rMEvt);
-    virtual void    MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void    Paint(const Rectangle& rRect);
-    virtual long    Notify(NotifyEvent& rNEvt);
+    virtual void	KeyInput(const KeyEvent& rKEvt);
+    virtual void	MouseMove(const MouseEvent& rMEvt);
+    virtual void	MouseButtonUp(const MouseEvent& rMEvt);
+    virtual void	MouseButtonDown(const MouseEvent& rMEvt);
+    virtual void	Paint(const Rectangle& rRect);
+    virtual long	Notify(NotifyEvent& rNEvt);
 
-    void            TerminateShow();
-    void            RestartShow();
-
-private:
-    void            DrawPauseScene( BOOL bTimeoutOnly );
-    void            DrawEndScene();
-    void            DrawBlankScene();
-
-    void            DeleteWindowFromPaintView();
-    void            AddWindowToPaintView();
+    void			TerminateShow();
+    void			RestartShow();
 
 private:
-    Timer           maPauseTimer;
-    Timer           maMouseTimer;
-    Wallpaper       maShowBackground;
-    Graphic         maLogo;
-    ULONG           mnPauseTimeout;
-    sal_Int32       mnRestartPageIndex;
+    void			DrawPauseScene( BOOL bTimeoutOnly );
+    void			DrawEndScene();
+    void			DrawBlankScene();
+
+    void			DeleteWindowFromPaintView();
+    void			AddWindowToPaintView();
+
+private:
+    Timer			maPauseTimer;
+    Timer			maMouseTimer;
+    Wallpaper		maShowBackground;
+    Graphic			maLogo;
+    ULONG			mnPauseTimeout;
+    sal_Int32		mnRestartPageIndex;
     ShowWindowMode  meShowWindowMode;
-    BOOL            mbShowNavigatorAfterSpecialMode;
-    Rectangle       maPresArea;
-    bool            mbMouseAutoHide;
-    bool            mbMouseCursorHidden;
-    ULONG           mnFirstMouseMove;
+    BOOL			mbShowNavigatorAfterSpecialMode;
+    Rectangle		maPresArea;
+    bool			mbMouseAutoHide;
+    bool			mbMouseCursorHidden;
+    ULONG			mnFirstMouseMove;
 
                     DECL_LINK( PauseTimeoutHdl, Timer* pTimer );
                     DECL_LINK( MouseTimeoutHdl, Timer* pTimer );

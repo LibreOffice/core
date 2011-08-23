@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ bool Animator::ServeAnimations (void)
 void Animator::CleanUpAnimationList (void)
 {
     AnimationList aActiveAnimations;
-
+    
     AnimationList::const_iterator iAnimation;
     for (iAnimation=maAnimations.begin(); iAnimation!=maAnimations.end(); ++iAnimation)
     {
@@ -174,7 +174,7 @@ Animator::Animation::Animation (
 
     maAnimation(mnValue);
     mnValue = mnDelta;
-
+ 
 }
 
 

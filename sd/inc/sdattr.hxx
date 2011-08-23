@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 
 
 //==================================================================
-//  Layer-Attribute
+//	Layer-Attribute
 //==================================================================
 
 class SdAttrLayerName : public SfxStringItem
@@ -119,10 +119,10 @@ public:
             DiaEffectItem( ::com::sun::star::presentation::FadeEffect eFade = com::sun::star::presentation::FadeEffect_NONE );
             DiaEffectItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
-            USHORT          GetValueCount() const { return FADE_EFFECT_COUNT; }
-            ::com::sun::star::presentation::FadeEffect      GetValue() const
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Create( SvStream& rIn, USHORT nVer ) const;
+            USHORT			GetValueCount() const { return FADE_EFFECT_COUNT; }
+            ::com::sun::star::presentation::FadeEffect		GetValue() const
                             { return (::com::sun::star::presentation::FadeEffect) SfxEnumItem::GetValue(); }
 };
 
@@ -135,10 +135,10 @@ public:
             DiaSpeedItem( FadeSpeed = FADE_SPEED_MEDIUM );
             DiaSpeedItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
-            USHORT          GetValueCount() const { return FADE_SPEED_COUNT; }
-            FadeSpeed       GetValue() const
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Create( SvStream& rIn, USHORT nVer ) const;
+            USHORT			GetValueCount() const { return FADE_SPEED_COUNT; }
+            FadeSpeed		GetValue() const
                             { return (FadeSpeed) SfxEnumItem::GetValue(); }
 };
 
@@ -151,10 +151,10 @@ public:
             DiaAutoItem( PresChange = PRESCHANGE_MANUAL );
             DiaAutoItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
-            USHORT          GetValueCount() const { return PRESCHANGE_COUNT; }
-            PresChange      GetValue() const { return (PresChange) SfxEnumItem::GetValue(); }
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Create( SvStream& rIn, USHORT nVer ) const;
+            USHORT			GetValueCount() const { return PRESCHANGE_COUNT; }
+            PresChange		GetValue() const { return (PresChange) SfxEnumItem::GetValue(); }
 };
 
 //------------------------------------------------------------------
@@ -166,7 +166,7 @@ public:
             DiaTimeItem( UINT32 nValue = 0L );
 
     virtual SfxPoolItem* Clone( SfxItemPool* pPool = 0 ) const;
-    virtual int          operator==( const SfxPoolItem& ) const;
+    virtual int 		 operator==( const SfxPoolItem& ) const;
 };
 
 #endif // _SDATTR_HXX

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,14 +48,14 @@ public:
     typedef sal_uInt32 EventId;
     /** The EventMultiplexer itself is being disposed.  Called for a live
         EventMultiplexer.  Removing a listener as response is not necessary,
-        though.
+        though. 
     */
     static const EventId EID_DISPOSING              = 0x00000001;
-
+    
     /** The selection in the center pane has changed.
     */
     static const EventId EID_EDIT_VIEW_SELECTION    = 0x00000002;
-
+    
     /** The selection in the slide sorter has changed, regardless of whether
         the slide sorter is displayed in the left pane or the center pane.
     */
@@ -69,7 +69,7 @@ public:
         pane) has been removed.
     */
     static const EventId EID_MAIN_VIEW_REMOVED      = 0x00000010;
-
+    
     /** A new ViewShell has been made the MainViewShell.
     */
     static const EventId EID_MAIN_VIEW_ADDED        = 0x00000020;
@@ -102,7 +102,7 @@ public:
     /** Text editing in one of the shapes in the MainViewShell has started.
     */
     static const EventId EID_BEGIN_TEXT_EDIT        = 0x00000800;
-
+    
     /** Text editing in one of the shapes in the MainViewShell has ended.
     */
     static const EventId EID_END_TEXT_EDIT          = 0x00001000;
@@ -110,7 +110,7 @@ public:
     /** A UNO controller has been attached to the UNO frame.
     */
     static const EventId EID_CONTROLLER_ATTACHED    = 0x00002000;
-
+    
     /** A UNO controller has been detached to the UNO frame.
     */
     static const EventId EID_CONTROLLER_DETACHED    = 0x00004000;
@@ -120,7 +120,7 @@ public:
     static const EventId EID_SHAPE_CHANGED          = 0x00008000;
 
     /** A shape has been inserted to a page.  The page is available in the
-        user data.
+        user data. 
     */
     static const EventId EID_SHAPE_INSERTED         = 0x00010000;
 
@@ -157,7 +157,7 @@ public:
 
     When a listener is registered it can specify the events it
     wants to be informed of.  This can be done with code like the following:
-
+    
     mrViewShellBase.GetEventMultiplexer().AddEventListener (
         LINK(this,MasterPagesSelector,EventMultiplexerListener),
         tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
@@ -187,7 +187,7 @@ public:
             be informed about.
     */
     void AddEventListener (
-        Link& rCallback,
+        Link& rCallback, 
         EventMultiplexerEvent::EventId aEventTypeSet);
 
     /** Remove an event listener for the specified event types.
@@ -198,7 +198,7 @@ public:
             for.
     */
     void RemoveEventListener (
-        Link& rCallback,
+        Link& rCallback, 
         EventMultiplexerEvent::EventId aEventTypeSet = EID_FULL_SET);
 
     /** This method is used for out-of-line events.  An event of the

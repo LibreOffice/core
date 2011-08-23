@@ -2,7 +2,7 @@
 /************************************************************************* *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/gradient.hxx>
-#include <vcl/salbtype.hxx> // FRound
+#include <vcl/salbtype.hxx>	// FRound
 #include <vcl/cursor.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -102,12 +102,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::office;
 using namespace ::com::sun::star::text;
 
-#define METABUTTON_WIDTH        16
-#define METABUTTON_HEIGHT       18
-#define METABUTTON_AREA_WIDTH   30
-#define POSTIT_META_HEIGHT  (sal_Int32)     30
+#define METABUTTON_WIDTH		16
+#define METABUTTON_HEIGHT		18
+#define METABUTTON_AREA_WIDTH	30
+#define POSTIT_META_HEIGHT	(sal_Int32)		30
 
-#define EMPTYSTRING             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(""))
+#define EMPTYSTRING				rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(""))
 
 namespace sd {
 
@@ -117,9 +117,9 @@ extern com::sun::star::util::DateTime getCurrentDateTime();
 
 Color ColorFromAlphaColor(UINT8 aTransparency, Color &aFront, Color &aBack )
 {
-    return Color((UINT8)(aFront.GetRed()    * aTransparency/(double)255 + aBack.GetRed()    * (1-aTransparency/(double)255)),
-                 (UINT8)(aFront.GetGreen()  * aTransparency/(double)255 + aBack.GetGreen()  * (1-aTransparency/(double)255)),
-                 (UINT8)(aFront.GetBlue()   * aTransparency/(double)255 + aBack.GetBlue()   * (1-aTransparency/(double)255)));
+    return Color((UINT8)(aFront.GetRed()	* aTransparency/(double)255	+ aBack.GetRed()	* (1-aTransparency/(double)255)),
+                 (UINT8)(aFront.GetGreen()	* aTransparency/(double)255	+ aBack.GetGreen()	* (1-aTransparency/(double)255)),
+                 (UINT8)(aFront.GetBlue()	* aTransparency/(double)255	+ aBack.GetBlue()	* (1-aTransparency/(double)255)));
 }
 
 /************ AnnotationTextWindow **********************************/
@@ -324,8 +324,8 @@ void AnnotationWindow::InitControls()
     mpMeta->AlwaysDisableInput(true);
     mpMeta->SetCallHandlersOnInputDisabled(true);
 
-//  mpMeta->AddEventListener( LINK( mpPostItTxt, PostItTxt, WindowEventListener ) );
-//  AddEventListener( LINK( mpTextWindow, PostItTxt, WindowEventListener ) );
+//	mpMeta->AddEventListener( LINK( mpPostItTxt, PostItTxt, WindowEventListener ) );
+//	AddEventListener( LINK( mpTextWindow, PostItTxt, WindowEventListener ) );
 
     // we should leave this setting alone, but for this we need a better layout algo
     // with variable meta size height
@@ -353,9 +353,9 @@ void AnnotationWindow::InitControls()
     mpTextWindow->SetOutlinerView(mpOutlinerView);
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,1,1) ) );
 
-//  SfxItemSet item(DocShell()->GetPool());
-//  item.Put(SvxFontHeightItem(352,100,EE_CHAR_FONTHEIGHT));
-//  mpOutlinerView->SetAttribs(item);
+//	SfxItemSet item(DocShell()->GetPool());
+//	item.Put(SvxFontHeightItem(352,100,EE_CHAR_FONTHEIGHT));
+//	mpOutlinerView->SetAttribs(item);
 
     // TODO: ??
     EEHorizontalTextDirection aDefHoriTextDir = Application::GetSettings().GetLayoutRTL() ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
@@ -367,7 +367,7 @@ void AnnotationWindow::InitControls()
     mpVScrollbar->EnableRTL( false );
     mpVScrollbar->SetScrollHdl(LINK(this, AnnotationWindow, ScrollHdl));
     mpVScrollbar->EnableDrag();
-//  mpVScrollbar->AddEventListener( LINK( this, AnnotationWindow, WindowEventListener ) );
+//	mpVScrollbar->AddEventListener( LINK( this, AnnotationWindow, WindowEventListener ) );
 
     ULONG nCntrl = mpOutliner->GetControlWord();
     nCntrl |= EE_CNTRL_PASTESPECIAL | EE_CNTRL_AUTOCORRECT  | EV_CNTRL_AUTOSCROLL | EE_CNTRL_NOCOLORS;
@@ -382,7 +382,7 @@ void AnnotationWindow::InitControls()
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
 */
     mpOutliner->SetControlWord(nCntrl);
-//  mpOutliner->SetFlatMode( TRUE );
+//	mpOutliner->SetFlatMode( TRUE );
 
     Engine()->SetModifyHdl( Link() );
     Engine()->EnableUndo( FALSE );
@@ -428,14 +428,14 @@ void AnnotationWindow::Rescale()
 
 void AnnotationWindow::DoResize()
 {
-    unsigned long aWidth    =   GetSizePixel().Width();
-    long aHeight            =   GetSizePixel().Height() - POSTIT_META_HEIGHT;
+    unsigned long aWidth	=	GetSizePixel().Width();
+    long aHeight			=	GetSizePixel().Height() - POSTIT_META_HEIGHT;
 
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
-    long aTextHeight        =   LogicToPixel( mpOutliner->CalcTextSize()).Height();
+    long aTextHeight		=   LogicToPixel( mpOutliner->CalcTextSize()).Height();
 
     if( aTextHeight > aHeight )
-    {   // we need vertical scrollbars and have to reduce the width
+    {	// we need vertical scrollbars and have to reduce the width
         aWidth -= GetScrollbarWidth();
         mpVScrollbar->Show();
     }
@@ -454,7 +454,7 @@ void AnnotationWindow::DoResize()
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
     if (!mpVScrollbar->IsVisible())
-    {   // if we do not have a scrollbar anymore, we want to see the complete text
+    {	// if we do not have a scrollbar anymore, we want to see the complete text
         mpOutlinerView->SetVisArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
     }
     mpVScrollbar->SetPosSizePixel( 0 + aWidth, 0, GetScrollbarWidth(), aHeight );
@@ -552,7 +552,7 @@ IMPL_LINK(AnnotationWindow, ModifyHdl, void*, EMPTYARG)
 sal_Int32 AnnotationWindow::GetScrollbarWidth()
 {
     return 16;
-//  return mpView->GetWrtShell().GetViewOptions()->GetZoom() / 10;
+//	return mpView->GetWrtShell().GetViewOptions()->GetZoom() / 10;
 }
 
 SvxLanguageItem AnnotationWindow::GetLanguage(void)

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@
 #include <boost/optional.hpp>
 
 namespace cppcanvas
-{
-    class Canvas;
+{ 
+    class Canvas; 
     class CustomSprite;
 }
 
@@ -52,7 +52,7 @@ namespace slideshow {
 namespace internal {
 
 /** Base class for all slide change effects.
-
+    
     This class provides the basic sprite and view handling
     functionality.  Derived classes should normally only need to
     implement the perform() method.
@@ -66,20 +66,20 @@ public:
     // NumberAnimation
     virtual bool operator()( double x );
     virtual double getUnderlyingValue() const;
-
+    
     // Animation
     virtual void prefetch( const AnimatableShapeSharedPtr&,
                            const ShapeAttributeLayerSharedPtr& );
     virtual void start( const AnimatableShapeSharedPtr&,
                         const ShapeAttributeLayerSharedPtr& );
-    virtual void end();
+    virtual void end();    
 
     // ViewEventHandler
     virtual void viewAdded( const UnoViewSharedPtr& rView );
     virtual void viewRemoved( const UnoViewSharedPtr& rView );
     virtual void viewChanged( const UnoViewSharedPtr& rView );
     virtual void viewsChanged();
-
+    
 protected:
     /** Create a new SlideChanger, for the given leaving and
         entering slides.
@@ -91,7 +91,7 @@ protected:
         const UnoViewContainer&                   rViewContainer,
         ScreenUpdater&                            rScreenUpdater,
         EventMultiplexer&                         rEventMultiplexer,
-        bool                                      bCreateLeavingSprites = true,
+        bool                                      bCreateLeavingSprites = true, 
         bool                                      bCreateEnteringSprites = true );
 
     /// Info on a per-view basis
@@ -99,8 +99,8 @@ protected:
     {
         ViewEntry() {}
 
-        explicit ViewEntry( const UnoViewSharedPtr& rView ) :
-            mpView( rView )
+        explicit ViewEntry( const UnoViewSharedPtr& rView ) : 
+            mpView( rView ) 
         {
         }
 
@@ -126,24 +126,24 @@ protected:
 
     SlideBitmapSharedPtr getLeavingBitmap( const ViewEntry& rViewEntry ) const;
     SlideBitmapSharedPtr getEnteringBitmap( const ViewEntry& rViewEntry ) const;
-
+    
     SlideBitmapSharedPtr createBitmap( const UnoViewSharedPtr&                pView,
                                        const boost::optional<SlideSharedPtr>& rSlide_ ) const;
-
+    
     ::basegfx::B2ISize getEnteringSlideSizePixel( const UnoViewSharedPtr& pView ) const;
     ::basegfx::B2ISize getLeavingSlideSizePixel( const UnoViewSharedPtr& pView ) const;
 
     void renderBitmap( SlideBitmapSharedPtr const&                 pSlideBitmap,
-                       boost::shared_ptr<cppcanvas::Canvas> const& pCanvas );
-
+                       boost::shared_ptr<cppcanvas::Canvas> const& pCanvas );    
+    
     /** Called on derived classes to implement actual slide change.
-
+        
         This method is called with the sprite of the slide coming 'in'
-
+        
         @param rSprite
         Current sprite to operate on. This is the sprite of the
         'entering' slide
-
+        
         @param t
         Current parameter value
     */
@@ -152,15 +152,15 @@ protected:
         const ViewEntry&                                    rViewEntry,
         const boost::shared_ptr<cppcanvas::Canvas>&         rDestinationCanvas,
         double                                              t );
-
+    
     /** Called on derived classes to implement actual slide change.
-
+        
         This method is called with the sprite of the slide moving 'out'
-
+        
         @param rSprite
         Current sprite to operate on. This is the sprite of the
         'leaving' slide
-
+        
         @param t
         Current parameter value
     */
@@ -173,7 +173,7 @@ protected:
     ScreenUpdater& getScreenUpdater() const { return mrScreenUpdater; }
 
 private:
-
+    
     boost::shared_ptr<cppcanvas::CustomSprite> createSprite(
         UnoViewSharedPtr const &   pView,
         ::basegfx::B2DSize const & rSpriteSize,
@@ -186,13 +186,13 @@ private:
     ViewsVecT::const_iterator lookupView( UnoViewSharedPtr const & pView ) const;
 
     SoundPlayerSharedPtr                mpSoundPlayer;
-
+    
     EventMultiplexer&                   mrEventMultiplexer;
     ScreenUpdater&                      mrScreenUpdater;
 
     ::boost::optional<SlideSharedPtr>   maLeavingSlide;
     SlideSharedPtr                      mpEnteringSlide;
-
+    
     ViewsVecT                           maViewData;
     const UnoViewContainer&             mrViewContainer;
 

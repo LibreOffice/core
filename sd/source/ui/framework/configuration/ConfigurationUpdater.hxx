@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ public:
     void SetControllerManager(
         const css::uno::Reference<
             css::drawing::framework::XControllerManager>& rxControllerManager);
-
+    
     /** Request an update of the current configuration so that it looks like
         the given requested configuration.  It checks whether an update of
         the current configuration can be done.  Calls UpdateConfiguration()
@@ -91,7 +91,7 @@ public:
         made.
     */
     ::boost::shared_ptr<ConfigurationUpdaterLock> GetLock (void);
-
+    
 private:
     /** A reference to the XControllerManager is kept so that
         UpdateConfiguration() has access to the other sub controllers.
@@ -123,13 +123,13 @@ private:
         resets the flag to </FALSE>.
     */
     bool mbUpdatePending;
-
+    
     /** This flag is set to </TRUE> while the UpdateConfiguration() method
         is running.  It is used to prevent reentrance problems with this
         method.
     */
     bool mbUpdateBeingProcessed;
-
+    
     /** The ConfigurationController is locked when this count has a value
         larger then zero.  If the controller is locked then updates of the
         current configuration are not made.

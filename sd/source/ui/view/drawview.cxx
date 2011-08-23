@@ -2,7 +2,7 @@
     /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -204,9 +204,9 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                 else if (eObjKind == OBJ_OUTLINETEXT)
                 {
                     // Presentation object outline
-                    OutlinerView* pOV   = GetTextEditOutlinerView();
+                    OutlinerView* pOV	= GetTextEditOutlinerView();
                     ::Outliner* pOutliner = pOV->GetOutliner();
-                    List*         pList = (List*)pOV->CreateSelectionList();
+                    List*		  pList = (List*)pOV->CreateSelectionList();
                     aTemplateName += String(SdResId(STR_LAYOUT_OUTLINE));
 
                     pOutliner->SetUpdateMode(FALSE);
@@ -285,7 +285,7 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
         {
             // Selection
             const SdrMarkList& rList = GetMarkedObjectList();
-            ULONG nMarkCount         = rList.GetMarkCount();
+            ULONG nMarkCount		 = rList.GetMarkCount();
             for (ULONG nMark = 0; nMark < nMarkCount; nMark++)
             {
                 SdrObject* pObject = rList.GetMark(nMark)->GetMarkedSdrObj();
@@ -380,7 +380,7 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                 bOk = ::sd::View::SetAttributes(rSet, bReplaceAll);
         }
     }
-    else    // nicht auf der Masterpage
+    else	// nicht auf der Masterpage
     {
         bOk = ::sd::View::SetAttributes(rSet, bReplaceAll);
     }

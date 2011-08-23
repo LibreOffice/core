@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ class View;
 |* Dialog zum Einstellen des Bildschirms
 |*
 \************************************************************************/
-class CopyDlg
+class CopyDlg 
     : public SfxModalDialog
 {
 public:
@@ -55,43 +55,43 @@ public:
         XColorTable* pColTab, ::sd::View* pView );
     ~CopyDlg();
 
-    void    GetAttr( SfxItemSet& rOutAttrs );
+    void	GetAttr( SfxItemSet& rOutAttrs );
     DECL_LINK( Reset, void* );
 
 private:
-    FixedText           maFtCopies;
-    NumericField        maNumFldCopies;
-    ImageButton         maBtnSetViewData;
+    FixedText			maFtCopies;
+    NumericField		maNumFldCopies;
+    ImageButton			maBtnSetViewData;
 
-    FixedText           maFtMoveX;
-    MetricField         maMtrFldMoveX;
-    FixedText           maFtMoveY;
-    MetricField         maMtrFldMoveY;
-    FixedText           maFtAngle;
-    MetricField         maMtrFldAngle;
-    FixedLine           maGrpMovement;
+    FixedText			maFtMoveX;
+    MetricField 		maMtrFldMoveX;
+    FixedText			maFtMoveY;
+    MetricField 		maMtrFldMoveY;
+    FixedText			maFtAngle;
+    MetricField 		maMtrFldAngle;
+    FixedLine			maGrpMovement;
 
-    FixedText           maFtWidth;
-    MetricField         maMtrFldWidth;
-    FixedText           maFtHeight;
-    MetricField         maMtrFldHeight;
-    FixedLine           maGrpEnlargement;
+    FixedText			maFtWidth;
+    MetricField 		maMtrFldWidth;
+    FixedText			maFtHeight;
+    MetricField 		maMtrFldHeight;
+    FixedLine			maGrpEnlargement;
 
-    FixedText           maFtStartColor;
-    ColorLB             maLbStartColor;
-    FixedText           maFtEndColor;
-    ColorLB             maLbEndColor;
-    FixedLine           maGrpColor;
+    FixedText			maFtStartColor;
+    ColorLB 			maLbStartColor;
+    FixedText			maFtEndColor;
+    ColorLB 			maLbEndColor;
+    FixedLine			maGrpColor;
 
-    OKButton            maBtnOK;
-    CancelButton        maBtnCancel;
-    HelpButton          maBtnHelp;
-    PushButton          maBtnSetDefault;
+    OKButton			maBtnOK;
+    CancelButton		maBtnCancel;
+    HelpButton			maBtnHelp;
+    PushButton			maBtnSetDefault;
 
-    const SfxItemSet&   mrOutAttrs;
-    XColorTable*        mpColorTab;
-    Fraction            maUIScale;
-    ::sd::View*         mpView;
+    const SfxItemSet&	mrOutAttrs;
+    XColorTable*		mpColorTab;
+    Fraction			maUIScale;
+    ::sd::View*			mpView;
 
     DECL_LINK( SelectColorHdl, void * );
     DECL_LINK( SetViewData, void * );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class SdrLayer;
 
 class SdLayerModifyUndoAction : public SdUndoAction
 {
-
+    
 public:
     TYPEINFO();
     SdLayerModifyUndoAction( SdDrawDocument* _pDoc, SdrLayer* pLayer,
@@ -64,6 +64,6 @@ private:
     bool mbNewIsPrintable;
 };
 
-#endif      // _SD_UNDOLAYER_HXX
+#endif		// _SD_UNDOLAYER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

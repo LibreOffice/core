@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace slideshow
             ENSURE_OR_THROW( mpWakeupEvent,
                               "DiscreteActivityBase::DiscreteActivityBase(): Invalid wakeup event" );
 
-            ENSURE_OR_THROW( !maDiscreteTimes.empty(),
+            ENSURE_OR_THROW( !maDiscreteTimes.empty(), 
                               "DiscreteActivityBase::DiscreteActivityBase(): time vector is empty, why do you create me?" );
 
 #ifdef DBG_UTIL
@@ -61,7 +61,7 @@ namespace slideshow
             for( ::std::size_t i=1, len=maDiscreteTimes.size(); i<len; ++i )
             {
                 if( maDiscreteTimes[i] < 0.0 ||
-                    maDiscreteTimes[i] > 1.0 ||
+                    maDiscreteTimes[i] > 1.0 || 
                     maDiscreteTimes[i-1] < 0.0 ||
                     maDiscreteTimes[i-1] > 1.0 )
                 {
@@ -82,8 +82,8 @@ namespace slideshow
             mpWakeupEvent->start();
         }
 
-        sal_uInt32 DiscreteActivityBase::calcFrameIndex( sal_uInt32     nCurrCalls,
-                                                         ::std::size_t  nVectorSize ) const
+        sal_uInt32 DiscreteActivityBase::calcFrameIndex( sal_uInt32 	nCurrCalls,
+                                                         ::std::size_t 	nVectorSize ) const
         {
             if( isAutoReverse() )
             {
@@ -104,8 +104,8 @@ namespace slideshow
             }
         }
 
-        sal_uInt32 DiscreteActivityBase::calcRepeatCount( sal_uInt32    nCurrCalls,
-                                                          ::std::size_t nVectorSize ) const
+        sal_uInt32 DiscreteActivityBase::calcRepeatCount( sal_uInt32 	nCurrCalls,
+                                                          ::std::size_t	nVectorSize ) const
         {
             if( isAutoReverse() )
                 return nCurrCalls / (2*nVectorSize); // we've got 2 cycles per repeat
@@ -126,11 +126,11 @@ namespace slideshow
 
             // TODO(Q3): Refactor this mess
 
-            // call derived class with current frame index (modulo
+            // call derived class with current frame index (modulo 
             // vector size, to cope with repeats)
-            perform( calcFrameIndex( mnCurrPerformCalls, nVectorSize ),
+            perform( calcFrameIndex( mnCurrPerformCalls, nVectorSize ), 
                      calcRepeatCount( mnCurrPerformCalls, nVectorSize ) );
-
+                    
             // calc next index
             ++mnCurrPerformCalls;
 
@@ -143,21 +143,21 @@ namespace slideshow
             if( isAutoReverse() )
                 nCurrRepeat /= 2.0;
 
-            // schedule next frame, if either repeat is indefinite
+            // schedule next frame, if either repeat is indefinite 
             // (repeat forever), or we've not yet reached the requested
             // repeat count
             if( !isRepeatCountValid() ||
                 nCurrRepeat < getRepeatCount() )
             {
-                // add wake-up event to queue (modulo
+                // add wake-up event to queue (modulo 
                 // vector size, to cope with repeats).
 
                 // repeat is handled locally, only apply acceleration/deceleration.
-                // Scale time vector with simple duration, offset with full repeat
+                // Scale time vector with simple duration, offset with full repeat 
                 // times.
                 //
                 // Somewhat condensed, the argument for setNextTimeout below could
-                // be written as
+                // be written as 
                 //
                 // mnSimpleDuration*(nFullRepeats + calcAcceleratedTime( currentRepeatTime )),
                 //
@@ -166,15 +166,15 @@ namespace slideshow
                 // Note that calcAcceleratedTime() is only applied to the current repeat's value,
                 // not to the total resulting time. This is in accordance with the SMIL spec.
                 //
-                mpWakeupEvent->setNextTimeout(
+                mpWakeupEvent->setNextTimeout( 
                     mnSimpleDuration*(
-                        calcRepeatCount(
-                            mnCurrPerformCalls,
-                            nVectorSize ) +
-                        calcAcceleratedTime(
+                        calcRepeatCount( 
+                            mnCurrPerformCalls, 
+                            nVectorSize ) + 
+                        calcAcceleratedTime( 
                             maDiscreteTimes[
-                                calcFrameIndex(
-                                    mnCurrPerformCalls,
+                                calcFrameIndex( 
+                                    mnCurrPerformCalls, 
                                     nVectorSize ) ] ) ) );
 
                 getEventQueue().addEvent( mpWakeupEvent );
@@ -197,7 +197,7 @@ namespace slideshow
             // dispose event
             if( mpWakeupEvent )
                 mpWakeupEvent->dispose();
-
+                    
             // release references
             mpWakeupEvent.reset();
 

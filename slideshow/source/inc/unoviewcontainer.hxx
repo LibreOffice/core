@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include "unoview.hxx"
 
 
-namespace com { namespace sun { namespace star { namespace presentation
+namespace com { namespace sun { namespace star { namespace presentation 
 {
     class XSlideShowView;
 } } } }
@@ -78,7 +78,7 @@ namespace slideshow
                 removed, and an empty shared_ptr otherwise (e.g. if
                 this view wasn't added in the first place)
             */
-            UnoViewSharedPtr removeView( const ::com::sun::star::uno::Reference<
+            UnoViewSharedPtr removeView( const ::com::sun::star::uno::Reference< 
                                                      ::com::sun::star::presentation::XSlideShowView >& xView );
 
             /// Dispose all stored views. Implies clear().
@@ -92,15 +92,15 @@ namespace slideshow
 
             void clear() { maViews.clear(); }
 
-
-            UnoViewVector::iterator         begin() { return maViews.begin(); }
-            UnoViewVector::const_iterator   begin() const { return maViews.begin(); }
-            UnoViewVector::iterator         end() { return maViews.end(); }
-            UnoViewVector::const_iterator   end() const { return maViews.end(); }
+            
+            UnoViewVector::iterator 		begin() { return maViews.begin(); }
+            UnoViewVector::const_iterator 	begin() const { return maViews.begin(); }
+            UnoViewVector::iterator 		end() { return maViews.end(); }
+            UnoViewVector::const_iterator 	end() const { return maViews.end(); }
 
         private:
             /// All added views
-            UnoViewVector   maViews;
+            UnoViewVector	maViews;
         };
 
         typedef ::boost::shared_ptr< UnoViewContainer > UnoViewContainerSharedPtr;

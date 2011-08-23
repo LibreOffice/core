@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,14 +37,14 @@ namespace sd {
 
 class ViewShellBase;
 
-class LayerDialogContent
+class LayerDialogContent 
     : public SfxDockingWindow
 {
 public:
     LayerDialogContent (
-        SfxBindings* pBindings,
+        SfxBindings* pBindings, 
         SfxChildWindow *pCW,
-        ::Window* pParent,
+        ::Window* pParent, 
         const SdResId& rSdResId,
         ViewShellBase& rBase);
     virtual ~LayerDialogContent (void);

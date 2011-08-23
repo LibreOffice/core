@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace slideshow
         {
         public:
             /** Predicate whether this node is constant.
-
+                    
                 This predicate returns true, if this node is
                 neither time- nor ViewInfo dependent. This allows
                 for certain obtimizations, i.e. not the full

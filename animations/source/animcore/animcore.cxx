@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ typedef ::std::list< Reference< XAnimationNode > > ChildList_t;
 
 // ====================================================================
 
-class AnimationNodeBase :   public XAnimateMotion,
+class AnimationNodeBase :	public XAnimateMotion,
                             public XAnimateColor,
                             public XTransitionFilter,
                             public XAnimateSet,
@@ -294,7 +294,7 @@ public:
     void fireChangeListener();
 
 private:
-    OInterfaceContainerHelper   maChangeListener;
+    OInterfaceContainerHelper	maChangeListener;
 
     static void initTypeProvider( sal_Int16 nNodeType ) throw();
 
@@ -312,11 +312,11 @@ private:
     Sequence< NamedValue > maUserData;
 
     // parent interface for XChild interface implementation
-    Reference<XInterface>   mxParent;
-    AnimationNode*          mpParent;
+    Reference<XInterface>	mxParent;
+    AnimationNode*			mpParent;
 
     // attributes for XAnimate
-    Any maTarget;
+    Any	maTarget;
     OUString maAttributeName, maFormula;
     Sequence< Any > maValues;
     Sequence< double > maKeyTimes;
@@ -351,10 +351,10 @@ private:
 
     // XIterateContainer
     sal_Int16 mnIterateType;
-    double  mfIterateInterval;
+    double	mfIterateInterval;
 
     /** sorted list of child nodes for XTimeContainer*/
-    ChildList_t             maChilds;
+    ChildList_t				maChilds;
 };
 
 // ====================================================================
@@ -371,13 +371,13 @@ public:
 
 private:
     /** sorted list of child nodes */
-    ChildList_t             maChilds;
+    ChildList_t				maChilds;
 
     /** current iteration position */
-    ChildList_t::iterator   maIter;
+    ChildList_t::iterator	maIter;
 
     /** our first, last and only protection from mutli-threads! */
-    Mutex                   maMutex;
+    Mutex					maMutex;
 };
 
 TimeContainerEnumeration::TimeContainerEnumeration( const ChildList_t &rChilds )
@@ -398,7 +398,7 @@ sal_Bool SAL_CALL TimeContainerEnumeration::hasMoreElements() throw (RuntimeExce
     return maIter != maChilds.end();
 }
 
-Any SAL_CALL TimeContainerEnumeration::nextElement()
+Any SAL_CALL TimeContainerEnumeration::nextElement() 
     throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
@@ -415,7 +415,7 @@ Sequence< Type >* AnimationNode::mpTypes[] = { NULL, NULL, NULL, NULL, NULL, NUL
 Sequence< sal_Int8 >* AnimationNode::mpId[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
 AnimationNode::AnimationNode( sal_Int16 nNodeType )
-:   maChangeListener(maMutex),
+:	maChangeListener(maMutex),
     mnNodeType( nNodeType ),
     mnFill( AnimationFill::DEFAULT ),
     mnFillDefault( AnimationFill::INHERIT ),
@@ -446,7 +446,7 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
 }
 
 AnimationNode::AnimationNode( const AnimationNode& rNode )
-:   AnimationNodeBase(),
+:	AnimationNodeBase(),
     maChangeListener(maMutex),
     mnNodeType( rNode.mnNodeType ),
 
@@ -493,7 +493,7 @@ AnimationNode::AnimationNode( const AnimationNode& rNode )
 
     // attributes for XAnimateTransform
     mnTransformType( rNode.mnTransformType ),
-
+    
     // attributes for XTransitionFilter
     mnTransition( rNode.mnTransition ),
     mnSubtype( rNode.mnSubtype ),
@@ -647,7 +647,7 @@ void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) throw()
         mpId[nNodeType] = new Sequence< sal_Int8 >( 16 );
         rtl_createUuid( (sal_uInt8 *)mpId[nNodeType]->getArray(), 0, sal_True );
 
-        static sal_Int32 type_numbers[] =
+        static sal_Int32 type_numbers[] = 
         {
             7, // CUSTOM
             9, // PAR
@@ -1162,7 +1162,7 @@ void SAL_CALL AnimationNode::setParent( const Reference< XInterface >& Parent ) 
         mpParent = 0;
         Reference< XUnoTunnel > xTunnel( mxParent, UNO_QUERY );
         if( xTunnel.is() )
-            mpParent = reinterpret_cast< AnimationNode* >( sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething( getUnoTunnelId() )));
+            mpParent = reinterpret_cast< AnimationNode* >( sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething( getUnoTunnelId() ))); 
 
         fireChangeListener();
     }
@@ -1827,7 +1827,7 @@ Reference< XEnumeration > SAL_CALL AnimationNode::createEnumeration()
     throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-
+    
     return new TimeContainerEnumeration( maChilds);
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ using ::sd::framework::FrameworkHelper;
 namespace sd { namespace framework {
 
 namespace {
-
+      
 typedef ::cppu::WeakComponentImplHelper1 <
       ::com::sun::star::frame::XStatusListener
     > LocalReadOnlyModeObserverInterfaceBase;
@@ -103,7 +103,7 @@ public:
             xComponent->removeEventListener(this);
 
     }
-
+    
     virtual void SAL_CALL disposing (const com::sun::star::lang::EventObject& rEvent)
         throw(RuntimeException)
     {
@@ -118,14 +118,14 @@ public:
         }
         dispose();
     }
-
+    
     virtual void SAL_CALL statusChanged (const com::sun::star::frame::FeatureStateEvent& rEvent)
         throw(RuntimeException)
     {
         bool bReadWrite (true);
         if (rEvent.IsEnabled)
             rEvent.State >>= bReadWrite;
-
+        
         if (bReadWrite)
             mpResourceManager->Enable();
         else

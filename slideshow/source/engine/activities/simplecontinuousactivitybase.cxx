@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace slideshow
 
         void SimpleContinuousActivityBase::startAnimation()
         {
-            // init timer. We measure animation time only when we're
+            // init timer. We measure animation time only when we're 
             // actually started.
             maTimer.reset();
         }
@@ -62,7 +62,7 @@ namespace slideshow
             ActivityBase::calcTimeLag();
             if (! isActive())
                 return 0.0;
-
+            
             // retrieve locally elapsed time
             const double nCurrElapsedTime( maTimer.getElapsedTime() );
 
@@ -75,7 +75,7 @@ namespace slideshow
             // here, try to spread the animator calls uniquely over
             // the [0,1] parameter range. Be aware of the fact that
             // perform will be called at least mnMinNumberOfTurns
-            // times.
+            // times. 
 
             // fraction of time elapsed
             const double nFractionElapsedTime(
@@ -110,26 +110,26 @@ namespace slideshow
                 VERBOSE_TRACE( "SimpleContinuousActivityBase::perform(): "
                                "t=%f is based on number of calls",
                                nFractionRequiredCalls );
-
+                
                 // lag global time, so all other animations lag, too:
                 return ((nFractionElapsedTime - nFractionRequiredCalls)
                         * mnMinSimpleDuration);
             }
         }
-
+    
         bool SimpleContinuousActivityBase::perform()
         {
             // call base class, for start() calls and end handling
             if( !ActivityBase::perform() )
                 return false; // done, we're ended
-
+            
 
             // get relative animation position
             // ===============================
-
+            
             const double nCurrElapsedTime( maTimer.getElapsedTime() );
             double nT( nCurrElapsedTime / mnMinSimpleDuration );
-
+            
 
             // one of the stop criteria reached?
             // =================================
@@ -157,7 +157,7 @@ namespace slideshow
                     // to give animation the chance to render the last
                     // frame below
                     bActivityEnding = true;
-
+                            
                     // clamp animation to max permissible value
                     nT = nEffectiveRepeat;
                 }
@@ -202,7 +202,7 @@ namespace slideshow
 
                 // calc simple time and number of repeats from nT
                 // Now, that's easy, since the fractional part of
-                // nT gives the relative simple time, and the
+                // nT gives the relative simple time, and the 
                 // integer part the number of full repeats:
                 nRelativeSimpleTime = modf(nT, &nRepeats);
 

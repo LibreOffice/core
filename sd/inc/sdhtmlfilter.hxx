@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,17 +35,17 @@
 // - SdHTMLFilter -
 // ----------------
 
-class SdHTMLFilter
+class SdHTMLFilter 
     : public SdFilter
 {
 public:
     SdHTMLFilter (
-        SfxMedium& rMedium,
-        ::sd::DrawDocShell& rDocShell,
+        SfxMedium& rMedium, 
+        ::sd::DrawDocShell& rDocShell, 
         sal_Bool bShowProgress);
     virtual ~SdHTMLFilter (void);
 
-    virtual sal_Bool        Export();
+    virtual sal_Bool		Export();
 
 private:
     DECL_LINK( IOProgressHdl, USHORT* );

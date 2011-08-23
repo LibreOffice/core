@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,24 +34,24 @@ namespace slideshow {
 namespace internal {
 
 /** This class implements parallel node containers
-
+    
     All children of this node are played in parallel
 */
 class ParallelTimeContainer : public BaseContainerNode
 {
 public:
     ParallelTimeContainer(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode >& xNode,
+        const ::com::sun::star::uno::Reference< 
+        ::com::sun::star::animations::XAnimationNode >& xNode, 
         const BaseContainerNodeSharedPtr&               rParent,
         const NodeContext&                              rContext )
         : BaseContainerNode( xNode, rParent, rContext ) {}
-
+    
 #if defined(VERBOSE) && defined(DBG_UTIL)
     virtual const char* getDescription() const
         { return "ParallelTimeContainer"; }
 #endif
-
+    
 private:
     virtual void activate_st();
     virtual void notifyDeactivating( AnimationNodeSharedPtr const& pChildNode );

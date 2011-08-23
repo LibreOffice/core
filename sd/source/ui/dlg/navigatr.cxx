@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ static const sal_uInt16 nShowAllShapesFilter=2;
 }
 
 /*************************************************************************
-|*  SdNavigatorWin - FloatingWindow
+|*	SdNavigatorWin - FloatingWindow
 \************************************************************************/
 
 SdNavigatorWin::SdNavigatorWin(
@@ -77,17 +77,17 @@ SdNavigatorWin::SdNavigatorWin(
     ::sd::NavigatorChildWindow* pChWinCtxt,
     const SdResId& rSdResId,
     SfxBindings* pInBindings )
-:   ::Window( pParent, rSdResId )
-,   maToolbox        ( this, SdResId( 1 ) )
-,   maTlbObjects( this, SdResId( TLB_OBJECTS ) )
-,   maLbDocs         ( this, SdResId( LB_DOCS ) )
-,   mpChildWinContext( pChWinCtxt )
-,   mbDocImported   ( FALSE )
+:	::Window( pParent, rSdResId )
+,	maToolbox        ( this, SdResId( 1 ) )
+,	maTlbObjects( this, SdResId( TLB_OBJECTS ) )
+,	maLbDocs         ( this, SdResId( LB_DOCS ) )
+,	mpChildWinContext( pChWinCtxt )
+,	mbDocImported	( FALSE )
     // Bei Aenderung des DragTypes: SelectionMode der TLB anpassen!
-,   meDragType      ( NAVIGATOR_DRAGTYPE_EMBEDDED )
-,   mpBindings      ( pInBindings )
-,   maImageList     ( SdResId( IL_NAVIGATR ) )
-,   maImageListH    ( SdResId( ILH_NAVIGATR ) )
+,	meDragType		( NAVIGATOR_DRAGTYPE_EMBEDDED )
+,	mpBindings		( pInBindings )
+,	maImageList		( SdResId( IL_NAVIGATR ) )
+,	maImageListH	( SdResId( ILH_NAVIGATR ) )
 {
     maTlbObjects.SetViewFrame( mpBindings->GetDispatcher()->GetFrame() );
 
@@ -109,7 +109,7 @@ SdNavigatorWin::SdNavigatorWin(
     // Shape filter drop down menu.
     maToolbox.SetItemBits(TBI_SHAPE_FILTER,
         maToolbox.GetItemBits(TBI_SHAPE_FILTER) | TIB_DROPDOWNONLY);
-
+        
     // TreeListBox
     // set position below toolbox
     long nListboxYPos = maToolbox.GetPosPixel().Y() + maToolbox.GetSizePixel().Height() + 4;
@@ -187,7 +187,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
         maToolbox.EnableItem(TBI_SHAPE_FILTER, FALSE);
     else
         maToolbox.EnableItem(TBI_SHAPE_FILTER);
-
+    
     if( !maTlbObjects.IsEqualToDoc( pDoc ) )
     {
         String aDocName = pDocShell->GetMedium()->GetName();
@@ -203,7 +203,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
         maLbDocs.SelectEntry( aDocShName );
 
 // auskommentiert um 30246 zu fixen
-//        if( maLbDocs.GetSelectEntryCount() == 0 )
+//		  if( maLbDocs.GetSelectEntryCount() == 0 )
         {
             RefreshDocumentLB();
             maLbDocs.SelectEntry( aDocShName );
@@ -340,7 +340,7 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
             //pBox->Invalidate();
         }
         break;
-
+        
         case TBI_SHAPE_FILTER:
         {
             PopupMenu *pMenu = new PopupMenu;
@@ -534,7 +534,7 @@ IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu )
             }
         }
     }
-
+    
     return 0;
 }
 
@@ -580,8 +580,8 @@ void SdNavigatorWin::Resize()
 
 BOOL SdNavigatorWin::InsertFile(const String& rFileName)
 {
-    INetURLObject   aURL( rFileName );
-    BOOL            bReturn = TRUE;
+    INetURLObject	aURL( rFileName );
+    BOOL			bReturn = TRUE;
 
     if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
@@ -622,7 +622,7 @@ BOOL SdNavigatorWin::InsertFile(const String& rFileName)
             // ersteinmal nachgeschaut, ob es einen Storage enthaelt
             SfxMedium* pMedium = new SfxMedium( aFileName,
                                                 STREAM_READ | STREAM_NOCREATE,
-                                                TRUE);                // Download
+                                                TRUE);				  // Download
 
             if (pMedium->IsStorage())
             {
@@ -778,7 +778,7 @@ NavDocInfo* SdNavigatorWin::GetDocInfo()
 long SdNavigatorWin::Notify(NotifyEvent& rNEvt)
 {
     const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-    long            nOK = FALSE;
+    long			nOK = FALSE;
 
     if( pKEvt )
     {
@@ -879,7 +879,7 @@ void SdNavigatorWin::ApplyImageList()
 
 SdNavigatorControllerItem::SdNavigatorControllerItem( USHORT _nId,
                                 SdNavigatorWin* pNavWin,
-                                SfxBindings*    _pBindings) :
+                                SfxBindings*	_pBindings) :
     SfxControllerItem( _nId, *_pBindings ),
     pNavigatorWin( pNavWin )
 {
@@ -965,7 +965,7 @@ void SdNavigatorControllerItem::StateChanged( USHORT nSId,
 
 SdPageNameControllerItem::SdPageNameControllerItem( USHORT _nId,
                                 SdNavigatorWin* pNavWin,
-                                SfxBindings*    _pBindings) :
+                                SfxBindings*	_pBindings) :
     SfxControllerItem( _nId, *_pBindings ),
     pNavigatorWin( pNavWin )
 {

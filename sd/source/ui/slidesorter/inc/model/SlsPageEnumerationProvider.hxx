@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,12 +49,12 @@ public:
         selected slides of the given model.
     */
     static PageEnumeration CreateSelectedPagesEnumeration (const SlideSorterModel& rModel);
-
+    
     /** The returned enumeration of slides iterates over the slides
         (partially) inside the visible area.
     */
     static PageEnumeration CreateVisiblePagesEnumeration (const SlideSorterModel& rModel);
-};
+}; 
 
 } } } // end of namespace ::sd::slidesorter::model
 

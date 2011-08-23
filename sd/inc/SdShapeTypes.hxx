@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,9 +64,9 @@ enum SdShapeTypes
     type of the given shape.
 */
 AccessibleShape*
-    CreateSdAccessibleShape (const ::com::sun::star::uno::Reference<
+    CreateSdAccessibleShape (const ::com::sun::star::uno::Reference< 
         ::com::sun::star::accessibility::XAccessible>& rxParent,
-        const ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference< 
         ::com::sun::star::drawing::XShape>& rxShape
         );
 

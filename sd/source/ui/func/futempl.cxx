@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -247,14 +247,14 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 String aStr;
 
                 if( // if the object had no style sheet, allow all
-                    !pOldStyleSheet ||
-
+                    !pOldStyleSheet || 
+                    
                     // allow if old and new style sheet has same family
                     pStyleSheet->GetFamily() == pOldStyleSheet->GetFamily() ||
-
+                    
                     // allow if old was background objects and new is graphics
                     pStyleSheet->GetFamily() == (SD_STYLE_FAMILY_GRAPHICS && pOldStyleSheet->GetHelpId( aStr ) == HID_PSEUDOSHEET_BACKGROUNDOBJECTS) ||
-
+                    
                     // allow if old was presentation and we are a drawing document
                     (pOldStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE && mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW) )
                 {

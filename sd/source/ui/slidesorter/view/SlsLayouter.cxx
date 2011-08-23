@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,9 +73,9 @@ Layouter::~Layouter (void)
 
 
 void Layouter::SetBorders (
-    sal_Int32 nLeftBorder,
+    sal_Int32 nLeftBorder, 
     sal_Int32 nRightBorder,
-    sal_Int32 nTopBorder,
+    sal_Int32 nTopBorder, 
     sal_Int32 nBottomBorder)
 {
     if (nLeftBorder >= 0)
@@ -92,9 +92,9 @@ void Layouter::SetBorders (
 
 
 void Layouter::SetPageBorders (
-    sal_Int32 nLeftBorder,
+    sal_Int32 nLeftBorder, 
     sal_Int32 nRightBorder,
-    sal_Int32 nTopBorder,
+    sal_Int32 nTopBorder, 
     sal_Int32 nBottomBorder)
 {
     if (nLeftBorder >= 0)
@@ -111,7 +111,7 @@ void Layouter::SetPageBorders (
 
 
 void Layouter::SetColumnCount (
-    sal_Int32 nMinimalColumnCount,
+    sal_Int32 nMinimalColumnCount, 
         sal_Int32 nMaximalColumnCount)
 {
     if (nMinimalColumnCount <= nMaximalColumnCount)
@@ -171,11 +171,11 @@ bool Layouter::RearrangeHorizontal (
         sal_uInt32 nTargetHeight = 0;
         sal_uInt32 nRowCount = 1;
         if (mnColumnCount > 0)
-            nTargetHeight = (rWindowSize.Height()
+            nTargetHeight = (rWindowSize.Height() 
                 - mnTopBorder.mnScreen
                 - mnBottomBorder.mnScreen
-                - nRowCount * (mnTopPageBorder.mnScreen
-                    + mnBottomPageBorder.mnScreen)
+                - nRowCount * (mnTopPageBorder.mnScreen 
+                    + mnBottomPageBorder.mnScreen) 
                 - (nRowCount-1) * mnTotalVerticalGap.mnScreen
                 )
             / nRowCount;
@@ -197,7 +197,7 @@ bool Layouter::RearrangeHorizontal (
         pDevice->SetMapMode (aMapMode);
 
         // Calculate the resulting scale factor and the page object size in
-        // pixels.
+        // pixels. 
         maPageObjectModelSize = rPageObjectSize;
         int nPagePixelHeight (pDevice->LogicToPixel(maPageObjectModelSize).Height());
 
@@ -232,7 +232,7 @@ bool Layouter::RearrangeVertical (
             + mnTopPageBorder.mnScreen + mnBottomPageBorder.mnScreen;
 
         // Calculate the column count.
-        mnColumnCount = (rWindowSize.Width()
+        mnColumnCount = (rWindowSize.Width() 
             - mnRequestedLeftBorder.mnScreen - mnRequestedRightBorder.mnScreen)
             / (mnPreferredWidth  + mnTotalHorizontalGap.mnScreen);
         if (mnColumnCount < mnMinimalColumnCount)
@@ -267,11 +267,11 @@ bool Layouter::RearrangeVertical (
         // Calculate the width of each page object.
         sal_Int32 nTargetWidth = 0;
         if (mnColumnCount > 0)
-            nTargetWidth = (rWindowSize.Width()
+            nTargetWidth = (rWindowSize.Width() 
                 - mnLeftBorder.mnScreen
                 - mnRightBorder.mnScreen
-                - mnColumnCount * (mnRightPageBorder.mnScreen
-                    + mnLeftPageBorder.mnScreen)
+                - mnColumnCount * (mnRightPageBorder.mnScreen 
+                    + mnLeftPageBorder.mnScreen) 
                 - (mnColumnCount-1) * mnTotalHorizontalGap.mnScreen
                 )
             / mnColumnCount;
@@ -289,7 +289,7 @@ bool Layouter::RearrangeVertical (
         pDevice->SetMapMode (aMapMode);
 
         // Calculate the resulting scale factor and the page object size in
-        // pixels.
+        // pixels. 
         maPageObjectModelSize = rPageObjectSize;
         int nPagePixelWidth (pDevice->LogicToPixel (maPageObjectModelSize).Width());
 
@@ -354,7 +354,7 @@ void Layouter::SetZoom (Fraction nZoomFactor, OutputDevice* pDevice)
     mnRightPageBorder.mnModel = aBottomRightPageBorder.Width();
     mnBottomPageBorder.mnModel = aBottomRightPageBorder.Height();
 
-    mnInsertionMarkerThickness.mnModel = pDevice->PixelToLogic (
+    mnInsertionMarkerThickness.mnModel = pDevice->PixelToLogic ( 
         Size(mnInsertionMarkerThickness.mnScreen,0)).Width();
 }
 
@@ -382,7 +382,7 @@ Rectangle Layouter::GetPageObjectBox (sal_Int32 nIndex) const
     int nColumn = nIndex % mnColumnCount;
     int nRow = nIndex / mnColumnCount;
     return Rectangle (
-        Point (mnLeftBorder.mnModel
+        Point (mnLeftBorder.mnModel 
             + nColumn * maPageObjectModelSize.Width()
             + mnLeftPageBorder.mnModel
             + (nColumn>0 ? nColumn : 0) * mnTotalHorizontalGap.mnModel,
@@ -403,20 +403,20 @@ Rectangle Layouter::GetPageBox (sal_Int32 nObjectCount) const
     if (mnColumnCount > 0)
     {
         sal_Int32 nRowCount = (nObjectCount+mnColumnCount-1) / mnColumnCount;
-        nHorizontalSize =
+        nHorizontalSize = 
             mnLeftBorder.mnModel
             + mnRightBorder.mnModel
             + mnColumnCount * maPageObjectModelSize.Width()
             + mnLeftPageBorder.mnModel + mnRightPageBorder.mnModel;
         if (mnColumnCount > 1)
-            nHorizontalSize
+            nHorizontalSize 
                 +=  (mnColumnCount-1) * mnTotalHorizontalGap.mnModel;
-        nVerticalSize =
+        nVerticalSize = 
             mnTopBorder.mnModel
             + mnBottomBorder.mnModel
             + nRowCount * maPageObjectModelSize.Height()
             + mnTopPageBorder.mnModel + mnBottomPageBorder.mnModel;
-        if (nRowCount > 1)
+        if (nRowCount > 1) 
             nVerticalSize += (nRowCount-1) * mnTotalVerticalGap.mnModel;
     }
 
@@ -430,7 +430,7 @@ Rectangle Layouter::GetPageBox (sal_Int32 nObjectCount) const
 
 
 Rectangle Layouter::GetInsertionMarkerBox (
-    sal_Int32 nIndex,
+    sal_Int32 nIndex, 
     bool bVertical,
     bool bLeftOrTop) const
 {
@@ -443,14 +443,14 @@ Rectangle Layouter::GetInsertionMarkerBox (
         if (bLeftOrTop)
         {
             // Left.
-            aBox.Left() -= mnLeftPageBorder.mnModel
+            aBox.Left() -= mnLeftPageBorder.mnModel 
                 + mnHorizontalGap.mnModel
                 - nHorizontalInsertionMarkerOffset;
         }
         else
         {
             // Right.
-            aBox.Left() = aBox.Right()
+            aBox.Left() = aBox.Right() 
                 + mnRightPageBorder.mnModel
                 + nHorizontalInsertionMarkerOffset;
         }
@@ -470,8 +470,8 @@ Rectangle Layouter::GetInsertionMarkerBox (
         else
         {
             // Below.
-            aBox.Top() = aBox.Bottom()
-                + mnBottomPageBorder.mnModel
+            aBox.Top() = aBox.Bottom() 
+                + mnBottomPageBorder.mnModel 
                 + nVerticalInsertionMarkerOffset;
         }
         aBox.Bottom() = aBox.Top() + mnInsertionMarkerThickness.mnModel;
@@ -496,7 +496,7 @@ sal_Int32 Layouter::GetIndexOfFirstVisiblePageObject (
 sal_Int32 Layouter::GetIndexOfLastVisiblePageObject (
     const Rectangle& aVisibleArea) const
 {
-    sal_Int32 nRow = GetRowAtPosition (aVisibleArea.Bottom(),
+    sal_Int32 nRow = GetRowAtPosition (aVisibleArea.Bottom(), 
         true, GM_BOTH);
     return (nRow+1) * mnColumnCount - 1;
 }
@@ -508,13 +508,13 @@ sal_Int32 Layouter::GetIndexAtPoint (
     const Point& rPosition,
     bool bIncludePageBorders) const
 {
-    sal_Int32 nRow = GetRowAtPosition (rPosition.Y(),
+    sal_Int32 nRow = GetRowAtPosition (rPosition.Y(), 
         bIncludePageBorders,
         bIncludePageBorders ? GM_PAGE_BORDER : GM_NONE);
-    sal_Int32 nColumn = GetColumnAtPosition (rPosition.X(),
+    sal_Int32 nColumn = GetColumnAtPosition (rPosition.X(), 
         bIncludePageBorders,
         bIncludePageBorders ? GM_PAGE_BORDER : GM_NONE);
-
+    
     if (nRow >= 0 && nColumn >= 0)
         return nRow * mnColumnCount + nColumn;
     else
@@ -532,7 +532,7 @@ sal_Int32 Layouter::GetIndexAtPoint (
     will yield valid return values.  The horizontal positions between the
     center of page objects in column i and the center of page objects in
     column i+1 will return column i+1 as insertion index.
-
+    
     When there is only one column and bAllowVerticalPosition is true than
     take the vertical areas between rows into account as well.
 */
@@ -542,34 +542,34 @@ sal_Int32 Layouter::GetInsertionIndex (
 {
     sal_Int32 nIndex = -1;
 
-    sal_Int32 nRow = GetRowAtPosition (rPosition.Y(), true,
+    sal_Int32 nRow = GetRowAtPosition (rPosition.Y(), true, 
         (mnColumnCount==1 && bAllowVerticalPosition) ? GM_BOTH : GM_BOTH);
     sal_Int32 nColumn = GetColumnAtPosition (rPosition.X(), true, GM_BOTH);
 
     if (nRow >= 0 && nColumn >= 0)
         nIndex = nRow * mnColumnCount + nColumn;
-
+    
     return nIndex;
 }
 
 
 
 
-Layouter::DoublePoint
+Layouter::DoublePoint 
     Layouter::ConvertModelToLayouterCoordinates (
         const Point& rModelPoint) const
 {
     sal_Int32 nColumn = GetColumnAtPosition (rModelPoint.X(), true, GM_BOTH);
-    sal_Int32 nColumnWidth
+    sal_Int32 nColumnWidth 
         = maPageObjectModelSize.Width() + mnTotalHorizontalGap.mnModel;
-    sal_Int32 nDistanceIntoColumn =
+    sal_Int32 nDistanceIntoColumn = 
         rModelPoint.X() - mnLeftBorder.mnModel - mnLeftPageBorder.mnModel
         - nColumn * nColumnWidth;
 
     sal_Int32 nRow = GetRowAtPosition (rModelPoint.Y(), true, GM_BOTH);
-    sal_Int32 nRowHeight
+    sal_Int32 nRowHeight 
         = maPageObjectModelSize.Height() + mnTotalVerticalGap.mnModel;
-    sal_Int32 nDistanceIntoRow =
+    sal_Int32 nDistanceIntoRow = 
         rModelPoint.Y() - mnTopBorder.mnModel - mnTopPageBorder.mnModel
         - nRow * nRowHeight;
 
@@ -586,18 +586,18 @@ Point Layouter::ConvertLayouterToModelCoordinates (
 {
     sal_Int32 nColumn = (sal_Int32) ::rtl::math::round(rLayouterPoint.first,
         0,rtl_math_RoundingMode_Floor);
-    sal_Int32 nColumnWidth
+    sal_Int32 nColumnWidth 
         = maPageObjectModelSize.Width() + mnTotalHorizontalGap.mnModel;
-    sal_Int32 nDistanceIntoColumn
+    sal_Int32 nDistanceIntoColumn 
         = (sal_Int32)((rLayouterPoint.first - nColumn) * nColumnWidth);
 
     sal_Int32 nRow = (sal_Int32) ::rtl::math::round(rLayouterPoint.second,
         0,rtl_math_RoundingMode_Floor);
-    sal_Int32 nRowHeight
+    sal_Int32 nRowHeight 
         = maPageObjectModelSize.Height() + mnTotalVerticalGap.mnModel;
-    sal_Int32 nDistanceIntoRow
+    sal_Int32 nDistanceIntoRow 
         = (sal_Int32)((rLayouterPoint.second - nRow) * nRowHeight);
-
+    
     return Point (
         mnLeftBorder.mnModel + mnLeftPageBorder.mnModel
         + nColumn * nColumnWidth + nDistanceIntoColumn,
@@ -609,13 +609,13 @@ Point Layouter::ConvertLayouterToModelCoordinates (
 
 
 sal_Int32 Layouter::GetRowAtPosition (
-    sal_Int32 nYPosition,
+    sal_Int32 nYPosition, 
     bool bIncludeBordersAndGaps,
     GapMembership eGapMembership) const
 {
     sal_Int32 nRow = -1;
 
-    const sal_Int32 nY = nYPosition
+    const sal_Int32 nY = nYPosition 
         - mnTopBorder.mnModel - mnTopPageBorder.mnModel;
     if (nY >= 0)
     {
@@ -652,13 +652,13 @@ sal_Int32 Layouter::GetRowAtPosition (
 
 
 sal_Int32 Layouter::GetColumnAtPosition (
-    sal_Int32 nXPosition,
+    sal_Int32 nXPosition, 
     bool bIncludeBordersAndGaps,
     GapMembership eGapMembership) const
 {
     sal_Int32 nColumn = -1;
 
-    sal_Int32 nX = nXPosition
+    sal_Int32 nX = nXPosition 
         - mnLeftBorder.mnModel - mnLeftPageBorder.mnModel;
     if (nX >= 0)
     {
@@ -720,11 +720,11 @@ sal_Int32 Layouter::ResolvePositionInGap (
                 nIndex ++;
             break;
         }
-
+        
         case GM_PREVIOUS:
             // Row or column already at correct value.
             break;
-
+            
         case GM_NEXT:
             // The complete gap belongs to the next row or column.
             nIndex ++;
@@ -745,7 +745,7 @@ sal_Int32 Layouter::ResolvePositionInGap (
                 }
             }
             break;
-
+        
         default:
             nIndex = -1;
     }

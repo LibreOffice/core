@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,14 +34,14 @@
 //////////////////////////////////////////////////////////////////////////////
 class SvStream;
 
-class old_SdrDownCompat
+class old_SdrDownCompat 
 {
 protected:
-    SvStream&                   rStream;
-    UINT32                      nSubRecSiz;
-    UINT32                      nSubRecPos;
-    UINT16                      nMode;
-    BOOL                        bOpen;
+    SvStream&					rStream;
+    UINT32						nSubRecSiz;
+    UINT32						nSubRecPos;
+    UINT16						nMode;
+    BOOL						bOpen;
 
 protected:
     void Read();
@@ -65,14 +65,14 @@ private:
 
 public:
                 // nNewMode: STREAM_READ oder STREAM_WRITE
-                // nVer:     nur beim Schreiben angeben
+                // nVer:	 nur beim Schreiben angeben
             SdIOCompat(SvStream& rNewStream, USHORT nNewMode,
                        UINT16 nVer = SDIOCOMPAT_VERSIONDONTKNOW);
             ~SdIOCompat();
-    UINT16  GetVersion() const { return nVersion; }
+    UINT16	GetVersion() const { return nVersion; }
 };
 
-#endif      // _SD_SDIOCMPT_HXX
+#endif		// _SD_SDIOCMPT_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

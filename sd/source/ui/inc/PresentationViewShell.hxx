@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,10 @@ class PresentationViewShell : public DrawViewShell
 {
 public:
     TYPEINFO();
-
+                    
     SFX_DECL_VIEWFACTORY(PresViewShell);
     SFX_DECL_INTERFACE( SD_IF_SDPRESVIEWSHELL )
-
+                    
     PresentationViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow, FrameView* pFrameView = NULL);
     virtual ~PresentationViewShell (void);
 
@@ -66,7 +66,7 @@ protected:
 
 private:
     Rectangle       maOldVisArea;
-
+                    
     virtual void Activate (BOOL bIsMDIActivate);
     virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin);
 };

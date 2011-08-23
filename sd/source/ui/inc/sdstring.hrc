@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,11 +25,11 @@
  *
  ************************************************************************/
 #include <sfx2/sfx.hrc>
-#define SID_SD_STRING_START         RID_APP_START+300
+#define SID_SD_STRING_START			RID_APP_START+300
 
 // Texts for search and replace info and question boxes.
 #define STR_SAR_NOT_FOUND           SID_SD_STRING_START+23
 #define STR_SAR_WRAP_FORWARD        SID_SD_STRING_START+24
 #define STR_SAR_WRAP_BACKWARD       SID_SD_STRING_START+25
-#define STR_SAR_WRAP_FORWARD_DRAW   SID_SD_STRING_START+26
+#define STR_SAR_WRAP_FORWARD_DRAW	SID_SD_STRING_START+26
 #define STR_SAR_WRAP_BACKWARD_DRAW  SID_SD_STRING_START+27

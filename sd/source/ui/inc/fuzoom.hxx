@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,39 +36,39 @@ namespace sd {
 
 extern USHORT SidArrayZoom[];
 
-class FuZoom
+class FuZoom 
     : public FuPoor
 {
 public:
     TYPEINFO();
 
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
-
+                        
     // Mouse- & Key-Events
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();        // Function aktivieren
-    virtual void Deactivate();      // Function deaktivieren
+    virtual void Activate();		// Function aktivieren
+    virtual void Deactivate();		// Function deaktivieren
 
 protected:
     virtual ~FuZoom (void);
 
-    Point       aBeginPosPix;
-    Point       aBeginPos;
-    Point       aEndPos;
-    Rectangle   aZoomRect;
-    BOOL        bVisible;
-    BOOL        bStartDrag;
-    Pointer     aPtr;
+    Point		aBeginPosPix;
+    Point		aBeginPos;
+    Point		aEndPos;
+    Rectangle	aZoomRect;
+    BOOL		bVisible;
+    BOOL		bStartDrag;
+    Pointer 	aPtr;
 
 private:
     FuZoom (
-        ViewShell* pViewSh,
+        ViewShell* pViewSh, 
         ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument* pDoc, 
         SfxRequest& rReq);
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,11 +92,11 @@ public:
     virtual void Activate( BOOL IsMDIActivate );
     virtual void Deactivate( BOOL IsMDIActivate );
 
-    virtual SdPage* GetActualPage();
+    virtual SdPage*	GetActualPage();
 
     /// inherited from sd::ViewShell
-    virtual SdPage* getCurrentPage() const;
-
+    virtual SdPage* getCurrentPage() const; 
+    
     /** Return a string that describes the currently selected pages.
     */
     String GetPageRangeString (void);
@@ -117,7 +117,7 @@ public:
 
     virtual void SetZoom(long nZoom);
     virtual void SetZoomRect(const Rectangle& rZoomRect);
-    virtual String  GetSelectionText( BOOL bCompleteWords = FALSE );
+    virtual String	GetSelectionText( BOOL bCompleteWords = FALSE );
     virtual BOOL    HasSelection( BOOL bText = TRUE ) const;
 
     void Execute(SfxRequest& rReq);
@@ -170,9 +170,9 @@ protected:
 
 private:
     OutlineView* pOlView;
-    SdPage*         pLastPage; // Zur performanten Aufbereitung der Preview
+    SdPage*			pLastPage; // Zur performanten Aufbereitung der Preview
     TransferableClipboardListener* pClipEvtLstnr;
-    BOOL            bPastePossible;
+    BOOL			bPastePossible;
     bool mbInitialized;
 
     void Construct (DrawDocShell* pDocSh);

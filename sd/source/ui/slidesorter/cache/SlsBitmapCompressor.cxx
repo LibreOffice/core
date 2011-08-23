@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -133,7 +133,7 @@ public:
     Size maOriginalSize;
 
     virtual ~ResolutionReducedReplacement();
-
+    
     virtual sal_Int32 GetMemorySize (void) const;
 };
 
@@ -172,7 +172,7 @@ sal_Int32 ResolutionReduction::ResolutionReducedReplacement::GetMemorySize (void
     const BitmapReplacement& rBitmapData) const
 {
     ::boost::shared_ptr<BitmapEx> pResult;
-
+    
     const ResolutionReducedReplacement* pData (
         dynamic_cast<const ResolutionReducedReplacement*>(&rBitmapData));
 
@@ -182,7 +182,7 @@ sal_Int32 ResolutionReduction::ResolutionReducedReplacement::GetMemorySize (void
         if (pData->maOriginalSize.Width() > mnWidth)
             pResult->Scale(pData->maOriginalSize);
     }
-
+    
     return pResult;
 }
 
