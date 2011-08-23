@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,24 +51,24 @@
 #include <fmtclds.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
-#include <errhdl.hxx>       // fuer Create-Methoden
+#include <errhdl.hxx>		// fuer Create-Methoden
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <wdocsh.hxx>
 #include <viewopt.hxx>
 #include <pgfnote.hxx>
 #include <pggrid.hxx>
-#include <tmpdlg.hxx>       // der Dialog
-#include <column.hxx>       // Spalten
-#include <drpcps.hxx>       // Initialen
-#include <frmpage.hxx>      // Rahmen
-#include <wrap.hxx>         // Rahmen
-#include <frmmgr.hxx>       // Rahmen
-#include <ccoll.hxx>        // CondColl
+#include <tmpdlg.hxx>		// der Dialog
+#include <column.hxx>		// Spalten
+#include <drpcps.hxx>		// Initialen
+#include <frmpage.hxx>		// Rahmen
+#include <wrap.hxx>			// Rahmen
+#include <frmmgr.hxx>		// Rahmen
+#include <ccoll.hxx>		// CondColl
 #include <swuiccoll.hxx>
-#include <docstyle.hxx>     //
-#include <fmtcol.hxx>       //
-#include <macassgn.hxx>     //
+#include <docstyle.hxx>		//
+#include <fmtcol.hxx>		//
+#include <macassgn.hxx>		//
 #include <poolfmt.hxx>
 #include <uitool.hxx>
 #include <shellres.hxx>
@@ -91,16 +91,16 @@
 extern SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Der Traeger des Dialoges
+    Beschreibung:	Der Traeger des Dialoges
  --------------------------------------------------------------------*/
 
-SwTemplateDlg::SwTemplateDlg(Window*            pParent,
+SwTemplateDlg::SwTemplateDlg(Window*			pParent,
                              SfxStyleSheetBase& rBase,
-                             USHORT             nRegion,
-                             BOOL               bColumn,
-                             SwWrtShell*        pActShell,
-                             BOOL               bNew ) :
-    SfxStyleDialog( pParent,
+                             USHORT 			nRegion,
+                             BOOL 				bColumn,
+                             SwWrtShell* 		pActShell,
+                             BOOL 				bNew ) :
+    SfxStyleDialog(	pParent,
                     SW_RES(DLG_TEMPLATE_BASE + nRegion),
                     rBase,
                     FALSE,
@@ -150,19 +150,19 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
         {
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageCreatorFunc fail!");
                 OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageRangesFunc fail!");
-                AddTabPage( TP_PARA_STD,    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH) );
+                AddTabPage( TP_PARA_STD,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH) );
 
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageCreatorFunc fail!");
                 OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageRangesFunc fail!");
-                AddTabPage( TP_PARA_ALIGN,  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),      pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH) );
+                AddTabPage( TP_PARA_ALIGN,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH) );
 
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageCreatorFunc fail!");
                 OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageRangesFunc fail!");
-                AddTabPage( TP_PARA_EXT,    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
+                AddTabPage( TP_PARA_EXT,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
 
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
                 OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageRangesFunc fail!");
-                AddTabPage( TP_PARA_ASIAN,  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
+                AddTabPage( TP_PARA_ASIAN,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
 
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
                 OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageRangesFunc fail!");
@@ -183,12 +183,12 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
 
             OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR), "GetTabPageRangesFunc fail!");
-            AddTabPage( TP_TABULATOR,   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
+            AddTabPage( TP_TABULATOR,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
 
 
             AddTabPage(TP_NUMPARA,   SwParagraphNumTabPage::Create,
                                     SwParagraphNumTabPage::GetRanges);
-            AddTabPage(TP_DROPCAPS,     SwDropCapsPage::Create,
+            AddTabPage(TP_DROPCAPS, 	SwDropCapsPage::Create,
                                         SwDropCapsPage::GetRanges );
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
@@ -233,11 +233,11 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
         // Rahmenvorlagen
         case SFX_STYLE_FAMILY_FRAME:
         {
-            AddTabPage(TP_FRM_STD,      SwFrmPage::Create,
+            AddTabPage(TP_FRM_STD, 		SwFrmPage::Create,
                                         SwFrmPage::GetRanges );
-            AddTabPage(TP_FRM_ADD,      SwFrmAddPage::Create,
+            AddTabPage(TP_FRM_ADD,		SwFrmAddPage::Create,
                                         SwFrmAddPage::GetRanges );
-            AddTabPage(TP_FRM_WRAP,     SwWrapTabPage::Create,
+            AddTabPage(TP_FRM_WRAP, 	SwWrapTabPage::Create,
                                         SwWrapTabPage::GetRanges );
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
@@ -246,13 +246,13 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
             AddTabPage(TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
 
-            AddTabPage(TP_COLUMN,       SwColumnPage::Create,
+            AddTabPage(TP_COLUMN, 		SwColumnPage::Create,
                                         SwColumnPage::GetRanges );
 
             AddTabPage( TP_MACRO_ASSIGN, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
 
             // Auskommentiert wegen Bug #45776 (per default keine Breite&Groesse in Rahmenvorlagen)
-/*          SwFmtFrmSize aSize( (const SwFmtFrmSize&)rBase.
+/*			SwFmtFrmSize aSize( (const SwFmtFrmSize&)rBase.
                                             GetItemSet().Get(RES_FRM_SIZE));
             if( !aSize.GetWidth() )
             {
@@ -268,10 +268,10 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
             AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
-            AddTabPage(TP_HEADER_PAGE,      String(SW_RES(STR_PAGE_HEADER)),
+            AddTabPage(TP_HEADER_PAGE,		String(SW_RES(STR_PAGE_HEADER)),
                                             SvxHeaderPage::Create,
                                             SvxHeaderPage::GetRanges );
-            AddTabPage(TP_FOOTER_PAGE,      String(SW_RES(STR_PAGE_FOOTER)),
+            AddTabPage(TP_FOOTER_PAGE,		String(SW_RES(STR_PAGE_FOOTER)),
                                             SvxFooterPage::Create,
                                             SvxFooterPage::GetRanges );
             if(bColumn)
@@ -279,7 +279,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
 
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ), "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_PAGE_STD,         String(SW_RES(STR_PAGE_STD)),
+            AddTabPage(TP_PAGE_STD,			String(SW_RES(STR_PAGE_STD)),
                                             pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ),
                                             pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ),
                                             FALSE,
@@ -288,12 +288,12 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             {
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
                 OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
-                AddTabPage(TP_BORDER,           String(SW_RES(STR_PAGE_BORDER)),
+                AddTabPage(TP_BORDER, 			String(SW_RES(STR_PAGE_BORDER)),
                                 pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
-                AddTabPage(TP_COLUMN,           String(SW_RES(STR_PAGE_COLUMN)),
+                AddTabPage(TP_COLUMN,			String(SW_RES(STR_PAGE_COLUMN)),
                                                 SwColumnPage::Create,
                                                 SwColumnPage::GetRanges );
-                AddTabPage(TP_FOOTNOTE_PAGE,    String(SW_RES(STR_PAGE_FOOTNOTE)),
+                AddTabPage(TP_FOOTNOTE_PAGE,	String(SW_RES(STR_PAGE_FOOTNOTE)),
                                                 SwFootNotePage::Create,
                                                 SwFootNotePage::GetRanges );
                 AddTabPage(TP_TEXTGRID_PAGE,    String(SW_RES(STR_PAGE_TEXTGRID)),
@@ -318,11 +318,11 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             AddTabPage( RID_SVXPAGE_NUM_POSITION );
 
 
-/*          const SfxPoolItem* pItem;
+/*			const SfxPoolItem* pItem;
             if(SFX_ITEM_SET == rBase.GetItemSet().GetItemState(
                 FN_PARAM_ACT_NUMBER, FALSE, &pItem ))
             {
-//              pActNum = (ActNumberFormat*)((const SwPtrItem*)pItem)->GetValue();
+//				pActNum = (ActNumberFormat*)((const SwPtrItem*)pItem)->GetValue();
             }
 */
         }
@@ -576,7 +576,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             rCharFmtLB.Clear();
             rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
             SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
-            ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
+            ::FillCharStyleListBox(rCharFmtLB,	pDocShell);
             List aList;
             for(USHORT j = 0; j < rCharFmtLB.GetEntryCount(); j++)
             {

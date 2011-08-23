@@ -66,7 +66,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <PostItMgr.hxx>
 
-USHORT  SwView::nMoveType = NID_PGE;
+USHORT	SwView::nMoveType = NID_PGE;
 sal_Int32 SwView::nActMark = 0;
 
 
@@ -117,7 +117,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         const MapMode aTmpMap( MAP_TWIP );
         const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
 
-        if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )    // gespiegelte Seiten
+        if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )	// gespiegelte Seiten
         {
             const SvxLRSpaceItem &rLeftLRSpace = rDesc.GetLeft().GetLRSpace();
             aPageSize.Width() += Abs( long(rLeftLRSpace.GetLeft()) - long(rLRSpace.GetLeft()) );
@@ -165,10 +165,10 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         //MasterUsrPrefs updaten UND DANACH die ViewOptions der aktuellen
         //View updaten.
         if ( !bViewOnly &&
-                (USHORT(nFac)      != pUsrPref->GetZoom() ||
+                (USHORT(nFac) 	   != pUsrPref->GetZoom() ||
                 BYTE  (eZoomType) != pUsrPref->GetZoomType()) )
         {
-            pUsrPref->SetZoom    ( USHORT(nFac) );
+            pUsrPref->SetZoom	 ( USHORT(nFac) );
             pUsrPref->SetZoomType( eZoomType );
             SW_MOD()->ApplyUsrPref( *pUsrPref,
                     bViewOnly ? this: 0,
@@ -177,7 +177,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         }
         if ( pOpt->GetZoom() != (USHORT) nFac )
         {
-            aOpt.SetZoom    ( USHORT(nFac) );
+            aOpt.SetZoom	( USHORT(nFac) );
             aOpt.SetReadonly(pOpt->IsReadonly());
             pWrtShell->ApplyViewOptions( aOpt );
         }
@@ -204,11 +204,11 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         // OS: Notloesung - in CalcVisArea wird u.U. wieder SetZoom gerufen und
         // dann werden falsche Werte eingestellt
         ((SwViewOption*)pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
-        CalcVisArea( rEditSize );   //fuer das Neuberechnen des sichtbaren Bereiches
+        CalcVisArea( rEditSize );	//fuer das Neuberechnen des sichtbaren Bereiches
     }
     else if ( USHORT(nFac) != pOpt->GetZoom() )
     {
-        aOpt.SetZoom    ( USHORT(nFac) );
+        aOpt.SetZoom	( USHORT(nFac) );
         pWrtShell->ApplyViewOptions( aOpt );
     }
 
@@ -230,7 +230,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
 //        mpPostItMgr->LayoutPostIts();
 //    }
 
-//  eZoom = eZoomType;
+//	eZoom = eZoomType;
 }
 
 void SwView::SetViewLayout( USHORT nColumns, bool bBookMode, BOOL bViewOnly )
@@ -355,9 +355,9 @@ int SwView::_CreateScrollbar( BOOL bHori )
 void SwView::CreatePageButtons(BOOL bShow)
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
-    pPageUpBtn      = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEUP ), TRUE );
+    pPageUpBtn		= new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEUP ), TRUE );
     pPageUpBtn->SetHelpId(HID_SCRL_PAGEUP);
-    pPageDownBtn    = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEDOWN ), FALSE );
+    pPageDownBtn	= new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEDOWN ), FALSE );
     pPageDownBtn->SetHelpId(HID_SCRL_PAGEDOWN);
     Reference< XFrame > xFrame = GetViewFrame()->GetFrame().GetFrameInterface();
     pNaviBtn = new SwNaviImageButton(pMDI, xFrame );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,7 +122,7 @@ uno::Reference< text::XTextRange > SwVbaFind::FindOneElement() throw ( uno::Runt
         {
             mxTVC->gotoStart(sal_False);
             xFoundOne.set( mxReplaceable->findNext( mxTextRange->getStart(), uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
-        }
+        }    
         else
         {
             mxTVC->gotoEnd( sal_False );
@@ -321,7 +321,7 @@ void SAL_CALL SwVbaFind::setStyle( const uno::Any& /*_style */ ) throw (uno::Run
     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
 }
 
-sal_Bool SAL_CALL
+sal_Bool SAL_CALL 
 SwVbaFind::Execute( const uno::Any& FindText, const uno::Any& MatchCase, const uno::Any& MatchWholeWord, const uno::Any& MatchWildcards, const uno::Any& MatchSoundsLike, const uno::Any& MatchAllWordForms, const uno::Any& Forward, const uno::Any& Wrap, const uno::Any& Format, const uno::Any& ReplaceWith, const uno::Any& Replace, const uno::Any& /*MatchKashida*/, const uno::Any& /*MatchDiacritics*/, const uno::Any& /*MatchAlefHamza*/, const uno::Any& /*MatchControl*/, const uno::Any& /*MatchPrefix*/, const uno::Any& /*MatchSuffix*/, const uno::Any& /*MatchPhrase*/, const uno::Any& /*IgnoreSpace*/, const uno::Any& /*IgnorePunct*/ ) throw (uno::RuntimeException)
 {
     sal_Bool result = sal_False;
@@ -401,21 +401,21 @@ SwVbaFind::Execute( const uno::Any& FindText, const uno::Any& MatchCase, const u
     return result;
 }
 
-void SAL_CALL
+void SAL_CALL 
 SwVbaFind::ClearFormatting(  ) throw (uno::RuntimeException)
 {
     uno::Sequence< beans::PropertyValue >  aSearchAttribs;
     mxPropertyReplace->setSearchAttributes( aSearchAttribs );
 }
 
-rtl::OUString&
+rtl::OUString& 
 SwVbaFind::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaFind") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 SwVbaFind::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

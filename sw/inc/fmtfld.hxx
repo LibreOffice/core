@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@ class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBro
     friend void _InitCore();
 
     SwField *pField;
-    SwTxtFld* pTxtAttr;     // mein TextAttribut
+    SwTxtFld* pTxtAttr;		// mein TextAttribut
 
-    SwFmtFld();             // das default-Attibut
+    SwFmtFld();				// das default-Attibut
 
     // geschuetzter CopyCtor
     // @@@ copy construction allowed, but copy assignment is not? @@@
@@ -67,13 +67,13 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
 
     virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
-    const SwField *GetFld() const   { return pField; }
-    SwField *GetFld()               { return pField; }
+    const SwField *GetFld() const	{ return pField; }
+    SwField *GetFld()				{ return pField; }
 
     // #111840#
     /**
@@ -85,8 +85,8 @@ public:
      */
     void SetFld(SwField * pField);
 
-    const SwTxtFld *GetTxtFld() const   { return pTxtAttr; }
-    SwTxtFld *GetTxtFld()               { return pTxtAttr; }
+    const SwTxtFld *GetTxtFld() const	{ return pTxtAttr; }
+    SwTxtFld *GetTxtFld()				{ return pTxtAttr; }
 
     BOOL IsFldInDoc() const;
     BOOL IsProtect() const;
@@ -94,11 +94,11 @@ public:
 
 class SW_DLLPUBLIC SwFmtFldHint : public SfxHint
 {
-#define SWFMTFLD_INSERTED   1
-#define SWFMTFLD_REMOVED    2
-#define SWFMTFLD_FOCUS      3
-#define SWFMTFLD_CHANGED    4
-#define SWFMTFLD_LANGUAGE   5
+#define SWFMTFLD_INSERTED	1
+#define SWFMTFLD_REMOVED	2
+#define SWFMTFLD_FOCUS		3
+#define SWFMTFLD_CHANGED	4
+#define SWFMTFLD_LANGUAGE	5
 
     const SwFmtFld* pFld;
     sal_Int16 nWhich;

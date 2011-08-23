@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,56 +76,56 @@ class XMLRedlineImportHelper
 public:
 
     XMLRedlineImportHelper(
-        sal_Bool bIgnoreRedlines,       /// ignore redlines mode
+        sal_Bool bIgnoreRedlines,		/// ignore redlines mode
 
-        // property sets of model + import info for saving + restoring the
+        // property sets of model + import info for saving + restoring the 
         // redline mode
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rModel,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rImportInfoSet );
+            ::com::sun::star::beans::XPropertySet> & rImportInfoSet ); 
     virtual ~XMLRedlineImportHelper();
 
     /// create a redline object
     /// (The redline will be inserted into the document after both start
     ///  and end cursor has been set.)
-    void Add(
-        const ::rtl::OUString& rType,       /// redline type (insert, del,... )
-        const ::rtl::OUString& rId,         /// use to identify this redline
-        const ::rtl::OUString& rAuthor,     /// name of the author
-        const ::rtl::OUString& rComment,    /// redline comment
+    void Add( 
+        const ::rtl::OUString& rType,		/// redline type (insert, del,... )
+        const ::rtl::OUString& rId,			/// use to identify this redline
+        const ::rtl::OUString& rAuthor,		/// name of the author
+        const ::rtl::OUString& rComment,	/// redline comment
         const ::com::sun::star::util::DateTime& rDateTime, /// date+time
         sal_Bool bMergeLastParagraph);      /// merge last paragraph?
 
     /// create a text section for the redline, and return an
     /// XText/XTextCursor that may be used to write into it.
-    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference< 
         ::com::sun::star::text::XTextCursor> CreateRedlineTextSection(
-            ::com::sun::star::uno::Reference<   /// needed to get the document
+            ::com::sun::star::uno::Reference< 	/// needed to get the document
                     ::com::sun::star::text::XTextCursor> xOldCursor,
-            const ::rtl::OUString& rId);    /// ID used to RedlineAdd() call
+            const ::rtl::OUString& rId);	/// ID used to RedlineAdd() call
 
     /// Set start or end position for a redline in the text body.
     /// Accepts XTextRange objects.
     void SetCursor(
-        const ::rtl::OUString& rId,     /// ID used in RedlineAdd() call
-        sal_Bool bStart,                /// start or end Range
-        ::com::sun::star::uno::Reference<   /// the actual XTextRange
+        const ::rtl::OUString& rId,		/// ID used in RedlineAdd() call
+        sal_Bool bStart,				/// start or end Range
+        ::com::sun::star::uno::Reference< 	/// the actual XTextRange
             ::com::sun::star::text::XTextRange> & rRange,
         /// text range is (from an XML view) outside of a paragraph
         /// (i.e. before a table)
-        sal_Bool bIsOusideOfParagraph);
+        sal_Bool bIsOusideOfParagraph);	
 
     /**
      * Adjust the start (end) position for a redline that begins in a
-     * start node. It takes the cursor positions _inside_ the redlined
+     * start node. It takes the cursor positions _inside_ the redlined 
      * element (e.g. section or table).
      *
      * We will do sanity checking of the given text range: It will
      * only be considered valid if it points to the next text node
      * after the position given in a previous SetCursor */
     void AdjustStartNodeCursor(
-         const ::rtl::OUString& rId,        /// ID used in RedlineAdd() call
+         const ::rtl::OUString& rId,		/// ID used in RedlineAdd() call
         sal_Bool bStart,
         /// XTextRange _inside_ a table/section
         ::com::sun::star::uno::Reference<
@@ -138,7 +138,7 @@ public:
     void SetRecordChanges( sal_Bool bRecordChanges );
 
     /// set redline protection key
-    void SetProtectionKey(
+    void SetProtectionKey( 
         const ::com::sun::star::uno::Sequence<sal_Int8> & rKey );
 
 private:
@@ -148,8 +148,8 @@ private:
     void InsertIntoDocument(RedlineInfo* pRedline);
 
     SwRedlineData* ConvertRedline(
-        RedlineInfo* pRedline,  /// RedlineInfo to be converted
-        SwDoc* pDoc);           /// document needed for Author-ID conversion
+        RedlineInfo* pRedline,	/// RedlineInfo to be converted
+        SwDoc* pDoc);			/// document needed for Author-ID conversion
 
     /** save the redline mode (if rPropertySet is non-null) */
     void SaveRedlineMode(

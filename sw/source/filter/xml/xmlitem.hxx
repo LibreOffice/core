@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ struct SvXMLItemMapEntry;
 class SvXMLItemSetContext : public SvXMLImportContext
 {
 protected:
-    SfxItemSet                  &rItemSet;
-    const SvXMLImportItemMapper &rIMapper;
-    const SvXMLUnitConverter    &rUnitConv;
+    SfxItemSet					&rItemSet;
+    const SvXMLImportItemMapper	&rIMapper;
+    const SvXMLUnitConverter	&rUnitConv;
 
 public:
 
@@ -77,6 +77,6 @@ public:
 };
 
 
-#endif  //  _XMLITEM_HXX
+#endif	//  _XMLITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

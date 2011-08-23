@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Drucker an Sfx uebergeben
+    Beschreibung:	Drucker an Sfx uebergeben
  --------------------------------------------------------------------*/
 SfxPrinter* __EXPORT SwView::GetPrinter( BOOL bCreate )
 {
@@ -109,7 +109,7 @@ SfxPrinter* __EXPORT SwView::GetPrinter( BOOL bCreate )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Druckerwechsel weitermelden
+    Beschreibung:	Druckerwechsel weitermelden
  --------------------------------------------------------------------*/
 void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, BOOL bWeb )
 {
@@ -168,7 +168,7 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   TabPage fuer applikationsspezifische Druckoptionen
+    Beschreibung:	TabPage fuer applikationsspezifische Druckoptionen
  --------------------------------------------------------------------*/
 SfxTabPage* __EXPORT SwView::CreatePrintOptionsPage(Window* pParent,
                                                     const SfxItemSet& rSet)
@@ -177,17 +177,17 @@ SfxTabPage* __EXPORT SwView::CreatePrintOptionsPage(Window* pParent,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Druckerdialog
+    Beschreibung:	Druckerdialog
  --------------------------------------------------------------------*/
 PrintDialog* CreatePrintDialog( Window* pParent, USHORT nPg, SwWrtShell* pSh )
 {
     PrintDialog *pDlg = new PrintDialog( pParent, false );
-//  pDlg->ChangeFirstPage( 1 );
+//	pDlg->ChangeFirstPage( 1 );
 
     if ( !nPg )
         nPg = 1;
-//  pDlg->ChangeLastPage( nPg );
-//  pDlg->ChangeMaxPage( 9999 );
+//	pDlg->ChangeLastPage( nPg );
+//	pDlg->ChangeMaxPage( 9999 );
     pDlg->EnableRange( PRINTDIALOG_FROMTO );
 
     if (pSh && (pSh->IsSelection() || pSh->IsFrmSelected() || pSh->IsObjSelected()))
@@ -202,13 +202,13 @@ PrintDialog* CreatePrintDialog( Window* pParent, USHORT nPg, SwWrtShell* pSh )
 PrintDialog* __EXPORT SwView::CreatePrintDialog( Window* pParent )
 {
     // AMA: Hier sollte vielleicht die virtuelle Seitennummer angezeigt werden,
-    //      aber nur, wenn das Drucken virtuelle Seitennummern und nicht wie
-    //      bisher (auch beim SWG 2.0) physikalische beachtet werden.
+    // 		aber nur, wenn das Drucken virtuelle Seitennummern und nicht wie
+    //		bisher (auch beim SWG 2.0) physikalische beachtet werden.
     return ::CreatePrintDialog( pParent, GetWrtShell().GetPhyPageNum(), &GetWrtShell() );
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Print-Dispatcher
+    Beschreibung:	Print-Dispatcher
  --------------------------------------------------------------------*/
 void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
 {
@@ -277,7 +277,7 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
                     short nBtn = SvxPrtQryBox(&GetEditWin()).Execute();
                     if( RET_CANCEL == nBtn )
                         return;;
-
+                    
                     if( RET_OK == nBtn )
                         bPrintSelection = true;
                 }
@@ -301,7 +301,7 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Page Drucker/Zusaetze erzeugen fuer SwView und
+    Beschreibung:	Page Drucker/Zusaetze erzeugen fuer SwView und
                     SwPagePreview
  --------------------------------------------------------------------*/
 SfxTabPage* CreatePrintOptionsPage( Window *pParent,
@@ -343,10 +343,10 @@ void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb )
         // Applikationseigene Druckoptionen in SfxPrinter schiessen
         SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, aPrtData);
         SfxItemSet aSet( pSh->GetAttrPool(),
-                    FN_PARAM_ADDPRINTER,        FN_PARAM_ADDPRINTER,
-                    SID_HTML_MODE,              SID_HTML_MODE,
-                    SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
-                    SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
+                    FN_PARAM_ADDPRINTER, 		FN_PARAM_ADDPRINTER,
+                    SID_HTML_MODE,				SID_HTML_MODE,
+                    SID_PRINTER_NOTFOUND_WARN, 	SID_PRINTER_NOTFOUND_WARN,
+                    SID_PRINTER_CHANGESTODOC, 	SID_PRINTER_CHANGESTODOC,
                     0 );
 
         utl::MiscCfg aMisc;

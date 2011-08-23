@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,8 +63,8 @@ class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
     friend void Notify( SwFlyFrm *, SwPageFrm *pOld, const SwRect &rOld,
                         const SwRect* pOldPrt );
 
-    void InitDrawObj( BOOL bNotify );   //Wird von den CToren gerufen.
-    void FinitDrawObj();                //Wird vom CTor gerufen.
+    void InitDrawObj( BOOL bNotify );	//Wird von den CToren gerufen.
+    void FinitDrawObj();				//Wird vom CTor gerufen.
 
     void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
@@ -74,13 +74,13 @@ class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
 protected:
 
     SwFlyFrm *pPrevLink,        // Vorgaenger/Nachfolger fuer Verkettung mit
-             *pNextLink;        // Textfluss
+             *pNextLink;		// Textfluss
 
     // OD 2004-05-27 #i26791# - moved to <SwAnchoredObject>
 //    Point aRelPos;   //Die Relative Position zum Master
 
 private:
-    BOOL bLocked    :1; //Cntnt-gebundene Flys muessen derart blockiert werden
+    BOOL bLocked	:1;	//Cntnt-gebundene Flys muessen derart blockiert werden
                         //koennen, dass sie nicht Formatiert werden; :MakeAll
                         //returnt dann sofort. Dies ist bei Seitenwechseln
                         //waehrend der Formatierung notwendig.
@@ -88,22 +88,22 @@ private:
                         //sonst der Anker formatiert wird obwohl die Root noch
                         //nicht korrekt an der Shell haengt und weil sonst
                         //initial zuviel Formatiert wuerde.
-    BOOL bNotifyBack:1; //TRUE wenn am Ende eines MakeAll() der Background
+    BOOL bNotifyBack:1;	//TRUE wenn am Ende eines MakeAll() der Background
                         //vom NotifyDTor benachrichtigt werden muss.
 protected:
 
-    BOOL bInvalid :1;   //Pos, PrtArea od. SSize wurden Invalidiert, sie werden
+    BOOL bInvalid :1; 	//Pos, PrtArea od. SSize wurden Invalidiert, sie werden
                         //gleich wieder Validiert, denn sie muessen _immer_
                         //gueltig sein. Damit in LayAction korrekt gearbeitet
                         //werden kann muss hier festgehalten werden, dass sie
                         //invalidiert wurden. Ausnahmen bestaetigen die Regelt!
-    BOOL bMinHeight:1;  //TRUE wenn die vom Attribut vorgegebene Hoehe eine
+    BOOL bMinHeight:1;	//TRUE wenn die vom Attribut vorgegebene Hoehe eine
                         //eine Minimalhoehe ist (der Frm also bei Bedarf
                         //darueberhinaus wachsen kann).
-    BOOL bHeightClipped :1; //TRUE wenn der Fly nicht die Pos/Size anhand der Attrs
-    BOOL bWidthClipped  :1; //formatieren konnte, weil z.B. nicht genug Raum vorh.
+    BOOL bHeightClipped	:1; //TRUE wenn der Fly nicht die Pos/Size anhand der Attrs
+    BOOL bWidthClipped	:1;	//formatieren konnte, weil z.B. nicht genug Raum vorh.
                             //war.
-    BOOL bFormatHeightOnly  :1; //Damit nach einer Anpassung der Breite
+    BOOL bFormatHeightOnly	:1; //Damit nach einer Anpassung der Breite
                                 //(CheckClip) nur das Format aufgerufen wird;
                                 //nicht aber die Breite anhand der Attribute
                                 //wieder bestimmt wird.
@@ -123,10 +123,10 @@ protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     void MakePrtArea( const SwBorderAttrs &rAttrs );
 
-    void Lock()         { bLocked = TRUE; }
-    void Unlock()       { bLocked = FALSE; }
+    void Lock()			{ bLocked = TRUE; }
+    void Unlock()		{ bLocked = FALSE; }
 
-    void SetMinHeight()  { bMinHeight = TRUE; }
+    void SetMinHeight()	 { bMinHeight = TRUE; }
     void ResetMinHeight(){ bMinHeight = FALSE; }
 
     Size CalcRel( const SwFmtFrmSize &rSz ) const;
@@ -156,7 +156,7 @@ public:
     TYPEINFO();
 
     virtual ~SwFlyFrm();
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual	void Modify( SfxPoolItem*, SfxPoolItem* );
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
     virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
@@ -172,14 +172,14 @@ public:
 
     SwTwips _Shrink( SwTwips, BOOL bTst );
     SwTwips _Grow  ( SwTwips, BOOL bTst );
-    void    _Invalidate( SwPageFrm *pPage = 0 );
+    void 	_Invalidate( SwPageFrm *pPage = 0 );
 
     BOOL FrmSizeChg( const SwFmtFrmSize & );
 
     SwFlyFrm *GetPrevLink() const { return pPrevLink; }
     SwFlyFrm *GetNextLink() const { return pNextLink; }
 
-    static void ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow );
+    static void	ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow );
     static void UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow );
 
     SwFlyFrm *FindChainNeighbour( SwFrmFmt &rFmt, SwFrm *pAnch = 0 );
@@ -194,26 +194,26 @@ public:
     void Invalidate() const { ((SwFlyFrm*)this)->bInvalid = TRUE; }
     void Validate() const { ((SwFlyFrm*)this)->bInvalid = FALSE; }
 
-    BOOL IsMinHeight()  const { return bMinHeight; }
-    BOOL IsLocked()     const { return bLocked; }
-    BOOL IsAutoPos()    const { return bAutoPosition; }
+    BOOL IsMinHeight()	const { return bMinHeight; }
+    BOOL IsLocked()		const { return bLocked; }
+    BOOL IsAutoPos()	const { return bAutoPosition; }
     BOOL IsFlyInCntFrm() const { return bInCnt; }
     BOOL IsFlyFreeFrm() const { return bAtCnt || bLayout; }
     BOOL IsFlyLayFrm() const { return bLayout; }
     BOOL IsFlyAtCntFrm() const { return bAtCnt; }
 
-    BOOL IsNotifyBack() const { return bNotifyBack; }
-    void SetNotifyBack()      { bNotifyBack = TRUE; }
-    void ResetNotifyBack()    { bNotifyBack = FALSE; }
+    BOOL IsNotifyBack()	const { return bNotifyBack; }
+    void SetNotifyBack()	  { bNotifyBack = TRUE; }
+    void ResetNotifyBack()	  { bNotifyBack = FALSE; }
     BOOL IsNoShrink()   const { return bNoShrink; }
     void SetNoShrink( BOOL bNew ) { bNoShrink = bNew; }
     BOOL IsLockDeleteContent()  const { return bLockDeleteContent; }
     void SetLockDeleteContent( BOOL bNew ) { bLockDeleteContent = bNew; }
 
 
-    BOOL IsClipped()        const   { return bHeightClipped || bWidthClipped; }
-    BOOL IsHeightClipped()  const   { return bHeightClipped; }
-    BOOL IsWidthClipped()   const   { return bWidthClipped;  }
+    BOOL IsClipped()		const	{ return bHeightClipped || bWidthClipped; }
+    BOOL IsHeightClipped()	const	{ return bHeightClipped; }
+    BOOL IsWidthClipped()	const	{ return bWidthClipped;  }
 
     BOOL IsLowerOf( const SwLayoutFrm* pUpper ) const;
     inline BOOL IsUpperOf( const SwFlyFrm& _rLower ) const

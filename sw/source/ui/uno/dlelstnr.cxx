@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::linguistic2::LinguServiceEventFlags;
 
-#define A2OU(x) OUString::createFromAscii(x)
+#define A2OU(x)	OUString::createFromAscii(x)
 
 SwLinguServiceEventListener::SwLinguServiceEventListener()
 {
@@ -105,17 +105,17 @@ void SwLinguServiceEventListener::processDictionaryListEvent(
     sal_Int16 nEvt = rDicListEvent.nCondensedEvent;
 
     sal_Int16 nSpellWrongFlags =
-            DictionaryListEventFlags::ADD_POS_ENTRY     |
-            DictionaryListEventFlags::DEL_NEG_ENTRY     |
-            DictionaryListEventFlags::ACTIVATE_POS_DIC  |
+            DictionaryListEventFlags::ADD_POS_ENTRY 	|
+            DictionaryListEventFlags::DEL_NEG_ENTRY		|
+            DictionaryListEventFlags::ACTIVATE_POS_DIC	|
             DictionaryListEventFlags::DEACTIVATE_NEG_DIC;
-    sal_Bool bIsSpellWrong  =  0 != (nEvt & nSpellWrongFlags);
+    sal_Bool bIsSpellWrong	=  0 != (nEvt & nSpellWrongFlags);
     sal_Int16 nSpellAllFlags =
-            DictionaryListEventFlags::ADD_NEG_ENTRY     |
-            DictionaryListEventFlags::DEL_POS_ENTRY     |
-            DictionaryListEventFlags::ACTIVATE_NEG_DIC  |
+            DictionaryListEventFlags::ADD_NEG_ENTRY		|
+            DictionaryListEventFlags::DEL_POS_ENTRY		|
+            DictionaryListEventFlags::ACTIVATE_NEG_DIC	|
             DictionaryListEventFlags::DEACTIVATE_POS_DIC;
-    sal_Bool bIsSpellAll    =  0 != (nEvt & nSpellAllFlags);
+    sal_Bool bIsSpellAll	=  0 != (nEvt & nSpellAllFlags);
 
     if (bIsSpellWrong || bIsSpellAll)
         SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll, sal_False );

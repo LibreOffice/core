@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <svtools/ctrlbox.hxx>
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Fussnoteneinstellungs-TabPage
+    Beschreibung:	Fussnoteneinstellungs-TabPage
  --------------------------------------------------------------------*/
 class SwFootNotePage: public SfxTabPage
 {
@@ -53,34 +53,34 @@ private:
     SwFootNotePage(Window *pParent, const SfxItemSet &rSet);
     ~SwFootNotePage();
 
-    RadioButton     aMaxHeightPageBtn;
-    RadioButton     aMaxHeightBtn;
-    MetricField     aMaxHeightEdit;
-    FixedText       aDistLbl;
-    MetricField     aDistEdit;
-    FixedLine       aPosHeader;
+    RadioButton		aMaxHeightPageBtn;
+    RadioButton		aMaxHeightBtn;
+    MetricField		aMaxHeightEdit;
+    FixedText   	aDistLbl;
+    MetricField		aDistEdit;
+    FixedLine		aPosHeader;
 
-    FixedText       aLinePosLbl;
-    ListBox         aLinePosBox;
-    FixedText       aLineTypeLbl;
-    LineListBox     aLineTypeBox;
-    FixedText       aLineWidthLbl;
-    MetricField     aLineWidthEdit;
-    FixedText       aLineDistLbl;
-    MetricField     aLineDistEdit;
-    FixedLine       aLineHeader;
+    FixedText   	aLinePosLbl;
+    ListBox			aLinePosBox;
+    FixedText   	aLineTypeLbl;
+    LineListBox		aLineTypeBox;
+    FixedText   	aLineWidthLbl;
+    MetricField		aLineWidthEdit;
+    FixedText   	aLineDistLbl;
+    MetricField		aLineDistEdit;
+    FixedLine		aLineHeader;
 
     DECL_LINK( HeightPage, Button * );
     DECL_LINK( HeightMetric, Button * );
     DECL_LINK( HeightModify, MetricField * );
 
-    long            lMaxHeight;
+    long 			lMaxHeight;
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-
+    
     virtual void    ActivatePage( const SfxItemSet& rSet );
-    virtual int     DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual int		DeactivatePage( SfxItemSet* pSet = 0 );
 
 };
 

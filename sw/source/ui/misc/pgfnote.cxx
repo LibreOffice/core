@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ static USHORT __FAR_DATA aPageRg[] = {
 };
 
 /*------------------------------------------------------------------------
- Beschreibung:  liefert zurueck, ob die Linienbreite nWidth bereits
+ Beschreibung:	liefert zurueck, ob die Linienbreite nWidth bereits
                 in der Listbox enthalten ist.
 ------------------------------------------------------------------------*/
 BOOL lcl_HasLineWidth(USHORT nWidth)
@@ -92,7 +92,7 @@ BOOL lcl_HasLineWidth(USHORT nWidth)
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler fuer umschalten zwischen den unterschiedlichen
+ Beschreibung:	Handler fuer umschalten zwischen den unterschiedlichen
                 Arten, wie die Hoehe des Fussnotenbereiches angegeben
                 werden kann.
 ------------------------------------------------------------------------*/
@@ -113,7 +113,7 @@ IMPL_LINK_INLINE_START( SwFootNotePage, HeightMetric, Button *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwFootNotePage, HeightMetric, Button *, EMPTYARG )
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler Grenzwerte
+ Beschreibung:	Handler Grenzwerte
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwFootNotePage, HeightModify, MetricField *, EMPTYARG )
 {
@@ -143,29 +143,29 @@ SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage(pParent, SW_RES(TP_FOOTNOTE_PAGE), rSet),
 
     aMaxHeightPageBtn(this, SW_RES(RB_MAXHEIGHT_PAGE)),
-    aMaxHeightBtn(this,     SW_RES(RB_MAXHEIGHT)),
-    aMaxHeightEdit(this,    SW_RES(ED_MAXHEIGHT)),
-    aDistLbl(this,          SW_RES(FT_DIST)),
-    aDistEdit(this,         SW_RES(ED_DIST)),
-    aPosHeader(this,        SW_RES(FL_FOOTNOTE_SIZE)),
+    aMaxHeightBtn(this, 	SW_RES(RB_MAXHEIGHT)),
+    aMaxHeightEdit(this, 	SW_RES(ED_MAXHEIGHT)),
+    aDistLbl(this, 			SW_RES(FT_DIST)),
+    aDistEdit(this, 		SW_RES(ED_DIST)),
+    aPosHeader(this, 		SW_RES(FL_FOOTNOTE_SIZE)),
 
-    aLinePosLbl(this,       SW_RES(FT_LINEPOS)),
-    aLinePosBox(this,       SW_RES(DLB_LINEPOS)),
-    aLineTypeLbl(this,      SW_RES(FT_LINETYPE)),
-    aLineTypeBox(this,      SW_RES(DLB_LINETYPE)),
-    aLineWidthLbl(this,     SW_RES(FT_LINEWIDTH)),
-    aLineWidthEdit(this,    SW_RES(ED_LINEWIDTH)),
-    aLineDistLbl(this,      SW_RES(FT_LINEDIST)),
-    aLineDistEdit(this,     SW_RES(ED_LINEDIST)),
-    aLineHeader(this,       SW_RES(FL_LINE))
+    aLinePosLbl(this, 		SW_RES(FT_LINEPOS)),
+    aLinePosBox(this, 		SW_RES(DLB_LINEPOS)),
+    aLineTypeLbl(this, 		SW_RES(FT_LINETYPE)),
+    aLineTypeBox(this, 		SW_RES(DLB_LINETYPE)),
+    aLineWidthLbl(this, 	SW_RES(FT_LINEWIDTH)),
+    aLineWidthEdit(this, 	SW_RES(ED_LINEWIDTH)),
+    aLineDistLbl(this, 		SW_RES(FT_LINEDIST)),
+    aLineDistEdit(this, 	SW_RES(ED_LINEDIST)),
+    aLineHeader(this, 		SW_RES(FL_LINE))
 {
     FreeResource();
 
     SetExchangeSupport();
     FieldUnit aMetric = ::GetDfltMetric(FALSE);
-    SetMetric( aMaxHeightEdit,  aMetric );
-    SetMetric( aDistEdit,       aMetric );
-    SetMetric( aLineDistEdit,   aMetric );
+    SetMetric( aMaxHeightEdit,	aMetric );
+    SetMetric( aDistEdit, 		aMetric );
+    SetMetric( aLineDistEdit, 	aMetric );
     MeasurementSystem eSys = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     long nHeightValue = MEASURE_METRIC != eSys ? 1440 : 1134;
     aMaxHeightEdit.SetValue(aMaxHeightEdit.Normalize(nHeightValue),FUNIT_TWIP);;
@@ -243,7 +243,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Attribute in den Set stopfen bei OK
+    Beschreibung:	Attribute in den Set stopfen bei OK
  --------------------------------------------------------------------*/
 BOOL SwFootNotePage::FillItemSet(SfxItemSet &rSet)
 {

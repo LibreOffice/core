@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ BOOL    IsBold( const Font &rFont );
 
 class SmFace : public Font
 {
-    long    nBorderWidth;
+    long	nBorderWidth;
 
     void    Impl_Init();
 
@@ -120,12 +120,12 @@ public:
 
     // overloaded version in order to supply a min value
     // for font size (height). (Also used in ctor's to do so.)
-    void    SetSize(const Size& rSize);
+    void 	SetSize(const Size& rSize);
 
-    void    SetBorderWidth(long nWidth)     { nBorderWidth = nWidth; }
-    long    GetBorderWidth() const;
-    long    GetDefaultBorderWidth() const   { return GetSize().Height() / 20 ; }
-    void    FreezeBorderWidth()     { nBorderWidth = GetDefaultBorderWidth(); }
+    void	SetBorderWidth(long nWidth)		{ nBorderWidth = nWidth; }
+    long	GetBorderWidth() const;
+    long	GetDefaultBorderWidth() const	{ return GetSize().Height() / 20 ; }
+    void	FreezeBorderWidth()		{ nBorderWidth = GetDefaultBorderWidth(); }
 
     SmFace & operator = (const SmFace &rFace);
 };
@@ -142,14 +142,14 @@ SmFace & operator *= (SmFace &rFace, const Fraction &rFrac);
 class SmInfoText : public FixedText
 {
 protected:
-    USHORT  nMaxLen;
-    String  aText;
+    USHORT	nMaxLen;
+    String	aText;
 
 public:
     SmInfoText(Window* pParent, WinBits nWinStyle = 0, USHORT nMax = 128);
     SmInfoText(Window* pParent, const ResId& rResId, USHORT nMax = 128);
 
-    void    SetText(const String& rStr);
+    void	SetText(const String& rStr);
 
     XubString GetText() const { return (aText); }
 };
@@ -164,20 +164,20 @@ public:
 class SmPickList : public SfxPtrArr
 {
 protected:
-    USHORT  nSize;
+    USHORT	nSize;
 
     virtual void   *CreateItem(const String& rString) = 0;
     virtual void   *CreateItem(const void *pItem) = 0;
-    virtual void    DestroyItem(void *pItem) = 0;
+    virtual void	DestroyItem(void *pItem) = 0;
 
-    virtual BOOL    CompareItem(const void *pFirstItem, const void *pSecondItem) const = 0;
+    virtual BOOL	CompareItem(const void *pFirstItem, const void *pSecondItem) const = 0;
 
-    virtual String  GetStringItem(void *pItem) = 0;
+    virtual String	GetStringItem(void *pItem) = 0;
 
-    void       *GetPtr(USHORT nPos) const { return SfxPtrArr::GetObject(nPos); }
-    void      *&GetPtr(USHORT nPos) { return SfxPtrArr::GetObject(nPos); }
-    void        InsertPtr(USHORT nPos, void *pItem) { SfxPtrArr::Insert(nPos, pItem); }
-    void        RemovePtr(USHORT nPos, USHORT nCount = 1) { SfxPtrArr::Remove(nPos, nCount); }
+    void	   *GetPtr(USHORT nPos) const { return SfxPtrArr::GetObject(nPos); }
+    void	  *&GetPtr(USHORT nPos) { return SfxPtrArr::GetObject(nPos); }
+    void		InsertPtr(USHORT nPos, void *pItem) { SfxPtrArr::Insert(nPos, pItem); }
+    void		RemovePtr(USHORT nPos, USHORT nCount = 1) { SfxPtrArr::Remove(nPos, nCount); }
 
 public:
     SmPickList(USHORT nInitSize = 0, USHORT nMaxSize = 5);
@@ -185,20 +185,20 @@ public:
 
     SmPickList&   operator = (const SmPickList& rList);
 
-    void       *Get(USHORT nPos = 0) const { return GetPtr(nPos); }
+    void	   *Get(USHORT nPos = 0) const { return GetPtr(nPos); }
     using   SfxPtrArr::Insert;
-    void        Insert(const void* pItem);
-    void        Update(const void* pItem, const void *pNewItem);
+    void		Insert(const void* pItem);
+    void		Update(const void* pItem, const void *pNewItem);
     using   SfxPtrArr::Remove;
-    void        Remove(const void* pItem);
+    void		Remove(const void* pItem);
 
     using   SfxPtrArr::operator [];
-    void       *operator [] (USHORT nPos) const { return GetPtr(nPos); }
+    void	   *operator [] (USHORT nPos) const { return GetPtr(nPos); }
 
-    USHORT      GetSize() const { return nSize; }
-    USHORT      Count() const { return SfxPtrArr::Count(); }
+    USHORT		GetSize() const { return nSize; }
+    USHORT		Count() const { return SfxPtrArr::Count(); }
 
-    void        Clear();
+    void		Clear();
 };
 
 
@@ -212,11 +212,11 @@ class SmStringPickList : public SmPickList
 protected:
     virtual void   *CreateItem(const String& rString);
     virtual void   *CreateItem(const void *pItem);
-    virtual void    DestroyItem(void *pItem);
+    virtual void	DestroyItem(void *pItem);
 
-    virtual BOOL    CompareItem(const void *pFirstItem, const void *pSecondItem) const;
+    virtual BOOL	CompareItem(const void *pFirstItem, const void *pSecondItem) const;
 
-    virtual String  GetStringItem(void *pItem);
+    virtual String	GetStringItem(void *pItem);
 
 public:
     SmStringPickList()
@@ -227,15 +227,15 @@ public:
         : SmPickList(rOrig) {}
     virtual ~SmStringPickList() { Clear(); }
 
-    virtual void    Insert(const String &rString);
-    virtual void    Update(const String &rString, const String &rNewString);
-    virtual void    Remove(const String &rString);
+    virtual void	Insert(const String &rString);
+    virtual void	Update(const String &rString, const String &rNewString);
+    virtual void	Remove(const String &rString);
 
-    inline BOOL     Contains(const String &rString) const;
-    inline String   Get(USHORT nPos = 0) const;
+    inline BOOL		Contains(const String &rString) const;
+    inline String	Get(USHORT nPos = 0) const;
 
     inline SmStringPickList& operator = (const SmStringPickList& rList);
-    inline String            operator [] (USHORT nPos) const;
+    inline String			 operator [] (USHORT nPos) const;
 };
 
 inline SmStringPickList& SmStringPickList::operator = (const SmStringPickList& rList)
@@ -253,7 +253,7 @@ inline String SmStringPickList::Get(USHORT nPos) const
     return nPos < Count() ? *((String *)SmPickList::Get(nPos)) : String();
 }
 
-inline BOOL SmStringPickList::Contains(const String &rString) const
+inline BOOL	SmStringPickList::Contains(const String &rString) const
 {
     return SmPickList::Contains((void *)&rString);
 }
@@ -271,11 +271,11 @@ class SmFontPickList : public SmPickList
 protected:
     virtual void   *CreateItem(const String& rString);
     virtual void   *CreateItem(const void *pItem);
-    virtual void    DestroyItem(void *pItem);
+    virtual void	DestroyItem(void *pItem);
 
-    virtual BOOL    CompareItem(const void *pFirstItem, const void *pSecondItem) const;
+    virtual BOOL	CompareItem(const void *pFirstItem, const void *pSecondItem) const;
 
-    virtual String  GetStringItem(void *pItem);
+    virtual String	GetStringItem(void *pItem);
 
 public:
     SmFontPickList()
@@ -287,22 +287,22 @@ public:
     virtual ~SmFontPickList() { Clear(); }
 
     using   SfxPtrArr::Insert;
-    virtual void    Insert(const Font &rFont);
+    virtual void	Insert(const Font &rFont);
     using   SmPickList::Update;
-    virtual void    Update(const Font &rFont, const Font &rNewFont);
+    virtual void	Update(const Font &rFont, const Font &rNewFont);
     using   SfxPtrArr::Remove;
-    virtual void    Remove(const Font &rFont);
+    virtual void	Remove(const Font &rFont);
 
     using   SmPickList::Contains;
-    inline BOOL     Contains(const Font &rFont) const;
-    inline Font     Get(USHORT nPos = 0) const;
+    inline BOOL		Contains(const Font &rFont) const;
+    inline Font		Get(USHORT nPos = 0) const;
 
-    inline SmFontPickList&  operator = (const SmFontPickList& rList);
+    inline SmFontPickList& 	operator = (const SmFontPickList& rList);
     using   SfxPtrArr::operator [];
-    inline Font             operator [] (USHORT nPos) const;
+    inline Font				operator [] (USHORT nPos) const;
 
-    void            ReadFrom(const SmFontDialog& rDialog);
-    void            WriteTo(SmFontDialog& rDialog) const;
+    void 			ReadFrom(const SmFontDialog& rDialog);
+    void 			WriteTo(SmFontDialog& rDialog) const;
 };
 
 inline SmFontPickList& SmFontPickList::operator = (const SmFontPickList& rList)
@@ -310,7 +310,7 @@ inline SmFontPickList& SmFontPickList::operator = (const SmFontPickList& rList)
     *(SmPickList *)this = *(SmPickList *)&rList; return *this;
 }
 
-inline Font SmFontPickList::operator [] (USHORT nPos) const
+inline Font	SmFontPickList::operator [] (USHORT nPos) const
 {
     return *((Font *)SmPickList::operator[](nPos));
 }
@@ -320,7 +320,7 @@ inline Font SmFontPickList::Get(USHORT nPos) const
     return nPos < Count() ? *((Font *)SmPickList::Get(nPos)) : Font();
 }
 
-inline BOOL SmFontPickList::Contains(const Font &rFont) const
+inline BOOL	SmFontPickList::Contains(const Font &rFont) const
 {
     return SmPickList::Contains((void *)&rFont);
 }
@@ -344,17 +344,17 @@ public:
 
     SmStringPickComboBox& operator = (const SmStringPickList& rList);
 
-    void            SetText(const String& rStr);
+    void			SetText(const String& rStr);
 
-    virtual void    Insert(const String &rString);
-    virtual void    Update(const String &rString, const String &rNewString);
-    virtual void    Remove(const String &rString);
+    virtual void	Insert(const String &rString);
+    virtual void	Update(const String &rString, const String &rNewString);
+    virtual void	Remove(const String &rString);
 };
 #endif
 
 ////////////////////////////////////////////////////////////
 //
-//  SmFontPickListBox
+//	SmFontPickListBox
 //
 
 class SmFontPickListBox : public SmFontPickList, public ListBox
@@ -368,11 +368,11 @@ public:
     SmFontPickListBox& operator = (const SmFontPickList& rList);
 
     using   SfxPtrArr::Insert;
-    virtual void    Insert(const Font &rFont);
+    virtual void	Insert(const Font &rFont);
     using   Window::Update;
-    virtual void    Update(const Font &rFont, const Font &rNewFont);
+    virtual void	Update(const Font &rFont, const Font &rNewFont);
     using   SfxPtrArr::Remove;
-    virtual void    Remove(const Font &rFont);
+    virtual void	Remove(const Font &rFont);
 };
 
 #endif

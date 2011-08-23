@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -428,19 +428,19 @@ namespace sw { namespace mark
         const rtl::OUString& rName,
         const rtl::OUString& rType )
     {
-        sw::mark::IMark* pMark = makeMark( rPaM, rName,
+        sw::mark::IMark* pMark = makeMark( rPaM, rName, 
                 IDocumentMarkAccess::TEXT_FIELDMARK );
         sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
         pFieldMark->SetFieldname( rType );
 
         return pFieldMark;
     }
-
-    ::sw::mark::IFieldmark* MarkManager::makeNoTextFieldBookmark( const SwPaM& rPaM,
-        const rtl::OUString& rName,
+            
+    ::sw::mark::IFieldmark* MarkManager::makeNoTextFieldBookmark( const SwPaM& rPaM, 
+        const rtl::OUString& rName, 
         const rtl::OUString& rType)
     {
-        sw::mark::IMark* pMark = makeMark( rPaM, rName,
+        sw::mark::IMark* pMark = makeMark( rPaM, rName, 
                 IDocumentMarkAccess::CHECKBOX_FIELDMARK );
         sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
         pFieldMark->SetFieldname( rType );
@@ -869,20 +869,20 @@ namespace sw { namespace mark
 namespace
 {
     // Aufbau vom Array: 2 longs,
-    //  1. Long enthaelt Type und Position im DocArray,
-    //  2. die ContentPosition
+    //	1. Long enthaelt Type und Position im DocArray,
+    //	2. die ContentPosition
     //
-    //  CntntType --
-    //          0x8000 = Bookmark Pos1
-    //          0x8001 = Bookmark Pos2
-    //          0x2000 = Absatzgebundener Rahmen
-    //          0x2001 = Auto-Absatzgebundener Rahmen, der umgehaengt werden soll
-    //          0x1000 = Redline Mark
-    //          0x1001 = Redline Point
-    //          0x0800 = Crsr aus der CrsrShell Mark
-    //          0x0801 = Crsr aus der CrsrShell Point
-    //          0x0400 = UnoCrsr Mark
-    //          0x0401 = UnoCrsr Point
+    //	CntntType --
+    //			0x8000 = Bookmark Pos1
+    //			0x8001 = Bookmark Pos2
+    //			0x2000 = Absatzgebundener Rahmen
+    //			0x2001 = Auto-Absatzgebundener Rahmen, der umgehaengt werden soll
+    //			0x1000 = Redline Mark
+    //			0x1001 = Redline Point
+    //			0x0800 = Crsr aus der CrsrShell Mark
+    //			0x0801 = Crsr aus der CrsrShell Point
+    //			0x0400 = UnoCrsr Mark
+    //			0x0401 = UnoCrsr Point
     //
 
     class _SwSaveTypeCountContent
@@ -911,21 +911,21 @@ namespace
             rArr.Insert( nContent, rArr.Count() );
         }
 
-        void SetType( USHORT n )        { TYPECOUNT.TC.nType = n; }
-        USHORT GetType() const          { return TYPECOUNT.TC.nType; }
-        void IncType()                  { ++TYPECOUNT.TC.nType; }
-        void DecType()                  { --TYPECOUNT.TC.nType; }
+        void SetType( USHORT n )		{ TYPECOUNT.TC.nType = n; }
+        USHORT GetType() const 			{ return TYPECOUNT.TC.nType; }
+        void IncType() 	 				{ ++TYPECOUNT.TC.nType; }
+        void DecType() 	 				{ --TYPECOUNT.TC.nType; }
 
-        void SetCount( USHORT n )       { TYPECOUNT.TC.nCount = n; }
-        USHORT GetCount() const         { return TYPECOUNT.TC.nCount; }
-        USHORT IncCount()               { return ++TYPECOUNT.TC.nCount; }
-        USHORT DecCount()               { return --TYPECOUNT.TC.nCount; }
+        void SetCount( USHORT n ) 		{ TYPECOUNT.TC.nCount = n; }
+        USHORT GetCount() const 		{ return TYPECOUNT.TC.nCount; }
+        USHORT IncCount()  				{ return ++TYPECOUNT.TC.nCount; }
+        USHORT DecCount()  				{ return --TYPECOUNT.TC.nCount; }
 
         void SetTypeAndCount( USHORT nT, USHORT nC )
             { TYPECOUNT.TC.nCount = nC; TYPECOUNT.TC.nType = nT; }
 
-        void SetContent( xub_StrLen n )     { nContent = n; }
-        xub_StrLen GetContent() const       { return nContent; }
+        void SetContent( xub_StrLen n )		{ nContent = n; }
+        xub_StrLen GetContent() const		{ return nContent; }
     };
 
     // #i59534: If a paragraph will be splitted we have to restore some redline positions

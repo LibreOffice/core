@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,27 +63,27 @@ class SwDropCapsPage : public SfxTabPage
 {
 friend class SwDropCapsPict;
 
-    CheckBox        aDropCapsBox;
-    CheckBox        aWholeWordCB;
-    FixedText       aSwitchText;
-    NumericField    aDropCapsField;
-    FixedText       aLinesText;
-    NumericField    aLinesField;
-    FixedText       aDistanceText;
-    MetricField     aDistanceField;
+    CheckBox  		aDropCapsBox;
+    CheckBox  		aWholeWordCB;
+    FixedText		aSwitchText;
+    NumericField  	aDropCapsField;
+    FixedText 		aLinesText;
+    NumericField 	aLinesField;
+    FixedText 		aDistanceText;
+    MetricField 	aDistanceField;
     FixedLine       aSettingsFL;
 
-    FixedText       aTextText;
-    Edit            aTextEdit;
-    FixedText       aTemplateText;
-    ListBox         aTemplateBox;
+    FixedText      	aTextText;
+    Edit           	aTextEdit;
+    FixedText      	aTemplateText;
+    ListBox        	aTemplateBox;
     FixedLine       aContentFL;
 
-    SwDropCapsPict  *pPict;
+    SwDropCapsPict 	*pPict;
 
-    BOOL            bModified;
-    BOOL            bFormat;
-    BOOL            bHtmlMode;
+    BOOL 			bModified;
+    BOOL 			bFormat;
+    BOOL			bHtmlMode;
 
     SwWrtShell &rSh;
 
@@ -91,7 +91,7 @@ friend class SwDropCapsPict;
     ~SwDropCapsPage();
 
     virtual int     DeactivatePage(SfxItemSet *pSet);
-    void    FillSet( SfxItemSet &rSet );
+    void 	FillSet( SfxItemSet &rSet );
 
     DECL_LINK( ClickHdl, Button * );
     DECL_LINK( ModifyHdl, Edit * );
@@ -109,7 +109,7 @@ public:
     virtual BOOL FillItemSet(      SfxItemSet &rSet);
     virtual void Reset      (const SfxItemSet &rSet);
 
-    void    SetFormat(BOOL bSet){bFormat = bSet;}
+    void 	SetFormat(BOOL bSet){bFormat = bSet;}
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,8 @@
 #include <extinput.hxx>
 #include <ndtxt.hxx>
 #include <scriptinfo.hxx>
-#include <mdiexp.hxx>           // GetSearchDialog
-#include <comcore.hrc>          // ResId fuer Abfrage wenn zu Search & Replaces
+#include <mdiexp.hxx>			// GetSearchDialog
+#include <comcore.hrc>			// ResId fuer Abfrage wenn zu Search & Replaces
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -109,10 +109,10 @@ void SwRedlineRects::Paint( const Rectangle& rRect )
     UINT8 nVal = 0xc8 - ( (nMode / 4) * 16 );
     switch( nMode % 4 )
     {
-    case 0: aCol = RGB_COLORDATA( nVal, nVal, 0xFF );   break;
-    case 1: aCol = RGB_COLORDATA( 0xFF, 0xc8, nVal );   break;
-    case 2: aCol = RGB_COLORDATA( nVal, 0xFF, nVal );   break;
-    case 3: aCol = RGB_COLORDATA( 0xFF, nVal, nVal );   break;
+    case 0: aCol = RGB_COLORDATA( nVal, nVal, 0xFF );	break;
+    case 1: aCol = RGB_COLORDATA( 0xFF, 0xc8, nVal );	break;
+    case 2: aCol = RGB_COLORDATA( nVal, 0xFF, nVal );	break;
+    case 3: aCol = RGB_COLORDATA( 0xFF, nVal, nVal );	break;
     }
     aCol = aCol.GetColor() ^ COL_WHITE;
 
@@ -186,7 +186,7 @@ void ShowRedlines( const SwCrsrShell* pSh, int nAction, const SwRect* pRect = 0 
                 switch( nAction )
                 {
                 case 1: (*ppRedRect)->Show(); break;
-                case 2: (*ppRedRect)->Hide(); break;
+                case 2:	(*ppRedRect)->Hide(); break;
                 case 3: (*ppRedRect)->Invalidate( *pRect ); break;
                 }
 
@@ -197,8 +197,8 @@ void ShowRedlines( const SwCrsrShell* pSh, int nAction, const SwRect* pRect = 0 
     }
 }
 
-#define SHOWREDLINES1( nAct )           ShowRedlines( GetShell(),nAct );
-#define SHOWREDLINES2( nAct, pRect )    ShowRedlines( GetShell(),nAct, pRect );
+#define SHOWREDLINES1( nAct )			ShowRedlines( GetShell(),nAct );
+#define SHOWREDLINES2( nAct, pRect )	ShowRedlines( GetShell(),nAct, pRect );
 
 #else
 
@@ -238,7 +238,7 @@ SwVisCrsr::~SwVisCrsr()
 {
 #ifdef SW_CRSR_TIMER
     if( bTimerOn )
-        Stop();     // Timer stoppen
+        Stop();		// Timer stoppen
 #endif
 
     if( bIsVisible && aTxtCrsr.IsVisible() )
@@ -289,7 +289,7 @@ void SwVisCrsr::Hide()
             Stop();         // Timer Stoppen
 #endif
 
-        if( aTxtCrsr.IsVisible() )      // sollten die Flags nicht gueltig sein?
+        if( aTxtCrsr.IsVisible() )		// sollten die Flags nicht gueltig sein?
             aTxtCrsr.Hide();
     }
 }
@@ -319,7 +319,7 @@ BOOL SwVisCrsr::ChgTimerFlag( BOOL bFlag )
     bOld = bTimerOn;
     if( !bFlag && bIsVisible && IsActive() )
     {
-        Stop();         // Timer Stoppen
+        Stop();			// Timer Stoppen
         _SetPosAndShow();
     }
     bTimerOn = bFlag;
@@ -421,7 +421,7 @@ void SwVisCrsr::_SetPosAndShow()
 //////////////////////////////////////////////////////////////////////////////
 
 SwSelPaintRects::SwSelPaintRects( const SwCrsrShell& rCSh )
-:   SwRects( 0 ),
+:	SwRects( 0 ),
     pCShell( &rCSh ),
     mpCursorOverlay(0)
 {
@@ -526,7 +526,7 @@ void SwSelPaintRects::Show()
                 // create correct selection
                 mpCursorOverlay = new sdr::overlay::OverlaySelection(
                     sdr::overlay::OVERLAY_TRANSPARENT,
-                    aHighlight,
+                    aHighlight, 
                     aNewRanges,
                     true);
 
@@ -645,7 +645,7 @@ void SwShellCrsr::FillRects()
         GetPoint()->nNode.GetNode().GetCntntNode()->GetFrm() &&
         (GetMark()->nNode == GetPoint()->nNode ||
         (GetMark()->nNode.GetNode().IsCntntNode() &&
-         GetMark()->nNode.GetNode().GetCntntNode()->GetFrm() )  ))
+         GetMark()->nNode.GetNode().GetCntntNode()->GetFrm() )	))
         GetDoc()->GetRootFrm()->CalcFrmRects( *this, GetShell()->IsTableMode() );
 }
 
@@ -759,7 +759,7 @@ BOOL SwShellCrsr::UpDown( BOOL bUp, USHORT nCnt )
 #if OSL_DEBUG_LEVEL > 1
 
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
-//              am sichtbaren Cursor
+//				am sichtbaren Cursor
 
 BOOL SwShellCrsr::IsSelOvr( int eFlags )
 {
@@ -801,7 +801,7 @@ SwShellTableCrsr::SwShellTableCrsr( const SwCrsrShell& rCrsrSh,
 
 SwShellTableCrsr::~SwShellTableCrsr() {}
 
-void SwShellTableCrsr::SetMark()                { SwShellCrsr::SetMark(); }
+void SwShellTableCrsr::SetMark() 				{ SwShellCrsr::SetMark(); }
 
 SwCursor* SwShellTableCrsr::Create( SwPaM* pRing ) const
 {
@@ -898,7 +898,7 @@ BOOL SwShellTableCrsr::IsInside( const Point& rPt ) const
 #if OSL_DEBUG_LEVEL > 1
 
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
-//              am sichtbaren Cursor
+//				am sichtbaren Cursor
 BOOL SwShellTableCrsr::IsSelOvr( int eFlags )
 {
     return SwShellCrsr::IsSelOvr( eFlags );

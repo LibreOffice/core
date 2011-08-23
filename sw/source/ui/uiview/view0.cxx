@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@
 #include "basesh.hxx"
 #include "docsh.hxx"
 #include "globals.hrc"
-#include "cmdid.h"          // FN_       ...
+#include "cmdid.h"		 	// FN_		 ...
 #include "globdoc.hxx"
 #include "wview.hxx"
 #include "shells.hrc"
@@ -135,7 +135,7 @@ SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
 
 TYPEINIT1(SwView,SfxViewShell)
 
-ShellModes  SwView::GetShellMode()
+ShellModes	SwView::GetShellMode()
 {
     return pViewImpl->GetShellMode();
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,9 +84,9 @@
 #include <pagedesc.hxx>
 #include <fmtpdsc.hxx>
 #include <doc.hxx>
-#include <rootfrm.hxx>      // AuthorField
-#include <pagefrm.hxx>      //
-#include <cntfrm.hxx>       //
+#include <rootfrm.hxx>		// AuthorField
+#include <pagefrm.hxx>		//
+#include <cntfrm.hxx>		//
 #include <pam.hxx>
 #include <viewsh.hxx>
 #include <dbmgr.hxx>
@@ -105,7 +105,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 
-#define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
+#define URL_DECODE 	INetURLObject::DECODE_UNAMBIGUOUS
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -144,8 +144,8 @@ SwFieldType* SwPageNumberFieldType::Copy() const
 {
     SwPageNumberFieldType *pTmp = new SwPageNumberFieldType();
 
-    pTmp->nNum       = nNum;
-    pTmp->nMax       = nMax;
+    pTmp->nNum 		 = nNum;
+    pTmp->nMax 		 = nMax;
     pTmp->nNumberingType = nNumberingType;
     pTmp->bVirtuell  = bVirtuell;
 
@@ -551,7 +551,7 @@ bool SwFileNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
                 case FF_NAME:
                     nRet = text::FilenameDisplayFormat::NAME_AND_EXT;
                 break;
-                default:    nRet = text::FilenameDisplayFormat::FULL;
+                default:	nRet = text::FilenameDisplayFormat::FULL;
             }
             rAny <<= nRet;
         }
@@ -582,8 +582,8 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     case FIELD_PROP_FORMAT:
         {
             //JP 24.10.2001: int32 because in UnoField.cxx a putvalue is
-            //              called with a int32 value! But normally we need
-            //              here only a int16
+            //				called with a int32 value! But normally we need
+            //				here only a int16
             sal_Int32 nType = 0;
             rAny >>= nType;
             BOOL bFixed = IsFixed();
@@ -598,7 +598,7 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
                 case text::FilenameDisplayFormat::NAME_AND_EXT:
                     nType = FF_NAME;
                 break;
-                default:    nType = FF_PATHNAME;
+                default:	nType = FF_PATHNAME;
             }
             if(bFixed)
                 nType |= FF_FIXED;
@@ -718,12 +718,12 @@ bool SwTemplNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
             sal_Int16 nRet;
             switch( GetFormat() )
             {
-                case FF_PATH:       nRet = text::FilenameDisplayFormat::PATH; break;
+                case FF_PATH:		nRet = text::FilenameDisplayFormat::PATH; break;
                 case FF_NAME_NOEXT: nRet = text::FilenameDisplayFormat::NAME; break;
-                case FF_NAME:       nRet = text::FilenameDisplayFormat::NAME_AND_EXT; break;
-                case FF_UI_RANGE:   nRet = text::TemplateDisplayFormat::AREA; break;
+                case FF_NAME: 		nRet = text::FilenameDisplayFormat::NAME_AND_EXT; break;
+                case FF_UI_RANGE: 	nRet = text::TemplateDisplayFormat::AREA; break;
                 case FF_UI_NAME:    nRet = text::TemplateDisplayFormat::TITLE;  break;
-                default:    nRet = text::FilenameDisplayFormat::FULL;
+                default:	nRet = text::FilenameDisplayFormat::FULL;
 
             }
             rAny <<= nRet;
@@ -744,8 +744,8 @@ bool SwTemplNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     case FIELD_PROP_FORMAT:
         {
             //JP 24.10.2001: int32 because in UnoField.cxx a putvalue is
-            //              called with a int32 value! But normally we need
-            //              here only a int16
+            //				called with a int32 value! But normally we need
+            //				here only a int16
             sal_Int32 nType = 0;
             rAny >>= nType;
             switch( nType )
@@ -759,13 +759,13 @@ bool SwTemplNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             case text::FilenameDisplayFormat::NAME_AND_EXT:
                 SetFormat(FF_NAME);
             break;
-            case text::TemplateDisplayFormat::AREA  :
+            case text::TemplateDisplayFormat::AREA	:
                 SetFormat(FF_UI_RANGE);
             break;
             case text::TemplateDisplayFormat::TITLE  :
                 SetFormat(FF_UI_NAME);
             break;
-            default:    SetFormat(FF_PATHNAME);
+            default:	SetFormat(FF_PATHNAME);
             }
         }
         break;
@@ -798,7 +798,7 @@ String SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
         case DS_CHAR: nVal = rDStat.nChar;  break;
         case DS_PAGE:
             if( pDoc->GetRootFrm() )
-                ((SwDocStat &)rDStat).nPage = pDoc->GetRootFrm()->GetPageNum();
+                ((SwDocStat	&)rDStat).nPage = pDoc->GetRootFrm()->GetPageNum();
             nVal = rDStat.nPage;
             if( SVX_NUM_PAGEDESC == nFmt )
                 nFmt = (sal_uInt32)nNumberingType;
@@ -954,17 +954,17 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
     DBG_ASSERT(xDocProps.is(), "Doc has no DocumentProperties");
 
     sal_uInt16 nExtSub = nSub & 0xff00;
-    nSub &= 0xff;   // ExtendedSubTypes nicht beachten
+    nSub &= 0xff;	// ExtendedSubTypes nicht beachten
 
     switch(nSub)
     {
-    case DI_TITEL:  aStr = xDocProps->getTitle();       break;
-    case DI_THEMA:  aStr = xDocProps->getSubject();     break;
-    case DI_KEYS:   aStr = ::comphelper::string::convertCommaSeparated(
+    case DI_TITEL:	aStr = xDocProps->getTitle();	    break;
+    case DI_THEMA:	aStr = xDocProps->getSubject();	    break;
+    case DI_KEYS:	aStr = ::comphelper::string::convertCommaSeparated(
                                 xDocProps->getKeywords());
                     break;
-    case DI_COMMENT:aStr = xDocProps->getDescription(); break;
-    case DI_DOCNO:  aStr = String::CreateFromInt32(
+    case DI_COMMENT:aStr = xDocProps->getDescription();	break;
+    case DI_DOCNO:	aStr = String::CreateFromInt32(
                                         xDocProps->getEditingCycles() );
                     break;
     case DI_EDIT:
@@ -1011,7 +1011,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
             DateTime aDate(aD,aT);
             if( nSub == DI_CREATE )
-                ;       // das wars schon!!
+                ;		// das wars schon!!
             else if( nSub == DI_CHANGE )
             {
                 aName = xDocProps->getModifiedBy();
@@ -1154,7 +1154,7 @@ String SwDocInfoField::Expand() const
                     util::Date aDate;
                     util::DateTime aDateTime;
                     util::Duration aDuration;
-                    if( aAny >>= aDate)
+                    if( aAny >>= aDate) 
                     {
                         SvNumberFormatter* pFormatter = pDocShell->GetDoc()->GetNumberFormatter();
                         Date* pNullDate = pFormatter->GetNullDate();
@@ -1381,17 +1381,17 @@ void SwHiddenTxtFieldType::SetHiddenFlag( sal_Bool bSetHidden )
     if( bHidden != bSetHidden )
     {
         bHidden = bSetHidden;
-        UpdateFlds();       // alle HiddenText benachrichtigen
+        UpdateFlds();		// alle HiddenText benachrichtigen
     }
 }
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
 SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
-                                    sal_Bool    bConditional,
-                                    const   String& rCond,
-                                    const   String& rStr,
-                                    sal_Bool    bHidden,
+                                    sal_Bool 	bConditional,
+                                    const 	String& rCond,
+                                    const	String& rStr,
+                                    sal_Bool 	bHidden,
                                     sal_uInt16  nSub) :
     SwField( pFldType ), aCond(rCond), nSubType(nSub),
     bCanToggle(bConditional), bIsHidden(bHidden), bValid(sal_False)
@@ -1425,7 +1425,7 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
     : SwField( pFldType ), aTRUETxt(rTrue), aFALSETxt(rFalse), aCond(rCond), nSubType(nSub),
       bIsHidden(sal_True), bValid(sal_False)
 {
-    bCanToggle  = aCond.Len() > 0;
+    bCanToggle	= aCond.Len() > 0;
 }
 /* ---------------------------------------------------------------------------
 
@@ -1433,7 +1433,7 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
 String SwHiddenTxtField::Expand() const
 {
     // Type: !Hidden  -> immer anzeigen
-    //        Hide    -> Werte die Bedingung aus
+    // 		  Hide	  -> Werte die Bedingung aus
 
     if( TYP_CONDTXTFLD == nSubType )
     {
@@ -1471,12 +1471,12 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
             sTmpName = aFALSETxt;
 
 // OS 21.08.97: #42943# Datenbankausdruecke muessen sich von
-//              einfachem Text unterscheiden. also wird der einfache Text
-//              bevorzugt in Anfuehrungszeichen gesetzt.
-//              Sind diese vorhanden werden umschliessende entfernt.
-//              Wenn nicht, dann wird auf die Tauglichkeit als Datenbankname
-//              geprueft. Nur wenn zwei oder mehr Punkte vorhanden sind und kein
-//              Anfuehrungszeichen enthalten ist, gehen wir von einer DB aus.
+// 				einfachem Text unterscheiden. also wird der einfache Text
+// 				bevorzugt in Anfuehrungszeichen gesetzt.
+// 				Sind diese vorhanden werden umschliessende entfernt.
+//				Wenn nicht, dann wird auf die Tauglichkeit als Datenbankname
+//				geprueft. Nur wenn zwei oder mehr Punkte vorhanden sind und kein
+//				Anfuehrungszeichen enthalten ist, gehen wir von einer DB aus.
         if(sTmpName.Len() > 1 && sTmpName.GetChar(0) == '\"' &&
             sTmpName.GetChar((sTmpName.Len() - 1))== '\"')
         {
@@ -1488,7 +1488,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
         {
             ::ReplacePoint(sTmpName);
             if(sTmpName.GetChar(0) == '[' && sTmpName.GetChar(sTmpName.Len()-1) == ']')
-            {   // Eckige Klammern entfernen
+            {	// Eckige Klammern entfernen
                 sTmpName.Erase(0, 1);
                 sTmpName.Erase(sTmpName.Len()-1, 1);
             }
@@ -1547,10 +1547,10 @@ SwField* SwHiddenTxtField::Copy() const
         new SwHiddenTxtField((SwHiddenTxtFieldType*)GetTyp(), aCond,
                               aTRUETxt, aFALSETxt);
     pFld->bIsHidden = bIsHidden;
-    pFld->bValid    = bValid;
-    pFld->aContent  = aContent;
+    pFld->bValid	= bValid;
+    pFld->aContent	= aContent;
     pFld->SetFormat(GetFormat());
-    pFld->nSubType  = nSubType;
+    pFld->nSubType 	= nSubType;
     return pFld;
 }
 
@@ -2070,7 +2070,7 @@ String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 ) const
     case EU_STATE:          nRet = USER_OPT_STATE;          break;
     case EU_FATHERSNAME:    nRet = USER_OPT_FATHERSNAME;    break;
     case EU_APARTMENT:      nRet = USER_OPT_APARTMENT;      break;
-    default:             OSL_ENSURE( !this, "Field unknown");
+    default:			 OSL_ENSURE( !this, "Field unknown");
     }
     if( USHRT_MAX != nRet )
     {
@@ -2407,7 +2407,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
                 const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().GetFrm( &aPt, 0, sal_False );
                 const SwPageFrm* pPgFrm = 0;
                 sal_uInt16 nDiff = ( pFrm && pRefFrm )
-                        ?   (pPgFrm = pFrm->FindPageFrm())->GetPhyPageNum() -
+                        ? 	(pPgFrm = pFrm->FindPageFrm())->GetPhyPageNum() -
                             pRefFrm->FindPageFrm()->GetPhyPageNum() + 1
                         : 1;
 
@@ -2491,7 +2491,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     aTmpLst.Seek_Entry( &aEndFld, &nLast );
 
     if( !nLast-- )
-        return ;        // es gibt kein entsprechendes Set - Feld vor mir
+        return ;		// es gibt kein entsprechendes Set - Feld vor mir
 
     const SwTxtFld* pRefTxtFld = aTmpLst[ nLast ]->GetFld();
     const SwRefPageSetField* pSetFld =
@@ -2587,7 +2587,7 @@ SwCharFmt* SwJumpEditFieldType::GetCharFmt()
 
     // noch nicht registriert ?
     if( !aDep.GetRegisteredIn() )
-        pFmt->Add( &aDep );     // anmelden
+        pFmt->Add( &aDep );		// anmelden
 
     return pFmt;
 }
@@ -2664,8 +2664,8 @@ bool SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
             case JE_FMT_TABLE:  nRet = text::PlaceholderType::TABLE; break;
             case JE_FMT_FRAME:  nRet = text::PlaceholderType::TEXTFRAME; break;
             case JE_FMT_GRAPHIC:nRet = text::PlaceholderType::GRAPHIC; break;
-            case JE_FMT_OLE:    nRet = text::PlaceholderType::OBJECT; break;
-//          case JE_FMT_TEXT:
+            case JE_FMT_OLE:	nRet = text::PlaceholderType::OBJECT; break;
+//			case JE_FMT_TEXT:
             default:
                 nRet = text::PlaceholderType::TEXT; break;
             }
@@ -2693,17 +2693,17 @@ bool SwJumpEditField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     case FIELD_PROP_USHORT1:
         {
             //JP 24.10.2001: int32 because in UnoField.cxx a putvalue is
-            //              called with a int32 value! But normally we need
-            //              here only a int16
+            //				called with a int32 value! But normally we need
+            //				here only a int16
             sal_Int32 nSet = 0;
             rAny >>= nSet;
             switch( nSet )
             {
-                case text::PlaceholderType::TEXT     : SetFormat(JE_FMT_TEXT); break;
-                case text::PlaceholderType::TABLE    : SetFormat(JE_FMT_TABLE); break;
+                case text::PlaceholderType::TEXT 	 : SetFormat(JE_FMT_TEXT); break;
+                case text::PlaceholderType::TABLE 	 : SetFormat(JE_FMT_TABLE); break;
                 case text::PlaceholderType::TEXTFRAME: SetFormat(JE_FMT_FRAME); break;
                 case text::PlaceholderType::GRAPHIC  : SetFormat(JE_FMT_GRAPHIC); break;
-                case text::PlaceholderType::OBJECT   : SetFormat(JE_FMT_OLE); break;
+                case text::PlaceholderType::OBJECT 	 : SetFormat(JE_FMT_OLE); break;
             }
         }
         break;
@@ -2743,7 +2743,7 @@ SwCombinedCharField::SwCombinedCharField( SwCombinedCharFieldType* pFTyp,
 {
 }
 
-String  SwCombinedCharField::Expand() const
+String	SwCombinedCharField::Expand() const
 {
     return sCharacters;
 }

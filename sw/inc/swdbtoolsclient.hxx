@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,14 +39,14 @@
 class SW_DLLPUBLIC SwDbtoolsClient
 {
 private:
-    ::rtl::Reference< ::connectivity::simple::IDataAccessTools >            m_xDataAccessTools;
-    ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion >   m_xAccessTypeConversion;
-    ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory >     m_xDataAccessFactory;
+    ::rtl::Reference< ::connectivity::simple::IDataAccessTools >			m_xDataAccessTools;
+    ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion >	m_xAccessTypeConversion;
+    ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory >		m_xDataAccessFactory;
 
     SW_DLLPRIVATE static void registerClient();
     SW_DLLPRIVATE static void revokeClient();
     SW_DLLPRIVATE void getFactory();
-
+    
     SW_DLLPRIVATE ::rtl::Reference< ::connectivity::simple::IDataAccessTools >    getDataAccessTools();
     SW_DLLPRIVATE ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion > getAccessTypeConversion();
 

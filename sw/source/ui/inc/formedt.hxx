@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class SwWrtShell;
 class SwForm;
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Markierung fuer Verzeichniseintrag einfuegen
+     Beschreibung:	Markierung fuer Verzeichniseintrag einfuegen
  --------------------------------------------------------------------*/
 class SwIdxFormDlg : public SvxStandardDialog
 {
@@ -58,38 +58,38 @@ class SwIdxFormDlg : public SvxStandardDialog
     DECL_LINK( DoubleClickHdl, Button * );
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( AssignHdl, Button * );
-    void            UpdatePattern();
-    void            Apply();
+    void			UpdatePattern();
+    void			Apply();
 
-    ListBox         aEntryLB;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBT;
-    FixedText       aLevelFT;
-    Edit            aEntryED;
-    PushButton      aEntryBT;
-    PushButton      aTabBT;
-    PushButton      aPageBT;
-    PushButton      aJumpBT;
+    ListBox 		aEntryLB;
+    OKButton		aOKBtn;
+    CancelButton	aCancelBT;
+    FixedText		aLevelFT;
+    Edit			aEntryED;
+    PushButton		aEntryBT;
+    PushButton		aTabBT;
+    PushButton		aPageBT;
+    PushButton		aJumpBT;
     FixedLine       aEntryFL;
-    FixedText       aLevelFT2;
-    ListBox         aLevelLB;
-    FixedText       aTemplateFT;
-    ListBox         aParaLayLB;
-    PushButton      aStdBT;
-    PushButton      aAssignBT;
+    FixedText		aLevelFT2;
+    ListBox 		aLevelLB;
+    FixedText		aTemplateFT;
+    ListBox 		aParaLayLB;
+    PushButton		aStdBT;
+    PushButton		aAssignBT;
     FixedLine       aFormatFL;
 
-    SwWrtShell     &rSh;
-    SwForm         *pForm;
-    USHORT          nAktLevel;
-    BOOL            bLastLinkIsEnd;
+    SwWrtShell	   &rSh;
+    SwForm		   *pForm;
+    USHORT			nAktLevel;
+    BOOL			bLastLinkIsEnd;
 
 public:
     SwIdxFormDlg( Window* pParent, SwWrtShell &rShell, const SwForm& rForm );
     ~SwIdxFormDlg();
 
-    static BOOL     IsNoNum(SwWrtShell& rSh, const String& rName);
-    const SwForm&   GetTOXForm();
+    static BOOL		IsNoNum(SwWrtShell& rSh, const String& rName);
+    const SwForm&	GetTOXForm();
 };
 
 inline const SwForm& SwIdxFormDlg::GetTOXForm()

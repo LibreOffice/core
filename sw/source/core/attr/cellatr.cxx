@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 
 #include <rtl/math.hxx>
 
-#include <hintids.hxx>          // fuer RES_..
+#include <hintids.hxx> 			// fuer RES_..
 #include <cellatr.hxx>
 #include <calc.hxx>
 #include <format.hxx>
@@ -45,7 +45,7 @@
 
 
 
-//TYPEINIT1( SwFmt, SwClient ); //rtti fuer SwFmt
+//TYPEINIT1( SwFmt, SwClient );	//rtti fuer SwFmt
 
 /*************************************************************************
 |*
@@ -105,8 +105,8 @@ SfxPoolItem* SwTblBoxFormula::Clone( SfxItemPool* ) const
 
 
     // suche den Node, in dem die Formel steht:
-    //  TextFeld    -> TextNode,
-    //  BoxAttribut -> BoxStartNode
+    //	TextFeld	-> TextNode,
+    //	BoxAttribut	-> BoxStartNode
     // !!! MUSS VON JEDER ABLEITUNG UEBERLADEN WERDEN !!!
 const SwNode* SwTblBoxFormula::GetNodeOfFormula() const
 {
@@ -157,10 +157,10 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
         case TBL_CALC:
             // setze das Value-Flag zurueck
             // JP 17.06.96: interne Darstellung auf alle Formeln
-            //              (Referenzen auf andere Tabellen!!!)
-//          if( VF_CMD & pFld->GetFormat() )
-//              pFld->PtrToBoxNm( pUpdtFld->pTbl );
-//          else
+            //				(Referenzen auf andere Tabellen!!!)
+//			if( VF_CMD & pFld->GetFormat() )
+//				pFld->PtrToBoxNm( pUpdtFld->pTbl );
+//			else
                 ChgValid( FALSE );
             break;
         case TBL_BOXNAME:
@@ -172,7 +172,7 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
         case TBL_BOXPTR:
             // zur internen Darstellung
             // JP 17.06.96: interne Darstellung auf alle Formeln
-            //              (Referenzen auf andere Tabellen!!!)
+            //				(Referenzen auf andere Tabellen!!!)
             BoxNmToPtr( &pTblNd->GetTable() );
             break;
         case TBL_RELBOXNAME:
@@ -219,7 +219,7 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
 
 void SwTblBoxFormula::Calc( SwTblCalcPara& rCalcPara, double& rValue )
 {
-    if( !rCalcPara.rCalc.IsCalcError() )        // ist schon Fehler gesetzt ?
+    if( !rCalcPara.rCalc.IsCalcError() )		// ist schon Fehler gesetzt ?
     {
         // erzeuge aus den BoxNamen die Pointer
         BoxNmToPtr( rCalcPara.pTbl );
@@ -228,7 +228,7 @@ void SwTblBoxFormula::Calc( SwTblCalcPara& rCalcPara, double& rValue )
             rValue = rCalcPara.rCalc.Calculate( sFml ).GetDouble();
         else
             rValue = DBL_MAX;
-        ChgValid( !rCalcPara.IsStackOverFlow() );       // der Wert ist wieder gueltig
+        ChgValid( !rCalcPara.IsStackOverFlow() );		// der Wert ist wieder gueltig
     }
 }
 

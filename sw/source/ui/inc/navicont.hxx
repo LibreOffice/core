@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,28 +35,28 @@ class SwDocShell;
 class TransferDataContainer;
 class TransferableDataHelper;
 
-/*  [Beschreibung]
+/*	[Beschreibung]
     Navigator-Bookmark zur eindeutigen Identifizierung im Sw
 */
 
 class NaviContentBookmark
 {
-    String          aUrl;       // URL inkl. Sprungmarke
-    String          aDescr;     // Description
-    long            nDocSh;     // Adresse der DocShell
-    USHORT          nDefDrag;   // Description enthaelt defaultDragType
+    String			aUrl;		// URL inkl. Sprungmarke
+    String			aDescr;		// Description
+    long			nDocSh;		// Adresse der DocShell
+    USHORT			nDefDrag; 	// Description enthaelt defaultDragType
 
 public:
     NaviContentBookmark();
     NaviContentBookmark( const String &rUrl, const String& rDesc,
                             USHORT nDragType, const SwDocShell* );
 
-    const String&   GetURL() const              { return aUrl; }
-    const String&   GetDescription() const      { return aDescr; }
-    USHORT          GetDefaultDragType() const  { return nDefDrag; }
-    long            GetDocShell() const         { return nDocSh; }
-    void            Copy( TransferDataContainer& rData ) const;
-    BOOL            Paste( TransferableDataHelper& rData );
+    const String&	GetURL() const 				{ return aUrl; }
+    const String&	GetDescription() const		{ return aDescr; }
+    USHORT			GetDefaultDragType() const	{ return nDefDrag; }
+    long 			GetDocShell() const 		{ return nDocSh; }
+    void			Copy( TransferDataContainer& rData ) const;
+    BOOL 			Paste( TransferableDataHelper& rData );
 };
 
 #endif

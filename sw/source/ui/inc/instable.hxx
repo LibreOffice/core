@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,29 +49,29 @@ class SwInsTableDlg : public SfxModalDialog
 
     FixedLine       aFL;
     FixedText       aColLbl;
-    NumericField    aColEdit;
-    FixedText       aRowLbl;
-    NumericField    aRowEdit;
+    NumericField 	aColEdit;
+    FixedText   	aRowLbl;
+    NumericField 	aRowEdit;
 
     FixedLine       aOptionsFL;
     CheckBox        aHeaderCB;
-    CheckBox        aRepeatHeaderCB;
-    FixedText       aRepeatHeaderFT;    // "dummy" to build before and after FT
-    FixedText       aRepeatHeaderBeforeFT;
-    NumericField    aRepeatHeaderNF;
-    FixedText       aRepeatHeaderAfterFT;
-    TextControlCombo    aRepeatHeaderCombo;
+    CheckBox		aRepeatHeaderCB;
+    FixedText		aRepeatHeaderFT;	// "dummy" to build before and after FT
+    FixedText		aRepeatHeaderBeforeFT;
+    NumericField	aRepeatHeaderNF;
+    FixedText		aRepeatHeaderAfterFT;
+    TextControlCombo	aRepeatHeaderCombo;
 
-    CheckBox        aDontSplitCB;
-    CheckBox        aBorderCB;
+    CheckBox		aDontSplitCB;
+    CheckBox		aBorderCB;
 
     OKButton        aOkBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-    PushButton      aAutoFmtBtn;
+    CancelButton 	aCancelBtn;
+    HelpButton 		aHelpBtn;
+    PushButton 		aAutoFmtBtn;
 
-    SwWrtShell*     pShell;
-    SwTableAutoFmt* pTAutoFmt;
+    SwWrtShell*		pShell;
+    SwTableAutoFmt*	pTAutoFmt;
     sal_Int64       nEnteredValRepeatHeaderNF;
 
     DECL_LINK( ModifyName, Edit * );

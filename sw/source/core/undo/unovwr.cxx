@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <doc.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>			// fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <undobj.hxx>
@@ -54,9 +54,9 @@ using namespace ::com::sun::star::uno;
 
 // zwei Zugriffs-Funktionen
 inline SwPosition* IterPt( SwUndoIter& rUIter )
-{   return rUIter.pAktPam->GetPoint();  }
+{	return rUIter.pAktPam->GetPoint();	}
 inline SwPosition* IterMk( SwUndoIter& rUIter )
-{   return rUIter.pAktPam->GetMark();   }
+{	return rUIter.pAktPam->GetMark();	}
 
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
@@ -88,7 +88,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
 
     bInsChar = TRUE;
     xub_StrLen nTxtNdLen = pTxtNd->GetTxt().Len();
-    if( nSttCntnt < nTxtNdLen )     // kein reines Einfuegen ?
+    if( nSttCntnt < nTxtNdLen )		// kein reines Einfuegen ?
     {
         aDelStr.Insert( pTxtNd->GetTxt().GetChar( nSttCntnt ) );
         if( !pHistory )
@@ -368,7 +368,7 @@ struct _UndoTransliterate_Data
     void SetChangeAtNode( SwDoc& rDoc );
 };
 
-SwUndoTransliterate::SwUndoTransliterate(
+SwUndoTransliterate::SwUndoTransliterate( 
     const SwPaM& rPam,
     const utl::TransliterationWrapper& rTrans )
     : SwUndo( UNDO_TRANSLITERATE ), SwUndRng( rPam ), nType( rTrans.getType() )
@@ -388,7 +388,7 @@ void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
     rDoc.DoUndo( FALSE );
 
     // since the changes were added to the vector from the end of the string/node towards
-    // the start, we need to revert them from the start towards the end now to keep the
+    // the start, we need to revert them from the start towards the end now to keep the 
     // offset information of the undo data in sync with the changing text.
     // Thus we need to iterate from the end of the vector to the start
     for (sal_Int32 i = aChanges.size() - 1; i >= 0;  --i)
@@ -400,7 +400,7 @@ void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
 
 void SwUndoTransliterate::Redo( SwUndoIter& rUndoIter )
 {
-/* ??? */   rUndoIter.SetUpdateAttr( TRUE );
+/* ??? */	rUndoIter.SetUpdateAttr( TRUE );
 
     SetPaM( *rUndoIter.pAktPam );
     Repeat( rUndoIter );
@@ -469,7 +469,7 @@ void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
                 // same node and have a history?
                 pNew->pHistory = pD->pHistory;
                 pD->pHistory = 0;
-                break;          // more can't exist
+                break;		    // more can't exist
             }
         }
 

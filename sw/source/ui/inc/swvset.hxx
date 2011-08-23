@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ class SwRulerValueSet : public SvxBmpNumValueSet
         SwRulerValueSet( Window* pParent,
                         const ResId& rResId );
         ~SwRulerValueSet();
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void	UserDraw( const UserDrawEvent& rUDEvt );
 };
 #endif
 

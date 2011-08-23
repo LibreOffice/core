@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,13 +76,13 @@ class SwXStyleFamilies :  public cppu::WeakImplHelper4
 >,
     public SwUnoCollection
 {
-    SwDocShell*         pDocShell;
+    SwDocShell* 		pDocShell;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxCharStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxParaStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxFrameStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxPageStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxNumberingStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *	pxCharStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *	pxParaStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *	pxFrameStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *	pxPageStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *	pxNumberingStyles;
 protected:
     virtual ~SwXStyleFamilies();
 public:
@@ -125,12 +125,12 @@ class SwXStyleFamily : public cppu::WeakImplHelper4
 >,
     public SfxListener
 {
-    SfxStyleFamily              eFamily;        // Familie
-    SfxStyleSheetBasePool*      pBasePool;
-//  const SfxItemPropertyMap*   _pPropMap;
-    SwDocShell*                 pDocShell;
+    SfxStyleFamily 				eFamily;		// Familie
+    SfxStyleSheetBasePool*		pBasePool;
+//	const SfxItemPropertyMap*	_pPropMap;
+    SwDocShell* 				pDocShell;
 
-    SwXStyle*               _FindStyle(const String& rStyleName) const;
+    SwXStyle* 				_FindStyle(const String& rStyleName) const;
 public:
     SwXStyleFamily(SwDocShell* pDocShell, sal_uInt16 nFamily);
     ~SwXStyleFamily();
@@ -163,7 +163,7 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     //SfxListener
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -187,27 +187,27 @@ class SwXStyle : public cppu::WeakImplHelper7
         public SwClient
 {
     friend class SwXStyleFamily;
-    SwDoc*                  m_pDoc;
-    String                  sStyleName;
-    SfxStyleSheetBasePool*  pBasePool;
-    SfxStyleFamily          eFamily;    // fuer Notify
+    SwDoc* 					m_pDoc;
+    String 					sStyleName;
+    SfxStyleSheetBasePool* 	pBasePool;
+    SfxStyleFamily 			eFamily;	// fuer Notify
 
-    sal_Bool                    bIsDescriptor  : 1;
-    sal_Bool                    bIsConditional : 1;
-    String                  sParentStyleName;
-    SwStyleProperties_Impl* pPropImpl;
+    sal_Bool					bIsDescriptor  : 1;
+    sal_Bool					bIsConditional : 1;
+    String					sParentStyleName;
+    SwStyleProperties_Impl*	pPropImpl;
 
-    void    ApplyDescriptorProperties();
+    void	ApplyDescriptorProperties();
 protected:
-    void    Invalidate();
+    void 	Invalidate();
 
-    const SfxStyleSheetBasePool*    GetBasePool() const {return pBasePool;}
-    SfxStyleSheetBasePool*  GetBasePool() {return pBasePool;}
+    const SfxStyleSheetBasePool* 	GetBasePool() const {return pBasePool;}
+    SfxStyleSheetBasePool* 	GetBasePool() {return pBasePool;}
 
-    void                SetStyleName(const String& rSet){ sStyleName = rSet;}
+    void				SetStyleName(const String& rSet){ sStyleName = rSet;}
     SwStyleProperties_Impl* GetPropImpl(){return pPropImpl;}
-    com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxStyleData;
-    com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  mxStyleFamily;
+    com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >	mxStyleData;
+    com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >	mxStyleFamily;
 
     void SAL_CALL SetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL GetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -215,7 +215,7 @@ protected:
 public:
     SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam = SFX_STYLE_FAMILY_PARA, BOOL bConditional = FALSE);
     SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
-                                SwDoc*  pDoc,
+                                SwDoc* 	pDoc,
                                 const String& rStyleName);//,
                                     //const SfxItemPropertyMap* _pMap);
     ~SwXStyle();
@@ -272,22 +272,22 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //SfxListener
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    const String&       GetStyleName() const { return sStyleName;}
-    SfxStyleFamily      GetFamily() const {return eFamily;}
+    const String& 		GetStyleName() const { return sStyleName;}
+    SfxStyleFamily 		GetFamily() const {return eFamily;}
 
-    sal_Bool                IsDescriptor() const {return bIsDescriptor;}
-    sal_Bool                IsConditional() const { return bIsConditional;}
-    const String&       GetParentStyleName() const { return sParentStyleName;}
-    void                SetDoc(SwDoc* pDc, SfxStyleSheetBasePool*   pPool)
+    sal_Bool				IsDescriptor() const {return bIsDescriptor;}
+    sal_Bool				IsConditional() const { return bIsConditional;}
+    const String&		GetParentStyleName() const { return sParentStyleName;}
+    void				SetDoc(SwDoc* pDc, SfxStyleSheetBasePool* 	pPool)
                             {
                                 bIsDescriptor = sal_False; m_pDoc = pDc;
                                 pBasePool = pPool;
                                 StartListening(*pBasePool);
                             }
     SwDoc*                GetDoc() const { return m_pDoc; }
-    virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void 	Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 };
 /* -----------------------------15.12.00 14:25--------------------------------
 
@@ -297,7 +297,7 @@ class SwXFrameStyle : public SwXStyle,
 {
 public:
     SwXFrameStyle(SfxStyleSheetBasePool& rPool,
-                                SwDoc*  pDoc,
+                                SwDoc* 	pDoc,
                                 const String& rStyleName) :
         SwXStyle(rPool, SFX_STYLE_FAMILY_FRAME, pDoc, rStyleName){}
     SwXFrameStyle( SwDoc *pDoc );
@@ -318,7 +318,7 @@ public:
  * --------------------------------------------------*/
 class SwXPageStyle : public SwXStyle
 {
-    SwDocShell*     pDocShell;
+    SwDocShell* 	pDocShell;
 
 protected:
     void SAL_CALL SetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,18 +30,18 @@
 #include "precompiled_sw.hxx"
 
 
-#include "errhdl.hxx"   // ASSERT
+#include "errhdl.hxx"	// ASSERT
 
 #include "txtcfg.hxx"
 #include "porlay.hxx"
 #include "itrform2.hxx"
 #include "porglue.hxx"
-#include "porexp.hxx"   // SwQuoVadisPortion
-#include "blink.hxx"    // pBlink
+#include "porexp.hxx"	// SwQuoVadisPortion
+#include "blink.hxx"	// pBlink
 #include "redlnitr.hxx" // SwRedlineItr
-#include "porfly.hxx"   // SwFlyCntPortion
-#include <porrst.hxx>       // SwHangingPortion
-#include <pormulti.hxx>     // SwMultiPortion
+#include "porfly.hxx"	// SwFlyCntPortion
+#include <porrst.hxx>		// SwHangingPortion
+#include <pormulti.hxx> 	// SwMultiPortion
 #include <breakit.hxx>
 #include <unicode/uchar.h>
 #include <com/sun/star/i18n/ScriptType.hdl>
@@ -227,7 +227,7 @@ sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
  }
 
 /*************************************************************************
- *                 SwLineLayout::~SwLineLayout()
+ *				   SwLineLayout::~SwLineLayout()
  *
  * class SwLineLayout: Das Layout einer einzelnen Zeile. Dazu
  * gehoeren vor allen Dingen die Dimension, die Anzahl der
@@ -251,7 +251,7 @@ SwLineLayout::~SwLineLayout()
 }
 
 /*************************************************************************
- *                virtual SwLineLayout::Insert()
+ *				  virtual SwLineLayout::Insert()
  *************************************************************************/
 
 SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
@@ -280,7 +280,7 @@ SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
 }
 
 /*************************************************************************
- *                virtual SwLineLayout::Append()
+ *				  virtual SwLineLayout::Append()
  *************************************************************************/
 
 SwLinePortion *SwLineLayout::Append( SwLinePortion *pIns )
@@ -294,7 +294,7 @@ SwLinePortion *SwLineLayout::Append( SwLinePortion *pIns )
 }
 
 /*************************************************************************
- *                virtual SwLineLayout::Format()
+ *				  virtual SwLineLayout::Format()
  *************************************************************************/
 
 // fuer die Sonderbehandlung bei leeren Zeilen
@@ -311,7 +311,7 @@ sal_Bool SwLineLayout::Format( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                    SwLineLayout::CalcLeftMargin()
+ *					  SwLineLayout::CalcLeftMargin()
  *
  * Wir sammeln alle FlyPortions am Anfang der Zeile zu einer MarginPortion.
  *************************************************************************/
@@ -369,7 +369,7 @@ void SwLineLayout::InitSpaceAdd()
 }
 
 /*************************************************************************
- *                    SwLineLayout::CreateSpaceAdd()
+ *					  SwLineLayout::CreateSpaceAdd()
  *************************************************************************/
 
 void SwLineLayout::CreateSpaceAdd( const long nInit )
@@ -399,7 +399,7 @@ bool lcl_HasOnlyBlanks( const XubString& rTxt, xub_StrLen nStt, xub_StrLen nEnd 
 }
 
 /*************************************************************************
- *                    SwLineLayout::CalcLine()
+ *					  SwLineLayout::CalcLine()
  *
  * Aus FormatLine() ausgelagert.
  *************************************************************************/
@@ -447,9 +447,9 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
             SwLinePortion *pLast = this;
             KSHORT nMaxDescent = 0;
 
-            //  Eine Gruppe ist ein Abschnitt in der Portion-Kette von
-            //  pCurr oder einer Fix-Portion bis zum Ende bzw. zur naechsten
-            //  Fix-Portion.
+            //	Eine Gruppe ist ein Abschnitt in der Portion-Kette von
+            //	pCurr oder einer Fix-Portion bis zum Ende bzw. zur naechsten
+            //	Fix-Portion.
             while( pPos )
             {
                 DBG_LOOP;
@@ -713,7 +713,7 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
 }
 
 /*************************************************************************
- *                      class SwCharRange
+ *						class SwCharRange
  *************************************************************************/
 
 SwCharRange &SwCharRange::operator+=(const SwCharRange &rRange)
@@ -781,7 +781,7 @@ BYTE SwScriptInfo::WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScrip
 }
 
 /*************************************************************************
- *                      SwScriptInfo::InitScriptInfo()
+ *						SwScriptInfo::InitScriptInfo()
  *
  * searches for script changes in rTxt and stores them
  *************************************************************************/
@@ -1412,7 +1412,7 @@ void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
     UBiDi* pBidi = ubidi_openSized( rTxt.Len(), 0, &nError );
     nError = U_ZERO_ERROR;
 
-    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rTxt.GetBuffer()), rTxt.Len(),    // UChar != sal_Unicode in MinGW
+    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rTxt.GetBuffer()), rTxt.Len(),	// UChar != sal_Unicode in MinGW
                    nDefaultDir, NULL, &nError );
     nError = U_ZERO_ERROR;
     long nCount = ubidi_countRuns( pBidi, &nError );
@@ -1435,13 +1435,13 @@ void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
 
 
 /*************************************************************************
- *                        SwScriptInfo::NextScriptChg(..)
+ *						  SwScriptInfo::NextScriptChg(..)
  * returns the position of the next character which belongs to another script
  * than the character of the actual (input) position.
  * If there's no script change until the end of the paragraph, it will return
  * STRING_LEN.
  * Scripts are Asian (Chinese, Japanese, Korean),
- *             Latin ( English etc.)
+ * 			   Latin ( English etc.)
  *         and Complex ( Hebrew, Arabian )
  *************************************************************************/
 
@@ -1458,7 +1458,7 @@ xub_StrLen SwScriptInfo::NextScriptChg( const xub_StrLen nPos )  const
 }
 
 /*************************************************************************
- *                        SwScriptInfo::ScriptType(..)
+ *						  SwScriptInfo::ScriptType(..)
  * returns the script of the character at the input position
  *************************************************************************/
 
@@ -2278,7 +2278,7 @@ SwParaPortion::~SwParaPortion()
 }
 
 /*************************************************************************
- *                      SwParaPortion::GetParLen()
+ *						SwParaPortion::GetParLen()
  *************************************************************************/
 xub_StrLen SwParaPortion::GetParLen() const
 {
@@ -2294,7 +2294,7 @@ xub_StrLen SwParaPortion::GetParLen() const
 }
 
 /*************************************************************************
- *                      SwParaPortion::FindDropPortion()
+ *						SwParaPortion::FindDropPortion()
  *************************************************************************/
 
 const SwDropPortion *SwParaPortion::FindDropPortion() const
@@ -2315,7 +2315,7 @@ const SwDropPortion *SwParaPortion::FindDropPortion() const
 }
 
 /*************************************************************************
- *                      SwLineLayout::Init()
+ *						SwLineLayout::Init()
  *************************************************************************/
 
 void SwLineLayout::Init( SwLinePortion* pNextPortion )

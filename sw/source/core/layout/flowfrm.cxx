@@ -77,10 +77,10 @@ BOOL SwFlowFrm::bMoveBwdJump = FALSE;
 
 /*************************************************************************
 |*
-|*  SwFlowFrm::SwFlowFrm()
+|*	SwFlowFrm::SwFlowFrm()
 |*
-|*  Ersterstellung      MA 26. Apr. 95
-|*  Letzte Aenderung    MA 26. Apr. 95
+|*	Ersterstellung		MA 26. Apr. 95
+|*	Letzte Aenderung	MA 26. Apr. 95
 |*
 |*************************************************************************/
 
@@ -115,10 +115,10 @@ sal_Bool SwFlowFrm::HasLockedFollow() const
 
 /*************************************************************************
 |*
-|*  SwFlowFrm::IsKeepFwdMoveAllowed()
+|*	SwFlowFrm::IsKeepFwdMoveAllowed()
 |*
-|*  Ersterstellung      MA 20. Jul. 94
-|*  Letzte Aenderung    MA 16. May. 95
+|*	Ersterstellung		MA 20. Jul. 94
+|*	Letzte Aenderung	MA 16. May. 95
 |*
 |*************************************************************************/
 
@@ -131,7 +131,7 @@ BOOL SwFlowFrm::IsKeepFwdMoveAllowed()
     SwFrm *pFrm = &rThis;
     if ( !pFrm->IsInFtn() )
         do
-        {   if ( pFrm->GetAttrSet()->GetKeep().GetValue() )
+        {	if ( pFrm->GetAttrSet()->GetKeep().GetValue() )
                 pFrm = pFrm->GetIndPrev();
             else
                 return TRUE;
@@ -146,11 +146,11 @@ BOOL SwFlowFrm::IsKeepFwdMoveAllowed()
 
 /*************************************************************************
 |*
-|*    SwFlowFrm::CheckKeep()
+|*	  SwFlowFrm::CheckKeep()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MA 20. Jun. 95
-|*    Letzte Aenderung  MA 09. Apr. 97
+|*	  Beschreibung
+|*	  Ersterstellung	MA 20. Jun. 95
+|*	  Letzte Aenderung	MA 09. Apr. 97
 |*
 |*************************************************************************/
 
@@ -189,10 +189,10 @@ void SwFlowFrm::CheckKeep()
 
 /*************************************************************************
 |*
-|*  SwFlowFrm::IsKeep()
+|*	SwFlowFrm::IsKeep()
 |*
-|*  Ersterstellung      MA 09. Apr. 97
-|*  Letzte Aenderung    MA 09. Apr. 97
+|*	Ersterstellung		MA 09. Apr. 97
+|*	Letzte Aenderung	MA 09. Apr. 97
 |*
 |*************************************************************************/
 
@@ -289,10 +289,10 @@ BOOL SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKeep 
 
 /*************************************************************************
 |*
-|*  SwFlowFrm::BwdMoveNecessary()
+|*	SwFlowFrm::BwdMoveNecessary()
 |*
-|*  Ersterstellung      MA 20. Jul. 94
-|*  Letzte Aenderung    MA 02. May. 96
+|*	Ersterstellung		MA 20. Jul. 94
+|*	Letzte Aenderung	MA 02. May. 96
 |*
 |*************************************************************************/
 
@@ -405,13 +405,13 @@ BYTE SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRect )
 
 /*************************************************************************
 |*
-|*  SwFlowFrm::CutTree(), PasteTree(), MoveSubTree()
+|*	SwFlowFrm::CutTree(), PasteTree(), MoveSubTree()
 |*
-|*  Beschreibung        Eine Spezialisierte Form des Cut() und Paste(), die
-|*      eine ganze Kette umhaengt (naehmlich this und folgende). Dabei werden
-|*      nur minimale Operationen und Benachrichtigungen ausgefuehrt.
-|*  Ersterstellung      MA 18. Mar. 93
-|*  Letzte Aenderung    MA 18. May. 95
+|*	Beschreibung		Eine Spezialisierte Form des Cut() und Paste(), die
+|*		eine ganze Kette umhaengt (naehmlich this und folgende). Dabei werden
+|* 		nur minimale Operationen und Benachrichtigungen ausgefuehrt.
+|*	Ersterstellung		MA 18. Mar. 93
+|*	Letzte Aenderung	MA 18. May. 95
 |*
 |*************************************************************************/
 
@@ -549,7 +549,7 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
     SWRECTFN( pParent )
     SwTwips nGrowVal = 0;
     do
-    {   pFloat->pUpper = pParent;
+    {	pFloat->pUpper = pParent;
         pFloat->_InvalidateAll();
         pFloat->CheckDirChange();
 
@@ -558,7 +558,7 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
         if ( pFloat->IsTxtFrm() )
         {
             if ( ((SwTxtFrm*)pFloat)->GetCacheIdx() != USHRT_MAX )
-                ((SwTxtFrm*)pFloat)->Init();    //Ich bin sein Freund.
+                ((SwTxtFrm*)pFloat)->Init();	//Ich bin sein Freund.
         }
         else
             bRet = TRUE;
@@ -625,7 +625,7 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
             pPre->InvalidatePage();
         }
         else
-        {   rThis.GetUpper()->SetCompletePaint();
+        {	rThis.GetUpper()->SetCompletePaint();
             rThis.GetUpper()->InvalidatePage();
         }
     }
@@ -685,10 +685,10 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
 
 /*************************************************************************
 |*
-|*  SwFlowFrm::IsAnFollow()
+|*	SwFlowFrm::IsAnFollow()
 |*
-|*  Ersterstellung      MA 26. Apr. 95
-|*  Letzte Aenderung    MA 26. Apr. 95
+|*	Ersterstellung		MA 26. Apr. 95
+|*	Letzte Aenderung	MA 26. Apr. 95
 |*
 |*************************************************************************/
 
@@ -697,7 +697,7 @@ BOOL SwFlowFrm::IsAnFollow( const SwFlowFrm *pAssumed ) const
 {
     const SwFlowFrm *pFoll = this;
     do
-    {   if ( pAssumed == pFoll )
+    {	if ( pAssumed == pFoll )
             return TRUE;
         pFoll = pFoll->GetFollow();
     } while ( pFoll );
@@ -707,10 +707,10 @@ BOOL SwFlowFrm::IsAnFollow( const SwFlowFrm *pAssumed ) const
 
 /*************************************************************************
 |*
-|*  SwFlowFrm::FindMaster()
+|*	SwFlowFrm::FindMaster()
 |*
-|*  Ersterstellung      MA 26. Apr. 95
-|*  Letzte Aenderung    MA 26. Apr. 95
+|*	Ersterstellung		MA 26. Apr. 95
+|*	Letzte Aenderung	MA 26. Apr. 95
 |*
 |*************************************************************************/
 
@@ -806,14 +806,14 @@ SwTabFrm* SwTabFrm::FindMaster( bool bFirstMaster ) const
 
 /*************************************************************************
 |*
-|*  SwFrm::GetLeaf()
+|*	SwFrm::GetLeaf()
 |*
-|*  Beschreibung        Liefert das naechste/vorhergehende LayoutBlatt,
-|*      das _nicht_ unterhalb von this liegt (oder gar this selbst ist).
-|*      Ausserdem muss dieses LayoutBlatt im gleichen Textfluss wie
-|*      pAnch Ausgangsfrm liegen (Body, Ftn)
-|*  Ersterstellung      MA 25. Nov. 92
-|*  Letzte Aenderung    MA 25. Apr. 95
+|*	Beschreibung		Liefert das naechste/vorhergehende LayoutBlatt,
+|* 		das _nicht_ unterhalb von this liegt (oder gar this selbst ist).
+|* 		Ausserdem muss dieses LayoutBlatt im gleichen Textfluss wie
+|* 		pAnch Ausgangsfrm liegen (Body, Ftn)
+|*	Ersterstellung		MA 25. Nov. 92
+|*	Letzte Aenderung	MA 25. Apr. 95
 |*
 |*************************************************************************/
 
@@ -829,13 +829,13 @@ const SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, BOOL bFwd,
     BOOL bFound = FALSE;
 
     do
-    {   pLeaf = ((SwFrm*)pLeaf)->GetLeaf( eMakePage, bFwd );
+    {	pLeaf = ((SwFrm*)pLeaf)->GetLeaf( eMakePage, bFwd );
 
         if ( pLeaf &&
             (!IsLayoutFrm() || !((SwLayoutFrm*)this)->IsAnLower( pLeaf )))
         {
             if ( pAnch->IsInDocBody() == pLeaf->IsInDocBody() &&
-                 pAnch->IsInFtn()     == pLeaf->IsInFtn() )
+                 pAnch->IsInFtn()	  == pLeaf->IsInFtn() )
             {
                 bFound = TRUE;
             }
@@ -847,12 +847,12 @@ const SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, BOOL bFwd,
 
 /*************************************************************************
 |*
-|*  SwFrm::GetLeaf()
+|*	SwFrm::GetLeaf()
 |*
-|*  Beschreibung        Ruft Get[Next|Prev]Leaf
+|*	Beschreibung		Ruft Get[Next|Prev]Leaf
 |*
-|*  Ersterstellung      MA 20. Mar. 93
-|*  Letzte Aenderung    MA 25. Apr. 95
+|*	Ersterstellung		MA 20. Mar. 93
+|*	Letzte Aenderung	MA 25. Apr. 95
 |*
 |*************************************************************************/
 
@@ -971,13 +971,13 @@ BOOL SwFrm::WrongPageDesc( SwPageFrm* pNew )
 
 /*************************************************************************
 |*
-|*  SwFrm::GetNextLeaf()
+|*	SwFrm::GetNextLeaf()
 |*
-|*  Beschreibung        Liefert das naechste LayoutBlatt in den das
-|*      Frame gemoved werden kann.
+|*	Beschreibung		Liefert das naechste LayoutBlatt in den das
+|* 		Frame gemoved werden kann.
 |*
-|*  Ersterstellung      MA 16. Nov. 92
-|*  Letzte Aenderung    MA 05. Dec. 96
+|*	Ersterstellung		MA 16. Nov. 92
+|*	Letzte Aenderung	MA 05. Dec. 96
 |*
 |*************************************************************************/
 
@@ -986,7 +986,7 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
     OSL_ENSURE( !IsInFtn(), "GetNextLeaf(), don't call me for Ftn." );
     OSL_ENSURE( !IsInSct(), "GetNextLeaf(), don't call me for Sections." );
 
-    const BOOL bBody = IsInDocBody();       //Wenn ich aus dem DocBody komme
+    const BOOL bBody = IsInDocBody();		//Wenn ich aus dem DocBody komme
                                             //Will ich auch im Body landen.
 
     // Bei Flys macht es keinen Sinn, Seiten einzufuegen, wir wollen lediglich
@@ -1007,10 +1007,10 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
     if ( !pLayLeaf )
         pLayLeaf = GetNextLayoutLeaf();
 
-    SwLayoutFrm *pOldLayLeaf = 0;           //Damit bei neu erzeugten Seiten
+    SwLayoutFrm *pOldLayLeaf = 0;			//Damit bei neu erzeugten Seiten
                                             //nicht wieder vom Anfang gesucht
                                             //wird.
-    BOOL bNewPg = FALSE;    //nur einmal eine neue Seite einfuegen.
+    BOOL bNewPg = FALSE;	//nur einmal eine neue Seite einfuegen.
 
     while ( TRUE )
     {
@@ -1021,7 +1021,7 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
             //Dazu braucht er nur von der gleichen Art wie mein Ausgangspunkt
             //sein (DocBody bzw. Footnote.)
             if ( pLayLeaf->FindPageFrm()->IsFtnPage() )
-            {   //Wenn ich bei den Endnotenseiten angelangt bin hat sichs.
+            {	//Wenn ich bei den Endnotenseiten angelangt bin hat sichs.
                 pLayLeaf = 0;
                 continue;
             }
@@ -1115,12 +1115,12 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
 
 /*************************************************************************
 |*
-|*  SwFrm::GetPrevLeaf()
+|*	SwFrm::GetPrevLeaf()
 |*
-|*  Beschreibung        Liefert das vorhergehende LayoutBlatt in das der
-|*      Frame gemoved werden kann.
-|*  Ersterstellung      MA 16. Nov. 92
-|*  Letzte Aenderung    MA 25. Apr. 95
+|*	Beschreibung		Liefert das vorhergehende LayoutBlatt in das der
+|* 		Frame gemoved werden kann.
+|*	Ersterstellung		MA 16. Nov. 92
+|*	Letzte Aenderung	MA 25. Apr. 95
 |*
 |*************************************************************************/
 
@@ -1129,7 +1129,7 @@ SwLayoutFrm *SwFrm::GetPrevLeaf( MakePageType )
 {
     OSL_ENSURE( !IsInFtn(), "GetPrevLeaf(), don't call me for Ftn." );
 
-    const BOOL bBody = IsInDocBody();       //Wenn ich aus dem DocBody komme
+    const BOOL bBody = IsInDocBody();		//Wenn ich aus dem DocBody komme
                                             //will ich auch im Body landen.
     const BOOL bFly  = IsInFly();
 
@@ -1138,8 +1138,8 @@ SwLayoutFrm *SwFrm::GetPrevLeaf( MakePageType )
 
     while ( pLayLeaf )
     {
-        if ( pLayLeaf->IsInTab() ||     //In Tabellen geht's niemals hinein.
-             pLayLeaf->IsInSct() )      //In Bereiche natuerlich auch nicht!
+        if ( pLayLeaf->IsInTab() || 	//In Tabellen geht's niemals hinein.
+             pLayLeaf->IsInSct() )		//In Bereiche natuerlich auch nicht!
             pLayLeaf = pLayLeaf->GetPrevLayoutLeaf();
         else if ( bBody && pLayLeaf->IsInDocBody() )
         {
@@ -1151,7 +1151,7 @@ SwLayoutFrm *SwFrm::GetPrevLeaf( MakePageType )
                 SwFlowFrm::SetMoveBwdJump( TRUE );
         }
         else if ( bFly )
-            break;  //Cntnts in Flys sollte jedes Layout-Blatt recht sein.
+            break;	//Cntnts in Flys sollte jedes Layout-Blatt recht sein.
         else
             pLayLeaf = pLayLeaf->GetPrevLayoutLeaf();
     }
@@ -1160,10 +1160,10 @@ SwLayoutFrm *SwFrm::GetPrevLeaf( MakePageType )
 
 /*************************************************************************
 |*
-|*  SwFlowFrm::IsPrevObjMove()
+|*	SwFlowFrm::IsPrevObjMove()
 |*
-|*  Ersterstellung      MA 20. Feb. 96
-|*  Letzte Aenderung    MA 22. Feb. 96
+|*	Ersterstellung		MA 20. Feb. 96
+|*	Letzte Aenderung	MA 22. Feb. 96
 |*
 |*************************************************************************/
 
@@ -1181,8 +1181,8 @@ BOOL SwFlowFrm::IsPrevObjMove() const
 
     if ( pPre && pPre->GetDrawObjs() )
     {
-        OSL_ENSURE( SwFlowFrm::CastFlowFrm( pPre ), "new flowfrm?" );
-        if( SwFlowFrm::CastFlowFrm( pPre )->IsAnFollow( this ) )
+        OSL_ENSURE( SwFlowFrm::CastFlowFrm( pPre ),	"new flowfrm?" );
+        if(	SwFlowFrm::CastFlowFrm( pPre )->IsAnFollow( this ) )
             return FALSE;
         SwLayoutFrm* pPreUp = pPre->GetUpper();
         // Wenn der Upper ein SectionFrm oder die Spalte eines SectionFrms ist,
@@ -1228,24 +1228,24 @@ BOOL SwFlowFrm::IsPrevObjMove() const
 
 /*************************************************************************
 |*
-|*  BOOL SwFlowFrm::IsPageBreak()
+|*	BOOL SwFlowFrm::IsPageBreak()
 |*
-|*  Beschreibung        Wenn vor dem Frm ein harter Seitenumbruch steht UND
-|*      es einen Vorgaenger auf der gleichen Seite gibt, wird TRUE
-|*      zurueckgeliefert (es muss ein PageBreak erzeugt werden) FALSE sonst.
-|*      Wenn in bAct TRUE uebergeben wird, gibt die Funktion dann TRUE
-|*      zurueck, wenn ein PageBreak besteht.
-|*      Fuer Follows wird der harte Seitenumbruch natuerlich nicht
-|*      ausgewertet.
-|*      Der Seitenumbruch steht im eigenen FrmFmt (BEFORE) oder im FrmFmt
-|*      des Vorgaengers (AFTER). Wenn es keinen Vorgaenger auf der Seite
-|*      gibt ist jede weitere Ueberlegung ueberfluessig.
-|*      Ein Seitenumbruch (oder der Bedarf) liegt auch dann vor, wenn
-|*      im FrmFmt ein PageDesc angegeben wird.
-|*      Die Implementierung arbeitet zuaechst nur auf CntntFrms!
-|*      -->Fuer LayoutFrms ist die Definition des Vorgaengers unklar.
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 21. Mar. 95
+|*	Beschreibung		Wenn vor dem Frm ein harter Seitenumbruch steht UND
+|*		es einen Vorgaenger auf der gleichen Seite gibt, wird TRUE
+|*		zurueckgeliefert (es muss ein PageBreak erzeugt werden) FALSE sonst.
+|*		Wenn in bAct TRUE uebergeben wird, gibt die Funktion dann TRUE
+|*		zurueck, wenn ein PageBreak besteht.
+|* 		Fuer Follows wird der harte Seitenumbruch natuerlich nicht
+|* 		ausgewertet.
+|*		Der Seitenumbruch steht im eigenen FrmFmt (BEFORE) oder im FrmFmt
+|*		des Vorgaengers (AFTER). Wenn es keinen Vorgaenger auf der Seite
+|*		gibt ist jede weitere Ueberlegung ueberfluessig.
+|* 		Ein Seitenumbruch (oder der Bedarf) liegt auch dann vor, wenn
+|* 		im FrmFmt ein PageDesc angegeben wird.
+|*		Die Implementierung arbeitet zuaechst nur auf CntntFrms!
+|*		-->Fuer LayoutFrms ist die Definition des Vorgaengers unklar.
+|*	Ersterstellung		MA ??
+|*	Letzte Aenderung	MA 21. Mar. 95
 |*
 |*************************************************************************/
 
@@ -1268,11 +1268,11 @@ BOOL SwFlowFrm::IsPageBreak( BOOL bAct ) const
         {
             OSL_ENSURE( pPrev->IsInDocBody(), "IsPageBreak: Not in DocBody?" );
             if ( bAct )
-            {   if ( rThis.FindPageFrm() == pPrev->FindPageFrm() )
+            {	if ( rThis.FindPageFrm() == pPrev->FindPageFrm() )
                     return FALSE;
             }
             else
-            {   if ( rThis.FindPageFrm() != pPrev->FindPageFrm() )
+            {	if ( rThis.FindPageFrm() != pPrev->FindPageFrm() )
                     return FALSE;
             }
 
@@ -1294,22 +1294,22 @@ BOOL SwFlowFrm::IsPageBreak( BOOL bAct ) const
 
 /*************************************************************************
 |*
-|*  BOOL SwFlowFrm::IsColBreak()
+|*	BOOL SwFlowFrm::IsColBreak()
 |*
-|*  Beschreibung        Wenn vor dem Frm ein harter Spaltenumbruch steht UND
-|*      es einen Vorgaenger in der gleichen Spalte gibt, wird TRUE
-|*      zurueckgeliefert (es muss ein PageBreak erzeugt werden) FALSE sonst.
-|*      Wenn in bAct TRUE uebergeben wird, gibt die Funktion dann TRUE
-|*      zurueck, wenn ein ColBreak besteht.
-|*      Fuer Follows wird der harte Spaltenumbruch natuerlich nicht
-|*      ausgewertet.
-|*      Der Spaltenumbruch steht im eigenen FrmFmt (BEFORE) oder im FrmFmt
-|*      des Vorgaengers (AFTER). Wenn es keinen Vorgaenger in der Spalte
-|*      gibt ist jede weitere Ueberlegung ueberfluessig.
-|*      Die Implementierung arbeitet zuaechst nur auf CntntFrms!
-|*      -->Fuer LayoutFrms ist die Definition des Vorgaengers unklar.
-|*  Ersterstellung      MA 11. Jun. 93
-|*  Letzte Aenderung    MA 21. Mar. 95
+|*	Beschreibung		Wenn vor dem Frm ein harter Spaltenumbruch steht UND
+|*		es einen Vorgaenger in der gleichen Spalte gibt, wird TRUE
+|*		zurueckgeliefert (es muss ein PageBreak erzeugt werden) FALSE sonst.
+|*		Wenn in bAct TRUE uebergeben wird, gibt die Funktion dann TRUE
+|*		zurueck, wenn ein ColBreak besteht.
+|* 		Fuer Follows wird der harte Spaltenumbruch natuerlich nicht
+|* 		ausgewertet.
+|*		Der Spaltenumbruch steht im eigenen FrmFmt (BEFORE) oder im FrmFmt
+|*		des Vorgaengers (AFTER). Wenn es keinen Vorgaenger in der Spalte
+|*		gibt ist jede weitere Ueberlegung ueberfluessig.
+|*		Die Implementierung arbeitet zuaechst nur auf CntntFrms!
+|*		-->Fuer LayoutFrms ist die Definition des Vorgaengers unklar.
+|*	Ersterstellung		MA 11. Jun. 93
+|*	Letzte Aenderung	MA 21. Mar. 95
 |*
 |*************************************************************************/
 
@@ -1329,11 +1329,11 @@ BOOL SwFlowFrm::IsColBreak( BOOL bAct ) const
             if ( pPrev )
             {
                 if ( bAct )
-                {   if ( pCol == pPrev->FindColFrm() )
+                {	if ( pCol == pPrev->FindColFrm() )
                         return FALSE;
                 }
                 else
-                {   if ( pCol != pPrev->FindColFrm() )
+                {	if ( pCol != pPrev->FindColFrm() )
                         return FALSE;
                 }
 
@@ -1843,12 +1843,12 @@ SwTwips SwFlowFrm::CalcAddLowerSpaceAsLastInTableCell(
 
 /*************************************************************************
 |*
-|*  BOOL SwFlowFrm::CheckMoveFwd()
+|*	BOOL SwFlowFrm::CheckMoveFwd()
 |*
-|*  Beschreibung        Moved den Frm vorwaerts wenn es durch die aktuellen
-|*      Bedingungen und Attribute notwendig erscheint.
-|*  Ersterstellung      MA 05. Dec. 96
-|*  Letzte Aenderung    MA 09. Mar. 98
+|*	Beschreibung		Moved den Frm vorwaerts wenn es durch die aktuellen
+|* 		Bedingungen und Attribute notwendig erscheint.
+|*	Ersterstellung		MA 05. Dec. 96
+|*	Letzte Aenderung	MA 09. Mar. 98
 |*
 |*************************************************************************/
 
@@ -1919,7 +1919,7 @@ BOOL SwFlowFrm::CheckMoveFwd( BOOL &rbMakePage, BOOL bKeep, BOOL )
                 const SwPageFrm *pPage = rThis.FindPageFrm();
                 SwFrm *pCol = rThis.FindColFrm();
                 do
-                {   MoveFwd( rbMakePage, FALSE );
+                {	MoveFwd( rbMakePage, FALSE );
                     SwFrm *pTmp = rThis.FindColFrm();
                     if( pTmp != pCol )
                     {
@@ -1939,11 +1939,11 @@ BOOL SwFlowFrm::CheckMoveFwd( BOOL &rbMakePage, BOOL bKeep, BOOL )
 
 /*************************************************************************
 |*
-|*  BOOL SwFlowFrm::MoveFwd()
+|*	BOOL SwFlowFrm::MoveFwd()
 |*
-|*  Beschreibung        Returnwert sagt, ob der Frm die Seite gewechselt hat.
-|*  Ersterstellung      MA 05. Dec. 96
-|*  Letzte Aenderung    MA 05. Dec. 96
+|*	Beschreibung		Returnwert sagt, ob der Frm die Seite gewechselt hat.
+|*	Ersterstellung		MA 05. Dec. 96
+|*	Letzte Aenderung	MA 05. Dec. 96
 |*
 |*************************************************************************/
 
@@ -2145,13 +2145,13 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
 
 /*************************************************************************
 |*
-|*  BOOL SwFlowFrm::MoveBwd()
+|*	BOOL SwFlowFrm::MoveBwd()
 |*
-|*  Beschreibung        Returnwert sagt, ob der Frm die Seite wechseln soll.
-|*                      Sollte von abgeleiteten Klassen gerufen werden.
-|*                      Das moven selbst muessen die abgeleiteten uebernehmen.
-|*  Ersterstellung      MA 05. Dec. 96
-|*  Letzte Aenderung    MA 05. Dec. 96
+|*	Beschreibung		Returnwert sagt, ob der Frm die Seite wechseln soll.
+|*						Sollte von abgeleiteten Klassen gerufen werden.
+|* 						Das moven selbst muessen die abgeleiteten uebernehmen.
+|*	Ersterstellung		MA 05. Dec. 96
+|*	Letzte Aenderung	MA 05. Dec. 96
 |*
 |*************************************************************************/
 
@@ -2221,7 +2221,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
            )
             pNewUpper = rThis.GetLeaf( MAKEPAGE_FTN, FALSE );
     }
-    else if ( IsPageBreak( TRUE ) ) //PageBreak zu beachten?
+    else if ( IsPageBreak( TRUE ) )	//PageBreak zu beachten?
     {
         //Wenn auf der vorhergehenden Seite kein Frm im Body steht,
         //so ist das Zurueckfliessen trotz Pagebreak sinnvoll
@@ -2707,10 +2707,10 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
 
 /*************************************************************************
 |*
-|*  SwFlowFrm::CastFlowFrm
+|*	SwFlowFrm::CastFlowFrm
 |*
-|*  Ersterstellung      MA 03. May. 95
-|*  Letzte Aenderung    AMA 02. Dec. 97
+|*	Ersterstellung		MA 03. May. 95
+|*	Letzte Aenderung	AMA 02. Dec. 97
 |*
 |*************************************************************************/
 

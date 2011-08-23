@@ -84,10 +84,10 @@ public:
 class SwAccessibleTableData_Impl
 {
     SwAccessibleMap& mrAccMap;
-    Int32Set_Impl   maRows;
-    Int32Set_Impl   maColumns;
-    Int32PairList_Impl maExtents;   // cell extends for event processing only
-    Point   maTabFrmPos;
+    Int32Set_Impl	maRows;
+    Int32Set_Impl	maColumns;
+    Int32PairList_Impl maExtents;	// cell extends for event processing only
+    Point 	maTabFrmPos;
     const SwTabFrm *mpTabFrm;
     sal_Bool mbIsInPagePreview;
     bool mbOnlyTableColumnHeader;
@@ -226,7 +226,7 @@ void SwAccessibleTableData_Impl::CollectExtents( const SwFrm *pFrm )
 
 sal_Bool SwAccessibleTableData_Impl::FindCell(
         const Point& rPos, const SwFrm *pFrm, sal_Bool bExact,
-        const SwFrm *& rRet ) const
+        const SwFrm *& rRet	) const
 {
     sal_Bool bFound = sal_False;
 
@@ -302,7 +302,7 @@ void SwAccessibleTableData_Impl::GetSelection(
                     const_cast< SwTableBox *>( pCFrm->GetTabBox() ); //SVPtrArr!
                 if( !rSelBoxes.Seek_Entry( pBox ) )
                 {
-                    const Int32Set_Impl rRowsOrCols =
+                    const Int32Set_Impl	rRowsOrCols =
                         bColumns ? maColumns : maRows;
 
                     sal_Int32 nPos = bColumns ? (rBox.Left() - rTabPos.X())
@@ -1483,7 +1483,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
 //      SwPaM* pPaM = pCrsrShell->GetCrsr();
 //      pPaM->DeleteMark();
 //      *(pPaM->GetPoint()) = SwPosition( *pStartNode );
-//      pPaM->Move( fnMoveForward, fnGoNode );
+//  	pPaM->Move( fnMoveForward, fnGoNode );
 // //   pCrsrShell->SelTblBox();
 
         pCrsrShell->StartAction();

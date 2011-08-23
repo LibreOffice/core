@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -614,7 +614,7 @@ void ViewShell::LayoutIdle()
 
     ViewShell *pSh = this;
     do
-    {   if ( !pSh->GetWin() )
+    {	if ( !pSh->GetWin() )
             return;
         pSh = (ViewShell*)pSh->GetNext();
 
@@ -904,7 +904,7 @@ void ViewShell::SetFirstVisPageInvalid()
 {
     ViewShell *pSh = this;
     do
-    {   pSh->Imp()->SetFirstVisPageInvalid();
+    {	pSh->Imp()->SetFirstVisPageInvalid();
         pSh = (ViewShell*)pSh->GetNext();
 
     } while ( pSh != this );
@@ -1600,12 +1600,12 @@ BOOL ViewShell::CheckInvalidForPaint( const SwRect &rRect )
             {
                 SwRegionRects aRegion( rRect );
                 for ( USHORT i = 0; i < pRegion->Count(); ++i )
-                {   const SwRect &rTmp = (*pRegion)[i];
+                {	const SwRect &rTmp = (*pRegion)[i];
                     if ( !rRect.IsInside( rTmp ) )
                     {
                         InvalidateWindows( rTmp );
                         if ( rTmp.IsOver( VisArea() ) )
-                        {   aRegion -= rTmp;
+                        {	aRegion -= rTmp;
                             bRet = TRUE;
                         }
                     }
@@ -1823,7 +1823,7 @@ void ViewShell::CheckBrowseView( BOOL bBrowseChgd )
 
     SwPageFrm *pPg = (SwPageFrm*)GetLayout()->Lower();
     do
-    {   pPg->InvalidateSize();
+    {	pPg->InvalidateSize();
         pPg->_InvalidatePrt();
         pPg->InvaPercentLowers();
         if ( bBrowseChgd )
@@ -1902,7 +1902,7 @@ void ViewShell::ApplyViewOptions( const SwViewOption &rOpt )
 
     ViewShell *pSh = this;
     do
-    {   pSh->StartAction();
+    {	pSh->StartAction();
         pSh = (ViewShell*)pSh->GetNext();
     } while ( pSh != this );
 
@@ -1927,7 +1927,7 @@ void ViewShell::ApplyViewOptions( const SwViewOption &rOpt )
 
     pSh = this;
     do
-    {   pSh->EndAction();
+    {	pSh->EndAction();
         pSh = (ViewShell*)pSh->GetNext();
     } while ( pSh != this );
 
@@ -1947,7 +1947,7 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
     SET_CURR_SHELL( this );
 
-    BOOL bReformat   = FALSE;
+    BOOL bReformat	 = FALSE;
 
     if( pOpt->IsShowHiddenField() != rOpt.IsShowHiddenField() )
     {
@@ -2052,7 +2052,7 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         ViewShell *pSh = (ViewShell*)this->GetNext();
         BOOL bOnlineSpl = rOpt.IsOnlineSpell();
         while( pSh != this )
-        {   pSh->pOpt->SetOnlineSpell( bOnlineSpl );
+        {	pSh->pOpt->SetOnlineSpell( bOnlineSpl );
             Window *pTmpWin = pSh->GetWin();
             if( pTmpWin )
                 pTmpWin->Invalidate();
@@ -2140,7 +2140,7 @@ void    ViewShell::SetRestoreActions(USHORT nSet)
     DBG_ASSERT(!GetRestoreActions()||!nSet, "mehrfaches Restore der Actions ?");
     Imp()->SetRestoreActions(nSet);
 }
-USHORT  ViewShell::GetRestoreActions() const
+USHORT 	ViewShell::GetRestoreActions() const
 {
     return Imp()->GetRestoreActions();
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,21 +80,21 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
 {
     const sal_Unicode cOpenBracket = '<';
     const sal_Unicode cCloseBracket= '>';
-    const sal_Unicode cSlash        = '/';
+    const sal_Unicode cSlash		= '/';
     const sal_Unicode cExclamation = '!';
-    const sal_Unicode cMinus        = '-';
-    const sal_Unicode cSpace        = ' ';
-    const sal_Unicode cTab          = 0x09;
+    const sal_Unicode cMinus		= '-';
+    const sal_Unicode cSpace		= ' ';
+    const sal_Unicode cTab			= 0x09;
     const sal_Unicode cLF          = 0x0a;
     const sal_Unicode cCR          = 0x0d;
 
 
     const USHORT nStrLen = rSource.Len();
-    USHORT nInsert = 0;         // Anzahl der eingefuegten Portions
-    USHORT nActPos = 0;         //Position, an der '<' gefunden wurde
-    USHORT nOffset = 0;         //Offset von nActPos zur '<'
-    USHORT nPortStart = USHRT_MAX;  // fuer die TextPortion
-    USHORT nPortEnd  =  0;  //
+    USHORT nInsert = 0;			// Anzahl der eingefuegten Portions
+    USHORT nActPos = 0;			//Position, an der '<' gefunden wurde
+    USHORT nOffset = 0; 		//Offset von nActPos zur '<'
+    USHORT nPortStart = USHRT_MAX; 	// fuer die TextPortion
+    USHORT nPortEnd  = 	0;  //
     SwTextPortion aText;
     while(nActPos < nStrLen)
     {
@@ -142,9 +142,9 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                 while(++nSrchPos < nStrLen - 1)
                 {
                     sal_Unicode cNext = rSource.GetChar(nSrchPos);
-                    if( cNext == cSpace ||
-                        cNext == cTab   ||
-                        cNext == cLF    ||
+                    if( cNext == cSpace	||
+                        cNext == cTab 	||
+                        cNext == cLF 	||
                         cNext == cCR)
                         break;
                     else if(cNext == cCloseBracket)
@@ -318,8 +318,8 @@ void  SwSrcEditWindow::Resize()
         aScrollPos = Point(aOutSz.Width() - nScrollStd, 0);
 
         pVScrollbar->SetPosSizePixel( aScrollPos, aScrollSz);
-        aOutSz.Width()  -= nScrollStd;
-        aOutSz.Height()     -= nScrollStd;
+        aOutSz.Width() 	-= nScrollStd;
+        aOutSz.Height() 	-= nScrollStd;
         pOutWin->SetOutputSizePixel(aOutSz);
         InitScrollBars();
 
@@ -541,7 +541,7 @@ void SwSrcEditWindow::CreateTextEngine()
 
     SfxBindings& rBind = GetSrcView()->GetViewFrame()->GetBindings();
     rBind.Invalidate( SID_TABLE_CELL );
-//  rBind.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+//	rBind.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
 }
 
 /*--------------------------------------------------------------------
@@ -678,7 +678,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
     // SyntaxTimerHdl wird gerufen, wenn Text-Aenderung
     // => gute Gelegenheit, Textbreite zu ermitteln!
     long nPrevTextWidth = nCurTextWidth;
-    nCurTextWidth = pTextEngine->CalcTextWidth() + 25;  // kleine Toleranz
+    nCurTextWidth = pTextEngine->CalcTextWidth() + 25;	// kleine Toleranz
     if ( nCurTextWidth != nPrevTextWidth )
         SetScrollBarRanges();
     bHighlighting = FALSE;
@@ -743,7 +743,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         return;
 
     SwTextPortion& rLast = aPortionList[nCount-1];
-    if ( rLast.nStart > rLast.nEnd )    // Nur bis Bug von MD behoeben
+    if ( rLast.nStart > rLast.nEnd ) 	// Nur bis Bug von MD behoeben
     {
         nCount--;
         aPortionList.Remove( nCount);
@@ -770,7 +770,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
             USHORT nLine = aPortionList[0].nLine;
             OSL_ENSURE( r.nLine == nLine, "doch mehrere Zeilen ?" );
 #endif
-            if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
+            if ( r.nStart > r.nEnd ) 	// Nur bis Bug von MD behoeben
                 continue;
 
             if ( r.nStart > nLastEnd )
@@ -788,7 +788,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
     for ( USHORT i = 0; i < aPortionList.Count(); i++ )
     {
         SwTextPortion& r = aPortionList[i];
-        if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
+        if ( r.nStart > r.nEnd ) 	// Nur bis Bug von MD behoeben
             continue;
         if(r.eType !=  svtools::HTMLSGML    &&
             r.eType != svtools::HTMLCOMMENT &&
@@ -879,8 +879,8 @@ void SwSrcEditWindow::GetFocus()
 /*void SwSrcEditWindow::LoseFocus()
 {
     Window::LoseFocus();
-//  pOutWin->LoseFocus();
-//  rView.LostFocus();
+//	pOutWin->LoseFocus();
+//	rView.LostFocus();
 } */
 /* -----------------------------29.08.2002 13:21------------------------------
 
@@ -1069,7 +1069,7 @@ void SwSrcEditWindow::SetFont()
     }
     const SvxFontListItem* pFontListItem =
         (const SvxFontListItem* )pSrcView->GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST );
-    const FontList*  pList = pFontListItem->GetFontList();
+    const FontList*	 pList = pFontListItem->GetFontList();
     FontInfo aInfo = pList->Get(sFontName,WEIGHT_NORMAL, ITALIC_NONE);
 
     const Font& rFont = GetTextEngine()->GetFont();

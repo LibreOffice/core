@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
 
-#define COM_TEXT_FLDMASTER      "com.sun.star.text.FieldMaster."
+#define COM_TEXT_FLDMASTER		"com.sun.star.text.FieldMaster."
 
 // case-corrected version of the first part for the service names (see #i67811)
 #define COM_TEXT_FLDMASTER_CC   "com.sun.star.text.fieldmaster."
@@ -107,23 +107,23 @@ using namespace nsSwDocInfoSubType;
 // note: this thing is indexed as an array, so do not insert/remove entries!
 static const sal_uInt16 aDocInfoSubTypeFromService[] =
 {
-    DI_CHANGE | DI_SUB_AUTHOR,  //PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_AUTHOR
-    DI_CHANGE | DI_SUB_DATE,    //PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME
-    DI_EDIT | DI_SUB_TIME,      //PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME
-    DI_COMMENT,                 //PROPERTY_MAP_FLDTYP_DOCINFO_DESCRIPTION
-    DI_CREATE | DI_SUB_AUTHOR,  //PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_AUTHOR
-    DI_CREATE | DI_SUB_DATE,    //PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME
-    0,                          //DUMMY
-    0,                          //DUMMY
-    0,                          //DUMMY
-    0,                          //DUMMY
-    DI_CUSTOM,                  //PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM
-    DI_PRINT | DI_SUB_AUTHOR,   //PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_AUTHOR
-    DI_PRINT | DI_SUB_DATE,     //PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_DATE_TIME
-    DI_KEYS,                    //PROPERTY_MAP_FLDTYP_DOCINFO_KEY_WORDS
-    DI_THEMA,                   //PROPERTY_MAP_FLDTYP_DOCINFO_SUBJECT
-    DI_TITEL,                   //PROPERTY_MAP_FLDTYP_DOCINFO_TITLE
-    DI_DOCNO                    //PROPERTY_MAP_FLDTYP_DOCINFO_REVISION
+    DI_CHANGE | DI_SUB_AUTHOR,	//PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_AUTHOR
+    DI_CHANGE | DI_SUB_DATE,	//PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME
+    DI_EDIT | DI_SUB_TIME,		//PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME
+    DI_COMMENT,					//PROPERTY_MAP_FLDTYP_DOCINFO_DESCRIPTION
+    DI_CREATE | DI_SUB_AUTHOR,	//PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_AUTHOR
+    DI_CREATE | DI_SUB_DATE,	//PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME
+    0,       					//DUMMY
+    0, 		        			//DUMMY
+    0, 			        		//DUMMY
+    0, 			        		//DUMMY
+    DI_CUSTOM,					//PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM
+    DI_PRINT | DI_SUB_AUTHOR,	//PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_AUTHOR
+    DI_PRINT | DI_SUB_DATE,		//PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_DATE_TIME
+    DI_KEYS,					//PROPERTY_MAP_FLDTYP_DOCINFO_KEY_WORDS
+    DI_THEMA,					//PROPERTY_MAP_FLDTYP_DOCINFO_SUBJECT
+    DI_TITEL,					//PROPERTY_MAP_FLDTYP_DOCINFO_TITLE
+    DI_DOCNO					//PROPERTY_MAP_FLDTYP_DOCINFO_REVISION
 };
 
 struct ServiceIdResId
@@ -134,59 +134,59 @@ struct ServiceIdResId
 
 static const ServiceIdResId aServiceToRes[] =
 {
-    {RES_DATETIMEFLD,   SW_SERVICE_FIELDTYPE_DATETIME               },
-    {RES_USERFLD,       SW_SERVICE_FIELDTYPE_USER                   },
-    {RES_SETEXPFLD,         SW_SERVICE_FIELDTYPE_SET_EXP            }    ,
-    {RES_GETEXPFLD,         SW_SERVICE_FIELDTYPE_GET_EXP            }    ,
-    {RES_FILENAMEFLD,   SW_SERVICE_FIELDTYPE_FILE_NAME              },
-    {RES_PAGENUMBERFLD,     SW_SERVICE_FIELDTYPE_PAGE_NUM           }    ,
-    {RES_AUTHORFLD,         SW_SERVICE_FIELDTYPE_AUTHOR             }    ,
-    {RES_CHAPTERFLD,    SW_SERVICE_FIELDTYPE_CHAPTER                },
-    {RES_GETREFFLD,         SW_SERVICE_FIELDTYPE_GET_REFERENCE      }    ,
-    {RES_HIDDENTXTFLD,  SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT       },
-    {RES_POSTITFLD,         SW_SERVICE_FIELDTYPE_ANNOTATION         }    ,
-    {RES_INPUTFLD,      SW_SERVICE_FIELDTYPE_INPUT                  },
-    {RES_MACROFLD,      SW_SERVICE_FIELDTYPE_MACRO                  },
-    {RES_DDEFLD,        SW_SERVICE_FIELDTYPE_DDE                    },
-    {RES_HIDDENPARAFLD,     SW_SERVICE_FIELDTYPE_HIDDEN_PARA        }    ,
-    {RES_DOCINFOFLD,    SW_SERVICE_FIELDTYPE_DOC_INFO               },
-    {RES_TEMPLNAMEFLD,  SW_SERVICE_FIELDTYPE_TEMPLATE_NAME          },
-    {RES_EXTUSERFLD,    SW_SERVICE_FIELDTYPE_USER_EXT               },
-    {RES_REFPAGESETFLD,     SW_SERVICE_FIELDTYPE_REF_PAGE_SET       }    ,
-    {RES_REFPAGEGETFLD,     SW_SERVICE_FIELDTYPE_REF_PAGE_GET       }    ,
-    {RES_JUMPEDITFLD,   SW_SERVICE_FIELDTYPE_JUMP_EDIT              },
-    {RES_SCRIPTFLD,         SW_SERVICE_FIELDTYPE_SCRIPT             }    ,
-    {RES_DBNEXTSETFLD,  SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET      },
-    {RES_DBNUMSETFLD,   SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET       },
+    {RES_DATETIMEFLD, 	SW_SERVICE_FIELDTYPE_DATETIME				},
+    {RES_USERFLD, 		SW_SERVICE_FIELDTYPE_USER                   },
+    {RES_SETEXPFLD, 		SW_SERVICE_FIELDTYPE_SET_EXP            }    ,
+    {RES_GETEXPFLD, 		SW_SERVICE_FIELDTYPE_GET_EXP            }    ,
+    {RES_FILENAMEFLD, 	SW_SERVICE_FIELDTYPE_FILE_NAME              },
+    {RES_PAGENUMBERFLD, 	SW_SERVICE_FIELDTYPE_PAGE_NUM           }    ,
+    {RES_AUTHORFLD, 		SW_SERVICE_FIELDTYPE_AUTHOR             }    ,
+    {RES_CHAPTERFLD, 	SW_SERVICE_FIELDTYPE_CHAPTER                },
+    {RES_GETREFFLD, 		SW_SERVICE_FIELDTYPE_GET_REFERENCE      }    ,
+    {RES_HIDDENTXTFLD, 	SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT       },
+    {RES_POSTITFLD, 		SW_SERVICE_FIELDTYPE_ANNOTATION         }    ,
+    {RES_INPUTFLD, 		SW_SERVICE_FIELDTYPE_INPUT                  },
+    {RES_MACROFLD, 		SW_SERVICE_FIELDTYPE_MACRO                  },
+    {RES_DDEFLD, 		SW_SERVICE_FIELDTYPE_DDE                    },
+    {RES_HIDDENPARAFLD, 	SW_SERVICE_FIELDTYPE_HIDDEN_PARA        }    ,
+    {RES_DOCINFOFLD, 	SW_SERVICE_FIELDTYPE_DOC_INFO               },
+    {RES_TEMPLNAMEFLD, 	SW_SERVICE_FIELDTYPE_TEMPLATE_NAME          },
+    {RES_EXTUSERFLD, 	SW_SERVICE_FIELDTYPE_USER_EXT               },
+    {RES_REFPAGESETFLD, 	SW_SERVICE_FIELDTYPE_REF_PAGE_SET       }    ,
+    {RES_REFPAGEGETFLD, 	SW_SERVICE_FIELDTYPE_REF_PAGE_GET       }    ,
+    {RES_JUMPEDITFLD, 	SW_SERVICE_FIELDTYPE_JUMP_EDIT              },
+    {RES_SCRIPTFLD, 		SW_SERVICE_FIELDTYPE_SCRIPT             }    ,
+    {RES_DBNEXTSETFLD, 	SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET      },
+    {RES_DBNUMSETFLD, 	SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET       },
     {RES_DBSETNUMBERFLD, SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM      } ,
-    {RES_DBFLD,             SW_SERVICE_FIELDTYPE_DATABASE           }    ,
-    {RES_DBNAMEFLD,     SW_SERVICE_FIELDTYPE_DATABASE_NAME          },
-    {RES_DOCSTATFLD,    SW_SERVICE_FIELDTYPE_PAGE_COUNT             },
-    {RES_DOCSTATFLD,    SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT        },
-    {RES_DOCSTATFLD,    SW_SERVICE_FIELDTYPE_WORD_COUNT             },
-    {RES_DOCSTATFLD,    SW_SERVICE_FIELDTYPE_CHARACTER_COUNT        },
-    {RES_DOCSTATFLD,    SW_SERVICE_FIELDTYPE_TABLE_COUNT            },
-    {RES_DOCSTATFLD,    SW_SERVICE_FIELDTYPE_GRAPHIC_OBJECT_COUNT   },
-    {RES_DOCSTATFLD,    SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT  },
-    {RES_DOCINFOFLD,    SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR  },
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME},
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME       },
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION     },
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR   },
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME},
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM          },
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR    },
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME },
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS       },
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT         },
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_TITLE           },
-    {RES_INPUTFLD,      SW_SERVICE_FIELDTYPE_INPUT_USER                  },
-    {RES_HIDDENTXTFLD,  SW_SERVICE_FIELDTYPE_HIDDEN_TEXT                 },
-    {RES_AUTHORITY,     SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY                },
-    {RES_COMBINED_CHARS,    SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS     },
-    {RES_DROPDOWN,  SW_SERVICE_FIELDTYPE_DROPDOWN                        },
+    {RES_DBFLD, 			SW_SERVICE_FIELDTYPE_DATABASE           }    ,
+    {RES_DBNAMEFLD,		SW_SERVICE_FIELDTYPE_DATABASE_NAME          },
+    {RES_DOCSTATFLD, 	SW_SERVICE_FIELDTYPE_PAGE_COUNT             },
+    {RES_DOCSTATFLD, 	SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT        },
+    {RES_DOCSTATFLD, 	SW_SERVICE_FIELDTYPE_WORD_COUNT             },
+    {RES_DOCSTATFLD, 	SW_SERVICE_FIELDTYPE_CHARACTER_COUNT        },
+    {RES_DOCSTATFLD, 	SW_SERVICE_FIELDTYPE_TABLE_COUNT            },
+    {RES_DOCSTATFLD, 	SW_SERVICE_FIELDTYPE_GRAPHIC_OBJECT_COUNT   },
+    {RES_DOCSTATFLD, 	SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT  },
+    {RES_DOCINFOFLD, 	SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR  },
+    {RES_DOCINFOFLD,		SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME},
+    {RES_DOCINFOFLD,		SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME       },
+    {RES_DOCINFOFLD,		SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION     },
+    {RES_DOCINFOFLD,		SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR   },
+    {RES_DOCINFOFLD,		SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME},
+    {RES_DOCINFOFLD,		SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM          },
+    {RES_DOCINFOFLD,		SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR    },
+    {RES_DOCINFOFLD,		SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME },
+    {RES_DOCINFOFLD,		SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS       },
+    {RES_DOCINFOFLD,		SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT         },
+    {RES_DOCINFOFLD,		SW_SERVICE_FIELDTYPE_DOCINFO_TITLE           },
+    {RES_INPUTFLD, 		SW_SERVICE_FIELDTYPE_INPUT_USER                  },
+    {RES_HIDDENTXTFLD, 	SW_SERVICE_FIELDTYPE_HIDDEN_TEXT                 },
+    {RES_AUTHORITY, 	SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY                },
+    {RES_COMBINED_CHARS,	SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS	 },
+    {RES_DROPDOWN,	SW_SERVICE_FIELDTYPE_DROPDOWN	                     },
     {RES_TABLEFLD,      SW_SERVICE_FIELDTYPE_TABLE_FORMULA              },
-    {USHRT_MAX,         USHRT_MAX                                        }
+    {USHRT_MAX,			USHRT_MAX                                        }
 };
 
 sal_uInt16 lcl_ServiceIdToResId(sal_uInt16 nServiceId)
@@ -232,13 +232,13 @@ sal_uInt16 lcl_GetServiceForField( const SwField& rFld )
                         ? SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR
                         : SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME;
                 break;
-            case DI_EDIT:   nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME;break;
+            case DI_EDIT:	nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME;break;
             case DI_COMMENT:nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION;break;
             case DI_KEYS:   nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS;break;
-            case DI_THEMA:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT;  break;
-            case DI_TITEL:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_TITLE;    break;
-            case DI_DOCNO:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_REVISION; break;
-            case DI_CUSTOM: nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM;   break;
+            case DI_THEMA:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT;	break;
+            case DI_TITEL:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_TITLE;	break;
+            case DI_DOCNO:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_REVISION;	break;
+            case DI_CUSTOM: nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM;	break;
             }
         }
         break;
@@ -286,12 +286,12 @@ sal_uInt16 lcl_GetPropMapIdForFieldType( USHORT nWhich )
     sal_uInt16 nId;
     switch( nWhich )
     {
-    case RES_USERFLD:   nId = PROPERTY_MAP_FLDMSTR_USER;            break;
-    case RES_DBFLD:     nId = PROPERTY_MAP_FLDMSTR_DATABASE;        break;
-    case RES_SETEXPFLD: nId = PROPERTY_MAP_FLDMSTR_SET_EXP;         break;
-    case RES_DDEFLD:    nId = PROPERTY_MAP_FLDMSTR_DDE;             break;
-    case RES_AUTHORITY: nId = PROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY;    break;
-    default:            nId = PROPERTY_MAP_FLDMSTR_DUMMY0;
+    case RES_USERFLD:	nId = PROPERTY_MAP_FLDMSTR_USER;			break;
+    case RES_DBFLD:		nId = PROPERTY_MAP_FLDMSTR_DATABASE;		break;
+    case RES_SETEXPFLD:	nId = PROPERTY_MAP_FLDMSTR_SET_EXP;			break;
+    case RES_DDEFLD:	nId = PROPERTY_MAP_FLDMSTR_DDE;				break;
+    case RES_AUTHORITY:	nId = PROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY;	break;
+    default:			nId = PROPERTY_MAP_FLDMSTR_DUMMY0;
     }
     return nId;
 }
@@ -429,11 +429,11 @@ BOOL SwXFieldMaster::supportsService(const OUString& rServiceName) throw( uno::R
         const sal_Char* pEntry;
         switch( nResTypeId )
         {
-        case RES_USERFLD:   pEntry = "User";            break;
-        case RES_DBFLD:     pEntry = "Database";        break;
-        case RES_SETEXPFLD: pEntry = "SetExpression";   break;
-        case RES_DDEFLD:    pEntry = "DDE";             break;
-        case RES_AUTHORITY: pEntry = "Bibliography";    break;
+        case RES_USERFLD:	pEntry = "User"; 			break;
+        case RES_DBFLD:		pEntry = "Database"; 		break;
+        case RES_SETEXPFLD:	pEntry = "SetExpression";	break;
+        case RES_DDEFLD:	pEntry = "DDE";				break;
+        case RES_AUTHORITY:	pEntry = "Bibliography"; 	break;
         default: pEntry = 0;
         }
         if( pEntry )
@@ -456,11 +456,11 @@ uno::Sequence< OUString > SwXFieldMaster::getSupportedServiceNames(void) throw( 
     const sal_Char* pEntry1;
     switch( nResTypeId )
     {
-    case RES_USERFLD:   pEntry1 = "User";           break;
-    case RES_DBFLD:     pEntry1 = "Database";       break;
-    case RES_SETEXPFLD: pEntry1 = "SetExpression";  break;
-    case RES_DDEFLD:    pEntry1 = "DDE";            break;
-    case RES_AUTHORITY: pEntry1 = "Bibliography";   break;
+    case RES_USERFLD: 	pEntry1 = "User"; 			break;
+    case RES_DBFLD:	  	pEntry1 = "Database";		break;
+    case RES_SETEXPFLD:	pEntry1 = "SetExpression";	break;
+    case RES_DDEFLD:	pEntry1 = "DDE"; 			break;
+    case RES_AUTHORITY:	pEntry1 = "Bibliography";	break;
     default: pEntry1 = 0;
     }
     if( pEntry1 )
@@ -507,7 +507,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXFieldMaster::getPropertySetInfo(vo
                                             throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< beans::XPropertySetInfo >  aRef =
+    uno::Reference< beans::XPropertySetInfo >  aRef = 
                         aSwMapProvider.GetPropertySet(
                                 lcl_GetPropMapIdForFieldType( nResTypeId ) )->getPropertySetInfo();
     return aRef;
@@ -537,7 +537,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
             };
             for(const sal_uInt16 * pIds = nIds; *pIds; ++pIds)
             {
-                if(sTypeName == *rExtraArr[ *pIds ] )
+                if(sTypeName ==	*rExtraArr[ *pIds ] )
                 {
                     bSetValue = sal_False;
                     break;
@@ -609,7 +609,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
                 }
                 break;
                 case RES_DBFLD :
-                {
+                {    
                     ::GetString( rValue, sParam3 );
                     pType = GetFldType();
                 }
@@ -898,7 +898,7 @@ void SwXFieldMaster::removeVetoableChangeListener(const OUString& /*PropertyName
     DBG_WARNING("not implemented");
 }
 
-void SwXFieldMaster::dispose(void)          throw( uno::RuntimeException )
+void SwXFieldMaster::dispose(void) 			throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
     SwFieldType* pFldType = GetFldType(sal_True);
@@ -970,14 +970,14 @@ const Programmatic2UIName_Impl* lcl_GetFieldNameTable()
     {
         bInitialized = TRUE;
         int nName = 0;
-        aFieldNames[nName].sUIName = String             (SW_RES(STR_POOLCOLL_LABEL_ABB ));
-        aFieldNames[nName++].sProgrammaticName = String (SW_RES(STR_POCO_PRGM_LABEL_ABB));
-        aFieldNames[nName].sUIName = String             (SW_RES(STR_POOLCOLL_LABEL_TABLE ));
-        aFieldNames[nName++].sProgrammaticName = String (SW_RES(STR_POCO_PRGM_LABEL_TABLE));
-        aFieldNames[nName].sUIName = String             (SW_RES(STR_POOLCOLL_LABEL_FRAME));
-        aFieldNames[nName++].sProgrammaticName = String (SW_RES(STR_POCO_PRGM_LABEL_FRAME));
-        aFieldNames[nName].sUIName = String             (SW_RES(STR_POOLCOLL_LABEL_DRAWING ));
-        aFieldNames[nName++].sProgrammaticName = String (SW_RES(STR_POCO_PRGM_LABEL_DRAWING));
+        aFieldNames[nName].sUIName = String				(SW_RES(STR_POOLCOLL_LABEL_ABB ));
+        aFieldNames[nName++].sProgrammaticName = String	(SW_RES(STR_POCO_PRGM_LABEL_ABB));
+        aFieldNames[nName].sUIName = String				(SW_RES(STR_POOLCOLL_LABEL_TABLE ));
+        aFieldNames[nName++].sProgrammaticName = String	(SW_RES(STR_POCO_PRGM_LABEL_TABLE));
+        aFieldNames[nName].sUIName = String				(SW_RES(STR_POOLCOLL_LABEL_FRAME));
+        aFieldNames[nName++].sProgrammaticName = String	(SW_RES(STR_POCO_PRGM_LABEL_FRAME));
+        aFieldNames[nName].sUIName = String				(SW_RES(STR_POOLCOLL_LABEL_DRAWING ));
+        aFieldNames[nName++].sProgrammaticName = String	(SW_RES(STR_POCO_PRGM_LABEL_DRAWING));
     }
     return &aFieldNames[0];
 }
@@ -1042,28 +1042,28 @@ SwXTextField * CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt)
 
 struct SwFieldProperties_Impl
 {
-    String      sPar1;
-    String      sPar2;
-    String      sPar3;
-    String      sPar4;
+    String 		sPar1;
+    String 		sPar2;
+    String 		sPar3;
+    String 		sPar4;
     String      sPar5;
     String      sPar6;
-    Date            aDate;
-    double          fDouble;
-    uno::Sequence<beans::PropertyValue> aPropSeq;
+    Date 			aDate;
+    double 			fDouble;
+    uno::Sequence<beans::PropertyValue>	aPropSeq;
     uno::Sequence<OUString> aStrings;
-    util::DateTime* pDateTime;
+    util::DateTime*	pDateTime;
 
-    sal_Int32       nSubType;
-    sal_Int32       nFormat;
-    sal_uInt16      nUSHORT1;
-    sal_uInt16      nUSHORT2;
-    sal_Int16       nSHORT1;
-    sal_Int8        nByte1;
+    sal_Int32 		nSubType;
+    sal_Int32 		nFormat;
+    sal_uInt16 		nUSHORT1;
+    sal_uInt16 		nUSHORT2;
+    sal_Int16 		nSHORT1;
+    sal_Int8 		nByte1;
     sal_Bool        bFormatIsDefault;
-    sal_Bool        bBool1;
-    sal_Bool        bBool2;
-    sal_Bool        bBool3;
+    sal_Bool 		bBool1;
+    sal_Bool 		bBool2;
+    sal_Bool 		bBool3;
     sal_Bool        bBool4;
 
     SwFieldProperties_Impl():
@@ -1183,9 +1183,9 @@ uno::Reference< beans::XPropertySet >  SwXTextField::getTextFieldMaster(void) th
     if( m_bIsDescriptor && m_aFieldTypeClient.GetRegisteredIn() )
     {
         pType = (SwFieldType*)m_aFieldTypeClient.GetRegisteredIn();
-    }
+    }            
     else
-    {
+    {        
         if(!GetRegisteredIn())
             throw uno::RuntimeException();
         pType = pFmtFld->GetFld()->GetTyp();
@@ -1222,9 +1222,9 @@ void SwXTextField::attachToRange(
     OTextCursorHelper* pCursor = 0;
     if(xRangeTunnel.is())
     {
-        pRange  = reinterpret_cast< SwXTextRange * >(
+        pRange 	= reinterpret_cast< SwXTextRange * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-        pCursor = reinterpret_cast< OTextCursorHelper * >(
+        pCursor	= reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
     }
 
@@ -1241,7 +1241,7 @@ void SwXTextField::attachToRange(
             case SW_SERVICE_FIELDTYPE_ANNOTATION:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_POSTITFLD);
-
+                
                 DateTime aDateTime;
                 if (m_pProps->pDateTime)
                 {
@@ -1380,7 +1380,7 @@ void SwXTextField::attachToRange(
                         m_pProps->nUSHORT1, m_pProps->sPar2, m_pProps->sPar1);
             }
             break;
-            case SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR     :
+            case SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR		:
             case SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME  :
             case SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME         :
             case SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION       :
@@ -1573,7 +1573,7 @@ void SwXTextField::attachToRange(
                     m_pProps->nUSHORT2 != USHRT_MAX ?  //#i79471# the field can have a number format or a number_ing_ format
                     m_pProps->nUSHORT2 : m_pProps->nFormat);
 
-                sal_uInt16  nSubType = pFld->GetSubType();
+                sal_uInt16	nSubType = pFld->GetSubType();
                 if(m_pProps->bBool2)
                     nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
                 else
@@ -1613,8 +1613,8 @@ void SwXTextField::attachToRange(
                         static_cast< SwSetExpFieldType* >(pSetExpFld)->GetType() == nsSwGetSetExpType::GSE_STRING )
                     nSubType = nsSwGetSetExpType::GSE_STRING;
                 }
-                else
-                    bSetGetExpFieldUninitialized = true; // #i82544#
+                else 
+                    bSetGetExpFieldUninitialized = true; // #i82544# 
 
                 if(m_pProps->bBool2)
                     nSubType |= nsSwExtendedSubType::SUB_CMD;
@@ -1626,7 +1626,7 @@ void SwXTextField::attachToRange(
                 //TODO: SubType auswerten!
                 if(m_pProps->sPar4.Len())
                     ((SwGetExpField*)pFld)->ChgExpStr(m_pProps->sPar4);
-                // #i82544#
+                // #i82544# 
                 if( bSetGetExpFieldUninitialized )
                     ((SwGetExpField*)pFld)->SetLateInitialization();
             }
@@ -1678,7 +1678,7 @@ void SwXTextField::attachToRange(
                 sal_uInt16 nSubType = DS_PAGE;
                 switch(m_nServiceId)
                 {
-//                  case SW_SERVICE_FIELDTYPE_PAGE_COUNT            : break;
+//					case SW_SERVICE_FIELDTYPE_PAGE_COUNT            : break;
                     case SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT       : nSubType = DS_PARA;break;
                     case SW_SERVICE_FIELDTYPE_WORD_COUNT            : nSubType = DS_WORD;break;
                     case SW_SERVICE_FIELDTYPE_CHARACTER_COUNT       : nSubType = DS_CHAR;break;
@@ -1929,12 +1929,12 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         {
             pFmtFld->GetTxtFld()->Expand();
         }
-
+    
     //#i100374# changing a document field should set the modify flag
     SwDoc* pDoc = GetDoc();
     if (pDoc)
         pDoc->SetModified();
-
+        
     }
     else if(m_pProps)
     {
@@ -2142,7 +2142,7 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
                         m_pTextObject = new SwTextAPIObject( pObj );
                         m_pTextObject->acquire();
                     }
-
+                    
                     uno::Reference < text::XText > xText( m_pTextObject  );
                     aRet <<= xText;
                     break;

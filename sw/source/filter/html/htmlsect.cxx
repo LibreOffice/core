@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,7 +153,7 @@ void SwHTMLParser::NewDivision( int nToken )
 
     if( !bPositioned && (bHeader || bFooter) && IsNewDoc() )
     {
-        SwPageDesc *pPageDesc = pCSS1Parser->GetMasterPageDesc();
+        SwPageDesc *pPageDesc =	pCSS1Parser->GetMasterPageDesc();
         SwFrmFmt& rPageFmt = pPageDesc->GetMaster();
 
         SwFrmFmt *pHdFtFmt;
@@ -360,7 +360,7 @@ void SwHTMLParser::NewDivision( int nToken )
         // (ersten) Node des Bereich verschieben.
         if( pOldTxtNd )
             MovePageDescAttrs( pOldTxtNd, pPam->GetPoint()->nNode.GetIndex(),
-                               sal_True  );
+                               sal_True	 );
 
         if( pPostIts )
         {
@@ -416,7 +416,7 @@ void SwHTMLParser::EndDivision( int /*nToken*/ )
     {
         // Attribute beenden
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();	// Absatz-Atts wegen JavaScript moeglichst schnell setzen
 
         delete pCntxt;
     }
@@ -425,7 +425,7 @@ void SwHTMLParser::EndDivision( int /*nToken*/ )
 void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
                                             const SwPosition *pOldPos )
 {
-    SwPageDesc *pPageDesc = pCSS1Parser->GetMasterPageDesc();
+    SwPageDesc *pPageDesc =	pCSS1Parser->GetMasterPageDesc();
     SwFrmFmt& rPageFmt = pPageDesc->GetMaster();
 
     SwFrmFmt *pHdFtFmt =
@@ -755,7 +755,7 @@ void SwHTMLParser::NewMultiCol()
         // to the section's first node.
         if( pOldTxtNd )
             MovePageDescAttrs( pOldTxtNd, pPam->GetPoint()->nNode.GetIndex(),
-                               sal_True  );
+                               sal_True	 );
 
         if( pPostIts )
         {
@@ -824,14 +824,14 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
         SwCntntNode* pSrcCntntNd = pSrcNd->GetCntntNode();
 
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pSrcCntntNd->GetSwAttrSet()
+        if( SFX_ITEM_SET ==	pSrcCntntNd->GetSwAttrSet()
                 .GetItemState( RES_PAGEDESC, sal_False, &pItem ) &&
             ((SwFmtPageDesc *)pItem)->GetPageDesc() )
         {
             pDestCntntNd->SetAttr( *pItem );
             pSrcCntntNd->ResetAttr( RES_PAGEDESC );
         }
-        if( SFX_ITEM_SET == pSrcCntntNd->GetSwAttrSet()
+        if( SFX_ITEM_SET ==	pSrcCntntNd->GetSwAttrSet()
                 .GetItemState( RES_BREAK, sal_False, &pItem ) )
         {
             switch( ((SvxFmtBreakItem *)pItem)->GetBreak() )
@@ -852,7 +852,7 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
         SwFrmFmt *pFrmFmt = pSrcNd->GetTableNode()->GetTable().GetFrmFmt();
 
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pFrmFmt->GetAttrSet().
+        if( SFX_ITEM_SET ==	pFrmFmt->GetAttrSet().
                 GetItemState( RES_PAGEDESC, sal_False, &pItem ) )
         {
             pDestCntntNd->SetAttr( *pItem );

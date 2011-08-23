@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,7 +166,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_aTopMF.SetUpHdl(aFrameHdl);
     m_aTopMF.SetDownHdl(aFrameHdl);
     m_aTopMF.SetLoseFocusHdl(aFrameHdl);
-
+    
     FieldUnit eFieldUnit = ::GetDfltMetric(sal_False);
     ::SetFieldUnit( m_aLeftMF, eFieldUnit );
     ::SetFieldUnit( m_aTopMF, eFieldUnit );

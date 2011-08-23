@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,9 +96,9 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     aUseSquaredPageMode ( this, SW_RES( CB_USE_SQUARE_PAGE_MODE ) ),
     aUseCharUnit             ( this , SW_RES( CB_USE_CHAR_UNIT ) ),
 
-    pWrtShell   ( NULL ),
+    pWrtShell	( NULL ),
     bHTMLMode   ( FALSE ),
-    nLastTab    ( 0 ),
+    nLastTab	( 0 ),
     nOldLinkMode( MANUAL )
 
 {
@@ -134,7 +134,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
         aTabFT.Hide();
         aTabMF.Hide();
     }
-
+    
     SvtCJKOptions aCJKOptions;
     if(!aCJKOptions.IsAsianTypographyEnabled())
         {
@@ -147,7 +147,7 @@ SwLoadOptPage::~SwLoadOptPage()
 {
 }
 
-SfxTabPage* __EXPORT SwLoadOptPage::Create( Window* pParent,
+SfxTabPage*	__EXPORT SwLoadOptPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet )
 {
     return new SwLoadOptPage(pParent, rAttrSet );
@@ -214,7 +214,7 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
         rSet.Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bIsUseCharUnitFlag ));
         bRet = TRUE;
     }
-
+    
     sal_Bool bIsSquaredPageModeFlag = aUseSquaredPageMode.IsChecked();
     if ( bIsSquaredPageModeFlag != aUseSquaredPageMode.GetSavedValue() )
     {
@@ -256,9 +256,9 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
 
     switch (nOldLinkMode)
     {
-        case NEVER:     aNeverRB.Check();   break;
-        case MANUAL:    aRequestRB.Check(); break;
-        case AUTOMATIC: aAlwaysRB.Check();  break;
+        case NEVER:		aNeverRB.Check();	break;
+        case MANUAL:	aRequestRB.Check();	break;
+        case AUTOMATIC:	aAlwaysRB.Check();	break;
     }
 
     aAutoUpdateFields.SaveValue();
@@ -291,7 +291,7 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
     {
         bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
     }
-
+    
     //default page mode loading
     if(pWrtShell)
     {
@@ -359,7 +359,7 @@ SwCaptionPreview::SwCaptionPreview( Window* pParent, const ResId& rResId )
 {
     maDrawPos = Point( 4, 6 );
 
-    Wallpaper   aBack( GetSettings().GetStyleSettings().GetWindowColor() );
+    Wallpaper	aBack( GetSettings().GetStyleSettings().GetWindowColor() );
     SetBackground( aBack );
     SetFillColor( aBack.GetColor() );
     SetLineColor( aBack.GetColor() );
@@ -388,47 +388,47 @@ void SwCaptionPreview::Paint( const Rectangle& rRect )
 
 SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage(pParent, SW_RES(TP_OPTCAPTION_PAGE), rSet),
-    aCheckFT        (this, SW_RES(FT_OBJECTS    )),
-    aCheckLB        (this, SW_RES(CLB_OBJECTS   )),
+    aCheckFT		(this, SW_RES(FT_OBJECTS	)),
+    aCheckLB		(this, SW_RES(CLB_OBJECTS	)),
     aFtCaptionOrder(this, SW_RES( FT_ORDER )),
     aLbCaptionOrder(this, SW_RES( LB_ORDER )),
     aPreview        (this, SW_RES(WIN_PREVIEW   )),
-    aSettingsGroupFL(this, SW_RES(FL_SETTINGS_2 )),
-    aCategoryText   (this, SW_RES(TXT_CATEGORY  )),
-    aCategoryBox    (this, SW_RES(BOX_CATEGORY  )),
-    aFormatText     (this, SW_RES(TXT_FORMAT    )),
-    aFormatBox      (this, SW_RES(BOX_FORMAT    )),
+    aSettingsGroupFL(this, SW_RES(FL_SETTINGS_2	)),
+    aCategoryText	(this, SW_RES(TXT_CATEGORY	)),
+    aCategoryBox 	(this, SW_RES(BOX_CATEGORY	)),
+    aFormatText		(this, SW_RES(TXT_FORMAT	)),
+    aFormatBox		(this, SW_RES(BOX_FORMAT	)),
     aNumberingSeparatorFT(this, SW_RES(FT_NUM_SEP  )),
     aNumberingSeparatorED(this, SW_RES(ED_NUM_SEP  )),
-    aTextText       (this, SW_RES(TXT_TEXT      )),
-    aTextEdit       (this, SW_RES(EDT_TEXT      )),
-    aPosText        (this, SW_RES(TXT_POS       )),
-    aPosBox         (this, SW_RES(BOX_POS       )),
-    aNumCaptFL      (this, SW_RES(FL_NUMCAPT    )),
-    aFtLevel        (this, SW_RES(FT_LEVEL      )),
-    aLbLevel        (this, SW_RES(LB_LEVEL      )),
-    aFtDelim        (this, SW_RES(FT_SEPARATOR  )),
-    aEdDelim        (this, SW_RES(ED_SEPARATOR  )),
-    aCategoryFL     (this, SW_RES(FL_CATEGORY   )),
-    aCharStyleFT    (this, SW_RES(FT_CHARSTYLE  )),
-    aCharStyleLB    (this, SW_RES(LB_CHARSTYLE  )),
-    aApplyBorderCB  (this, SW_RES(CB_APPLYBORDER)),
+    aTextText		(this, SW_RES(TXT_TEXT		)),
+    aTextEdit		(this, SW_RES(EDT_TEXT		)),
+    aPosText		(this, SW_RES(TXT_POS		)),
+    aPosBox			(this, SW_RES(BOX_POS		)),
+    aNumCaptFL		(this, SW_RES(FL_NUMCAPT	)),
+    aFtLevel		(this, SW_RES(FT_LEVEL		)),
+    aLbLevel		(this, SW_RES(LB_LEVEL		)),
+    aFtDelim		(this, SW_RES(FT_SEPARATOR	)),
+    aEdDelim		(this, SW_RES(ED_SEPARATOR	)),
+    aCategoryFL		(this, SW_RES(FL_CATEGORY	)),
+    aCharStyleFT	(this, SW_RES(FT_CHARSTYLE	)),
+    aCharStyleLB	(this, SW_RES(LB_CHARSTYLE	)),
+    aApplyBorderCB	(this, SW_RES(CB_APPLYBORDER)),
 
-    sSWTable        (SW_RES(STR_TABLE           )),
-    sSWFrame        (SW_RES(STR_FRAME           )),
-    sSWGraphic      (SW_RES(STR_GRAPHIC         )),
-    sOLE            (SW_RES(STR_OLE             )),
+    sSWTable    	(SW_RES(STR_TABLE			)),
+    sSWFrame    	(SW_RES(STR_FRAME			)),
+    sSWGraphic   	(SW_RES(STR_GRAPHIC			)),
+    sOLE    		(SW_RES(STR_OLE				)),
 
-    sBegin          (SW_RESSTR(STR_BEGINNING            )),
-    sEnd            (SW_RESSTR(STR_END                  )),
-    sAbove          (SW_RESSTR(STR_ABOVE                )),
-    sBelow          (SW_RESSTR(STR_CP_BELOW             )),
+    sBegin			(SW_RESSTR(STR_BEGINNING			)),
+    sEnd			(SW_RESSTR(STR_END					)),
+    sAbove			(SW_RESSTR(STR_ABOVE				)),
+    sBelow			(SW_RESSTR(STR_CP_BELOW				)),
     sNone           (SW_RESSTR( STR_CATEGORY_NONE )),
 
-    pMgr            (new SwFldMgr()),
+    pMgr			(new SwFldMgr()),
     bHTMLMode(FALSE)
 {
-    Wallpaper   aBack( GetSettings().GetStyleSettings().GetWindowColor() );
+    Wallpaper	aBack( GetSettings().GetStyleSettings().GetWindowColor() );
     aPreview.SetBackground( aBack );
 
     SwStyleNameMapper::FillUIName( RES_POOLCOLL_LABEL_ABB, sIllustration );
@@ -471,7 +471,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
         aLbLevel.InsertEntry(String::CreateFromInt32(i + 1));
 
     sal_Unicode nLvl = MAXLEVEL;
-    String  sDelim( String::CreateFromAscii( ": " ) );
+    String	sDelim( String::CreateFromAscii( ": " ) );
 
     if (pSh)
     {
@@ -494,11 +494,11 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     Link aLk = LINK( this, SwCaptionOptPage, ModifyHdl );
     aCategoryBox.SetModifyHdl( aLk );
     aNumberingSeparatorED.SetModifyHdl( aLk );
-    aTextEdit   .SetModifyHdl( aLk );
+    aTextEdit	.SetModifyHdl( aLk );
 
     aLk = LINK(this, SwCaptionOptPage, SelectHdl);
     aCategoryBox.SetSelectHdl( aLk );
-    aFormatBox  .SetSelectHdl( aLk );
+    aFormatBox	.SetSelectHdl( aLk );
 
     aLbCaptionOrder.SetSelectHdl( LINK(this, SwCaptionOptPage, OrderHdl));
 
@@ -513,7 +513,7 @@ SwCaptionOptPage::~SwCaptionOptPage()
     delete pMgr;
 }
 
-SfxTabPage* SwCaptionOptPage::Create( Window* pParent,
+SfxTabPage*	SwCaptionOptPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet )
 {
     return new SwCaptionOptPage(pParent, rAttrSet );
@@ -524,7 +524,7 @@ BOOL SwCaptionOptPage::FillItemSet( SfxItemSet&  )
     BOOL bRet = FALSE;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    SaveEntry(aCheckLB.FirstSelected());    // Aktuellen Eintrag uebernehmen
+    SaveEntry(aCheckLB.FirstSelected());	// Aktuellen Eintrag uebernehmen
 
     SvLBoxEntry* pEntry = aCheckLB.First();
 
@@ -739,8 +739,8 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
                 break;
         }
         aPosBox.SelectEntryPos(pOpt->GetPos());
-        aPosBox.Enable( pOpt->GetObjType() != GRAPHIC_CAP &&
-                pOpt->GetObjType() != OLE_CAP &&
+        aPosBox.Enable( pOpt->GetObjType() != GRAPHIC_CAP && 
+                pOpt->GetObjType() != OLE_CAP && 
                 aPosText.IsEnabled() );
         aPosBox.SelectEntryPos(pOpt->GetPos());
 

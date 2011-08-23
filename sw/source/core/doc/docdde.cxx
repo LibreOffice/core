@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,15 +38,15 @@
 
 #define _SVSTDARR_STRINGS
 #include <svl/svstdarr.hxx>
-#include <sfx2/linkmgr.hxx>         // LinkManager
+#include <sfx2/linkmgr.hxx>			// LinkManager
 #include <unotools/charclass.hxx>
 #include <fmtcntnt.hxx>
 #include <doc.hxx>
-#include <swserv.hxx>           // fuer Server-Funktionalitaet
+#include <swserv.hxx>			// fuer Server-Funktionalitaet
 #include <IMark.hxx>
 #include <bookmrk.hxx>
-#include <section.hxx>          // fuer SwSectionFmt
-#include <swtable.hxx>          // fuer SwTable
+#include <section.hxx>			// fuer SwSectionFmt
+#include <swtable.hxx>			// fuer SwTable
 #include <node.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
@@ -115,20 +115,20 @@ BOOL lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs, bool bCaseS
                 pItem->pSectNd = pIdx->GetNode().GetSectionNode();
                 return FALSE;
             }
-//nein!!            // sollte der Namen schon passen, der Rest aber nicht, dann haben wir
+//nein!!			// sollte der Namen schon passen, der Rest aber nicht, dann haben wir
             // sie nicht. Die Namen sind immer eindeutig.
         }
     }
-    return TRUE;        // dann weiter
+    return TRUE;		// dann weiter
 }
 BOOL lcl_FindSectionCaseSensitive( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
 {
     return lcl_FindSection( rpSectFmt, pArgs, true );
-}
+}    
 BOOL lcl_FindSectionCaseInsensitive( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
 {
     return lcl_FindSection( rpSectFmt, pArgs, false );
-}
+}    
 
 
 
@@ -150,10 +150,10 @@ BOOL lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
                                         pFBox->GetSttNd()->FindTableNode();
             return FALSE;
         }
-//nein!     // sollte der Namen schon passen, der Rest aber nicht, dann haben wir
+//nein!		// sollte der Namen schon passen, der Rest aber nicht, dann haben wir
         // sie nicht. Die Namen sind immer eindeutig.
     }
-    return TRUE;        // dann weiter
+    return TRUE;		// dann weiter
 }
 
 
@@ -166,7 +166,7 @@ bool SwDoc::GetData( const String& rItem, const String& rMimeType,
     while( true )
     {
         ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, rItem, bCaseSensitive);
-        if(pBkmk)
+        if(pBkmk) 
             return SwServerObject(*pBkmk).GetData(rValue, rMimeType);
 
         // haben wir ueberhaupt das Item vorraetig?
@@ -179,7 +179,7 @@ bool SwDoc::GetData( const String& rItem, const String& rMimeType,
             // gefunden, als erfrage die Daten
             return SwServerObject( *aPara.pSectNd ).GetData( rValue, rMimeType );
         }
-        if( !bCaseSensitive )
+        if( !bCaseSensitive ) 
             break;
         bCaseSensitive = false;
     }
@@ -205,7 +205,7 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
     while( true )
     {
         ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, rItem, bCaseSensitive);
-        if(pBkmk)
+        if(pBkmk) 
             return SwServerObject(*pBkmk).SetData(rMimeType, rValue);
 
         // haben wir ueberhaupt das Item vorraetig?
@@ -217,7 +217,7 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
             // gefunden, als erfrage die Daten
             return SwServerObject( *aPara.pSectNd ).SetData( rMimeType, rValue );
         }
-        if( !bCaseSensitive )
+        if( !bCaseSensitive ) 
             break;
         bCaseSensitive = false;
     }
@@ -248,12 +248,12 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
         if(pBkmk && pBkmk->IsExpanded()
             && (0 == (pObj = pBkmk->GetRefObject())))
         {
-            // mark found, but no link yet -> create hotlink
+            // mark found, but no link yet -> create hotlink 
             pObj = new SwServerObject(*pBkmk);
             pBkmk->SetRefObject(pObj);
             GetLinkManager().InsertServer(pObj);
-        }
-        if(pObj)
+        }     
+        if(pObj) 
             return pObj;
 
         _FindItem aPara(bCaseSensitive ? rItem : GetAppCharClass().lower(rItem));
@@ -262,25 +262,25 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
         if(aPara.pSectNd
             && (0 == (pObj = aPara.pSectNd->GetSection().GetObject())))
         {
-            // section found, but no link yet -> create hotlink
+            // section found, but no link yet -> create hotlink 
             pObj = new SwServerObject( *aPara.pSectNd );
             aPara.pSectNd->GetSection().SetRefObject( pObj );
             GetLinkManager().InsertServer(pObj);
         }
-        if(pObj)
+        if(pObj) 
             return pObj;
-        if( !bCaseSensitive )
+        if( !bCaseSensitive ) 
             break;
         bCaseSensitive = false;
     }
 
     _FindItem aPara( GetAppCharClass().lower(rItem) );
-    // tables
+    // tables 
     ((SwFrmFmts*)pTblFrmFmtTbl)->ForEach(0, pTblFrmFmtTbl->Count(), lcl_FindTable, &aPara);
     if(aPara.pTblNd
         && (0 == (pObj = aPara.pTblNd->GetTable().GetObject())))
     {
-        // table found, but no link yet -> create hotlink
+        // table found, but no link yet -> create hotlink 
         pObj = new SwServerObject(*aPara.pTblNd);
         aPara.pTblNd->GetTable().SetRefObject(pObj);
         GetLinkManager().InsertServer(pObj);
@@ -341,7 +341,7 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
         }
         else if( sCmp.EqualsAscii( pMarkToRegion ) )
         {
-            sItem = sName;              // wird unten behandelt !
+            sItem = sName;				// wird unten behandelt	!
             bWeiter = TRUE;
         }
         else if( sCmp.EqualsAscii( pMarkToOutline ) )
@@ -365,7 +365,7 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                                 //GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
                                 GetAttrOutlineLevel()-1;//<-end,zhaojianwei
                     ++nTmpPos )
-                    ;       // es gibt keinen Block
+                    ;		// es gibt keinen Block
 
                 if( nTmpPos < rOutlNds.Count() )
                     rpRange->aEnd = *rOutlNds[ nTmpPos ];
@@ -393,7 +393,7 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
             return static_cast<bool>(rpPam);
         }
 
-        //
+        // 
         _FindItem aPara( bCaseSensitive ? sItem : rCC.lower( sItem ) );
 
         if( pSectionFmtTbl->Count() )
@@ -408,7 +408,7 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
 
             }
         }
-        if( !bCaseSensitive )
+        if( !bCaseSensitive ) 
             break;
         bCaseSensitive = false;
     }

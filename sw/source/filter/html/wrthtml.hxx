@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,61 +72,61 @@ extern SwAttrFnTab aHTMLAttrFnTab;
 // BORDER geht nur bei OutHTML_Image
 // ANYSIZE gibt an, ob auch VAR_SIZE und MIN_SIZE angaben exportiert werden
 // ABSSIZE gibt an, ob Abstand und Umrandung ignoriert werden sollen
-const sal_uInt32 HTML_FRMOPT_ALIGN      = 1<<0;
-const sal_uInt32 HTML_FRMOPT_S_ALIGN    = 1<<1;
+const sal_uInt32 HTML_FRMOPT_ALIGN   	= 1<<0;
+const sal_uInt32 HTML_FRMOPT_S_ALIGN   	= 1<<1;
 
-const sal_uInt32 HTML_FRMOPT_WIDTH      = 1<<2;
-const sal_uInt32 HTML_FRMOPT_HEIGHT         = 1<<3;
-const sal_uInt32 HTML_FRMOPT_SIZE       = HTML_FRMOPT_WIDTH|HTML_FRMOPT_HEIGHT;
-const sal_uInt32 HTML_FRMOPT_S_WIDTH    = 1<<4;
-const sal_uInt32 HTML_FRMOPT_S_HEIGHT   = 1<<5;
-const sal_uInt32 HTML_FRMOPT_S_SIZE     = HTML_FRMOPT_S_WIDTH|HTML_FRMOPT_S_HEIGHT;
-const sal_uInt32 HTML_FRMOPT_ANYSIZE    = 1<<6;
-const sal_uInt32 HTML_FRMOPT_ABSSIZE    = 1<<7;
-const sal_uInt32 HTML_FRMOPT_MARGINSIZE     = 1<<8;
+const sal_uInt32 HTML_FRMOPT_WIDTH 		= 1<<2;
+const sal_uInt32 HTML_FRMOPT_HEIGHT 		= 1<<3;
+const sal_uInt32 HTML_FRMOPT_SIZE    	= HTML_FRMOPT_WIDTH|HTML_FRMOPT_HEIGHT;
+const sal_uInt32 HTML_FRMOPT_S_WIDTH 	= 1<<4;
+const sal_uInt32 HTML_FRMOPT_S_HEIGHT 	= 1<<5;
+const sal_uInt32 HTML_FRMOPT_S_SIZE    	= HTML_FRMOPT_S_WIDTH|HTML_FRMOPT_S_HEIGHT;
+const sal_uInt32 HTML_FRMOPT_ANYSIZE 	= 1<<6;
+const sal_uInt32 HTML_FRMOPT_ABSSIZE 	= 1<<7;
+const sal_uInt32 HTML_FRMOPT_MARGINSIZE 	= 1<<8;
 
-const sal_uInt32 HTML_FRMOPT_SPACE      = 1<<9;
-const sal_uInt32 HTML_FRMOPT_S_SPACE    = 1<<10;
+const sal_uInt32 HTML_FRMOPT_SPACE   	= 1<<9;
+const sal_uInt32 HTML_FRMOPT_S_SPACE   	= 1<<10;
 
-const sal_uInt32 HTML_FRMOPT_BORDER     = 1<<11;
-const sal_uInt32 HTML_FRMOPT_S_BORDER   = 1<<12;
-const sal_uInt32 HTML_FRMOPT_S_NOBORDER     = 1<<13;
+const sal_uInt32 HTML_FRMOPT_BORDER  	= 1<<11;
+const sal_uInt32 HTML_FRMOPT_S_BORDER  	= 1<<12;
+const sal_uInt32 HTML_FRMOPT_S_NOBORDER 	= 1<<13;
 
 const sal_uInt32 HTML_FRMOPT_S_BACKGROUND = 1<<14;
 
-const sal_uInt32 HTML_FRMOPT_NAME           = 1<<15;
-const sal_uInt32 HTML_FRMOPT_ALT        = 1<<16;
-const sal_uInt32 HTML_FRMOPT_BRCLEAR    = 1<<17;
-const sal_uInt32 HTML_FRMOPT_S_PIXSIZE  = 1<<18;
-const sal_uInt32 HTML_FRMOPT_ID             = 1<<19;
-const sal_uInt32 HTML_FRMOPT_DIR            = 1<<20;
+const sal_uInt32 HTML_FRMOPT_NAME   		= 1<<15;
+const sal_uInt32 HTML_FRMOPT_ALT 		= 1<<16;
+const sal_uInt32 HTML_FRMOPT_BRCLEAR 	= 1<<17;
+const sal_uInt32 HTML_FRMOPT_S_PIXSIZE 	= 1<<18;
+const sal_uInt32 HTML_FRMOPT_ID 			= 1<<19;
+const sal_uInt32 HTML_FRMOPT_DIR 			= 1<<20;
 
 
-const sal_uInt32 HTML_FRMOPTS_GENIMG_ALL    =
-    HTML_FRMOPT_ALT     |
-    HTML_FRMOPT_SIZE    |
+const sal_uInt32 HTML_FRMOPTS_GENIMG_ALL	=
+    HTML_FRMOPT_ALT		|
+    HTML_FRMOPT_SIZE	|
     HTML_FRMOPT_ABSSIZE |
     HTML_FRMOPT_NAME;
 const sal_uInt32 HTML_FRMOPTS_GENIMG_CNTNR = HTML_FRMOPTS_GENIMG_ALL;
-const sal_uInt32 HTML_FRMOPTS_GENIMG    =
+const sal_uInt32 HTML_FRMOPTS_GENIMG	=
     HTML_FRMOPTS_GENIMG_ALL |
-    HTML_FRMOPT_ALIGN       |
-    HTML_FRMOPT_SPACE       |
+    HTML_FRMOPT_ALIGN 		|
+    HTML_FRMOPT_SPACE 		|
     HTML_FRMOPT_BRCLEAR;
 
-#define HTMLMODE_BLOCK_SPACER       0x00010000
-#define HTMLMODE_FLOAT_FRAME        0x00020000
-#define HTMLMODE_VERT_SPACER        0x00040000
-#define HTMLMODE_NBSP_IN_TABLES     0x00080000
-#define HTMLMODE_LSPACE_IN_NUMBUL   0x00100000
-#define HTMLMODE_NO_BR_AT_PAREND    0x00200000
-#define HTMLMODE_PRINT_EXT          0x00400000
-#define HTMLMODE_ABS_POS_FLY        0x00800000
-#define HTMLMODE_ABS_POS_DRAW       0x01000000
-#define HTMLMODE_FLY_MARGINS        0x02000000
-#define HTMLMODE_BORDER_NONE        0x04000000
-#define HTMLMODE_FONT_GENERIC       0x08000000
-#define HTMLMODE_FRSTLINE_IN_NUMBUL 0x10000000
+#define HTMLMODE_BLOCK_SPACER 		0x00010000
+#define HTMLMODE_FLOAT_FRAME 		0x00020000
+#define HTMLMODE_VERT_SPACER 		0x00040000
+#define HTMLMODE_NBSP_IN_TABLES		0x00080000
+#define HTMLMODE_LSPACE_IN_NUMBUL	0x00100000
+#define HTMLMODE_NO_BR_AT_PAREND	0x00200000
+#define HTMLMODE_PRINT_EXT			0x00400000
+#define HTMLMODE_ABS_POS_FLY		0x00800000
+#define HTMLMODE_ABS_POS_DRAW		0x01000000
+#define HTMLMODE_FLY_MARGINS		0x02000000
+#define HTMLMODE_BORDER_NONE		0x04000000
+#define HTMLMODE_FONT_GENERIC		0x08000000
+#define HTMLMODE_FRSTLINE_IN_NUMBUL	0x10000000
 #define HTMLMODE_NO_CONTROL_CENTERING 0x20000000
 
 #define HTML_DLCOLL_DD 0x4000
@@ -139,55 +139,55 @@ const sal_uInt32 HTML_FRMOPTS_GENIMG    =
 // Die folgenden Flags bestimmen nur, welche Descriptoren, Tags, Optionen etc.
 // ausgegeben werden ...
 // bit 0,1,2
-#define CSS1_OUTMODE_SPAN_NO_ON     0x0000U
-#define CSS1_OUTMODE_SPAN_TAG_ON    0x0001U
-#define CSS1_OUTMODE_STYLE_OPT_ON   0x0002U
-#define CSS1_OUTMODE_RULE_ON        0x0003U
-#define CSS1_OUTMODE_SPAN_TAG1_ON   0x0004U
-#define CSS1_OUTMODE_ANY_ON         0x0007U
+#define CSS1_OUTMODE_SPAN_NO_ON		0x0000U
+#define CSS1_OUTMODE_SPAN_TAG_ON	0x0001U
+#define CSS1_OUTMODE_STYLE_OPT_ON	0x0002U
+#define CSS1_OUTMODE_RULE_ON 		0x0003U
+#define CSS1_OUTMODE_SPAN_TAG1_ON	0x0004U
+#define CSS1_OUTMODE_ANY_ON			0x0007U
 
 // bit 3,4,5
-#define CSS1_OUTMODE_SPAN_NO_OFF    0x0000U
-#define CSS1_OUTMODE_SPAN_TAG_OFF   ((sal_uInt16)(0x0001U << 3))
-#define CSS1_OUTMODE_STYLE_OPT_OFF  ((sal_uInt16)(0x0002U << 3))
-#define CSS1_OUTMODE_RULE_OFF       ((sal_uInt16)(0x0003U << 3))
-#define CSS1_OUTMODE_SPAN_TAG1_OFF  ((sal_uInt16)(0x0004U << 3))
-#define CSS1_OUTMODE_ANY_OFF        ((sal_uInt16)(0x0007U << 3))
+#define CSS1_OUTMODE_SPAN_NO_OFF	0x0000U
+#define CSS1_OUTMODE_SPAN_TAG_OFF	((sal_uInt16)(0x0001U << 3))
+#define CSS1_OUTMODE_STYLE_OPT_OFF 	((sal_uInt16)(0x0002U << 3))
+#define CSS1_OUTMODE_RULE_OFF 		((sal_uInt16)(0x0003U << 3))
+#define CSS1_OUTMODE_SPAN_TAG1_OFF	((sal_uInt16)(0x0004U << 3))
+#define CSS1_OUTMODE_ANY_OFF		((sal_uInt16)(0x0007U << 3))
 
 #define CSS1_OUTMODE_ONOFF(a) (CSS1_OUTMODE_##a##_ON|CSS1_OUTMODE_##a##_OFF)
-#define CSS1_OUTMODE_SPAN_TAG       CSS1_OUTMODE_ONOFF(SPAN_TAG)
-#define CSS1_OUTMODE_STYLE_OPT      CSS1_OUTMODE_ONOFF(STYLE_OPT)
-#define CSS1_OUTMODE_RULE           CSS1_OUTMODE_ONOFF(RULE)
-#define CSS1_OUTMODE_SPAN_TAG1      CSS1_OUTMODE_ONOFF(TAG1)
+#define CSS1_OUTMODE_SPAN_TAG		CSS1_OUTMODE_ONOFF(SPAN_TAG)
+#define CSS1_OUTMODE_STYLE_OPT		CSS1_OUTMODE_ONOFF(STYLE_OPT)
+#define CSS1_OUTMODE_RULE			CSS1_OUTMODE_ONOFF(RULE)
+#define CSS1_OUTMODE_SPAN_TAG1		CSS1_OUTMODE_ONOFF(TAG1)
 
 // Die folgenden Flags legen fest, was ausgegeben wird
 // bit 6,7,8,9
-#define CSS1_OUTMODE_TEMPLATE       0x0000U
-#define CSS1_OUTMODE_BODY           ((sal_uInt16)(0x0001U << 6))
-#define CSS1_OUTMODE_PARA           ((sal_uInt16)(0x0002U << 6))
-#define CSS1_OUTMODE_HINT           ((sal_uInt16)(0x0003U << 6))
-#define CSS1_OUTMODE_FRAME          ((sal_uInt16)(0x0004U << 6))
-#define CSS1_OUTMODE_TABLE          ((sal_uInt16)(0x0005U << 6))
-#define CSS1_OUTMODE_TABLEBOX       ((sal_uInt16)(0x0006U << 6))
-#define CSS1_OUTMODE_DROPCAP        ((sal_uInt16)(0x0007U << 6))
-#define CSS1_OUTMODE_SECTION        ((sal_uInt16)(0x0008U << 6))
-#define CSS1_OUTMODE_SOURCE         ((sal_uInt16)(0x000fU << 6))
+#define CSS1_OUTMODE_TEMPLATE		0x0000U
+#define CSS1_OUTMODE_BODY			((sal_uInt16)(0x0001U << 6))
+#define CSS1_OUTMODE_PARA			((sal_uInt16)(0x0002U << 6))
+#define CSS1_OUTMODE_HINT 			((sal_uInt16)(0x0003U << 6))
+#define CSS1_OUTMODE_FRAME 			((sal_uInt16)(0x0004U << 6))
+#define CSS1_OUTMODE_TABLE			((sal_uInt16)(0x0005U << 6))
+#define CSS1_OUTMODE_TABLEBOX		((sal_uInt16)(0x0006U << 6))
+#define CSS1_OUTMODE_DROPCAP 		((sal_uInt16)(0x0007U << 6))
+#define CSS1_OUTMODE_SECTION 		((sal_uInt16)(0x0008U << 6))
+#define CSS1_OUTMODE_SOURCE			((sal_uInt16)(0x000fU << 6))
 
 // bit 10
-#define CSS1_OUTMODE_ENCODE         ((sal_uInt16)(0x0001U << 10))
+#define CSS1_OUTMODE_ENCODE 		((sal_uInt16)(0x0001U << 10))
 
 // bit 11,12,13
 // don't care about script
-#define CSS1_OUTMODE_ANY_SCRIPT     0x0000U
+#define CSS1_OUTMODE_ANY_SCRIPT		0x0000U
 // no cjk or ctl items
-#define CSS1_OUTMODE_WESTERN        ((sal_uInt16)(0x0001U << 11))
+#define CSS1_OUTMODE_WESTERN		((sal_uInt16)(0x0001U << 11))
 // no western or ctl items
-#define CSS1_OUTMODE_CJK            ((sal_uInt16)(0x0002U << 11))
+#define CSS1_OUTMODE_CJK			((sal_uInt16)(0x0002U << 11))
 // no western or cjk items
-#define CSS1_OUTMODE_CTL            ((sal_uInt16)(0x0003U << 11))
+#define CSS1_OUTMODE_CTL			((sal_uInt16)(0x0003U << 11))
 // no western, cjk or ctl items
-#define CSS1_OUTMODE_NO_SCRIPT      ((sal_uInt16)(0x0004U << 11))
-#define CSS1_OUTMODE_SCRIPT         ((sal_uInt16)(0x0007U << 11))
+#define CSS1_OUTMODE_NO_SCRIPT		((sal_uInt16)(0x0004U << 11))
+#define CSS1_OUTMODE_SCRIPT			((sal_uInt16)(0x0007U << 11))
 
 // der HTML-Writer
 struct HTMLControl;
@@ -204,7 +204,7 @@ class SwHTMLWriter : public Writer
     SwHTMLPosFlyFrms *pHTMLPosFlyFrms;
     SwHTMLNumRuleInfo *pNumRuleInfo;// aktuelle Numerierung
     SwHTMLNumRuleInfo *pNextNumRuleInfo;
-    sal_uInt32 nHTMLMode;               // Beschreibung der Export-Konfiguration
+    sal_uInt32 nHTMLMode;				// Beschreibung der Export-Konfiguration
 
     FieldUnit eCSS1Unit;
 
@@ -220,126 +220,126 @@ protected:
 
 public:
 #if defined(UNX)
-    static const sal_Char sNewLine;     // nur \012 oder \015
+    static const sal_Char sNewLine;		// nur \012 oder \015
 #else
-    static const sal_Char __FAR_DATA sNewLine[];    // \015\012
+    static const sal_Char __FAR_DATA sNewLine[];	// \015\012
 #endif
 
-    SvStringsDtor aImgMapNames;     // geschriebene Image Maps
+    SvStringsDtor aImgMapNames;		// geschriebene Image Maps
     SvStringsSortDtor aImplicitMarks;// implizite Stprungmarken
-    SvStringsDtor aOutlineMarks;        // geschriebene Image Maps
+    SvStringsDtor aOutlineMarks;		// geschriebene Image Maps
     SvStringsSortDtor aNumRuleNames;// Names of exported num rules
     SvStringsSortDtor aScriptParaStyles;// script dependent para styles
     SvStringsSortDtor aScriptTextStyles;// script dependent text styles
     SvULongs aOutlineMarkPoss;
-    HTMLControls aHTMLControls;     // die zu schreibenden ::com::sun::star::form::Forms
+    HTMLControls aHTMLControls;		// die zu schreibenden ::com::sun::star::form::Forms
     SwHTMLFmtInfos aChrFmtInfos;
     SwHTMLFmtInfos aTxtCollInfos;
-    INetFmts aINetFmts;             // die "offenen" INet-Attribute
+    INetFmts aINetFmts;				// die "offenen" INet-Attribute
     SwHTMLTxtFtns *pFootEndNotes;
 
-    String aCSS1Selector;           // der Selektor eines Styles
+    String aCSS1Selector;			// der Selektor eines Styles
     String aNonConvertableCharacters;
-    String aBulletGrfs[MAXLEVEL];   // die Grafiken fuer Listen
+    String aBulletGrfs[MAXLEVEL];	// die Grafiken fuer Listen
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  *pxFormComps; // die aktuelle Form
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  *pxFormComps;	// die aktuelle Form
 
-    SwDoc *pTemplate;               // die HTML-Vorlage
-    Color *pDfltColor;              // default Farbe
-    SwNodeIndex *pStartNdIdx;       // Index des ersten Absatz
+    SwDoc *pTemplate;				// die HTML-Vorlage
+    Color *pDfltColor;				// default Farbe
+    SwNodeIndex *pStartNdIdx;	   	// Index des ersten Absatz
     const SwPageDesc *pCurrPageDesc;// Die aktuelle Seiten-Vorlage
     const SwFmtFtn *pFmtFtn;
 
-    sal_uInt32 aFontHeights[7];         // die Font-Hoehen 1-7
+    sal_uInt32 aFontHeights[7];			// die Font-Hoehen 1-7
 
-    sal_uInt32 nWarn;                   // Result-Code fuer Warnungen
-    sal_uInt32 nLastLFPos;              // letzte Position eines LF
+    sal_uInt32 nWarn;					// Result-Code fuer Warnungen
+    sal_uInt32 nLastLFPos;				// letzte Position eines LF
 
-    sal_uInt16 nLastParaToken;          // fuers Absaetze zusammenhalten
-    sal_Int32 nBkmkTabPos;              // akt. Position in der Bookmark-Tabelle
-    sal_uInt16 nImgMapCnt;              // zum eindeutig
+    sal_uInt16 nLastParaToken;			// fuers Absaetze zusammenhalten
+    sal_Int32 nBkmkTabPos;				// akt. Position in der Bookmark-Tabelle
+    sal_uInt16 nImgMapCnt;				// zum eindeutig
     sal_uInt16 nFormCntrlCnt;
     sal_uInt16 nEndNote;
     sal_uInt16 nFootNote;
-    sal_Int32 nLeftMargin;              // linker Einzug (z.B. aus Listen)
-    sal_Int32 nDfltLeftMargin;          // die dafaults, der nicht geschrieben
-    sal_Int32 nDfltRightMargin;     // werden muessen (aus der Vorlage)
-    short  nFirstLineIndent;        // Erstzeilen-Einzug (aus Listen)
-    short  nDfltFirstLineIndent;    // nicht zu schreibender default
-    sal_uInt16 nDfltTopMargin;          // die defaults, der nicht geschrieben
-    sal_uInt16 nDfltBottomMargin;       // werden muessen (aus der Vorlage)
-    sal_uInt16 nIndentLvl;              // wie weit ist eingerueckt?
-    xub_StrLen nWhishLineLen;           // wie lang darf eine Zeile werden?
-    sal_uInt16 nDefListLvl;             // welcher DL-Level existiert gerade
-    sal_Int32  nDefListMargin;          // Wie weit wird in DL eingerueckt
+    sal_Int32 nLeftMargin;				// linker Einzug (z.B. aus Listen)
+    sal_Int32 nDfltLeftMargin;			// die dafaults, der nicht geschrieben
+    sal_Int32 nDfltRightMargin;		// werden muessen (aus der Vorlage)
+    short  nFirstLineIndent;		// Erstzeilen-Einzug (aus Listen)
+    short  nDfltFirstLineIndent;	// nicht zu schreibender default
+    sal_uInt16 nDfltTopMargin;			// die defaults, der nicht geschrieben
+    sal_uInt16 nDfltBottomMargin;		// werden muessen (aus der Vorlage)
+    sal_uInt16 nIndentLvl;				// wie weit ist eingerueckt?
+    xub_StrLen nWhishLineLen;			// wie lang darf eine Zeile werden?
+    sal_uInt16 nDefListLvl;				// welcher DL-Level existiert gerade
+    sal_Int32  nDefListMargin;			// Wie weit wird in DL eingerueckt
     sal_uInt16 nHeaderFooterSpace;
     sal_uInt16 nTxtAttrsToIgnore;
     sal_uInt16 nExportMode;
     sal_uInt16 nCSS1OutMode;
-    sal_uInt16 nCSS1Script;         // contains default script (that's the one
+    sal_uInt16 nCSS1Script;			// contains default script (that's the one
                                     // that is not contained in class names)
-    sal_uInt16 nDirection;          // the current direction
+    sal_uInt16 nDirection;			// the current direction
 
-    rtl_TextEncoding    eDestEnc;
-    LanguageType        eLang;
+    rtl_TextEncoding	eDestEnc;
+    LanguageType		eLang;
 
     // Beschreibung der Export-Konfiguration
     // 0
-    sal_Bool bCfgOutStyles : 1;         // Styles exportieren
-    sal_Bool bCfgPreferStyles : 1;      // Styles herkoemmlichen Tags vorziehen
-    sal_Bool bCfgFormFeed : 1;          // Form-Feeds exportieren
-    sal_Bool bCfgStarBasic : 1;         // StarBasic exportieren
+    sal_Bool bCfgOutStyles : 1;			// Styles exportieren
+    sal_Bool bCfgPreferStyles : 1;		// Styles herkoemmlichen Tags vorziehen
+    sal_Bool bCfgFormFeed : 1;			// Form-Feeds exportieren
+    sal_Bool bCfgStarBasic : 1;			// StarBasic exportieren
     sal_Bool bCfgCpyLinkedGrfs : 1;
 
     // Beschreibung dessen, was exportiert wird
 
-    sal_Bool bFirstLine : 1;            // wird die 1. Zeile ausgegeben ?
-    sal_Bool bTagOn : 1;                // Tag an oder aus/Attr-Start oder -Ende
+    sal_Bool bFirstLine : 1;			// wird die 1. Zeile ausgegeben ?
+    sal_Bool bTagOn : 1;				// Tag an oder aus/Attr-Start oder -Ende
 
     // Die folgenden beiden Flags geben an, wir Attribute exportiert werden:
     // bTxtAttr bOutOpts
-    // 0        0           Style-Sheets
-    // 1        0           Hints: Jedes Attribut wird als eignes Tag
-    //                          geschrieben und es gibt ein End-Tag
-    // 0        1           (Absatz-)Attribute: Das Attribut wird als Option
-    //                          eines bereits geschrieben Tags exportiert. Es
-    //                          gibt kein End-Tag.
+    // 0		0			Style-Sheets
+    // 1		0			Hints: Jedes Attribut wird als eignes Tag
+    //							geschrieben und es gibt ein End-Tag
+    // 0		1			(Absatz-)Attribute: Das Attribut wird als Option
+    //							eines bereits geschrieben Tags exportiert. Es
+    //							gibt kein End-Tag.
     sal_Bool bTxtAttr : 1;
     // 8
     sal_Bool bOutOpts : 1;
 
-    sal_Bool bOutTable : 1;             // wird der Tabelleninhalt geschrieben?
+    sal_Bool bOutTable : 1;				// wird der Tabelleninhalt geschrieben?
     sal_Bool bOutHeader : 1;
     sal_Bool bOutFooter : 1;
     sal_Bool bOutFlyFrame : 1;
 
     // Flags fuer Style-Export
 
-    sal_Bool bFirstCSS1Rule : 1;        // wurde schon eine Property ausgegeben
-    sal_Bool bFirstCSS1Property : 1;    // wurde schon eine Property ausgegeben
-    sal_Bool bPoolCollTextModified : 1; // die Textkoerper-Vorlage wurde
+    sal_Bool bFirstCSS1Rule : 1;		// wurde schon eine Property ausgegeben
+    sal_Bool bFirstCSS1Property : 1;	// wurde schon eine Property ausgegeben
+    sal_Bool bPoolCollTextModified : 1;	// die Textkoerper-Vorlage wurde
                                     // modifiziert.
     // 16
     sal_Bool bCSS1IgnoreFirstPageDesc : 1;
 
     // was muss/kann/darf nicht ausgegeben werden?
 
-    sal_Bool bNoAlign : 1;              // HTML-Tag erlaubt kein ALIGN=...
-    sal_Bool bClearLeft : 1;            // <BR CLEAR=LEFT> am Absatz-Ende ausg.
-    sal_Bool bClearRight : 1;           // <BR CLEAR=RIGHT> am Absatz-Ende ausg.
-    sal_Bool bLFPossible : 1;           // ein Zeilenumbruch darf eingef. werden
+    sal_Bool bNoAlign : 1;				// HTML-Tag erlaubt kein ALIGN=...
+    sal_Bool bClearLeft : 1;			// <BR CLEAR=LEFT> am Absatz-Ende ausg.
+    sal_Bool bClearRight : 1;			// <BR CLEAR=RIGHT> am Absatz-Ende ausg.
+    sal_Bool bLFPossible : 1;			// ein Zeilenumbruch darf eingef. werden
 
     // sonstiges
 
-    sal_Bool bPreserveForm : 1;         // die aktuelle Form beibehalten
+    sal_Bool bPreserveForm : 1;			// die aktuelle Form beibehalten
 
-    sal_Bool bCfgNetscape4 : 1;         // Netscape4 Hacks
+    sal_Bool bCfgNetscape4 : 1;			// Netscape4 Hacks
     // 23
 
     SwHTMLWriter( const String& rBaseURL );
     virtual ~SwHTMLWriter();
 
-    void Out_SwDoc( SwPaM* );       // schreibe den makierten Bereich
+    void Out_SwDoc( SwPaM* );		// schreibe den makierten Bereich
 
     // gebe alle an in aktuellen Ansatz stehenden ::com::sun::star::text::Bookmarks aus
     void OutAnchor( const String& rName );
@@ -462,7 +462,7 @@ public:
                                    String& rClass, sal_uInt16& rRefPoolId,
                                    String *pPseudo=0 );
 
-    static const SwFmt *GetTemplateFmt( sal_uInt16 nPoolId, IDocumentStylePoolAccess* /*SwDoc*/ pTemplate );
+    static const SwFmt *GetTemplateFmt( sal_uInt16 nPoolId,	IDocumentStylePoolAccess* /*SwDoc*/ pTemplate );
     static const SwFmt *GetParentFmt( const SwFmt& rFmt, sal_uInt16 nDeep );
 
     static void SubtractItemSet( SfxItemSet& rItemSet,
@@ -534,8 +534,8 @@ struct HTMLSaveData
 {
     SwHTMLWriter& rWrt;
     SwPaM* pOldPam, *pOldEnd;
-    SwHTMLNumRuleInfo *pOldNumRuleInfo;     // Owner = this
-    SwHTMLNumRuleInfo *pOldNextNumRuleInfo; // Owner = HTML-Writer
+    SwHTMLNumRuleInfo *pOldNumRuleInfo;		// Owner = this
+    SwHTMLNumRuleInfo *pOldNextNumRuleInfo;	// Owner = HTML-Writer
     sal_uInt16 nOldDefListLvl;
     sal_uInt16 nOldDirection;
     sal_Bool bOldWriteAll : 1;
@@ -546,7 +546,7 @@ struct HTMLSaveData
 
     HTMLSaveData( SwHTMLWriter&, ULONG nStt, ULONG nEnd,
                   sal_Bool bSaveNum=sal_True,
-                     const SwFrmFmt *pFrmFmt=0  );
+                     const SwFrmFmt *pFrmFmt=0	);
     ~HTMLSaveData();
 };
 
@@ -601,6 +601,6 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
 
 Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt );
 
-#endif  //  _WRTHTML_HXX
+#endif	//  _WRTHTML_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

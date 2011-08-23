@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,9 @@
 #include <vcl/lstbox.hxx>
 #include "swdllapi.h"
 
-#define INSERT_NUM_TYPE_NO_NUMBERING                0x01
-#define INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING        0x02
-#define INSERT_NUM_TYPE_BITMAP                      0x04
+#define INSERT_NUM_TYPE_NO_NUMBERING				0x01
+#define INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING		0x02
+#define INSERT_NUM_TYPE_BITMAP						0x04
 #define INSERT_NUM_TYPE_BULLET                      0x08
 #define INSERT_NUM_EXTENDED_TYPES                   0x10
 
@@ -48,10 +48,10 @@ public:
         USHORT nTypeFlags = INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING|INSERT_NUM_TYPE_NO_NUMBERING|INSERT_NUM_EXTENDED_TYPES );
     ~SwNumberingTypeListBox();
 
-    void        Reload(USHORT nTypeFlags);
+    void		Reload(USHORT nTypeFlags);
 
-    sal_Int16   GetSelectedNumberingType();
-    sal_Bool    SelectNumberingType(sal_Int16 nType);
+    sal_Int16 	GetSelectedNumberingType();
+    sal_Bool 	SelectNumberingType(sal_Int16 nType);
 };
 
 

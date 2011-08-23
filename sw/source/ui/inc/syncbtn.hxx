@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@
 
 class SwSyncBtnDlg : public SfxFloatingWindow
 {
-    PushButton              aSyncBtn;
+    PushButton				aSyncBtn;
 
-    DECL_LINK( BtnHdl,      PushButton* pBtn = 0 );
+    DECL_LINK( BtnHdl,		PushButton* pBtn = 0 );
 
 public:
     SwSyncBtnDlg(SfxBindings*, SfxChildWindow*, Window *pParent);
@@ -57,7 +57,7 @@ public:
 class SwSyncChildWin : public SfxChildWindow
 {
 public:
-    SwSyncChildWin( Window* ,
+    SwSyncChildWin(	Window* ,
                     USHORT nId,
                     SfxBindings*,
                     SfxChildWinInfo*  );

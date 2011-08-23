@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,12 @@ class SvStringsISortDtor;
 
 struct AutoTextGroup
 {
-    USHORT      nCount;
-    String      sName;
-    String      sTitle;
-    String      sLongNames;   // durch 0x0A getrennte Langnamen
-    String      sShortNames;  // durch 0x0A getrennte Kurznamen
-    DateTime    aDateModified;
+    USHORT 		nCount;
+    String 		sName;
+    String  	sTitle;
+    String		sLongNames;   // durch 0x0A getrennte Langnamen
+    String 		sShortNames;  // durch 0x0A getrennte Kurznamen
+    DateTime	aDateModified;
 };
 
 
@@ -54,31 +54,31 @@ SV_DECL_PTRARR(AutoTextGroups, AutoTextGroupPtr, 4, 4)
 
 class SwGlossaryList : public AutoTimer
 {
-    AutoTextGroups  aGroupArr;
-    String          sPath;
-    BOOL            bFilled;
+    AutoTextGroups	aGroupArr;
+    String			sPath;
+    BOOL 			bFilled;
 
-    AutoTextGroup*  FindGroup(const String& rGroupName);
-    void            FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGloss);
+    AutoTextGroup*	FindGroup(const String& rGroupName);
+    void			FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGloss);
 
 public:
         SwGlossaryList();
         ~SwGlossaryList();
 
-    BOOL            HasLongName(const String& rBegin, SvStringsISortDtor* pLongNames );
-    BOOL            GetShortName(const String& rLongName,
+    BOOL			HasLongName(const String& rBegin, SvStringsISortDtor* pLongNames );
+    BOOL			GetShortName(const String& rLongName,
                                         String& rShortName, String& rGroupName );
 
-    USHORT          GetGroupCount();
-    String          GetGroupName(USHORT nPos, BOOL bNoPath = TRUE, String* pTitle = 0);
-    USHORT          GetBlockCount(USHORT nGroup);
-    String          GetBlockName(USHORT nGroup, USHORT nBlock, String& rShortName);
+    USHORT 			GetGroupCount();
+    String			GetGroupName(USHORT nPos, BOOL bNoPath = TRUE, String* pTitle = 0);
+    USHORT 			GetBlockCount(USHORT nGroup);
+    String			GetBlockName(USHORT nGroup, USHORT nBlock, String& rShortName);
 
-    void            Update();
+    void			Update();
 
-    virtual void    Timeout();
+    virtual void	Timeout();
 
-    void            ClearGroups();
+    void			ClearGroups();
 };
 
 #endif

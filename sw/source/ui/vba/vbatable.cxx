@@ -21,16 +21,16 @@ SwVbaTable::SwVbaTable(  const uno::Reference< ooo::vba::XHelperInterface >& rPa
     mxTextTable.set( xTextTable, uno::UNO_QUERY_THROW );
 }
 
-uno::Reference< word::XRange > SAL_CALL
+uno::Reference< word::XRange > SAL_CALL 
 SwVbaTable::Range(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     return new SwVbaRange( mxParent, mxContext, mxTextDocument, mxTextTable->getAnchor() );
 }
 
-void SAL_CALL
+void SAL_CALL 
 SwVbaTable::Select(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    uno::Reference< frame::XModel > xModel( mxTextDocument, uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XModel > xModel( mxTextDocument, uno::UNO_QUERY_THROW );    
     uno::Reference< frame::XController > xController = xModel->getCurrentController();
 
     uno::Reference< text::XTextViewCursorSupplier > xViewCursorSupplier( xController, uno::UNO_QUERY_THROW );
@@ -42,20 +42,20 @@ SwVbaTable::Select(  ) throw (script::BasicErrorException, uno::RuntimeException
     // go to the end of the table and span the view
     uno::Reference< text::XTextViewCursor > xCursor = xViewCursorSupplier->getViewCursor();
     xCursor->gotoEnd(sal_True);
-
+    
 }
 
-void SAL_CALL
+void SAL_CALL 
 SwVbaTable::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     uno::Reference< table::XTableRows > xRows( mxTextTable->getRows() );
     xRows->removeByIndex( 0, xRows->getCount() );
 }
 
-uno::Reference< word::XRange > SAL_CALL
+uno::Reference< word::XRange > SAL_CALL 
 SwVbaTable::ConvertToText( const uno::Any& /*Separator*/, const uno::Any& /*NestedTables*/ ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    // #FIXME the helper api uses the dreaded dispatch mechanism, holding off
+    // #FIXME the helper api uses the dreaded dispatch mechanism, holding off 
     // implementation while I look for alternative solution
     throw uno::RuntimeException();
 }
@@ -99,14 +99,14 @@ SwVbaTable::Columns( const uno::Any& index ) throw (uno::RuntimeException)
 }
 
 // XHelperInterface
-rtl::OUString&
+rtl::OUString& 
 SwVbaTable::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaTable") );
-    return sImplName;
+    return sImplName;    
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<rtl::OUString> 
 SwVbaTable::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

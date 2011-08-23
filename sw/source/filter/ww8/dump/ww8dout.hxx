@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,10 @@
 #define _WW8DOUT_HXX
 
 #ifndef INC_FSTREAM
-  #include <fstream.h>          // ostream
+  #include <fstream.h>			// ostream
 #endif
 #ifndef SOLAR_H
-  #include <tools/solar.h>          // BYTE
+  #include <tools/solar.h>			// BYTE
 #endif
 
 class SvStream;

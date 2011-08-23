@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,11 +32,11 @@
 
 #include <pam.hxx>          // GetSpaces
 #include <txtcfg.hxx>
-#include <frminf.hxx>       // SwTxtFrminfo
+#include <frminf.hxx>		// SwTxtFrminfo
 #include <itrtxt.hxx>       // SwTxtMargin
 
 /*************************************************************************
- *                   SwTxtMargin::GetTxtStart()
+ *					 SwTxtMargin::GetTxtStart()
  *************************************************************************/
 
 xub_StrLen SwTxtMargin::GetTxtStart() const
@@ -56,7 +56,7 @@ xub_StrLen SwTxtMargin::GetTxtStart() const
 }
 
 /*************************************************************************
- *                   SwTxtMargin::GetTxtEnd()
+ *					 SwTxtMargin::GetTxtEnd()
  *************************************************************************/
 
 xub_StrLen SwTxtMargin::GetTxtEnd() const
@@ -75,7 +75,7 @@ xub_StrLen SwTxtMargin::GetTxtEnd() const
 }
 
 /*************************************************************************
- *                   SwTxtFrmInfo::IsOneLine()
+ *					 SwTxtFrmInfo::IsOneLine()
  *************************************************************************/
 
 // Passt der Absatz in eine Zeile?
@@ -101,7 +101,7 @@ sal_Bool SwTxtFrmInfo::IsOneLine() const
 }
 
 /*************************************************************************
- *                   SwTxtFrmInfo::IsFilled()
+ *					 SwTxtFrmInfo::IsFilled()
  *************************************************************************/
 
 // Ist die Zeile zu X% gefuellt?
@@ -120,7 +120,7 @@ sal_Bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
 }
 
 /*************************************************************************
- *                   SwTxtFrmInfo::GetLineStart()
+ *					 SwTxtFrmInfo::GetLineStart()
  *************************************************************************/
 
 // Wo beginnt der Text (ohne whitespaces)? ( Dokument global )
@@ -143,7 +143,7 @@ SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine ) const
 
 
 /*************************************************************************
- *                   SwTxtFrmInfo::GetLineStart()
+ *					 SwTxtFrmInfo::GetLineStart()
  *************************************************************************/
 
 // Wo beginnt der Text (ohne whitespaces)? (rel. im Frame)
@@ -151,7 +151,7 @@ SwTwips SwTxtFrmInfo::GetLineStart() const
 {
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
     SwTxtCursor aLine( (SwTxtFrm*)pFrm, &aInf );
-    return GetLineStart( aLine ) - pFrm->Frm().Left() - pFrm->Prt().Left();
+    return GetLineStart( aLine ) - pFrm->Frm().Left() -	pFrm->Prt().Left();
 }
 
 // errechne die Position des Zeichens und gebe die Mittelposition zurueck
@@ -192,7 +192,7 @@ SwTwips SwTxtFrmInfo::GetCharPos( xub_StrLen nChar, sal_Bool bCenter ) const
 }
 
 /*************************************************************************
- *                   SwTxtFrmInfo::GetSpaces()
+ *					 SwTxtFrmInfo::GetSpaces()
  *************************************************************************/
 
 SwPaM *AddPam( SwPaM *pPam, const SwTxtFrm* pTxtFrm,
@@ -234,13 +234,13 @@ void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const
         {
             xub_StrLen nPos = aLine.GetTxtStart();
             // Bug 49649: von der ersten Line die Blanks/Tabs NICHT
-            //              mit selektieren
+            //				mit selektieren
             if( !bFirstLine && nPos > aLine.GetStart() )
                 pPam = AddPam( pPam, pFrm, aLine.GetStart(),
                                 nPos - aLine.GetStart() );
 
             // Bug 49649: von der letzten Line die Blanks/Tabs NICHT
-            //              mit selektieren
+            //				mit selektieren
             if( aLine.GetNext() )
             {
                 nPos = aLine.GetTxtEnd();
@@ -260,7 +260,7 @@ void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const
 }
 
 /*************************************************************************
- *                   SwTxtFrmInfo::IsBullet()
+ *					 SwTxtFrmInfo::IsBullet()
  *************************************************************************/
 
 // Ist an der Textposition ein Bullet/Symbol etc?
@@ -274,7 +274,7 @@ sal_Bool SwTxtFrmInfo::IsBullet( xub_StrLen nTxtStart ) const
 }
 
 /*************************************************************************
- *                   SwTxtFrmInfo::GetFirstIndent()
+ *					 SwTxtFrmInfo::GetFirstIndent()
  *************************************************************************/
 
 // Ermittelt Erstzeileneinzug
@@ -316,7 +316,7 @@ SwTwips SwTxtFrmInfo::GetFirstIndent() const
 }
 
 /*************************************************************************
- *                   SwTxtFrmInfo::GetBigIndent()
+ *					 SwTxtFrmInfo::GetBigIndent()
  *************************************************************************/
 
 KSHORT SwTxtFrmInfo::GetBigIndent( xub_StrLen& rFndPos,

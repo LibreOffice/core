@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,10 +74,10 @@ SV_IMPL_PTRARR( TripleStrings, TripleStringPtr )
 
 class SwGlossDecideDlg : public ModalDialog
 {
-    OKButton        aOk;
-    CancelButton    aCancel;
-    HelpButton      aHelp;
-    ListBox         aListLB;
+    OKButton 		aOk;
+    CancelButton 	aCancel;
+    HelpButton		aHelp;
+    ListBox			aListLB;
     FixedLine       aFL;
 
     DECL_LINK(DoubleClickHdl, ListBox*);
@@ -85,7 +85,7 @@ class SwGlossDecideDlg : public ModalDialog
 
     public:
         SwGlossDecideDlg(Window* pParent);
-    ListBox&    GetListBox() {return aListLB;}
+    ListBox& 	GetListBox() {return aListLB;}
 };
 
 /*-----------------21.01.97 13.25-------------------
@@ -94,10 +94,10 @@ class SwGlossDecideDlg : public ModalDialog
 
 SwGlossDecideDlg::SwGlossDecideDlg(Window* pParent) :
     ModalDialog(pParent, SW_RES(DLG_GLOSSARY_DECIDE_DLG)),
-    aOk(this,       SW_RES(PB_OK)),
-    aCancel(this,   SW_RES(PB_CANCEL)),
-    aHelp(this,     SW_RES(PB_HELP)),
-    aListLB(this,   SW_RES(LB_LIST)),
+    aOk(this, 		SW_RES(PB_OK)),
+    aCancel(this, 	SW_RES(PB_CANCEL)),
+    aHelp(this, 	SW_RES(PB_HELP)),
+    aListLB(this, 	SW_RES(LB_LIST)),
     aFL(this,    SW_RES(FL_GLOSS))
 {
     FreeResource();
@@ -223,7 +223,7 @@ BOOL SwGlossaryList::GetShortName(const String& rLongName,
 ********************************************************************/
 
 
-USHORT  SwGlossaryList::GetGroupCount()
+USHORT 	SwGlossaryList::GetGroupCount()
 {
     if(!bFilled)
         Update();
@@ -257,7 +257,7 @@ String SwGlossaryList::GetGroupName(USHORT nPos, BOOL bNoPath, String* pTitle)
 ********************************************************************/
 
 
-USHORT  SwGlossaryList::GetBlockCount(USHORT nGroup)
+USHORT 	SwGlossaryList::GetBlockCount(USHORT nGroup)
 {
     OSL_ENSURE(aGroupArr.Count() > nGroup, "group not available");
     if(nGroup < aGroupArr.Count())
@@ -273,7 +273,7 @@ USHORT  SwGlossaryList::GetBlockCount(USHORT nGroup)
 ********************************************************************/
 
 
-String  SwGlossaryList::GetBlockName(USHORT nGroup, USHORT nBlock, String& rShortName)
+String	SwGlossaryList::GetBlockName(USHORT nGroup, USHORT nBlock, String& rShortName)
 {
     OSL_ENSURE(aGroupArr.Count() > nGroup, "group not available");
     if(nGroup < aGroupArr.Count())
@@ -421,7 +421,7 @@ void SwGlossaryList::Timeout()
 ********************************************************************/
 
 
-AutoTextGroup*  SwGlossaryList::FindGroup(const String& rGroupName)
+AutoTextGroup*	SwGlossaryList::FindGroup(const String& rGroupName)
 {
     for(USHORT i = 0; i < aGroupArr.Count(); i++)
     {
@@ -439,7 +439,7 @@ AutoTextGroup*  SwGlossaryList::FindGroup(const String& rGroupName)
 
 void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
 {
-    SwTextBlocks*   pBlock = pGlossaries->GetGroupDoc(pGroup->sName);
+    SwTextBlocks*	pBlock = pGlossaries->GetGroupDoc(pGroup->sName);
     pGroup->nCount = pBlock ? pBlock->GetCount() : 0;
     pGroup->sLongNames = pGroup->sShortNames = aEmptyStr;
     if(pBlock)
@@ -492,7 +492,7 @@ BOOL SwGlossaryList::HasLongName(const String& rBegin, SvStringsISortDtor* pLong
 /********************************************************************
 
 ********************************************************************/
-void    SwGlossaryList::ClearGroups()
+void	SwGlossaryList::ClearGroups()
 {
     USHORT nCount = aGroupArr.Count();
     for( USHORT i = 0; i < nCount; ++i )

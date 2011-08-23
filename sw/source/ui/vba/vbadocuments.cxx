@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ getDocument( uno::Reference< uno::XComponentContext >& xContext, const uno::Refe
     uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
     if( !xModel.is() )
         return uno::Any();
-
+    
     SwVbaDocument *pWb = new SwVbaDocument(  uno::Reference< XHelperInterface >( aApplication, uno::UNO_QUERY_THROW ), xContext, xModel );
     return uno::Any( uno::Reference< word::XDocument > (pWb) );
 }
@@ -79,8 +79,8 @@ class DocumentEnumImpl : public EnumerationHelperImpl
 public:
     DocumentEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, const uno::Any& aApplication ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_aApplication( aApplication ) {}
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-    {
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException) 
+    { 
         uno::Reference< text::XTextDocument > xDoc( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         return getDocument( m_xContext, xDoc, m_aApplication );
     }
@@ -99,7 +99,7 @@ uno::Reference< container::XEnumeration >
 SwVbaDocuments::createEnumeration() throw (uno::RuntimeException)
 {
     // #FIXME its possible the DocumentEnumImpl here doens't reflect
-    // the state of this object ( although it should ) would be
+    // the state of this object ( although it should ) would be 
     // safer to create an enumeration based on this objects state
     // rather than one effectively based of the desktop component
     uno::Reference< container::XEnumerationAccess > xEnumerationAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
@@ -178,14 +178,14 @@ SwVbaDocuments::Open( const ::rtl::OUString& Filename, const uno::Any& ReadOnly,
     return VbaDocumentsBase::Open( Filename, ReadOnly, rProps );
 }
 
-rtl::OUString&
+rtl::OUString& 
 SwVbaDocuments::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaDocuments") );
     return sImplName;
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<rtl::OUString> 
 SwVbaDocuments::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > sNames;

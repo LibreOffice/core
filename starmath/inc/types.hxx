@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ sal_Unicode ConvertMathToMathML( sal_Unicode cChar );
 // enum definitions for characters from the 'StarSymbol' font
 // (some chars have more than one alias!)
 //! Note: not listed here does not(!) mean "not used"
-//!     (see %alpha ... %gamma for example)
+//!		(see %alpha ... %gamma for example)
 //
 enum MathSymbol
 {

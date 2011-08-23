@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,31 +39,31 @@ class SwWrtShell;
 
 class SwEndNoteOptionPage : public SfxTabPage
 {
-    FixedText       aNumTypeFT;
-    SwNumberingTypeListBox   aNumViewBox;
-    FixedText       aOffsetLbl;
-    NumericField    aOffsetFld;
-    FixedText       aNumCountFT;
-    ListBox         aNumCountBox;
-    FixedText       aPrefixFT;
-    Edit            aPrefixED;
-    FixedText       aSuffixFT;
-    Edit            aSuffixED;
-    FixedText       aPosFT;
-    RadioButton     aPosPageBox;
-    RadioButton     aPosChapterBox;
+    FixedText		aNumTypeFT;
+    SwNumberingTypeListBox	 aNumViewBox;
+    FixedText 		aOffsetLbl;
+    NumericField 	aOffsetFld;
+    FixedText		aNumCountFT;
+    ListBox 		aNumCountBox;
+    FixedText		aPrefixFT;
+    Edit			aPrefixED;
+    FixedText		aSuffixFT;
+    Edit			aSuffixED;
+    FixedText		aPosFT;
+    RadioButton 	aPosPageBox;
+    RadioButton 	aPosChapterBox;
     FixedLine       aNumFL;
 
-    FixedText       aParaTemplLbl;
-    ListBox         aParaTemplBox;
-    FixedText       aPageTemplLbl;
-    ListBox         aPageTemplBox;
+    FixedText 		aParaTemplLbl;
+    ListBox 		aParaTemplBox;
+    FixedText 		aPageTemplLbl;
+    ListBox 		aPageTemplBox;
     FixedLine        aTemplFL;
 
-    FixedText       aFtnCharAnchorTemplLbl;
-    ListBox         aFtnCharAnchorTemplBox;
-    FixedText       aFtnCharTextTemplLbl;
-    ListBox         aFtnCharTextTemplBox;
+    FixedText 		aFtnCharAnchorTemplLbl;
+    ListBox 		aFtnCharAnchorTemplBox;
+    FixedText 		aFtnCharTextTemplLbl;
+    ListBox 		aFtnCharTextTemplBox;
     FixedLine        aCharTemplFL;
 
     FixedText aContLbl;
@@ -76,8 +76,8 @@ class SwEndNoteOptionPage : public SfxTabPage
     String aNumPage;
     String aNumChapter;
     SwWrtShell *pSh;
-    BOOL    bPosDoc;
-    BOOL    bEndNote;
+    BOOL	bPosDoc;
+    BOOL 	bEndNote;
 
     inline void SelectNumbering(int eNum);
     int GetNumbering() const;

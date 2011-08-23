@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,30 +39,30 @@ class SwWrtShell;
 
 class SwInsFootNoteDlg: public SvxStandardDialog
 {
-    SwWrtShell     &rSh;
+    SwWrtShell	   &rSh;
 
     //Alles fuer das/die Zeichen
-    String          aFontName;
-    CharSet         eCharSet;
-    char            cExtChar;
-    BOOL            bExtCharAvailable;
-    BOOL            bEdit;
-    RadioButton     aNumberAutoBtn;
-    RadioButton     aNumberCharBtn;
-    Edit            aNumberCharEdit;
-    PushButton      aNumberExtChar;
+    String			aFontName;
+    CharSet			eCharSet;
+    char			cExtChar;
+    BOOL			bExtCharAvailable;
+    BOOL			bEdit;
+    RadioButton		aNumberAutoBtn;
+    RadioButton		aNumberCharBtn;
+    Edit 			aNumberCharEdit;
+    PushButton		aNumberExtChar;
     FixedLine       aNumberFL;
 
     //Alles fuer die Auswahl Fussnote/Endnote
-    RadioButton     aFtnBtn;
-    RadioButton     aEndNoteBtn;
+    RadioButton		aFtnBtn;
+    RadioButton		aEndNoteBtn;
     FixedLine        aTypeFL;
 
-    OKButton        aOkBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-    ImageButton     aPrevBT;
-    ImageButton     aNextBT;
+    OKButton		aOkBtn;
+    CancelButton	aCancelBtn;
+    HelpButton		aHelpBtn;
+    ImageButton 	aPrevBT;
+    ImageButton		aNextBT;
 
     DECL_LINK( NumberCharHdl, Button * );
     DECL_LINK( NumberEditHdl, void * );
@@ -70,9 +70,9 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     DECL_LINK( NumberExtCharHdl, Button *);
     DECL_LINK( NextPrevHdl, Button * );
 
-    virtual void    Apply();
+    virtual void	Apply();
 
-    void            Init();
+    void			Init();
 
 public:
     SwInsFootNoteDlg(Window * pParent, SwWrtShell &rSh, BOOL bEd = FALSE);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,13 +35,13 @@ SwWrtShellItem::SwWrtShellItem( USHORT _nWhich, SwWrtShell* pSh )
 {
 
 }
-SwWrtShellItem::SwWrtShellItem( const SwWrtShellItem& rItem) :
+SwWrtShellItem::SwWrtShellItem( const SwWrtShellItem& rItem) : 
     SfxPoolItem( rItem.Which() ),
     pWrtSh( rItem.pWrtSh )
 {
 }
 
-int SwWrtShellItem::operator==( const SfxPoolItem& rItem) const
+int	SwWrtShellItem::operator==( const SfxPoolItem& rItem) const
 {
     return ((SwWrtShellItem&)rItem).pWrtSh == pWrtSh;
 }

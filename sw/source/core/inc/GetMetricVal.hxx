@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,18 +30,18 @@
 
 #include <tools/solar.h>
 
-#define CM_1  0         // 1 centimeter     or 1/2 inch
-#define CM_05 1         // 0.5 centimeter   or 1/4 inch
-#define CM_01 2         // 0.1 centimeter   or 1/20 inch
+#define CM_1  0			// 1 centimeter 	or 1/2 inch
+#define CM_05 1	 		// 0.5 centimeter 	or 1/4 inch
+#define CM_01 2	 		// 0.1 centimeter	or 1/20 inch
 
 inline USHORT GetMetricVal( int n )
 {
 #ifdef USE_MEASUREMENT
     USHORT nVal = MEASURE_METRIC == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
-                    ? 567       // 1 cm
-                    : 770;      // 1/2 Inch
+                    ? 567 		// 1 cm
+                    : 770;		// 1/2 Inch
 #else
-    USHORT nVal = 567;      // 1 cm
+    USHORT nVal = 567; 		// 1 cm
 #endif
 
     if( CM_01 == n )
@@ -52,6 +52,6 @@ inline USHORT GetMetricVal( int n )
 }
 
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

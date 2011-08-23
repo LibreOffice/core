@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,22 +37,22 @@
 #include <editeng/pgrditem.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <viewsh.hxx>   // ViewShell
+#include <viewsh.hxx>	// ViewShell
 #include <viewopt.hxx>
-#include <ndtxt.hxx>    // SwTxtNode
+#include <ndtxt.hxx>	// SwTxtNode
 #include <pagefrm.hxx>  // SwPageFrm
 #include <paratr.hxx>
 #include <SwPortionHandler.hxx>
 #include <txtcfg.hxx>
 #include <porrst.hxx>
 #include <inftxt.hxx>
-#include <txtpaint.hxx> // ClipVout
-#include <swfntcch.hxx> // SwFontAccess
+#include <txtpaint.hxx>	// ClipVout
+#include <swfntcch.hxx>	// SwFontAccess
 #include <tgrditem.hxx>
 #include <pagedesc.hxx> // SwPageDesc
 #include <frmatr.hxx>
-#include <redlnitr.hxx> // SwRedlineItr
-#include <porfly.hxx>   // SwFlyPortion
+#include <redlnitr.hxx>	// SwRedlineItr
+#include <porfly.hxx> 	// SwFlyPortion
 #include <atrhndl.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
@@ -73,7 +73,7 @@ SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion )
 }
 
 /*************************************************************************
- *                 virtual SwTmpEndPortion::Paint()
+ *				   virtual SwTmpEndPortion::Paint()
  *************************************************************************/
 
 void SwTmpEndPortion::Paint( const SwTxtPaintInfo &rInf ) const
@@ -87,7 +87,7 @@ void SwTmpEndPortion::Paint( const SwTxtPaintInfo &rInf ) const
 }
 
 /*************************************************************************
- *                      class SwBreakPortion
+ *						class SwBreakPortion
  *************************************************************************/
 SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
     : SwLinePortion( rPortion )
@@ -112,7 +112,7 @@ void SwBreakPortion::Paint( const SwTxtPaintInfo &rInf ) const
 }
 
 /*************************************************************************
- *                 virtual SwBreakPortion::Format()
+ *				   virtual SwBreakPortion::Format()
  *************************************************************************/
 
 sal_Bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
@@ -303,7 +303,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
 }
 
 /*************************************************************************
- *                      SwTxtFrm::FormatEmpty()
+ *						SwTxtFrm::FormatEmpty()
  *************************************************************************/
 
 sal_Bool SwTxtFrm::FormatEmpty()

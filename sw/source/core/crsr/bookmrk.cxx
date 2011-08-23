@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ namespace
         SwTxtNode const * const pStartTxtNode = io_pDoc->GetNodes()[rStart.nNode]->GetTxtNode();
         SwTxtNode const * const pEndTxtNode = io_pDoc->GetNodes()[rEnd.nNode]->GetTxtNode();
         const sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(rStart.nContent.GetIndex());
-        xub_StrLen nEndPos = rEnd.nContent.GetIndex() == 0 ? 0 : rEnd.nContent.GetIndex() - 1;
+        xub_StrLen nEndPos = rEnd == rStart ? rEnd.nContent.GetIndex() : rEnd.nContent.GetIndex() - 1;
         const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar( nEndPos );
         SwPaM aStartPaM(rStart);
         SwPaM aEndPaM(rEnd);

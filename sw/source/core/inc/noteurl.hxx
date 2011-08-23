@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _NOTEURL_HXX
-#define _NOTEURL_HXX
+#ifndef	_NOTEURL_HXX
+#define	_NOTEURL_HXX
 
 
 #include <svl/svarray.hxx>
@@ -46,9 +46,9 @@ public:
     SwURLNote( const String& rURL, const String& rTarget, const SwRect& rRect )
     : aURL( rURL ), aTarget( rTarget ), aRect( rRect )
     {}
-    const String& GetURL()      const { return aURL; }
-    const String& GetTarget()   const { return aTarget; }
-    const SwRect& GetRect()     const { return aRect; }
+    const String& GetURL() 		const { return aURL; }
+    const String& GetTarget() 	const { return aTarget; }
+    const SwRect& GetRect() 	const { return aRect; }
     BOOL operator==( const SwURLNote& rSwURLNote ) const
     { return aRect == rSwURLNote.aRect; }
 };

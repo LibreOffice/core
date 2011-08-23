@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,27 +24,27 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define CB_NUMBERING_ON     1
+#define CB_NUMBERING_ON		1
 #define FT_CHAR_STYLE       2
 #define LB_CHAR_STYLE       3
 #define FT_FORMAT           4
 #define LB_FORMAT           5
 #define FT_POS              6
-#define LB_POS              7
-#define FT_OFFSET           8
-#define MF_OFFSET           9
+#define LB_POS				7
+#define FT_OFFSET   		8
+#define MF_OFFSET   		9
 #define FT_NUM_INVERVAL     10
 #define NF_NUM_INVERVAL     11
-#define FT_NUM_ROWS         12
+#define FT_NUM_ROWS			12
 #define FL_DISPLAY          13
 #define FT_DIVISOR          14
 #define ED_DIVISOR          15
 #define FT_DIV_INTERVAL     16
 #define NF_DIV_INTERVAL     17
-#define FT_DIV_ROWS         18
+#define FT_DIV_ROWS			18
 #define FL_DIVISOR          19
 #define CB_COUNT_EMPTYLINES 20
 #define CB_COUNT_FRAMELINES 21
 #define FL_COUNT            22
-#define CB_RESTART_PAGE     23
+#define CB_RESTART_PAGE		23
 

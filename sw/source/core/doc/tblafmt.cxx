@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-#define READ_OLDVERS        // erstmal noch alte Versionen lesen
+#define READ_OLDVERS		// erstmal noch alte Versionen lesen
 #include <swtypes.hxx>
 #include <doc.hxx>
 #include <poolfmt.hxx>
@@ -52,17 +52,17 @@
 #include <SwStyleNameMapper.hxx>
 
 // bis SO5PF
-const USHORT AUTOFORMAT_ID_X        = 9501;
-const USHORT AUTOFORMAT_ID_358      = 9601;
-const USHORT AUTOFORMAT_DATA_ID_X   = 9502;
+const USHORT AUTOFORMAT_ID_X		= 9501;
+const USHORT AUTOFORMAT_ID_358		= 9601;
+const USHORT AUTOFORMAT_DATA_ID_X	= 9502;
 
 // ab SO5
 //! in nachfolgenden Versionen muss der Betrag dieser IDs groesser sein
-const USHORT AUTOFORMAT_ID_504      = 9801;
-const USHORT AUTOFORMAT_DATA_ID_504 = 9802;
+const USHORT AUTOFORMAT_ID_504		= 9801;
+const USHORT AUTOFORMAT_DATA_ID_504	= 9802;
 
-const USHORT AUTOFORMAT_ID_552      = 9901;
-const USHORT AUTOFORMAT_DATA_ID_552 = 9902;
+const USHORT AUTOFORMAT_ID_552		= 9901;
+const USHORT AUTOFORMAT_DATA_ID_552	= 9902;
 
 // --- from 641 on: CJK and CTL font settings
 const USHORT AUTOFORMAT_ID_641      = 10001;
@@ -86,9 +86,9 @@ const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_300OVRLN;
 
 
 #ifdef READ_OLDVERS
-const USHORT AUTOFORMAT_OLD_ID      = 8201;
-const USHORT AUTOFORMAT_OLD_ID1     = 8301;
-const USHORT AUTOFORMAT_OLD_DATA_ID = 8202;
+const USHORT AUTOFORMAT_OLD_ID		= 8201;
+const USHORT AUTOFORMAT_OLD_ID1		= 8301;
+const USHORT AUTOFORMAT_OLD_DATA_ID	= 8202;
 #endif
 
 
@@ -100,7 +100,7 @@ SwBoxAutoFmt* SwTableAutoFmt::pDfltBoxAutoFmt = 0;
 SV_IMPL_PTRARR( _SwTableAutoFmtTbl, SwTableAutoFmt* )
 
 
-//  Struct mit Versionsnummern der Items
+//	Struct mit Versionsnummern der Items
 
 struct SwAfVersions
 {
@@ -192,7 +192,7 @@ void SwAfVersions::Load( SvStream& rStream, USHORT nVer )
     rStream >> nNumFmtVersion;
 }
 
-//  ---------------------------------------------------------------------------
+//	---------------------------------------------------------------------------
 
 SwBoxAutoFmt::SwBoxAutoFmt()
     : aFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_FONT ) ),
@@ -371,7 +371,7 @@ BOOL SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, USHOR
         READ( aBLTR, SvxLineItem, rVersions.nLineVersion)
     }
 
-    READ( aBackground,  SvxBrushItem        , rVersions.nBrushVersion)
+    READ( aBackground,  SvxBrushItem		, rVersions.nBrushVersion)
 
     pNew = aAdjust.Create(rStream, rVersions.nAdjustVersion );
     SetAdjust( *(SvxAdjustItem*)pNew );
@@ -405,7 +405,7 @@ BOOL SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, USHOR
                 >> eSys >> eLge;
         eSysLanguage = (LanguageType) eSys;
         eNumFmtLanguage = (LanguageType) eLge;
-        if ( eSysLanguage == LANGUAGE_SYSTEM )      // von alten Versionen (Calc)
+        if ( eSysLanguage == LANGUAGE_SYSTEM )		// von alten Versionen (Calc)
             eSysLanguage = static_cast<LanguageType>(::GetAppLanguage());
     }
 
@@ -420,26 +420,26 @@ BOOL SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, USHOR
 BOOL SwBoxAutoFmt::LoadOld( SvStream& rStream, USHORT aLoadVer[] )
 {
     SfxPoolItem* pNew;
-    READ( aFont,        SvxFontItem         , 0)
+    READ( aFont,        SvxFontItem			, 0)
 
     if( rStream.GetStreamCharSet() == aFont.GetCharSet() )
         aFont.GetCharSet() = ::gsl_getSystemTextEncoding();
 
-    READ( aHeight,      SvxFontHeightItem   , 1)
-    READ( aWeight,      SvxWeightItem       , 2)
-    READ( aPosture,     SvxPostureItem      , 3)
-    READ( aUnderline,   SvxUnderlineItem    , 4)
-    READ( aCrossedOut,  SvxCrossedOutItem   , 5)
-    READ( aContour,     SvxContourItem      , 6)
-    READ( aShadowed,    SvxShadowedItem     , 7)
-    READ( aColor,       SvxColorItem        , 8)
+    READ( aHeight,      SvxFontHeightItem	, 1)
+    READ( aWeight,      SvxWeightItem		, 2)
+    READ( aPosture,     SvxPostureItem	    , 3)
+    READ( aUnderline,   SvxUnderlineItem	, 4)
+    READ( aCrossedOut,  SvxCrossedOutItem	, 5)
+    READ( aContour,     SvxContourItem	    , 6)
+    READ( aShadowed,    SvxShadowedItem	    , 7)
+    READ( aColor,       SvxColorItem		, 8)
 
     pNew = aAdjust.Create(rStream, aLoadVer[ 9 ] );
     SetAdjust( *(SvxAdjustItem*)pNew );
     delete pNew;
 
-    READ( aBox,         SvxBoxItem          , 10)
-    READ( aBackground,  SvxBrushItem        , 11)
+    READ( aBox,         SvxBoxItem		    , 10)
+    READ( aBackground,  SvxBrushItem		, 11)
 
     return 0 == rStream.GetError();
 }
@@ -519,7 +519,7 @@ BOOL SwBoxAutoFmt::SaveVerionNo( SvStream& rStream ) const
     rStream << aRotateAngle.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aRotateMode.GetVersion( SOFFICE_FILEFORMAT_40 );
 
-    rStream << (USHORT)0;       // NumberFormat
+    rStream << (USHORT)0;		// NumberFormat
 
     return 0 == rStream.GetError();
 }
@@ -556,9 +556,9 @@ SwTableAutoFmt& SwTableAutoFmt::operator=( const SwTableAutoFmt& rNew )
             delete aBoxAutoFmt[ n ];
 
         SwBoxAutoFmt* pFmt = rNew.aBoxAutoFmt[ n ];
-        if( pFmt )      // ist gesetzt -> kopieren
+        if( pFmt )		// ist gesetzt -> kopieren
             aBoxAutoFmt[ n ] = new SwBoxAutoFmt( *pFmt );
-        else            // sonst default
+        else			// sonst default
             aBoxAutoFmt[ n ] = 0;
     }
 
@@ -589,9 +589,9 @@ void SwTableAutoFmt::SetBoxFmt( const SwBoxAutoFmt& rNew, BYTE nPos )
     OSL_ENSURE( nPos < 16, "falscher Bereich" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
-    if( pFmt )      // ist gesetzt -> kopieren
+    if( pFmt )		// ist gesetzt -> kopieren
         *aBoxAutoFmt[ nPos ] = rNew;
-    else            // sonst neu setzen
+    else			// sonst neu setzen
         aBoxAutoFmt[ nPos ] = new SwBoxAutoFmt( rNew );
 }
 
@@ -601,9 +601,9 @@ const SwBoxAutoFmt& SwTableAutoFmt::GetBoxFmt( BYTE nPos ) const
     OSL_ENSURE( nPos < 16, "falscher Bereich" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
-    if( pFmt )      // ist gesetzt -> kopieren
+    if( pFmt )		// ist gesetzt -> kopieren
         return *pFmt;
-    else            // sonst den default returnen
+    else			// sonst den default returnen
     {
         // falls noch nicht vorhanden:
         if( !pDfltBoxAutoFmt )
@@ -622,7 +622,7 @@ SwBoxAutoFmt& SwTableAutoFmt::UpdateFromSet( BYTE nPos,
     OSL_ENSURE( nPos < 16, "falscher Bereich" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
-    if( !pFmt )     // ist gesetzt -> kopieren
+    if( !pFmt )		// ist gesetzt -> kopieren
     {
         pFmt = new SwBoxAutoFmt;
         aBoxAutoFmt[ nPos ] = pFmt;
@@ -769,8 +769,8 @@ void SwTableAutoFmt::UpdateToSet( BYTE nPos, SfxItemSet& rSet,
 
 BOOL SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions )
 {
-    BOOL    bRet = TRUE;
-    USHORT  nVal = 0;
+    BOOL	bRet = TRUE;
+    USHORT	nVal = 0;
     rStream >> nVal;
     bRet = 0 == rStream.GetError();
 
@@ -822,8 +822,8 @@ BOOL SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions )
 
 BOOL SwTableAutoFmt::LoadOld( SvStream& rStream, USHORT aLoadVer[] )
 {
-    BOOL    bRet = TRUE;
-    USHORT  nVal = 0;
+    BOOL	bRet = TRUE;
+    USHORT	nVal = 0;
     rStream >> nVal;
     bRet = 0 == rStream.GetError();
 
@@ -875,7 +875,7 @@ BOOL SwTableAutoFmt::Save( SvStream& rStream ) const
     for( int i = 0; bRet && i < 16; ++i )
     {
         SwBoxAutoFmt* pFmt = aBoxAutoFmt[ i ];
-        if( !pFmt )     // nicht gesetzt -> default schreiben
+        if( !pFmt )		// nicht gesetzt -> default schreiben
         {
             // falls noch nicht vorhanden:
             if( !pDfltBoxAutoFmt )
@@ -993,8 +993,8 @@ BOOL SwTableAutoFmtTbl::Load( SvStream& rStream )
                 BYTE nChrSet, nCnt;
                 long nPos = rStream.Tell();
                 rStream >> nCnt >> nChrSet;
-//              if( 4 <= nCnt )
-//                  rStream >> nFileVers;
+//				if( 4 <= nCnt )
+//					rStream >> nFileVers;
                 if( rStream.Tell() != ULONG(nPos + nCnt) )
                 {
                     OSL_ENSURE( !this, "Der Header enthaelt mehr/neuere Daten" );
@@ -1007,7 +1007,7 @@ BOOL SwTableAutoFmtTbl::Load( SvStream& rStream )
             if( nVal == AUTOFORMAT_ID_358 || nVal == AUTOFORMAT_ID_X ||
                     (AUTOFORMAT_ID_504 <= nVal && nVal <= AUTOFORMAT_ID) )
             {
-                aVersions.Load( rStream, nVal );        // Item-Versionen
+                aVersions.Load( rStream, nVal );		// Item-Versionen
 
                 SwTableAutoFmt* pNew;
                 USHORT nAnz = 0;
@@ -1077,11 +1077,11 @@ BOOL SwTableAutoFmtTbl::Save( SvStream& rStream ) const
         // Achtung hier muss ein allgemeiner Header gespeichert werden
         USHORT nVal = AUTOFORMAT_ID;
         rStream << nVal
-                << (BYTE)2      // Anzahl von Zeichen des Headers incl. diesem
+                << (BYTE)2 		// Anzahl von Zeichen des Headers incl. diesem
                 << (BYTE)GetStoreCharSet( ::gsl_getSystemTextEncoding() );
-//              << (BYTE)4      // Anzahl von Zeichen des Headers incl. diesem
-//              << (BYTE)::GetSystemCharSet()
-//              << (UNIT16)SOFFICE_FILEFORMAT_NOW;
+//				<< (BYTE)4 		// Anzahl von Zeichen des Headers incl. diesem
+//				<< (BYTE)::GetSystemCharSet()
+//				<< (UNIT16)SOFFICE_FILEFORMAT_NOW;
         bRet = 0 == rStream.GetError();
 
         //-----------------------------------------------------------

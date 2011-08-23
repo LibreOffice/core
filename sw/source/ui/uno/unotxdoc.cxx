@@ -690,7 +690,7 @@ Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor(
     return xRet;
 }
 
-SwUnoCrsr*  SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCrsr)
+SwUnoCrsr* 	SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCrsr)
 {
     getText();
     XText *const pText = xBodyText.get();
@@ -712,7 +712,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         throw RuntimeException();
 
     Reference< XTextCursor >  xCrsr;
-    SwUnoCrsr*  pUnoCrsr = CreateCursorForSearch(xCrsr);
+    SwUnoCrsr* 	pUnoCrsr = CreateCursorForSearch(xCrsr);
 
     const SwXTextSearch* pSearch = reinterpret_cast<const SwXTextSearch*>(
             xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()));
@@ -788,7 +788,7 @@ Reference< util::XSearchDescriptor >  SwXTextDocument::createSearchDescriptor(vo
 /* -----------------26.02.99 16:08-------------------
  * wird fuer findAll/First/Next verwendet
  * --------------------------------------------------*/
-SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > & xDesc,
+SwUnoCrsr* 	SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > & xDesc,
                                         Reference< XTextCursor > & xCrsr, sal_Bool bAll,
                                                 sal_Int32& nResult,
                                                 Reference< XInterface >  xLastResult)
@@ -797,7 +797,7 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
     if(!IsValid() || !xDescTunnel.is() || !xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()))
         return 0;
 
-    SwUnoCrsr*  pUnoCrsr = CreateCursorForSearch(xCrsr);
+    SwUnoCrsr* 	pUnoCrsr = CreateCursorForSearch(xCrsr);
     const SwXTextSearch* pSearch = reinterpret_cast<const SwXTextSearch*>(
         xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()));
 
@@ -847,11 +847,11 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
 
 /*
  * folgende Kombinationen sind erlaubt:
- *  - suche einen im Body:                  -> FND_IN_BODY
- *  - suche alle im Body:                   -> FND_IN_BODYONLY | FND_IN_SELALL
+ *  - suche einen im Body:					-> FND_IN_BODY
+ *  - suche alle im Body: 					-> FND_IN_BODYONLY | FND_IN_SELALL
  *  - suche in Selectionen: einen / alle    -> FND_IN_SEL  [ | FND_IN_SELALL ]
  *  - suche im nicht Body: einen / alle     -> FND_IN_OTHER [ | FND_IN_SELALL ]
- *  - suche ueberall alle:                  -> FND_IN_SELALL
+ *  - suche ueberall alle: 					-> FND_IN_SELALL
  */
     int eRanges(FND_IN_BODY);
     if(bParentInExtra)
@@ -872,7 +872,7 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
                                 RES_CHRATR_BEGIN, RES_CHRATR_END-1,
                                 RES_PARATR_BEGIN, RES_PARATR_END-1,
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-                                RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
+                                RES_TXTATR_INETFMT,	RES_TXTATR_INETFMT,
                                 0);
             pSearch->FillSearchItemSet(aSearch);
             BOOL bCancel;
@@ -1418,7 +1418,7 @@ void SwXTextDocument::Reactivate(SwDocShell* pNewDocShell)
     bObjectValid = TRUE;
 }
 
-void    SwXTextDocument::InitNewDoc()
+void	SwXTextDocument::InitNewDoc()
 {
     // zunaechst alle Collections invalidieren, dann Referenzen loeschen und Null setzen
     if(pxXTextTables)
@@ -1701,7 +1701,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                 //! For inserting OLE objects the proper way is to use
                 //! "com.sun.star.text.TextEmbeddedObject"!
                 if (rServiceName.lastIndexOf( C2U(".OLE2Shape") ) == rServiceName.getLength() - 10)
-                    throw ServiceNotRegisteredException();  // declare service to be not registered with this factory
+                    throw ServiceNotRegisteredException();	// declare service to be not registered with this factory
 
                 // --> OD 2006-02-22 #b6382898#
                 // the XML import is allowed to create instances of com.sun.star.drawing.OLE2Shape.
@@ -3143,7 +3143,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
 
     //get languages from "drawobject"
     SwWrtShell *pWrtSh = pDocShell->GetWrtShell();
-    SdrView *pSdrView = pWrtSh->GetDrawView();
+    SdrView	*pSdrView = pWrtSh->GetDrawView();
 
     if( pSdrView )
     {
@@ -3220,12 +3220,12 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
 SwXLinkTargetSupplier::SwXLinkTargetSupplier(SwXTextDocument& rxDoc) :
     pxDoc(&rxDoc)
 {
-    sTables     = String(SW_RES(STR_CONTENT_TYPE_TABLE));
+    sTables 	= String(SW_RES(STR_CONTENT_TYPE_TABLE));
     sFrames     = String(SW_RES(STR_CONTENT_TYPE_FRAME));
-    sGraphics   = String(SW_RES(STR_CONTENT_TYPE_GRAPHIC));
-    sOLEs       = String(SW_RES(STR_CONTENT_TYPE_OLE));
-    sSections   = String(SW_RES(STR_CONTENT_TYPE_REGION));
-    sOutlines   = String(SW_RES(STR_CONTENT_TYPE_OUTLINE));
+    sGraphics	= String(SW_RES(STR_CONTENT_TYPE_GRAPHIC));
+    sOLEs		= String(SW_RES(STR_CONTENT_TYPE_OLE));
+    sSections	= String(SW_RES(STR_CONTENT_TYPE_REGION));
+    sOutlines	= String(SW_RES(STR_CONTENT_TYPE_OUTLINE));
     sBookmarks  = String(SW_RES(STR_CONTENT_TYPE_BOOKMARK));
 }
 
@@ -3266,7 +3266,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
         aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
     }
-/*  else if(sToCompare == )
+/*	else if(sToCompare == )
     {
         sSuffix += UniString::CreateFromAscii(pMarkToText);
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
@@ -3319,7 +3319,7 @@ Sequence< OUString > SwXLinkTargetSupplier::getElementNames(void)
     pNames[0] = sTables;
     pNames[1] = sFrames  ;
     pNames[2] = sGraphics;
-    pNames[3] = sOLEs   ;
+    pNames[3] = sOLEs	;
     pNames[4] = sSections;
     pNames[5] = sOutlines;
     pNames[6] = sBookmarks;
@@ -3330,13 +3330,13 @@ sal_Bool SwXLinkTargetSupplier::hasByName(const OUString& rName)
                                     throw( RuntimeException )
 {
     String sToCompare(rName);
-    if( sToCompare == sTables  ||
+    if(	sToCompare == sTables  ||
         sToCompare == sFrames  ||
         sToCompare == sGraphics||
-        sToCompare == sOLEs   ||
+        sToCompare == sOLEs	  ||
         sToCompare == sSections ||
         sToCompare == sOutlines ||
-        sToCompare == sBookmarks    )
+        sToCompare == sBookmarks	)
         return sal_True;
     return sal_False;
 }
@@ -3579,8 +3579,8 @@ Any lcl_GetDisplayBitmap(String sLinkSuffix)
         nImgId = CONTENT_TYPE_FRAME;
     else if(COMPARE_EQUAL  == sLinkSuffix.CompareToAscii(pMarkToGraphic))
         nImgId = CONTENT_TYPE_GRAPHIC;
-//  else if(== sLinkSuffix)
-//      nImgId = CONTENT_TYPE_BOOKMARK;
+//	else if(== sLinkSuffix)
+//		nImgId = CONTENT_TYPE_BOOKMARK;
     else if(COMPARE_EQUAL  == sLinkSuffix.CompareToAscii(pMarkToRegion))
         nImgId = CONTENT_TYPE_REGION;
     else if(COMPARE_EQUAL == sLinkSuffix.CompareToAscii(pMarkToOLE))

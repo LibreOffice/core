@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -169,7 +169,7 @@ SfxPopupWindow* SwTbxInsertCtrl::CreatePopupWindow()
 **********************************************************************/
 
 
-SfxPopupWindowType  SwTbxInsertCtrl::GetPopupWindowType() const
+SfxPopupWindowType	SwTbxInsertCtrl::GetPopupWindowType() const
 {
     return nLastSlotId ? SFX_POPUPWINDOW_ONTIMEOUT : SFX_POPUPWINDOW_ONCLICK;
 }
@@ -633,7 +633,7 @@ void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )
 /*-----------------20.06.97 13:41-------------------
 
 --------------------------------------------------*/
-String  SwScrollNaviPopup::GetQuickHelpText(BOOL bNext)
+String	SwScrollNaviPopup::GetQuickHelpText(BOOL bNext)
 {
     USHORT nResId = STR_IMGBTN_START;
     nResId += SwView::GetMoveType() - NID_START;

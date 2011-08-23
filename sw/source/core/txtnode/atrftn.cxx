@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,17 +72,17 @@ SwFmtFtn::SwFmtFtn( bool bEndNote )
 int SwFmtFtn::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return nNumber  == ((SwFmtFtn&)rAttr).nNumber &&
-           aNumber  == ((SwFmtFtn&)rAttr).aNumber &&
+    return nNumber	== ((SwFmtFtn&)rAttr).nNumber &&
+           aNumber	== ((SwFmtFtn&)rAttr).aNumber &&
            m_bEndNote == ((SwFmtFtn&)rAttr).m_bEndNote;
 }
 
 
 SfxPoolItem* SwFmtFtn::Clone( SfxItemPool* ) const
 {
-    SwFmtFtn* pNew  = new SwFmtFtn;
-    pNew->aNumber   = aNumber;
-    pNew->nNumber   = nNumber;
+    SwFmtFtn* pNew	= new SwFmtFtn;
+    pNew->aNumber	= aNumber;
+    pNew->nNumber	= nNumber;
     pNew->m_bEndNote = m_bEndNote;
     return pNew;
 }
@@ -170,7 +170,7 @@ XubString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, BOOL bInclStrings ) const
 }
 
 /*************************************************************************
- *                      class SwTxt/FmtFnt
+ *						class SwTxt/FmtFnt
  *************************************************************************/
 
 SwTxtFtn::SwTxtFtn( SwFmtFtn& rAttr, xub_StrLen nStartPos )
@@ -217,10 +217,10 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, BOOL bDelNode )
         else
         {
             //JP 27.01.97: der sw3-Reader setzt einen StartNode aber das
-            //              Attribut ist noch nicht im TextNode verankert.
-            //              Wird es geloescht (z.B. bei Datei einfuegen mit
-            //              Ftn in einen Rahmen), muss auch der Inhalt
-            //              geloescht werden
+            //				Attribut ist noch nicht im TextNode verankert.
+            //				Wird es geloescht (z.B. bei Datei einfuegen mit
+            //				Ftn in einen Rahmen), muss auch der Inhalt
+            //				geloescht werden
             pDoc = m_pStartNode->GetNodes().GetDoc();
         }
 
@@ -385,7 +385,7 @@ void SwTxtFtn::DelFrms()
         }
     }
     //JP 13.05.97: falls das Layout vorm loeschen der Fussnoten entfernt
-    //              wird, sollte man das ueber die Fussnote selbst tun
+    //				wird, sollte man das ueber die Fussnote selbst tun
     if ( !bFrmFnd && m_pStartNode )
     {
         SwNodeIndex aIdx( *m_pStartNode );

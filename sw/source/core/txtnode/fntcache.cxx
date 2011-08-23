@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
 #include <com/sun/star/i18n/WordType.hdl>
 #include <breakit.hxx>
-#include <viewsh.hxx>       // Bildschirmabgleich
-#include <viewopt.hxx>      // Bildschirmabgleich abschalten, ViewOption
+#include <viewsh.hxx>		// Bildschirmabgleich
+#include <viewopt.hxx>		// Bildschirmabgleich abschalten, ViewOption
 #include <fntcache.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <swfont.hxx>       // CH_BLANK + CH_BULLET
@@ -95,10 +95,10 @@ USHORT GetDefaultFontHeight( SwDrawTextInfo &rInf )
 
 /*************************************************************************
 |*
-|*  SwFntCache::Flush()
+|*	SwFntCache::Flush()
 |*
-|*  Ersterstellung      AMA 16. Dez. 94
-|*  Letzte Aenderung    AMA 16. Dez. 94
+|*	Ersterstellung		AMA 16. Dez. 94
+|*	Letzte Aenderung	AMA 16. Dez. 94
 |*
 |*************************************************************************/
 
@@ -114,10 +114,10 @@ void SwFntCache::Flush( )
 
 /*************************************************************************
 |*
-|*  SwFntObj::SwFntObj(), ~SwFntObj()
+|*	SwFntObj::SwFntObj(), ~SwFntObj()
 |*
-|*  Ersterstellung      AMA 7. Nov. 94
-|*  Letzte Aenderung    AMA 7. Nov. 94
+|*	Ersterstellung		AMA 7. Nov. 94
+|*	Letzte Aenderung	AMA 7. Nov. 94
 |*
 |*************************************************************************/
 
@@ -292,11 +292,11 @@ void lcl_calcLinePos( const CalcLinePosData &rData,
  *
  *  USHORT SwFntObj::GetFontAscent( const OutputDevice& rOut )
  *
- *  Ersterstellung      AMA 7. Nov. 94
- *  Letzte Aenderung    AMA 7. Nov. 94
+ *	Ersterstellung		AMA 7. Nov. 94
+ *	Letzte Aenderung	AMA 7. Nov. 94
  *
  *  Beschreibung: liefern den Ascent des Fonts auf dem
- *  gewuenschten Outputdevice zurueck, ggf. muss der Bildschirmfont erst
+ * 	gewuenschten Outputdevice zurueck, ggf. muss der Bildschirmfont erst
  *  erzeugt werden.
  *************************************************************************/
 
@@ -424,8 +424,8 @@ USHORT SwFntObj::GetFontLeading( const ViewShell *pSh, const OutputDevice& rOut 
  *
  *  SwFntObj::CreateScrFont( const ViewShell& rSh, const OutputDevice& rOut )
  *
- *  Ersterstellung      AMA 7. Nov. 94
- *  Letzte Aenderung    AMA 7. Nov. 94
+ *	Ersterstellung		AMA 7. Nov. 94
+ *	Letzte Aenderung	AMA 7. Nov. 94
  *
  *  pOut is the output device, not the reference device
  *
@@ -601,10 +601,10 @@ void SwFntObj::GuessLeading( const ViewShell&
 
 /*************************************************************************
  *
- *  void SwFntObj::SetDeviceFont( const OutputDevice *pOut ),
+ *	void SwFntObj::SetDeviceFont( const OutputDevice *pOut ),
  *
- *  Ersterstellung      AMA 7. Nov. 94
- *  Letzte Aenderung    AMA 7. Nov. 94
+ *	Ersterstellung		AMA 7. Nov. 94
+ *	Letzte Aenderung	AMA 7. Nov. 94
  *
  *  Beschreibung: stellt den Font am gewuenschten OutputDevice ein,
  *  am Bildschirm muss eventuell erst den Abgleich durchgefuehrt werden.
@@ -643,13 +643,13 @@ void SwFntObj::SetDevFont( const ViewShell *pSh, OutputDevice& rOut )
  *
  * void SwFntObj::DrawText( ... )
  *
- *  Ersterstellung      AMA 16. Dez. 94
- *  Letzte Aenderung    AMA 16. Dez. 94
+ *	Ersterstellung		AMA 16. Dez. 94
+ *	Letzte Aenderung	AMA 16. Dez. 94
  *
  *  Beschreibung: Textausgabe
- *                  auf dem Bildschirm          => DrawTextArray
- *                  auf dem Drucker, !Kerning   => DrawText
- *                  auf dem Drucker + Kerning   => DrawStretchText
+ * 					auf dem Bildschirm 			=> DrawTextArray
+ * 					auf dem Drucker, !Kerning 	=> DrawText
+ * 					auf dem Drucker + Kerning	=> DrawStretchText
  *
  *************************************************************************/
 
@@ -1866,11 +1866,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
 /*************************************************************************
  *
- *  Size SwFntObj::GetTextSize( const OutputDevice *pOut, const String &rTxt,
- *           const USHORT nIdx, const USHORT nLen, const short nKern = 0 );
+ *	Size SwFntObj::GetTextSize( const OutputDevice *pOut, const String &rTxt,
+ *			 const USHORT nIdx, const USHORT nLen, const short nKern = 0 );
  *
- *  Ersterstellung      AMA 16. Dez. 94
- *  Letzte Aenderung    AMA 16. Dez. 94
+ *	Ersterstellung		AMA 16. Dez. 94
+ *	Letzte Aenderung	AMA 16. Dez. 94
  *
  *  Beschreibung: ermittelt die TextSize (des Druckers)
  *
@@ -1973,7 +1973,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                            rInf.GetScriptInfo()->CountCompChg() &&
                            lcl_IsMonoSpaceFont( rInf.GetOut() );
 
-    OSL_ENSURE( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
+    OSL_ENSURE(	!bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
 
     // This is the part used e.g., for cursor travelling
@@ -2295,10 +2295,10 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
 /*************************************************************************
 |*
-|*  SwFntAccess::SwFntAccess()
+|*	SwFntAccess::SwFntAccess()
 |*
-|*  Ersterstellung      AMA 9. Nov. 94
-|*  Letzte Aenderung    AMA 9. Nov. 94
+|*	Ersterstellung		AMA 9. Nov. 94
+|*	Letzte Aenderung	AMA 9. Nov. 94
 |*
 |*************************************************************************/
 
@@ -2345,7 +2345,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
                         ((SwSubFont*)pOwn)->GetPropWidth() )
                 return; // Die Ueberpruefung ergab: Drucker+Zoom okay.
             pFntObj->Unlock( ); // Vergiss dies Objekt, es wurde leider
-            pObj = NULL;        // eine Drucker/Zoomaenderung festgestellt.
+            pObj = NULL;	 	// eine Drucker/Zoomaenderung festgestellt.
         }
 
         // Search by font comparison, quite expensive!

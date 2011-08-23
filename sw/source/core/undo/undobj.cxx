@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>			// fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <undobj.hxx>
@@ -128,12 +128,12 @@ void SwUndRng::SetPaM( SwPaM & rPam, BOOL bCorrToCntnt ) const
     else
         rPam.GetPoint()->nContent.Assign( 0, 0 );
 
-    if( !nEndNode && STRING_MAXLEN == nEndCntnt )       // keine Selection
+    if( !nEndNode && STRING_MAXLEN == nEndCntnt )		// keine Selection
         return ;
 
     rPam.SetMark();
     if( nSttNode == nEndNode && nSttCntnt == nEndCntnt )
-        return;                             // nichts mehr zu tun
+        return;								// nichts mehr zu tun
 
     rPam.GetPoint()->nNode = nEndNode;
     if( (pNd = rPam.GetNode())->IsCntntNode() )
@@ -276,11 +276,11 @@ SwUndoSaveCntnt::~SwUndoSaveCntnt()
     // Inhalte in das UndoNodesArray verschoben. Diese Methoden fuegen
     // am Ende eines TextNodes fuer die Attribute einen Trenner ein.
     // Dadurch werden die Attribute nicht expandiert.
-    // MoveTo..     verschiebt aus dem NodesArray in das UndoNodesArray
-    // MoveFrom..   verschiebt aus dem UndoNodesArray in das NodesArray
+    // MoveTo.. 	verschiebt aus dem NodesArray in das UndoNodesArray
+    // MoveFrom..	verschiebt aus dem UndoNodesArray in das NodesArray
 
-    // 2.8.93:  ist pEndNdIdx angebenen, wird vom Undo/Redo -Ins/DelFly
-    //          aufgerufen. Dann soll die gesamte Section verschoben werden.
+    // 2.8.93:	ist pEndNdIdx angebenen, wird vom Undo/Redo -Ins/DelFly
+    //			aufgerufen. Dann soll die gesamte Section verschoben werden.
 
 void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
                     SwIndex* pCntIdx, ULONG* pEndNdIdx, xub_StrLen* pEndCntIdx )
@@ -327,7 +327,7 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
         rDoc.GetNodes().MoveRange( rPaM, aPos, rNds );
 
         SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode();
-        if( pTxtNd )        // fuege einen Trenner fuer die Attribute ein !
+        if( pTxtNd )		// fuege einen Trenner fuer die Attribute ein !
         {
             // weil aber beim Insert die Attribute angefasst/sprich
             // aus dem Array geloescht und wieder eingefuegt werden, koennen
@@ -379,13 +379,13 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx,
     // jetzt kommt das wiederherstellen
     SwNodes& rNds = (SwNodes&)*rDoc.GetUndoNds();
     if( nNodeIdx == rNds.GetEndOfPostIts().GetIndex() )
-        return;     // nichts gespeichert
+        return;		// nichts gespeichert
 
     BOOL bUndo = rDoc.DoesUndo();
     rDoc.DoUndo( FALSE );
 
     SwPaM aPaM( rInsPos );
-    if( pEndNdIdx )         // dann hole aus diesem den Bereich
+    if( pEndNdIdx )			// dann hole aus diesem den Bereich
         aPaM.GetPoint()->nNode.Assign( rNds, *pEndNdIdx );
     else
     {
@@ -394,7 +394,7 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx,
     }
 
     SwTxtNode* pTxtNd = aPaM.GetNode()->GetTxtNode();
-    if( !pEndNdIdx && pTxtNd )  // loesche den Trenner wieder
+    if( !pEndNdIdx && pTxtNd )	// loesche den Trenner wieder
     {
         if( pEndCntIdx )
             aPaM.GetPoint()->nContent.Assign( pTxtNd, *pEndCntIdx );
@@ -414,7 +414,7 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx,
 
         // noch den letzen Node loeschen.
         if( !aPaM.GetPoint()->nContent.GetIndex() ||
-            ( aPaM.GetPoint()->nNode++ &&       // noch leere Nodes am Ende ??
+            ( aPaM.GetPoint()->nNode++ && 		// noch leere Nodes am Ende ??
             &rNds.GetEndOfExtras() != &aPaM.GetPoint()->nNode.GetNode() ))
         {
             aPaM.GetPoint()->nContent.Assign( 0, 0 );
@@ -525,7 +525,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     ( &pEnd->nNode.GetNode() == pFtnNd &&
                     nFtnSttIdx >= pEnd->nContent.GetIndex() )) )
                 {
-                    ++nPos;     // weiter suchen
+                    ++nPos;		// weiter suchen
                     continue;
                 }
 
@@ -551,7 +551,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     pStt->nContent.GetIndex() > nFtnSttIdx ) ||
                     ( &pEnd->nNode.GetNode() == pFtnNd &&
                     nFtnSttIdx >= pEnd->nContent.GetIndex() )))
-                    continue;               // weiter suchen
+                    continue;				// weiter suchen
 
                 // es muss leider ein Index angelegt werden. Sonst knallts im
                 // TextNode, weil im DTOR der SwFtn dieser geloescht wird !!
@@ -824,7 +824,7 @@ SwUndoSaveSection::SwUndoSaveSection()
 
 SwUndoSaveSection::~SwUndoSaveSection()
 {
-    if( pMvStt )        // loesche noch den Bereich aus dem UndoNodes Array
+    if( pMvStt )		// loesche noch den Bereich aus dem UndoNodes Array
     {
         // SaveSection speichert den Inhalt in der PostIt-Section
         SwNodes& rUNds = pMvStt->GetNode().GetNodes();
@@ -875,7 +875,7 @@ void SwUndoSaveSection::SaveSection( SwDoc* , const SwNodeRange& rRange )
 void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
                                         USHORT nSectType )
 {
-    if( ULONG_MAX != nStartPos )        // gab es ueberhaupt Inhalt ?
+    if( ULONG_MAX != nStartPos )		// gab es ueberhaupt Inhalt ?
     {
         // ueberpruefe, ob der Inhalt an der alten Position steht
         SwNodeIndex aSttIdx( pDoc->GetNodes(), nStartPos );
@@ -895,7 +895,7 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
 
 void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos )
 {
-    if( ULONG_MAX != nStartPos )        // gab es ueberhaupt Inhalt ?
+    if( ULONG_MAX != nStartPos )		// gab es ueberhaupt Inhalt ?
     {
         SwPosition aInsPos( rInsPos );
         ULONG nEnd = pMvStt->GetIndex() + nMvLen - 1;
@@ -1051,23 +1051,23 @@ SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
 
     switch( eCmpPos )
     {
-    case POS_OVERLAP_BEFORE:        // Pos1 ueberlappt Pos2 am Anfang
+    case POS_OVERLAP_BEFORE:		// Pos1 ueberlappt Pos2 am Anfang
         nEndNode = rEndPos.nNode.GetIndex();
         nEndCntnt = rEndPos.nContent.GetIndex();
         break;
-    case POS_OVERLAP_BEHIND:        // Pos1 ueberlappt Pos2 am Ende
+    case POS_OVERLAP_BEHIND: 		// Pos1 ueberlappt Pos2 am Ende
         nSttNode = rSttPos.nNode.GetIndex();
         nSttCntnt = rSttPos.nContent.GetIndex();
         break;
 
-    case POS_INSIDE:                // Pos1 liegt vollstaendig in Pos2
+    case POS_INSIDE:				// Pos1 liegt vollstaendig in Pos2
         nSttNode = rSttPos.nNode.GetIndex();
         nSttCntnt = rSttPos.nContent.GetIndex();
         nEndNode = rEndPos.nNode.GetIndex();
         nEndCntnt = rEndPos.nContent.GetIndex();
         break;
 
-    case POS_OUTSIDE:               // Pos2 liegt vollstaendig in Pos1
+    case POS_OUTSIDE:				// Pos2 liegt vollstaendig in Pos1
         if( rRedl.GetContentIdx() )
         {
             // dann den Bereich ins UndoArray verschieben und merken
@@ -1076,7 +1076,7 @@ SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
         }
         break;
 
-    case POS_EQUAL:                 // Pos1 ist genauso gross wie Pos2
+    case POS_EQUAL:					// Pos1 ist genauso gross wie Pos2
         break;
 
     default:

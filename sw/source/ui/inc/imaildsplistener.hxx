@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,10 @@ class MailDispatcher;
 
 /**
     MailDispatcher listener interface.
-    Clients may implement and register instances of the
+    Clients may implement and register instances of the 
     mail dispatcher interface in order to get notifications
-    about the MailDispatcher status.
-
+    about the MailDispatcher status. 
+    
     @see MailDispatcher
 */
 class IMailDispatcherListener : public ::salhelper::ReferenceObject
@@ -50,29 +50,29 @@ public:
         Called when the MailDispatcher is started.
     */
     virtual void started(::rtl::Reference<MailDispatcher> xMailDispatcher) = 0;
-
+    
     /**
         Called when the MailDispatcher is stopped.
     */
     virtual void stopped(::rtl::Reference<MailDispatcher> xMailDispatcher) = 0;
-
+    
     /**
         Called when there are no more mail messages
-        to deliver.
+        to deliver. 
     */
     virtual void idle(::rtl::Reference<MailDispatcher> xMailDispatcher) = 0;
-
+            
     /**
-        Called for every mail message that has been
+        Called for every mail message that has been 
         successfully delivered.
     */
-    virtual void mailDelivered(::rtl::Reference<MailDispatcher> xMailDispatcher, ::com::sun::star::uno::Reference< ::com::sun::star::mail::XMailMessage> xMailMessage) = 0;
-
+    virtual void mailDelivered(::rtl::Reference<MailDispatcher> xMailDispatcher, ::com::sun::star::uno::Reference< ::com::sun::star::mail::XMailMessage> xMailMessage) = 0;        
+    
     /**
         Called for every mail message whose delivery
         failed.
     */
-    virtual void mailDeliveryError(::rtl::Reference<MailDispatcher> xMailDispatcher, ::com::sun::star::uno::Reference< ::com::sun::star::mail::XMailMessage> xMailMessage, const rtl::OUString& sErrorMessage) = 0;
+    virtual void mailDeliveryError(::rtl::Reference<MailDispatcher> xMailDispatcher, ::com::sun::star::uno::Reference< ::com::sun::star::mail::XMailMessage> xMailMessage, const rtl::OUString& sErrorMessage) = 0;            
 };
 
 #endif // INCLUDED_IMAILDISPATCHERLISTENER_HXX

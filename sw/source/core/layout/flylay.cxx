@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,10 +68,10 @@ using namespace ::com::sun::star;
 
 /*************************************************************************
 |*
-|*  SwFlyFreeFrm::SwFlyFreeFrm(), ~SwFlyFreeFrm()
+|*	SwFlyFreeFrm::SwFlyFreeFrm(), ~SwFlyFreeFrm()
 |*
-|*  Ersterstellung      MA 03. Dec. 92
-|*  Letzte Aenderung    MA 09. Apr. 99
+|*	Ersterstellung		MA 03. Dec. 92
+|*	Letzte Aenderung	MA 09. Apr. 99
 |*
 |*************************************************************************/
 
@@ -119,16 +119,16 @@ TYPEINIT1(SwFlyFreeFrm,SwFlyFrm);
 // <--
 /*************************************************************************
 |*
-|*  SwFlyFreeFrm::NotifyBackground()
+|*	SwFlyFreeFrm::NotifyBackground()
 |*
-|*  Beschreibung        Benachrichtigt den Hintergrund (alle CntntFrms die
-|*      gerade ueberlappt werden. Ausserdem wird das Window in einigen
-|*      Faellen direkt invalidiert (vor allem dort, wo keine CntntFrms
-|*      ueberlappt werden.
-|*      Es werden auch die CntntFrms innerhalb von anderen Flys
-|*      beruecksichtigt.
-|*  Ersterstellung      MA 03. Dec. 92
-|*  Letzte Aenderung    MA 26. Aug. 93
+|*	Beschreibung		Benachrichtigt den Hintergrund (alle CntntFrms die
+|*		gerade ueberlappt werden. Ausserdem wird das Window in einigen
+|* 		Faellen direkt invalidiert (vor allem dort, wo keine CntntFrms
+|*		ueberlappt werden.
+|* 		Es werden auch die CntntFrms innerhalb von anderen Flys
+|*		beruecksichtigt.
+|*	Ersterstellung		MA 03. Dec. 92
+|*	Letzte Aenderung	MA 26. Aug. 93
 |*
 |*************************************************************************/
 
@@ -140,10 +140,10 @@ void SwFlyFreeFrm::NotifyBackground( SwPageFrm *pPageFrm,
 
 /*************************************************************************
 |*
-|*  SwFlyFreeFrm::MakeAll()
+|*	SwFlyFreeFrm::MakeAll()
 |*
-|*  Ersterstellung      MA 18. Feb. 94
-|*  Letzte Aenderung    MA 03. Mar. 97
+|*	Ersterstellung		MA 18. Feb. 94
+|*	Letzte Aenderung	MA 03. Mar. 97
 |*
 |*************************************************************************/
 
@@ -168,7 +168,7 @@ void SwFlyFreeFrm::MakeAll()
     if( !GetPageFrm() )
         return;
 
-    Lock(); //Der Vorhang faellt
+    Lock();	//Der Vorhang faellt
 
     //uebernimmt im DTor die Benachrichtigung
     const SwFlyNotify aNotify( this );
@@ -200,7 +200,7 @@ void SwFlyFreeFrm::MakeAll()
     {
         SWRECTFN( this )
         const SwFmtFrmSize *pSz;
-        {   //Zusaetzlicher Scope, damit aAccess vor dem Check zerstoert wird!
+        {	//Zusaetzlicher Scope, damit aAccess vor dem Check zerstoert wird!
 
             SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
@@ -324,10 +324,10 @@ bool SwFlyFreeFrm::HasEnvironmentAutoSize() const
 
 /*************************************************************************
 |*
-|*  SwFlyFreeFrm::CheckClip()
+|*	SwFlyFreeFrm::CheckClip()
 |*
-|*  Ersterstellung      MA 21. Feb. 94
-|*  Letzte Aenderung    MA 03. Mar. 97
+|*	Ersterstellung		MA 21. Feb. 94
+|*	Letzte Aenderung	MA 03. Mar. 97
 |*
 |*************************************************************************/
 
@@ -444,7 +444,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                      aFrmRect.Height()!= aOldSize.Height() )
                 {
                     if ( (aOldSize.Width() - aFrmRect.Width()) >
-                         (aOldSize.Height()- aFrmRect.Height()) )
+                         (aOldSize.Height()- aFrmRect.Height())	)
                         aFrmRect.Height( aOldSize.Height() );
                     else
                         aFrmRect.Width( aOldSize.Width() );
@@ -496,14 +496,14 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             Frm().Width ( Max( long(MINLAY), aFrmRect.Width() ) );
             if ( Lower() && Lower()->IsColumnFrm() )
             {
-                ColLock();  //Grow/Shrink locken.
+                ColLock();	//Grow/Shrink locken.
                 const Size aTmpOldSize( Prt().SSize() );
                 Prt().Height( Frm().Height() - nPrtHeightDiff );
                 Prt().Width ( Frm().Width()  - nPrtWidthDiff );
                 ChgLowersProp( aTmpOldSize );
                 SwFrm *pLow = Lower();
                 do
-                {   pLow->Calc();
+                {	pLow->Calc();
                     // auch den (Column)BodyFrm mitkalkulieren
                     ((SwLayoutFrm*)pLow)->Lower()->Calc();
                     pLow = pLow->GetNext();
@@ -542,10 +542,10 @@ bool SwFlyFreeFrm::IsFormatPossible() const
 
 /*************************************************************************
 |*
-|*  SwFlyLayFrm::SwFlyLayFrm()
+|*	SwFlyLayFrm::SwFlyLayFrm()
 |*
-|*  Ersterstellung      MA 25. Aug. 92
-|*  Letzte Aenderung    MA 09. Apr. 99
+|*	Ersterstellung		MA 25. Aug. 92
+|*	Letzte Aenderung	MA 09. Apr. 99
 |*
 |*************************************************************************/
 
@@ -560,10 +560,10 @@ TYPEINIT1(SwFlyLayFrm,SwFlyFreeFrm);
 // <--
 /*************************************************************************
 |*
-|*  SwFlyLayFrm::Modify()
+|*	SwFlyLayFrm::Modify()
 |*
-|*  Ersterstellung      MA 08. Feb. 93
-|*  Letzte Aenderung    MA 28. Aug. 93
+|*	Ersterstellung		MA 08. Feb. 93
+|*	Letzte Aenderung	MA 28. Aug. 93
 |*
 |*************************************************************************/
 
@@ -575,7 +575,7 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     if( RES_ATTRSET_CHG == nWhich && SFX_ITEM_SET ==
         ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, FALSE,
             (const SfxPoolItem**)&pAnch ))
-        ;       // Beim GetItemState wird der AnkerPointer gesetzt !
+        ;		// Beim GetItemState wird der AnkerPointer gesetzt !
 
     else if( RES_ANCHOR == nWhich )
     {
@@ -644,10 +644,10 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 
 /*************************************************************************
 |*
-|*  SwPageFrm::AppendFly()
+|*	SwPageFrm::AppendFly()
 |*
-|*  Ersterstellung      MA 10. Oct. 92
-|*  Letzte Aenderung    MA 08. Jun. 96
+|*	Ersterstellung		MA 10. Oct. 92
+|*	Letzte Aenderung	MA 08. Jun. 96
 |*
 |*************************************************************************/
 
@@ -756,10 +756,10 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 
 /*************************************************************************
 |*
-|*  SwPageFrm::RemoveFly()
+|*	SwPageFrm::RemoveFly()
 |*
-|*  Ersterstellung      MA 10. Oct. 92
-|*  Letzte Aenderung    MA 26. Aug. 96
+|*	Ersterstellung		MA 10. Oct. 92
+|*	Letzte Aenderung	MA 26. Aug. 96
 |*
 |*************************************************************************/
 
@@ -800,7 +800,7 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
     {
         pSortedObjs->Remove( *pToRemove );
         if ( !pSortedObjs->Count() )
-        {   DELETEZ( pSortedObjs );
+        {	DELETEZ( pSortedObjs );
         }
     }
     // --> OD 2004-06-30 #i28701# - use new method <SetPageFrm(..)>
@@ -809,10 +809,10 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
 
 /*************************************************************************
 |*
-|*  SwPageFrm::MoveFly
+|*	SwPageFrm::MoveFly
 |*
-|*  Ersterstellung      MA 25. Jan. 97
-|*  Letzte Aenderung    MA 25. Jan. 97
+|*	Ersterstellung		MA 25. Jan. 97
+|*	Letzte Aenderung	MA 25. Jan. 97
 |*
 |*************************************************************************/
 
@@ -854,7 +854,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     {
         pSortedObjs->Remove( *pToMove );
         if ( !pSortedObjs->Count() )
-        {   DELETEZ( pSortedObjs );
+        {	DELETEZ( pSortedObjs );
         }
     }
 
@@ -1011,10 +1011,10 @@ void SwPageFrm::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
 
 /*************************************************************************
 |*
-|*  SwPageFrm::PlaceFly
+|*	SwPageFrm::PlaceFly
 |*
-|*  Ersterstellung      MA 08. Feb. 93
-|*  Letzte Aenderung    MA 27. Feb. 93
+|*	Ersterstellung		MA 08. Feb. 93
+|*	Letzte Aenderung	MA 27. Feb. 93
 |*
 |*************************************************************************/
 
@@ -1047,10 +1047,10 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
 
 /*************************************************************************
 |*
-|*  ::CalcClipRect
+|*	::CalcClipRect
 |*
-|*  Ersterstellung      AMA 24. Sep. 96
-|*  Letzte Aenderung    MA  18. Dec. 96
+|*	Ersterstellung		AMA 24. Sep. 96
+|*	Letzte Aenderung	MA  18. Dec. 96
 |*
 |*************************************************************************/
 // OD 22.09.2003 #i18732# - adjustments for following text flow or not

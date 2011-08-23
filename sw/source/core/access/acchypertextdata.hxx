@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 class SwTxtAttr;
 
 namespace com { namespace sun { namespace star {
-    namespace accessibility { class XAccessibleHyperlink; }
+    namespace accessibility { class XAccessibleHyperlink; } 
 } } }
 
 typedef ::std::less< const SwTxtAttr * > SwTxtAttrPtrLess;

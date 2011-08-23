@@ -432,7 +432,7 @@ uno::Any SwAccessibleDocument::queryInterface(
 }
 
 //====== XTypeProvider ====================================================
-uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes()
+uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes() 
     throw(uno::RuntimeException)
 {
     uno::Sequence< uno::Type > aTypes( SwAccessibleDocumentBase::getTypes() );

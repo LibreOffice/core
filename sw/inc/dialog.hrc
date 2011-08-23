@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #define DLG_LINKS               (RC_DIALOG_BEGIN +  6)
 #define DLG_LINKEDIT            (RC_DIALOG_BEGIN +  7)
 #define DLG_INSERT_ABSTRACT     (RC_DIALOG_BEGIN +  8)
-#define DLG_ASCII_FILTER        (RC_DIALOG_BEGIN +  9)
+#define DLG_ASCII_FILTER     	(RC_DIALOG_BEGIN +  9)
 #define DLG_WORDCOUNT           (RC_DIALOG_BEGIN + 10)
 #define RID_QB_SPELL_CONTINUE   (RC_DIALOG_BEGIN + 11)
 #define STR_SPELLING_COMPLETED  (RC_DIALOG_BEGIN + 12)
@@ -63,18 +63,18 @@
 // Bereiche *****************************************************************
 
 
-#define RC_REGIONSW_BEGIN       (RC_DIALOG_BEGIN + 60)
-#define RC_REGIONSW_END         (RC_DIALOG_BEGIN + 79)
+#define RC_REGIONSW_BEGIN 		(RC_DIALOG_BEGIN + 60)
+#define RC_REGIONSW_END    		(RC_DIALOG_BEGIN + 79)
 
-#define RC_MACASSGN_BEGIN       (RC_DIALOG_BEGIN + 80)
-#define RC_MACASSGN_END         (RC_DIALOG_BEGIN + 89)
+#define RC_MACASSGN_BEGIN 		(RC_DIALOG_BEGIN + 80)
+#define RC_MACASSGN_END    		(RC_DIALOG_BEGIN + 89)
 
-#define RC_DLG_ADDR         (RC_DIALOG_BEGIN + 90)
-#define RC_SWDLG_BACKGROUND     (RC_DIALOG_BEGIN + 91)
-#define RC_DLG_SWNUMFMTDLG      (RC_DIALOG_BEGIN + 92)
-#define RC_DLG_SWBORDERDLG      (RC_DIALOG_BEGIN + 93)
-#define RC_DLG_SWWRAPDLG        (RC_DIALOG_BEGIN + 94)
-#define RC_DLG_SWFLDEDITDLG     (RC_DIALOG_BEGIN + 95)
+#define RC_DLG_ADDR			(RC_DIALOG_BEGIN + 90)
+#define RC_SWDLG_BACKGROUND		(RC_DIALOG_BEGIN + 91)
+#define RC_DLG_SWNUMFMTDLG		(RC_DIALOG_BEGIN + 92)
+#define RC_DLG_SWBORDERDLG		(RC_DIALOG_BEGIN + 93)
+#define RC_DLG_SWWRAPDLG		(RC_DIALOG_BEGIN + 94)
+#define RC_DLG_SWFLDEDITDLG		(RC_DIALOG_BEGIN + 95)
 // Ueberlaufpruefung ********************************************************
 
 #define DIALOG_ACT_END  RC_MACASSGN_END

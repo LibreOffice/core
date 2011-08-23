@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -292,7 +292,7 @@ BOOL lcl_SrchNew( const _MapTblFrmFmt& rMap, void * pPara )
     if( rMap.pOld != *(const SwFrmFmt**)pPara )
         return TRUE;
     *((const SwFrmFmt**)pPara) = rMap.pNew;
-    return FALSE;       // abbrechen, Pointer gefunden
+    return FALSE;		// abbrechen, Pointer gefunden
 }
 
 
@@ -323,7 +323,7 @@ BOOL lcl_CopyTblBox( const SwTableBox*& rpBox, void* pPara )
 
     SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)rpBox->GetFrmFmt();
     pCT->rMapArr.ForEach( lcl_SrchNew, &pBoxFmt );
-    if( pBoxFmt == rpBox->GetFrmFmt() ) // ein neues anlegen ??
+    if( pBoxFmt == rpBox->GetFrmFmt() )	// ein neues anlegen ??
     {
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == pBoxFmt->GetItemState( RES_BOXATR_FORMULA, FALSE,
@@ -386,7 +386,7 @@ BOOL lcl_CopyTblLine( const SwTableLine*& rpLine, void* pPara )
     _CopyTable* pCT = (_CopyTable*)pPara;
     SwTableLineFmt* pLineFmt = (SwTableLineFmt*)rpLine->GetFrmFmt();
     pCT->rMapArr.ForEach( lcl_SrchNew, &pLineFmt );
-    if( pLineFmt == rpLine->GetFrmFmt() )   // ein neues anlegen ??
+    if( pLineFmt == rpLine->GetFrmFmt() )	// ein neues anlegen ??
     {
         pLineFmt = pCT->pDoc->MakeTableLineFmt();
         pLineFmt->CopyAttrs( *rpLine->GetFrmFmt() );
@@ -453,7 +453,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     SwNodeIndex aInsPos( *pEndNd );
 
     SwTable& rTbl = (SwTable&)pTblNd->GetTable();
-    pTblFmt->Add( &rTbl );      // das Frame-Format setzen
+    pTblFmt->Add( &rTbl );		// das Frame-Format setzen
 
     rTbl.SetRowsToRepeat( GetTable().GetRowsToRepeat() );
     rTbl.SetTblChgMode( GetTable().GetTblChgMode() );
@@ -477,7 +477,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     }
     // dann kopiere erstmal den Inhalt der Tabelle, die Zuordnung der
     // Boxen/Lines und das anlegen der Frames erfolgt spaeter
-    SwNodeRange aRg( *this, +1, *EndOfSectionNode() );  // (wo stehe in denn nun ??)
+    SwNodeRange aRg( *this, +1, *EndOfSectionNode() );	// (wo stehe in denn nun ??)
 
     // If there is a table in this table, the table format for the outer table
     // does not seem to be used, because the table does not have any contents yet
@@ -570,11 +570,11 @@ BOOL lcl_ChkFlyFly( SwDoc* pDoc, ULONG nSttNd, ULONG nEndNd,
 
             if( pSNd->GetIndex() < nInsNd &&
                 nInsNd < pSNd->EndOfSectionIndex() )
-                return TRUE;        // nicht kopieren !!
+                return TRUE;		// nicht kopieren !!
 
             if( lcl_ChkFlyFly( pDoc, pSNd->GetIndex(),
                         pSNd->EndOfSectionIndex(), nInsNd ) )
-                return TRUE;        // nicht kopieren !!
+                return TRUE;		// nicht kopieren !!
         }
     }
 
@@ -608,11 +608,11 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
                 switch( eCmpPos )
                 {
                 case POS_COLLIDE_END:
-                case POS_BEFORE:                // Pos1 liegt vor Pos2
+                case POS_BEFORE:				// Pos1 liegt vor Pos2
                     break;
 
                 case POS_COLLIDE_START:
-                case POS_BEHIND:                // Pos1 liegt hinter Pos2
+                case POS_BEHIND:				// Pos1 liegt hinter Pos2
                     n = rTbl.Count();
                     break;
 
@@ -736,13 +736,13 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
         pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
         BOOL bDoUndo = pDoc->DoesUndo();
-        pDoc->DoUndo( FALSE );  // Auf jedenfall Undo abschalten
+        pDoc->DoUndo( FALSE );	// Auf jedenfall Undo abschalten
         // dann kopiere den Bereich im unteren DokumentBereich,
         // (mit Start/End-Nodes geklammert) und verschiebe diese
         // dann an die gewuenschte Stelle.
 
         SwUndoCpyDoc* pUndo = 0;
-        SwPaM aPam( rPos );         // UndoBereich sichern
+        SwPaM aPam( rPos );			// UndoBereich sichern
         if( bDoUndo )
         {
             pDoc->ClearRedo();
@@ -767,10 +767,10 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
         pDoc->MoveRange( aPam, rPos, DOC_MOVEDEFAULT );
 
         pNode = aPam.GetCntntNode();
-        *aPam.GetPoint() = rPos;        // Cursor umsetzen fuers Undo !
-        aPam.SetMark();                 // auch den Mark umsetzen !!
-        aPam.DeleteMark();              // aber keinen Bereich makieren !!
-        pDoc->DeleteSection( pNode );           // Bereich wieder loeschen
+        *aPam.GetPoint() = rPos;		// Cursor umsetzen fuers Undo !
+        aPam.SetMark();					// auch den Mark umsetzen !!
+        aPam.DeleteMark();				// aber keinen Bereich makieren !!
+        pDoc->DeleteSection( pNode );			// Bereich wieder loeschen
 
         // falls Undo eingeschaltet ist, so speicher den eingefuegten Bereich
         pDoc->DoUndo( bDoUndo );
@@ -1002,7 +1002,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                         aRg.aEnd = pEnd->nNode;
                         pEndTxtNd = pEnd->nNode.GetNode().GetTxtNode();
                     }
-                    else if( rPos == *pEnd )        // Wurde das Ende auch verschoben
+                    else if( rPos == *pEnd )		// Wurde das Ende auch verschoben
                     {
                         pEnd->nNode--;
                         pEnd->nContent.Assign( pDestTxtNd, nCntntEnd );
@@ -1119,7 +1119,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 // korrigiere den Bereich wieder !!
                 if( bEndEqualIns )
                     aRg.aEnd--;
-                else if( rPos == *pEnd )        // Wurde das Ende auch verschoben
+                else if( rPos == *pEnd )		// Wurde das Ende auch verschoben
                 {
                     rPos.nNode-=2;
                     rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(),
@@ -1331,8 +1331,8 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndConte
 #if OSL_DEBUG_LEVEL > 1
     {
         //JP 17.06.99: Bug 66973 - check count only if the selection is in
-        //              the same (or no) section. Becaus not full selected
-        //              section are not copied.
+        //				the same (or no) section. Becaus not full selected
+        //				section are not copied.
         const SwSectionNode* pSSectNd = rRg.aStart.GetNode().FindSectionNode();
         SwNodeIndex aTmpI( rRg.aEnd, -1 );
         const SwSectionNode* pESectNd = aTmpI.GetNode().FindSectionNode();
@@ -1391,9 +1391,9 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
         const bool bCopyFlyAtFly ) const
 {
     // Bug 22727: suche erst mal alle Flys zusammen, sortiere sie entsprechend
-    //            ihrer Ordnungsnummer und kopiere sie erst dann. Damit wird
-    //            die Ordnungsnummer (wird nur im DrawModel verwaltet)
-    //            beibehalten.
+    //			  ihrer Ordnungsnummer und kopiere sie erst dann. Damit wird
+    //			  die Ordnungsnummer (wird nur im DrawModel verwaltet)
+    //			  beibehalten.
     SwDoc *const pDest = rStartIdx.GetNode().GetDoc();
     _ZSortFlys aArr;
     USHORT nArrLen = GetSpzFrmFmts()->Count();

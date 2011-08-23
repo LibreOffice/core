@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,12 +32,12 @@
 
 #include <cntfrm.hxx>
 #include <doc.hxx>
-#include <pam.hxx>      // fuer GetBodyTxtNode
+#include <pam.hxx> 		// fuer GetBodyTxtNode
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <expfld.hxx>
-#include <docfld.hxx>   // fuer _SetGetExpFld
+#include <docfld.hxx> 	// fuer _SetGetExpFld
 #include <unofldmid.h>
 
 using namespace ::com::sun::star;
@@ -58,14 +58,14 @@ SwFieldType* SwTblFieldType::Copy() const
 
 void SwTblField::CalcField( SwTblCalcPara& rCalcPara )
 {
-    if( rCalcPara.rCalc.IsCalcError() )     // ist schon Fehler gesetzt ?
+    if( rCalcPara.rCalc.IsCalcError() )		// ist schon Fehler gesetzt ?
         return;
 
     // erzeuge aus den BoxNamen die Pointer
     BoxNmToPtr( rCalcPara.pTbl );
     String sFml( MakeFormel( rCalcPara ));
     SetValue( rCalcPara.rCalc.Calculate( sFml ).GetDouble() );
-    ChgValid( !rCalcPara.IsStackOverFlow() );       // ist der Wert wieder gueltig?
+    ChgValid( !rCalcPara.IsStackOverFlow() );		// ist der Wert wieder gueltig?
 }
 
 
@@ -82,7 +82,7 @@ SwField* SwTblField::Copy() const
 {
     SwTblField* pTmp = new SwTblField( (SwTblFieldType*)GetTyp(),
                                         SwTableFormula::GetFormula(), nSubType, GetFormat() );
-    pTmp->sExpand     = sExpand;
+    pTmp->sExpand 	  = sExpand;
     pTmp->SwValueField::SetValue(GetValue());
     pTmp->SwTableFormula::operator=( *this );
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
@@ -116,7 +116,7 @@ const SwNode* SwTblField::GetNodeOfFormula() const
 
     SwClientIter aIter( *GetTyp() );
     SwClient * pLast = aIter.GoStart();
-    if( pLast )     // konnte zum Anfang gesprungen werden ??
+    if( pLast ) 	// konnte zum Anfang gesprungen werden ??
         do {
             const SwFmtFld* pFmtFld = (SwFmtFld*)pLast;
             if( this == pFmtFld->GetFld() )

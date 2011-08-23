@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@ class SvStringsDtor;
 /*
  * Extern Definitions
  */
-extern  SwThesaurus*    pThes;
+extern  SwThesaurus* 	pThes;
 
-extern  String*         pOldGrfCat;
-extern  String*         pOldTabCat;
-extern  String*         pOldFrmCat;
+extern  String* 		pOldGrfCat;
+extern  String* 		pOldTabCat;
+extern  String* 		pOldFrmCat;
 
-extern  String*         pCurrGlosGroup;
+extern  String* 		pCurrGlosGroup;
 
 SW_DLLPUBLIC String* GetOldGrfCat();
 SW_DLLPUBLIC String* GetOldTabCat();
@@ -57,10 +57,10 @@ SW_DLLPUBLIC String* GetOldDrwCat();
 SW_DLLPUBLIC String* GetCurrGlosGroup();
 SW_DLLPUBLIC void SetCurrGlosGroup(String* pStr);
 
-extern SvStringsDtor*   pDBNameList;
+extern SvStringsDtor* 	pDBNameList;
 
-extern SvStringsDtor*   pAuthFieldNameList;
-extern SvStringsDtor*   pAuthFieldTypeList;
+extern SvStringsDtor* 	pAuthFieldNameList;
+extern SvStringsDtor* 	pAuthFieldTypeList;
 
 // stellt die Textbausteinverwaltung zur Verfuegung
 class SwGlossaries;
@@ -71,8 +71,8 @@ class SwGlossaryList;
 BOOL HasGlossaryList();
 SwGlossaryList* GetGlossaryList();
 
-extern  void _InitUI();
-extern  void _FinitUI();
+extern	void _InitUI();
+extern	void _FinitUI();
 extern  void _InitSpell();
 extern  void _FinitSpell();
 

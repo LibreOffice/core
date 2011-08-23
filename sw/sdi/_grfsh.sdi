@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,142 +64,142 @@ interface BaseTextGraphic
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-
+    
     SID_TWAIN_TRANSFER
     [
         ExecMethod = Execute ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-
+    
     FN_GRAPHIC_MIRROR_ON_EVEN_PAGES // status(final|play|rec)
     [
         ExecMethod = Execute ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    SID_ATTR_GRAF_LUMINANCE // status(final|play|rec)
+    SID_ATTR_GRAF_LUMINANCE	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_ATTR_GRAF_CONTRAST  // status(final|play|rec)
+    SID_ATTR_GRAF_CONTRAST	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_ATTR_GRAF_RED   // status(final|play|rec)
+    SID_ATTR_GRAF_RED	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_ATTR_GRAF_GREEN // status(final|play|rec)
+    SID_ATTR_GRAF_GREEN	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_ATTR_GRAF_BLUE  // status(final|play|rec)
+    SID_ATTR_GRAF_BLUE	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_ATTR_GRAF_GAMMA // status(final|play|rec)
+    SID_ATTR_GRAF_GAMMA	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_ATTR_GRAF_TRANSPARENCE  // status(final|play|rec)
+    SID_ATTR_GRAF_TRANSPARENCE	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_ATTR_GRAF_INVERT    // status(final|play|rec)
+    SID_ATTR_GRAF_INVERT	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_ATTR_GRAF_MODE  // status(final|play|rec)
+    SID_ATTR_GRAF_MODE	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_GRFFILTER   // status(final|play|rec)
+    SID_GRFFILTER	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    SID_GRFFILTER_INVERT    // status(final|play|rec)
+    SID_GRFFILTER_INVERT	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_GRFFILTER_SMOOTH    // status(final|play|rec)
+    SID_GRFFILTER_SMOOTH	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_GRFFILTER_SHARPEN   // status(final|play|rec)
+    SID_GRFFILTER_SHARPEN	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_GRFFILTER_REMOVENOISE   // status(final|play|rec)
+    SID_GRFFILTER_REMOVENOISE	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_GRFFILTER_SOBEL // status(final|play|rec)
+    SID_GRFFILTER_SOBEL	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_GRFFILTER_MOSAIC    // status(final|play|rec)
+    SID_GRFFILTER_MOSAIC	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_GRFFILTER_EMBOSS    // status(final|play|rec)
+    SID_GRFFILTER_EMBOSS	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_GRFFILTER_POSTER    // status(final|play|rec)
+    SID_GRFFILTER_POSTER	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_GRFFILTER_POPART    // status(final|play|rec)
+    SID_GRFFILTER_POPART	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_GRFFILTER_SEPIA // status(final|play|rec)
+    SID_GRFFILTER_SEPIA	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_GRFFILTER_SOLARIZE  // status(final|play|rec)
+    SID_GRFFILTER_SOLARIZE	// status(final|play|rec)
     [
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;

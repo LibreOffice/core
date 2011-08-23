@@ -31,7 +31,7 @@
 #define _SVSTDARR_STRINGS
 
 #include <string.h>
-#include <stdio.h>          // sscanf
+#include <stdio.h>			// sscanf
 #include <hintids.hxx>
 #include <i18npool/lang.h>
 #include <i18npool/mslangid.hxx>
@@ -301,7 +301,7 @@ USHORT Sw3Reader::GetSectionList( SfxMedium& rMedium,
         else
             nRet = pIO->SaveAs( pStg, pOrigPam, bWriteAll );
 
-        pIO = 0;        // nach dem Schreiben ist der Pointer ungueltig !!
+        pIO = 0;		// nach dem Schreiben ist der Pointer ungueltig !!
     }
     else
     {
@@ -389,7 +389,7 @@ BOOL SwReader::CheckPasswd( const String& /*rPasswd*/, const Reader& /*rOptions*
 </FilterFlags>
 */
 
-#define FILTER_OPTION_ROOT      String::CreateFromAscii( \
+#define FILTER_OPTION_ROOT 		String::CreateFromAscii( \
                 RTL_CONSTASCII_STRINGPARAM( "Office.Writer/FilterFlags" ) )
 
 SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
@@ -888,10 +888,10 @@ String NameFromCharSet(rtl_TextEncoding nChrSet)
 // for the automatic conversion (mail/news/...)
 // The user data contains the options for the ascii import/export filter.
 // The format is:
-//  1. CharSet - as ascii chars
-//  2. LineEnd - as CR/LR/CRLF
-//  3. Fontname
-//  4. Language
+//	1. CharSet - as ascii chars
+//	2. LineEnd - as CR/LR/CRLF
+//	3. Fontname
+//	4. Language
 // the delimetercharacter is ","
 //
 
@@ -905,10 +905,10 @@ void SwAsciiOptions::ReadUserData( const String& rStr )
         {
             switch( nCnt )
             {
-            case 0:     // CharSet
+            case 0:		// CharSet
                 eCharSet = CharSetFromName(sToken);
                 break;
-            case 1:     // LineEnd
+            case 1:		// LineEnd
                 if( sToken.EqualsIgnoreCaseAscii( "CRLF" ))
                     eCRLF_Flag = LINEEND_CRLF;
                 else if( sToken.EqualsIgnoreCaseAscii( "LF" ))
@@ -916,10 +916,10 @@ void SwAsciiOptions::ReadUserData( const String& rStr )
                 else
                     eCRLF_Flag = LINEEND_CR;
                 break;
-            case 2:     // fontname
+            case 2:		// fontname
                 sFont = sToken;
                 break;
-            case 3:     // Language
+            case 3:		// Language
                 nLanguage = MsLangId::convertIsoStringToLanguage( sToken );
                 break;
             }

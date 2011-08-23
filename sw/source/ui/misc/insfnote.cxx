@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 static BOOL bFootnote = TRUE;
 
 /*------------------------------------------------------------------------
- Beschreibung:  Einfuegen der Fussnote durch OK
+ Beschreibung:	Einfuegen der Fussnote durch OK
 ------------------------------------------------------------------------*/
 
 void __EXPORT SwInsFootNoteDlg::Apply()
@@ -234,21 +234,21 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, BOOL bEd
     rSh(rShell),
     bExtCharAvailable(FALSE),
     bEdit(bEd),
-    aNumberAutoBtn  (this,SW_RES(RB_NUMBER_AUTO)),
-    aNumberCharBtn  (this,SW_RES(RB_NUMBER_CHAR)),
-    aNumberCharEdit (this,SW_RES(ED_NUMBER_CHAR)),
-    aNumberExtChar  (this,SW_RES(BT_NUMBER_CHAR)),
+    aNumberAutoBtn	(this,SW_RES(RB_NUMBER_AUTO)),
+    aNumberCharBtn	(this,SW_RES(RB_NUMBER_CHAR)),
+    aNumberCharEdit	(this,SW_RES(ED_NUMBER_CHAR)),
+    aNumberExtChar	(this,SW_RES(BT_NUMBER_CHAR)),
     aNumberFL      (this,SW_RES(FL_NUMBER)),
 
     aFtnBtn         (this,SW_RES(RB_TYPE_FTN)),
-    aEndNoteBtn     (this,SW_RES(RB_TYPE_ENDNOTE)),
+    aEndNoteBtn		(this,SW_RES(RB_TYPE_ENDNOTE)),
     aTypeFL        (this,SW_RES(FL_TYPE)),
 
-    aOkBtn          (this,SW_RES(BT_OK)),
-    aCancelBtn      (this,SW_RES(BT_CANCEL)),
-    aHelpBtn        (this,SW_RES(BT_HELP)),
-    aPrevBT         (this,SW_RES(BT_PREV)),
-    aNextBT         (this,SW_RES(BT_NEXT))
+    aOkBtn			(this,SW_RES(BT_OK)),
+    aCancelBtn		(this,SW_RES(BT_CANCEL)),
+    aHelpBtn		(this,SW_RES(BT_HELP)),
+    aPrevBT			(this,SW_RES(BT_PREV)),
+    aNextBT			(this,SW_RES(BT_NEXT))
 {
     aNumberAutoBtn.SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberAutoBtnHdl));
     aNumberExtChar.SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberExtCharHdl));

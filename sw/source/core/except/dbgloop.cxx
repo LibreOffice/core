@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 DbgLoopStack DbgLoop::aDbgLoopStack;
 
 /*************************************************************************
- *                      class DbgLoopStack
+ *						class DbgLoopStack
  *************************************************************************/
 
 DbgLoopStack::DbgLoopStack()
@@ -56,7 +56,7 @@ void DbgLoopStack::Reset()
 }
 
 /*************************************************************************
- *                       DbgLoopStack::Push()
+ *						 DbgLoopStack::Push()
  *************************************************************************/
 
 void DbgLoopStack::Push( const void *pThis )
@@ -82,7 +82,7 @@ void DbgLoopStack::Push( const void *pThis )
 }
 
 /*************************************************************************
- *                       DbgLoopStack::Pop()
+ *						 DbgLoopStack::Pop()
  *************************************************************************/
 
 void DbgLoopStack::Pop()
@@ -99,7 +99,7 @@ void DbgLoopStack::Pop()
 }
 
 /*************************************************************************
- *                       DbgLoopStack::Print()
+ *						 DbgLoopStack::Print()
  *************************************************************************/
 
 void DbgLoopStack::Print( SvStream &rOS ) const
@@ -118,7 +118,7 @@ void DbgLoopStack::Print( SvStream &rOS ) const
 // compile with: cl /AL /DSTAND_ALONE dbgloop.cxx
 
 /*************************************************************************
- *                          main()
+ *							main()
  *************************************************************************/
 
 #include <stdlib.h>

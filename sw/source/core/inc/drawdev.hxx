@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <vcl/outdev.hxx>
 
 /*************************************************************************
- *                          class SwDrawDev
+ *							class SwDrawDev
  *
  * Alle Draw-Methoden werden um den Offset *pPos verschoben.
  *************************************************************************/
@@ -72,7 +72,7 @@ public:
 };
 
 /*************************************************************************
- *                      SwDrawDev::DrawText
+ *						SwDrawDev::DrawText
  *************************************************************************/
 
 inline void SwDrawDev::DrawText( const Point& rStart, const String& rTxt,
@@ -85,7 +85,7 @@ inline void SwDrawDev::DrawText( const Point& rStart, const String& rTxt,
 }
 
 /*************************************************************************
- *                      SwDrawDev::DrawStretchText
+ *						SwDrawDev::DrawStretchText
  *************************************************************************/
 
 inline void SwDrawDev::DrawStretchText( const Point& rStart, USHORT nWidth,
@@ -98,7 +98,7 @@ inline void SwDrawDev::DrawStretchText( const Point& rStart, USHORT nWidth,
 }
 
 /*************************************************************************
- *                      SwDrawDev::DrawTextArray
+ *						SwDrawDev::DrawTextArray
  *************************************************************************/
 
 inline void SwDrawDev::DrawTextArray( const Point& rStart, const String& rTxt,
@@ -111,7 +111,7 @@ inline void SwDrawDev::DrawTextArray( const Point& rStart, const String& rTxt,
 }
 
 /*************************************************************************
- *                      SwDrawDev::DrawLine
+ *						SwDrawDev::DrawLine
  *************************************************************************/
 
 inline void SwDrawDev::DrawLine( const Point& rStart, const Point& rEnd )
@@ -123,7 +123,7 @@ inline void SwDrawDev::DrawLine( const Point& rStart, const Point& rEnd )
 }
 
 /*************************************************************************
- *                      SwDrawDev::DrawRect
+ *						SwDrawDev::DrawRect
  *************************************************************************/
 
 inline void SwDrawDev::DrawRect( const SwRect& rRect,

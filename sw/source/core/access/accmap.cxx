@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,7 +124,7 @@ public:
     virtual void SAL_CALL addEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException);
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     void Dispose();
 };
 
@@ -318,13 +318,13 @@ public:
                      INVALID_ATTR };
 
 private:
-    SwRect      maOldBox;               // the old bounds for CHILD_POS_CHANGED
+    SwRect		maOldBox;				// the old bounds for CHILD_POS_CHANGED
                                         // and POS_CHANGED
-    uno::WeakReference < XAccessible > mxAcc;   // The object that fires the event
+    uno::WeakReference < XAccessible > mxAcc;	// The object that fires the event
     SwAccessibleChild   maFrmOrObj;             // the child for CHILD_POS_CHANGED and
                                         // the same as xAcc for any other
                                         // event type
-    EventType   meType;                 // The event type
+    EventType 	meType;					// The event type
     tAccessibleStates mnStates;         // check states or update caret pos
 
     SwAccessibleEvent_Impl& operator==( const SwAccessibleEvent_Impl& );
@@ -1583,7 +1583,7 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
                 OSL_ENSURE( pOldAccImpl->GetFrm(), "old caret context is disposed" );
                 if( pOldAccImpl->GetFrm() == pFrm )
                 {
-                    xOldAcc.clear();    // get an empty ref
+                    xOldAcc.clear();	// get an empty ref
                     mxCursorContext = xOldAcc;
                 }
             }
@@ -1954,7 +1954,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
         osl::MutexGuard aGuard( maMutex );
 
         xOldAcc = mxCursorContext;
-        mxCursorContext = xAcc; // clear reference
+        mxCursorContext = xAcc;	// clear reference
 
         bOldShapeSelected = mbShapeSelected;
         mbShapeSelected = bShapeSelected;
@@ -1985,9 +1985,9 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                     AreInSameTable( xOldAcc, aFrmOrObj.GetSwFrm() ) )
                 {
                     if( xAcc.is() )
-                        xOldAcc = xAcc; // avoid extra invalidation
+                        xOldAcc = xAcc;	// avoid extra invalidation
                     else
-                        xAcc = xOldAcc; // make sure ate least one
+                        xAcc = xOldAcc;	// make sure ate least one
                 }
                 if( !xAcc.is() )
                     xAcc = GetContext( aFrmOrObj.GetSwFrm(), sal_True );
@@ -2402,7 +2402,7 @@ sal_Bool SwAccessibleMap::ReplaceChild (
         const uno::Reference< drawing::XShape >& _rxShape,
         const long /*_nIndex*/,
         const ::accessibility::AccessibleShapeTreeInfo& /*_rShapeTreeInfo*/
-    )   throw (uno::RuntimeException)
+    )	throw (uno::RuntimeException)
 {
     const SdrObject *pObj = 0;
     {
@@ -2432,7 +2432,7 @@ sal_Bool SwAccessibleMap::ReplaceChild (
                                              // hold it.
     // Also get keep parent.
     uno::Reference < XAccessible > xParent( pCurrentChild->getAccessibleParent() );
-    pCurrentChild = 0;  // well be realease by dispose
+    pCurrentChild = 0;	// well be realease by dispose
     Dispose( 0, pObj, 0 );
 
     {

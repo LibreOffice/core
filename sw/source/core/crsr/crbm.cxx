@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ namespace
             }
         }
 
-        // returns true if the Cursor had been rolled back
+        // returns true if the Cursor had been rolled back 
         bool RollbackIfIllegal()
         {
             if(m_pCrsr->IsSelOvr(nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION
@@ -157,7 +157,7 @@ bool SwCrsrShell::GoNextBookmark()
         back_inserter(vCandidates),
         &lcl_IsInvisibleBookmark);
 
-    // watch Crsr-Moves
+    // watch Crsr-Moves 
     CrsrStateHelper aCrsrSt(*this);
     IDocumentMarkAccess::const_iterator_t ppMark = vCandidates.begin();
     for(; ppMark!=vCandidates.end(); ++ppMark)
@@ -196,7 +196,7 @@ bool SwCrsrShell::GoPrevBookmark()
         vCandidates.end(),
         &lcl_ReverseMarkOrderingByEnd);
 
-    // watch Crsr-Moves
+    // watch Crsr-Moves 
     CrsrStateHelper aCrsrSt(*this);
     IDocumentMarkAccess::const_iterator_t ppMark = vCandidates.begin();
     for(; ppMark!=vCandidates.end(); ++ppMark)

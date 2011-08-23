@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,21 +44,21 @@
 
 class SwFldFuncPage : public SwFldPage
 {
-    FixedText       aTypeFT;
-    ListBox         aTypeLB;
-    FixedText       aSelectionFT;
-    ListBox         aSelectionLB;
-    FixedText       aFormatFT;
-    ListBox         aFormatLB;
-    FixedText       aNameFT;
-    ConditionEdit   aNameED;
-    FixedText       aValueFT;
-    Edit            aValueED;
-    FixedText       aCond1FT;
-    ConditionEdit   aCond1ED;
-    FixedText       aCond2FT;
-    ConditionEdit   aCond2ED;
-    PushButton      aMacroBT;
+    FixedText 		aTypeFT;
+    ListBox 		aTypeLB;
+    FixedText		aSelectionFT;
+    ListBox			aSelectionLB;
+    FixedText		aFormatFT;
+    ListBox			aFormatLB;
+    FixedText		aNameFT;
+    ConditionEdit	aNameED;
+    FixedText		aValueFT;
+    Edit			aValueED;
+    FixedText		aCond1FT;
+    ConditionEdit	aCond1ED;
+    FixedText		aCond2FT;
+    ConditionEdit	aCond2ED;
+    PushButton		aMacroBT;
 
     //controls of "Input list"
     FixedText       aListItemFT;
@@ -72,10 +72,10 @@ class SwFldFuncPage : public SwFldPage
     FixedText       aListNameFT;
     Edit            aListNameED;
 
-    String          sOldValueFT;
-    String          sOldNameFT;
+    String			sOldValueFT;
+    String			sOldNameFT;
 
-    ULONG           nOldFormat;
+    ULONG			nOldFormat;
     bool            bDropDownLBChanged;
 
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
@@ -88,11 +88,11 @@ class SwFldFuncPage : public SwFldPage
     // Macro ausw„hlen
     DECL_LINK( MacroHdl, Button * );
 
-    void                UpdateSubType();
-    String              TurnMacroString(const String &rMacro);
+    void				UpdateSubType();
+    String				TurnMacroString(const String &rMacro);
 
 protected:
-    virtual USHORT      GetGroup();
+    virtual USHORT		GetGroup();
 
 public:
                         SwFldFuncPage(Window* pParent, const SfxItemSet& rSet);
@@ -104,7 +104,7 @@ public:
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
-    virtual void        FillUserData();
+    virtual void		FillUserData();
 };
 
 
