@@ -55,6 +55,7 @@
 #include "globstr.hrc"
 #include "segmenttree.hxx"
 #include "cell.hxx"
+#include <rtl/strbuf.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 

@@ -503,7 +503,7 @@ void SAL_CALL ChartModel::initNew()
 #if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL
     OSL_TRACE( "ChartModel::initNew: Showing ChartDocument structure" );
     OSL_TRACE( "----------------------------------------------------" );
-    debug::ChartDebugTraceDocument( Reference< chart2::XChartDocument >( this ));
+    ::chart::debug::ChartDebugTraceDocument( Reference< chart2::XChartDocument >( this ));
 #endif
 }
 

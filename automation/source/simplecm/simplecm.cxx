@@ -43,10 +43,10 @@
 #include <stdio.h>
 void debug_printf( const char *chars )
 {
-    static BOOL bPrint = (getenv("DEBUG") != NULL);
+    static bool bPrint = (getenv("DEBUG") != NULL);
     if ( bPrint )
     {
-        printf( "%c\n", chars );
+        printf( "%s\n", chars );
         fflush( stdout );
     }
 }
