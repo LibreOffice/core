@@ -4,7 +4,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -278,7 +278,7 @@ sub is_moduledirectory
 
 sub print_logged
 # Print routine.
-# If a log file name is specified with '-l' option, print_logged() prints to that file
+# If a log file name is specified with '-l' option, print_logged() prints to that file 
 # as well as to STDOUT. If '-l' option is not set, print_logged() just writes to STDOUT
 {
     my $message = shift;
