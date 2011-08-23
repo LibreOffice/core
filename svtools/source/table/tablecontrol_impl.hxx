@@ -72,13 +72,9 @@ namespace svt { namespace table
 
     struct ColumnInfoPositionLess
     {
-        bool operator()( MutableColumnMetrics const& i_colInfo, long const i_position )
+        bool operator()( MutableColumnMetrics const& i_lhs, MutableColumnMetrics const& i_rhs )
         {
-            return i_colInfo.getEnd() < i_position;
-        }
-        bool operator()( long const i_position, MutableColumnMetrics const& i_colInfo )
-        {
-            return i_position < i_colInfo.getStart();
+            return i_lhs.getEnd() < i_rhs.getStart();
         }
     };
 

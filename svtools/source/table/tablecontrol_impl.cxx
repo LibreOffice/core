@@ -2391,10 +2391,12 @@ namespace svt { namespace table
 
         long const ordinate = i_ordinate - m_nRowHeaderWidthPixel;
 
+        MutableColumnMetrics aOrdinateColumn(ordinate+1, ordinate+1);
+
         ColumnPositions::const_iterator lowerBound = ::std::lower_bound(
             m_aColumnWidths.begin(),
             m_aColumnWidths.end(),
-            ordinate + 1,
+            MutableColumnMetrics(ordinate+1, ordinate+1),
             ColumnInfoPositionLess()
         );
         if ( lowerBound == m_aColumnWidths.end() )
