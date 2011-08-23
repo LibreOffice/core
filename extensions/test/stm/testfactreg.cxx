@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_extensions.hxx"
 #include <string.h>
 
-#include <usr/reflserv.hxx>  // for EXTERN_SERVICE_CALLTYPE
+#include <usr/reflserv.hxx>  // for EXTERN_SERVICE_CALLTYPE 
 
 #include <usr/factoryhlp.hxx>
 #include "testfactreg.hxx"
@@ -49,7 +49,7 @@ BOOL EXTERN_SERVICE_CALLTYPE exService_writeRegEntry(
         const UNO_INTERFACE(XRegistryKey)* xUnoKey)
 
 {
-    XRegistryKeyRef   xKey;
+    XRegistryKeyRef   xKey;	
     uno2smart(xKey, *xUnoKey);
 
     UString str = UString( L"/" ) + OPipeTest_getImplementationName() + UString( L"/UNO/SERVICES" );
@@ -92,15 +92,15 @@ UNO_INTERFACE(XInterface) EXTERN_SERVICE_CALLTYPE exService_getFactory
 (
     const wchar_t* implementationName,
     const UNO_INTERFACE(XMultiServiceFactory)* xUnoFact,
-    const UNO_INTERFACE(XRegistryKey)*
+    const UNO_INTERFACE(XRegistryKey)* 
 )
 {
     UNO_INTERFACE(XInterface) xUnoRet = {0, 0};
 
-    XInterfaceRef           xRet;
+    XInterfaceRef 			xRet;
     XMultiServiceFactoryRef xSMgr;
-    UString                 aImplementationName(implementationName);
-
+    UString					aImplementationName(implementationName);
+    
     uno2smart(xSMgr, *xUnoFact);
 
     if (aImplementationName == OPipeTest_getImplementationName() )
@@ -112,43 +112,43 @@ UNO_INTERFACE(XInterface) EXTERN_SERVICE_CALLTYPE exService_getFactory
     else if( aImplementationName == ODataStreamTest_getImplementationName(1) ) {
         xRet = createSingleFactory( xSMgr , implementationName,
                                     ODataStreamTest_CreateInstance,
-                                    ODataStreamTest_getSupportedServiceNames(1) );
+                                    ODataStreamTest_getSupportedServiceNames(1) );	
     }
     else if( aImplementationName == ODataStreamTest_getImplementationName(2) ) {
         xRet = createSingleFactory( xSMgr , implementationName,
                                     ODataStreamTest_CreateInstance,
-                                    ODataStreamTest_getSupportedServiceNames(2) );
+                                    ODataStreamTest_getSupportedServiceNames(2) );	
     }
     else if( aImplementationName == OObjectStreamTest_getImplementationName(1) ) {
         xRet = createSingleFactory( xSMgr , implementationName,
                                     OObjectStreamTest_CreateInstance,
-                                    OObjectStreamTest_getSupportedServiceNames(1) );
+                                    OObjectStreamTest_getSupportedServiceNames(1) );	
     }
     else if( aImplementationName == OObjectStreamTest_getImplementationName(2) ) {
         xRet = createSingleFactory( xSMgr , implementationName,
                                     OObjectStreamTest_CreateInstance,
-                                    OObjectStreamTest_getSupportedServiceNames(2) );
+                                    OObjectStreamTest_getSupportedServiceNames(2) );	
     }
     else if( aImplementationName == OMarkableOutputStreamTest_getImplementationName() ) {
         xRet = createSingleFactory( xSMgr , implementationName,
                                     OMarkableOutputStreamTest_CreateInstance,
-                                    OMarkableOutputStreamTest_getSupportedServiceNames() );
+                                    OMarkableOutputStreamTest_getSupportedServiceNames() );	
     }
     else if( aImplementationName == OMarkableInputStreamTest_getImplementationName() ) {
         xRet = createSingleFactory( xSMgr , implementationName,
                                     OMarkableInputStreamTest_CreateInstance,
-                                    OMarkableInputStreamTest_getSupportedServiceNames() );
+                                    OMarkableInputStreamTest_getSupportedServiceNames() );	
     }
     else if( aImplementationName == OMyPersistObject_getImplementationName() ) {
         xRet = createSingleFactory( xSMgr , implementationName,
                                     OMyPersistObject_CreateInstance,
-                                    OMyPersistObject_getSupportedServiceNames() );
+                                    OMyPersistObject_getSupportedServiceNames() );	
     }
     if (xRet.is())
     {
         smart2uno(xRet, xUnoRet);
-    }
-
+    }   
+    
     return xUnoRet;
 }
 
@@ -163,7 +163,7 @@ Sequence<BYTE> createSeq( char * p )
     return seq;
 }
 
-Sequence<BYTE> createIntSeq( INT32 i )
+Sequence<BYTE> createIntSeq( INT32 i ) 
 {
     char pcCount[20];
     sprintf( pcCount , "%d" , i );

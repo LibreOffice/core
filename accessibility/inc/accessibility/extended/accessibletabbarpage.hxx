@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ namespace accessibility
 {
 //.........................................................................
 
-    //  ----------------------------------------------------
-    //  class AccessibleTabBarPage
-    //  ----------------------------------------------------
+    //	----------------------------------------------------
+    //	class AccessibleTabBarPage
+    //	----------------------------------------------------
 
     typedef ::cppu::ImplHelper2<
         ::com::sun::star::accessibility::XAccessible,
@@ -58,36 +58,36 @@ namespace accessibility
         friend class AccessibleTabBarPageList;
 
     private:
-        sal_uInt16              m_nPageId;
-        sal_Bool                m_bEnabled;
-        sal_Bool                m_bShowing;
-        sal_Bool                m_bSelected;
-        ::rtl::OUString         m_sPageText;
+        sal_uInt16				m_nPageId;
+        sal_Bool				m_bEnabled;
+        sal_Bool				m_bShowing;
+        sal_Bool				m_bSelected;
+        ::rtl::OUString			m_sPageText;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >        m_xParent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >		m_xParent;
 
     protected:
-        sal_Bool                IsEnabled();
-        sal_Bool                IsShowing();
-        sal_Bool                IsSelected();
+        sal_Bool				IsEnabled();
+        sal_Bool				IsShowing();
+        sal_Bool				IsSelected();
 
-        void                    SetEnabled( sal_Bool bEnabled );
-        void                    SetShowing( sal_Bool bShowing );
-        void                    SetSelected( sal_Bool bSelected );
-        void                    SetPageText( const ::rtl::OUString& sPageText );
+        void					SetEnabled( sal_Bool bEnabled );
+        void					SetShowing( sal_Bool bShowing );
+        void					SetSelected( sal_Bool bSelected );
+        void					SetPageText( const ::rtl::OUString& sPageText );
 
-        sal_uInt16              GetPageId() const { return m_nPageId; }
+        sal_uInt16				GetPageId() const { return m_nPageId; }
 
-        virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+        virtual void			FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
-        // OCommonAccessibleComponent
-        virtual ::com::sun::star::awt::Rectangle SAL_CALL   implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+        // OCommonAccessibleComponent 
+        virtual ::com::sun::star::awt::Rectangle SAL_CALL	implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XComponent
-        virtual void SAL_CALL   disposing();
+        virtual void SAL_CALL	disposing();
 
     public:
-        AccessibleTabBarPage( TabBar* pTabBar, sal_uInt16 nPageId,
+        AccessibleTabBarPage( TabBar* pTabBar, sal_uInt16 nPageId, 
                               const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent );
         virtual ~AccessibleTabBarPage();
 
@@ -124,13 +124,13 @@ namespace accessibility
         virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XAccessibleExtendedComponent
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(	) throw (::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
     };
 
 //.........................................................................
-}   // namespace accessibility
+}	// namespace accessibility
 //.........................................................................
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBLETABBARPAGE_HXX_

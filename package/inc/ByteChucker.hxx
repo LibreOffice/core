@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 namespace com { namespace sun { namespace star {
     namespace io { class XSeekable; class XOutputStream; }
 } } }
-class ByteChucker
+class ByteChucker 
 {
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
@@ -53,7 +53,7 @@ public:
     void WriteBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-    sal_Int64 GetPosition()
+    sal_Int64 GetPosition() 
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     ByteChucker& operator << (sal_Int8 nInt8);

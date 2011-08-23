@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -505,7 +505,7 @@ ODatabaseForm::~ODatabaseForm()
     ::rtl::OUString aName;
     ::rtl::OUString aValue;
 
-    for (   HtmlSuccessfulObjListIterator pSuccObj = aSuccObjList.begin();
+    for	(	HtmlSuccessfulObjListIterator pSuccObj = aSuccObjList.begin();
             pSuccObj < aSuccObjList.end();
             ++pSuccObj
         )
@@ -528,7 +528,7 @@ ODatabaseForm::~ODatabaseForm()
         aResult.append(aName);
         aResult.append(sal_Unicode('='));
         aResult.append(aValue);
-
+        
         if (pSuccObj < aSuccObjList.end() - 1)
         {
             if ( _bURLEncoded )
@@ -568,7 +568,7 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
 
     // Liste zu ::rtl::OUString zusammensetzen
     ::rtl::OUString aResult;
-    for (   HtmlSuccessfulObjListIterator pSuccObj = aSuccObjList.begin();
+    for	(	HtmlSuccessfulObjListIterator pSuccObj = aSuccObjList.begin();
             pSuccObj < aSuccObjList.end();
             ++pSuccObj
         )
@@ -639,7 +639,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
     xComponentSet->getPropertyValue( PROPERTY_NAME ) >>= aName;
     if( !aName.getLength() && nClassId != FormComponentType::IMAGEBUTTON)
         return;
-    else    // Name um den Prefix erweitern
+    else	// Name um den Prefix erweitern
         aName = rNamePrefix + aName;
 
     switch( nClassId )
@@ -718,11 +718,11 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             // MIB: Spezial-Behandlung fuer Multiline-Edit nur dann, wenn
             // es auch ein Control dazu gibt.
             Any aTmp = xComponentSet->getPropertyValue( PROPERTY_MULTILINE );
-            sal_Bool bMulti =   rxSubmitButton.is()
+            sal_Bool bMulti =	rxSubmitButton.is()
                             && (aTmp.getValueType().getTypeClass() == TypeClass_BOOLEAN)
                             && getBOOL(aTmp);
             ::rtl::OUString sText;
-            if ( bMulti )   // Bei MultiLineEdit Text am Control abholen
+            if ( bMulti )	// Bei MultiLineEdit Text am Control abholen
             {
 
                 Reference<XControlContainer>  xControlContainer(rxSubmitButton->getContext(), UNO_QUERY);
@@ -787,7 +787,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 }
                 rList.push_back( HtmlSuccessfulObj(aName, aText) );
             }
-        }   break;
+        }	break;
         case FormComponentType::DATEFIELD:
         {
             // <name>=<wert> // Wert wird als Datum im Format (MM-DD-YYYY)
@@ -810,7 +810,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 }
                 rList.push_back( HtmlSuccessfulObj(aName, aText) );
             }
-        }   break;
+        }	break;
         case FormComponentType::TIMEFIELD:
         {
             // <name>=<wert> // Wert wird als Zeit im Format (HH:MM:SS) angegeben
@@ -833,7 +833,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 }
                 rList.push_back( HtmlSuccessfulObj(aName, aText) );
             }
-        }   break;
+        }	break;
 
         // starform
         case FormComponentType::HIDDENCONTROL:
@@ -952,7 +952,7 @@ void ODatabaseForm::FillSuccessfulList( HtmlSuccessfulObjList& rList,
     // Liste loeschen
     rList.clear();
     // Ueber Components iterieren
-    Reference<XPropertySet>         xComponentSet;
+    Reference<XPropertySet> 		xComponentSet;
     ::rtl::OUString aPrefix;
 
     // we know already how many objects should be appended,
@@ -971,7 +971,7 @@ void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
     ::rtl::OUString aResult;
 
     // Immer ANSI #58641
-//  rString.Convert(CHARSET_SYSTEM, CHARSET_ANSI);
+//	rString.Convert(CHARSET_SYSTEM, CHARSET_ANSI);
 
 
     // Zeilenendezeichen werden als CR dargestellt
@@ -993,17 +993,17 @@ void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
         {
             switch( nCharCode )
             {
-                case 13:    // CR
-                    aResult += ::rtl::OUString::createFromAscii("%0D%0A");  // Hex-Darstellung CR LF
+                case 13:	// CR
+                    aResult += ::rtl::OUString::createFromAscii("%0D%0A");	// Hex-Darstellung CR LF
                     break;
 
 
                 // Netscape Sonderbehandlung
-                case 42:    // '*'
-                case 45:    // '-'
-                case 46:    // '.'
-                case 64:    // '@'
-                case 95:    // '_'
+                case 42:	// '*'
+                case 45:	// '-'
+                case 46:	// '.'
+                case 64:	// '@'
+                case 95:	// '_'
                     aResult += UniString(nCharCode);
                     break;
 
@@ -1025,7 +1025,7 @@ void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
     }
 
 
-    // Spaces durch '+' ersetzen
+    // Spaces durch	'+' ersetzen
     aResult = aResult.replace(' ', '+');
 
     rString = aResult;
@@ -1164,10 +1164,10 @@ bool ODatabaseForm::hasValidParent() const
         {
             Reference< XPropertySet >  xSet( m_xParent, UNO_QUERY );
             Reference< XLoadable > xLoad( m_xParent, UNO_QUERY );
-            if  (   xLoad->isLoaded()
-                &&  (   xResultSet->isBeforeFirst()
-                    ||  xResultSet->isAfterLast()
-                    ||  getBOOL( xSet->getPropertyValue( PROPERTY_ISNEW ) )
+            if	(	xLoad->isLoaded()
+                &&	(	xResultSet->isBeforeFirst()
+                    ||	xResultSet->isAfterLast()
+                    ||	getBOOL( xSet->getPropertyValue( PROPERTY_ISNEW ) )
                     )
                 )
                 // the parent form is loaded and on a "virtual" row -> not valid
@@ -1280,7 +1280,7 @@ sal_Bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNot
     if (bSuccess)
     {
         // adjust the privilege property
-        //  m_nPrivileges;
+        //	m_nPrivileges;
         m_xAggregateSet->getPropertyValue(PROPERTY_PRIVILEGES) >>= m_nPrivileges;
         if (!m_bAllowInsert)
             m_nPrivileges &= ~Privilege::INSERT;
@@ -1408,7 +1408,7 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
         RemoveProperty( _rAggregateProps, PROPERTY_FILTER );
         RemoveProperty( _rAggregateProps, PROPERTY_APPLYFILTER );
 
-        DECL_IFACE_PROP4(ACTIVE_CONNECTION, XConnection,                    BOUND, TRANSIENT, MAYBEVOID, CONSTRAINED);
+        DECL_IFACE_PROP4(ACTIVE_CONNECTION,	XConnection,	                BOUND, TRANSIENT, MAYBEVOID, CONSTRAINED);
         DECL_BOOL_PROP2 ( APPLYFILTER,                                      BOUND, MAYBEDEFAULT            );
         DECL_PROP1      ( NAME,             ::rtl::OUString,                BOUND                          );
         DECL_PROP1      ( MASTERFIELDS,     Sequence< ::rtl::OUString >,    BOUND                          );
@@ -1511,9 +1511,9 @@ void ODatabaseForm::fire( sal_Int32* pnHandles, const Any* pNewValues, const Any
                 break;
 
         if ((nPos < nCount) && (pNewValues[nPos].getValueType().getTypeClass() == TypeClass_BOOLEAN) && getBOOL(pNewValues[nPos]))
-        {   // yeah, we found it, and it changed to TRUE
+        {	// yeah, we found it, and it changed to TRUE
             if (nPos == 0)
-            {   // just cut the first element
+            {	// just cut the first element
                 ++pnHandles;
                 ++pNewValues;
                 ++pOldValues;
@@ -1523,7 +1523,7 @@ void ODatabaseForm::fire( sal_Int32* pnHandles, const Any* pNewValues, const Any
                 // just cut the last element
                 --nCount;
             else
-            {   // split into two base class calls
+            {	// split into two base class calls
                 OPropertySetAggregationHelper::fire(pnHandles, pNewValues, pOldValues, nPos, bVetoable);
                 ++nPos;
                 OPropertySetAggregationHelper::fire(pnHandles + nPos, pNewValues + nPos, pOldValues + nPos, nCount - nPos, bVetoable);
@@ -2391,7 +2391,7 @@ void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt) throw( Runt
         sal_Int32 nHandle = PROPERTY_ID_ACTIVE_CONNECTION;
         fire(&nHandle, &evt.NewValue, &evt.OldValue, 1, sal_False);
     }
-    else    // it was one of the statement relevant props
+    else	// it was one of the statement relevant props
     {
         // if the statement has changed we have to delete the parameter info
         invlidateParameters();
@@ -2606,7 +2606,7 @@ void SAL_CALL ODatabaseForm::disposing(const EventObject& Source) throw( Runtime
 
     // does the disposing come from the aggregate ?
     if (m_xAggregate.is())
-    {   // no -> forward it
+    {	// no -> forward it
         com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> xListener;
         if (query_aggregation(m_xAggregate, xListener))
             xListener->disposing(Source);
@@ -2725,7 +2725,7 @@ sal_Bool ODatabaseForm::canShareConnection( const Reference< XPropertySet >& _rx
             // and it's really a data source name (not empty)
             bCanShareConnection = sal_True;
         else
-        {   // the data source name is empty
+        {	// the data source name is empty
             // -> ook for the URL
             ::rtl::OUString sParentURL;
             ::rtl::OUString sMyURL;
@@ -2751,7 +2751,7 @@ sal_Bool ODatabaseForm::canShareConnection( const Reference< XPropertySet >& _rx
 
         bCanShareConnection =
                 ( sParentUser == sMyUser )
-            &&  ( sParentPwd == sMyPwd );
+            &&	( sParentPwd == sMyPwd );
     }
 
     return bCanShareConnection;
@@ -2897,7 +2897,7 @@ void ODatabaseForm::load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirs
 
     // if we don't have a connection, we are not intended to be a database form or the aggregate was not able
     // to establish a connection
-    sal_Bool bConnected = implEnsureConnection();
+    sal_Bool bConnected	= implEnsureConnection();
 
     // we don't have to execute if we do not have a command to execute
     sal_Bool bExecute = bConnected && m_xAggregateSet.is() && getString(m_xAggregateSet->getPropertyValue(PROPERTY_COMMAND)).getLength();
@@ -3229,7 +3229,7 @@ sal_Bool SAL_CALL ODatabaseForm::approveRowChange(const RowChangeEvent& event) t
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseForm::approveRowSetChange(const EventObject& event) throw( RuntimeException )
 {
-    if (event.Source == InterfaceRef(static_cast<XWeak*>(this)))    // ignore our aggregate as we handle this approve ourself
+    if (event.Source == InterfaceRef(static_cast<XWeak*>(this)))	// ignore our aggregate as we handle this approve ourself
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
         bool bWasLoaded = isLoaded();
@@ -3802,7 +3802,7 @@ void SAL_CALL ODatabaseForm::propertyChange( const PropertyChangeEvent& evt ) th
 
 // com::sun::star::lang::XServiceInfo
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseForm::getImplementationName_Static()
+::rtl::OUString	SAL_CALL ODatabaseForm::getImplementationName_Static()
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.forms.ODatabaseForm" ) );
 }
@@ -3843,7 +3843,7 @@ Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames_Sta
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseForm::getImplementationName() throw( RuntimeException )
+::rtl::OUString	SAL_CALL ODatabaseForm::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
@@ -3884,13 +3884,13 @@ sal_Bool SAL_CALL ODatabaseForm::supportsService(const ::rtl::OUString& ServiceN
 // com::sun::star::io::XPersistObject
 //------------------------------------------------------------------------------
 
-const sal_uInt16 CYCLE              = 0x0001;
-const sal_uInt16 DONTAPPLYFILTER    = 0x0002;
+const sal_uInt16 CYCLE				= 0x0001;
+const sal_uInt16 DONTAPPLYFILTER	= 0x0002;
 
 //------------------------------------------------------------------------------
 ::rtl::OUString ODatabaseForm::getServiceName() throw( RuntimeException )
 {
-    return FRM_COMPONENT_FORM;  // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_FORM;	// old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
@@ -3942,7 +3942,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
             default : DBG_ERROR("ODatabaseForm::write : wrong CommandType !");
         }
     }
-    _rxOutStream->writeShort((sal_Int16)eTranslated);           // former DataSelectionType
+    _rxOutStream->writeShort((sal_Int16)eTranslated);			// former DataSelectionType
 
     // very old versions expect a CursorType here
     _rxOutStream->writeShort(DatabaseCursorType_KEYSET);
@@ -4063,16 +4063,16 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
     if (m_xAggregateSet.is())
         m_xAggregateSet->setPropertyValue(PROPERTY_INSERTONLY, makeAny(bInsertOnly));
 
-    m_bAllowInsert      = _rxInStream->readBoolean();
-    m_bAllowUpdate      = _rxInStream->readBoolean();
-    m_bAllowDelete      = _rxInStream->readBoolean();
+    m_bAllowInsert		= _rxInStream->readBoolean();
+    m_bAllowUpdate		= _rxInStream->readBoolean();
+    m_bAllowDelete		= _rxInStream->readBoolean();
 
     // html stuff
     ::rtl::OUString sTmp;
     _rxInStream >> sTmp;
     m_aTargetURL = INetURLObject::decode( sTmp, '%', INetURLObject::DECODE_UNAMBIGUOUS);
-    m_eSubmitMethod     = (FormSubmitMethod)_rxInStream->readShort();
-    m_eSubmitEncoding       = (FormSubmitEncoding)_rxInStream->readShort();
+    m_eSubmitMethod		= (FormSubmitMethod)_rxInStream->readShort();
+    m_eSubmitEncoding		= (FormSubmitEncoding)_rxInStream->readShort();
     _rxInStream >> m_aTargetFrame;
 
     if (nVersion > 1)
@@ -4089,7 +4089,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
             m_xAggregateSet->setPropertyValue(PROPERTY_SORT, makeAny(sAggregateProp));
     }
 
-    sal_uInt16 nAnyMask = 0;
+    sal_uInt16 nAnyMask	= 0;
     if (nVersion > 2)
     {
         nAnyMask = _rxInStream->readShort();
@@ -4110,11 +4110,11 @@ void ODatabaseForm::implInserted( const ElementDescription* _pElement )
 {
     OFormComponents::implInserted( _pElement );
 
-    Reference< XSQLErrorBroadcaster >   xBroadcaster( _pElement->xInterface, UNO_QUERY );
-    Reference< XForm >                  xForm       ( _pElement->xInterface, UNO_QUERY );
+    Reference< XSQLErrorBroadcaster >	xBroadcaster( _pElement->xInterface, UNO_QUERY );
+    Reference< XForm >					xForm		( _pElement->xInterface, UNO_QUERY );
 
     if ( xBroadcaster.is() && !xForm.is() )
-    {   // the object is an error broadcaster, but no form itself -> add ourself as listener
+    {	// the object is an error broadcaster, but no form itself -> add ourself as listener
         xBroadcaster->addSQLErrorListener( this );
     }
 }
@@ -4127,7 +4127,7 @@ void ODatabaseForm::implRemoved(const InterfaceRef& _rxObject)
     Reference<XSQLErrorBroadcaster>  xBroadcaster(_rxObject, UNO_QUERY);
     Reference<XForm>  xForm(_rxObject, UNO_QUERY);
     if (xBroadcaster.is() && !xForm.is())
-    {   // the object is an error broadcaster, but no form itself -> remove ourself as listener
+    {	// the object is an error broadcaster, but no form itself -> remove ourself as listener
         xBroadcaster->removeSQLErrorListener(this);
     }
 }
@@ -4157,6 +4157,6 @@ void SAL_CALL ODatabaseForm::setName(const ::rtl::OUString& aName) throw( Runtim
 }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 

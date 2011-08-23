@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,11 +57,11 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage( Window* pParent, const SfxItemSe
 
     SfxTabPage( pParent, CUI_RES( RID_OPTPAGE_CHART_DEFCOLORS ), rInAttrs ),
 
-    aGbChartColors  ( this, CUI_RES( FL_CHART_COLOR_LIST ) ),
-    aLbChartColors  ( this, CUI_RES( LB_CHART_COLOR_LIST ) ),
-    aGbColorBox     ( this, CUI_RES( FL_COLOR_BOX ) ),
-    aValSetColorBox ( this, CUI_RES( CT_COLOR_BOX ) ),
-    aPBDefault      ( this, CUI_RES( PB_RESET_TO_DEFAULT ) )
+    aGbChartColors	( this, CUI_RES( FL_CHART_COLOR_LIST ) ),
+    aLbChartColors	( this, CUI_RES( LB_CHART_COLOR_LIST ) ),
+    aGbColorBox		( this, CUI_RES( FL_COLOR_BOX ) ),
+    aValSetColorBox	( this, CUI_RES( CT_COLOR_BOX ) ),
+    aPBDefault		( this, CUI_RES( PB_RESET_TO_DEFAULT ) )
 {
     FreeResource();
 
@@ -159,7 +159,7 @@ long SvxDefaultColorOptPage::GetColorIndex( const Color& rCol )
         long nCount = pColorTab->Count();
         XColorEntry* pColorEntry;
 
-        for( long i = nCount - 1; i >= 0; i-- )         // default chart colors are at the end of the table
+        for( long i = nCount - 1; i >= 0; i-- )			// default chart colors are at the end of the table
         {
             pColorEntry = pColorTab->GetColor( i );
             if( pColorEntry && pColorEntry->GetColor() == rCol )
@@ -202,13 +202,13 @@ IMPL_LINK( SvxDefaultColorOptPage, ListClickedHdl, ChartColorLB*,  pColorList )
 
     long nIndex = GetColorIndex( aCol );
 
-    if( nIndex == -1 )      // not found
+    if( nIndex == -1 )		// not found
     {
         aValSetColorBox.SetNoSelection();
     }
     else
     {
-        aValSetColorBox.SelectItem( (USHORT)nIndex + 1 );       // ValueSet is 1-based
+        aValSetColorBox.SelectItem( (USHORT)nIndex + 1 );		// ValueSet is 1-based
     }
 
     return 0L;
@@ -228,7 +228,7 @@ IMPL_LINK( SvxDefaultColorOptPage, BoxClickedHdl, ValueSet*, EMPTYARG )
         aLbChartColors.Modify( & aEntry, nIdx );
         pColorConfig->ReplaceColorByIndex( nIdx, aEntry );
 
-        aLbChartColors.SelectEntryPos( nIdx );  // reselect entry
+        aLbChartColors.SelectEntryPos( nIdx );	// reselect entry
     }
 
     return 0L;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,17 +59,17 @@ public:
     /** The data table child. */
     Reference<
         ::com::sun::star::accessibility::XAccessible >          mxTable;
-    AccessibleBrowseBoxTable*                                   m_pTable;
+    AccessibleBrowseBoxTable*									m_pTable;
 
     /** The header bar for rows ("handle column"). */
     Reference<
-        ::com::sun::star::accessibility::XAccessible >          mxRowHeaderBar;
-    AccessibleBrowseBoxHeaderBar*                               m_pRowHeaderBar;
+        ::com::sun::star::accessibility::XAccessible >	        mxRowHeaderBar;
+    AccessibleBrowseBoxHeaderBar*								m_pRowHeaderBar;
 
     /** The header bar for columns (first row of the table). */
     Reference<
-        ::com::sun::star::accessibility::XAccessible >          mxColumnHeaderBar;
-    AccessibleBrowseBoxHeaderBar*                               m_pColumnHeaderBar;
+        ::com::sun::star::accessibility::XAccessible >	        mxColumnHeaderBar;
+    AccessibleBrowseBoxHeaderBar*								m_pColumnHeaderBar;
 };
 
 // Ctor/Dtor/disposing --------------------------------------------------------
@@ -108,9 +108,9 @@ void SAL_CALL AccessibleBrowseBox::disposing()
 {
     ::osl::MutexGuard aGuard( getOslMutex() );
 
-    m_pImpl->m_pTable           = NULL;
-    m_pImpl->m_pColumnHeaderBar = NULL;
-    m_pImpl->m_pRowHeaderBar    = NULL;
+    m_pImpl->m_pTable			= NULL;
+    m_pImpl->m_pColumnHeaderBar	= NULL;
+    m_pImpl->m_pRowHeaderBar	= NULL;
     m_pImpl->m_aCreator         = Reference< XAccessible >();
 
     Reference< XAccessible >  xTable = m_pImpl->mxTable;
@@ -289,7 +289,7 @@ AccessibleBrowseBox::implGetHeaderBar( AccessibleBrowseBoxObjType eObjType )
             if ( BBTYPE_COLUMNHEADERBAR == eObjType)
                 m_pImpl->m_pColumnHeaderBar = pHeaderBar;
             else
-                m_pImpl->m_pRowHeaderBar    = pHeaderBar;
+                m_pImpl->m_pRowHeaderBar	= pHeaderBar;
 
             *pxMember = pHeaderBar;
         }
@@ -333,7 +333,7 @@ void AccessibleBrowseBox::commitTableEvent(sal_Int16 _nEventId,const Any& _rNewV
     }
 }
 // -----------------------------------------------------------------------------
-void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
+void AccessibleBrowseBox::commitHeaderBarEvent(	sal_Int16 _nEventId,
                                                 const Any& _rNewValue,
                                                 const Any& _rOldValue,sal_Bool _bColumnHeaderBar)
 {

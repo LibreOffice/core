@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,29 +30,29 @@
 
 static BOOL CALLBACK EnumWindowsProc( HWND hWnd, LPARAM lParam )
 {
-    MSIHANDLE   hMSI = static_cast< MSIHANDLE >( lParam );
-    CHAR    szClassName[sizeof(QUICKSTART_CLASSNAMEA) + 1];
+    MSIHANDLE	hMSI = static_cast< MSIHANDLE >( lParam );
+    CHAR	szClassName[sizeof(QUICKSTART_CLASSNAMEA) + 1];
 
-    int nCharsCopied = GetClassName( hWnd, szClassName, sizeof( szClassName ) );
+    int	nCharsCopied = GetClassName( hWnd, szClassName, sizeof( szClassName ) );
 
     if ( nCharsCopied && !stricmp( QUICKSTART_CLASSNAMEA, szClassName ) )
     {
-        DWORD   dwProcessId;
+        DWORD	dwProcessId;
 
         if ( GetWindowThreadProcessId( hWnd, &dwProcessId ) )
         {
-            std::string sImagePath = GetProcessImagePath( dwProcessId );
-            std::string sOfficeImageDir = GetOfficeInstallationPath( hMSI ) + "program\\";
+            std::string	sImagePath = GetProcessImagePath( dwProcessId );
+            std::string	sOfficeImageDir = GetOfficeInstallationPath( hMSI ) + "program\\";
 
             if ( !strnicmp( sImagePath.c_str(), sOfficeImageDir.c_str(), sOfficeImageDir.length() ) )
             {
-                UINT    uMsgShutdownQuickstart = RegisterWindowMessageA( SHUTDOWN_QUICKSTART_MESSAGEA );
+                UINT	uMsgShutdownQuickstart = RegisterWindowMessageA( SHUTDOWN_QUICKSTART_MESSAGEA );
 
                 if ( uMsgShutdownQuickstart )
                     SendMessageA( hWnd, uMsgShutdownQuickstart, 0, 0 );
+                
 
-
-                HANDLE  hProcess = OpenProcess( SYNCHRONIZE, FALSE, dwProcessId );
+                HANDLE	hProcess = OpenProcess( SYNCHRONIZE, FALSE, dwProcessId );
 
                 if ( hProcess )
                 {
@@ -65,7 +65,7 @@ static BOOL CALLBACK EnumWindowsProc( HWND hWnd, LPARAM lParam )
 
         }
     }
-
+    
     return TRUE;
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,15 +71,15 @@ using namespace ::com::sun::star::view;
 
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
-const sal_uInt16 ROWHEIGHT          =   0x0001;
-const sal_uInt16 FONTTYPE           =   0x0002;
-const sal_uInt16 FONTSIZE           =   0x0004;
-const sal_uInt16 FONTATTRIBS        =   0x0008;
-const sal_uInt16 TABSTOP            =   0x0010;
-const sal_uInt16 TEXTCOLOR          =   0x0020;
-const sal_uInt16 FONTDESCRIPTOR     =   0x0040;
-const sal_uInt16 RECORDMARKER       =   0x0080;
-const sal_uInt16 BACKGROUNDCOLOR    =   0x0100;
+const sal_uInt16 ROWHEIGHT			=	0x0001;
+const sal_uInt16 FONTTYPE			=	0x0002;
+const sal_uInt16 FONTSIZE			=	0x0004;
+const sal_uInt16 FONTATTRIBS		=	0x0008;
+const sal_uInt16 TABSTOP			=	0x0010;
+const sal_uInt16 TEXTCOLOR			=	0x0020;
+const sal_uInt16 FONTDESCRIPTOR 	=	0x0040;
+const sal_uInt16 RECORDMARKER		=	0x0080;
+const sal_uInt16 BACKGROUNDCOLOR	=	0x0100;
 
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OGridControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
@@ -287,7 +287,7 @@ void SAL_CALL OGridControlModel::setParent( const InterfaceRef& i_Parent ) throw
 }
 
 //------------------------------------------------------------------------------
-Sequence< Type > SAL_CALL OGridControlModel::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OGridControlModel::getTypes(	) throw(RuntimeException)
 {
     return concatSequences(
         concatSequences(
@@ -387,16 +387,16 @@ Reference<XPropertySet>  OGridControlModel::createColumn(sal_Int32 nTypeId) cons
     Reference<XPropertySet>  xReturn;
     switch (nTypeId)
     {
-        case TYPE_CHECKBOX:         xReturn = new CheckBoxColumn( getContext() ); break;
-        case TYPE_COMBOBOX:         xReturn = new ComboBoxColumn( getContext() ); break;
-        case TYPE_CURRENCYFIELD:    xReturn = new CurrencyFieldColumn( getContext() ); break;
-        case TYPE_DATEFIELD:        xReturn = new DateFieldColumn( getContext() ); break;
-        case TYPE_LISTBOX:          xReturn = new ListBoxColumn( getContext() ); break;
-        case TYPE_NUMERICFIELD:     xReturn = new NumericFieldColumn( getContext() ); break;
-        case TYPE_PATTERNFIELD:     xReturn = new PatternFieldColumn( getContext() ); break;
-        case TYPE_TEXTFIELD:        xReturn = new TextFieldColumn( getContext() ); break;
-        case TYPE_TIMEFIELD:        xReturn = new TimeFieldColumn( getContext() ); break;
-        case TYPE_FORMATTEDFIELD:   xReturn = new FormattedFieldColumn( getContext() ); break;
+        case TYPE_CHECKBOX: 		xReturn = new CheckBoxColumn( getContext() ); break;
+        case TYPE_COMBOBOX: 		xReturn = new ComboBoxColumn( getContext() ); break;
+        case TYPE_CURRENCYFIELD:	xReturn = new CurrencyFieldColumn( getContext() ); break;
+        case TYPE_DATEFIELD:		xReturn = new DateFieldColumn( getContext() ); break;
+        case TYPE_LISTBOX:			xReturn = new ListBoxColumn( getContext() ); break;
+        case TYPE_NUMERICFIELD: 	xReturn = new NumericFieldColumn( getContext() ); break;
+        case TYPE_PATTERNFIELD: 	xReturn = new PatternFieldColumn( getContext() ); break;
+        case TYPE_TEXTFIELD:		xReturn = new TextFieldColumn( getContext() ); break;
+        case TYPE_TIMEFIELD:		xReturn = new TimeFieldColumn( getContext() ); break;
+        case TYPE_FORMATTEDFIELD:	xReturn = new FormattedFieldColumn( getContext() ); break;
         default:
             DBG_ERROR("OGridControlModel::createColumn: Unknown Column");
             break;
@@ -457,41 +457,41 @@ void OGridControlModel::_reset()
 void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_BASE_PROPERTIES( 37 )
-        DECL_PROP1(NAME,                ::rtl::OUString,    BOUND);
-        DECL_PROP2(CLASSID,             sal_Int16,          READONLY, TRANSIENT);
-        DECL_PROP1(TAG,                 ::rtl::OUString,    BOUND);
-        DECL_PROP1(TABINDEX,            sal_Int16,          BOUND);
-        DECL_PROP3(TABSTOP,             sal_Bool,           BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP2(HASNAVIGATION,       sal_Bool,           BOUND, MAYBEDEFAULT);
-        DECL_PROP1(ENABLED,             sal_Bool,           BOUND);
-        DECL_PROP2(ENABLEVISIBLE,       sal_Bool,           BOUND, MAYBEDEFAULT);
-        DECL_PROP1(BORDER,              sal_Int16,          BOUND);
-        DECL_PROP2(BORDERCOLOR,         sal_Int16,          BOUND, MAYBEVOID);
-        DECL_PROP1(DEFAULTCONTROL,      ::rtl::OUString,    BOUND);
-        DECL_PROP3(TEXTCOLOR,           sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP3(BACKGROUNDCOLOR,     sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP2(FONT,                FontDescriptor,     BOUND, MAYBEDEFAULT);
-        DECL_PROP3(ROWHEIGHT,           sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP1(HELPTEXT,            ::rtl::OUString,    BOUND);
-        DECL_PROP1(FONT_NAME,           ::rtl::OUString,    MAYBEDEFAULT);
-        DECL_PROP1(FONT_STYLENAME,      ::rtl::OUString,    MAYBEDEFAULT);
-        DECL_PROP1(FONT_FAMILY,         sal_Int16,          MAYBEDEFAULT);
-        DECL_PROP1(FONT_CHARSET,        sal_Int16,          MAYBEDEFAULT);
-        DECL_PROP1(FONT_HEIGHT,         float,              MAYBEDEFAULT);
-        DECL_PROP1(FONT_WEIGHT,         float,              MAYBEDEFAULT);
-        DECL_PROP1(FONT_SLANT,          sal_Int16,          MAYBEDEFAULT);
-        DECL_PROP1(FONT_UNDERLINE,      sal_Int16,          MAYBEDEFAULT);
-        DECL_BOOL_PROP1(FONT_WORDLINEMODE,                  MAYBEDEFAULT);
-        DECL_PROP3(TEXTLINECOLOR,       sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP2(FONTEMPHASISMARK,    sal_Int16,          BOUND, MAYBEDEFAULT);
-        DECL_PROP2(FONTRELIEF,          sal_Int16,          BOUND, MAYBEDEFAULT);
-        DECL_PROP1(FONT_STRIKEOUT,      sal_Int16,          MAYBEDEFAULT);
-        DECL_PROP2(RECORDMARKER,        sal_Bool,           BOUND, MAYBEDEFAULT );
-        DECL_PROP2(PRINTABLE,           sal_Bool,           BOUND, MAYBEDEFAULT );
-        DECL_PROP4(CURSORCOLOR,         sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID , TRANSIENT);
-        DECL_PROP3(ALWAYSSHOWCURSOR,    sal_Bool,           BOUND, MAYBEDEFAULT, TRANSIENT);
-        DECL_PROP3(DISPLAYSYNCHRON,     sal_Bool,           BOUND, MAYBEDEFAULT, TRANSIENT);
-        DECL_PROP2(HELPURL,             ::rtl::OUString,    BOUND, MAYBEDEFAULT);
+        DECL_PROP1(NAME,				::rtl::OUString,	BOUND);
+        DECL_PROP2(CLASSID, 			sal_Int16,			READONLY, TRANSIENT);
+        DECL_PROP1(TAG, 				::rtl::OUString,	BOUND);
+        DECL_PROP1(TABINDEX,			sal_Int16,			BOUND);
+        DECL_PROP3(TABSTOP, 			sal_Bool,			BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP2(HASNAVIGATION,		sal_Bool,			BOUND, MAYBEDEFAULT);
+        DECL_PROP1(ENABLED, 			sal_Bool,			BOUND);
+        DECL_PROP2(ENABLEVISIBLE,		sal_Bool,			BOUND, MAYBEDEFAULT);
+        DECL_PROP1(BORDER,				sal_Int16,			BOUND);
+        DECL_PROP2(BORDERCOLOR,	        sal_Int16,			BOUND, MAYBEVOID);
+        DECL_PROP1(DEFAULTCONTROL,		::rtl::OUString,	BOUND);
+        DECL_PROP3(TEXTCOLOR,			sal_Int32,			BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP3(BACKGROUNDCOLOR, 	sal_Int32,			BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP2(FONT,				FontDescriptor, 	BOUND, MAYBEDEFAULT);
+        DECL_PROP3(ROWHEIGHT,			sal_Int32,			BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP1(HELPTEXT,			::rtl::OUString,	BOUND);
+        DECL_PROP1(FONT_NAME,			::rtl::OUString,	MAYBEDEFAULT);
+        DECL_PROP1(FONT_STYLENAME,		::rtl::OUString,	MAYBEDEFAULT);
+        DECL_PROP1(FONT_FAMILY, 		sal_Int16,			MAYBEDEFAULT);
+        DECL_PROP1(FONT_CHARSET,		sal_Int16,			MAYBEDEFAULT);
+        DECL_PROP1(FONT_HEIGHT, 		float,				MAYBEDEFAULT);
+        DECL_PROP1(FONT_WEIGHT, 		float,				MAYBEDEFAULT);
+        DECL_PROP1(FONT_SLANT,			sal_Int16,			MAYBEDEFAULT);
+        DECL_PROP1(FONT_UNDERLINE,		sal_Int16,			MAYBEDEFAULT);
+        DECL_BOOL_PROP1(FONT_WORDLINEMODE,					MAYBEDEFAULT);
+        DECL_PROP3(TEXTLINECOLOR,		sal_Int32,			BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP2(FONTEMPHASISMARK,	sal_Int16,			BOUND, MAYBEDEFAULT);
+        DECL_PROP2(FONTRELIEF,			sal_Int16,			BOUND, MAYBEDEFAULT);
+        DECL_PROP1(FONT_STRIKEOUT,		sal_Int16,			MAYBEDEFAULT);
+        DECL_PROP2(RECORDMARKER,		sal_Bool,			BOUND, MAYBEDEFAULT );
+        DECL_PROP2(PRINTABLE,			sal_Bool,			BOUND, MAYBEDEFAULT );
+        DECL_PROP4(CURSORCOLOR, 		sal_Int32,			BOUND, MAYBEDEFAULT, MAYBEVOID , TRANSIENT);
+        DECL_PROP3(ALWAYSSHOWCURSOR,	sal_Bool,			BOUND, MAYBEDEFAULT, TRANSIENT);
+        DECL_PROP3(DISPLAYSYNCHRON, 	sal_Bool,			BOUND, MAYBEDEFAULT, TRANSIENT);
+        DECL_PROP2(HELPURL, 			::rtl::OUString,	BOUND, MAYBEDEFAULT);
         DECL_PROP2(WRITING_MODE,        sal_Int16,          BOUND, MAYBEDEFAULT);
         DECL_PROP3(CONTEXT_WRITING_MODE,sal_Int16,          BOUND, MAYBEDEFAULT, TRANSIENT);
     END_DESCRIBE_PROPERTIES();
@@ -810,7 +810,7 @@ void OGridControlModel::gotColumn( const Reference< XInterface >& _rxColumn )
 void OGridControlModel::lostColumn(const Reference< XInterface >& _rxColumn)
 {
     if ( m_xSelection == _rxColumn )
-    {   // the currently selected element was replaced
+    {	// the currently selected element was replaced
         m_xSelection.clear();
         EventObject aEvt( static_cast< XWeak* >( this ) );
         m_aSelectListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aEvt );
@@ -882,7 +882,7 @@ void OGridControlModel::approveNewElement( const Reference< XPropertySet >& _rxO
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OGridControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return FRM_COMPONENT_GRID;  // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_GRID;	// old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
@@ -890,7 +890,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
 {
     OControlModel::write(_rxOutStream);
 
-    Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
+    Reference<XMarkableStream>	xMark(_rxOutStream, UNO_QUERY);
 
     // 1. Version
     _rxOutStream->writeShort(0x0008);
@@ -1008,7 +1008,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
 {
     OControlModel::read(_rxInStream);
 
-    Reference<XMarkableStream>  xMark(_rxInStream, UNO_QUERY);
+    Reference<XMarkableStream>	xMark(_rxInStream, UNO_QUERY);
 
     // 1. Version
     sal_Int16 nVersion = _rxInStream->readShort();
@@ -1158,6 +1158,6 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
 }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ ParagraphImpl::numberChanged(bool bIncremented)
 }
 
 void ParagraphImpl::textChanged()
-{
+{    
     ::rtl::OUString aParagraphText = implGetText();
     ::css::uno::Any aOldValue, aNewValue;
     if ( implInitTextChangedEvent( m_aParagraphText, aParagraphText, aOldValue, aNewValue ) )
@@ -596,45 +596,45 @@ ParagraphImpl::getRunAttributes(::sal_Int32 Index, const ::css::uno::Sequence< :
     return m_xDocument->retrieveRunAttributes( this, Index, RequestedAttributes );
 }
 
-// virtual
-::sal_Int32 SAL_CALL ParagraphImpl::getLineNumberAtIndex( ::sal_Int32 nIndex )
-    throw (::css::lang::IndexOutOfBoundsException,
+// virtual 
+::sal_Int32 SAL_CALL ParagraphImpl::getLineNumberAtIndex( ::sal_Int32 nIndex ) 
+    throw (::css::lang::IndexOutOfBoundsException, 
            ::css::uno::RuntimeException)
 {
     checkDisposed();
-
+    
     ::sal_Int32 nLineNo = -1;
-    ::css::i18n::Boundary aBoundary =
+    ::css::i18n::Boundary aBoundary = 
         m_xDocument->retrieveParagraphLineBoundary( this, nIndex, &nLineNo );
-
+        
     return nLineNo;
 }
-
-// virtual
-::css::accessibility::TextSegment SAL_CALL ParagraphImpl::getTextAtLineNumber( ::sal_Int32 nLineNo )
+    
+// virtual 
+::css::accessibility::TextSegment SAL_CALL ParagraphImpl::getTextAtLineNumber( ::sal_Int32 nLineNo ) 
     throw (::css::lang::IndexOutOfBoundsException,
            ::css::uno::RuntimeException)
 {
     checkDisposed();
-
-    ::css::i18n::Boundary aBoundary =
+    
+    ::css::i18n::Boundary aBoundary = 
         m_xDocument->retrieveParagraphBoundaryOfLine( this, nLineNo );
-
+    
     return ::css::accessibility::TextSegment( getTextRange(aBoundary.startPos, aBoundary.endPos),
         aBoundary.startPos, aBoundary.endPos);
 }
 
 // virtual
-::css::accessibility::TextSegment SAL_CALL ParagraphImpl::getTextAtLineWithCaret(  )
+::css::accessibility::TextSegment SAL_CALL ParagraphImpl::getTextAtLineWithCaret(  ) 
     throw (::css::uno::RuntimeException)
 {
     checkDisposed();
-
+    
     sal_Int32 nLineNo = getNumberOfLineWithCaret();
-
+    
     try {
-        return ( nLineNo >= 0 ) ?
-            getTextAtLineNumber( nLineNo ) :
+        return ( nLineNo >= 0 ) ? 
+            getTextAtLineNumber( nLineNo ) : 
             ::css::accessibility::TextSegment();
     } catch (const ::css::lang::IndexOutOfBoundsException&) {
         throw ::css::uno::RuntimeException(
@@ -645,9 +645,9 @@ ParagraphImpl::getRunAttributes(::sal_Int32 Index, const ::css::uno::Sequence< :
             static_cast< ::css::uno::XWeak * >( this ) );
     }
 }
-
+    
 // virtual
-::sal_Int32 SAL_CALL ParagraphImpl::getNumberOfLineWithCaret(  )
+::sal_Int32 SAL_CALL ParagraphImpl::getNumberOfLineWithCaret(  ) 
     throw (::css::uno::RuntimeException)
 {
     checkDisposed();
@@ -738,7 +738,7 @@ void ParagraphImpl::implGetSelection(::sal_Int32 & rStartIndex,
 }
 
 // virtual
-void ParagraphImpl::implGetParagraphBoundary( ::css::i18n::Boundary& rBoundary,
+void ParagraphImpl::implGetParagraphBoundary( ::css::i18n::Boundary& rBoundary, 
                                               ::sal_Int32 nIndex )
 {
     ::rtl::OUString sText( implGetText() );
@@ -765,7 +765,7 @@ void ParagraphImpl::implGetLineBoundary( ::css::i18n::Boundary& rBoundary,
 
     if ( implIsValidIndex( nIndex, nLength ) || nIndex == nLength )
     {
-        ::css::i18n::Boundary aBoundary =
+        ::css::i18n::Boundary aBoundary = 
             m_xDocument->retrieveParagraphLineBoundary( this, nIndex );
         rBoundary.startPos = aBoundary.startPos;
         rBoundary.endPos = aBoundary.endPos;
@@ -917,8 +917,8 @@ void Document::retrieveParagraphSelection(ParagraphImpl const * pParagraph,
 
     if ( nNumber >= aMinPaM.GetPara() && nNumber <= aMaxPaM.GetPara() )
     {
-        *pBegin = nNumber > aMinPaM.GetPara()
-            ? 0
+        *pBegin = nNumber > aMinPaM.GetPara() 
+            ? 0 
             : static_cast< ::sal_Int32 >( aMinPaM.GetIndex() );
             // XXX numeric overflow
         *pEnd = nNumber < aMaxPaM.GetPara()
@@ -927,7 +927,7 @@ void Document::retrieveParagraphSelection(ParagraphImpl const * pParagraph,
             // XXX  numeric overflow (3x)
 
         if ( aStartPaM > aEndPaM )
-            ::std::swap( *pBegin, *pEnd );
+            ::std::swap( *pBegin, *pEnd );   
     }
     else
     {
@@ -944,7 +944,7 @@ void Document::retrieveParagraphSelection(ParagraphImpl const * pParagraph,
     Paragraphs::size_type nNumber = pParagraph->getNumber();
     TextPaM aEndPaM( rSelection.GetEnd() );
 
-    return aEndPaM.GetPara() == nNumber
+    return aEndPaM.GetPara() == nNumber 
         ? static_cast< ::sal_Int32 >(aEndPaM.GetIndex()) : -1;
 }
 
@@ -1315,7 +1315,7 @@ Document::retrieveParagraphLineBoundary( ParagraphImpl const * pParagraph,
         ::USHORT nLineCount = m_rEngine.GetLineCount( nNumber );
         for ( ::USHORT nLine = 0; nLine < nLineCount; ++nLine )
         {
-            ::sal_Int32 nLineLength = static_cast< ::sal_Int32 >(
+            ::sal_Int32 nLineLength = static_cast< ::sal_Int32 >( 
                 m_rEngine.GetLineLen( nNumber, nLine ) );
             nLineStart = nLineEnd;
             nLineEnd += nLineLength;
@@ -1356,12 +1356,12 @@ Document::retrieveParagraphBoundaryOfLine( ParagraphImpl const * pParagraph,
         ::sal_Int32 nLineEnd = 0;
         for ( ::USHORT nLine = 0; nLine <= nLineNo; ++nLine )
         {
-            ::sal_Int32 nLineLength = static_cast< ::sal_Int32 >(
+            ::sal_Int32 nLineLength = static_cast< ::sal_Int32 >( 
                 m_rEngine.GetLineLen( nNumber, nLine ) );
             nLineStart = nLineEnd;
             nLineEnd += nLineLength;
         }
-
+        
         aBoundary.startPos = nLineStart;
         aBoundary.endPos = nLineEnd;
     }
@@ -1377,7 +1377,7 @@ sal_Int32 Document::retrieveParagraphLineWithCursor( ParagraphImpl const * pPara
     Paragraphs::size_type nNumber = pParagraph->getNumber();
     TextPaM aEndPaM( rSelection.GetEnd() );
 
-    return aEndPaM.GetPara() == nNumber
+    return aEndPaM.GetPara() == nNumber 
         ? m_rView.GetLineNumberOfCursorInSelection() : -1;
 }
 
@@ -1418,7 +1418,7 @@ void Document::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_WINDOW_GETFOCUS:
         case VCLEVENT_WINDOW_LOSEFOCUS:
         {
-            // #107179# if our parent is a compound control (e.g. MultiLineEdit),
+            // #107179# if our parent is a compound control (e.g. MultiLineEdit), 
             // suppress the window focus events here
             if ( !m_bCompoundControlChild )
                 VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );

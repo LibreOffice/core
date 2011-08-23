@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,12 +59,12 @@ ZipPackageEntry::~ZipPackageEntry()
 }
 
 // XChild
-OUString SAL_CALL ZipPackageEntry::getName(  )
+OUString SAL_CALL ZipPackageEntry::getName(  ) 
     throw(RuntimeException)
 {
     return msName;
 }
-void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
+void SAL_CALL ZipPackageEntry::setName( const OUString& aName ) 
     throw(RuntimeException)
 {
     if ( pParent && msName.getLength() && pParent->hasByName ( msName ) )
@@ -80,7 +80,7 @@ void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
     if ( pParent )
         pParent->doInsertByName ( this, sal_False );
 }
-Reference< XInterface > SAL_CALL ZipPackageEntry::getParent(  )
+Reference< XInterface > SAL_CALL ZipPackageEntry::getParent(  ) 
         throw(RuntimeException)
 {
     // return Reference< XInterface >( xParent, UNO_QUERY );
@@ -95,7 +95,7 @@ void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent, sal_Bool bIns
         pNewParent->doInsertByName ( this, sal_False );
 }
 
-void SAL_CALL ZipPackageEntry::setParent( const Reference< XInterface >& xNewParent )
+void SAL_CALL ZipPackageEntry::setParent( const Reference< XInterface >& xNewParent ) 
         throw(NoSupportException, RuntimeException)
 {
     sal_Int64 nTest(0);
@@ -113,24 +113,24 @@ void SAL_CALL ZipPackageEntry::setParent( const Reference< XInterface >& xNewPar
     }
 }
     //XPropertySet
-Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageEntry::getPropertySetInfo(  )
+Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageEntry::getPropertySetInfo(  ) 
         throw(RuntimeException)
 {
     return Reference < beans::XPropertySetInfo > ();
 }
-void SAL_CALL ZipPackageEntry::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< beans::XPropertyChangeListener >& /*xListener*/ )
+void SAL_CALL ZipPackageEntry::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< beans::XPropertyChangeListener >& /*xListener*/ ) 
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackageEntry::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< beans::XPropertyChangeListener >& /*aListener*/ )
+void SAL_CALL ZipPackageEntry::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< beans::XPropertyChangeListener >& /*aListener*/ ) 
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackageEntry::addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< beans::XVetoableChangeListener >& /*aListener*/ )
+void SAL_CALL ZipPackageEntry::addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< beans::XVetoableChangeListener >& /*aListener*/ ) 
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackageEntry::removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< beans::XVetoableChangeListener >& /*aListener*/ )
+void SAL_CALL ZipPackageEntry::removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< beans::XVetoableChangeListener >& /*aListener*/ ) 
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }

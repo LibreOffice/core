@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 namespace com { namespace sun { namespace star {
     namespace io { class XSeekable; class XInputStream; }
 } } }
-class ByteGrabber
+class ByteGrabber 
 {
 protected:
     ::osl::Mutex m_aMutex;
@@ -53,15 +53,15 @@ protected:
 public:
     ByteGrabber (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xIstream);
     ~ByteGrabber();
-
+    
     void setInputStream (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewStream);
     // XInputStream
-    sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+    sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) 
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     // XSeekable
-    sal_Int64 SAL_CALL seek( sal_Int64 location )
+    sal_Int64 SAL_CALL seek( sal_Int64 location ) 
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    sal_Int64 SAL_CALL getPosition(  )
+    sal_Int64 SAL_CALL getPosition(  ) 
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     sal_Int64 SAL_CALL getLength(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);

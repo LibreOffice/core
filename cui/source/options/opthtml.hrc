@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,35 +29,35 @@
 
 // defines ------------------------------------------------------------------
 
-#define GB_FONTSIZE             1
-#define FT_SIZE1                2
-#define NF_SIZE1                3
-#define FT_SIZE2                4
-#define NF_SIZE2                5
-#define FT_SIZE3                6
-#define NF_SIZE3                7
-#define FT_SIZE4                8
-#define NF_SIZE4                9
-#define FT_SIZE5                10
-#define NF_SIZE5                11
-#define FT_SIZE6                12
-#define NF_SIZE6                13
-#define FT_SIZE7                14
-#define NF_SIZE7                15
-#define GB_IMPORT               20
-#define CB_UNKNOWN_TAGS         21
-#define CB_IGNORE_FONTNAMES     22
+#define GB_FONTSIZE				1
+#define FT_SIZE1				2
+#define NF_SIZE1				3
+#define FT_SIZE2				4
+#define NF_SIZE2				5
+#define FT_SIZE3				6
+#define NF_SIZE3				7
+#define FT_SIZE4				8
+#define NF_SIZE4				9
+#define FT_SIZE5				10
+#define NF_SIZE5				11
+#define FT_SIZE6				12
+#define NF_SIZE6				13
+#define FT_SIZE7				14
+#define NF_SIZE7				15
+#define GB_IMPORT				20
+#define CB_UNKNOWN_TAGS			21
+#define CB_IGNORE_FONTNAMES		22
 #define CB_NUMBERS_ENGLISH_US   23
 
-#define GB_EXPORT               30
-#define CB_STARBASIC            31
-#define CB_STARBASIC_WARNING    32
+#define GB_EXPORT				30
+#define CB_STARBASIC			31
+#define CB_STARBASIC_WARNING	32
 
-#define CB_LOCAL_GRF            37
-#define CB_PRINT_EXTENSION      38
-#define LB_EXPORT               39
-#define FT_CHARSET              40
-#define LB_CHARSET              41
+#define CB_LOCAL_GRF			37
+#define CB_PRINT_EXTENSION		38
+#define LB_EXPORT				39
+#define FT_CHARSET 		   		40
+#define LB_CHARSET				41
 
 #endif
 

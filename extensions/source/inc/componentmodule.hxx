@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,36 +75,36 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
 
     protected:
         // resource administration
-        static ::osl::Mutex     s_aMutex;       /// access safety
-        static sal_Int32        s_nClients;     /// number of registered clients
-        static OModuleImpl*     s_pImpl;        /// impl class. lives as long as at least one client for the module is registered
-        static ::rtl::OString   s_sResPrefix;
+        static ::osl::Mutex		s_aMutex;		/// access safety
+        static sal_Int32		s_nClients;		/// number of registered clients
+        static OModuleImpl*		s_pImpl;		/// impl class. lives as long as at least one client for the module is registered
+        static ::rtl::OString	s_sResPrefix;
 
         // auto registration administration
-        static  ::com::sun::star::uno::Sequence< ::rtl::OUString >*
+        static	::com::sun::star::uno::Sequence< ::rtl::OUString >*
             s_pImplementationNames;
-        static  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > >*
+        static	::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > >*
             s_pSupportedServices;
-        static  ::com::sun::star::uno::Sequence< sal_Int64 >*
+        static	::com::sun::star::uno::Sequence< sal_Int64 >*
             s_pCreationFunctionPointers;
-        static  ::com::sun::star::uno::Sequence< sal_Int64 >*
+        static	::com::sun::star::uno::Sequence< sal_Int64 >*
             s_pFactoryFunctionPointers;
 
     public:
         // cna be set as long as no resource has been accessed ...
-        static void     setResourceFilePrefix(const ::rtl::OString& _rPrefix);
+        static void		setResourceFilePrefix(const ::rtl::OString& _rPrefix);
 
         /// get the vcl res manager of the module
-        static ResMgr*  getResManager();
+        static ResMgr*	getResManager();
 
         /** register a component implementing a service with the given data.
-            @param  _rImplementationName
+            @param	_rImplementationName
                         the implementation name of the component
-            @param  _rServiceNames
+            @param	_rServiceNames
                         the services the component supports
-            @param  _pCreateFunction
+            @param	_pCreateFunction
                         a function for creating an instance of the component
-            @param  _pFactoryFunction
+            @param	_pFactoryFunction
                         a function for creating a factory for that component
             @see revokeComponent
         */
@@ -115,7 +115,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
             FactoryInstantiation _pFactoryFunction);
 
         /** revoke the registration for the specified component
-            @param  _rImplementationName
+            @param	_rImplementationName
                 the implementation name of the component
         */
         static void revokeComponent(
@@ -125,9 +125,9 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
             <p>writes the registration information of all components which are currently registered into the
             specified registry.<p/>
             <p>Usually used from within component_writeInfo.<p/>
-            @param  _rxServiceManager
+            @param	_rxServiceManager
                         the service manager
-            @param  _rRootKey
+            @param	_rRootKey
                         the registry key under which the information will be stored
             @return
                         sal_True if the registration of all implementations was successfull, sal_False otherwise
@@ -138,9 +138,9 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
 
         /** creates a Factory for the component with the given implementation name.
             <p>Usually used from within component_getFactory.<p/>
-            @param  _rxServiceManager
+            @param	_rxServiceManager
                         a pointer to an XMultiServiceFactory interface as got in component_getFactory
-            @param  _pImplementationName
+            @param	_pImplementationName
                         the implementation name of the component
             @return
                         the XInterface access to a factory for the component
@@ -152,9 +152,9 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
 
     protected:
         /// register a client for the module
-        static void registerClient();
+        static void	registerClient();
         /// revoke a client for the module
-        static void revokeClient();
+        static void	revokeClient();
 
     private:
         /** ensure that the impl class exists
@@ -166,13 +166,13 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
     //=========================================================================
     //= OModuleResourceClient
     //=========================================================================
-    /** base class for objects which uses any global module-specific ressources
+    /** base class for objects which uses any global module-specific ressources 
     */
     class OModuleResourceClient
     {
     public:
-        OModuleResourceClient()     { OModule::registerClient(); }
-        ~OModuleResourceClient()    { OModule::revokeClient(); }
+        OModuleResourceClient()		{ OModule::registerClient(); }
+        ~OModuleResourceClient()	{ OModule::revokeClient(); }
     };
 
     //=========================================================================
@@ -271,7 +271,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
     }
 
 //.........................................................................
-}   // namespace COMPMOD_NAMESPACE
+}	// namespace COMPMOD_NAMESPACE
 //.........................................................................
 
 #endif // _EXTENSIONS_COMPONENT_MODULE_HXX_

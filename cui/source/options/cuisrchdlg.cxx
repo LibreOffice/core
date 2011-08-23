@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 
 #include <cuires.hrc>
 
-#define ITEMID_SETITEM      0
+#define	ITEMID_SETITEM		0
 
 #include <svl/srchitem.hxx>
 #include <svx/pageitem.hxx>
@@ -65,12 +65,12 @@
 SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(
             Window *pParent,
             const SfxItemSet& rOptionsSet, INT32 nInitialFlags ) :
-    SfxSingleTabDialog  ( pParent, rOptionsSet, RID_SVXPAGE_JSEARCH_OPTIONS ),
+    SfxSingleTabDialog	( pParent, rOptionsSet, RID_SVXPAGE_JSEARCH_OPTIONS ),
     nInitialTlFlags( nInitialFlags )
 {
     pPage = (SvxJSearchOptionsPage *)
                     SvxJSearchOptionsPage::Create( this, rOptionsSet );
-    SetTabPage( pPage );    //! implicitly calls pPage->Reset(...)!
+    SetTabPage( pPage );	//! implicitly calls pPage->Reset(...)!
     pPage->EnableSaveOptions( FALSE );
 }
 

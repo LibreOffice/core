@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,63 +43,63 @@ class BufferNode
 /****** buffernode.hxx/CLASS BufferNode ***************************************
  *
  *   NAME
- *  BufferNode -- Class to maintain the tree of bufferred elements
+ *	BufferNode -- Class to maintain the tree of bufferred elements
  *
  *   FUNCTION
- *  One BufferNode object represents a bufferred element in the document
- *  wrapper component.
- *  All BufferNode objects construct a tree which has the same structure
- *  of all bufferred elements. That is to say, if one bufferred element is
- *  an ancestor of another bufferred element, then the corresponding
- *  BufferNode objects are also in ancestor/descendant relationship.
- *  This class is used to manipulate the tree of bufferred elements.
+ *	One BufferNode object represents a bufferred element in the document
+ *	wrapper component.
+ *	All BufferNode objects construct a tree which has the same structure
+ *	of all bufferred elements. That is to say, if one bufferred element is
+ *	an ancestor of another bufferred element, then the corresponding
+ *	BufferNode objects are also in ancestor/descendant relationship.
+ *	This class is used to manipulate the tree of bufferred elements.
  *
  *   HISTORY
- *  05.01.2004 -    implemented
+ *	05.01.2004 -	implemented
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
 private:
     /* the parent BufferNode */
     BufferNode* m_pParent;
-
+    
     /* all child BufferNodes */
-    std::vector< const BufferNode* > m_vChildren;
-
+    std::vector< const BufferNode* > m_vChildren; 
+    
     /* all ElementCollector holding this BufferNode */
     std::vector< const ElementCollector* > m_vElementCollectors;
-
+    
     /*
      * the blocker holding this BufferNode, one BufferNode can have one
      * blocker at most
      */
     ElementMark* m_pBlocker;
-
+    
     /*
      * whether the element has completely bufferred by the document wrapper
      * component
      */
     bool m_bAllReceived;
-
+    
     /* the XMLElementWrapper of the bufferred element */
     com::sun::star::uno::Reference<
         com::sun::star::xml::wrapper::XXMLElementWrapper > m_xXMLElement;
 
-private:
+private:	
     bool isECInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const;
     bool isECOfBeforeModifyInAncestorIncluded(sal_Int32 nIgnoredSecurityId) const;
     bool isBlockerInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const;
     const BufferNode* getNextChild(const BufferNode* pChild) const;
-
+        
 public:
     explicit BufferNode(
         const com::sun::star::uno::Reference<
             com::sun::star::xml::wrapper::XXMLElementWrapper >& xXMLElement);
     virtual ~BufferNode() {};
-
+    
     bool isECOfBeforeModifyIncluded(sal_Int32 nIgnoredSecurityId) const;
         void setReceivedAll();
         bool isAllReceived() const;

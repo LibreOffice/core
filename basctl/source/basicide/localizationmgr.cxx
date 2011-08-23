@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,13 +28,13 @@
 #include "precompiled_basctl.hxx"
 #include <ide_pch.hxx>
 
-#include <basidesh.hxx>
+#include <basidesh.hxx> 
 #include <baside3.hxx>
 #include <basobj.hxx>
 #include <iderdll.hxx>
 #include "dlged.hxx"
 
-#include <localizationmgr.hxx>
+#include <localizationmgr.hxx> 
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
@@ -134,9 +134,9 @@ bool isLanguageDependentProperty( ::rtl::OUString aName )
         pLangDepProp++;
     }
     return bRet;
-}
+} 
 //============================================
-
+ 
 void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResourceMode eMode )
 {
     Sequence< ::rtl::OUString > aDlgNames = m_aDocument.getObjectNames( E_DIALOGS, m_aLibName );
@@ -200,11 +200,11 @@ extern bool localesAreEqual( const ::com::sun::star::lang::Locale& rLocaleLeft,
                              const ::com::sun::star::lang::Locale& rLocaleRight );
 
 // Works on xStringResourceManager's current language for SET_IDS/RESET_IDS,
-// anyway only one language should exist when calling this method then,
+// anyway only one language should exist when calling this method then, 
 // either the first one for mode SET_IDS or the last one for mode RESET_IDS
 sal_Int32 LocalizationMgr::implHandleControlResourceProperties
     ( Any aControlAny, const ::rtl::OUString& aDialogName, const ::rtl::OUString& aCtrlName,
-        Reference< XStringResourceManager > xStringResourceManager,
+        Reference< XStringResourceManager > xStringResourceManager, 
         Reference< XStringResourceResolver > xSourceStringResolver, HandleResourceMode eMode )
 {
     sal_Int32 nChangedCount = 0;
@@ -795,7 +795,7 @@ void LocalizationMgr::handleRemoveLocales( Sequence< Locale > aLocaleSeq )
         handleTranslationbar();
     }
 
-    DBG_ASSERT( bConsistant,
+    DBG_ASSERT( bConsistant, 
         "LocalizationMgr::handleRemoveLocales(): sequence contains unsupported locales" );
 }
 
@@ -888,7 +888,7 @@ DialogWindow* FindDialogWindowForEditor( DlgEditor* pEditor )
         pWin = aIDEWindowTable.Next();
     }
     return pFoundDlgWin;
-}
+} 
 
 
 void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEditor,
@@ -919,7 +919,7 @@ void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEdito
 
     if( nChangedCount )
         BasicIDE::MarkDocumentModified( aDocument );
-}
+} 
 
 void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEditor,
     ::com::sun::star::uno::Any aControlAny, const ::rtl::OUString& aNewCtrlName )
@@ -946,7 +946,7 @@ void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEdito
     implHandleControlResourceProperties
         ( aControlAny, aDialogName, aNewCtrlName, xStringResourceManager,
           xDummyStringResolver, RENAME_CONTROL_IDS );
-}
+} 
 
 
 void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor* pEditor,
@@ -973,7 +973,7 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
 
     if( nChangedCount )
         BasicIDE::MarkDocumentModified( aDocument );
-}
+} 
 
 void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument, const String& aLibName,
     const String& aDlgName, Reference< container::XNameContainer > xDialogModel )
@@ -1148,7 +1148,7 @@ void LocalizationMgr::copyResourcesForPastedEditorObject( DlgEditor* pEditor,
     implHandleControlResourceProperties
         ( aControlAny, aDialogName, aCtrlName, xStringResourceManager,
           xSourceStringResolver, MOVE_RESOURCES );
-}
+} 
 
 void LocalizationMgr::copyResourceForDroppedDialog( Reference< container::XNameContainer > xDialogModel,
     const ::rtl::OUString& aDialogName, Reference< XStringResourceManager > xStringResourceManager,
@@ -1217,7 +1217,7 @@ Reference< XStringResourceManager > LocalizationMgr::getStringResourceFromDialog
             Reference< resource::XStringResourceResolver >
                 xStringResourceResolver = xStringResourceSupplier->getStringResource();
 
-            xStringResourceManager =
+            xStringResourceManager = 
                 Reference< resource::XStringResourceManager >( xStringResourceResolver, UNO_QUERY );
         }
     }

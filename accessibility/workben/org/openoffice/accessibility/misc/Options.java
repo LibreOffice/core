@@ -64,7 +64,7 @@ public class Options
         }
         catch (java.io.IOException e)
         {
-            // Ignore a non-existing options file.
+            // Ignore a non-existing options file. 
         }
     }
 
@@ -87,7 +87,7 @@ public class Options
             }
         }
     }
-
+    
     private Options ()
     {
         maFile = null;

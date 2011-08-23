@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,29 +73,29 @@ class VCLXAccessibleListItem : public ::comphelper::OBaseMutex,
                                public VCLXAccessibleListItem_BASE
 {
 private:
-    ::rtl::OUString                     m_sEntryText;
-    sal_Int32                           m_nIndexInParent;
-    sal_Bool                            m_bSelected;
-    sal_Bool                            m_bVisible;
+    ::rtl::OUString						m_sEntryText;
+    sal_Int32							m_nIndexInParent;
+    sal_Bool							m_bSelected;
+    sal_Bool							m_bVisible;
 
 protected:
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32                          m_nClientId;
-    ::accessibility::IComboListBoxHelper*       m_pListBoxHelper;
+    ::accessibility::IComboListBoxHelper*		m_pListBoxHelper;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >        m_xParent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > m_xParentContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >		m_xParent;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >	m_xParentContext;
 
 private:
     /** notifies all listeners that this object has changed
-        @param  _nEventId
+        @param	_nEventId
             is the event id
-        @param  _aOldValue
+        @param	_aOldValue
             is the old value
-        @param  _aNewValue
+        @param	_aNewValue
             is the new value
     */
-    void                    NotifyAccessibleEvent(  sal_Int16 _nEventId,
+    void 					NotifyAccessibleEvent(	sal_Int16 _nEventId,
                                                     const ::com::sun::star::uno::Any& _aOldValue,
                                                     const ::com::sun::star::uno::Any& _aNewValue );
 
@@ -103,32 +103,32 @@ protected:
     virtual ~VCLXAccessibleListItem();
     /** this function is called upon disposing the component
     */
-    virtual void SAL_CALL   disposing();
+    virtual void SAL_CALL	disposing();
 
     // OCommonAccessibleText
-    virtual ::rtl::OUString                 implGetText();
-    virtual ::com::sun::star::lang::Locale  implGetLocale();
-    virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
+    virtual ::rtl::OUString					implGetText();
+    virtual ::com::sun::star::lang::Locale	implGetLocale();
+    virtual void							implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
 
 public:
     /** OAccessibleBase needs a valid view
-        @param  _pListBoxHelper
+        @param	_pListBoxHelper
             is the list- or combobox for which we implement an accessible object
-        @param  _nIndexInParent
+        @param	_nIndexInParent
             is the position of the entry inside the listbox
-        @param  _xParent
+        @param	_xParent
             is our parent accessible object
     */
-    VCLXAccessibleListItem( ::accessibility::IComboListBoxHelper* _pListBoxHelper,
+    VCLXAccessibleListItem(	::accessibility::IComboListBoxHelper* _pListBoxHelper,
                             sal_Int32 _nIndexInParent,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xParent );
 
 
-    inline sal_Bool         IsSelected() const { return m_bSelected; }
-    void                    SetSelected( sal_Bool _bSelected );
-    void                    SetVisible( sal_Bool _bVisible );
-    inline bool             DecrementIndexInParent() { OSL_ENSURE(m_nIndexInParent != 0,"Invalid call!");--m_nIndexInParent; return true;}
-    inline bool             IncrementIndexInParent() { ++m_nIndexInParent; return true;}
+    inline sal_Bool			IsSelected() const { return m_bSelected; }
+    void					SetSelected( sal_Bool _bSelected );
+    void					SetVisible( sal_Bool _bVisible );
+    inline bool				DecrementIndexInParent() { OSL_ENSURE(m_nIndexInParent != 0,"Invalid call!");--m_nIndexInParent; return true;}
+    inline bool				IncrementIndexInParent() { ++m_nIndexInParent; return true;}
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);

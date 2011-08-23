@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@
 
 #ifdef UNICODE
 #define _UNICODE
-#define _tstring    wstring
+#define _tstring	wstring
 #else
-#define _tstring    string
+#define _tstring	string
 #endif
 #include <tchar.h>
 #include <string>
@@ -115,7 +115,7 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
 
             mystr = "Current short file: " + sFileName;
             // MessageBox(NULL, mystr.c_str(), "Current Content", MB_OK);
-
+        
             if (( strcmp(sFileName.c_str(),sCurrentDir.c_str()) != 0 ) &&
                 ( strcmp(sFileName.c_str(),sParentDir.c_str()) != 0 ))
             {
@@ -175,7 +175,7 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
             bDirectoryRemoved = false;
         }
     }
-
+    
     return bDirectoryRemoved;
 }
 
@@ -220,7 +220,7 @@ extern "C" UINT __stdcall RemovePrgFolder( MSIHANDLE handle )
     std::_tstring sRemoveDir = sOfficeInstallPath + TEXT("program_old");
 
 //    MessageBox(NULL, sRemoveDir.c_str(), "REMOVING OLD DIR", MB_OK);
-
+    
     bool bSuccess = RemoveCompleteDirectory( sRemoveDir );
 
     TCHAR sAppend[2] = TEXT("0");

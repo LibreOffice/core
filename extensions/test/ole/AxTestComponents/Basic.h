@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 //#include "AxTestComponents.h"
 /////////////////////////////////////////////////////////////////////////////
 // CBasic
-class ATL_NO_VTABLE CBasic :
+class ATL_NO_VTABLE CBasic : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CBasic, &CLSID_Basic>,
     public IDispatchImpl<IBasic, &IID_IBasic, &LIBID_AXTESTCOMPONENTSLib>
@@ -54,7 +54,7 @@ public:
     END_COM_MAP()
 
     // IBasic
-public:
+public:  
     STDMETHOD(outMore)(/*[out]*/long* val1, /*[out]*/long* val2);
     STDMETHOD(inMulDimArrayByte2)(LPSAFEARRAY val);
     STDMETHOD(inMulDimArrayByte)(LPSAFEARRAY val);
@@ -83,7 +83,7 @@ public:
     STDMETHOD(inSequenceShort)(LPSAFEARRAY ar);
     STDMETHOD(inSequenceByte)(LPSAFEARRAY ar);
     STDMETHOD(inSequenceLong)(LPSAFEARRAY  ar);
-    STDMETHOD(mixed1)(
+    STDMETHOD(mixed1)( 
         /* [out][in] */ unsigned char *aChar,
         /* [out][in] */ float *aFloat,
         /* [out][in] */ VARIANT *aVar);

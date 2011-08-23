@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,28 +53,28 @@ typedef cppu::WeakComponentImplHelper2<css::beans::XPropertySet,
 
 struct LdapProfileMutexHolder { osl::Mutex mMutex; };
 /**
-  Implements the PlatformBackend service, a specialization of the
-  XPropertySet service for retreiving LDAP user profile
+  Implements the PlatformBackend service, a specialization of the 
+  XPropertySet service for retreiving LDAP user profile 
   configuration settings from a LDAP repsoitory.
   */
-class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
+class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase 
 {
     public :
-
+        
         LdapUserProfileBe(const uno::Reference<uno::XComponentContext>& xContext);
         ~LdapUserProfileBe(void) ;
 
         // XServiceInfo
-        virtual rtl::OUString SAL_CALL
-            getImplementationName(  )
+        virtual rtl::OUString SAL_CALL 
+            getImplementationName(  ) 
+                throw (uno::RuntimeException) ;
+        
+        virtual sal_Bool SAL_CALL 
+            supportsService( const rtl::OUString& aServiceName ) 
                 throw (uno::RuntimeException) ;
 
-        virtual sal_Bool SAL_CALL
-            supportsService( const rtl::OUString& aServiceName )
-                throw (uno::RuntimeException) ;
-
-        virtual uno::Sequence<rtl::OUString> SAL_CALL
-            getSupportedServiceNames(  )
+        virtual uno::Sequence<rtl::OUString> SAL_CALL 
+            getSupportedServiceNames(  ) 
                 throw (uno::RuntimeException) ;
 
         // XPropertySet
@@ -137,7 +137,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
           Provides the supported services names
           @return   service names
           */
-        static uno::Sequence<rtl::OUString> SAL_CALL
+        static uno::Sequence<rtl::OUString> SAL_CALL 
             getLdapUserProfileBeServiceNames(void) ;
 
     private:
@@ -145,7 +145,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
         bool readLdapConfiguration(
             uno::Reference<lang::XMultiServiceFactory> const & factory,
             LdapDefinition * definition, rtl::OUString * loggedOnUser);
-
+        
         bool getLdapStringParam(uno::Reference<container::XNameAccess>& xAccess,
                                 const rtl::OUString& aLdapSetting,
                                 rtl::OString& aServerParameter);

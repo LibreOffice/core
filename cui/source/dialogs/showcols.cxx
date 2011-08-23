@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #define CUIFM_PROP_LABEL  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" ) )
 
 //==========================================================================
-//  FmShowColsDialog
+//	FmShowColsDialog
 //==========================================================================
 DBG_NAME(FmShowColsDialog)
 //--------------------------------------------------------------------------
@@ -121,7 +121,7 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
 
             ::rtl::OUString sName;
             //CHINA001 xCurCol->getPropertyValue(::svxform::FM_PROP_LABEL) >>= sName;
-
+            
             xCurCol->getPropertyValue(CUIFM_PROP_LABEL) >>= sName;
             sCurName = (const sal_Unicode*)sName;
         }

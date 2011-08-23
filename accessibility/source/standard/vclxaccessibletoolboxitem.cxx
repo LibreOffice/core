@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,12 +72,12 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
 
     AccessibleTextHelper_BASE( new VCLExternalSolarLock() ),
 
-    m_pToolBox      ( _pToolBox ),
+    m_pToolBox		( _pToolBox ),
     m_nIndexInParent( _nPos ),
-    m_nRole         ( AccessibleRole::PUSH_BUTTON ),
-    m_nItemId       ( 0 ),
-    m_bHasFocus     ( sal_False ),
-    m_bIsChecked    ( sal_False ),
+    m_nRole			( AccessibleRole::PUSH_BUTTON ),
+    m_nItemId		( 0 ),
+    m_bHasFocus		( sal_False ),
+    m_bIsChecked	( sal_False ),
     m_bIndeterminate( false )
 
 {
@@ -97,12 +97,12 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
         {
             ToolBoxItemBits nBits = m_pToolBox->GetItemBits( m_nItemId );
             if (( nBits & TIB_DROPDOWN ) == TIB_DROPDOWN)
-                m_nRole = AccessibleRole::BUTTON_DROPDOWN;
+                m_nRole	= AccessibleRole::BUTTON_DROPDOWN;
             else if (( ( nBits & TIB_CHECKABLE ) == TIB_CHECKABLE ) ||
                 ( ( nBits & TIB_AUTOCHECK ) == TIB_AUTOCHECK ) )
-                m_nRole = AccessibleRole::TOGGLE_BUTTON;
+                m_nRole	= AccessibleRole::TOGGLE_BUTTON;
             else if ( m_pToolBox->GetItemWindow( m_nItemId ) )
-                m_nRole = AccessibleRole::PANEL;
+                m_nRole	= AccessibleRole::PANEL;
             break;
         }
 
@@ -139,15 +139,15 @@ VCLXAccessibleToolBoxItem::~VCLXAccessibleToolBoxItem()
         sRet = m_pToolBox->GetItemText( m_nItemId );
 //OJ #108243# we only read the name of the toolboxitem
 //
-//      Window* pItemWindow = m_pToolBox->GetItemWindow( m_nItemId );
-//      if ( pItemWindow && pItemWindow->GetAccessible().is() &&
-//           pItemWindow->GetAccessible()->getAccessibleContext().is() )
-//      {
-//          ::rtl::OUString sWinText = pItemWindow->GetAccessible()->getAccessibleContext()->getAccessibleName();
-//          if ( ( sRet.getLength() > 0 ) && ( sWinText.getLength() > 0 ) )
-//              sRet += String( RTL_CONSTASCII_USTRINGPARAM( " " ) );
-//          sRet += sWinText;
-//      }
+//		Window* pItemWindow = m_pToolBox->GetItemWindow( m_nItemId );
+//		if ( pItemWindow && pItemWindow->GetAccessible().is() &&
+//			 pItemWindow->GetAccessible()->getAccessibleContext().is() )
+//		{
+//			::rtl::OUString sWinText = pItemWindow->GetAccessible()->getAccessibleContext()->getAccessibleName();
+//			if ( ( sRet.getLength() > 0 ) && ( sWinText.getLength() > 0 ) )
+//				sRet += String( RTL_CONSTASCII_USTRINGPARAM( " " ) );
+//			sRet += sWinText;
+//		}
     }
     return sRet;
 }
@@ -552,11 +552,11 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleAtPoin
 void SAL_CALL VCLXAccessibleToolBoxItem::grabFocus(  ) throw (RuntimeException)
 {
     Reference< XAccessible > xParent(getAccessibleParent());
-
+    
     if( xParent.is() )
     {
         Reference< XAccessibleSelection > rxAccessibleSelection(xParent->getAccessibleContext(), UNO_QUERY);
-
+       
         if ( rxAccessibleSelection.is() )
         {
             rxAccessibleSelection -> selectAccessibleChild ( getAccessibleIndexInParent() );
@@ -588,7 +588,7 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getBackground(  ) throw (RuntimeEx
 // -----------------------------------------------------------------------------
 // XAccessibleExtendedComponent
 // -----------------------------------------------------------------------------
-Reference< awt::XFont > SAL_CALL VCLXAccessibleToolBoxItem::getFont(    ) throw (RuntimeException)
+Reference< awt::XFont > SAL_CALL VCLXAccessibleToolBoxItem::getFont(	) throw (RuntimeException)
 {
     return uno::Reference< awt::XFont >();
 }

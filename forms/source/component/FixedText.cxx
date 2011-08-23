@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ void OFixedTextModel::describeAggregateProperties( Sequence< Property >& _rAggre
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OFixedTextModel::getServiceName() throw(RuntimeException)
 {
-    return FRM_COMPONENT_FIXEDTEXT; // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_FIXEDTEXT;	// old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define _UNOCONTROLS_FRAMECONTROL_CTRL_HXX
 
 //______________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //______________________________________________________________________________________________________________
 
 #include <com/sun/star/frame/XFrameActionListener.hpp>
@@ -43,77 +43,77 @@
 #include <cppuhelper/propshlp.hxx>
 
 //______________________________________________________________________________________________________________
-//  includes of my own project
+//	includes of my own project
 //______________________________________________________________________________________________________________
 #include "basecontrol.hxx"
 #include "OConnectionPointContainerHelper.hxx"
 
 //______________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //______________________________________________________________________________________________________________
 
 namespace unocontrols{
 
-#define UNO3_ANY                                        ::com::sun::star::uno::Any
-#define UNO3_ILLEGALARGUMENTEXCEPTION                   ::com::sun::star::lang::IllegalArgumentException
-#define UNO3_IPROPERTYARRAYHELPER                       ::cppu::IPropertyArrayHelper
-#define UNO3_OBROADCASTHELPER                           ::cppu::OBroadcastHelper
-#define UNO3_OCONNECTIONPOINTCONTAINERHELPER            OConnectionPointContainerHelper
-#define UNO3_OMULTITYPEINTERFACECONTAINERHELPER         ::cppu::OMultiTypeInterfaceContainerHelper
-#define UNO3_OPROPERTYSETHELPER                         ::cppu::OPropertySetHelper
-#define UNO3_OUSTRING                                   ::rtl::OUString
-#define UNO3_PROPERTY                                   ::com::sun::star::beans::Property
-#define UNO3_PROPERTYVALUE                              ::com::sun::star::beans::PropertyValue
-#define UNO3_REFERENCE                                  ::com::sun::star::uno::Reference
-#define UNO3_RUNTIMEEXCEPTION                           ::com::sun::star::uno::RuntimeException
-#define UNO3_SEQUENCE                                   ::com::sun::star::uno::Sequence
-#define UNO3_TYPE                                       ::com::sun::star::uno::Type
-#define UNO3_WINDOWDESCRIPTOR                           ::com::sun::star::awt::WindowDescriptor
-#define UNO3_XCONNECTIONPOINT                           ::com::sun::star::lang::XConnectionPoint
-#define UNO3_XCONNECTIONPOINTCONTAINER                  ::com::sun::star::lang::XConnectionPointContainer
-#define UNO3_XCONTROLMODEL                              ::com::sun::star::awt::XControlModel
-#define UNO3_XFRAME                                     ::com::sun::star::frame::XFrame
-#define UNO3_XGRAPHICS                                  ::com::sun::star::awt::XGraphics
-#define UNO3_XINTERFACE                                 ::com::sun::star::uno::XInterface
-#define UNO3_XMULTISERVICEFACTORY                       ::com::sun::star::lang::XMultiServiceFactory
-#define UNO3_XPROPERTYSETINFO                           ::com::sun::star::beans::XPropertySetInfo
-#define UNO3_XTOOLKIT                                   ::com::sun::star::awt::XToolkit
-#define UNO3_XWINDOWPEER                                ::com::sun::star::awt::XWindowPeer
+#define	UNO3_ANY										::com::sun::star::uno::Any
+#define	UNO3_ILLEGALARGUMENTEXCEPTION					::com::sun::star::lang::IllegalArgumentException
+#define	UNO3_IPROPERTYARRAYHELPER						::cppu::IPropertyArrayHelper
+#define	UNO3_OBROADCASTHELPER							::cppu::OBroadcastHelper
+#define	UNO3_OCONNECTIONPOINTCONTAINERHELPER			OConnectionPointContainerHelper
+#define	UNO3_OMULTITYPEINTERFACECONTAINERHELPER			::cppu::OMultiTypeInterfaceContainerHelper
+#define	UNO3_OPROPERTYSETHELPER							::cppu::OPropertySetHelper
+#define	UNO3_OUSTRING									::rtl::OUString
+#define	UNO3_PROPERTY									::com::sun::star::beans::Property
+#define	UNO3_PROPERTYVALUE								::com::sun::star::beans::PropertyValue
+#define	UNO3_REFERENCE									::com::sun::star::uno::Reference
+#define	UNO3_RUNTIMEEXCEPTION							::com::sun::star::uno::RuntimeException
+#define	UNO3_SEQUENCE									::com::sun::star::uno::Sequence
+#define	UNO3_TYPE										::com::sun::star::uno::Type
+#define	UNO3_WINDOWDESCRIPTOR                           ::com::sun::star::awt::WindowDescriptor
+#define	UNO3_XCONNECTIONPOINT							::com::sun::star::lang::XConnectionPoint
+#define	UNO3_XCONNECTIONPOINTCONTAINER					::com::sun::star::lang::XConnectionPointContainer
+#define	UNO3_XCONTROLMODEL								::com::sun::star::awt::XControlModel
+#define	UNO3_XFRAME										::com::sun::star::frame::XFrame
+#define	UNO3_XGRAPHICS									::com::sun::star::awt::XGraphics
+#define	UNO3_XINTERFACE									::com::sun::star::uno::XInterface
+#define	UNO3_XMULTISERVICEFACTORY						::com::sun::star::lang::XMultiServiceFactory
+#define	UNO3_XPROPERTYSETINFO							::com::sun::star::beans::XPropertySetInfo
+#define	UNO3_XTOOLKIT									::com::sun::star::awt::XToolkit
+#define	UNO3_XWINDOWPEER								::com::sun::star::awt::XWindowPeer
 
 //______________________________________________________________________________________________________________
-//  defines
+//	defines
 //______________________________________________________________________________________________________________
 
-#define SERVICENAME_FRAMECONTROL                        "com.sun.star.frame.FrameControl"
-#define IMPLEMENTATIONNAME_FRAMECONTROL                 "stardiv.UnoControls.FrameControl"
-#define PROPERTYNAME_LOADERARGUMENTS                    "LoaderArguments"
-#define PROPERTYNAME_COMPONENTURL                       "ComponentURL"
-#define PROPERTYNAME_FRAME                              "Frame"
-#define ERRORTEXT_VOSENSHURE                            "This is an invalid property handle."
-#define PROPERTY_COUNT                                  3                                                       // you must count the propertys
-#define PROPERTYHANDLE_COMPONENTURL                     0                                                       // Id must be the index into the array
-#define PROPERTYHANDLE_FRAME                            1
-#define PROPERTYHANDLE_LOADERARGUMENTS                  2
+#define	SERVICENAME_FRAMECONTROL						"com.sun.star.frame.FrameControl"
+#define	IMPLEMENTATIONNAME_FRAMECONTROL					"stardiv.UnoControls.FrameControl"
+#define	PROPERTYNAME_LOADERARGUMENTS					"LoaderArguments"
+#define	PROPERTYNAME_COMPONENTURL						"ComponentURL"
+#define	PROPERTYNAME_FRAME								"Frame"
+#define	ERRORTEXT_VOSENSHURE							"This is an invalid property handle."
+#define PROPERTY_COUNT									3                                       				// you must count the propertys
+#define PROPERTYHANDLE_COMPONENTURL						0														// Id must be the index into the array
+#define PROPERTYHANDLE_FRAME							1
+#define PROPERTYHANDLE_LOADERARGUMENTS					2
 
 //______________________________________________________________________________________________________________
-//  class
+//	class
 //______________________________________________________________________________________________________________
 
-class FrameControl  : public UNO3_XCONTROLMODEL
+class FrameControl	: public UNO3_XCONTROLMODEL
                     , public UNO3_XCONNECTIONPOINTCONTAINER
-                    , public BaseControl                                // This order is neccessary for right initialization of m_aMutex!
+                    , public BaseControl								// This order is neccessary for right initialization of m_aMutex!
                     , public UNO3_OBROADCASTHELPER
                     , public UNO3_OPROPERTYSETHELPER
 {
 
 //______________________________________________________________________________________________________________
-//  public methods
+//	public methods
 //______________________________________________________________________________________________________________
 
 public:
 
     //__________________________________________________________________________________________________________
-    //  construct/destruct
+    //	construct/destruct
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -144,10 +144,10 @@ public:
         @onerror
     */
 
-    virtual ~FrameControl();
+    virtual	~FrameControl();
 
     //__________________________________________________________________________________________________________
-    //  XInterface
+    //	XInterface
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -166,39 +166,39 @@ public:
     virtual UNO3_ANY SAL_CALL queryInterface( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
 
     /**_______________________________________________________________________________________________________
-        @short      increment refcount
-        @descr      -
+        @short		increment refcount
+        @descr		-
 
-        @seealso    XInterface
-        @seealso    release()
+        @seealso	XInterface
+        @seealso	release()
 
-        @param      -
+        @param		-
 
-        @return     -
+        @return		-
 
-        @onerror    A RuntimeException is thrown.
+        @onerror	A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL acquire() throw();
 
     /**_______________________________________________________________________________________________________
-        @short      decrement refcount
-        @descr      -
+        @short		decrement refcount
+        @descr		-
 
-        @seealso    XInterface
-        @seealso    acquire()
+        @seealso	XInterface
+        @seealso	acquire()
 
-        @param      -
+        @param		-
 
-        @return     -
+        @return		-
 
-        @onerror    A RuntimeException is thrown.
+        @onerror	A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL release() throw();
 
     //__________________________________________________________________________________________________________
-    //  XTypeProvider
+    //	XTypeProvider
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -217,7 +217,7 @@ public:
     virtual UNO3_SEQUENCE< UNO3_TYPE > SAL_CALL getTypes() throw( UNO3_RUNTIMEEXCEPTION );
 
     //__________________________________________________________________________________________________________
-    //  XAggregation
+    //	XAggregation
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -236,7 +236,7 @@ public:
     UNO3_ANY SAL_CALL queryAggregation( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
 
     //__________________________________________________________________________________________________________
-    //  XControl
+    //	XControl
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -252,8 +252,8 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL createPeer(   const   UNO3_REFERENCE< UNO3_XTOOLKIT >&    xToolkit    ,
-                                        const   UNO3_REFERENCE< UNO3_XWINDOWPEER >& xParent     ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL createPeer(	const	UNO3_REFERENCE< UNO3_XTOOLKIT >&	xToolkit	,
+                                        const	UNO3_REFERENCE< UNO3_XWINDOWPEER >&	xParent		) throw( UNO3_RUNTIMEEXCEPTION );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -286,7 +286,7 @@ public:
     virtual UNO3_REFERENCE< UNO3_XCONTROLMODEL > SAL_CALL getModel() throw( UNO3_RUNTIMEEXCEPTION );
 
     //__________________________________________________________________________________________________________
-    //  XComponent
+    //	XComponent
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -305,7 +305,7 @@ public:
     virtual void SAL_CALL dispose() throw( UNO3_RUNTIMEEXCEPTION );
 
     //__________________________________________________________________________________________________________
-    //  XView
+    //	XView
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -339,7 +339,7 @@ public:
     virtual UNO3_REFERENCE< UNO3_XGRAPHICS > SAL_CALL getGraphics() throw( UNO3_RUNTIMEEXCEPTION );
 
     //__________________________________________________________________________________________________________
-    //  XConnectionPointContainer
+    //	XConnectionPointContainer
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -385,8 +385,8 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL advise(   const   UNO3_TYPE&                          aType       ,
-                                    const   UNO3_REFERENCE< UNO3_XINTERFACE >&  xListener   ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL advise(	const	UNO3_TYPE&							aType		,
+                                    const	UNO3_REFERENCE< UNO3_XINTERFACE >&	xListener	) throw( UNO3_RUNTIMEEXCEPTION );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -401,11 +401,11 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL unadvise( const   UNO3_TYPE&                          aType       ,
-                                    const   UNO3_REFERENCE< UNO3_XINTERFACE >&  xListener   ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL unadvise(	const	UNO3_TYPE&							aType		,
+                                    const	UNO3_REFERENCE< UNO3_XINTERFACE >&	xListener	) throw( UNO3_RUNTIMEEXCEPTION );
 
     //__________________________________________________________________________________________________________
-    //  impl but public methods to register service!
+    //	impl but public methods to register service!
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -439,13 +439,13 @@ public:
     static const UNO3_OUSTRING impl_getStaticImplementationName();
 
 //______________________________________________________________________________________________________________
-//  protected methods
+//	protected methods
 //______________________________________________________________________________________________________________
 
 protected:
     using OPropertySetHelper::getFastPropertyValue;
     //__________________________________________________________________________________________________________
-    //  OPropertySetHelper
+    //	OPropertySetHelper
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -461,10 +461,10 @@ protected:
         @onerror
     */
 
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(         UNO3_ANY&   rConvertedValue ,
-                                                                UNO3_ANY&   rOldValue       ,
-                                                                sal_Int32   nHandle         ,
-                                                        const   UNO3_ANY&   rValue          ) throw( UNO3_ILLEGALARGUMENTEXCEPTION );
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(			UNO3_ANY&	rConvertedValue	,
+                                                                UNO3_ANY&	rOldValue		,
+                                                                sal_Int32	nHandle			,
+                                                        const	UNO3_ANY&	rValue			) throw( UNO3_ILLEGALARGUMENTEXCEPTION );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -479,8 +479,8 @@ protected:
         @onerror
     */
 
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(         sal_Int32   nHandle ,
-                                                              const UNO3_ANY&   rValue  ) throw ( ::com::sun::star::uno::Exception );
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(			sal_Int32	nHandle	,
+                                                              const	UNO3_ANY&	rValue	) throw ( ::com::sun::star::uno::Exception );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -495,8 +495,8 @@ protected:
         @onerror
     */
 
-    virtual void SAL_CALL getFastPropertyValue( UNO3_ANY&   rValue  ,
-                                                  sal_Int32 nHandle ) const ;
+    virtual void SAL_CALL getFastPropertyValue(	UNO3_ANY&	rValue	,
+                                                  sal_Int32	nHandle	) const ;
 
     /**_________________________________________________________________________________________________________
         @short
@@ -514,7 +514,7 @@ protected:
     virtual UNO3_IPROPERTYARRAYHELPER& SAL_CALL getInfoHelper();
 
     //__________________________________________________________________________________________________________
-    //  XPropertySet
+    //	XPropertySet
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -533,7 +533,7 @@ protected:
     UNO3_REFERENCE< UNO3_XPROPERTYSETINFO > SAL_CALL getPropertySetInfo() throw( UNO3_RUNTIMEEXCEPTION );
 
     //__________________________________________________________________________________________________________
-    //  BaseControl
+    //	BaseControl
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -552,7 +552,7 @@ protected:
     virtual UNO3_WINDOWDESCRIPTOR* impl_getWindowDescriptor( const UNO3_REFERENCE< UNO3_XWINDOWPEER >& xParentPeer );
 
 //______________________________________________________________________________________________________________
-//  private methods
+//	private methods
 //______________________________________________________________________________________________________________
 
 private:
@@ -570,9 +570,9 @@ private:
         @onerror
     */
 
-    void impl_createFrame(  const   UNO3_REFERENCE< UNO3_XWINDOWPEER >&     xPeer           ,
-                            const   UNO3_OUSTRING&                          sURL            ,
-                            const   UNO3_SEQUENCE< UNO3_PROPERTYVALUE >&    seqArguments    );
+    void impl_createFrame(	const	UNO3_REFERENCE< UNO3_XWINDOWPEER >&		xPeer			,
+                            const	UNO3_OUSTRING&							sURL			,
+                            const	UNO3_SEQUENCE< UNO3_PROPERTYVALUE >&	seqArguments	);
 
     /**_________________________________________________________________________________________________________
         @short
@@ -606,19 +606,19 @@ private:
 
 
 //______________________________________________________________________________________________________________
-//  private variables
+//	private variables
 //______________________________________________________________________________________________________________
 
 private:
 
-    UNO3_REFERENCE< UNO3_XFRAME >               m_xFrame                    ;
-    UNO3_OUSTRING                               m_sComponentURL             ;
-    UNO3_SEQUENCE< UNO3_PROPERTYVALUE >         m_seqLoaderArguments        ;
-    UNO3_OMULTITYPEINTERFACECONTAINERHELPER     m_aInterfaceContainer       ;
-    UNO3_OCONNECTIONPOINTCONTAINERHELPER        m_aConnectionPointContainer ;
+    UNO3_REFERENCE< UNO3_XFRAME >				m_xFrame					;
+    UNO3_OUSTRING								m_sComponentURL				;
+    UNO3_SEQUENCE< UNO3_PROPERTYVALUE >			m_seqLoaderArguments		;
+    UNO3_OMULTITYPEINTERFACECONTAINERHELPER		m_aInterfaceContainer		;
+    UNO3_OCONNECTIONPOINTCONTAINERHELPER		m_aConnectionPointContainer	;
 
-};  // class FrameControl
+};	// class FrameControl
 
-}   // namespace unocontrols
+}	// namespace unocontrols
 
-#endif  // #ifndef _UNOCONTROLS_FRAMECONTROL_CTRL_HXX
+#endif	// #ifndef _UNOCONTROLS_FRAMECONTROL_CTRL_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,11 +62,11 @@ using namespace ::rtl;
 
 struct TargetData
 {
-    OUString        aUStrLinkname;
-    BOOL        bIsTarget;
+    OUString		aUStrLinkname;
+    BOOL		bIsTarget;
 
     TargetData ( OUString aUStrLName, BOOL bTarget )
-        :   bIsTarget ( bTarget )
+        :	bIsTarget ( bTarget )
     {
         if ( bIsTarget )
             aUStrLinkname = aUStrLName;
@@ -76,13 +76,13 @@ struct TargetData
 
 //########################################################################
 //#                                                                      #
-//# Tree-Window                                                          #
+//# Tree-Window 														 #
 //#                                                                      #
 //########################################################################
 
 SvxHlmarkTreeLBox::SvxHlmarkTreeLBox( Window* pParent, const ResId& rResId )
-: SvTreeListBox ( pParent, rResId ),
-  mpParentWnd   ( (SvxHlinkDlgMarkWnd*) pParent )
+: SvTreeListBox	( pParent, rResId ),
+  mpParentWnd	( (SvxHlinkDlgMarkWnd*) pParent )
 {
     SetNodeDefaultImages();
 }
@@ -118,7 +118,7 @@ void SvxHlmarkTreeLBox::Paint( const Rectangle& rRect )
 
 //########################################################################
 //#                                                                      #
-//# Window-Class                                                         #
+//# Window-Class														 #
 //#                                                                      #
 //########################################################################
 
@@ -129,20 +129,20 @@ void SvxHlmarkTreeLBox::Paint( const Rectangle& rRect )
 |************************************************************************/
 
 SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
-:   ModalDialog( (Window*)pParent, CUI_RES ( RID_SVXFLOAT_HYPERLINK_MARKWND ) ),
+:	ModalDialog( (Window*)pParent, CUI_RES ( RID_SVXFLOAT_HYPERLINK_MARKWND ) ),
     maBtApply( this, CUI_RES (BT_APPLY) ),
     maBtClose( this, CUI_RES (BT_CLOSE) ),
     maLbTree ( this, CUI_RES (TLB_MARK) ),
     mbUserMoved ( FALSE ),
-    mbFirst     ( TRUE ),
-    mpParent    ( pParent ),
-    mnError     ( LERR_NOERROR )
+    mbFirst	    ( TRUE ),
+    mpParent	( pParent ),
+    mnError		( LERR_NOERROR )
 {
     FreeResource();
 
-    maBtApply.SetClickHdl       ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
-    maBtClose.SetClickHdl       ( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
-    maLbTree.SetDoubleClickHdl  ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
+    maBtApply.SetClickHdl		( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
+    maBtClose.SetClickHdl		( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
+    maLbTree.SetDoubleClickHdl	( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
 
     // Tree-ListBox mit Linien versehen
     maLbTree.SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES |

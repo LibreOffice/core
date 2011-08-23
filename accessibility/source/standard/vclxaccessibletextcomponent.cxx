@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,9 +53,9 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleTextComponent
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXAccessibleTextComponent
+//	----------------------------------------------------
 
 VCLXAccessibleTextComponent::VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindow )
     :VCLXAccessibleComponent( pVCLXWindow )
@@ -175,8 +175,8 @@ sal_Bool VCLXAccessibleTextComponent::setCaretPosition( sal_Int32 nIndex ) throw
 sal_Unicode VCLXAccessibleTextComponent::getCharacter( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
-
-    return OCommonAccessibleText::getCharacter( nIndex );
+    
+    return OCommonAccessibleText::getCharacter( nIndex );	
 }
 
 // -----------------------------------------------------------------------------
@@ -225,8 +225,8 @@ awt::Rectangle VCLXAccessibleTextComponent::getCharacterBounds( sal_Int32 nIndex
 sal_Int32 VCLXAccessibleTextComponent::getCharacterCount() throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
-
-    return OCommonAccessibleText::getCharacterCount();
+    
+    return OCommonAccessibleText::getCharacterCount();		
 }
 
 // -----------------------------------------------------------------------------
@@ -248,8 +248,8 @@ sal_Int32 VCLXAccessibleTextComponent::getIndexAtPoint( const awt::Point& aPoint
 ::rtl::OUString VCLXAccessibleTextComponent::getSelectedText() throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
-
-    return OCommonAccessibleText::getSelectedText();
+    
+    return OCommonAccessibleText::getSelectedText();				
 }
 
 // -----------------------------------------------------------------------------
@@ -257,7 +257,7 @@ sal_Int32 VCLXAccessibleTextComponent::getIndexAtPoint( const awt::Point& aPoint
 sal_Int32 VCLXAccessibleTextComponent::getSelectionStart() throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
-
+    
     return OCommonAccessibleText::getSelectionStart();
 }
 
@@ -266,8 +266,8 @@ sal_Int32 VCLXAccessibleTextComponent::getSelectionStart() throw (RuntimeExcepti
 sal_Int32 VCLXAccessibleTextComponent::getSelectionEnd() throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
-
-    return OCommonAccessibleText::getSelectionEnd();
+    
+    return OCommonAccessibleText::getSelectionEnd();	
 }
 
 // -----------------------------------------------------------------------------
@@ -287,7 +287,7 @@ sal_Bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_I
 ::rtl::OUString VCLXAccessibleTextComponent::getText() throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
-
+    
     return OCommonAccessibleText::getText();
 }
 
@@ -296,8 +296,8 @@ sal_Bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_I
 ::rtl::OUString VCLXAccessibleTextComponent::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
-
-    return OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex );
+    
+    return OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex );		
 }
 
 // -----------------------------------------------------------------------------
@@ -305,7 +305,7 @@ sal_Bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_I
 ::com::sun::star::accessibility::TextSegment VCLXAccessibleTextComponent::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
-
+    
     return OCommonAccessibleText::getTextAtIndex( nIndex, aTextType );
 }
 
@@ -314,7 +314,7 @@ sal_Bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_I
 ::com::sun::star::accessibility::TextSegment VCLXAccessibleTextComponent::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
-
+    
     return OCommonAccessibleText::getTextBeforeIndex( nIndex, aTextType );
 }
 
@@ -323,7 +323,7 @@ sal_Bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_I
 ::com::sun::star::accessibility::TextSegment VCLXAccessibleTextComponent::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
-
+    
     return OCommonAccessibleText::getTextBehindIndex( nIndex, aTextType );
 }
 
@@ -349,7 +349,7 @@ sal_Bool VCLXAccessibleTextComponent::copyText( sal_Int32 nStartIndex, sal_Int32
             Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
             if( xFlushableClipboard.is() )
                 xFlushableClipboard->flushClipboard();
-
+            
             Application::AcquireSolarMutex( nRef );
 
             bReturn = sal_True;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svx/relfld.hxx>       // SvxRelativeField
-#include <svx/paraprev.hxx>     // Preview
+#include <svx/relfld.hxx>		// SvxRelativeField
+#include <svx/paraprev.hxx>		// Preview
 #include <svx/frmdirlbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <svx/flagsdef.hxx>
@@ -51,7 +51,7 @@ class SvxParagraphControllerItem;
 
 // class SvxStdParagraphTabPage ------------------------------------------
 
-/*  {k:\svx\prototyp\dialog\parastd.bmp}
+/* 	{k:\svx\prototyp\dialog\parastd.bmp}
 
     [Beschreibung]
     Mit dieser TabPage koennen Standard-Attribute eines Absatzes eingestellt
@@ -72,49 +72,49 @@ private:
     SvxStdParagraphTabPage( Window* pParent, const SfxItemSet& rSet );
 
     // Einzug
-    FixedText               aLeftLabel;
-    SvxRelativeField        aLeftIndent;
+    FixedText				aLeftLabel;
+    SvxRelativeField		aLeftIndent;
 
-    FixedText               aRightLabel;
-    SvxRelativeField        aRightIndent;
+    FixedText				aRightLabel;
+    SvxRelativeField		aRightIndent;
 
-    FixedText               aFLineLabel;
-    SvxRelativeField        aFLineIndent;
-    CheckBox                aAutoCB;
+    FixedText				aFLineLabel;
+    SvxRelativeField		aFLineIndent;
+    CheckBox				aAutoCB;
 
     FixedLine               aIndentFrm;
 
     // Abstaende
-    FixedText               aTopLabel;
-    SvxRelativeField        aTopDist;
-    FixedText               aBottomLabel;
-    SvxRelativeField        aBottomDist;
+    FixedText				aTopLabel;
+    SvxRelativeField		aTopDist;
+    FixedText				aBottomLabel;
+    SvxRelativeField		aBottomDist;
     FixedLine               aDistFrm;
 
     // Zeilenabstand
-    ListBox                 aLineDist;
-    FixedText               aLineDistAtLabel;
-    MetricField             aLineDistAtPercentBox;
-    MetricField             aLineDistAtMetricBox;
+    ListBox					aLineDist;
+    FixedText				aLineDistAtLabel;
+    MetricField				aLineDistAtPercentBox;
+    MetricField				aLineDistAtMetricBox;
     FixedLine               aLineDistFrm;
-    String                  sAbsDist;
-    SvxParaPrevWindow       aExampleWin;
+    String 					sAbsDist;
+    SvxParaPrevWindow		aExampleWin;
 
     //Registerhaltigkeit - nur Writer
-    CheckBox                aRegisterCB;
+    CheckBox				aRegisterCB;
     FixedLine               aRegisterFL;
 
-    Edit*                   pActLineDistFld;
-    long                    nAbst;
-    long                    nWidth;
-    long                    nMinFixDist;
-    BOOL                    bRelativeMode;
+    Edit*					pActLineDistFld;
+    long					nAbst;
+    long					nWidth;
+    long 					nMinFixDist;
+    BOOL					bRelativeMode;
     BOOL                    bNegativeIndents;
 
 #ifdef _SVX_PARAGRPH_CXX
-    void                    SetLineSpacing_Impl( const SvxLineSpacingItem& rAttr );
-    void                    Init_Impl();
-    void                    UpdateExample_Impl( BOOL bAll = FALSE );
+    void					SetLineSpacing_Impl( const SvxLineSpacingItem& rAttr );
+    void					Init_Impl();
+    void					UpdateExample_Impl( BOOL bAll = FALSE );
 
     DECL_LINK( LineDistHdl_Impl, ListBox* );
     DECL_LINK( ModifyHdl_Impl, SvxRelativeField* );
@@ -122,26 +122,26 @@ private:
 #endif
 
 protected:
-    virtual int             DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual int				DeactivatePage( SfxItemSet* pSet = 0 );
 
 public:
     DECL_LINK( ELRLoseFocusHdl, Edit* );
 
-    static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*          GetRanges();
+    static SfxTabPage*		Create( Window* pParent, const SfxItemSet& rSet );
+    static USHORT*			GetRanges();
 
-    virtual BOOL            FillItemSet( SfxItemSet& rSet );
-    virtual void            Reset( const SfxItemSet& rSet );
+    virtual BOOL			FillItemSet( SfxItemSet& rSet );
+    virtual void			Reset( const SfxItemSet& rSet );
 
 
-    void                    SetPageWidth( USHORT nPageWidth );
-    void                    SetMaxDistance( USHORT nMaxDist );
-    void                    EnableRelativeMode();
-    void                    EnableRegisterMode();
-    void                    EnableAutoFirstLine();
-    void                    EnableAbsLineDist(long nMinTwip);
-    void                    EnableNegativeMode();
-    virtual void            PageCreated(SfxAllItemSet aSet); // add CHINA001
+    void					SetPageWidth( USHORT nPageWidth );
+    void					SetMaxDistance( USHORT nMaxDist );
+    void					EnableRelativeMode();
+    void 					EnableRegisterMode();
+    void					EnableAutoFirstLine();
+    void					EnableAbsLineDist(long nMinTwip);
+    void					EnableNegativeMode();
+    virtual void 			PageCreated(SfxAllItemSet aSet); // add CHINA001
 };
 
 // class SvxParaAlignTabPage ------------------------------------------------
@@ -153,55 +153,55 @@ class SvxParaAlignTabPage : public SfxTabPage
     // Ausrichtung
     FixedLine               aAlignFrm;
     RadioButton             aLeft;
-    RadioButton             aRight;
-    RadioButton             aCenter;
-    RadioButton             aJustify;
-    FixedText               aLastLineFT;
-    ListBox                 aLastLineLB;
-    CheckBox                aExpandCB;
+    RadioButton				aRight;
+    RadioButton				aCenter;
+    RadioButton				aJustify;
+    FixedText				aLastLineFT;
+    ListBox				    aLastLineLB;
+    CheckBox				aExpandCB;
 
     CheckBox                aSnapToGridCB;
 
     //preview
-    SvxParaPrevWindow       aExampleWin;
+    SvxParaPrevWindow		aExampleWin;
     //vertical alignment
     FixedLine               aVertAlignFL;
 
     FixedText               aVertAlignFT;
     ListBox                 aVertAlignLB;
 
-    FixedLine                   aPropertiesFL;
-    FixedText                   aTextDirectionFT;
-    svx::FrameDirectionListBox  aTextDirectionLB;
+    FixedLine               	aPropertiesFL;
+    FixedText               	aTextDirectionFT;
+    svx::FrameDirectionListBox	aTextDirectionLB;
 
 #ifdef _SVX_PARAGRPH_CXX
-    DECL_LINK(              AlignHdl_Impl, RadioButton* );
-    DECL_LINK(              LastLineHdl_Impl, ListBox* );
-    DECL_LINK(              TextDirectionHdl_Impl, ListBox* );
+    DECL_LINK( 				AlignHdl_Impl, RadioButton* );
+    DECL_LINK( 				LastLineHdl_Impl, ListBox* );
+    DECL_LINK( 				TextDirectionHdl_Impl, ListBox* );
 
-    void                    UpdateExample_Impl( BOOL bAll = FALSE );
+    void					UpdateExample_Impl( BOOL bAll = FALSE );
 #endif
 
                             SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSet );
-    virtual                 ~SvxParaAlignTabPage();
+    virtual					~SvxParaAlignTabPage();
 
 protected:
-    virtual int             DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual int				DeactivatePage( SfxItemSet* pSet = 0 );
 
 public:
-    static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*          GetRanges();
+    static SfxTabPage*		Create( Window* pParent, const SfxItemSet& rSet );
+    static USHORT*			GetRanges();
 
-    virtual BOOL            FillItemSet( SfxItemSet& rSet );
-    virtual void            Reset( const SfxItemSet& rSet );
+    virtual BOOL			FillItemSet( SfxItemSet& rSet );
+    virtual void			Reset( const SfxItemSet& rSet );
 
-    void                    EnableJustifyExt();
-    virtual void            PageCreated(SfxAllItemSet aSet); // add CHINA001
+    void					EnableJustifyExt();
+    virtual void 			PageCreated(SfxAllItemSet aSet); // add CHINA001
 };
 
 // class SvxExtParagraphTabPage ------------------------------------------
 
-/*  {k:\svx\prototyp\dialog\paraext.bmp}
+/*	{k:\svx\prototyp\dialog\paraext.bmp}
 
     [Beschreibung]
     Mit dieser TabPage koennen Spezial-Attribute eines Absatzes eingestellt
@@ -220,65 +220,65 @@ class SvxExtParagraphTabPage: public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    virtual             ~SvxExtParagraphTabPage();
+    virtual				~SvxExtParagraphTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create(	Window* pParent,
                                 const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static USHORT*		GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual BOOL		FillItemSet( SfxItemSet& rSet );
+    virtual void		Reset( const SfxItemSet& rSet );
 
-    void                DisablePageBreak();
+    void				DisablePageBreak();
 
 protected:
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual int			DeactivatePage( SfxItemSet* pSet = 0 );
 
 private:
                         SvxExtParagraphTabPage( Window* pParent, const SfxItemSet& rSet );
 
     // Silbentrennung
-    TriStateBox         aHyphenBox;
-    FixedText           aBeforeText;
-    NumericField        aExtHyphenBeforeBox;
-//  FixedText           aHyphenBeforeLabel;
-    FixedText           aAfterText;
-    NumericField        aExtHyphenAfterBox;
-//  FixedText           aHyphenAfterLabel;
-    FixedText           aMaxHyphenLabel;
+    TriStateBox			aHyphenBox;
+    FixedText			aBeforeText;
+    NumericField		aExtHyphenBeforeBox;
+//	FixedText			aHyphenBeforeLabel;
+    FixedText			aAfterText;
+    NumericField		aExtHyphenAfterBox;
+//	FixedText			aHyphenAfterLabel;
+    FixedText     		aMaxHyphenLabel;
     NumericField        aMaxHyphenEdit;
     FixedLine           aExtFL;
 
     // Seitenumbruch
-    FixedLine           aBreaksFL;
-    TriStateBox         aPageBreakBox;
+    FixedLine			aBreaksFL;
+    TriStateBox			aPageBreakBox;
     FixedText           aBreakTypeFT;
     ListBox             aBreakTypeLB;
     FixedText           aBreakPositionFT;
     ListBox             aBreakPositionLB;
-    TriStateBox         aApplyCollBtn;
-    ListBox             aApplyCollBox;
+    TriStateBox			aApplyCollBtn;
+    ListBox				aApplyCollBox;
     FixedText           aPagenumText;
-    NumericField        aPagenumEdit;
+    NumericField       	aPagenumEdit;
 
     FixedLine           aExtendFL;
 
     // Absatzteilung
-    TriStateBox         aKeepTogetherBox;
-    TriStateBox         aKeepParaBox;
+    TriStateBox			aKeepTogetherBox;
+    TriStateBox			aKeepParaBox;
 
     // Witwen/Waisen
-    TriStateBox         aOrphanBox;
-    NumericField        aOrphanRowNo;
-    FixedText           aOrphanRowLabel;
+    TriStateBox			aOrphanBox;
+    NumericField       	aOrphanRowNo;
+    FixedText			aOrphanRowLabel;
 
-    TriStateBox         aWidowBox;
-    NumericField        aWidowRowNo;
-    FixedText           aWidowRowLabel;
+    TriStateBox			aWidowBox;
+    NumericField       	aWidowRowNo;
+    FixedText			aWidowRowLabel;
 
     BOOL                bPageBreak;
-    BOOL                bHtmlMode;
-    USHORT              nStdPos;
+    BOOL				bHtmlMode;
+    USHORT				nStdPos;
 
 #ifdef _SVX_PARAGRPH_CXX
     DECL_LINK( PageBreakHdl_Impl, TriStateBox* );
@@ -290,7 +290,7 @@ private:
     DECL_LINK( PageBreakPosHdl_Impl, ListBox* );
     DECL_LINK( PageBreakTypeHdl_Impl, ListBox* );
 #endif
-    virtual void            PageCreated(SfxAllItemSet aSet); // add CHINA001
+    virtual void 			PageCreated(SfxAllItemSet aSet); // add CHINA001
 };
 /* -----------------------------29.11.00 11:33--------------------------------
 
@@ -299,10 +299,10 @@ class SvxAsianTabPage : public SfxTabPage
 {
     FixedLine       aOptionsFL;
 
-    TriStateBox     aForbiddenRulesCB;
-    TriStateBox     aHangingPunctCB;
+    TriStateBox		aForbiddenRulesCB;
+    TriStateBox		aHangingPunctCB;
 
-    TriStateBox     aScriptSpaceCB;
+    TriStateBox		aScriptSpaceCB;
 
     SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet );
 
@@ -313,12 +313,12 @@ public:
     ~SvxAsianTabPage();
 
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create(	Window* pParent,
                                 const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static USHORT*		GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual BOOL		FillItemSet( SfxItemSet& rSet );
+    virtual void		Reset( const SfxItemSet& rSet );
 
 };
 

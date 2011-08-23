@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace abp
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         m_xORB;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xDataSource;
-        Window*         m_pMessageParent;
+        Window*			m_pMessageParent;
 
     public:
         OAdminDialogInvokation(
@@ -63,7 +63,7 @@ namespace abp
     };
 
 //.........................................................................
-}   // namespace abp
+}	// namespace abp
 //.........................................................................
 
 #endif // EXTENSIONS_ABP_ADMININVOKATIONIMPL_HXX

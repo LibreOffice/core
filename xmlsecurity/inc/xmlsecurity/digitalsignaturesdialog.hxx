@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ class DigitalSignaturesDialog : public ModalDialog
 {
 private:
     cssu::Reference< cssu::XComponentContext >& mxCtx;
-    XMLSignatureHelper      maSignatureHelper;
+    XMLSignatureHelper	    maSignatureHelper;
 
     css::uno::Reference < css::embed::XStorage > mxStore;
     css::uno::Reference < css::io::XStream > mxSignatureStream;
@@ -73,49 +73,49 @@ private:
     SignatureInformations   maCurrentSignatureInformations;
     bool                    mbVerifySignatures;
     bool                    mbSignaturesChanged;
-    DocumentSignatureMode   meSignatureMode;
+    DocumentSignatureMode	meSignatureMode;
     css::uno::Sequence < css::uno::Sequence < css::beans::PropertyValue > > m_manifest;
 
-    FixedText           maHintDocFT;
-    FixedText           maHintBasicFT;
-    FixedText           maHintPackageFT;
+    FixedText			maHintDocFT;
+    FixedText			maHintBasicFT;
+    FixedText			maHintPackageFT;
     SvxSimpleTable      maSignaturesLB; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
-    FixedImage          maSigsValidImg;
-    FixedInfo           maSigsValidFI;
+    FixedImage			maSigsValidImg;
+    FixedInfo			maSigsValidFI;
     FixedImage          maSigsInvalidImg;
     FixedInfo           maSigsInvalidFI;
     FixedImage          maSigsNotvalidatedImg;
     FixedInfo           maSigsNotvalidatedFI;
     FixedInfo           maSigsOldSignatureFI;
 
-    PushButton          maViewBtn;
-    PushButton          maAddBtn;
-    PushButton          maRemoveBtn;
+    PushButton			maViewBtn;
+    PushButton			maAddBtn;
+    PushButton			maRemoveBtn;
 
-    FixedLine           maBottomSepFL;
-    OKButton            maOKBtn;
-    HelpButton          maHelpBtn;
+    FixedLine			maBottomSepFL;
+    OKButton			maOKBtn;
+    HelpButton			maHelpBtn;
 
     ::rtl::OUString m_sODFVersion;
-    //Signals if the document contains already a document signature. This is only
+    //Signals if the document contains already a document signature. This is only 
     //importent when we are signing macros and if the value is true.
     bool m_bHasDocumentSignature;
     bool m_bWarningShowSignMacro;
 
-    DECL_LINK(          ViewButtonHdl, Button* );
-    DECL_LINK(          AddButtonHdl, Button* );
-    DECL_LINK(          RemoveButtonHdl, Button* );
-    DECL_LINK(          SignatureHighlightHdl, void* );
-    DECL_LINK(          SignatureSelectHdl, void* );
-    DECL_LINK(          StartVerifySignatureHdl, void* );
-    DECL_LINK(          OKButtonHdl, void* );
+    DECL_LINK(			ViewButtonHdl, Button* );
+    DECL_LINK(			AddButtonHdl, Button* );
+    DECL_LINK(			RemoveButtonHdl, Button* );
+    DECL_LINK(			SignatureHighlightHdl, void* );
+    DECL_LINK(			SignatureSelectHdl, void* );
+    DECL_LINK(			StartVerifySignatureHdl, void* );
+    DECL_LINK(			OKButtonHdl, void* );
 
     void                ImplGetSignatureInformations(bool bUseTempStream);
     void                ImplFillSignaturesBox();
     void                ImplShowSignaturesDetails();
     SignatureStreamHelper ImplOpenSignatureStream( sal_Int32 eStreamMode, bool bTempStream );
 
-    //Checks if adding is allowed.
+    //Checks if adding is allowed. 
     //See the spec at specs/www/appwide/security/Electronic_Signatures_and_Security.sxw
     //(6.6.2)Behaviour with regard to ODF 1.2
     bool canAdd();
@@ -127,8 +127,8 @@ private:
     bool canAddRemove();
 
 public:
-    DigitalSignaturesDialog( Window* pParent, cssu::Reference<
-        cssu::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
+    DigitalSignaturesDialog( Window* pParent, cssu::Reference< 
+        cssu::XComponentContext >& rxCtx, DocumentSignatureMode eMode, 
         sal_Bool bReadOnly, const ::rtl::OUString& sODFVersion, bool bHasDocumentSignature);
     ~DigitalSignaturesDialog();
 
@@ -140,7 +140,7 @@ public:
     void    SetSignatureStream( const cssu::Reference < css::io::XStream >& rxStream );
 
                 // Execute the dialog...
-    short       Execute();
+    short	    Execute();
 
                 // Did signatures change?
     sal_Bool    SignaturesChanged() const { return mbSignaturesChanged; }

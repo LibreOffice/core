@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 ////////////////////////////////////////////////////////////////////////////
 ////
-////                  Windows ONLY
+////                  Windows ONLY 
 ////
 ////////////////////////////////////////////////////////////////////////////
 
@@ -70,7 +70,7 @@ String ReadRegistry( String aKey, String aValueName )
                 &hRegKey ) == ERROR_SUCCESS )
     {
         LONG lRet;
-        sal_Unicode PathW[_MAX_PATH];
+        sal_Unicode	PathW[_MAX_PATH];
         DWORD lSize = sizeof(PathW) / sizeof( sal_Unicode );
         DWORD Type = REG_SZ;
 

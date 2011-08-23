@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,32 +44,32 @@ private:
 
 protected:
 
-    virtual void            _ExportMeta() {}
-    virtual void            _ExportStyles( BOOL /*bUsed*/ ) {}
-    virtual void            _ExportAutoStyles() {}
-    virtual void            _ExportContent() {}
-    virtual void            _ExportMasterStyles() {}
-    virtual sal_uInt32      exportDoc( enum ::xmloff::token::XMLTokenEnum /*eClass*/ ) { return 0; }
-
-public:
-
+    virtual void			_ExportMeta() {}
+    virtual void			_ExportStyles( BOOL /*bUsed*/ ) {}
+    virtual void			_ExportAutoStyles() {}
+    virtual void			_ExportContent() {}
+    virtual void			_ExportMasterStyles() {}
+    virtual sal_uInt32		exportDoc( enum ::xmloff::token::XMLTokenEnum /*eClass*/ ) { return 0; }
+                            
+public:						
+                            
     // #110680#
-    SVGMtfExport(
+    SVGMtfExport( 
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const REF( NMSP_SAX::XDocumentHandler )& rxHandler );
 
-    virtual                 ~SVGMtfExport();
+    virtual					~SVGMtfExport();
 
-    virtual void            writeMtf( const GDIMetaFile& rMtf );
+    virtual void			writeMtf( const GDIMetaFile& rMtf );
 };
 
 // -----------------------------------------------------------------------------
 
 // #110680#
-SVGMtfExport::SVGMtfExport(
+SVGMtfExport::SVGMtfExport( 
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-    const REF( NMSP_SAX::XDocumentHandler )& rxHandler )
-:   SvXMLExport( xServiceFactory, NMSP_RTL::OUString(), rxHandler )
+    const REF( NMSP_SAX::XDocumentHandler )& rxHandler ) 
+:	SvXMLExport( xServiceFactory, NMSP_RTL::OUString(), rxHandler )
 {
     GetDocHandler()->startDocument();
 }
@@ -85,18 +85,18 @@ SVGMtfExport::~SVGMtfExport()
 
 void SVGMtfExport::writeMtf( const GDIMetaFile& rMtf )
 {
-    const Size                                  aSize( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_MM ) );
-    NMSP_RTL::OUString                          aAttr;
-    REF( NMSP_SAX::XExtendedDocumentHandler )   xExtDocHandler( GetDocHandler(), NMSP_UNO::UNO_QUERY );
+    const Size									aSize( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_MM ) );
+    NMSP_RTL::OUString							aAttr;
+    REF( NMSP_SAX::XExtendedDocumentHandler )	xExtDocHandler( GetDocHandler(), NMSP_UNO::UNO_QUERY );
 
     if( xExtDocHandler.is() )
         xExtDocHandler->unknown( SVG_DTD_STRING );
 
-    aAttr = NMSP_RTL::OUString::valueOf( aSize.Width() );
+    aAttr = NMSP_RTL::OUString::valueOf( aSize.Width() ); 
     aAttr += B2UCONST( "mm" );
     AddAttribute( XML_NAMESPACE_NONE, "width", aAttr );
 
-    aAttr = NMSP_RTL::OUString::valueOf( aSize.Height() );
+    aAttr = NMSP_RTL::OUString::valueOf( aSize.Height() ); 
     aAttr += B2UCONST( "mm" );
     AddAttribute( XML_NAMESPACE_NONE, "height", aAttr );
 
@@ -107,9 +107,9 @@ void SVGMtfExport::writeMtf( const GDIMetaFile& rMtf )
     AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
 
     {
-        SvXMLElementExport  aSVG( *this, XML_NAMESPACE_NONE, "svg", TRUE, TRUE );
-        SVGActionWriter*    pWriter = new SVGActionWriter( *this, rMtf );
-
+        SvXMLElementExport	aSVG( *this, XML_NAMESPACE_NONE, "svg", TRUE, TRUE );
+        SVGActionWriter*	pWriter = new SVGActionWriter( *this, rMtf );
+        
         delete pWriter;
     }
 }
@@ -155,17 +155,17 @@ void SAL_CALL SVGWriter::release() throw()
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SVGWriter::write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHandler,
+void SAL_CALL SVGWriter::write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHandler, 
                                 const SEQ( sal_Int8 )& rMtfSeq ) throw( NMSP_UNO::RuntimeException )
 {
-    SvMemoryStream  aMemStm( (char*) rMtfSeq.getConstArray(), rMtfSeq.getLength(), STREAM_READ );
-    GDIMetaFile     aMtf;
+    SvMemoryStream	aMemStm( (char*) rMtfSeq.getConstArray(), rMtfSeq.getLength(), STREAM_READ );
+    GDIMetaFile		aMtf;
 
     aMemStm.SetCompressMode( COMPRESSMODE_FULL );
     aMemStm >> aMtf;
 
     const REF( NMSP_SAX::XDocumentHandler ) xDocumentHandler( rxDocHandler );
-
+    
     // #110680#
     // SVGMtfExport* pWriter = new SVGMtfExport( xDocumentHandler );
     SVGMtfExport* pWriter = new SVGMtfExport( mxFact, xDocumentHandler );

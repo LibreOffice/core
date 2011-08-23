@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_xmlsecurity.hxx"
 
 #include <rtl/locale.h>
-#include <osl/nlsupport.h>
+#include <osl/nlsupport.h> 
 #include <osl/process.h>
 
 #include <util.hxx>
@@ -99,20 +99,20 @@ void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
 {
     int length = data.getLength();
     ::rtl::OUString result;
-
+    
     char number[4];
     for (int j=0; j<length; j++)
     {
         sprintf(number, "%02X ", (unsigned char)data[j]);
         result += rtl::OUString::createFromAscii( number );
     }
-
+    
     return result;
 }
 
 
-::rtl::OUString getSignatureInformation(
-    const SignatureInformation& infor,
+::rtl::OUString getSignatureInformation( 
+    const SignatureInformation& infor, 
     cssu::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >& xSecurityEnvironment )
 {
     char* status[50] = {
@@ -166,9 +166,9 @@ void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
         "DSIG_NO_REFERENCES",
         "DSIG_INVALID_REFERENCE",
         "ASSERTION"};
-
+    
     rtl::OUString result;
-
+    
     result += rtl::OUString::createFromAscii( "Security Id : " )
         +rtl::OUString::valueOf(infor.nSecurityId)
         +rtl::OUString::createFromAscii( "\n" );
@@ -177,11 +177,11 @@ void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
         +rtl::OUString::createFromAscii( "] " )
         +rtl::OUString::createFromAscii(status[infor.nStatus])
         +rtl::OUString::createFromAscii( "\n" );
-
+    
     const SignatureReferenceInformations& rInfors = infor.vSignatureReferenceInfors;
     int i;
     int size = rInfors.size();
-
+    
     result += rtl::OUString::createFromAscii( "--References :\n" );
     for (i=0; i<size; i++)
     {
@@ -206,7 +206,7 @@ void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
             result += infor.ouX509SerialNumber;
             result += rtl::OUString::createFromAscii( "\n" );
         }
-
+        
         if (infor.ouX509Certificate.getLength()>0)
         {
             result += rtl::OUString::createFromAscii( "--X509Certificate :\n" );
@@ -222,7 +222,7 @@ void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
         }
 
            result += rtl::OUString::createFromAscii( "--Date :\n" );
-
+           
     ::rtl::OUStringBuffer buffer;
     convertDateTime( buffer, infor.stDateTime );
     result += buffer.makeStringAndClear();
@@ -233,7 +233,7 @@ void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
             result += rtl::OUString::createFromAscii( "--Certificate Path :\n" );
             cssu::Reference< ::com::sun::star::security::XCertificate > xCert = xSecurityEnvironment->getCertificate( infor.ouX509IssuerName, numericStringToBigInteger(infor.ouX509SerialNumber) );
             cssu::Sequence < cssu::Reference< ::com::sun::star::security::XCertificate > > xCertPath;
-            if(! xCert.is() )
+            if(! xCert.is() ) 
             {
                 fprintf(stdout , " xCert is NULL , so can not buildCertificatePath\n");
                 return result ;
@@ -242,8 +242,8 @@ void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
             {
                 xCertPath = xSecurityEnvironment->buildCertificatePath( xCert ) ;
             }
-
-        for( int i = 0; i < xCertPath.getLength(); i++ )
+            
+        for( int i = 0; i < xCertPath.getLength(); i++ ) 
         {
             result += xCertPath[i]->getSubjectName();
                     result += rtl::OUString::createFromAscii( "\n    Subject public key algorithm : " );
@@ -265,10 +265,10 @@ void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
 
                     result += rtl::OUString::createFromAscii( "\n  <<\n" );
         }
-
+        
                    result += rtl::OUString::createFromAscii( "\n    Key Usage : " );
                    sal_Int32 usage = xCert->getCertificateUsage();
-
+                   
                    if (usage & ::com::sun::star::security::KeyUsage::DIGITAL_SIGNATURE)
                    {
                        result += rtl::OUString::createFromAscii( "DIGITAL_SIGNATURE " );
@@ -278,27 +278,27 @@ void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
                    {
                        result += rtl::OUString::createFromAscii( "NON_REPUDIATION " );
                    }
-
+                   
                    if (usage & ::com::sun::star::security::KeyUsage::KEY_ENCIPHERMENT)
                    {
                        result += rtl::OUString::createFromAscii( "KEY_ENCIPHERMENT " );
                    }
-
+                   
                    if (usage & ::com::sun::star::security::KeyUsage::DATA_ENCIPHERMENT)
                    {
                        result += rtl::OUString::createFromAscii( "DATA_ENCIPHERMENT " );
                    }
-
+                   
                    if (usage & ::com::sun::star::security::KeyUsage::KEY_AGREEMENT)
                    {
                        result += rtl::OUString::createFromAscii( "KEY_AGREEMENT " );
                    }
-
+                   
                    if (usage & ::com::sun::star::security::KeyUsage::KEY_CERT_SIGN)
                    {
                        result += rtl::OUString::createFromAscii( "KEY_CERT_SIGN " );
                    }
-
+                   
                    if (usage & ::com::sun::star::security::KeyUsage::CRL_SIGN)
                    {
                        result += rtl::OUString::createFromAscii( "CRL_SIGN " );
@@ -306,32 +306,32 @@ void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
 
                    result += rtl::OUString::createFromAscii( "\n" );
         }
-
+        
     result += rtl::OUString::createFromAscii( "\n" );
     return result;
 }
 
-::rtl::OUString getSignatureInformations(
+::rtl::OUString getSignatureInformations( 
     const SignatureInformations& SignatureInformations,
-    cssu::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecurityEnvironment )
+    cssu::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecurityEnvironment ) 
 {
     rtl::OUString result;
     int i;
     int size = SignatureInformations.size();
-
+    
     for (i=0; i<size; i++)
     {
         const SignatureInformation& infor = SignatureInformations[i];
         result += getSignatureInformation( infor, xSecurityEnvironment );
     }
-
+    
     result += rtl::OUString::createFromAscii( "\n" );
-
+    
     return result;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >
-    getCertificateFromEnvironment( ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >  xSecurityEnvironment , BOOL nType)
+::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > 
+    getCertificateFromEnvironment( ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >	xSecurityEnvironment , BOOL nType)
 {
     cssu::Sequence< cssu::Reference< ::com::sun::star::security::XCertificate > > xPersonalCerts ;
     int length = 0;
@@ -346,18 +346,18 @@ void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
 
     if( nType != FALSE )
         xPersonalCerts = xSecurityEnvironment->getPersonalCertificates() ;
-    else
+    else 
         return NULL; // not support then;
 
     length = xPersonalCerts.getLength();
-    if(length == 0)
+    if(length == 0) 
     {
         fprintf( stdout, "\nNo certificate found!\n" ) ;
         return NULL;
     }
 
     fprintf( stdout, "\nSelect a certificate:\n" ) ;
-    for( i = 0; i < length; i ++ )
+    for( i = 0; i < length; i ++ ) 
     {
         rtl::OUString xxxIssuer;
         rtl::OUString xxxSubject;
@@ -375,7 +375,7 @@ void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
             yyySubject.getStr(),
             yyyIssuer.getStr());
     }
-
+    
     int sel = QuerySelectNumber( 1, length ) -1;
     return xPersonalCerts[sel] ;
 }
@@ -393,13 +393,13 @@ void QueryPrintSignatureDetails( const SignatureInformations& SignatureInformati
         sal_uInt16 encoding = osl_getTextEncodingFromLocale( pLocale ) ;
 
         fprintf( stdout, "------------- Signature details START -------------\n" );
-        fprintf( stdout, "%s",
+        fprintf( stdout, "%s", 
             rtl::OUStringToOString(
                 getSignatureInformations( SignatureInformations, rSecEnv),
                 encoding).getStr());
 
         fprintf( stdout, "------------- Signature details END -------------\n" );
-    }
+    }	
 }
 
 int QuerySelectNumber( int nMin, int nMax )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -174,7 +174,7 @@ sal_Int32 VCLXAccessibleRadioButton::getAccessibleActionCount( ) throw (RuntimeE
 {
     OExternalLockGuard aGuard( this );
 
-    return 1;
+    return 1;	
 }
 
 // -----------------------------------------------------------------------------
@@ -213,7 +213,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleRadioButton::getAccessibleActio
 
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
-
+    
     OAccessibleKeyBindingHelper* pKeyBindingHelper = new OAccessibleKeyBindingHelper();
     Reference< XAccessibleKeyBinding > xKeyBinding = pKeyBindingHelper;
 
@@ -257,7 +257,7 @@ Any VCLXAccessibleRadioButton::getCurrentValue(  ) throw (RuntimeException)
     VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
     if ( pVCLXRadioButton )
         aValue <<= (sal_Int32) pVCLXRadioButton->getState();
-
+    
     return aValue;
 }
 
@@ -283,7 +283,7 @@ sal_Bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber ) throw 
         pVCLXRadioButton->setState( (sal_Bool) nValue );
         bReturn = sal_True;
     }
-
+    
     return bReturn;
 }
 
@@ -295,7 +295,7 @@ Any VCLXAccessibleRadioButton::getMaximumValue(  ) throw (RuntimeException)
 
     Any aValue;
     aValue <<= (sal_Int32) 1;
-
+                
     return aValue;
 }
 
@@ -307,7 +307,7 @@ Any VCLXAccessibleRadioButton::getMinimumValue(  ) throw (RuntimeException)
 
     Any aValue;
     aValue <<= (sal_Int32) 0;
-
+    
     return aValue;
 }
 

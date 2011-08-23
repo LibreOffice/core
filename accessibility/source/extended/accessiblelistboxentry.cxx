@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#define ACCESSIBLE_ACTION_COUNT 1
+#define ACCESSIBLE_ACTION_COUNT	1
 
 namespace
 {
@@ -90,11 +90,11 @@ namespace accessibility
                                                     SvLBoxEntry* _pEntry,
                                                     const Reference< XAccessible >& _xParent ) :
 
-        AccessibleListBoxEntry_BASE ( m_aMutex ),
+        AccessibleListBoxEntry_BASE	( m_aMutex ),
         ListBoxAccessibleBase( _rListBox ),
 
         m_nClientId     ( 0 ),
-        m_aParent       ( _xParent )
+        m_aParent		( _xParent )
 
     {
         DBG_CTOR( AccessibleListBoxEntry, NULL );
@@ -357,13 +357,13 @@ namespace accessibility
         {
             DBG_ASSERT( m_aEntryPath.size(), "AccessibleListBoxEntry::getAccessibleParent: invalid path!" );
             if ( 1 == m_aEntryPath.size() )
-            {   // we're a top level entry
+            {	// we're a top level entry
                 // -> our parent is the tree listbox itself
                 if ( getListBox() )
                     xParent = getListBox()->GetAccessible( );
             }
             else
-            {   // we have a entry as parent -> get it's accessible
+            {	// we have a entry as parent -> get it's accessible
 
                 // shorten our access path by one
                 ::std::deque< sal_Int32 > aParentPath( m_aEntryPath );
@@ -523,7 +523,7 @@ namespace accessibility
         // do nothing, because no focus for each item
     }
     // -----------------------------------------------------------------------------
-    sal_Int32 AccessibleListBoxEntry::getForeground(    ) throw (RuntimeException)
+    sal_Int32 AccessibleListBoxEntry::getForeground(	) throw (RuntimeException)
     {
         ALBSolarGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -613,7 +613,7 @@ namespace accessibility
         EnsureIsAlive();
 
         String sText = getText();
-        if  ( ( 0 > nStartIndex ) || ( sText.Len() <= nStartIndex )
+        if	( ( 0 > nStartIndex ) || ( sText.Len() <= nStartIndex )
             || ( 0 > nEndIndex ) || ( sText.Len() <= nEndIndex ) )
             throw IndexOutOfBoundsException();
 

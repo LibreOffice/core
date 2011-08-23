@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,19 +43,19 @@ namespace abp
     class TypeSelectionPage : public AddressBookSourcePage
     {
     protected:
-        FixedText       m_aHint;
-        FixedLine       m_aTypeSep;
-        RadioButton     m_aEvolution;
-        RadioButton     m_aEvolutionGroupwise;
-        RadioButton     m_aEvolutionLdap;
-        RadioButton     m_aMORK;
-        RadioButton     m_aThunderbird;
-        RadioButton     m_aKab;
-        RadioButton     m_aMacab;
-        RadioButton     m_aLDAP;
-        RadioButton     m_aOutlook;
-        RadioButton     m_aOE;
-        RadioButton     m_aOther;
+        FixedText		m_aHint;
+        FixedLine		m_aTypeSep;
+        RadioButton		m_aEvolution;
+        RadioButton		m_aEvolutionGroupwise;
+        RadioButton		m_aEvolutionLdap;
+        RadioButton		m_aMORK;
+        RadioButton		m_aThunderbird;
+        RadioButton		m_aKab;
+        RadioButton		m_aMacab;
+        RadioButton		m_aLDAP;
+        RadioButton		m_aOutlook;
+        RadioButton		m_aOE;
+        RadioButton		m_aOther;
 
         struct ButtonItem {
             RadioButton *m_pItem;
@@ -82,12 +82,12 @@ namespace abp
 
     protected:
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void		initializePage();
+        virtual sal_Bool	commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
         // TabDialog overridables
-        virtual void        ActivatePage();
-        virtual void        DeactivatePage();
+        virtual void		ActivatePage();
+        virtual void		DeactivatePage();
 
         // OImportPage overridables
         virtual bool        canAdvance() const;
@@ -95,11 +95,11 @@ namespace abp
     private:
         DECL_LINK( OnTypeSelected, void* );
 
-        void                selectType( AddressSourceType _eType );
+        void				selectType( AddressSourceType _eType );
     };
 
 //.........................................................................
-}   // namespace abp
+}	// namespace abp
 //.........................................................................
 
 #endif // EXTENSIONS_ABP_TYPESELECTIONPAGE_HXX

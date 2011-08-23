@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,16 +45,16 @@ enum MSFltrPg2_CheckBoxEntries {
     InvalidCBEntry
 };
 
-#define CBCOL_FIRST     0
-#define CBCOL_SECOND    1
+#define CBCOL_FIRST		0
+#define CBCOL_SECOND 	1
 
 // -----------------------------------------------------------------------
 
 OfaMSFilterTabPage::OfaMSFilterTabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage( pParent, CUI_RES( RID_OFAPAGE_MSFILTEROPT ), rSet ),
-    aMSWordGB       ( this, CUI_RES( GB_WORD        ) ),
-    aWBasicCodeCB   ( this, CUI_RES( CB_WBAS_CODE ) ),
-    aWBasicStgCB    ( this, CUI_RES( CB_WBAS_STG  ) ),
+    aMSWordGB		( this, CUI_RES( GB_WORD	    ) ),
+    aWBasicCodeCB	( this, CUI_RES( CB_WBAS_CODE ) ),
+    aWBasicStgCB	( this, CUI_RES( CB_WBAS_STG  ) ),
     aMSExcelGB      ( this, CUI_RES( GB_EXCEL     ) ),
     aEBasicCodeCB   ( this, CUI_RES( CB_EBAS_CODE ) ),
     aEBasicExectblCB( this, CUI_RES( CB_EBAS_EXECTBL ) ),
@@ -78,7 +78,7 @@ IMPL_LINK( OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl, CheckBox*, EMPTYARG 
     return 0;
 }
 
-SfxTabPage* OfaMSFilterTabPage::Create( Window* pParent,
+SfxTabPage*	OfaMSFilterTabPage::Create( Window* pParent,
                                         const SfxItemSet& rAttrSet )
 {
     return new OfaMSFilterTabPage( pParent, rAttrSet );
@@ -143,15 +143,15 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet& )
 OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,
                                         const SfxItemSet& rSet )
     : SfxTabPage( pParent, CUI_RES( RID_OFAPAGE_MSFILTEROPT2 ), rSet ),
-    aCheckLB            ( this, CUI_RES( CLB_SETTINGS   )),
-    aHeader1FT          ( this, CUI_RES( FT_HEADER1_EXPLANATION )),
+    aCheckLB			( this, CUI_RES( CLB_SETTINGS	)),
+    aHeader1FT			( this, CUI_RES( FT_HEADER1_EXPLANATION )),
     aHeader2FT          ( this, CUI_RES( FT_HEADER2_EXPLANATION )),
     sHeader1            ( CUI_RES( ST_HEADER1 )),
     sHeader2            ( CUI_RES( ST_HEADER2 )),
-    sChgToFromMath      ( CUI_RES( ST_CHG_MATH  )),
-    sChgToFromWriter    ( CUI_RES( ST_CHG_WRITER )),
-    sChgToFromCalc      ( CUI_RES( ST_CHG_CALC )),
-    sChgToFromImpress   ( CUI_RES( ST_CHG_IMPRESS )),
+    sChgToFromMath		( CUI_RES( ST_CHG_MATH	)),
+    sChgToFromWriter	( CUI_RES( ST_CHG_WRITER )),
+    sChgToFromCalc		( CUI_RES( ST_CHG_CALC )),
+    sChgToFromImpress	( CUI_RES( ST_CHG_IMPRESS )),
     pCheckButtonData(0)
 {
     FreeResource();
@@ -173,7 +173,7 @@ OfaMSFilterTabPage2::~OfaMSFilterTabPage2()
     delete pCheckButtonData;
 }
 
-SfxTabPage* OfaMSFilterTabPage2::Create( Window* pParent,
+SfxTabPage*	OfaMSFilterTabPage2::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet )
 {
     return new OfaMSFilterTabPage2( pParent, rAttrSet );
@@ -189,21 +189,21 @@ BOOL OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
         BOOL (SvtFilterOptions:: *FnIs)() const;
         void (SvtFilterOptions:: *FnSet)( BOOL bFlag );
     } aChkArr[] = {
-        { Math,     &SvtFilterOptions::IsMathType2Math,
-                        &SvtFilterOptions::SetMathType2Math },
-        { Math,     &SvtFilterOptions::IsMath2MathType,
+        { Math, 	&SvtFilterOptions::IsMathType2Math,
+                        &SvtFilterOptions::SetMathType2Math	},
+        { Math, 	&SvtFilterOptions::IsMath2MathType,
                         &SvtFilterOptions::SetMath2MathType },
-        { Writer,   &SvtFilterOptions::IsWinWord2Writer,
+        { Writer,	&SvtFilterOptions::IsWinWord2Writer,
                         &SvtFilterOptions::SetWinWord2Writer },
-        { Writer,   &SvtFilterOptions::IsWriter2WinWord,
+        { Writer, 	&SvtFilterOptions::IsWriter2WinWord,
                         &SvtFilterOptions::SetWriter2WinWord },
-        { Calc,     &SvtFilterOptions::IsExcel2Calc,
+        { Calc, 	&SvtFilterOptions::IsExcel2Calc,
                         &SvtFilterOptions::SetExcel2Calc },
-        { Calc,     &SvtFilterOptions::IsCalc2Excel,
+        { Calc, 	&SvtFilterOptions::IsCalc2Excel,
                         &SvtFilterOptions::SetCalc2Excel },
-        { Impress,  &SvtFilterOptions::IsPowerPoint2Impress,
+        { Impress, 	&SvtFilterOptions::IsPowerPoint2Impress,
                         &SvtFilterOptions::SetPowerPoint2Impress },
-        { Impress,  &SvtFilterOptions::IsImpress2PowerPoint,
+        { Impress, 	&SvtFilterOptions::IsImpress2PowerPoint,
                         &SvtFilterOptions::SetImpress2PowerPoint },
         { InvalidCBEntry, 0, 0 }
     };

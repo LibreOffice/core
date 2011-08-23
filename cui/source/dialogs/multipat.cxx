@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,8 +55,8 @@ using namespace ::com::sun::star::uno;
 
 struct MultiPath_Impl
 {
-    BOOL    bEmptyAllowed;
-    BOOL    bIsClassPathMode;
+    BOOL	bEmptyAllowed;
+    BOOL	bIsClassPathMode;
     bool    bIsRadioButtonMode;
 
     MultiPath_Impl( BOOL bAllowed ) :
@@ -197,11 +197,11 @@ SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, BOOL bEmptyAllowed ) :
     aRadioLB    ( this, CUI_RES( LB_RADIOBUTTON ) ),
     aRadioFT    ( this, CUI_RES( FT_RADIOBUTTON ) ),
     aAddBtn     ( this, CUI_RES( BTN_ADD_MULTIPATH ) ),
-    aDelBtn     ( this, CUI_RES( BTN_DEL_MULTIPATH ) ),
-    aOKBtn      ( this, CUI_RES( BTN_MULTIPATH_OK ) ),
-    aCancelBtn  ( this, CUI_RES( BTN_MULTIPATH_CANCEL ) ),
-    aHelpButton ( this, CUI_RES( BTN_MULTIPATH_HELP ) ),
-    pImpl       ( new MultiPath_Impl( bEmptyAllowed ) )
+    aDelBtn		( this, CUI_RES( BTN_DEL_MULTIPATH ) ),
+    aOKBtn		( this, CUI_RES( BTN_MULTIPATH_OK ) ),
+    aCancelBtn	( this, CUI_RES( BTN_MULTIPATH_CANCEL ) ),
+    aHelpButton	( this, CUI_RES( BTN_MULTIPATH_HELP ) ),
+    pImpl		( new MultiPath_Impl( bEmptyAllowed ) )
 
 {
     static long aStaticTabs[]= { 2, 0, 12 };

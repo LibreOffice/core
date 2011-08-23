@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,8 +80,8 @@ public class ConfigGroup implements ConfigNode
 
     /**
      * convert the primitive type value of the
-     * given Field object to the corresponding
-     * Java Object value.
+     * given Field object to the corresponding 
+     * Java Object value. 
      * @param field
      * @return the value of the field as a Object.
      * @throws IllegalAccessException

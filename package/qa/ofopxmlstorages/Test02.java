@@ -48,7 +48,7 @@ public class Test02 implements StorageTest {
             XStream xTempFileStream = m_aTestHelper.CreateTempFileStream( m_xMSF );
             if ( xTempFileStream == null )
                 return false;
-
+        
             // create storage based on the temporary stream
             XStorage xTempStorage = m_aTestHelper.createStorageFromStream( m_xStorageFactory,
                                                                             xTempFileStream,
@@ -68,7 +68,7 @@ public class Test02 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-
+            
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
@@ -93,7 +93,7 @@ public class Test02 implements StorageTest {
                                                             ElementModes.WRITE,
                                                             aRelations ) )
                 return false;
-
+    
             // commit substorage first
             if ( !m_aTestHelper.commitStorage( xTempSubStorage ) )
                 return false;
@@ -120,7 +120,7 @@ public class Test02 implements StorageTest {
             if ( xTempInStream == null )
                 return false;
 
-
+        
             // open input stream
             XStorage xResultStorage = m_aTestHelper.createStorageFromInputStream( m_xStorageFactory, xTempInStream );
             if ( xResultStorage == null )
@@ -141,7 +141,7 @@ public class Test02 implements StorageTest {
                 m_aTestHelper.Error( "Can't open existing substorage!" );
                 return false;
             }
-
+    
             if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage,
                                                         false,
                                                         ElementModes.READ,
@@ -158,7 +158,7 @@ public class Test02 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    }
+    } 
 
 }
 

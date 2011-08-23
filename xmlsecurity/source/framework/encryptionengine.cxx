@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace cssxw = com::sun::star::xml::wrapper;
 
 #define ENCRYPTION_TEMPLATE "com.sun.star.xml.crypto.XMLEncryptionTemplate"
 
-#define DECLARE_ASCII( SASCIIVALUE )                                                                            \
+#define	DECLARE_ASCII( SASCIIVALUE )																			\
     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )
 
 EncryptionEngine::EncryptionEngine( )
@@ -52,31 +52,31 @@ bool EncryptionEngine::checkReady() const
 /****** EncryptionEngine/checkReady ******************************************
  *
  *   NAME
- *  checkReady -- checks the conditions for the main operation.
+ *	checkReady -- checks the conditions for the main operation.
  *
  *   SYNOPSIS
- *  bReady = checkReady( );
+ *	bReady = checkReady( );
  *
  *   FUNCTION
- *  checks whether all following conditions are satisfied:
- *  1. the main operation has't begun yet;
- *  2. the key material is known;
- *  3. the id of the template blocker is known;
- *  4. both the key element and the encryption template
- *     are bufferred.
+ *	checks whether all following conditions are satisfied:
+ *	1. the main operation has't begun yet;
+ *	2. the key material is known;
+ *	3. the id of the template blocker is known;
+ *	4. both the key element and the encryption template
+ *	   are bufferred.
  *
  *   INPUTS
- *  empty
+ *	empty
  *
  *   RESULT
- *  bReady - true if all conditions are satisfied, false otherwise
+ *	bReady - true if all conditions are satisfied, false otherwise
  *
  *   HISTORY
- *  05.01.2004 -    implemented
+ *	05.01.2004 -	implemented
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
     bool rc = true;
@@ -94,65 +94,65 @@ bool EncryptionEngine::checkReady() const
     {
         rc = false;
     }
-
+    
     return rc;
 }
 
-void EncryptionEngine::tryToPerform( )
+void EncryptionEngine::tryToPerform( ) 
         throw (cssu::Exception, cssu::RuntimeException)
 /****** EncryptionEngine/tryToPerform ****************************************
  *
  *   NAME
- *  tryToPerform -- tries to perform the encryption/decryption operation.
+ *	tryToPerform -- tries to perform the encryption/decryption operation.
  *
  *   SYNOPSIS
- *  tryToPerform( );
+ *	tryToPerform( );
  *
  *   FUNCTION
- *  if the situation is ready, perform following operations.
- *  1. prepares a encryption template;
- *  2. calls the encryption bridge component;
- *  3. clears up all used resources;
- *  4. notifies the result listener;
- *  5. sets the "accomplishment" flag.
+ *	if the situation is ready, perform following operations.
+ *	1. prepares a encryption template;
+ *	2. calls the encryption bridge component;
+ *	3. clears up all used resources;
+ *	4. notifies the result listener;
+ *	5. sets the "accomplishment" flag.
  *
  *   INPUTS
- *  empty
+ *	empty
  *
  *   RESULT
- *  empty
+ *	empty
  *
  *   HISTORY
- *  05.01.2004 -    implemented
+ *	05.01.2004 -	implemented
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
     if (checkReady())
     {
-        const rtl::OUString sEncryptionTemplate (
-            RTL_CONSTASCII_USTRINGPARAM( ENCRYPTION_TEMPLATE ) );
+        const rtl::OUString sEncryptionTemplate ( 
+            RTL_CONSTASCII_USTRINGPARAM( ENCRYPTION_TEMPLATE ) );	
         cssu::Reference < cssxc::XXMLEncryptionTemplate > xEncryptionTemplate(
             mxMSF->createInstance( sEncryptionTemplate ), cssu::UNO_QUERY );
-
+        
         OSL_ASSERT( xEncryptionTemplate.is() );
-
-        cssu::Reference< cssxw::XXMLElementWrapper > xXMLElement
+    
+        cssu::Reference< cssxw::XXMLElementWrapper > xXMLElement 
             = m_xSAXEventKeeper->getElement( m_nIdOfTemplateEC );
-
+        
         xEncryptionTemplate->setTemplate(xXMLElement);
-
+        
         startEngine( xEncryptionTemplate );
-
+    
         /*
          * done
          */
         clearUp( );
-
+        
         notifyResultListener();
-
+                
         m_bMissionDone = true;
     }
 }
@@ -161,45 +161,45 @@ void EncryptionEngine::clearUp( ) const
 /****** EncryptionEngine/clearup *********************************************
  *
  *   NAME
- *  clearUp -- clear up all resources used by this operation.
+ *	clearUp -- clear up all resources used by this operation.
  *
  *   SYNOPSIS
- *  clearUp( );
+ *	clearUp( );
  *
  *   FUNCTION
- *  cleaning resources up includes:
- *  1. releases the ElementCollector for the encryption template element;
- *  2. releases the Blocker for the encryption template element;
- *  3. releases the ElementCollector for the key element, if there is one.
+ *	cleaning resources up includes:
+ *	1. releases the ElementCollector for the encryption template element;
+ *	2. releases the Blocker for the encryption template element;
+ *	3. releases the ElementCollector for the key element, if there is one.
  *
  *   INPUTS
- *  empty
+ *	empty
  *
  *   RESULT
- *  empty
+ *	empty
  *
  *   HISTORY
- *  05.01.2004 -    implemented
+ *	05.01.2004 -	implemented
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    cssu::Reference < cssxc::sax::XReferenceResolvedBroadcaster >
+    cssu::Reference < cssxc::sax::XReferenceResolvedBroadcaster > 
         xReferenceResolvedBroadcaster( m_xSAXEventKeeper, cssu::UNO_QUERY );
-
+        
     xReferenceResolvedBroadcaster->removeReferenceResolvedListener(
-        m_nIdOfTemplateEC,
+        m_nIdOfTemplateEC, 
         (const cssu::Reference < cssxc::sax::XReferenceResolvedListener >)((SecurityEngine *)this));
-
+    
     m_xSAXEventKeeper->removeElementCollector(m_nIdOfTemplateEC);
-
+        
     if (m_nIdOfBlocker != -1)
     {
         m_xSAXEventKeeper->removeBlocker(m_nIdOfBlocker);
     }
-
+        
     if (m_nIdOfKeyEC != 0 && m_nIdOfKeyEC != -1)
     {
         m_xSAXEventKeeper->removeElementCollector(m_nIdOfKeyEC);

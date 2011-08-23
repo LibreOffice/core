@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -159,7 +159,7 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                     ((SdrHdlList&)rHdlList).ResetFocusHdl();
                 else
                     pView->UnmarkAll();
-
+                
                 bReturn = TRUE;
             }
         }
@@ -313,7 +313,7 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 
                             pView->MovAction( aEndPoint );
                             pView->EndDragObj();
-
+                        
                             // restore snap
                             if ( !bWasNoSnap )
                                 ((SdrDragStat&)rDragStat).SetNoSnap( bWasNoSnap );
@@ -413,7 +413,7 @@ BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
             pParent->ShowProperties();
     }
 
-    return TRUE;
+    return TRUE;	
 }
 
 //----------------------------------------------------------------------------
@@ -450,7 +450,7 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
         if ( pView->IsDragObj() )
              pView->EndDragObj( rMEvt.IsMod1() );
         return TRUE;
-    }
+    }	
 }
 
 //----------------------------------------------------------------------------
@@ -461,7 +461,7 @@ BOOL DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
     Window*  pWindow= pParent->GetWindow();
     pView->SetActualWin( pWindow );
 
-    Point   aPos( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+    Point	aPos( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
     USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
 
     if ( pView->IsAction() )
@@ -523,9 +523,9 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
                 if( pView->PickObj( aMDPos, nHitLog, pObj, pPV ) )
                 {
                     //if( pObj->ISA( DlgEdForm ) )
-                    //  pView->UnmarkAll();
+                    //	pView->UnmarkAll();
                     //else
-                    //  pParent->UnmarkDialog();
+                    //	pParent->UnmarkDialog();
                 }
             }
 
@@ -584,22 +584,22 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
         }
     }
 
-//  USHORT nClicks = rMEvt.GetClicks();
-//  if (nClicks == 2)
-//  {
-//      if ( pView->AreObjectsMarked() )
-//      {
-//          const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+//	USHORT nClicks = rMEvt.GetClicks();
+//	if (nClicks == 2)
+//	{
+//		if ( pView->AreObjectsMarked() )
+//		{
+//			const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 //
-//          if (rMarkList.GetMarkCount() == 1)
-//          {
-//              SdrMark* pMark = rMarkList.GetMark(0);
-//              SdrObject* pObj = pMark->GetMarkedSdrObj();
+//			if (rMarkList.GetMarkCount() == 1)
+//			{
+//				SdrMark* pMark = rMarkList.GetMark(0);
+//				SdrObject* pObj = pMark->GetMarkedSdrObj();
 //
-//              // edit objects here
-//          }
-//      }
-//  }
+//				// edit objects here
+//			}
+//		}
+//	}
 
     bMarkAction = FALSE;
 

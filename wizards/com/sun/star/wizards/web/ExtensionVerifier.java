@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ public class ExtensionVerifier implements UCB.Verifier
     /**
      * @return true if the given object is
      * a String which does not end with the
-     * given extension.
+     * given extension. 
      */
     public boolean verify(Object object)
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ SAL_IMPLEMENT_MAIN()
 {
     (void) argv;
     (void) argc;
-
+    
     if( osl_getCommandArgCount() != 0 )
     {
         fprintf(stderr, "Usage: updateprotocoltest\n");
@@ -56,19 +56,19 @@ SAL_IMPLEMENT_MAIN()
 
     // create the initial component context
     uno::Reference< uno::XComponentContext > rComponentContext = cppu::defaultBootstrap_InitialComponentContext();
-
+ 
     // initialize UCB
     uno::Sequence< uno::Any > theArguments(2);
     theArguments[0] = uno::makeAny( UNISTRING( "Local") );
     theArguments[1] = uno::makeAny( UNISTRING( "Office") );
-
-    uno::Reference< uno::XInterface > xUCB =
-        rComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            UNISTRING( "com.sun.star.ucb.UniversalContentBroker" ),
-            theArguments,
+    
+    uno::Reference< uno::XInterface > xUCB = 
+        rComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext( 
+            UNISTRING( "com.sun.star.ucb.UniversalContentBroker" ), 
+            theArguments, 
             rComponentContext );
-
-
+ 
+    
     rtl::OUString aURL;
     rtl::OUString aVersion;
 
@@ -76,7 +76,7 @@ SAL_IMPLEMENT_MAIN()
     {
         if( checkForUpdates(rComponentContext, uno::Reference< task::XInteractionHandler > (), aURL, aVersion) )
         {
-            OSL_TRACE( "Update found: %s on %s",
+            OSL_TRACE( "Update found: %s on %s", 
                 rtl::OUStringToOString( aVersion, RTL_TEXTENCODING_UTF8).getStr(),
                 rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8).getStr());
         }
@@ -89,6 +89,6 @@ SAL_IMPLEMENT_MAIN()
     {
         OSL_TRACE( "unhandled exception caught" );
     }
-
+            
     return 0;
 }

@@ -8,7 +8,7 @@
 #include <memory>
 #include <string>
 
-class RegistryValueImpl
+class RegistryValueImpl  
 {
 public:
 
@@ -21,7 +21,7 @@ public:
     RegistryValueImpl(const std::wstring& Name, const std::wstring& Value);
 
     RegistryValueImpl(const std::wstring& Name, const std::string& Value);
-
+    
     #if (_MSC_VER >= 1300)
     RegistryValueImpl::RegistryValueImpl(const RegistryValueImpl& s);
     #endif
@@ -52,7 +52,7 @@ public:
         @precond GetType = STRING
     */
     std::wstring GetDataAsUniString() const;
-
+    
     /** Returns the data as ansi string
 
         @precond GetType = STRING
@@ -60,7 +60,7 @@ public:
     std::string GetDataAsAnsiString() const;
 
     /** Returns the data as number
-
+    
         @precond GetType = NUMBER
     */
     int GetDataAsInt() const;
@@ -72,13 +72,13 @@ public:
     //#################################
     // Command
     //#################################
+    
 
-
-    /** Set a new name
+    /** Set a new name 
     */
     void SetName(const std::wstring& NewName);
 
-    /**
+    /** 
     */
     void SetValue(const std::wstring& NewValue);
 
@@ -95,14 +95,14 @@ public:
     //#################################
 
 private:
-    std::wstring    m_Name;
-    int             m_Type;
-    std::wstring    m_StringData;
-    int             m_IntData;
+    std::wstring	m_Name;
+    int				m_Type;
+    std::wstring	m_StringData;
+    int				m_IntData;
 };
 
 
 typedef std::auto_ptr<RegistryValueImpl> RegistryValue;
 
 
-#endif
+#endif 

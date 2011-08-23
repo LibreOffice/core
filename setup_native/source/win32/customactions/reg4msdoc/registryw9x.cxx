@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -445,7 +445,7 @@ void RegistryKeyImplWin9x::DeleteSubKey(const std::wstring& Name)
     else if (ERROR_ACCESS_DENIED == rc)
         throw RegistryAccessDeniedException(rc);
     else if (ERROR_SUCCESS != rc)
-        throw RegistryException(rc);
+        throw RegistryException(rc);		
 }
 
 //-----------------------------------------------------
@@ -477,7 +477,7 @@ void RegistryKeyImplWin9x::DeleteSubKeyTree(const std::wstring& Name)
                  IsWriteable = true
                  HasValue(Name) = true
 
-        @throws RegistryIOException
+        @throws	RegistryIOException
                 RegistryWriteAccessDeniedException
                 RegistryValueNotFoundException
 */

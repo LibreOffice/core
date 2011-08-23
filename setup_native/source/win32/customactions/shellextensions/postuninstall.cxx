@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@
 
 #ifdef UNICODE
 #define _UNICODE
-#define _tstring    wstring
+#define _tstring	wstring
 #else
-#define _tstring    string
+#define _tstring	string
 #endif
 #include <tchar.h>
 #include <string>
@@ -51,9 +51,9 @@
 
 static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 {
-    std::_tstring   result;
-    TCHAR   szDummy[1] = TEXT("");
-    DWORD   nChars = 0;
+    std::_tstring	result;
+    TCHAR	szDummy[1] = TEXT("");
+    DWORD	nChars = 0;
 
     if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
     {
@@ -61,18 +61,18 @@ static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sPro
         LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
         ZeroMemory( buffer, nBytes );
         MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
-        result = buffer;
+        result = buffer;            
     }
 
-    return  result;
+    return	result;
 }
 
 
 static BOOL ExecuteCommand( LPCTSTR lpCommand, BOOL bSync )
 {
-    BOOL                fSuccess = FALSE;
-    STARTUPINFO         si;
-    PROCESS_INFORMATION pi;
+    BOOL				fSuccess = FALSE;
+    STARTUPINFO			si;
+    PROCESS_INFORMATION	pi;
 
     ZeroMemory( &si, sizeof(si) );
     si.cb = sizeof(si);
@@ -104,15 +104,15 @@ static BOOL ExecuteCommand( LPCTSTR lpCommand, BOOL bSync )
 
 extern "C" UINT __stdcall ExecutePostUninstallScript( MSIHANDLE handle )
 {
-    TCHAR   szValue[8192];
-    DWORD   nValueSize = sizeof(szValue);
-    HKEY    hKey;
-    std::_tstring   sInstDir;
-
-    std::_tstring   sProductKey = GetMsiProperty( handle, TEXT("FINDPRODUCT") );
+    TCHAR	szValue[8192];
+    DWORD	nValueSize = sizeof(szValue);
+    HKEY	hKey;
+    std::_tstring	sInstDir;
+    
+    std::_tstring	sProductKey = GetMsiProperty( handle, TEXT("FINDPRODUCT") );
 
     // MessageBox( NULL, sProductKey.c_str(), "Titel", MB_OK );
-
+    
     if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
     {
         if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
@@ -132,11 +132,11 @@ extern "C" UINT __stdcall ExecutePostUninstallScript( MSIHANDLE handle )
     else
         return ERROR_SUCCESS;
 
-    std::_tstring   sInfFile = sInstDir + TEXT("program\\postuninstall.inf");
-    std::_tstring   sCommand = _T("RUNDLL32.EXE ");
+    std::_tstring	sInfFile = sInstDir + TEXT("program\\postuninstall.inf");
+    std::_tstring	sCommand = _T("RUNDLL32.EXE ");
 
     // MessageBox( NULL, sInfFile.c_str(), "Titel", MB_OK );
-
+    
     if ( (LONG)GetVersion() < 0 )
         sCommand += _T("setupx.dll");
     else

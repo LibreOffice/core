@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-#define FL_TREAT_AS_EQUAL                   100
+#define FL_TREAT_AS_EQUAL					100
 #define CB_MATCH_CASE                       101
 #define CB_MATCH_FULL_HALF_WIDTH            102
 #define CB_MATCH_HIRAGANA_KATAKANA          103
@@ -42,9 +42,9 @@
 #define CB_MATCH_IAIYA                      114
 #define CB_MATCH_KIKU                       115
 
-#define FL_IGNORE                           200
+#define FL_IGNORE							200
 #define CB_IGNORE_PUNCTUATION               201
 #define CB_IGNORE_WHITESPACES               202
 #define CB_MATCH_PROLONGED_SOUNDMARK        203
-#define CB_IGNORE_MIDDLE_DOT                204
+#define CB_IGNORE_MIDDLE_DOT				204
 

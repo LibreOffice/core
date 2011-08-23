@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 namespace ole_adapter
 {
-//Wrapper for VARDESC
+//Wrapper for VARDESC		
 class VarDesc
 {
     VARDESC* operator = (const VarDesc*);
@@ -87,7 +87,7 @@ class FuncDesc
     FUNCDESC * m_pFuncDesc;
 
 public:
-
+    
     FuncDesc(ITypeInfo * pTypeInfo) :
         m_pFuncDesc(NULL),
         m_pTypeInfo(pTypeInfo)

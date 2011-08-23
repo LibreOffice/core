@@ -41,7 +41,7 @@ public class BorderedStream
     {
         return (XInputStream)UnoRuntime.queryInterface( XInputStream.class, this );
     }
-
+    
     // ----------------------------------------------------------
     public synchronized XOutputStream getOutputStream()
         throws com.sun.star.uno.RuntimeException
@@ -75,7 +75,7 @@ public class BorderedStream
         {
             aData[0] = new byte[0];
         }
-
+        
         return nRead;
     }
 

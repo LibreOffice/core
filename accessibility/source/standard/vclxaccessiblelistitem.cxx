@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,14 +74,14 @@ DBG_NAME(VCLXAccessibleListItem)
 // -----------------------------------------------------------------------------
 VCLXAccessibleListItem::VCLXAccessibleListItem( ::accessibility::IComboListBoxHelper* _pListBoxHelper, sal_Int32 _nIndexInParent, const Reference< XAccessible >& _xParent ) :
 
-    VCLXAccessibleListItem_BASE ( m_aMutex ),
+    VCLXAccessibleListItem_BASE	( m_aMutex ),
 
     m_nIndexInParent( _nIndexInParent ),
-    m_bSelected     ( sal_False ),
-    m_bVisible      ( sal_False ),
+    m_bSelected		( sal_False ),
+    m_bVisible		( sal_False ),
     m_nClientId     ( 0 ),
     m_pListBoxHelper( _pListBoxHelper ),
-    m_xParent       ( _xParent )
+    m_xParent		( _xParent )
 
 {
     DBG_CTOR( VCLXAccessibleListItem, NULL );
@@ -209,10 +209,10 @@ void SAL_CALL VCLXAccessibleListItem::disposing()
         ::osl::MutexGuard aGuard( m_aMutex );
 
         VCLXAccessibleListItem_BASE::disposing();
-        m_sEntryText        = ::rtl::OUString();
-        m_pListBoxHelper    = NULL;
-        m_xParent           = NULL;
-        m_xParentContext    = NULL;
+        m_sEntryText		= ::rtl::OUString();
+        m_pListBoxHelper	= NULL;
+        m_xParent			= NULL;
+        m_xParentContext	= NULL;
 
         nId = m_nClientId;
         m_nClientId =  0;
@@ -287,7 +287,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getAccessibleIndexInParent(  ) throw 
 sal_Int16 SAL_CALL VCLXAccessibleListItem::getAccessibleRole(  ) throw (RuntimeException)
 {
     return AccessibleRole::LIST_ITEM;
-    //  return AccessibleRole::LABEL;
+    //	return AccessibleRole::LABEL;
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL VCLXAccessibleListItem::getAccessibleDescription(  ) throw (RuntimeException)

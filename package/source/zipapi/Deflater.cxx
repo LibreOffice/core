@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ using namespace com::sun::star;
 
 Deflater::~Deflater(void)
 {
-    end();
+    end();	
 }
 void Deflater::init (sal_Int32 nLevelArg, sal_Int32 nStrategyArg, sal_Bool bNowrap)
 {
@@ -141,15 +141,15 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
     }
 }
 
-void SAL_CALL Deflater::setInputSegment( const uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+void SAL_CALL Deflater::setInputSegment( const uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength ) 
 {
     OSL_ASSERT( !(nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength()));
-
+    
     sInBuffer = rBuffer;
     nOffset = nNewOffset;
     nLength = nNewLength;
 }
-void SAL_CALL Deflater::setLevel( sal_Int32 nNewLevel )
+void SAL_CALL Deflater::setLevel( sal_Int32 nNewLevel ) 
 {
     if ((nNewLevel < 0 || nNewLevel > 9) && nNewLevel != DEFAULT_COMPRESSION)
     {
@@ -161,32 +161,32 @@ void SAL_CALL Deflater::setLevel( sal_Int32 nNewLevel )
         bSetParams = sal_True;
     }
 }
-sal_Bool SAL_CALL Deflater::needsInput(  )
+sal_Bool SAL_CALL Deflater::needsInput(  ) 
 {
     return nLength <=0;
 }
-void SAL_CALL Deflater::finish(  )
+void SAL_CALL Deflater::finish(  ) 
 {
     bFinish = sal_True;
 }
-sal_Bool SAL_CALL Deflater::finished(  )
+sal_Bool SAL_CALL Deflater::finished(  ) 
 {
     return bFinished;
 }
-sal_Int32 SAL_CALL Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+sal_Int32 SAL_CALL Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength ) 
 {
     OSL_ASSERT( !(nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength()));
     return doDeflateBytes(rBuffer, nNewOffset, nNewLength);
 }
-sal_Int32 SAL_CALL Deflater::getTotalIn(  )
+sal_Int32 SAL_CALL Deflater::getTotalIn(  ) 
 {
     return pStream->total_in;
 }
-sal_Int32 SAL_CALL Deflater::getTotalOut(  )
+sal_Int32 SAL_CALL Deflater::getTotalOut(  ) 
 {
     return pStream->total_out;
 }
-void SAL_CALL Deflater::reset(  )
+void SAL_CALL Deflater::reset(  ) 
 {
 #ifdef SYSTEM_ZLIB
     deflateReset(pStream);
@@ -197,7 +197,7 @@ void SAL_CALL Deflater::reset(  )
     bFinished = sal_False;
     nOffset = nLength = 0;
 }
-void SAL_CALL Deflater::end(  )
+void SAL_CALL Deflater::end(  ) 
 {
     if (pStream != NULL)
     {

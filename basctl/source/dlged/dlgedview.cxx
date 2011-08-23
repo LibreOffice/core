@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -174,12 +174,12 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, USHORT n
             // will access aOutRect directly
             const Rectangle aOuterRectangle(pDlgEdObj->GetLastBoundRect());
 
-            if(!aOuterRectangle.IsEmpty()
-                && RECT_EMPTY != aOuterRectangle.Right()
+            if(!aOuterRectangle.IsEmpty() 
+                && RECT_EMPTY != aOuterRectangle.Right() 
                 && RECT_EMPTY != aOuterRectangle.Bottom())
             {
                 basegfx::B2DRange aOuterRange(
-                    aOuterRectangle.Left(), aOuterRectangle.Top(),
+                    aOuterRectangle.Left(), aOuterRectangle.Top(), 
                     aOuterRectangle.Right(), aOuterRectangle.Bottom());
 
                 if(nTol)

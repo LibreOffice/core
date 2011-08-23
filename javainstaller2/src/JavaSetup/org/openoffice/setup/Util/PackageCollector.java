@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,55 +33,55 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 public class PackageCollector {
-
+    
     private PackageCollector() {
     }
 
     static public void collectInstallPackages(PackageDescription packageData, Vector allPackages) {
-
+                
         if (( packageData.isLeaf() ) && ( packageData.getSelectionState() == packageData.INSTALL )) {
             allPackages.add(packageData);
             // System.err.println("Adding to collector 1: " + packageData.getPackageName());
         }
-
-        // also allowing packages at nodes!
+        
+        // also allowing packages at nodes! 
         if (( ! packageData.isLeaf() ) &&
                 ( packageData.getPackageName() != null ) &&
                 ( ! packageData.getPackageName().equals("")) &&
                 (( packageData.getSelectionState() == packageData.INSTALL ) ||
                 ( packageData.getSelectionState() == packageData.INSTALL_SOME ))) {
-            allPackages.add(packageData);
+            allPackages.add(packageData);            
             // System.err.println("Adding to collector 2: " + packageData.getPackageName());
         }
-
+        
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             collectInstallPackages(child, allPackages);
         }
-
+        
     }
 
     static public void collectUninstallPackages(PackageDescription packageData, Vector allPackages) {
         if (( packageData.isLeaf() ) && ( packageData.getSelectionState() == packageData.REMOVE )) {
             allPackages.add(0, packageData);
         }
-
-        // also allowing packages at nodes!
+ 
+        // also allowing packages at nodes! 
         if (( ! packageData.isLeaf() ) &&
                 ( packageData.getPackageName() != null ) &&
                 ( ! packageData.getPackageName().equals("")) &&
                 ( packageData.getSelectionState() == packageData.REMOVE )) {
             allPackages.add(0, packageData);
         }
-
+                
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             collectUninstallPackages(child, allPackages);
-        }
+        }   
     }
 
     // Special handling for packages, that change their name, and therefore need to be uninstalled
-
+    
     // static public void findOldPackages( InstallData installData ) {
     //
     //    String basis = "ooobasis3";
@@ -118,12 +118,12 @@ public class PackageCollector {
     //                    localName = localName.replace(search, replace);
     //                    localPackage.setName(localName);
     //                }
-
+                    
     //                oldPackages.add(localPackage);
     //            }
     //        }
     //    }
-
+        
     //    // reverse order for uninstallation
     //    int number = oldPackages.size();
     //    for (int i = 0; i < number; i++) {
@@ -131,7 +131,7 @@ public class PackageCollector {
     //            PackageDescription oldPackageData = (PackageDescription) oldPackages.remove(i);
     //            oldPackages.add(0,oldPackageData);
     //        }
-    //    }
+    //    }       
 
     //    installData.setOldPackages(oldPackages);
     // }
@@ -140,7 +140,7 @@ public class PackageCollector {
         for (int i = 0; i < allPackages.size(); i++) {
             boolean integrated = false;
             PackageDescription packageData = (PackageDescription) allPackages.get(i);
-
+            
             if ( i == 0 ) {
                 sortedPackages.add(packageData);
                 integrated = true;
@@ -149,21 +149,21 @@ public class PackageCollector {
                 for (int j = 0; j < sortedPackages.size(); j++) {
                     PackageDescription sortedPackageData = (PackageDescription) sortedPackages.get(j);
                     int compare = sortedPackageData.getOrder();
-
+                
                     if ( position < compare ) {
                         sortedPackages.add(j, packageData);
                         integrated = true;
                         break;
                     }
                 }
-
+                
                 // no break used -> adding at the end
                 if ( ! integrated ) {
                     sortedPackages.add(packageData);
                 }
             }
         }
-
+        
         // reverse order for uninstallation
         if ( mode.equalsIgnoreCase("uninstall")) {
             int number = sortedPackages.size();
@@ -173,7 +173,7 @@ public class PackageCollector {
                     sortedPackages.add(0,sortPackageData);
                 }
             }
-        }
+        } 
     }
 
 }

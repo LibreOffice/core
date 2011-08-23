@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ typedef int NSP_PIPE_FD;
 #define NSP_Write_Pipe(a, b, c, d) write(a, b, c)
 #define NSP_Read_Pipe(a, b, c, d) read(a, b, c)
 
-//for socket
+//for socket 
 #define NSP_CloseSocket close
 
 //for sleep
@@ -85,13 +85,13 @@ SECURITY_ATTRIBUTES  NSP_pipe_access = { sizeof(SECURITY_ATTRIBUTES), NULL, TRUE
 //for execl()
 #define NSP_CreateProcess(a, b ) CreateProcess(a, b, NULL, NULL, TRUE, 0, NULL, NULL, NULL, NULL)
 
-//for socket
+//for socket 
 #define NSP_CloseSocket closesocket
 //for sleep
 #define NSP_Sleep(a) Sleep(a*1000)
 
 //for mutex
-#define NSP_Mute_Obj    HANDLE
+#define NSP_Mute_Obj    HANDLE 
 #define NSP_New_Mute_Obj()    CreateMutex (NULL, FALSE, NULL)
 #define NSP_Lock_Mute_Obj(a)  WaitForSingleObject(a, INFINITE)
 #define NSP_Unlock_Mute_Obj(a)  ReleaseMutex(a)

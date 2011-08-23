@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@
 #include "hyperdlg.hrc"
 #include "hlmarkwn_def.hxx" //ADD CHINA001
 
-sal_Char __READONLY_DATA sHash[]                = "#";
-sal_Char __READONLY_DATA sFileScheme[]          = INET_FILE_SCHEME;
+sal_Char __READONLY_DATA sHash[]				= "#";
+sal_Char __READONLY_DATA sFileScheme[]			= INET_FILE_SCHEME;
 sal_Char __READONLY_DATA sNewsSRVScheme[] = "news://";
     // TODO news:// is nonsense
 sal_Char __READONLY_DATA sHTTPScheme[]    = INET_HTTP_SCHEME;
@@ -52,15 +52,15 @@ sal_Char __READONLY_DATA sHTTPScheme[]    = INET_HTTP_SCHEME;
 SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemSet)
     : SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_DOCUMENT ), rItemSet ),
     maGrpDocument   ( this, CUI_RES (GRP_DOCUMENT) ),
-    maFtPath        ( this, CUI_RES (FT_PATH_DOC) ),
-    maCbbPath       ( this, INET_PROT_FILE ),
-    maBtFileopen    ( this, CUI_RES (BTN_FILEOPEN) ),
-    maGrpTarget     ( this, CUI_RES (GRP_TARGET) ),
-    maFtTarget      ( this, CUI_RES (FT_TARGET_DOC) ),
-    maEdTarget      ( this, CUI_RES (ED_TARGET_DOC) ),
-    maFtURL         ( this, CUI_RES (FT_URL) ),
-    maFtFullURL     ( this, CUI_RES (FT_FULL_URL) ),
-    maBtBrowse      ( this, CUI_RES (BTN_BROWSE) ),
+    maFtPath		( this, CUI_RES (FT_PATH_DOC) ),
+    maCbbPath		( this, INET_PROT_FILE ),
+    maBtFileopen	( this, CUI_RES (BTN_FILEOPEN) ),
+    maGrpTarget		( this, CUI_RES (GRP_TARGET) ),
+    maFtTarget		( this, CUI_RES (FT_TARGET_DOC) ),
+    maEdTarget		( this, CUI_RES (ED_TARGET_DOC) ),
+    maFtURL			( this, CUI_RES (FT_URL) ),
+    maFtFullURL		( this, CUI_RES (FT_FULL_URL) ),
+    maBtBrowse		( this, CUI_RES (BTN_BROWSE) ),
     mbMarkWndOpen   ( FALSE )
 {
     // Set HC bitmaps and disable display of bitmap names.

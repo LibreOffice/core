@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_STRINGSDTOR
-#include <svl/svstdarr.hxx>     // SvUShorts
+#include <svl/svstdarr.hxx>		// SvUShorts
 #include <sfx2/minarray.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vector>
@@ -77,8 +77,8 @@ public:
 
     void                        ActivateTabPage( USHORT );
 
-    virtual void                PageCreated( USHORT nId, SfxTabPage &rPage );
-    virtual short               Ok();
+    virtual void				PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual short				Ok();
 
     void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
 };
@@ -87,10 +87,10 @@ class SaveInData : public ImageProvider
 {
 private:
 
-    bool        bModified;
+    bool		bModified;
 
-    bool        bDocConfig;
-    bool        bReadOnly;
+    bool		bDocConfig;
+    bool		bReadOnly;
 
     ::com::sun::star::uno::Reference
         < com::sun::star::ui::XUIConfigurationManager > m_xCfgMgr;
@@ -136,7 +136,7 @@ public:
     ::com::sun::star::uno::Reference
         < ::com::sun::star::ui::XUIConfigurationManager >
             GetParentConfigManager() { return m_xParentCfgMgr; };
-
+    
     ::com::sun::star::uno::Reference
         < ::com::sun::star::ui::XImageManager >
             GetImageManager() { return m_xImgMgr; };
@@ -171,13 +171,13 @@ class MenuSaveInData : public SaveInData
 {
 private:
 
-    rtl::OUString               m_aMenuResourceURL;
-    rtl::OUString               m_aDescriptorContainer;
+    rtl::OUString				m_aMenuResourceURL;
+    rtl::OUString				m_aDescriptorContainer;
 
     ::com::sun::star::uno::Reference
         < com::sun::star::container::XIndexAccess > m_xMenuSettings;
 
-    SvxConfigEntry* pRootEntry;
+    SvxConfigEntry*	pRootEntry;
 
     // static holder of the default menu data
     static MenuSaveInData* pDefaultData;
@@ -185,9 +185,9 @@ private:
     static void SetDefaultData( MenuSaveInData* pData ) {pDefaultData = pData;}
     static MenuSaveInData* GetDefaultData() { return pDefaultData; }
 
-    void        Apply( bool bDefault );
+    void		Apply( bool bDefault );
 
-    void        Apply(
+    void		Apply(
         SvxConfigEntry* pRootEntry,
         com::sun::star::uno::Reference<
             com::sun::star::container::XIndexContainer >& rNewMenuBar,
@@ -195,14 +195,14 @@ private:
             com::sun::star::lang::XSingleComponentFactory >& rFactory,
         SvLBoxEntry *pParent = NULL );
 
-    void        ApplyMenu(
+    void		ApplyMenu(
         com::sun::star::uno::Reference<
             com::sun::star::container::XIndexContainer >& rNewMenuBar,
         com::sun::star::uno::Reference<
             com::sun::star::lang::XSingleComponentFactory >& rFactory,
         SvxConfigEntry *pMenuData = NULL );
 
-    bool        LoadSubMenus(
+    bool		LoadSubMenus(
         const ::com::sun::star::uno::Reference<
             com::sun::star::container::XIndexAccess >& xMenuBarSettings,
         const rtl::OUString& rBaseTitle, SvxConfigEntry* pParentData );
@@ -220,12 +220,12 @@ public:
     ~MenuSaveInData();
 
     // methods inherited from SaveInData
-    SvxEntries*         GetEntries();
-    void                SetEntries( SvxEntries* );
-    bool                HasURL( const rtl::OUString& URL ) { (void)URL; return FALSE; }
-    bool                HasSettings() { return m_xMenuSettings.is(); }
-    void                Reset();
-    bool                Apply();
+    SvxEntries*			GetEntries();
+    void				SetEntries( SvxEntries* );
+    bool				HasURL( const rtl::OUString& URL ) { (void)URL; return FALSE; }
+    bool				HasSettings() { return m_xMenuSettings.is(); }
+    void				Reset();
+    bool				Apply();
 };
 
 class SvxConfigEntry
@@ -233,28 +233,28 @@ class SvxConfigEntry
 private:
 
     // common properties
-    USHORT                      nId;
-    ::rtl::OUString             aHelpText;
-    ::rtl::OUString             aLabel;
-    ::rtl::OUString             aCommand;
-    ::rtl::OUString             aHelpURL;
+    USHORT						nId;
+    ::rtl::OUString  			aHelpText;
+    ::rtl::OUString				aLabel;
+    ::rtl::OUString				aCommand;
+    ::rtl::OUString				aHelpURL;
 
     bool                        bPopUp;
     bool                        bStrEdited;
-    bool                        bIsUserDefined;
-    bool                        bIsMain;
-    bool                        bIsDeletable;
-    bool                        bIsMovable;
+    bool						bIsUserDefined;
+    bool						bIsMain;
+    bool						bIsDeletable;
+    bool						bIsMovable;
     bool                        bIsParentData;
 
     // toolbar specific properties
-    bool                        bIsVisible;
-    sal_Int32                   nStyle;
+    bool						bIsVisible;
+    sal_Int32					nStyle;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::graphic::XGraphic > xBackupGraphic;
 
-    SvxEntries                  *pEntries;
+    SvxEntries					*pEntries;
 
 public:
 
@@ -270,7 +270,7 @@ public:
                     bool bParentData = FALSE );
 
     SvxConfigEntry()
-        :
+        :	
             nId( 0 ),
             bPopUp( FALSE ),
             bStrEdited( FALSE ),
@@ -284,46 +284,46 @@ public:
 
     ~SvxConfigEntry();
 
-    const ::rtl::OUString&      GetCommand() const { return aCommand; }
-    void    SetCommand( const String& rCmd ) { aCommand = rCmd; }
+    const ::rtl::OUString&		GetCommand() const { return aCommand; }
+    void	SetCommand( const String& rCmd ) { aCommand = rCmd; }
 
-    const ::rtl::OUString&      GetName() const { return aLabel; }
-    void    SetName( const String& rStr ) { aLabel = rStr; bStrEdited = TRUE; }
-    bool    HasChangedName() const { return bStrEdited; }
+    const ::rtl::OUString& 		GetName() const { return aLabel; }
+    void	SetName( const String& rStr ) { aLabel = rStr; bStrEdited = TRUE; }
+    bool	HasChangedName() const { return bStrEdited; }
 
-    const ::rtl::OUString&      GetHelpText() ;
-    void    SetHelpText( const String& rStr ) { aHelpText = rStr; }
+    const ::rtl::OUString&		GetHelpText() ;
+    void	SetHelpText( const String& rStr ) { aHelpText = rStr; }
 
-    const ::rtl::OUString&      GetHelpURL() const { return aHelpURL; }
-    void    SetHelpURL( const String& rStr ) { aHelpURL = rStr; }
+    const ::rtl::OUString&		GetHelpURL() const { return aHelpURL; }
+    void	SetHelpURL( const String& rStr ) { aHelpURL = rStr; }
 
-    void    SetPopup( bool bOn = TRUE ) { bPopUp = bOn; }
-    bool    IsPopup() const { return bPopUp; }
+    void	SetPopup( bool bOn = TRUE ) { bPopUp = bOn; }
+    bool	IsPopup() const { return bPopUp; }
 
-    void    SetUserDefined( bool bOn = TRUE ) { bIsUserDefined = bOn; }
-    bool    IsUserDefined() const { return bIsUserDefined; }
+    void	SetUserDefined( bool bOn = TRUE ) { bIsUserDefined = bOn; }
+    bool	IsUserDefined() const { return bIsUserDefined; }
 
-    bool    IsBinding() const { return !bPopUp; }
-    bool    IsSeparator() const { return nId == 0; }
+    bool	IsBinding() const { return !bPopUp; }
+    bool	IsSeparator() const { return nId == 0; }
 
-    SvxEntries* GetEntries() const { return pEntries; }
-    void    SetEntries( SvxEntries* entries ) { pEntries = entries; }
-    bool    HasEntries() const { return pEntries != NULL; }
+    SvxEntries*	GetEntries() const { return pEntries; }
+    void	SetEntries( SvxEntries* entries ) { pEntries = entries; }
+    bool	HasEntries() const { return pEntries != NULL; }
 
-    void    SetMain( bool bValue = TRUE ) { bIsMain = bValue; }
-    bool    IsMain() { return bIsMain; }
+    void	SetMain( bool bValue = TRUE ) { bIsMain = bValue; }
+    bool	IsMain() { return bIsMain; }
 
     void    SetParentData( bool bValue = TRUE ) { bIsParentData = bValue; }
     bool    IsParentData() { return bIsParentData; }
 
-    bool    IsMovable();
-    bool    IsDeletable();
-    bool    IsRenamable();
+    bool	IsMovable();
+    bool	IsDeletable();
+    bool	IsRenamable();
 
-    void    SetVisible( bool b ) { bIsVisible = b; }
-    bool    IsVisible() const { return bIsVisible; }
+    void	SetVisible( bool b ) { bIsVisible = b; }
+    bool	IsVisible() const { return bIsVisible; }
 
-    void    SetBackupGraphic(
+    void	SetBackupGraphic(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::graphic::XGraphic > graphic )
                 { xBackupGraphic = graphic; }
@@ -333,10 +333,10 @@ public:
             GetBackupGraphic()
                 { return xBackupGraphic; }
 
-    bool    IsIconModified() { return xBackupGraphic.is(); }
+    bool	IsIconModified() { return xBackupGraphic.is(); }
 
-    sal_Int32   GetStyle() { return nStyle; }
-    void        SetStyle( sal_Int32 style ) { nStyle = style; }
+    sal_Int32	GetStyle() { return nStyle; }
+    void		SetStyle( sal_Int32 style ) { nStyle = style; }
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
         GetProperties(
@@ -347,38 +347,38 @@ public:
 class SvxMenuEntriesListBox : public SvTreeListBox
 {
 private:
-    SvxConfigPage*      pPage;
+    SvxConfigPage*		pPage;
 
 protected:
-    bool                m_bIsInternalDrag;
+    bool				m_bIsInternalDrag;
 
 public:
     SvxMenuEntriesListBox( Window*, const ResId& );
     ~SvxMenuEntriesListBox();
 
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8	AcceptDrop( const AcceptDropEvent& rEvt );
 
-    virtual BOOL        NotifyAcceptDrop( SvLBoxEntry* pEntry );
+    virtual BOOL    	NotifyAcceptDrop( SvLBoxEntry* pEntry );
 
-    virtual BOOL        NotifyMoving( SvLBoxEntry*, SvLBoxEntry*,
+    virtual BOOL    	NotifyMoving( SvLBoxEntry*, SvLBoxEntry*,
                                       SvLBoxEntry*&, ULONG& );
 
-    virtual BOOL        NotifyCopying( SvLBoxEntry*, SvLBoxEntry*,
+    virtual BOOL		NotifyCopying( SvLBoxEntry*, SvLBoxEntry*,
                                        SvLBoxEntry*&, ULONG&);
 
-    virtual DragDropMode    NotifyStartDrag(
+    virtual DragDropMode	NotifyStartDrag(
         TransferDataContainer&, SvLBoxEntry* );
 
-    virtual void        DragFinished( sal_Int8 );
+    virtual void		DragFinished( sal_Int8 );
 
-    void                KeyInput( const KeyEvent& rKeyEvent );
+    void 				KeyInput( const KeyEvent& rKeyEvent );
 };
 
 class SvxDescriptionEdit : public ExtMultiLineEdit
 {
 private:
     Rectangle           m_aRealRect;
-
+    
 public:
     SvxDescriptionEdit( Window* pParent, const ResId& _rId );
     inline ~SvxDescriptionEdit() {}
@@ -391,8 +391,8 @@ class SvxConfigPage : public SfxTabPage
 {
 private:
 
-    bool                                bInitialised;
-    SaveInData*                         pCurrentSaveInData;
+    bool								bInitialised;
+    SaveInData*							pCurrentSaveInData;
 
     DECL_LINK(  SelectSaveInLocation, ListBox * );
     DECL_LINK(  AsyncInfoMsg, String* );
@@ -404,34 +404,34 @@ protected:
 
     // the top section of the tab page where top level menus and toolbars
     //  are displayed in a listbox
-    FixedLine                           aTopLevelSeparator;
-    FixedText                           aTopLevelLabel;
-    ListBox                             aTopLevelListBox;
-    PushButton                          aNewTopLevelButton;
-    MenuButton                          aModifyTopLevelButton;
+    FixedLine							aTopLevelSeparator;
+    FixedText							aTopLevelLabel;
+    ListBox								aTopLevelListBox;
+    PushButton							aNewTopLevelButton;
+    MenuButton							aModifyTopLevelButton;
 
     // the contents section where the contents of the selected
     // menu or toolbar are displayed
-    FixedLine                           aContentsSeparator;
-    FixedText                           aContentsLabel;
-    SvTreeListBox*                      aContentsListBox;
+    FixedLine							aContentsSeparator;
+    FixedText							aContentsLabel;
+    SvTreeListBox*						aContentsListBox;
 
-    PushButton                          aAddCommandsButton;
-    MenuButton                          aModifyCommandButton;
+    PushButton							aAddCommandsButton;
+    MenuButton							aModifyCommandButton;
 
-    ImageButton                         aMoveUpButton;
-    ImageButton                         aMoveDownButton;
+    ImageButton							aMoveUpButton;
+    ImageButton							aMoveDownButton;
 
-    FixedText                           aSaveInText;
-    ListBox                             aSaveInListBox;
+    FixedText							aSaveInText;
+    ListBox								aSaveInListBox;
 
     FixedText                           aDescriptionLabel;
     SvxDescriptionEdit                  aDescriptionField;
 
-    SvxScriptSelectorDialog*            pSelectorDlg;
+    SvxScriptSelectorDialog*			pSelectorDlg;
 
     // the ResourceURL to select when opening the dialog
-    rtl::OUString                       m_aURLToSelect;
+    rtl::OUString						m_aURLToSelect;
 
     ::com::sun::star::uno::Reference
         < ::com::sun::star::frame::XFrame > m_xFrame;
@@ -449,49 +449,49 @@ protected:
         const rtl::OUString& aModuleId,
         bool docConfig ) = 0;
 
-    virtual void            Init() = 0;
-    virtual void            UpdateButtonStates() = 0;
-    virtual short           QueryReset() = 0;
+    virtual void			Init() = 0;
+    virtual void			UpdateButtonStates() = 0;
+    virtual short			QueryReset() = 0;
 
-    void            PositionContentsListBox();
+    void			PositionContentsListBox();
 
-    SvLBoxEntry*    InsertEntry(        SvxConfigEntry* pNewEntryData,
+    SvLBoxEntry*	InsertEntry(		SvxConfigEntry* pNewEntryData,
                                         SvLBoxEntry* pTarget = NULL,
                                         bool bFront = FALSE );
 
-    void            AddSubMenusToUI(    const String& rBaseTitle,
+    void			AddSubMenusToUI(	const String& rBaseTitle,
                                         SvxConfigEntry* pParentData );
 
-    SvLBoxEntry*    InsertEntryIntoUI ( SvxConfigEntry* pNewEntryData,
+    SvLBoxEntry*	InsertEntryIntoUI ( SvxConfigEntry* pNewEntryData,
                                         ULONG nPos = LIST_APPEND );
 
-    SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
+    SvxEntries*		FindParentForChild( SvxEntries* pParentEntries,
                                         SvxConfigEntry* pChildData );
 
-    void            ReloadTopLevelListBox( SvxConfigEntry* pSelection = NULL );
+    void			ReloadTopLevelListBox( SvxConfigEntry* pSelection = NULL );
 
 public:
 
-    static bool     CanConfig( const ::rtl::OUString& rModuleId );
+    static bool		CanConfig( const ::rtl::OUString& rModuleId );
 
-    SaveInData*     GetSaveInData() { return pCurrentSaveInData; }
+    SaveInData*		GetSaveInData() { return pCurrentSaveInData; }
 
-    SvLBoxEntry*    AddFunction( SvLBoxEntry* pTarget = NULL,
+    SvLBoxEntry*	AddFunction( SvLBoxEntry* pTarget = NULL,
                                  bool bFront = FALSE,
                                  bool bAllowDuplicates = FALSE );
 
-    virtual void    MoveEntry( bool bMoveUp );
+    virtual void	MoveEntry( bool bMoveUp );
 
-    bool            MoveEntryData(  SvLBoxEntry* pSourceEntry,
+    bool			MoveEntryData(	SvLBoxEntry* pSourceEntry,
                                     SvLBoxEntry* pTargetEntry );
 
-    BOOL            FillItemSet( SfxItemSet& );
-    void            Reset( const SfxItemSet& );
+    BOOL			FillItemSet( SfxItemSet& );
+    void			Reset( const SfxItemSet& );
 
-    virtual bool    DeleteSelectedContent() = 0;
-    virtual void    DeleteSelectedTopLevel() = 0;
+    virtual bool	DeleteSelectedContent() = 0;
+    virtual void	DeleteSelectedTopLevel() = 0;
 
-    SvxConfigEntry* GetTopLevelSelection()
+    SvxConfigEntry*	GetTopLevelSelection()
     {
         return (SvxConfigEntry*) aTopLevelListBox.GetEntryData(
             aTopLevelListBox.GetSelectEntryPos() );
@@ -523,11 +523,11 @@ private:
     DECL_LINK( AddCommandsHdl, Button * );
     DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog * );
 
-    void            Init();
-    void            UpdateButtonStates();
-    short           QueryReset();
-    bool            DeleteSelectedContent();
-    void            DeleteSelectedTopLevel();
+    void			Init();
+    void			UpdateButtonStates();
+    short			QueryReset();
+    bool			DeleteSelectedContent();
+    void			DeleteSelectedTopLevel();
 
 public:
     SvxMenuConfigPage( Window *pParent, const SfxItemSet& rItemSet );
@@ -544,19 +544,19 @@ public:
 
 class SvxMainMenuOrganizerDialog : public ModalDialog
 {
-    FixedText       aMenuNameText;
-    Edit            aMenuNameEdit;
-    FixedText       aMenuListText;
-    SvTreeListBox   aMenuListBox;
-    ImageButton     aMoveUpButton;
-    ImageButton     aMoveDownButton;
-    OKButton        aOKButton;
-    CancelButton    aCloseButton;
-    HelpButton      aHelpButton;
+    FixedText		aMenuNameText;
+    Edit			aMenuNameEdit;
+    FixedText		aMenuListText;
+    SvTreeListBox	aMenuListBox;
+    ImageButton		aMoveUpButton;
+    ImageButton		aMoveDownButton;
+    OKButton		aOKButton;
+    CancelButton	aCloseButton;
+    HelpButton		aHelpButton;
 
-    SvxEntries*     pEntries;
-    SvLBoxEntry*    pNewMenuEntry;
-    bool            bModified;
+    SvxEntries*		pEntries;
+    SvLBoxEntry*	pNewMenuEntry;
+    bool			bModified;
 
     void UpdateButtonStates();
 
@@ -571,27 +571,27 @@ public:
 
     ~SvxMainMenuOrganizerDialog ();
 
-    SvxEntries*     GetEntries();
-    void            SetEntries( SvxEntries* );
-    SvxConfigEntry* GetSelectedEntry();
+    SvxEntries* 	GetEntries();
+    void 			SetEntries( SvxEntries* );
+    SvxConfigEntry*	GetSelectedEntry();
 };
 
 class SvxToolbarEntriesListBox : public SvxMenuEntriesListBox
 {
-    Size            m_aCheckBoxImageSizePixel;
-    Link            m_aChangedListener;
-    SvLBoxButtonData*   m_pButtonData;
-    BOOL            m_bHiContrastMode;
-    SvxConfigPage*  pPage;
+    Size			m_aCheckBoxImageSizePixel;
+    Link			m_aChangedListener;
+    SvLBoxButtonData*	m_pButtonData;
+    BOOL			m_bHiContrastMode;
+    SvxConfigPage*	pPage;
 
-    void            ChangeVisibility( SvLBoxEntry* pEntry );
+    void			ChangeVisibility( SvLBoxEntry* pEntry );
 
 protected:
 
-    virtual void    CheckButtonHdl();
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    void            BuildCheckBoxButtonImages( SvLBoxButtonData* );
-    Image           GetSizedImage(
+    virtual void	CheckButtonHdl();
+    virtual void	DataChanged( const DataChangedEvent& rDCEvt );
+    void			BuildCheckBoxButtonImages( SvLBoxButtonData* );
+    Image			GetSizedImage(
         VirtualDevice& aDev, const Size& aNewSize, const Image& aImage );
 
 public:
@@ -601,21 +601,21 @@ public:
 
     ~SvxToolbarEntriesListBox();
 
-    void            SetChangedListener( const Link& aChangedListener )
+    void			SetChangedListener( const Link& aChangedListener )
         { m_aChangedListener = aChangedListener; }
 
-    const Link&     GetChangedListener() const { return m_aChangedListener; }
+    const Link&		GetChangedListener() const { return m_aChangedListener; }
 
-    Size            GetCheckBoxPixelSize() const
+    Size			GetCheckBoxPixelSize() const
         { return m_aCheckBoxImageSizePixel; }
 
-    virtual BOOL    NotifyMoving(
+    virtual BOOL	NotifyMoving(
         SvLBoxEntry*, SvLBoxEntry*, SvLBoxEntry*&, ULONG& );
 
-    virtual BOOL    NotifyCopying(
+    virtual BOOL	NotifyCopying(
         SvLBoxEntry*, SvLBoxEntry*, SvLBoxEntry*&, ULONG&);
 
-    void            KeyInput( const KeyEvent& rKeyEvent );
+    void 			KeyInput( const KeyEvent& rKeyEvent );
 };
 
 class SvxToolbarConfigPage : public SvxConfigPage
@@ -631,23 +631,23 @@ private:
     DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog * );
     DECL_LINK( MoveHdl, Button * );
 
-    void            UpdateButtonStates();
-    short           QueryReset();
-    void            Init();
-    bool            DeleteSelectedContent();
-    void            DeleteSelectedTopLevel();
+    void			UpdateButtonStates();
+    short			QueryReset();
+    void			Init();
+    bool			DeleteSelectedContent();
+    void			DeleteSelectedTopLevel();
 
 public:
     SvxToolbarConfigPage( Window *pParent, const SfxItemSet& rItemSet );
     ~SvxToolbarConfigPage();
 
-    SvLBoxEntry*    AddFunction( SvLBoxEntry* pTarget = NULL,
+    SvLBoxEntry*	AddFunction( SvLBoxEntry* pTarget = NULL,
                                              bool bFront = FALSE,
                                              bool bAllowDuplicates = TRUE );
 
-    void            MoveEntry( bool bMoveUp );
+    void			MoveEntry( bool bMoveUp );
 
-    SaveInData*     CreateSaveInData(
+    SaveInData*		CreateSaveInData(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >&,
         const ::com::sun::star::uno::Reference <
@@ -660,18 +660,18 @@ class ToolbarSaveInData : public SaveInData
 {
 private:
 
-    SvxConfigEntry*                                pRootEntry;
-    rtl::OUString                                  m_aDescriptorContainer;
+    SvxConfigEntry*	                               pRootEntry;
+    rtl::OUString	                               m_aDescriptorContainer;
 
     ::com::sun::star::uno::Reference
         < com::sun::star::container::XNameAccess > m_xPersistentWindowState;
 
-    bool        LoadToolbar(
+    bool		LoadToolbar(
         const ::com::sun::star::uno::Reference<
             com::sun::star::container::XIndexAccess >& xToolBarSettings,
         SvxConfigEntry* pParentData );
 
-    void        ApplyToolbar(
+    void		ApplyToolbar(
         com::sun::star::uno::Reference<
             com::sun::star::container::XIndexContainer >& rNewToolbarBar,
         com::sun::star::uno::Reference<
@@ -690,41 +690,41 @@ public:
 
     ~ToolbarSaveInData();
 
-    void            CreateToolbar( SvxConfigEntry* pToolbar );
-    void            RestoreToolbar( SvxConfigEntry* pToolbar );
-    void            RemoveToolbar( SvxConfigEntry* pToolbar );
-    void            ApplyToolbar( SvxConfigEntry* pToolbar );
-    void            ReloadToolbar( const rtl::OUString& rURL );
+    void			CreateToolbar( SvxConfigEntry* pToolbar );
+    void 			RestoreToolbar( SvxConfigEntry* pToolbar );
+    void 			RemoveToolbar( SvxConfigEntry* pToolbar );
+    void 			ApplyToolbar( SvxConfigEntry* pToolbar );
+    void 			ReloadToolbar( const rtl::OUString& rURL );
 
-    rtl::OUString   GetSystemUIName( const rtl::OUString& rResourceURL );
+    rtl::OUString	GetSystemUIName( const rtl::OUString& rResourceURL );
 
-    sal_Int32       GetSystemStyle( const rtl::OUString& rResourceURL );
+    sal_Int32		GetSystemStyle( const rtl::OUString& rResourceURL );
 
-    void            SetSystemStyle(
+    void			SetSystemStyle(
         const rtl::OUString& rResourceURL, sal_Int32 nStyle );
 
-    void            SetSystemStyle(
+    void			SetSystemStyle(
         ::com::sun::star::uno::Reference
             < ::com::sun::star::frame::XFrame > xFrame,
         const rtl::OUString& rResourceURL, sal_Int32 nStyle );
 
-    SvxEntries*     GetEntries();
-    void            SetEntries( SvxEntries* );
-    bool            HasSettings();
-    bool            HasURL( const rtl::OUString& rURL );
-    void            Reset();
-    bool            Apply();
+    SvxEntries*		GetEntries();
+    void 			SetEntries( SvxEntries* );
+    bool			HasSettings();
+    bool			HasURL( const rtl::OUString& rURL );
+    void			Reset();
+    bool			Apply();
 };
 
 class SvxNewToolbarDialog : public ModalDialog
 {
 private:
-    FixedText       aFtDescription;
-    Edit            aEdtName;
-    FixedText       aSaveInText;
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    FixedText		aFtDescription;
+    Edit			aEdtName;
+    FixedText		aSaveInText;
+    OKButton		aBtnOK;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 
     Link            aCheckNameHdl;
 
@@ -733,7 +733,7 @@ private:
 public:
     SvxNewToolbarDialog( Window* pWindow, const String& rName );
 
-    ListBox         aSaveInListBox;
+    ListBox			aSaveInListBox;
 
     void    GetName( rtl::OUString& rName ){rName = aEdtName.GetText();}
 
@@ -750,18 +750,18 @@ public:
 class SvxIconSelectorDialog : public ModalDialog
 {
 private:
-    FixedText       aFtDescription;
-    ToolBox         aTbSymbol;
-    FixedText       aFtNote;
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    PushButton      aBtnImport;
-    PushButton      aBtnDelete;
+    FixedText		aFtDescription;
+    ToolBox			aTbSymbol;
+    FixedText		aFtNote;
+    OKButton		aBtnOK;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
+    PushButton		aBtnImport;
+    PushButton      aBtnDelete; 
     FixedLine       aFlSeparator;
     sal_uInt16      m_nNextId;
 
-    sal_Int32       m_nExpectedSize;
+    sal_Int32		m_nExpectedSize;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::ui::XImageManager > m_xImageManager;
@@ -770,13 +770,13 @@ private:
         ::com::sun::star::ui::XImageManager > m_xParentImageManager;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::ui::XImageManager > m_xImportedImageManager;
+        ::com::sun::star::ui::XImageManager > m_xImportedImageManager; 
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::graphic::XGraphicProvider > m_xGraphProvider;
-
+    
     bool ReplaceGraphicItem( const ::rtl::OUString& aURL );
-
+    
     bool ImportGraphic( const ::rtl::OUString& aURL );
 
     void ImportGraphics(
@@ -791,8 +791,8 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::ui::XImageManager >& rXImageManager,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::ui::XImageManager >& rXParentImageManager
-            );
+            ::com::sun::star::ui::XImageManager >& rXParentImageManager 
+            ); 
 
     ~SvxIconSelectorDialog();
 
@@ -801,19 +801,19 @@ public:
 
     DECL_LINK( SelectHdl, ToolBox * );
     DECL_LINK( ImportHdl, PushButton * );
-    DECL_LINK( DeleteHdl, PushButton * );
+    DECL_LINK( DeleteHdl, PushButton * ); 
 };
 
 class SvxIconReplacementDialog : public MessBox
 {
 public:
-    SvxIconReplacementDialog(
-        Window *pWindow,
+    SvxIconReplacementDialog( 
+        Window *pWindow, 
         const rtl::OUString& aMessage,
         bool aYestoAll);
 
-    SvxIconReplacementDialog(
-        Window *pWindow,
+    SvxIconReplacementDialog( 
+        Window *pWindow, 
         const rtl::OUString& aMessage );
 
     rtl::OUString ReplaceIconName( const rtl::OUString& );
@@ -823,8 +823,8 @@ public:
 class SvxIconChangeDialog : public ModalDialog
 {
 private:
-    FixedImage      aFImageInfo;
-    OKButton        aBtnOK;
+    FixedImage		aFImageInfo;
+    OKButton		aBtnOK;
     FixedText         aDescriptionLabel;
     SvxDescriptionEdit aLineEditDescription;
 public:

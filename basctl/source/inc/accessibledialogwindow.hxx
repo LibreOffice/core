@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,18 +51,18 @@ class AccessibleStateSetHelper;
 }
 
 
-//  ----------------------------------------------------
-//  class AccessibleDialogWindow
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class AccessibleDialogWindow
+//	----------------------------------------------------
 
-typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
+typedef ::comphelper::OAccessibleExtendedComponentHelper	AccessibleExtendedComponentHelper_BASE;
 
-typedef ::cppu::ImplHelper3 <
+typedef ::cppu::ImplHelper3	<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleSelection,
     ::com::sun::star::lang::XServiceInfo > AccessibleDialogWindow_BASE;
 
-class AccessibleDialogWindow :  public AccessibleExtendedComponentHelper_BASE,
+class AccessibleDialogWindow :	public AccessibleExtendedComponentHelper_BASE,
                                 public AccessibleDialogWindow_BASE,
                                 public SfxListener
 {
@@ -71,9 +71,9 @@ private:
     class ChildDescriptor
     {
     public:
-        DlgEdObj*                                                                                   pDlgEdObj;
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >    rxAccessible;
-
+        DlgEdObj*																					pDlgEdObj;
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >	rxAccessible;
+        
         ChildDescriptor( DlgEdObj* _pDlgEdObj );
         ~ChildDescriptor();
 
@@ -86,35 +86,35 @@ private:
 
     typedef ::std::vector< ChildDescriptor > AccessibleChildren;
 
-    AccessibleChildren      m_aAccessibleChildren;
-    VCLExternalSolarLock*   m_pExternalLock;
-    DialogWindow*           m_pDialogWindow;
-    DlgEditor*              m_pDlgEditor;
-    DlgEdModel*             m_pDlgEdModel;
+    AccessibleChildren		m_aAccessibleChildren;
+    VCLExternalSolarLock*	m_pExternalLock;
+    DialogWindow*			m_pDialogWindow;
+    DlgEditor*				m_pDlgEditor;
+    DlgEdModel*				m_pDlgEdModel;
 
 protected:
-    void                    UpdateFocused();
-    void                    UpdateSelected();
-    void                    UpdateBounds();
+    void					UpdateFocused();
+    void					UpdateSelected();
+    void					UpdateBounds();
 
-    sal_Bool                IsChildVisible( const ChildDescriptor& rDesc );
+    sal_Bool				IsChildVisible( const ChildDescriptor& rDesc );
 
-    void                    InsertChild( const ChildDescriptor& rDesc );
-    void                    RemoveChild( const ChildDescriptor& rDesc );
-    void                    UpdateChild( const ChildDescriptor& rDesc );
-    void                    UpdateChildren();
-    void                    SortChildren();
+    void					InsertChild( const ChildDescriptor& rDesc );
+    void					RemoveChild( const ChildDescriptor& rDesc );
+    void					UpdateChild( const ChildDescriptor& rDesc );
+    void					UpdateChildren();
+    void					SortChildren();
 
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
-    virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    virtual void			ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void			FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
-    // OCommonAccessibleComponent
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL   implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    // OCommonAccessibleComponent 
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL	implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XComponent
-    virtual void SAL_CALL   disposing();
+    virtual void SAL_CALL	disposing();
 
 public:
     AccessibleDialogWindow( DialogWindow* pDialogWindow );
@@ -156,7 +156,7 @@ public:
     virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleExtendedComponent
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(	) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
 

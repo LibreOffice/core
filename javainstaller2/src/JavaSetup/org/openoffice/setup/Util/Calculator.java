@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@ import org.openoffice.setup.InstallData;
 import org.openoffice.setup.ResourceManager;
 
 public class Calculator {
-
+    
     private Calculator() {
     }
 
@@ -46,7 +46,7 @@ public class Calculator {
             int size = packageData.getSize();
             value = value + size;
         }
-
+            
         return value;
     }
 
@@ -56,13 +56,13 @@ public class Calculator {
         if ( required < available ) {
             missingDiscSpace = false;
         }
-
+        
         // missingDiscSpace = true; // for testing reasons
         return missingDiscSpace;
     }
 
     static public boolean notEnoughDiscSpace(InstallData data) {
-
+        
         Vector installPackages = data.getInstallPackages();
         // Calculate size of selected modules
         int installationSize = calculateInstallSize(installPackages);
@@ -81,7 +81,7 @@ public class Calculator {
             String title = ResourceManager.getString("String_Error");
             Informer.showErrorMessage(message, title);
         }
-
+        
         return insufficientDiscSpace;
     }
 

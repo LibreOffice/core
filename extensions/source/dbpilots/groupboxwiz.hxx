@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,11 +41,11 @@ namespace dbp
     //=====================================================================
     struct OOptionGroupSettings : public OControlWizardSettings
     {
-        StringArray     aLabels;
-        StringArray     aValues;
-        String          sDefaultField;
-        String          sDBField;
-        String          sName;
+        StringArray		aLabels;
+        StringArray		aValues;
+        String			sDefaultField;
+        String			sDBField;
+        String			sName;
     };
 
     //=====================================================================
@@ -54,10 +54,10 @@ namespace dbp
     class OGroupBoxWizard : public OControlWizard
     {
     protected:
-        OOptionGroupSettings        m_aSettings;
+        OOptionGroupSettings		m_aSettings;
 
-        sal_Bool        m_bVisitedDefault   : 1;
-        sal_Bool        m_bVisitedDB        : 1;
+        sal_Bool		m_bVisitedDefault	: 1;
+        sal_Bool		m_bVisitedDB		: 1;
 
     public:
         OGroupBoxWizard(
@@ -70,9 +70,9 @@ namespace dbp
 
     protected:
         // OWizardMachine overridables
-        virtual ::svt::OWizardPage* createPage( WizardState _nState );
-        virtual WizardState         determineNextState( WizardState _nCurrentState ) const;
-        virtual void                enterState( WizardState _nState );
+        virtual ::svt::OWizardPage*	createPage( WizardState _nState );
+        virtual WizardState	        determineNextState( WizardState _nCurrentState ) const;
+        virtual	void			    enterState( WizardState _nState );
         virtual sal_Bool            onFinish();
 
         virtual sal_Bool approveControl(sal_Int16 _nClassId);
@@ -99,13 +99,13 @@ namespace dbp
     class ORadioSelectionPage : public OGBWPage
     {
     protected:
-        FixedLine       m_aFrame;
-        FixedText       m_aRadioNameLabel;
-        Edit            m_aRadioName;
-        PushButton      m_aMoveRight;
-        PushButton      m_aMoveLeft;
-        FixedText       m_aExistingRadiosLabel;
-        ListBox         m_aExistingRadios;
+        FixedLine		m_aFrame;
+        FixedText		m_aRadioNameLabel;
+        Edit			m_aRadioName;
+        PushButton		m_aMoveRight;
+        PushButton		m_aMoveLeft;
+        FixedText		m_aExistingRadiosLabel;
+        ListBox			m_aExistingRadios;
 
     public:
         ORadioSelectionPage( OControlWizard* _pParent );
@@ -115,8 +115,8 @@ namespace dbp
         void ActivatePage();
 
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void		initializePage();
+        virtual sal_Bool	commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
         virtual bool        canAdvance() const;
 
         DECL_LINK( OnMoveEntry, PushButton* );
@@ -132,19 +132,19 @@ namespace dbp
     class ODefaultFieldSelectionPage : public OMaybeListSelectionPage
     {
     protected:
-        FixedLine       m_aFrame;
-        FixedText       m_aDefaultSelectionLabel;
-        RadioButton     m_aDefSelYes;
-        RadioButton     m_aDefSelNo;
-        ListBox         m_aDefSelection;
+        FixedLine		m_aFrame;
+        FixedText		m_aDefaultSelectionLabel;
+        RadioButton		m_aDefSelYes;
+        RadioButton		m_aDefSelNo;
+        ListBox			m_aDefSelection;
 
     public:
         ODefaultFieldSelectionPage( OControlWizard* _pParent );
 
     protected:
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void		initializePage();
+        virtual sal_Bool	commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
     };
@@ -155,14 +155,14 @@ namespace dbp
     class OOptionValuesPage : public OGBWPage
     {
     protected:
-        FixedLine       m_aFrame;
-        FixedText       m_aDescription;
-        FixedText       m_aValueLabel;
-        Edit            m_aValue;
-        FixedText       m_aOptionsLabel;
-        ListBox         m_aOptions;
+        FixedLine		m_aFrame;
+        FixedText		m_aDescription;
+        FixedText		m_aValueLabel;
+        Edit			m_aValue;
+        FixedText		m_aOptionsLabel;
+        ListBox			m_aOptions;
 
-        StringArray     m_aUncommittedValues;
+        StringArray		m_aUncommittedValues;
         ::svt::WizardTypes::WizardState
                         m_nLastSelection;
 
@@ -174,8 +174,8 @@ namespace dbp
         void ActivatePage();
 
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void		initializePage();
+        virtual sal_Bool	commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
         void implTraveledOptions();
 
@@ -203,10 +203,10 @@ namespace dbp
     class OFinalizeGBWPage : public OGBWPage
     {
     protected:
-        FixedLine       m_aFrame;
-        FixedText       m_aNameLabel;
-        Edit            m_aName;
-        FixedText       m_aThatsAll;
+        FixedLine		m_aFrame;
+        FixedText		m_aNameLabel;
+        Edit			m_aName;
+        FixedText		m_aThatsAll;
 
     public:
         OFinalizeGBWPage( OControlWizard* _pParent );
@@ -216,13 +216,13 @@ namespace dbp
         void ActivatePage();
 
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void		initializePage();
+        virtual sal_Bool	commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
         virtual bool        canAdvance() const;
     };
 
 //.........................................................................
-}   // namespace dbp
+}	// namespace dbp
 //.........................................................................
 
 #endif // _EXTENSIONS_DBP_GROUPBOXWIZ_HXX_

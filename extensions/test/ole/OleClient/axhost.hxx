@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ extern CComModule _Module;
 #include <atlhost.h>
 
 
-class HostWin: public CWindowImpl<HostWin, CWindow,
+class HostWin: public CWindowImpl<HostWin, CWindow, 
                CWinTraits< WS_CAPTION|WS_POPUPWINDOW|WS_VISIBLE, 0> >
 {
     CComBSTR controlName;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,59 +75,59 @@ class FmSearchDialog : public ModalDialog
 
     // meine ganzen Controls
     FixedLine       m_flSearchFor;
-    RadioButton     m_rbSearchForText;
-    RadioButton     m_rbSearchForNull;
-    RadioButton     m_rbSearchForNotNull;
-    ComboBox        m_cmbSearchText;
+    RadioButton		m_rbSearchForText;
+    RadioButton		m_rbSearchForNull;
+    RadioButton		m_rbSearchForNotNull;
+    ComboBox		m_cmbSearchText;
     FixedLine       m_flWhere;
-    FixedText       m_ftForm;
-    ListBox         m_lbForm;
-    RadioButton     m_rbAllFields;
-    RadioButton     m_rbSingleField;
-    ListBox         m_lbField;
+    FixedText		m_ftForm;
+    ListBox			m_lbForm;
+    RadioButton		m_rbAllFields;
+    RadioButton		m_rbSingleField;
+    ListBox			m_lbField;
     FixedLine       m_flOptions;
-    FixedText       m_ftPosition;
-    ListBox         m_lbPosition;
-    CheckBox        m_cbUseFormat;
-    CheckBox        m_cbCase;
-    CheckBox        m_cbBackwards;
-    CheckBox        m_cbStartOver;
-    CheckBox        m_cbWildCard;
-    CheckBox        m_cbRegular;
-    CheckBox        m_cbApprox;
-    PushButton      m_pbApproxSettings;
-    CheckBox        m_aHalfFullFormsCJK;
-    CheckBox        m_aSoundsLikeCJK;
-    PushButton      m_aSoundsLikeCJKSettings;
+    FixedText		m_ftPosition;
+    ListBox			m_lbPosition;
+    CheckBox		m_cbUseFormat;
+    CheckBox		m_cbCase;
+    CheckBox		m_cbBackwards;
+    CheckBox		m_cbStartOver;
+    CheckBox		m_cbWildCard;
+    CheckBox		m_cbRegular;
+    CheckBox		m_cbApprox;
+    PushButton		m_pbApproxSettings;
+    CheckBox		m_aHalfFullFormsCJK;
+    CheckBox		m_aSoundsLikeCJK;
+    PushButton		m_aSoundsLikeCJKSettings;
     FixedLine       m_flState;
-    FixedText       m_ftRecordLabel;
-    FixedText       m_ftRecord;
-    FixedText       m_ftHint;
-    PushButton      m_pbSearchAgain;
-    CancelButton    m_pbClose;
-    HelpButton      m_pbHelp;
+    FixedText		m_ftRecordLabel;
+    FixedText		m_ftRecord;
+    FixedText		m_ftHint;
+    PushButton		m_pbSearchAgain;
+    CancelButton	m_pbClose;
+    HelpButton		m_pbHelp;
     String          m_sSearch;
     String          m_sCancel;
 
-    Window*         m_pPreSearchFocus;
+    Window*			m_pPreSearchFocus;
 
-    Link    m_lnkFoundHandler;          // Handler fuer "gefunden"
-    Link    m_lnkCanceledNotFoundHdl;   // Handler fuer Positionierung des Cursors
+    Link	m_lnkFoundHandler;			// Handler fuer "gefunden"
+    Link	m_lnkCanceledNotFoundHdl;	// Handler fuer Positionierung des Cursors
 
-    Link    m_lnkContextSupplier;       // fuer Suche in verschiedenen Kontexten
+    Link	m_lnkContextSupplier;		// fuer Suche in verschiedenen Kontexten
 
     // ein Array, in dem ich mir fuer jeden Kontext das aktuell selektierte Feld merke
     ::std::vector<String> m_arrContextFields;
 
     // fuer die eigentliche Arbeit ...
-    FmSearchEngine* m_pSearchEngine;
+    FmSearchEngine*	m_pSearchEngine;
 
-    Timer           m_aDelayedPaint;
+    Timer			m_aDelayedPaint;
         // siehe EnableSearchUI
 
-    ::svxform::FmSearchConfigItem*      m_pConfig;
+    ::svxform::FmSearchConfigItem*		m_pConfig;
 public:
-    /** hiermit kann in verschiedenen Saetzen von Feldern gesucht werden. Es gibt eine Reihe von Kontexten, deren Namen in
+    /**	hiermit kann in verschiedenen Saetzen von Feldern gesucht werden. Es gibt eine Reihe von Kontexten, deren Namen in
         strContexts stehen (getrennt durch ';'), der Benutzer kann einen davon auswaehlen.
         Wenn der Benutzer einen Kontext auswaehlt, wird lnkContextSupplier aufgerufen, er bekommt einen Zeiger auf eine
         FmSearchContext-Struktur, die gefuellt werden muss.

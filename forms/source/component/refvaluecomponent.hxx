@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace frm
         // <properties>
         ::rtl::OUString     m_sReferenceValue;          // the reference value to use for data exchange
         ::rtl::OUString     m_sNoCheckReferenceValue;   // the reference value to be exchanged when the control is not checked
-        ToggleState         m_eDefaultChecked;          // the default check state
+        ToggleState			m_eDefaultChecked;          // the default check state
         // </properties>
 
         sal_Bool            m_bSupportSecondRefValue;       // do we support the SecondaryRefValue property?

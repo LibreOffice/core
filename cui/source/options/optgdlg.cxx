@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,6 +40,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <i18npool/mslangid.hxx>
+#include <unotools/compatibility.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/cacheoptions.hxx>
 #include <unotools/fontoptions.hxx>
@@ -112,7 +113,7 @@ using ::rtl::OUString;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
-#define MAX_PROGRAM_ENTRIES     3
+#define MAX_PROGRAM_ENTRIES		3
 
 // class OfaMiscTabPage --------------------------------------------------
 
@@ -194,25 +195,25 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, CUI_RES( OFA_TP_MISC ), rSet ),
 
-    aHelpFL             ( this, CUI_RES( FL_HELP ) ),
-    aToolTipsCB         ( this, CUI_RES( CB_TOOLTIP ) ),
-    aExtHelpCB          ( this, CUI_RES( CB_EXTHELP ) ),
-    aHelpAgentCB        ( this, CUI_RES( CB_HELPAGENT ) ),
-    aHelpAgentResetBtn  ( this, CUI_RES( PB_HELPAGENT_RESET ) ),
-    aHelpFormatFT       ( this, CUI_RES( FT_HELPFORMAT ) ),
-    aHelpFormatLB       ( this, CUI_RES( LB_HELPFORMAT ) ),
-    aFileDlgFL          ( this, CUI_RES( FL_FILEDLG ) ),
+    aHelpFL				( this, CUI_RES( FL_HELP ) ),
+    aToolTipsCB			( this, CUI_RES( CB_TOOLTIP ) ),
+    aExtHelpCB			( this, CUI_RES( CB_EXTHELP ) ),
+    aHelpAgentCB		( this, CUI_RES( CB_HELPAGENT ) ),
+    aHelpAgentResetBtn	( this, CUI_RES( PB_HELPAGENT_RESET ) ),
+    aHelpFormatFT		( this, CUI_RES( FT_HELPFORMAT ) ),
+    aHelpFormatLB		( this, CUI_RES( LB_HELPFORMAT ) ),
+    aFileDlgFL			( this, CUI_RES( FL_FILEDLG ) ),
     aFileDlgROImage     ( this, CUI_RES( FI_FILEDLG_RO ) ),
-    aFileDlgCB          ( this, CUI_RES( CB_FILEDLG ) ),
-    aODMADlgCB          ( this, CUI_RES( CB_ODMADLG ) ),
-    aPrintDlgFL         ( this, CUI_RES( FL_PRINTDLG ) ),
-    aPrintDlgCB         ( this, CUI_RES( CB_PRINTDLG ) ),
-    aDocStatusFL        ( this, CUI_RES( FL_DOCSTATUS ) ),
-    aDocStatusCB        ( this, CUI_RES( CB_DOCSTATUS ) ),
-    aTwoFigureFL        ( this, CUI_RES( FL_TWOFIGURE ) ),
-    aInterpretFT        ( this, CUI_RES( FT_INTERPRET ) ),
-    aYearValueField     ( this, CUI_RES( NF_YEARVALUE ) ),
-    aToYearFT           ( this, CUI_RES( FT_TOYEAR ) )
+    aFileDlgCB			( this, CUI_RES( CB_FILEDLG ) ),
+    aODMADlgCB			( this, CUI_RES( CB_ODMADLG ) ),
+    aPrintDlgFL			( this, CUI_RES( FL_PRINTDLG ) ),
+    aPrintDlgCB			( this, CUI_RES( CB_PRINTDLG ) ),
+    aDocStatusFL		( this, CUI_RES( FL_DOCSTATUS ) ),
+    aDocStatusCB		( this, CUI_RES( CB_DOCSTATUS ) ),
+    aTwoFigureFL		( this, CUI_RES( FL_TWOFIGURE ) ),
+    aInterpretFT		( this, CUI_RES( FT_INTERPRET ) ),
+    aYearValueField		( this, CUI_RES( NF_YEARVALUE ) ),
+    aToYearFT			( this, CUI_RES( FT_TOYEAR ) )
 
 {
     FreeResource();
@@ -362,7 +363,7 @@ OfaMiscTabPage::~OfaMiscTabPage()
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* OfaMiscTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage*	OfaMiscTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new OfaMiscTabPage( pParent, rAttrSet );
 }
@@ -711,12 +712,12 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aIconSizeStyleFT    ( this, CUI_RES( FT_ICONSIZESTYLE ) ),
     aIconSizeLB              ( this, CUI_RES( LB_ICONSIZE ) ),
     aIconStyleLB        ( this, CUI_RES( LB_ICONSTYLE ) ),
-    m_aSystemFont               (this, CUI_RES( CB_SYSTEM_FONT ) ),
+    m_aSystemFont				(this, CUI_RES( CB_SYSTEM_FONT ) ),
 #if defined( UNX )
-    aFontAntiAliasing   ( this, CUI_RES( CB_FONTANTIALIASING )),
-    aAAPointLimitLabel  ( this, CUI_RES( FT_POINTLIMIT_LABEL )),
-    aAAPointLimit       ( this, CUI_RES( NF_AA_POINTLIMIT )),
-    aAAPointLimitUnits  ( this, CUI_RES( FT_POINTLIMIT_UNIT )),
+    aFontAntiAliasing	( this, CUI_RES( CB_FONTANTIALIASING )),
+    aAAPointLimitLabel	( this, CUI_RES( FT_POINTLIMIT_LABEL )),
+    aAAPointLimit		( this, CUI_RES( NF_AA_POINTLIMIT )),
+    aAAPointLimitUnits	( this, CUI_RES( FT_POINTLIMIT_UNIT )),
 #endif
     aMenuFL             ( this, CUI_RES( FL_MENU ) ),
     aMenuIconsFT        ( this, CUI_RES( FT_MENU_ICONS )),
@@ -726,7 +727,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aFontHistoryCB      ( this, CUI_RES( CB_FONT_HISTORY ) ),
     aRenderingFL        ( this, CUI_RES( FL_RENDERING ) ),
     aUseHardwareAccell  ( this, CUI_RES( CB_USE_HARDACCELL ) ),
-    aUseAntiAliase      ( this, CUI_RES( CB_USE_ANTIALIASE ) ),
+    aUseAntiAliase		( this, CUI_RES( CB_USE_ANTIALIASE ) ),
     aMouseFL            ( this, CUI_RES( FL_MOUSE ) ),
     aMousePosFT         ( this, CUI_RES( FT_MOUSEPOS ) ),
     aMousePosLB         ( this, CUI_RES( LB_MOUSEPOS ) ),
@@ -757,7 +758,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     sLabel.EraseAllChars('~');
 
     sal_Int32 nLabelWidth = aAAPointLimitLabel.GetTextWidth( sLabel );
-    nLabelWidth += 3;   // small gap
+    nLabelWidth += 3;	// small gap
     // pixels to move both controls to the left
     Size aSize = aAAPointLimitLabel.GetSizePixel();
     sal_Int32 nMoveLeft = aSize.Width() - nLabelWidth;
@@ -786,7 +787,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     };
 
     // temporaryly create the checkbox for the anti aliasing (we need to to determine it's pos)
-    CheckBox* pFontAntiAliasing = new CheckBox( this, CUI_RES( CB_FONTANTIALIASING ) );
+    CheckBox* pFontAntiAliasing	= new CheckBox( this, CUI_RES( CB_FONTANTIALIASING ) );
     sal_Int32 nMoveUp = aMenuFL.GetPosPixel().Y() - pFontAntiAliasing->GetPosPixel().Y();
     DELETEZ( pFontAntiAliasing );
 
@@ -832,7 +833,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
                 aIconStyleLB.RemoveEntry( nItem );
                 aIconStyleItemId[n] = 0;
             }
-        }
+        }        
     }
 
     // add real theme name to 'auto' theme, e.g. 'auto' => 'auto (classic)'
@@ -845,7 +846,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
         ULONG nAutoStyle = aStyleSettings.GetAutoSymbolsStyle();
         if ( aIconStyleItemId[nAutoStyle] )
             aAutoStr += aIconStyleLB.GetEntry( aIconStyleItemId[nAutoStyle] );
-
+  
         aIconStyleLB.RemoveEntry( 0 );
         aIconStyleLB.InsertEntry( aAutoStr += ::rtl::OUString::createFromAscii( ")" ), 0 );
         // separate auto and other icon themes
@@ -889,7 +890,7 @@ IMPL_LINK( OfaViewTabPage, OnSelectionToggled, void*, NOTINTERESTEDIN )
 
 --------------------------------------------------*/
 
-SfxTabPage* OfaViewTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage*	OfaViewTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new OfaViewTabPage(pParent, rAttrSet);
 }
@@ -1055,7 +1056,7 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
         }
     }
 
-    SvtAccessibilityOptions     aAccessibilityOptions;
+    SvtAccessibilityOptions 	aAccessibilityOptions;
     if( aAccessibilityOptions.GetIsSystemFont() != m_aSystemFont.IsChecked() &&
         m_aSystemFont.IsEnabled() )
     {
@@ -1208,16 +1209,16 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
  ---------------------------------------------------------------------------*/
 class LangConfigItem_Impl : public ConfigItem
 {
-    Any         aValue;
-    OUString    aPropertyName;
+    Any 		aValue;
+    OUString	aPropertyName;
 public:
     LangConfigItem_Impl(const OUString& rTree, const OUString& rProperty);
     ~LangConfigItem_Impl();
 
-    virtual void            Commit();
+    virtual void			Commit();
 
-    const Any&  GetValue() const {return aValue;}
-    void        SetValue(Any& rValue)  {aValue = rValue; SetModified();}
+    const Any& 	GetValue() const {return aValue;}
+    void 		SetValue(Any& rValue)  {aValue = rValue; SetModified();}
 };
 /* -----------------------------23.11.00 15:06--------------------------------
 
@@ -1278,7 +1279,7 @@ static Sequence< OUString > seqInstalledLanguages;
 
 OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, CUI_RES( OFA_TP_LANGUAGES ), rSet ),
-    aUILanguageGB(this,         CUI_RES(FL_UI_LANG      )),
+    aUILanguageGB(this, 		CUI_RES(FL_UI_LANG		)),
     aLocaleSettingFI(this,      CUI_RES(FI_LOCALESETTING)),
     aUserInterfaceFT(this,      CUI_RES(FT_USERINTERFACE)),
     aUserInterfaceLB(this,      CUI_RES(LB_USERINTERFACE)),
@@ -1289,17 +1290,17 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aDecimalSeparatorCB(this,   CUI_RES(CB_DECIMALSEPARATOR)),
     aCurrencyFT( this,          CUI_RES(FT_CURRENCY       )),
     aCurrencyLB( this,          CUI_RES(LB_CURRENCY       )),
-    aLinguLanguageGB(this,      CUI_RES(FL_LINGU_LANG       )),
+    aLinguLanguageGB(this, 		CUI_RES(FL_LINGU_LANG		)),
     aWesternLanguageFI(this,    CUI_RES(FI_WEST_LANG      )),
     aWesternLanguageFT(this,    CUI_RES(FT_WEST_LANG      )),
-    aWesternLanguageLB(this,    CUI_RES(LB_WEST_LANG        )),
+    aWesternLanguageLB(this, 	CUI_RES(LB_WEST_LANG		)),
     aAsianLanguageFI(this,      CUI_RES(FI_ASIAN_LANG     )),
     aAsianLanguageFT(this,      CUI_RES(FT_ASIAN_LANG     )),
-    aAsianLanguageLB(this,      CUI_RES(LB_ASIAN_LANG       )),
+    aAsianLanguageLB(this, 		CUI_RES(LB_ASIAN_LANG		)),
     aComplexLanguageFI(this,    CUI_RES(FI_COMPLEX_LANG   )),
     aComplexLanguageFT(this,    CUI_RES(FT_COMPLEX_LANG   )),
-    aComplexLanguageLB(this,    CUI_RES(LB_COMPLEX_LANG )),
-    aCurrentDocCB(this,         CUI_RES(CB_CURRENT_DOC  )),
+    aComplexLanguageLB(this, 	CUI_RES(LB_COMPLEX_LANG	)),
+    aCurrentDocCB(this, 		CUI_RES(CB_CURRENT_DOC	)),
     aEnhancedFL(this,           CUI_RES(FL_ENHANCED    )),
     aAsianSupportFI(this,       CUI_RES(FI_ASIANSUPPORT   )),
     aAsianSupportCB(this,       CUI_RES(CB_ASIANSUPPORT   )),
@@ -1443,7 +1444,7 @@ OfaLanguagesTabPage::~OfaLanguagesTabPage()
 /*-- 23.11.00 13:06:40---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SfxTabPage* OfaLanguagesTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage*	OfaLanguagesTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new OfaLanguagesTabPage(pParent, rAttrSet);
 }
@@ -1587,12 +1588,17 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         // the end of this method
         pLangConfig->aSysLocaleOptions.SetLocaleConfigString( sNewLang );
         rSet.Put( SfxBoolItem( SID_OPT_LOCALE_CHANGED, TRUE ) );
+
+        sal_uInt16 nNewType = SvtLanguageOptions::GetScriptTypeOfLanguage( eNewLocale );
+        bool bNewCJK = ( nNewType & SCRIPTTYPE_ASIAN ) != 0;
+        SvtCompatibilityOptions aCompatOpts;
+        aCompatOpts.SetDefault( COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE, !bNewCJK );
     }
 
     if(aDecimalSeparatorCB.GetSavedValue() != aDecimalSeparatorCB.IsChecked())
         pLangConfig->aSysLocaleOptions.SetDecimalSeparatorAsLocale(aDecimalSeparatorCB.IsChecked());
 
-    // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default.
+    // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default. 
     OUString sOldCurr = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
     USHORT nCurrPos = aCurrencyLB.GetSelectEntryPos();
     const NfCurrencyEntry* pCurr = (const NfCurrencyEntry*)
@@ -1912,7 +1918,7 @@ namespace
         else
             _rCB.Check( _bOldValue );
 // #i15082# do not call SaveValue() in running dialog...
-//      _rCB.SaveValue();
+//		_rCB.SaveValue();
         _rCB.Enable( !_bNewValue );
     }
 }

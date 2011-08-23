@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 #ifdef UNIX
 #define STAROFFICE_VERSION_FILE "/.sversionrc"
 #define STAROFFICE_EXE_FILE_NAME "soffice"
-#endif
+#endif 
 #ifdef WNT
 #define STAROFFICE_VERSION_FILE "\\sversion.ini"
 #define STAROFFICE_EXE_FILE_NAME "soffice.exe"
@@ -71,7 +71,7 @@ const char* findInstallDir();
 
 // return SO program dir absolute path, like "/home/build/staroffice/program"
 const char* findProgramDir();
-
+    
 #ifdef WNT
 // return SO executable absolute path, like "/home/build/staroffice/program/soffice"
 const char* findSofficeExecutable();

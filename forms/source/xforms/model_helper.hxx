@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,7 +147,7 @@ sal_Int32 lcl_findInstance( const InstanceCollection*,
 
 
 // get values from Sequence<PropertyValue> describing an Instance
-void getInstanceData(
+void getInstanceData( 
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&,
     rtl::OUString* pID,
     com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocument>*,
@@ -155,7 +155,7 @@ void getInstanceData(
     bool* pURLOnce );
 
 // set values on Sequence<PropertyValue> for an Instance
-void setInstanceData(
+void setInstanceData( 
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&,
     const rtl::OUString* pID,
     const com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocument>*,

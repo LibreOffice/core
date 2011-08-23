@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,16 +51,16 @@ namespace pcr
                 ,public PcrClient
     {
     protected:
-        static sal_uInt16               s_nCount;
-        static OPropertyInfoImpl*       s_pPropertyInfos;
+        static sal_uInt16				s_nCount;
+        static OPropertyInfoImpl*		s_pPropertyInfos;
         // TODO: a real structure which allows quick access by name as well as by id
 
     public:
         // IPropertyInfoService
-        virtual sal_Int32                           getPropertyId(const String& _rName) const;
-        virtual String                              getPropertyTranslation(sal_Int32 _nId) const;
-        virtual sal_Int32                           getPropertyHelpId(sal_Int32 _nId) const;
-        virtual sal_Int16                           getPropertyPos(sal_Int32 _nId) const;
+        virtual sal_Int32				            getPropertyId(const String& _rName) const;
+        virtual String					            getPropertyTranslation(sal_Int32 _nId) const;
+        virtual sal_Int32				            getPropertyHelpId(sal_Int32 _nId) const;
+        virtual sal_Int16				            getPropertyPos(sal_Int32 _nId) const;
         virtual sal_uInt32                          getPropertyUIFlags(sal_Int32 _nId) const;
         virtual ::std::vector< ::rtl::OUString >    getPropertyEnumRepresentations(sal_Int32 _nId) const;
         virtual String                              getPropertyName( sal_Int32 _nPropId );
@@ -141,124 +141,124 @@ namespace pcr
     //= property ids (for all browseable properties)
     //========================================================================
 
-    #define PROPERTY_ID_NAME                  1
-    #define PROPERTY_ID_LABEL                 2
-    #define PROPERTY_ID_CONTROLLABEL          3
-    #define PROPERTY_ID_MAXTEXTLEN            4
-    #define PROPERTY_ID_EDITMASK              5
-    #define PROPERTY_ID_LITERALMASK           6
-    #define PROPERTY_ID_STRICTFORMAT          7
-    #define PROPERTY_ID_ENABLED               8
-    #define PROPERTY_ID_READONLY              9
-    #define PROPERTY_ID_PRINTABLE            10
-    #define PROPERTY_ID_CONTROLSOURCE        11
-    #define PROPERTY_ID_TABSTOP              12
-    #define PROPERTY_ID_TABINDEX             13
-    #define PROPERTY_ID_DATASOURCE           14
-    #define PROPERTY_ID_COMMAND              15
-    #define PROPERTY_ID_COMMANDTYPE          16
+    #define PROPERTY_ID_NAME				  1
+    #define PROPERTY_ID_LABEL				  2
+    #define PROPERTY_ID_CONTROLLABEL		  3
+    #define PROPERTY_ID_MAXTEXTLEN			  4
+    #define PROPERTY_ID_EDITMASK			  5
+    #define PROPERTY_ID_LITERALMASK			  6
+    #define PROPERTY_ID_STRICTFORMAT		  7
+    #define PROPERTY_ID_ENABLED			  	  8
+    #define PROPERTY_ID_READONLY			  9
+    #define PROPERTY_ID_PRINTABLE			 10
+    #define PROPERTY_ID_CONTROLSOURCE		 11
+    #define PROPERTY_ID_TABSTOP				 12
+    #define PROPERTY_ID_TABINDEX			 13
+    #define PROPERTY_ID_DATASOURCE			 14
+    #define PROPERTY_ID_COMMAND				 15
+    #define PROPERTY_ID_COMMANDTYPE			 16
     #define PROPERTY_ID_FILTER               17
-    #define PROPERTY_ID_SORT                 18
-    #define PROPERTY_ID_INSERTONLY           19
-    #define PROPERTY_ID_ALLOWADDITIONS       20
-    #define PROPERTY_ID_ALLOWEDITS           21
-    #define PROPERTY_ID_ALLOWDELETIONS       22
-    #define PROPERTY_ID_NAVIGATION           24
-    #define PROPERTY_ID_CYCLE                25
-    #define PROPERTY_ID_HIDDEN_VALUE         26
-    #define PROPERTY_ID_VALUEMIN             27
-    #define PROPERTY_ID_VALUEMAX             28
-    #define PROPERTY_ID_VALUESTEP            29
-    #define PROPERTY_ID_DEFAULT_VALUE        30
-    #define PROPERTY_ID_DECIMAL_ACCURACY     31
-    #define PROPERTY_ID_SHOWTHOUSANDSEP      32
-    #define PROPERTY_ID_REFVALUE             33
-    #define PROPERTY_ID_CURRENCYSYMBOL       34
-    #define PROPERTY_ID_CURRSYM_POSITION     35
-    #define PROPERTY_ID_DATEMIN              36
-    #define PROPERTY_ID_DATEMAX              37
-    #define PROPERTY_ID_DATEFORMAT           38
+    #define PROPERTY_ID_SORT				 18
+    #define PROPERTY_ID_INSERTONLY			 19
+    #define PROPERTY_ID_ALLOWADDITIONS		 20
+    #define PROPERTY_ID_ALLOWEDITS			 21
+    #define PROPERTY_ID_ALLOWDELETIONS		 22
+    #define PROPERTY_ID_NAVIGATION			 24
+    #define PROPERTY_ID_CYCLE				 25
+    #define PROPERTY_ID_HIDDEN_VALUE		 26
+    #define PROPERTY_ID_VALUEMIN			 27
+    #define PROPERTY_ID_VALUEMAX			 28
+    #define PROPERTY_ID_VALUESTEP			 29
+    #define PROPERTY_ID_DEFAULT_VALUE		 30
+    #define PROPERTY_ID_DECIMAL_ACCURACY	 31
+    #define PROPERTY_ID_SHOWTHOUSANDSEP		 32
+    #define PROPERTY_ID_REFVALUE			 33
+    #define PROPERTY_ID_CURRENCYSYMBOL		 34
+    #define PROPERTY_ID_CURRSYM_POSITION	 35
+    #define PROPERTY_ID_DATEMIN				 36
+    #define PROPERTY_ID_DATEMAX				 37
+    #define PROPERTY_ID_DATEFORMAT			 38
     #define PROPERTY_ID_SELECTEDITEMS        39
-    #define PROPERTY_ID_DEFAULT_DATE         40
-    #define PROPERTY_ID_TIMEMIN              41
-    #define PROPERTY_ID_TIMEMAX              42
-    #define PROPERTY_ID_TIMEFORMAT           43
-    #define PROPERTY_ID_DEFAULT_TIME         44
-    #define PROPERTY_ID_EFFECTIVE_MIN        45
-    #define PROPERTY_ID_EFFECTIVE_MAX        46
-    #define PROPERTY_ID_EFFECTIVE_DEFAULT    47
-    #define PROPERTY_ID_FORMATKEY            48
-    #define PROPERTY_ID_CLASSID              50
-    #define PROPERTY_ID_HEIGHT               51
-    #define PROPERTY_ID_WIDTH                52
-    #define PROPERTY_ID_BOUNDCOLUMN          53
-    #define PROPERTY_ID_LISTSOURCETYPE       54
-    #define PROPERTY_ID_LISTSOURCE           55
-    #define PROPERTY_ID_LISTINDEX            56
-    #define PROPERTY_ID_STRINGITEMLIST       57
-    #define PROPERTY_ID_DEFAULT_TEXT         58
+    #define PROPERTY_ID_DEFAULT_DATE		 40
+    #define PROPERTY_ID_TIMEMIN				 41
+    #define PROPERTY_ID_TIMEMAX				 42
+    #define PROPERTY_ID_TIMEFORMAT			 43
+    #define PROPERTY_ID_DEFAULT_TIME		 44
+    #define PROPERTY_ID_EFFECTIVE_MIN		 45
+    #define PROPERTY_ID_EFFECTIVE_MAX		 46
+    #define PROPERTY_ID_EFFECTIVE_DEFAULT	 47
+    #define PROPERTY_ID_FORMATKEY			 48
+    #define PROPERTY_ID_CLASSID				 50
+    #define PROPERTY_ID_HEIGHT				 51
+    #define PROPERTY_ID_WIDTH				 52
+    #define PROPERTY_ID_BOUNDCOLUMN			 53
+    #define PROPERTY_ID_LISTSOURCETYPE		 54
+    #define PROPERTY_ID_LISTSOURCE			 55
+    #define PROPERTY_ID_LISTINDEX			 56
+    #define PROPERTY_ID_STRINGITEMLIST		 57
+    #define PROPERTY_ID_DEFAULT_TEXT		 58
     #define PROPERTY_ID_FONT                 59
-    #define PROPERTY_ID_ALIGN                60
-    #define PROPERTY_ID_ROWHEIGHT            61
-    #define PROPERTY_ID_BACKGROUNDCOLOR      62
-    #define PROPERTY_ID_FILLCOLOR            63
-    #define PROPERTY_ID_ESCAPE_PROCESSING    64
-    #define PROPERTY_ID_LINECOLOR            65
-    #define PROPERTY_ID_BORDER               66
-    #define PROPERTY_ID_DROPDOWN             67
-    #define PROPERTY_ID_AUTOCOMPLETE         68
-    #define PROPERTY_ID_LINECOUNT            69
+    #define PROPERTY_ID_ALIGN				 60
+    #define PROPERTY_ID_ROWHEIGHT			 61
+    #define PROPERTY_ID_BACKGROUNDCOLOR		 62
+    #define PROPERTY_ID_FILLCOLOR			 63
+    #define PROPERTY_ID_ESCAPE_PROCESSING	 64
+    #define PROPERTY_ID_LINECOLOR			 65
+    #define PROPERTY_ID_BORDER				 66
+    #define PROPERTY_ID_DROPDOWN			 67
+    #define PROPERTY_ID_AUTOCOMPLETE		 68
+    #define PROPERTY_ID_LINECOUNT			 69
     #define PROPERTY_ID_WORDBREAK            70
-    #define PROPERTY_ID_MULTILINE            71
-    #define PROPERTY_ID_MULTISELECTION       72
+    #define PROPERTY_ID_MULTILINE			 71
+    #define PROPERTY_ID_MULTISELECTION		 72
     #define PROPERTY_ID_AUTOLINEBREAK        73
-    #define PROPERTY_ID_HSCROLL              74
-    #define PROPERTY_ID_VSCROLL              75
-    #define PROPERTY_ID_SPIN                 76
-    #define PROPERTY_ID_BUTTONTYPE           77
-    #define PROPERTY_ID_TARGET_URL           78
-    #define PROPERTY_ID_TARGET_FRAME         79
-    #define PROPERTY_ID_SUBMIT_ACTION        80
-    #define PROPERTY_ID_SUBMIT_TARGET        81
-    #define PROPERTY_ID_SUBMIT_METHOD        82
-    #define PROPERTY_ID_SUBMIT_ENCODING      83
-    #define PROPERTY_ID_DEFAULT_STATE        84
-    #define PROPERTY_ID_DEFAULTBUTTON        85
-    #define PROPERTY_ID_IMAGE_URL            86
-    #define PROPERTY_ID_DEFAULT_SELECT_SEQ   87
-    #define PROPERTY_ID_ECHO_CHAR            88
-    #define PROPERTY_ID_EMPTY_IS_NULL        89
-    #define PROPERTY_ID_TRISTATE             90
-    #define PROPERTY_ID_MASTERFIELDS         91
-    #define PROPERTY_ID_DETAILFIELDS         92
-    #define PROPERTY_ID_RECORDMARKER         93
-    #define PROPERTY_ID_FILTERPROPOSAL       94
-    #define PROPERTY_ID_TAG                  95
-    #define PROPERTY_ID_HELPTEXT             96
-    #define PROPERTY_ID_HELPURL              97
-    #define PROPERTY_ID_HASNAVIGATION        98
-    #define PROPERTY_ID_POSITIONX            99
-    #define PROPERTY_ID_POSITIONY            100
-    #define PROPERTY_ID_TITLE                101
-    #define PROPERTY_ID_STEP                 102
-    #define PROPERTY_ID_PROGRESSVALUE        103
-    #define PROPERTY_ID_PROGRESSVALUE_MIN    104
-    #define PROPERTY_ID_PROGRESSVALUE_MAX    105
-    #define PROPERTY_ID_SCROLLVALUE          106
-    #define PROPERTY_ID_SCROLLVALUE_MAX      107
-    #define PROPERTY_ID_LINEINCREMENT        108
-    #define PROPERTY_ID_BLOCKINCREMENT       109
-    #define PROPERTY_ID_VISIBLESIZE          110
-    #define PROPERTY_ID_ORIENTATION          111
+    #define PROPERTY_ID_HSCROLL				 74
+    #define PROPERTY_ID_VSCROLL				 75
+    #define PROPERTY_ID_SPIN				 76
+    #define PROPERTY_ID_BUTTONTYPE			 77
+    #define PROPERTY_ID_TARGET_URL			 78
+    #define PROPERTY_ID_TARGET_FRAME		 79
+    #define PROPERTY_ID_SUBMIT_ACTION		 80
+    #define PROPERTY_ID_SUBMIT_TARGET		 81
+    #define PROPERTY_ID_SUBMIT_METHOD		 82
+    #define PROPERTY_ID_SUBMIT_ENCODING		 83
+    #define PROPERTY_ID_DEFAULT_STATE		 84
+    #define PROPERTY_ID_DEFAULTBUTTON		 85
+    #define PROPERTY_ID_IMAGE_URL			 86
+    #define PROPERTY_ID_DEFAULT_SELECT_SEQ	 87
+    #define PROPERTY_ID_ECHO_CHAR			 88
+    #define PROPERTY_ID_EMPTY_IS_NULL		 89
+    #define PROPERTY_ID_TRISTATE			 90
+    #define PROPERTY_ID_MASTERFIELDS		 91
+    #define PROPERTY_ID_DETAILFIELDS		 92
+    #define PROPERTY_ID_RECORDMARKER		 93
+    #define PROPERTY_ID_FILTERPROPOSAL		 94
+    #define PROPERTY_ID_TAG					 95
+    #define PROPERTY_ID_HELPTEXT			 96
+    #define PROPERTY_ID_HELPURL				 97
+    #define PROPERTY_ID_HASNAVIGATION		 98
+    #define PROPERTY_ID_POSITIONX			 99
+    #define PROPERTY_ID_POSITIONY			 100
+    #define PROPERTY_ID_TITLE				 101
+    #define PROPERTY_ID_STEP				 102
+    #define PROPERTY_ID_PROGRESSVALUE		 103
+    #define PROPERTY_ID_PROGRESSVALUE_MIN	 104
+    #define PROPERTY_ID_PROGRESSVALUE_MAX	 105
+    #define PROPERTY_ID_SCROLLVALUE			 106
+    #define PROPERTY_ID_SCROLLVALUE_MAX		 107
+    #define PROPERTY_ID_LINEINCREMENT		 108
+    #define PROPERTY_ID_BLOCKINCREMENT		 109
+    #define PROPERTY_ID_VISIBLESIZE			 110
+    #define PROPERTY_ID_ORIENTATION			 111
     #define PROPERTY_ID_IMAGEPOSITION        112
-    #define PROPERTY_ID_DATE                 113
-    #define PROPERTY_ID_STATE                114
-    #define PROPERTY_ID_TIME                 115
-    #define PROPERTY_ID_VALUE                116
-    #define PROPERTY_ID_SCALEIMAGE           117
-    #define PROPERTY_ID_PUSHBUTTONTYPE       118
-    #define PROPERTY_ID_EFFECTIVE_VALUE      119
-    #define PROPERTY_ID_TEXT                 120
+    #define PROPERTY_ID_DATE			     113
+    #define PROPERTY_ID_STATE			     114
+    #define PROPERTY_ID_TIME			     115
+    #define PROPERTY_ID_VALUE			     116
+    #define PROPERTY_ID_SCALEIMAGE		     117
+    #define PROPERTY_ID_PUSHBUTTONTYPE	     118
+    #define PROPERTY_ID_EFFECTIVE_VALUE 	 119
+    #define PROPERTY_ID_TEXT        		 120
     #define PROPERTY_ID_BOUND_CELL           121
     #define PROPERTY_ID_LIST_CELL_RANGE      122
     #define PROPERTY_ID_CELL_EXCHANGE_TYPE   123
@@ -326,14 +326,14 @@ namespace pcr
     #define PROPERTY_ID_LIST_BINDING                185
     #define PROPERTY_ID_VERTICAL_ALIGN              186
     #define PROPERTY_ID_BINDING_NAME                187
-    #define PROPERTY_ID_DECORATION                  188
-    #define PROPERTY_ID_SELECTION_TYPE              189
-    #define PROPERTY_ID_ROOT_DISPLAYED              190
-    #define PROPERTY_ID_SHOWS_HANDLES               191
-    #define PROPERTY_ID_SHOWS_ROOT_HANDLES          192
-    #define PROPERTY_ID_EDITABLE                    193
+    #define PROPERTY_ID_DECORATION                  188		
+    #define PROPERTY_ID_SELECTION_TYPE				189
+    #define PROPERTY_ID_ROOT_DISPLAYED				190
+    #define PROPERTY_ID_SHOWS_HANDLES				191
+    #define PROPERTY_ID_SHOWS_ROOT_HANDLES			192
+    #define PROPERTY_ID_EDITABLE					193
     #define PROPERTY_ID_INVOKES_STOP_NOT_EDITING    194
-    #define PROPERTY_ID_NOLABEL                     195
+    #define PROPERTY_ID_NOLABEL				        195
     #define PROPERTY_ID_SCALE_MODE                  196
     #define PROPERTY_ID_INPUT_REQUIRED              197
     #define PROPERTY_ID_WRITING_MODE                198

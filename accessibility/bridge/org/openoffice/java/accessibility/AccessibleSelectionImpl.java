@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,11 @@ import com.sun.star.accessibility.*;
 
 class AccessibleSelectionImpl implements javax.accessibility.AccessibleSelection {
     XAccessibleSelection unoAccessibleSelection;
-
+    
     AccessibleSelectionImpl(XAccessibleSelection xAccessibleSelection) {
         unoAccessibleSelection = xAccessibleSelection;
     }
-
+    
     /** Returns an Accessible representing the specified selected child of the object */
     public javax.accessibility.Accessible getAccessibleSelection(int i) {
         try {
@@ -95,5 +95,5 @@ class AccessibleSelectionImpl implements javax.accessibility.AccessibleSelection
         } catch (com.sun.star.uno.RuntimeException e) {
         }
     }
-
+    
 }

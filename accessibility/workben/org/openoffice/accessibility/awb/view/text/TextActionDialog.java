@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,13 +51,13 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * Display a dialog with a text field and a pair of cancel/do-it buttons
  */
-class TextActionDialog
+class TextActionDialog 
     extends JDialog
     implements ActionListener
 {
     public TextActionDialog (
         XAccessibleContext xContext,
-        String sExplanation,
+        String sExplanation, 
         String sTitle)
     {
         super();// AccessibilityWorkBench.Instance() );
@@ -96,7 +96,7 @@ class TextActionDialog
         maText.setText (sText);
         maText.setRows (sText.length() / 40 + 1);
         maText.setColumns (Math.min (Math.max (40, sText.length()), 20));
-
+        
         JPanel aButtons = new JPanel();
         aButtons.setLayout (new FlowLayout());
         maIndexToggle = new JCheckBox ("reverse selection");
@@ -133,17 +133,17 @@ class TextActionDialog
     }
 
 
-    protected int GetSelectionStart()
-    {
-        return GetSelection(true);
+    protected int GetSelectionStart()     
+    { 
+        return GetSelection(true); 
     }
-    protected int GetSelectionEnd()
+    protected int GetSelectionEnd()       
     {
-        return GetSelection(false);
+        return GetSelection(false); 
     }
     private int GetSelection (boolean bStart)
     {
-        if (bStart ^ maIndexToggle.isSelected())
+        if (bStart ^ maIndexToggle.isSelected()) 
             return maText.getSelectionStart();
         else
             return maText.getSelectionEnd();
@@ -157,18 +157,18 @@ class TextActionDialog
         boolean bSuccess = true;
         try
         {
-            XAccessibleText xText =
+            XAccessibleText xText = 
                 (XAccessibleText)UnoRuntime.queryInterface(
                     XAccessibleText.class, mxContext);
             if (xText != null)
                 bSuccess = bSuccess && TextAction (xText);
 
-            XAccessibleEditableText xEditableText =
+            XAccessibleEditableText xEditableText = 
                 (XAccessibleEditableText)UnoRuntime.queryInterface(
                     XAccessibleEditableText.class, mxContext);
             if (xEditableText != null)
                 bSuccess = bSuccess && EditableTextAction (xEditableText);
-
+            
             if ( ! bSuccess)
                 sError = "Can't execute";
         }
@@ -179,9 +179,9 @@ class TextActionDialog
 
         if (sError != null)
             JOptionPane.showMessageDialog (
-                this,// AccessibilityWorkBench.Instance(),
-                sError,
-                msTitle,
+                this,// AccessibilityWorkBench.Instance(), 
+                sError, 
+                msTitle, 
                 JOptionPane.ERROR_MESSAGE);
 
         Cancel();
@@ -194,7 +194,7 @@ class TextActionDialog
         return true;
     }
 
-    boolean EditableTextAction (XAccessibleEditableText xText)
+    boolean EditableTextAction (XAccessibleEditableText xText) 
         throws IndexOutOfBoundsException
     {
         return true;

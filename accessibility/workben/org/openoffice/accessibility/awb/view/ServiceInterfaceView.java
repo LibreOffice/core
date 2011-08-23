@@ -95,12 +95,12 @@ public class ServiceInterfaceView
         {
             maImplementationNameRoot.add (
                 new DefaultMutableTreeNode (
-                    (xServiceInfo!=null
+                    (xServiceInfo!=null 
                         ? xServiceInfo.getImplementationName()
                         : "<XServiceInfo not supported>")));
         }
     }
-
+                
     private void CreateServiceTree ()
     {
         XServiceInfo xServiceInfo = (XServiceInfo)UnoRuntime.queryInterface(

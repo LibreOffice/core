@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@ namespace bib
         friend class OComponentAdapterBase;
 
     private:
-        OComponentAdapterBase*  m_pAdapter;
-        ::osl::Mutex&           m_rMutex;
+        OComponentAdapterBase*	m_pAdapter;
+        ::osl::Mutex&			m_rMutex;
     protected:
         OComponentListener( ::osl::Mutex& _rMutex )
             :m_pAdapter( NULL )
@@ -76,10 +76,10 @@ namespace bib
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                                             m_xComponent;
-        OComponentListener*                 m_pListener;
-        sal_Int32                           m_nLockCount;
-        sal_Bool                            m_bListening    : 1;
-        sal_Bool                            m_bAutoRelease  : 1;
+        OComponentListener*					m_pListener;
+        sal_Int32							m_nLockCount;
+        sal_Bool							m_bListening	: 1;
+        sal_Bool							m_bAutoRelease	: 1;
 
         // impl method for dispose - virtual, 'cause you at least need to remove the listener from the broadcaster
         virtual void disposing() = 0;
@@ -87,11 +87,11 @@ namespace bib
     protected:
         // attribute access for derivees
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >&
-                                getComponent() const    { return m_xComponent; }
-        OComponentListener*     getListener()           { return m_pListener; }
+                                getComponent() const	{ return m_xComponent; }
+        OComponentListener*		getListener()			{ return m_pListener; }
 
         // to be called by derivees which started listening at the component
-        virtual void    startComponentListening() = 0;
+        virtual	void	startComponentListening() = 0;
 
         virtual ~OComponentAdapterBase();
 
@@ -112,7 +112,7 @@ namespace bib
 
     // helper
         /// get the lock count
-        sal_Int32   locked() const { return m_nLockCount; }
+        sal_Int32	locked() const { return m_nLockCount; }
 
         /// dispose the object - stop listening and such
         void dispose();
@@ -143,17 +143,17 @@ namespace bib
     //=====================================================================
     //= OLoadListenerAdapter
     //=====================================================================
-    typedef ::cppu::WeakImplHelper1< ::com::sun::star::form::XLoadListener >    OLoadListenerAdapter_Base;
+    typedef	::cppu::WeakImplHelper1< ::com::sun::star::form::XLoadListener >	OLoadListenerAdapter_Base;
     class OLoadListenerAdapter
         :public OLoadListenerAdapter_Base
         ,public OComponentAdapterBase
     {
     protected:
-        OLoadListener*      getLoadListener( )  { return static_cast< OLoadListener* >( getListener() ); }
+        OLoadListener*		getLoadListener( )	{ return static_cast< OLoadListener* >( getListener() ); }
 
     protected:
-        virtual void    disposing();
-        virtual void    startComponentListening();
+        virtual void	disposing();
+        virtual	void	startComponentListening();
 
     public:
         OLoadListenerAdapter(
@@ -178,7 +178,7 @@ namespace bib
     };
 
 //.........................................................................
-}   // namespace bib
+}	// namespace bib
 //.........................................................................
 
 #endif // EXTENSIONS_BIB_LOADLISTENERADAPTER_HXX

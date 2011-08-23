@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,9 @@
 #include "res_services.hxx"
 
 #include <vos/mutex.hxx>
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/factory.hxx>   // helper for factories
-#include <cppuhelper/implbase3.hxx> // helper for implementations
+#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/factory.hxx>	// helper for factories
+#include <cppuhelper/implbase3.hxx>	// helper for implementations
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
@@ -69,36 +69,36 @@ public:
                                 ~ResourceService();
 
     // XServiceInfo
-    OUString SAL_CALL           getImplementationName() throw();
-    BOOL     SAL_CALL           supportsService(const OUString& ServiceName) throw();
-    Sequence< OUString > SAL_CALL   getSupportedServiceNames(void) throw();
+    OUString SAL_CALL			getImplementationName() throw();
+    BOOL 	 SAL_CALL			supportsService(const OUString& ServiceName) throw();
+    Sequence< OUString > SAL_CALL	getSupportedServiceNames(void) throw();
 
     static Sequence< OUString > getSupportedServiceNames_Static(void) throw();
-    static OUString             getImplementationName_Static() throw()
+    static OUString 			getImplementationName_Static() throw()
                                 {
                                     return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.extensions.ResourceService"));
                                 }
     static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
 
     // XExactName
-    OUString  SAL_CALL          getExactName( const OUString & ApproximateName ) throw(RuntimeException);
+    OUString  SAL_CALL			getExactName( const OUString & ApproximateName ) throw(RuntimeException);
 
     // XInvokation
     Reference< XIntrospectionAccess >  SAL_CALL getIntrospection(void)  throw(RuntimeException);
-    Any  SAL_CALL               invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) throw(IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException);
-    void  SAL_CALL              setValue(const OUString& PropertyName, const Any& Value) throw(UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException);
-    Any  SAL_CALL               getValue(const OUString& PropertyName) throw(UnknownPropertyException, RuntimeException);
-    BOOL  SAL_CALL              hasMethod(const OUString& Name)  throw(RuntimeException);
-    BOOL  SAL_CALL              hasProperty(const OUString& Name)  throw(RuntimeException);
+    Any  SAL_CALL				invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) throw(IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException);
+    void  SAL_CALL				setValue(const OUString& PropertyName, const Any& Value) throw(UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException);
+    Any  SAL_CALL				getValue(const OUString& PropertyName) throw(UnknownPropertyException, RuntimeException);
+    BOOL  SAL_CALL				hasMethod(const OUString& Name)  throw(RuntimeException);
+    BOOL  SAL_CALL				hasProperty(const OUString& Name)  throw(RuntimeException);
 private:
-    Reference< XTypeConverter >         getTypeConverter() const;
-    Reference< XInvocation >            getDefaultInvocation() const;
+    Reference< XTypeConverter >			getTypeConverter() const;
+    Reference< XInvocation >			getDefaultInvocation() const;
 
-    Reference< XMultiServiceFactory >   xSMgr;
-    Reference< XInvocation >            xDefaultInvocation;
-    Reference< XTypeConverter >         xTypeConverter;
-    OUString                                aFileName;
-    ResMgr *                            pResMgr;
+    Reference< XMultiServiceFactory >	xSMgr;
+    Reference< XInvocation >			xDefaultInvocation;
+    Reference< XTypeConverter >			xTypeConverter;
+    OUString								aFileName;
+    ResMgr *							pResMgr;
 };
 
 
@@ -187,7 +187,7 @@ Reference< XInvocation > ResourceService::getDefaultInvocation() const
 }
 
 // XExactName
-OUString    SAL_CALL ResourceService::getExactName( const OUString & ApproximateName ) throw(RuntimeException)
+OUString	SAL_CALL ResourceService::getExactName( const OUString & ApproximateName ) throw(RuntimeException)
 {
     OUString aName( ApproximateName );
     aName = aName.toAsciiLowerCase();
@@ -212,7 +212,7 @@ OUString    SAL_CALL ResourceService::getExactName( const OUString & Approximate
 }
 
 // XInvokation
-Reference< XIntrospectionAccess > SAL_CALL ResourceService::getIntrospection(void)
+Reference< XIntrospectionAccess > SAL_CALL ResourceService::getIntrospection(void)  
     throw(RuntimeException)
 {
     Reference< XInvocation > xI = getDefaultInvocation();
@@ -224,9 +224,9 @@ Reference< XIntrospectionAccess > SAL_CALL ResourceService::getIntrospection(voi
 // XInvokation
 Any SAL_CALL ResourceService::invoke
 (
-    const OUString& FunctionName,
-    const Sequence< Any >& Params,
-    Sequence< sal_Int16 >& OutParamIndex,
+    const OUString& FunctionName, 
+    const Sequence< Any >& Params, 
+    Sequence< sal_Int16 >& OutParamIndex, 
     Sequence< Any >& OutParam
 )
     throw(IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException)
@@ -245,16 +245,16 @@ Any SAL_CALL ResourceService::invoke
             throw IllegalArgumentException();
         if( !pResMgr )
             throw IllegalArgumentException();
-
+        
         Sequence< OUString > aStrings( Params.getLength() );
         Sequence< sal_Bool > aBools( Params.getLength() );
         const Any* pIn = Params.getConstArray();
         OUString* pOutString = aStrings.getArray();
         sal_Bool* pOutBool = aBools.getArray();
-
+        
         Reference< XTypeConverter > xC = getTypeConverter();
         bool bGetBranch = FunctionName.equalsAscii( "getString" ) || FunctionName.equalsAscii( "getStrings" );
-
+            
         OGuard aGuard( Application::GetSolarMutex() );
         for( sal_Int32 n = 0; n < nElements; n++ )
         {
@@ -270,7 +270,7 @@ Any SAL_CALL ResourceService::invoke
             }
             if( nId > 0xFFFF || nId < 0 )
                 throw IllegalArgumentException();
-
+            
             if( bGetBranch )
             {
                 ResId aId( (USHORT)nId, *pResMgr );
@@ -321,7 +321,7 @@ Any SAL_CALL ResourceService::invoke
             else
                 throw CannotConvertException();
         }
-
+        
         if( FunctionName.equalsAscii("getStringList") )
         {
             ResId aId( (USHORT)nId, *pResMgr );
@@ -368,7 +368,7 @@ Any SAL_CALL ResourceService::invoke
 }
 
 // XInvokation
-void SAL_CALL ResourceService::setValue(const OUString& PropertyName, const Any& Value)
+void SAL_CALL ResourceService::setValue(const OUString& PropertyName, const Any& Value) 
     throw(UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException)
 {
     if( PropertyName.equalsAscii("FileName") )
@@ -405,7 +405,7 @@ void SAL_CALL ResourceService::setValue(const OUString& PropertyName, const Any&
 }
 
 // XInvokation
-Any SAL_CALL ResourceService::getValue(const OUString& PropertyName)
+Any SAL_CALL ResourceService::getValue(const OUString& PropertyName) 
     throw(UnknownPropertyException, RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
@@ -420,7 +420,7 @@ Any SAL_CALL ResourceService::getValue(const OUString& PropertyName)
 }
 
 // XInvokation
-BOOL SAL_CALL ResourceService::hasMethod(const OUString& Name)
+BOOL SAL_CALL ResourceService::hasMethod(const OUString& Name)  
     throw(RuntimeException)
 {
     if( Name.equalsAscii("getString")     ||
@@ -442,7 +442,7 @@ BOOL SAL_CALL ResourceService::hasMethod(const OUString& Name)
 }
 
 // XInvokation
-BOOL SAL_CALL ResourceService::hasProperty(const OUString& Name)
+BOOL SAL_CALL ResourceService::hasProperty(const OUString& Name)  
     throw(RuntimeException)
 {
     if( Name.equalsAscii("FileName") )

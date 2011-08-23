@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,10 +79,10 @@ public class PropertySetHelper
     }
 
     /**
-    set a property,
+    set a property, 
     @param _sName name of the property to set
     @param _aValue property value as object
-     * @throws java.lang.Exception
+     * @throws java.lang.Exception 
      */
     public void setPropertyValue(String _sName, Object _aValue) throws java.lang.Exception
     {

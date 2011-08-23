@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
 #endif
-#define WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN		
 #include <windows.h>
 #include <msiquery.h>
 #ifdef _MSC_VER
@@ -143,7 +143,7 @@ static LONG DeleteSubKeyTree( HKEY RootKey, LPCSTR lpKey )
     LONG rc = RegOpenKeyExA( RootKey, lpKey, 0, KEY_READ | DELETE, &hKey );
 
     if (ERROR_SUCCESS == rc)
-    {
+    {	
         LPCSTR    lpSubKey;
         DWORD     nMaxSubKeyLen;
 
@@ -247,7 +247,7 @@ bool GetMsiProp( MSIHANDLE handle, LPCSTR name, /*out*/std::string& value )
         MsiGetPropertyA(handle, name, buff, &sz);
         value = buff;
         return true;
-    }
+    }            
     return false;
 }
 
@@ -457,7 +457,7 @@ extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
     }
 
     OutputDebugStringFormat( "FindRegisteredExtensions:" );
-
+    
     bool bRegisterAll = IsSetMsiProp( handle, "REGISTER_ALL_MSO_TYPES" );
 
     if ( IsSetMsiProp( handle, "REGISTER_NO_MSO_TYPES" ) )
@@ -470,7 +470,7 @@ extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
     else
         OutputDebugStringFormat( "FindRegisteredExtensions: " );
 
-    // setting the msi properties SELECT_* will force registering for all corresponding
+    // setting the msi properties SELECT_* will force registering for all corresponding 
     // file types
     if ( IsSetMsiProp( handle, "SELECT_WORD" ) )
         registerSomeExtensions( handle, WORD_START, EXCEL_START, true );
@@ -486,7 +486,7 @@ extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
 
 //----------------------------------------------------------
 extern "C" UINT __stdcall DeleteRegisteredExtensions( MSIHANDLE /*handle*/ )
-{
+{         
     OutputDebugStringFormat( "DeleteRegisteredExtensions\n" );
 
     // remove all file extensions

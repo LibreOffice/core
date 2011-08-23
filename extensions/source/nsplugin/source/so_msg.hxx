@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@ enum msg_type
     SO_SET_WINDOW,   // 1
     SO_SET_URL,      // 2
     SO_NEW_INSTANCE, // 3
-    SO_DESTROY,      // 4
+    SO_DESTROY,      // 4 
     SO_SHUTDOWN,     // 5
     SO_PRINT         // 6
 };

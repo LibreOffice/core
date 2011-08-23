@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ public class FaxWizardDialogResources extends Resource
         super(xmsf, UNIT_NAME, MODULE_NAME);
         /**
          * Delete the String, uncomment the getResText method
-         *
+         *  
          */
         resFaxWizardDialog_title = getResText(RID_FAXWIZARDDIALOG_START + 1);
         resLabel9_value = getResText(RID_FAXWIZARDDIALOG_START + 2);

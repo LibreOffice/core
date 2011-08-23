@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -431,7 +431,7 @@ bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue,
             ++i;
         }
         break;
-
+    
     // some structs
     case uno::TypeClass_STRUCT:
         OSL_ENSURE( false, "StringRepresentation::convertGenericValueToString(STRUCT): this is dead code - isn't it?" );
@@ -479,7 +479,7 @@ uno::Any StringRepresentation::convertStringToSimple( const ::rtl::OUString& _rV
             if ( m_aConstants.getLength() && m_aValues.getLength() )
             {
                 const ::rtl::OUString* pIter = m_aValues.getConstArray();
-                const ::rtl::OUString* pEnd   = pIter + m_aValues.getLength();
+                const ::rtl::OUString* pEnd	  = pIter + m_aValues.getLength();
                 for(sal_Int32 i = 0;pIter != pEnd;++pIter,++i)
                 {
                     if ( *pIter == _rValue )
@@ -584,7 +584,7 @@ bool StringRepresentation::convertStringToGenericValue( const ::rtl::OUString& _
             // weird enough, the string representation of dates, as used
             // by the control displaying dates, and thus as passed through the layers,
             // is YYYYMMDD.
-
+            
             _rValue <<= ::dbtools::DBTypeConversion::toDate(_rStringRep);
         }
         else if ( _rTargetType.equals( ::getCppuType( static_cast< util::Time* >( NULL ) ) ) )

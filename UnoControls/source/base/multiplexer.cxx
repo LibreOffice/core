@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,75 +25,75 @@
  *
  ************************************************************************/
 //____________________________________________________________________________________________________________
-//  my own include
+//	my own include
 //____________________________________________________________________________________________________________
 
 #include "multiplexer.hxx"
 
 //____________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //____________________________________________________________________________________________________________
 #include <vos/diagnose.hxx>
 
 //____________________________________________________________________________________________________________
-//  includes of my own project
+//	includes of my own project
 //____________________________________________________________________________________________________________
 
 //____________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //____________________________________________________________________________________________________________
 
-using namespace ::cppu                  ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::awt   ;
-using namespace ::com::sun::star::lang  ;
+using namespace	::cppu					;
+using namespace	::osl					;
+using namespace	::com::sun::star::uno	;
+using namespace	::com::sun::star::awt	;
+using namespace	::com::sun::star::lang	;
 
 namespace unocontrols{
 
 //____________________________________________________________________________________________________________
-//  macros
+//	macros
 //____________________________________________________________________________________________________________
 
-#define MULTIPLEX( INTERFACE, METHOD, EVENTTYP, EVENT )                                                                             \
+#define MULTIPLEX( INTERFACE, METHOD, EVENTTYP, EVENT )																				\
                                                                                                                                     \
-    /* First get all interfaces from container with right type.*/                                                                   \
-    OInterfaceContainerHelper* pContainer = m_aListenerHolder.getContainer( ::getCppuType((const Reference< INTERFACE >*)0) );  \
-    /* Do the follow only, if elements in container exist.*/                                                                        \
-    if( pContainer != NULL )                                                                                                        \
-    {                                                                                                                               \
-        OInterfaceIteratorHelper aIterator( *pContainer );                                                                          \
-        EVENTTYP aLocalEvent = EVENT;                                                                                               \
-        /* Remark: The control is the event source not the peer.*/                                                                  \
-        /*         We must change the source of the event.      */                                                                  \
-        aLocalEvent.Source = m_xControl ;                                                                                           \
-        /* Is the control not destroyed? */                                                                                         \
-        if( aLocalEvent.Source.is() == sal_True )                                                                                   \
-        {                                                                                                                           \
-            if( aIterator.hasMoreElements() )                                                                                       \
-            {                                                                                                                       \
-                INTERFACE * pListener = (INTERFACE *)aIterator.next();                                                          \
-                try                                                                                                                 \
-                {                                                                                                                   \
-                    pListener->METHOD( aLocalEvent );                                                                               \
-                }                                                                                                                   \
-                catch( RuntimeException& )                                                                                          \
-                {                                                                                                                   \
-                    /* Ignore all system exceptions from the listener! */                                                           \
-                }                                                                                                                   \
-            }                                                                                                                       \
-        }                                                                                                                           \
+    /* First get all interfaces from container with right type.*/																	\
+    OInterfaceContainerHelper* pContainer = m_aListenerHolder.getContainer( ::getCppuType((const Reference< INTERFACE >*)0) );	\
+    /* Do the follow only, if elements in container exist.*/																		\
+    if( pContainer != NULL )																										\
+    {																																\
+        OInterfaceIteratorHelper aIterator( *pContainer );																			\
+        EVENTTYP aLocalEvent = EVENT;																								\
+        /* Remark: The control is the event source not the peer.*/																	\
+        /*         We must change the source of the event.		*/																	\
+        aLocalEvent.Source = m_xControl ;																							\
+        /* Is the control not destroyed? */																							\
+        if( aLocalEvent.Source.is() == sal_True )																					\
+        {																															\
+            if( aIterator.hasMoreElements() )																						\
+            {																														\
+                INTERFACE * pListener = (INTERFACE *)aIterator.next();															\
+                try																													\
+                {																													\
+                    pListener->METHOD( aLocalEvent );																				\
+                }																													\
+                catch( RuntimeException& )																							\
+                {																													\
+                    /* Ignore all system exceptions from the listener! */															\
+                }																													\
+            }																														\
+        }																															\
     }
 
 //____________________________________________________________________________________________________________
-//  construct/destruct
+//	construct/destruct
 //____________________________________________________________________________________________________________
 
-OMRCListenerMultiplexerHelper::OMRCListenerMultiplexerHelper(   const   Reference< XWindow >&   xControl    ,
-                                                                const   Reference< XWindow >&   xPeer       )
-    : m_xPeer           ( xPeer     )
-    , m_xControl        ( xControl  )
-    , m_aListenerHolder ( m_aMutex  )
+OMRCListenerMultiplexerHelper::OMRCListenerMultiplexerHelper(	const	Reference< XWindow >&	xControl	,
+                                                                const	Reference< XWindow >&	xPeer		)
+    : m_xPeer			( xPeer		)
+    , m_xControl		( xControl	)
+    , m_aListenerHolder	( m_aMutex	)
 {
 }
 
@@ -106,7 +106,7 @@ OMRCListenerMultiplexerHelper::OMRCListenerMultiplexerHelper( const OMRCListener
     , XPaintListener()
     , XTopWindowListener()
     , OWeakObject()
-    , m_aListenerHolder ( m_aMutex  )
+    , m_aListenerHolder	( m_aMutex	)
 {
 }
 
@@ -115,25 +115,25 @@ OMRCListenerMultiplexerHelper::~OMRCListenerMultiplexerHelper()
 }
 
 //____________________________________________________________________________________________________________
-//  XInterface
+//	XInterface
 //____________________________________________________________________________________________________________
 
 Any SAL_CALL OMRCListenerMultiplexerHelper::queryInterface( const Type& rType ) throw( RuntimeException )
 {
     // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Ask for my own supported interfaces ...
     // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
-    Any aReturn ( ::cppu::queryInterface(   rType                                           ,
-                                            static_cast< XWindowListener*       > ( this )  ,
-                                            static_cast< XKeyListener*          > ( this )  ,
-                                            static_cast< XFocusListener*        > ( this )  ,
-                                            static_cast< XMouseListener*        > ( this )  ,
-                                            static_cast< XMouseMotionListener*  > ( this )  ,
-                                            static_cast< XPaintListener*        > ( this )  ,
-                                            static_cast< XTopWindowListener*    > ( this )  ,
-                                            static_cast< XTopWindowListener*    > ( this )
+    Any aReturn	( ::cppu::queryInterface(	rType											,
+                                            static_cast< XWindowListener*		> ( this )	,
+                                            static_cast< XKeyListener*			> ( this )	,
+                                            static_cast< XFocusListener*		> ( this )	,
+                                            static_cast< XMouseListener*		> ( this )	,
+                                            static_cast< XMouseMotionListener*	> ( this )	,
+                                            static_cast< XPaintListener*		> ( this )	,
+                                            static_cast< XTopWindowListener*	> ( this )	,
+                                            static_cast< XTopWindowListener*	> ( this )
                                         )
                 );
 
@@ -151,33 +151,33 @@ Any SAL_CALL OMRCListenerMultiplexerHelper::queryInterface( const Type& rType ) 
 }
 
 //____________________________________________________________________________________________________________
-//  XInterface
+//	XInterface
 //____________________________________________________________________________________________________________
 
 void SAL_CALL OMRCListenerMultiplexerHelper::acquire() throw()
 {
     // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Forward to baseclass
     OWeakObject::acquire();
 }
 
 //____________________________________________________________________________________________________________
-//  XInterface
+//	XInterface
 //____________________________________________________________________________________________________________
 
 void SAL_CALL OMRCListenerMultiplexerHelper::release() throw()
 {
     // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Forward to baseclass
     OWeakObject::release();
 }
 
 //____________________________________________________________________________________________________________
-//  operator
+//	operator
 //____________________________________________________________________________________________________________
 
 OMRCListenerMultiplexerHelper::operator Reference< XInterface >() const
@@ -186,16 +186,16 @@ OMRCListenerMultiplexerHelper::operator Reference< XInterface >() const
 }
 
 //____________________________________________________________________________________________________________
-//  operator
+//	operator
 //____________________________________________________________________________________________________________
 
 //OMRCListenerMultiplexerHelper& OMRCListenerMultiplexerHelper::operator= ( const OMRCListenerMultiplexerHelper& aCopyInstance )
 //{
-//  return this ;
+//	return this ;
 //}
 
 //____________________________________________________________________________________________________________
-//  container method
+//	container method
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::setPeer( const Reference< XWindow >& xPeer )
@@ -206,9 +206,9 @@ void OMRCListenerMultiplexerHelper::setPeer( const Reference< XWindow >& xPeer )
         if( m_xPeer.is() )
         {
             // get all types from the listener added to the peer
-            Sequence< Type >    aContainedTypes = m_aListenerHolder.getContainedTypes();
-            const Type*         pArray          = aContainedTypes.getConstArray();
-            sal_Int32           nCount          = aContainedTypes.getLength();
+            Sequence< Type >	aContainedTypes	= m_aListenerHolder.getContainedTypes();
+            const Type*			pArray			= aContainedTypes.getConstArray();
+            sal_Int32			nCount			= aContainedTypes.getLength();
             // loop over all listener types and remove the listeners from the peer
             for( sal_Int32 i=0; i<nCount; i++ )
                 impl_unadviseFromPeer( m_xPeer, pArray[i] );
@@ -217,9 +217,9 @@ void OMRCListenerMultiplexerHelper::setPeer( const Reference< XWindow >& xPeer )
         if( m_xPeer.is() )
         {
             // get all types from the listener added to the peer
-            Sequence< Type >    aContainedTypes = m_aListenerHolder.getContainedTypes();
-            const Type*         pArray          = aContainedTypes.getConstArray();
-            sal_Int32           nCount          = aContainedTypes.getLength();
+            Sequence< Type >	aContainedTypes	= m_aListenerHolder.getContainedTypes();
+            const Type*			pArray			= aContainedTypes.getConstArray();
+            sal_Int32			nCount			= aContainedTypes.getLength();
             // loop over all listener types and add the listeners to the peer
             for( sal_Int32 i = 0; i < nCount; i++ )
                 impl_adviseToPeer( m_xPeer, pArray[i] );
@@ -228,7 +228,7 @@ void OMRCListenerMultiplexerHelper::setPeer( const Reference< XWindow >& xPeer )
 }
 
 //____________________________________________________________________________________________________________
-//  container method
+//	container method
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::disposeAndClear()
@@ -239,11 +239,11 @@ void OMRCListenerMultiplexerHelper::disposeAndClear()
 }
 
 //____________________________________________________________________________________________________________
-//  container method
+//	container method
 //____________________________________________________________________________________________________________
 
-void OMRCListenerMultiplexerHelper::advise( const   Type&                       aType       ,
-                                            const   Reference< XInterface >&    xListener   )
+void OMRCListenerMultiplexerHelper::advise(	const	Type&						aType		,
+                                            const	Reference< XInterface >&	xListener	)
 {
     MutexGuard aGuard( m_aMutex );
     if( m_aListenerHolder.addInterface( aType, xListener ) == 1 )
@@ -257,11 +257,11 @@ void OMRCListenerMultiplexerHelper::advise( const   Type&                       
 }
 
 //____________________________________________________________________________________________________________
-//  container method
+//	container method
 //____________________________________________________________________________________________________________
 
-void OMRCListenerMultiplexerHelper::unadvise(   const   Type&                       aType       ,
-                                                const   Reference< XInterface >&    xListener   )
+void OMRCListenerMultiplexerHelper::unadvise(	const	Type&						aType		,
+                                                const	Reference< XInterface >&	xListener	)
 {
     MutexGuard aGuard( m_aMutex );
     if( m_aListenerHolder.removeInterface( aType, xListener ) == 0 )
@@ -275,7 +275,7 @@ void OMRCListenerMultiplexerHelper::unadvise(   const   Type&                   
 }
 
 //____________________________________________________________________________________________________________
-//  XEventListener
+//	XEventListener
 //____________________________________________________________________________________________________________
 
 void SAL_CALL OMRCListenerMultiplexerHelper::disposing( const EventObject& /*aSource*/ ) throw( RuntimeException )
@@ -286,7 +286,7 @@ void SAL_CALL OMRCListenerMultiplexerHelper::disposing( const EventObject& /*aSo
 }
 
 //____________________________________________________________________________________________________________
-//  XFcousListener
+//	XFcousListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::focusGained(const FocusEvent& aEvent ) throw( UNO3_RUNTIMEEXCEPTION )
@@ -295,7 +295,7 @@ void OMRCListenerMultiplexerHelper::focusGained(const FocusEvent& aEvent ) throw
     OInterfaceContainerHelper * pCont = aListenerHolder.getContainer( ::getCppuType((const Reference< XFocusListener >*)0) );
     if( pCont )
     {
-        OInterfaceIteratorHelper    aIt( *pCont );
+        OInterfaceIteratorHelper	aIt( *pCont );
         FocusEvent aEvt = e;
         // Reamark: The control is the event source not the peer. We must change
         // the source of the event
@@ -322,7 +322,7 @@ void OMRCListenerMultiplexerHelper::focusGained(const FocusEvent& aEvent ) throw
 }
 
 //____________________________________________________________________________________________________________
-//  XFcousListener
+//	XFcousListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::focusLost(const FocusEvent& aEvent ) throw( UNO3_RUNTIMEEXCEPTION )
@@ -331,7 +331,7 @@ void OMRCListenerMultiplexerHelper::focusLost(const FocusEvent& aEvent ) throw( 
 }
 
 //____________________________________________________________________________________________________________
-//  XWindowListener
+//	XWindowListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::windowResized(const WindowEvent& aEvent ) throw( UNO3_RUNTIMEEXCEPTION )
@@ -340,7 +340,7 @@ void OMRCListenerMultiplexerHelper::windowResized(const WindowEvent& aEvent ) th
 }
 
 //____________________________________________________________________________________________________________
-//  XWindowListener
+//	XWindowListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::windowMoved(const WindowEvent& aEvent ) throw( UNO3_RUNTIMEEXCEPTION )
@@ -349,7 +349,7 @@ void OMRCListenerMultiplexerHelper::windowMoved(const WindowEvent& aEvent ) thro
 }
 
 //____________________________________________________________________________________________________________
-//  XWindowListener
+//	XWindowListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::windowShown(const EventObject& aEvent ) throw( UNO3_RUNTIMEEXCEPTION )
@@ -358,7 +358,7 @@ void OMRCListenerMultiplexerHelper::windowShown(const EventObject& aEvent ) thro
 }
 
 //____________________________________________________________________________________________________________
-//  XWindowListener
+//	XWindowListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::windowHidden(const EventObject& aEvent ) throw( UNO3_RUNTIMEEXCEPTION )
@@ -367,7 +367,7 @@ void OMRCListenerMultiplexerHelper::windowHidden(const EventObject& aEvent ) thr
 }
 
 //____________________________________________________________________________________________________________
-//  XKeyListener
+//	XKeyListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::keyPressed(const KeyEvent& aEvent) throw( UNO3_RUNTIMEEXCEPTION )
@@ -376,7 +376,7 @@ void OMRCListenerMultiplexerHelper::keyPressed(const KeyEvent& aEvent) throw( UN
 }
 
 //____________________________________________________________________________________________________________
-//  XKeyListener
+//	XKeyListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::keyReleased(const KeyEvent& aEvent) throw( UNO3_RUNTIMEEXCEPTION )
@@ -385,7 +385,7 @@ void OMRCListenerMultiplexerHelper::keyReleased(const KeyEvent& aEvent) throw( U
 }
 
 //____________________________________________________________________________________________________________
-//  XMouseListener
+//	XMouseListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::mousePressed(const MouseEvent& aEvent) throw( UNO3_RUNTIMEEXCEPTION )
@@ -394,7 +394,7 @@ void OMRCListenerMultiplexerHelper::mousePressed(const MouseEvent& aEvent) throw
 }
 
 //____________________________________________________________________________________________________________
-//  XMouseListener
+//	XMouseListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::mouseReleased(const MouseEvent& aEvent) throw( UNO3_RUNTIMEEXCEPTION )
@@ -403,7 +403,7 @@ void OMRCListenerMultiplexerHelper::mouseReleased(const MouseEvent& aEvent) thro
 }
 
 //____________________________________________________________________________________________________________
-//  XMouseListener
+//	XMouseListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::mouseEntered(const MouseEvent& aEvent) throw( UNO3_RUNTIMEEXCEPTION )
@@ -412,7 +412,7 @@ void OMRCListenerMultiplexerHelper::mouseEntered(const MouseEvent& aEvent) throw
 }
 
 //____________________________________________________________________________________________________________
-//  XMouseListener
+//	XMouseListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::mouseExited(const MouseEvent& aEvent) throw( UNO3_RUNTIMEEXCEPTION )
@@ -421,7 +421,7 @@ void OMRCListenerMultiplexerHelper::mouseExited(const MouseEvent& aEvent) throw(
 }
 
 //____________________________________________________________________________________________________________
-//  XMouseMotionListener
+//	XMouseMotionListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::mouseDragged(const MouseEvent& aEvent) throw( UNO3_RUNTIMEEXCEPTION )
@@ -430,7 +430,7 @@ void OMRCListenerMultiplexerHelper::mouseDragged(const MouseEvent& aEvent) throw
 }
 
 //____________________________________________________________________________________________________________
-//  XMouseMotionListener
+//	XMouseMotionListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::mouseMoved(const MouseEvent& aEvent) throw( UNO3_RUNTIMEEXCEPTION )
@@ -439,7 +439,7 @@ void OMRCListenerMultiplexerHelper::mouseMoved(const MouseEvent& aEvent) throw( 
 }
 
 //____________________________________________________________________________________________________________
-//  XPaintListener
+//	XPaintListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::windowPaint(const PaintEvent& aEvent) throw( UNO3_RUNTIMEEXCEPTION )
@@ -448,7 +448,7 @@ void OMRCListenerMultiplexerHelper::windowPaint(const PaintEvent& aEvent) throw(
 }
 
 //____________________________________________________________________________________________________________
-//  XTopWindowListener
+//	XTopWindowListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::windowOpened(const EventObject& aEvent) throw( UNO3_RUNTIMEEXCEPTION )
@@ -457,7 +457,7 @@ void OMRCListenerMultiplexerHelper::windowOpened(const EventObject& aEvent) thro
 }
 
 //____________________________________________________________________________________________________________
-//  XTopWindowListener
+//	XTopWindowListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::windowClosing( const EventObject& aEvent ) throw( UNO3_RUNTIMEEXCEPTION )
@@ -466,7 +466,7 @@ void OMRCListenerMultiplexerHelper::windowClosing( const EventObject& aEvent ) t
 }
 
 //____________________________________________________________________________________________________________
-//  XTopWindowListener
+//	XTopWindowListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::windowClosed( const EventObject& aEvent ) throw( UNO3_RUNTIMEEXCEPTION )
@@ -475,7 +475,7 @@ void OMRCListenerMultiplexerHelper::windowClosed( const EventObject& aEvent ) th
 }
 
 //____________________________________________________________________________________________________________
-//  XTopWindowListener
+//	XTopWindowListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::windowMinimized( const EventObject& aEvent ) throw( UNO3_RUNTIMEEXCEPTION )
@@ -484,7 +484,7 @@ void OMRCListenerMultiplexerHelper::windowMinimized( const EventObject& aEvent )
 }
 
 //____________________________________________________________________________________________________________
-//  XTopWindowListener
+//	XTopWindowListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::windowNormalized( const EventObject& aEvent ) throw( UNO3_RUNTIMEEXCEPTION )
@@ -493,7 +493,7 @@ void OMRCListenerMultiplexerHelper::windowNormalized( const EventObject& aEvent 
 }
 
 //____________________________________________________________________________________________________________
-//  XTopWindowListener
+//	XTopWindowListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::windowActivated( const EventObject& aEvent ) throw( UNO3_RUNTIMEEXCEPTION )
@@ -502,7 +502,7 @@ void OMRCListenerMultiplexerHelper::windowActivated( const EventObject& aEvent )
 }
 
 //____________________________________________________________________________________________________________
-//  XTopWindowListener
+//	XTopWindowListener
 //____________________________________________________________________________________________________________
 
 void OMRCListenerMultiplexerHelper::windowDeactivated( const EventObject& aEvent ) throw( UNO3_RUNTIMEEXCEPTION )
@@ -511,11 +511,11 @@ void OMRCListenerMultiplexerHelper::windowDeactivated( const EventObject& aEvent
 }
 
 //____________________________________________________________________________________________________________
-//  protected method
+//	protected method
 //____________________________________________________________________________________________________________
 
-void OMRCListenerMultiplexerHelper::impl_adviseToPeer(  const   Reference< XWindow >&   xPeer   ,
-                                                        const   Type&                   aType   )
+void OMRCListenerMultiplexerHelper::impl_adviseToPeer(	const	Reference< XWindow >&	xPeer	,
+                                                        const	Type&					aType	)
 {
     // add a listener to the source (peer)
     if( aType == ::getCppuType((const Reference< XWindowListener >*)0) )
@@ -543,11 +543,11 @@ void OMRCListenerMultiplexerHelper::impl_adviseToPeer(  const   Reference< XWind
 }
 
 //____________________________________________________________________________________________________________
-//  protected method
+//	protected method
 //____________________________________________________________________________________________________________
 
-void OMRCListenerMultiplexerHelper::impl_unadviseFromPeer(  const   Reference< XWindow >&   xPeer   ,
-                                                            const   Type&                   aType   )
+void OMRCListenerMultiplexerHelper::impl_unadviseFromPeer(	const	Reference< XWindow >&	xPeer	,
+                                                            const	Type&					aType	)
 {
     // the last listener is removed, remove the listener from the source (peer)
     if( aType == ::getCppuType((const Reference< XWindowListener >*)0) )

@@ -7,7 +7,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // CEvtListener
-class ATL_NO_VTABLE CEvtListener :
+class ATL_NO_VTABLE CEvtListener : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CEvtListener, &CLSID_EvtListener>,
     public IDispatchImpl<IEvtListener, &IID_IEvtListener, &LIBID_EVENTLISTENERLib>

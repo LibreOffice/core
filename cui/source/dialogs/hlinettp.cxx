@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,8 @@
 #include "hyperdlg.hrc"
 #include "hlmarkwn_def.hxx" //ADD CHINA001
 
-#define STD_DOC_SUBPATH     "internal"
-#define STD_DOC_NAME        "url_transfer.htm"
+#define STD_DOC_SUBPATH		"internal"
+#define STD_DOC_NAME		"url_transfer.htm"
 
 sal_Char __READONLY_DATA sAnonymous[]    = "anonymous";
 sal_Char __READONLY_DATA sHTTPScheme[]   = INET_HTTP_SCHEME;
@@ -56,18 +56,18 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
 :   SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_INTERNET ),
                               rItemSet ) ,
     maGrpLinkTyp           ( this, CUI_RES (GRP_LINKTYPE) ),
-    maRbtLinktypInternet    ( this, CUI_RES (RB_LINKTYP_INTERNET) ),
-    maRbtLinktypFTP         ( this, CUI_RES (RB_LINKTYP_FTP) ),
-    maRbtLinktypTelnet      ( this, CUI_RES (RB_LINKTYP_TELNET) ),
-    maFtTarget              ( this, CUI_RES (FT_TARGET_HTML) ),
-    maCbbTarget             ( this, INET_PROT_HTTP ),
-    maFtLogin               ( this, CUI_RES (FT_LOGIN) ),
-    maEdLogin               ( this, CUI_RES (ED_LOGIN) ),
-    maFtPassword            ( this, CUI_RES (FT_PASSWD) ),
-    maEdPassword            ( this, CUI_RES (ED_PASSWD) ),
-    maCbAnonymous           ( this, CUI_RES (CBX_ANONYMOUS) ),
-    maBtBrowse              ( this, CUI_RES (BTN_BROWSE) ),
-    maBtTarget              ( this, CUI_RES (BTN_TARGET) ),
+    maRbtLinktypInternet	( this, CUI_RES (RB_LINKTYP_INTERNET) ),
+    maRbtLinktypFTP			( this, CUI_RES (RB_LINKTYP_FTP) ),
+    maRbtLinktypTelnet		( this, CUI_RES (RB_LINKTYP_TELNET) ),
+    maFtTarget				( this, CUI_RES (FT_TARGET_HTML) ),
+    maCbbTarget				( this, INET_PROT_HTTP ),
+    maFtLogin				( this, CUI_RES (FT_LOGIN) ),
+    maEdLogin				( this, CUI_RES (ED_LOGIN) ),
+    maFtPassword			( this, CUI_RES (FT_PASSWD) ),
+    maEdPassword			( this, CUI_RES (ED_PASSWD) ),
+    maCbAnonymous			( this, CUI_RES (CBX_ANONYMOUS) ),
+    maBtBrowse				( this, CUI_RES (BTN_BROWSE) ),
+    maBtTarget				( this, CUI_RES (BTN_TARGET) ),
     mbMarkWndOpen           ( FALSE )
 {
     // Set HC bitmaps and display display of bitmap names.
@@ -120,10 +120,10 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maCbAnonymous.SetClickHdl       ( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
     maBtBrowse.SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickBrowseHdl_Impl ) );
     maBtTarget.SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickTargetHdl_Impl ) );
-    maEdLogin.SetModifyHdl          ( LINK ( this, SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl ) );
-    maCbbTarget.SetLoseFocusHdl     ( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
-    maCbbTarget.SetModifyHdl        ( LINK ( this, SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl ) );
-    maTimer.SetTimeoutHdl           ( LINK ( this, SvxHyperlinkInternetTp, TimeoutHdl_Impl ) );
+    maEdLogin.SetModifyHdl			( LINK ( this, SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl ) );
+    maCbbTarget.SetLoseFocusHdl		( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
+    maCbbTarget.SetModifyHdl		( LINK ( this, SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl ) );
+    maTimer.SetTimeoutHdl			( LINK ( this, SvxHyperlinkInternetTp, TimeoutHdl_Impl ) );
 }
 
 SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp ()

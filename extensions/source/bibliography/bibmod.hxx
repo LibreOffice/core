@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,33 +33,33 @@ class ResMgr;
 class BibDataManager;
 class BibConfig;
 
-#define BIBLIOGRAPHY_INI_GROUP      "Bibliography"
-#define BIBLIOGRAPHY_INI_CUR_NAME   "BibliographyCurrent"
-#define BIBLIOGRAPHY_INI_DB_ENTRY   "Bibliography"
+#define BIBLIOGRAPHY_INI_GROUP		"Bibliography"
+#define BIBLIOGRAPHY_INI_CUR_NAME	"BibliographyCurrent"
+#define BIBLIOGRAPHY_INI_DB_ENTRY 	"Bibliography"
 #define BIBLIOGRAPHY_INI_MAPPING    "BibliographyFields"
 #define BIBLIOGRAPHY_TYPE_NAMES     "BibliographyTypeNames"
 
 class BibModul
 {
     private:
-        ResMgr*                 pResMgr;
-        static BibConfig*       pBibConfig;
+        ResMgr*					pResMgr;
+        static BibConfig*		pBibConfig;
 
     public:
                                 BibModul();
                                 ~BibModul();
 
-        ResMgr*                 GetResMgr(){return pResMgr;}
-        static BibConfig*       GetConfig();
+        ResMgr*					GetResMgr(){return pResMgr;}
+        static BibConfig*		GetConfig();
 
-        BibDataManager*         createDataManager();
+        BibDataManager*			createDataManager();
 
 };
 
-typedef BibModul*       PtrBibModul;
-typedef PtrBibModul*    HdlBibModul;
+typedef BibModul*		PtrBibModul;
+typedef PtrBibModul*	HdlBibModul;
 
-HdlBibModul     OpenBibModul();
-void            CloseBibModul(HdlBibModul ppBibModul);
+HdlBibModul		OpenBibModul();
+void			CloseBibModul(HdlBibModul ppBibModul);
 
 #endif

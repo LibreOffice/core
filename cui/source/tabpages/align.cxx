@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/localresaccess.hxx>
-#include <svx/flagsdef.hxx> //CHINA001
+#include <svx/flagsdef.hxx>	//CHINA001
 #include <svl/intitem.hxx> //CHINA001
 #include <sfx2/request.hxx> //CHINA001
 

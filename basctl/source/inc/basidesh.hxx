@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,22 +87,22 @@ friend class LocalizationMgr;
 friend BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName );
 friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
 
-    ObjectCatalog*      pObjectCatalog;
+    ObjectCatalog* 		pObjectCatalog;
 
-    IDEWindowTable      aIDEWindowTable;
-    USHORT              nCurKey;
-    IDEBaseWindow*      pCurWin;
+    IDEWindowTable		aIDEWindowTable;
+    USHORT				nCurKey;
+    IDEBaseWindow* 		pCurWin;
     ScriptDocument      m_aCurDocument;
     String              m_aCurLibName;
-    LocalizationMgr*    m_pCurLocalizationMgr;
+    LocalizationMgr*	m_pCurLocalizationMgr;
 
-    ScrollBar           aHScrollBar;
-    ScrollBar           aVScrollBar;
-    ScrollBarBox        aScrollBarBox;
-    BasicIDETabBar*     pTabBar;
-    BOOL                bTabBarSplitted;
-    BOOL                bCreatingWindow;
-    ModulWindowLayout*  pModulLayout;
+    ScrollBar			aHScrollBar;
+    ScrollBar			aVScrollBar;
+    ScrollBarBox		aScrollBarBox;
+    BasicIDETabBar*		pTabBar;
+    BOOL				bTabBarSplitted;
+    BOOL				bCreatingWindow;
+    ModulWindowLayout*	pModulLayout;
     BOOL                m_bAppBasicModified;
     ::basctl::DocumentEventNotifier
                         m_aNotifier;
@@ -110,21 +110,21 @@ friend class ContainerListenerImpl;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xLibListener;
 
 #if _SOLAR__PRIVATE
-    void                Init();
-    void                InitTabBar();
-    void                InitScrollBars();
-    void                CheckWindows();
-    void                RemoveWindows( const ScriptDocument& rDocument, const String& rLibName, BOOL bDestroy );
-    void                UpdateWindows();
-    void                ShowObjectDialog( BOOL bShow, BOOL bCreateOrDestroy );
-    void                InvalidateBasicIDESlots();
-    void                StoreAllWindowData( BOOL bPersistent = TRUE );
-    void                SetMDITitle();
-    void                EnableScrollbars( BOOL bEnable );
+    void				Init();
+    void				InitTabBar();
+    void				InitScrollBars();
+    void				CheckWindows();
+    void				RemoveWindows( const ScriptDocument& rDocument, const String& rLibName, BOOL bDestroy );
+    void				UpdateWindows();
+    void				ShowObjectDialog( BOOL bShow, BOOL bCreateOrDestroy );
+    void				InvalidateBasicIDESlots();
+    void				StoreAllWindowData( BOOL bPersistent = TRUE );
+    void				SetMDITitle();
+    void				EnableScrollbars( BOOL bEnable );
     void                SetCurLib( const ScriptDocument& rDocument, String aLibName, bool bUpdateWindows = true , bool bCheck = true );
-    void                SetCurLibForLocalization( const ScriptDocument& rDocument, String aLibName );
+    void				SetCurLibForLocalization( const ScriptDocument& rDocument, String aLibName );
 
-    void                ImplStartListening( StarBASIC* pBasic );
+    void				ImplStartListening( StarBASIC* pBasic );
 
     DECL_LINK( TabBarHdl, TabBar* );
     DECL_LINK( AccelSelectHdl, Accelerator* );
@@ -133,35 +133,35 @@ friend class ContainerListenerImpl;
 #endif
 
 protected:
-    virtual void        AdjustPosSizePixel( const Point &rPos, const Size &rSize );
-    virtual void        OuterResizePixel( const Point &rPos, const Size &rSize );
-    virtual Size        GetOptimalSizePixel() const;
-    USHORT              InsertWindowInTable( IDEBaseWindow* pNewWin );
-    virtual USHORT      PrepareClose( BOOL bUI, BOOL bForBrowsing );
+    virtual void    	AdjustPosSizePixel( const Point &rPos, const Size &rSize );
+    virtual void		OuterResizePixel( const Point &rPos, const Size &rSize );
+    virtual Size    	GetOptimalSizePixel() const;
+    USHORT				InsertWindowInTable( IDEBaseWindow* pNewWin );
+    virtual USHORT 		PrepareClose( BOOL bUI, BOOL bForBrowsing );
 
-    void                SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar = FALSE, BOOL bRememberAsCurrent = TRUE );
-    void                ManageToolbars();
-    void                RemoveWindow( IDEBaseWindow* pWindow, BOOL bDestroy, BOOL bAllowChangeCurWindow = TRUE );
-    void                ArrangeTabBar();
+    void				SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar = FALSE, BOOL bRememberAsCurrent = TRUE );
+    void				ManageToolbars();
+    void 				RemoveWindow( IDEBaseWindow* pWindow, BOOL bDestroy, BOOL bAllowChangeCurWindow = TRUE );
+    void				ArrangeTabBar();
 
-    ModulWindow*        CreateBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName );
+    ModulWindow*		CreateBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName );
     DialogWindow*       CreateDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
 
-    ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, BOOL bCreateIfNotExist, BOOL bFindSuspended = FALSE );
-    ModulWindow*        ShowActiveModuleWindow( StarBASIC* pBasic );
+    ModulWindow*		FindBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, BOOL bCreateIfNotExist, BOOL bFindSuspended = FALSE );
+    ModulWindow* 		ShowActiveModuleWindow( StarBASIC* pBasic );
 
-    virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
+    virtual void 		SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                                 const SfxHint& rHint, const TypeId& rHintType );
 
-    virtual void        Activate(BOOL bMDI);
-    virtual void        Deactivate(BOOL bMDI);
+    virtual void		Activate(BOOL bMDI);
+    virtual void		Deactivate(BOOL bMDI);
 
-    virtual void        Move();
-    virtual void        ShowCursor( FASTBOOL bOn = TRUE );
+    virtual void		Move();
+    virtual	void		ShowCursor( FASTBOOL bOn = TRUE );
 
-    void                CreateModulWindowLayout();
-    void                DestroyModulWindowLayout();
-    void                UpdateModulWindowLayout( bool bBasicStopped );
+    void				CreateModulWindowLayout();
+    void				DestroyModulWindowLayout();
+    void				UpdateModulWindowLayout( bool bBasicStopped );
 
     // DocumentEventListener
     virtual void onDocumentCreated( const ScriptDocument& _rDocument );
@@ -182,57 +182,57 @@ public:
                         BasicIDEShell( SfxViewFrame *pFrame, SfxViewShell *pOldSh );
                         ~BasicIDEShell();
 
-    IDEBaseWindow*      GetCurWindow() const    { return pCurWin; }
+    IDEBaseWindow*		GetCurWindow() const 	{ return pCurWin; }
     const ScriptDocument&
                         GetCurDocument() const { return m_aCurDocument; }
     const String&       GetCurLibName() const { return m_aCurLibName; }
-    ObjectCatalog*      GetObjectCatalog() const    { return pObjectCatalog; }
-    LocalizationMgr*    GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
+    ObjectCatalog* 		GetObjectCatalog() const	{ return pObjectCatalog; }
+    LocalizationMgr*	GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
 
-    ScrollBar&          GetHScrollBar()         { return aHScrollBar; }
-    ScrollBar&          GetVScrollBar()         { return aVScrollBar; }
-    ScrollBarBox&       GetScrollBarBox()       { return aScrollBarBox; }
-    TabBar*             GetTabBar()             { return (TabBar*)pTabBar; }
-    IDEWindowTable&     GetIDEWindowTable()     { return aIDEWindowTable; }
+    ScrollBar&			GetHScrollBar() 		{ return aHScrollBar; }
+    ScrollBar&			GetVScrollBar() 		{ return aVScrollBar; }
+    ScrollBarBox&		GetScrollBarBox() 		{ return aScrollBarBox; }
+    TabBar*				GetTabBar()				{ return (TabBar*)pTabBar; }
+    IDEWindowTable&		GetIDEWindowTable() 	{ return aIDEWindowTable; }
 
-    SdrView*            GetCurDlgView() const;
+    SdrView*			GetCurDlgView() const;
 
-    SfxUndoManager*     GetUndoManager();
+    SfxUndoManager*		GetUndoManager();
 
     virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable();
+    
+    // virtual USHORT			Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0 );
+    virtual SfxPrinter*		GetPrinter( BOOL bCreate );
+    virtual USHORT			SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
+    virtual String			GetSelectionText( BOOL bCompleteWords );
+    virtual BOOL			HasSelection( BOOL bText ) const;
 
-    // virtual USHORT           Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0 );
-    virtual SfxPrinter*     GetPrinter( BOOL bCreate );
-    virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
-    virtual String          GetSelectionText( BOOL bCompleteWords );
-    virtual BOOL            HasSelection( BOOL bText ) const;
+    void				GetState( SfxItemSet& );
+    void				ExecuteGlobal( SfxRequest& rReq );
+    void				ExecuteCurrent( SfxRequest& rReq );
+    void				ExecuteBasic( SfxRequest& rReq );
+    void				ExecuteDialog( SfxRequest& rReq );
 
-    void                GetState( SfxItemSet& );
-    void                ExecuteGlobal( SfxRequest& rReq );
-    void                ExecuteCurrent( SfxRequest& rReq );
-    void                ExecuteBasic( SfxRequest& rReq );
-    void                ExecuteDialog( SfxRequest& rReq );
+    virtual	sal_Bool	HasUIFeature( sal_uInt32 nFeature );
 
-    virtual sal_Bool    HasUIFeature( sal_uInt32 nFeature );
+    long				CallBasicErrorHdl( StarBASIC* pBasic );
+    long				CallBasicBreakHdl( StarBASIC* pBasic );
 
-    long                CallBasicErrorHdl( StarBASIC* pBasic );
-    long                CallBasicBreakHdl( StarBASIC* pBasic );
+    ModulWindowLayout*	GetLayoutWindow() const { return pModulLayout; }
 
-    ModulWindowLayout*  GetLayoutWindow() const { return pModulLayout; }
-
-    IDEBaseWindow*      FindWindow( const ScriptDocument& rDocument, const String& rLibName = String(), const String& rName = String(), USHORT nType = BASICIDE_TYPE_UNKNOWN, BOOL bFindSuspended = FALSE );
+    IDEBaseWindow*		FindWindow( const ScriptDocument& rDocument, const String& rLibName = String(), const String& rName = String(), USHORT nType = BASICIDE_TYPE_UNKNOWN, BOOL bFindSuspended = FALSE );
     DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, BOOL bCreateIfNotExist, BOOL bFindSuspended = FALSE );
-    IDEBaseWindow*      FindApplicationWindow();
-    BOOL                NextPage( BOOL bPrev = FALSE );
-
-    BOOL                IsAppBasicModified() const { return m_bAppBasicModified; }
-    void                SetAppBasicModified( BOOL bModified = TRUE ) { m_bAppBasicModified = bModified; }
+    IDEBaseWindow*		FindApplicationWindow();
+    BOOL				NextPage( BOOL bPrev = FALSE );
+    
+    BOOL	            IsAppBasicModified() const { return m_bAppBasicModified; }
+    void			    SetAppBasicModified( BOOL bModified = TRUE ) { m_bAppBasicModified = bModified; }
 
     // For Dialog Drag&Drop in Dialog Organizer
     static void CopyDialogResources(
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >& io_xISP,
         const ScriptDocument& rSourceDoc, const String& rSourceLibName, const ScriptDocument& rDestDoc,
-        const String& rDestLibName, const String& rDlgName );
+        const String& rDestLibName,	const String& rDlgName );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                         GetCurrentDocument() const;

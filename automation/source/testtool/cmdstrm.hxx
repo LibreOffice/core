@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ public:
     void GenCmdUNOSlot( const String &aURL );
 
     void GenCmdControl( comm_ULONG nUId, USHORT nMethodId, SbxArray* rPar );
-    void GenCmdControl( String aUId, USHORT nMethodId, SbxArray* rPar );
+    void GenCmdControl( String aUId, USHORT nMethodId, SbxArray* rPar ); 
 
 
     void GenCmdFlow( USHORT nArt );
@@ -58,11 +58,11 @@ public:
 
     SvMemoryStream* GetStream();
 
-    static CNames *pKeyCodes;           // Namen der Sondertasten  MOD1, F1, LEFT ...
+    static CNames *pKeyCodes;			// Namen der Sondertasten  MOD1, F1, LEFT ...
     static ControlDefLoad __READONLY_DATA arKeyCodes [];
 
 private:
-    String WandleKeyEventString( String aKeys );    // Nutzt pKeyCodes.  <RETURN> <SHIFT LEFT LEFT>
+    String WandleKeyEventString( String aKeys );	// Nutzt pKeyCodes.  <RETURN> <SHIFT LEFT LEFT>
 
     using CmdBaseStream::Write;
     void Write( comm_USHORT nNr ){CmdBaseStream::Write( nNr );}

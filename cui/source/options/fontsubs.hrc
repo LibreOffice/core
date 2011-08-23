@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 // defines ------------------------------------------------------------------
 
 #define CLB_SUBSTITUTES         1
-#define FT_FONT1                2
+#define FT_FONT1				2
 #define CB_FONT1                3
 #define FT_FONT2                4
 #define CB_FONT2                5
@@ -46,8 +46,8 @@
 #define STR_HEADER3             12
 #define STR_HEADER4             13
 
-#define IL_ICON                 20
-#define CB_USETABLE             21
+#define IL_ICON					20
+#define CB_USETABLE				21
 
 #define FL_SOURCEVIEW           22
 #define FT_FONTNAME             23

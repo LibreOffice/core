@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,12 +30,12 @@
 
 #include <cppuhelper/weak.hxx>
 
-#define OLESERV_SAVEOBJECT      1
-#define OLESERV_CLOSE           2
-#define OLESERV_NOTIFY          3
-#define OLESERV_NOTIFYCLOSING   4
-#define OLESERV_SHOWOBJECT      5
-#define OLESERV_DEACTIVATE      6
+#define OLESERV_SAVEOBJECT	    1
+#define OLESERV_CLOSE		    2
+#define OLESERV_NOTIFY		    3
+#define OLESERV_NOTIFYCLOSING	4
+#define OLESERV_SHOWOBJECT	    5
+#define OLESERV_DEACTIVATE	    6
 
 #include <oleidl.h>
 #ifndef __MINGW32__

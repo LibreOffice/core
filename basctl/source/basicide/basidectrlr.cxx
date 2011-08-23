@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ BasicIDEController::~BasicIDEController()
 //----------------------------------------------------------------------------
 
 Any SAL_CALL BasicIDEController::queryInterface( const Type & rType ) throw(RuntimeException)
-{
+{    
     Any aReturn = SfxBaseController::queryInterface( rType );
     if ( !aReturn.hasValue() )
         aReturn = OPropertyContainer::queryInterface( rType );

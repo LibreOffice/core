@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@
 
 /*************************************************************************
 |*
-|*  Dialog zum Definieren von Linienstilen
+|*	Dialog zum Definieren von Linienstilen
 |*
 \************************************************************************/
 
@@ -82,22 +82,22 @@ SvxLineDefTabPage::SvxLineDefTabPage
     aFTLinestyle    ( this, CUI_RES( FT_LINESTYLE ) ),
     aLbLineStyles   ( this, CUI_RES( LB_LINESTYLES ) ),
     aFtType         ( this, CUI_RES( FT_TYPE ) ),
-    aLbType1        ( this, CUI_RES( LB_TYPE_1 ) ),
-    aLbType2        ( this, CUI_RES( LB_TYPE_2 ) ),
-    aFtNumber       ( this, CUI_RES( FT_NUMBER ) ),
-    aNumFldNumber1  ( this, CUI_RES( NUM_FLD_1 ) ),
-    aNumFldNumber2  ( this, CUI_RES( NUM_FLD_2 ) ),
+    aLbType1		( this, CUI_RES( LB_TYPE_1 ) ),
+    aLbType2		( this, CUI_RES( LB_TYPE_2 ) ),
+    aFtNumber		( this, CUI_RES( FT_NUMBER ) ),
+    aNumFldNumber1	( this, CUI_RES( NUM_FLD_1 ) ),
+    aNumFldNumber2	( this, CUI_RES( NUM_FLD_2 ) ),
     aFtLength       ( this, CUI_RES( FT_LENGTH ) ),
     aMtrLength1     ( this, CUI_RES( MTR_FLD_LENGTH_1 ) ),
     aMtrLength2     ( this, CUI_RES( MTR_FLD_LENGTH_2 ) ),
     aFtDistance     ( this, CUI_RES( FT_DISTANCE ) ),
-    aMtrDistance    ( this, CUI_RES( MTR_FLD_DISTANCE ) ),
+    aMtrDistance	( this, CUI_RES( MTR_FLD_DISTANCE ) ),
     aCbxSynchronize ( this, CUI_RES( CBX_SYNCHRONIZE ) ),
     aBtnAdd         ( this, CUI_RES( BTN_ADD ) ),
-    aBtnModify      ( this, CUI_RES( BTN_MODIFY ) ),
-    aBtnDelete      ( this, CUI_RES( BTN_DELETE ) ),
+    aBtnModify		( this, CUI_RES( BTN_MODIFY ) ),
+    aBtnDelete		( this, CUI_RES( BTN_DELETE ) ),
     aBtnLoad        ( this, CUI_RES( BTN_LOAD ) ),
-    aBtnSave        ( this, CUI_RES( BTN_SAVE ) ),
+    aBtnSave		( this, CUI_RES( BTN_SAVE ) ),
     aCtlPreview     ( this, CUI_RES( CTL_PREVIEW ) ),
 
     rOutAttrs       ( rInAttrs ),
@@ -205,13 +205,13 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
 
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
-            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-            INetURLObject   aURL( pDashList->GetPath() );
+            String			aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+            INetURLObject	aURL( pDashList->GetPath() );
 
             aURL.Append( pDashList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-/*          if ( aURL.getBase().Len() > 18 )
+/*			if ( aURL.getBase().Len() > 18 )
             {
                 aString += aURL.getBase().Copy( 0, 15 );
                 aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
@@ -246,13 +246,13 @@ void SvxLineDefTabPage::CheckChanges_Impl()
     // wird hier benutzt, um Aenderungen NICHT zu verlieren
     //XDashStyle eXDS;
 
-    if( aNumFldNumber1.GetText()     != aNumFldNumber1.GetSavedValue() ||
-        aMtrLength1.GetText()        != aMtrLength1.GetSavedValue() ||
+    if( aNumFldNumber1.GetText() 	 != aNumFldNumber1.GetSavedValue() ||
+        aMtrLength1.GetText() 		 != aMtrLength1.GetSavedValue() ||
         aLbType1.GetSelectEntryPos() != aLbType1.GetSavedValue() ||
-        aNumFldNumber2.GetText()     != aNumFldNumber2.GetSavedValue() ||
-        aMtrLength2.GetText()        != aMtrLength2.GetSavedValue() ||
+        aNumFldNumber2.GetText() 	 != aNumFldNumber2.GetSavedValue() ||
+        aMtrLength2.GetText() 		 != aMtrLength2.GetSavedValue() ||
         aLbType2.GetSelectEntryPos() != aLbType2.GetSavedValue() ||
-        aMtrDistance.GetText()       != aMtrDistance.GetSavedValue() )
+        aMtrDistance.GetText() 		 != aMtrDistance.GetSavedValue() )
     {
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
@@ -821,7 +821,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
                     pDashList->SetName( aURL.getName() );
 
-/*                  // Ermitteln (evtl. abschneiden) des Namens und in
+/*					// Ermitteln (evtl. abschneiden) des Namens und in
                     // der GroupBox darstellen
                     String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
                     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
@@ -899,7 +899,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 
         if( pDashList->Save() )
         {
-/*          // Ermitteln (evtl. abschneiden) des Namens und in
+/*			// Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
             String aString( CUI_RES( RID_SVXSTR_TABLE ) );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
@@ -935,7 +935,7 @@ void SvxLineDefTabPage::FillDash_Impl()
 {
     XDashStyle eXDS;
 
-/*  Alle Stile werden z.Z. nicht benutzt
+/*	Alle Stile werden z.Z. nicht benutzt
     if( aRbtEnds1.IsChecked() )
         eXDS = XDASH_ROUND;
     else if( aRbtEnds2.IsChecked() )

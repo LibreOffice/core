@@ -33,7 +33,7 @@ public class Test13 implements StorageTest {
         for ( int nInd = 0; nInd < 4; ++nInd, aStreamPrefix += "SubStorage" + nInd )
             if ( !testForPath( aStreamPrefix ) )
                 return false;
-
+        
         return true;
     }
 
@@ -54,7 +54,7 @@ public class Test13 implements StorageTest {
                 m_aTestHelper.Error( "No valid temporary file was created!" );
                 return false;
             }
-
+    
             // create temporary storage based on a previously created temporary file
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
@@ -209,7 +209,7 @@ public class Test13 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    }
+    } 
 
 }
 

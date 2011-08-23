@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListene
 class DlgEdPropListenerImpl: public PropertyChangeListenerHelper
 {
 private:
-    DlgEdObj*       pDlgEdObj;
+    DlgEdObj*		pDlgEdObj;
 
 public:
     DlgEdPropListenerImpl(DlgEdObj* pObj);
@@ -66,7 +66,7 @@ typedef ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener
 class DlgEdEvtContListenerImpl: public ContainerListenerHelper
 {
 private:
-    DlgEdObj*       pDlgEdObj;
+    DlgEdObj*		pDlgEdObj;
 
 public:
     DlgEdEvtContListenerImpl(DlgEdObj* pObj);

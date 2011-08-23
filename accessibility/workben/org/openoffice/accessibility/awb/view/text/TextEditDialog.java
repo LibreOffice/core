@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.uno.UnoRuntime;
 
 
-class TextEditDialog
+class TextEditDialog 
     extends TextActionDialog
 {
     public TextEditDialog (
         XAccessibleContext xContext,
-        String sExplanation,
+        String sExplanation, 
         String sTitle )
     {
         super (xContext, sExplanation, sTitle);
@@ -83,7 +83,7 @@ class TextEditDialog
                 nFront++;
             int nBack = 0;
             while ((nBack < nMinLength) &&
-                (sNew.charAt(sNew.length()-nBack-1) ==
+                (sNew.charAt(sNew.length()-nBack-1) == 
                  sOld.charAt(sOld.length()-nBack-1)    ))
                 nBack++;
             if (nFront + nBack > nMinLength)
@@ -94,7 +94,7 @@ class TextEditDialog
             String sDel = sOld.substring (nFront, sOld.length() - nBack);
             String sIns = sNew.substring (nFront, sNew.length() - nBack);
 
-            System.out.println ("edit text: " +
+            System.out.println ("edit text: " + 
                 sOld.substring(0, nFront) +
                 " [ " + sDel + " -> " + sIns + " ] " +
                 sOld.substring(sOld.length() - nBack));

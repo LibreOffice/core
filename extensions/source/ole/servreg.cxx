@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,14 +43,14 @@ rtl_StandardModuleCount globalModuleCount= MODULE_COUNT_INIT;
 
 
 
-Reference<XInterface> SAL_CALL ConverterProvider_CreateInstance2(   const Reference<XMultiServiceFactory> & xSMgr)
+Reference<XInterface> SAL_CALL ConverterProvider_CreateInstance2(	const Reference<XMultiServiceFactory> & xSMgr)
                             throw(Exception)
 {
     Reference<XInterface> xService = *new OleConverter_Impl2( xSMgr);
     return xService;
 }
 
-Reference<XInterface> SAL_CALL ConverterProvider_CreateInstanceVar1(    const Reference<XMultiServiceFactory> & xSMgr)
+Reference<XInterface> SAL_CALL ConverterProvider_CreateInstanceVar1(	const Reference<XMultiServiceFactory> & xSMgr)
                             throw(Exception)
 {
     Reference<XInterface> xService = *new OleConverter_Impl2( xSMgr, UNO_OBJECT_WRAPPER_REMOTE_OPT, IUNKNOWN_WRAPPER_IMPL);
@@ -76,50 +76,50 @@ extern "C" void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
-
+    
     OUString aImplName( OUString::createFromAscii( pImplName ) );
     Reference< XSingleServiceFactory > xFactory;
     Sequence<OUString> seqServiceNames;
     if (pServiceManager && aImplName.equals(  reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleConverter2")  ))
     {
         xFactory=  createSingleFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
-                                         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleConverter2")),
+                                         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleConverter2")), 
                                          ConverterProvider_CreateInstance2, seqServiceNames,
                                          &globalModuleCount.modCnt );
     }
     else if (pServiceManager && aImplName.equals(  reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleConverterVar1")  ))
     {
         xFactory= createSingleFactory( reinterpret_cast<XMultiServiceFactory*>(pServiceManager),
-                                       OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleConverterVar1")),
+                                       OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleConverterVar1")), 
                                        ConverterProvider_CreateInstanceVar1, seqServiceNames,
                                        &globalModuleCount.modCnt );
     }
     else if(pServiceManager && aImplName.equals(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleClient")))
     {
         xFactory= createSingleFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
-                                       OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleClient")),
+                                       OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleClient")), 
                                        OleClient_CreateInstance, seqServiceNames,
                                        &globalModuleCount.modCnt);
     }
     else if(pServiceManager && aImplName.equals(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleServer")))
     {
         xFactory= createOneInstanceFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
-                                            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleServer")),
+                                            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleServer")), 
                                             OleServer_CreateInstance, seqServiceNames,
                                             &globalModuleCount.modCnt);
     }
-
+        
     if (xFactory.is())
     {
         xFactory->acquire();
         pRet = xFactory.get();
     }
-
+    
     return pRet;
 }
 
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(   void * /*pServiceManager*/, void * pRegistryKey )
+extern "C" sal_Bool SAL_CALL component_writeInfo(	void * /*pServiceManager*/, void * pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -149,7 +149,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(   void * /*pServiceManager*/, 
             xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.OleApplicationRegistration"));
 
             xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.oleautomation.ApplicationRegistration"));
-
+                
             return sal_True;
         }
         catch (InvalidRegistryException &)
@@ -167,7 +167,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 }
 
 
-extern "C"  sal_Bool component_canUnload( TimeValue* libUnused)
+extern "C"	sal_Bool component_canUnload( TimeValue* libUnused)
 {
     return globalModuleCount.canUnload( &globalModuleCount, libUnused);
 }

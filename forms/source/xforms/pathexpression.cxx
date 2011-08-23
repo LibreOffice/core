@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ using namespace std;
 namespace xforms
 {
 
-PathExpression::PathExpression()
+PathExpression::PathExpression() 
     : ComputedExpression(),
       maNodes()
 {
@@ -93,7 +93,7 @@ void PathExpression::setExpression( const OUString& rExpression )
     // whether it contains only 'simple' (i.e. static) conditions. For
     // now, we check whether it only contains number positions.
     // (TODO: Only works for names containing only ASCII letters+digits.)
-    mbIsSimple =
+    mbIsSimple = 
         _checkExpression( "( */@?[a-zA-Z0-9:]+( *\\[ *[0-9 ]+ *\\] *)?)+" );
 
     maNodes.clear();

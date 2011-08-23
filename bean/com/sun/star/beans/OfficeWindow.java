@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@ import java.awt.Component;
 import com.sun.star.awt.XWindowPeer;
 
 /**
- * The concreate implementation of the OfficeWindow extends an
- * approperate type of visual component (java.awt.Canvas for local
+ * The concreate implementation of the OfficeWindow extends an 
+ * approperate type of visual component (java.awt.Canvas for local 
  * and java.awt.Container for remote).
  * @deprecated
  */

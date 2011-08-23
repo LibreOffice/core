@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ public:
     DWORD GetAspect() { return m_nAspect; }
     ComSmart< IAdviseSink >& GetOrigAdvise() { return m_pListener; }
     void DisconnectOrigAdvise() { m_pListener = NULL; }
-
+    
     void SetClosed() { m_bClosed = TRUE; }
     void UnsetClosed() { m_bClosed = FALSE; }
     BOOL IsClosed() { return m_bClosed; }

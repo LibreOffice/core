@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,29 +34,29 @@ public:
                                     _SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet );
                                     ~_SvxMacroTabPage_Impl();
 
-    FixedText*                      pAssignFT;
-    PushButton*                     pAssignPB;
-    PushButton*                     pAssignComponentPB;
-    PushButton*                     pDeletePB;
-    Image*                          pMacroImg;
-    Image*                          pComponentImg;
-    Image*                          pMacroImg_h;
-    Image*                          pComponentImg_h;
-    String*                         pStrEvent;
-    String*                         pAssignedMacro;
-    _HeaderTabListBox*              pEventLB;
-    BOOL                            bReadOnly;
-    BOOL                            bIDEDialogMode;
+    FixedText*						pAssignFT;
+    PushButton*						pAssignPB;
+    PushButton*						pAssignComponentPB;
+    PushButton*						pDeletePB;
+    Image*							pMacroImg;
+    Image*							pComponentImg;
+    Image*							pMacroImg_h;
+    Image*							pComponentImg_h;
+    String*							pStrEvent;
+    String*							pAssignedMacro;
+    _HeaderTabListBox*				pEventLB;
+    BOOL							bReadOnly;
+    BOOL							bIDEDialogMode;
 };
 
 class AssignComponentDialog : public ModalDialog
 {
 private:
-    FixedText       maMethodLabel;
-    Edit            maMethodEdit;
-    OKButton        maOKButton;
-    CancelButton    maCancelButton;
-    HelpButton      maHelpButton;
+    FixedText		maMethodLabel;
+    Edit			maMethodEdit;
+    OKButton		maOKButton;
+    CancelButton	maCancelButton;
+    HelpButton		maHelpButton;
 
     ::rtl::OUString maURL;
 

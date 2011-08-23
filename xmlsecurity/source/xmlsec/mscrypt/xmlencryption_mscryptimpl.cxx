@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmlsecurity.hxx"
-
+ 
 #include <sal/config.h>
 #include <rtl/uuid.h>
 #include "xmlencryption_mscryptimpl.hxx"
@@ -79,7 +79,7 @@ Reference< XXMLEncryptionTemplate >
 SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
-) throw( com::sun::star::xml::crypto::XMLEncryptionException,
+) throw( com::sun::star::xml::crypto::XMLEncryptionException, 
          com::sun::star::uno::SecurityException )
 {
     xmlSecKeysMngrPtr pMngr = NULL ;
@@ -121,7 +121,7 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
 
     pEncryptedData = pTemplate->getNativeElement() ;
 
-    //Find the element to be encrypted.
+    //Find the element to be encrypted. 
     //This element is wrapped in the CipherValue sub-element.
     xmlNodePtr pCipherData = pEncryptedData->children;
     while (pCipherData != NULL && stricmp((const char *)(pCipherData->name), "CipherData"))
@@ -148,7 +148,7 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
     if( pContent == NULL ) {
         throw XMLEncryptionException() ;
     }
-
+    
     xmlUnlinkNode(pContent);
     xmlAddNextSibling(pEncryptedData, pContent);
 
@@ -192,7 +192,7 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
         clearErrorRecorder();
         return aTemplate;
     }
-    aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+    aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);    
     xmlSecEncCtxDestroy( pEncCtx ) ;
     pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
@@ -215,7 +215,7 @@ Reference< XXMLEncryptionTemplate > SAL_CALL
 XMLEncryption_MSCryptImpl :: decrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
-) throw( com::sun::star::xml::crypto::XMLEncryptionException ,
+) throw( com::sun::star::xml::crypto::XMLEncryptionException , 
          com::sun::star::uno::SecurityException) {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecEncCtxPtr pEncCtx = NULL ;
@@ -228,7 +228,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
         throw RuntimeException() ;
 
     //Get Keys Manager
-    Reference< XSecurityEnvironment > xSecEnv
+    Reference< XSecurityEnvironment > xSecEnv 
         = aSecurityCtx->getSecurityEnvironmentByIndex(
             aSecurityCtx->getDefaultSecurityEnvironmentIndex());
     Reference< XUnoTunnel > xSecTunnel( xSecEnv , UNO_QUERY ) ;
@@ -295,7 +295,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
         aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
         xmlSecEncCtxDestroy( pEncCtx ) ;
         pSecEnv->destroyKeysManager( pMngr ) ; //i39448
-
+        
         //throw XMLEncryptionException() ;
         clearErrorRecorder();
         return aTemplate;
@@ -304,7 +304,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
     /*----------------------------------------
     if( pEncCtx->resultReplaced != 0 ) {
         pContent = pEncryptedData ;
-
+    
         Reference< XUnoTunnel > xTunnel( ret , UNO_QUERY ) ;
         if( !xTunnel.is() ) {
             xmlSecEncCtxDestroy( pEncCtx ) ;

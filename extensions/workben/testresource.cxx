@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ using namespace usr;
 class MyApp : public Application
 {
 public:
-    void        Main();
+    void		Main();
 };
 
 MyApp aMyApp;
@@ -82,7 +82,7 @@ void MyApp::Main()
 
     UString aStr = xResLoader->invoke( L"getString", Args, OutPos, OutArgs ).getString();
     VOS_ENSHURE( aStr == L"Hello", "getString" );
-
+    
     Args.getArray()[0].setINT32( 1001 );
     b = xResLoader->invoke( L"hasString", Args, OutPos, OutArgs ).getBOOL();
     VOS_ENSHURE( !b, "!hasString" );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,11 +34,11 @@
 #include <com/sun/star/xml/crypto/sax/XMissionTaker.hpp>
 #include <com/sun/star/xml/crypto/sax/XSAXEventKeeper.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
-
+                                       
 #include <cppuhelper/implbase3.hxx>
 
 class SecurityEngine : public cppu::WeakImplHelper3
-<
+< 
     com::sun::star::xml::crypto::sax::XReferenceResolvedListener,
     com::sun::star::xml::crypto::sax::XKeyCollector,
     com::sun::star::xml::crypto::sax::XMissionTaker
@@ -46,54 +46,54 @@ class SecurityEngine : public cppu::WeakImplHelper3
 /****** securityengine.hxx/CLASS SecurityEngine *******************************
  *
  *   NAME
- *  SecurityEngine -- Base class of SignatureEngine and EncryptionEngine
+ *	SecurityEngine -- Base class of SignatureEngine and EncryptionEngine
  *
  *   FUNCTION
- *  Maintains common members and methods related with security engine
- *  operation.
+ *	Maintains common members and methods related with security engine
+ *	operation.
  *
  *   HISTORY
- *  05.01.2004 -    Interface supported: XReferenceResolvedListener,
- *          XKeyCollector, and XMissionTaker
+ *	05.01.2004 -	Interface supported: XReferenceResolvedListener,
+ * 			XKeyCollector, and XMissionTaker
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
 protected:
-    com::sun::star::uno::Reference<
+    com::sun::star::uno::Reference< 
         com::sun::star::lang::XMultiServiceFactory > mxMSF;
 
     /*
      * A SAXEventKeeper internally maintians all resources that a security
-     * operation needs. The m_xSAXEventKeeper member is used to release
+     * operation needs. The m_xSAXEventKeeper member is used to release 
      * those resources when the security operation finishes.
      */
-    com::sun::star::uno::Reference<
+    com::sun::star::uno::Reference< 
         com::sun::star::xml::crypto::sax::XSAXEventKeeper > m_xSAXEventKeeper;
-
+    
     /*
      * the id of ElementCollector of the template element.
      * For a signature, the template element is the Signature element,
      * for a encryption, the EncryptedData/EncryptedKey element is.
-     */
+     */	
     sal_Int32 m_nIdOfTemplateEC;
-
+    
     /*
      * remembers how many referenced elements have been bufferred completely,
      * including the key element, template element, and referenced element of
      * signature.
      */
     sal_Int32 m_nNumOfResolvedReferences;
-
+    
     /*
      * the id of ElementCollector of the key element.
      * If a Signature element or EncryptedData/EncryptedKey element has
      * an internal key sub-element, then this member should be -1
      */
     sal_Int32 m_nIdOfKeyEC;
-
+    
     /*
      * remembers whether the current opertion has finished.
      */
@@ -104,13 +104,13 @@ protected:
      * the result listener to identify the entity.
      */
     sal_Int32 m_nSecurityId;
-
+    
     /*
      * the status of the operation
      */
     //bool      m_bOperationSucceed;
     com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus;
-
+    
     /*
      * the result listener, which will receives the security operation result.
      */
@@ -119,25 +119,25 @@ protected:
         m_xResultListener;
 
 protected:
-    explicit SecurityEngine( const com::sun::star::uno::Reference<
+    explicit SecurityEngine( const com::sun::star::uno::Reference< 
         com::sun::star::lang::XMultiServiceFactory >& rxMSF = NULL );
     virtual ~SecurityEngine() {};
-
-    /*
+    
+    /* 
      * perform the security operation.
      * Any derived class will implement this method respectively.
      */
     virtual void tryToPerform( )
         throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException){};
-
+        
     /*
      * clear up all resources used by this operation.
      * This method is called after the operation finishes, or a End-Your-Mission
      * message is received.
      * Any derived class will implement this method respectively.
      */
-    virtual void clearUp( ) const {};
-
+    virtual void clearUp( ) const {};	
+        
         /*
          * notifies any possible result listener.
          * When verify a signature or conduct a decryption, the operation result will
@@ -153,7 +153,7 @@ protected:
      * Any derived class will implement this method respectively.
      */
     virtual bool checkReady() const { return true; };
-
+    
 public:
     /* XReferenceResolvedListener */
     virtual void SAL_CALL referenceResolved( sal_Int32 referenceId )
@@ -162,7 +162,7 @@ public:
     /* XKeyCollector */
     virtual void SAL_CALL setKeyId( sal_Int32 id )
             throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
-
+        
         /* XMissionTaker */
         virtual sal_Bool SAL_CALL endMission(  )
             throw (com::sun::star::uno::RuntimeException);

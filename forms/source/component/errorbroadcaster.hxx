@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,14 +42,14 @@ namespace frm
     //=====================================================================
     //= OErrorBroadcaster
     //=====================================================================
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::sdb::XSQLErrorBroadcaster
-                                >   OErrorBroadcaster_BASE;
+    typedef ::cppu::ImplHelper1	<	::com::sun::star::sdb::XSQLErrorBroadcaster
+                                >	OErrorBroadcaster_BASE;
 
     class OErrorBroadcaster : public OErrorBroadcaster_BASE
     {
     private:
-        ::cppu::OBroadcastHelper&           m_rBHelper;
-        ::cppu::OInterfaceContainerHelper   m_aErrorListeners;
+        ::cppu::OBroadcastHelper&			m_rBHelper;
+        ::cppu::OInterfaceContainerHelper	m_aErrorListeners;
 
     protected:
         OErrorBroadcaster( ::cppu::OBroadcastHelper& _rBHelper );
@@ -67,7 +67,7 @@ namespace frm
     };
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 #endif // FORMS_ERRORBROADCASTER_HXX

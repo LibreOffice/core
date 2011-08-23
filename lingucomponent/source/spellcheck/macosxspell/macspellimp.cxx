@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
-#include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/factory.hxx>	// helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <tools/debug.hxx>
 #include <unotools/processfactory.hxx>
@@ -92,7 +92,7 @@ const sal_Char *dbg_dump(rtl_uString *pStr)
 ///////////////////////////////////////////////////////////////////////////
 
 MacSpellChecker::MacSpellChecker() :
-    aEvtListeners   ( GetLinguMutex() )
+    aEvtListeners	( GetLinguMutex() )
 {
 //    aDicts = NULL;
     aDEncs = NULL;
@@ -102,7 +102,7 @@ MacSpellChecker::MacSpellChecker() :
     pPropHelper = NULL;
     numdict = 0;
     NSApplicationLoad();
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    NSAutoreleasePool* pool	= [[NSAutoreleasePool alloc] init];
     macSpell = [NSSpellChecker sharedSpellChecker];
     macTag = [NSSpellChecker uniqueSpellDocumentTag];
     [pool release];
@@ -135,11 +135,11 @@ PropertyHelper_Spell & MacSpellChecker::GetPropHelper_Impl()
 {
     if (!pPropHelper)
     {
-        Reference< XPropertySet >   xPropSet( GetLinguProperties(), UNO_QUERY );
+        Reference< XPropertySet	>	xPropSet( GetLinguProperties(), UNO_QUERY );
 
-        pPropHelper = new PropertyHelper_Spell( (XSpellChecker *) this, xPropSet );
+        pPropHelper	= new PropertyHelper_Spell( (XSpellChecker *) this, xPropSet );
         xPropHelper = pPropHelper;
-        pPropHelper->AddAsPropListener();   //! after a reference is established
+        pPropHelper->AddAsPropListener();	//! after a reference is established
     }
     return *pPropHelper;
 }
@@ -148,7 +148,7 @@ PropertyHelper_Spell & MacSpellChecker::GetPropHelper_Impl()
 Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
         // this routine should return the locales supported by the installed
         // dictionaries.  So here we need to parse both the user edited
@@ -259,7 +259,7 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
 sal_Bool SAL_CALL MacSpellChecker::hasLocale(const Locale& rLocale)
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     BOOL bRes = FALSE;
     if (!aSuppLocales.getLength())
@@ -303,7 +303,7 @@ INT16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLo
     if (n)
     {
         aEnc = 0;
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        NSAutoreleasePool* pool	= [[NSAutoreleasePool alloc] init];
         NSString* aNSStr = [[NSString alloc] initWithCharacters: nWord.getStr() length: nWord.getLength()];
         NSString* aLang = [[NSString alloc] initWithCharacters: rLocale.Language.getStr() length: rLocale.Language.getLength()];
         if(rLocale.Country.getLength()>0)
@@ -344,7 +344,7 @@ sal_Bool SAL_CALL
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
      if (rLocale == Locale()  ||  !rWord.getLength())
         return TRUE;
@@ -410,7 +410,7 @@ Reference< XSpellAlternatives >
 
     if (n)
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        NSAutoreleasePool* pool	= [[NSAutoreleasePool alloc] init];
         NSString* aNSStr = [[NSString alloc] initWithCharacters: nWord.getStr() length: nWord.getLength()];
         NSString* aLang = [[NSString alloc] initWithCharacters: rLocale.Language.getStr() length: rLocale.Language.getLength() ];
         if(rLocale.Country.getLength()>0)
@@ -458,7 +458,7 @@ Reference< XSpellAlternatives > SAL_CALL
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
      if (rLocale == Locale()  ||  !rWord.getLength())
         return NULL;
@@ -494,7 +494,7 @@ sal_Bool SAL_CALL
             const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     BOOL bRes = FALSE;
     if (!bDisposing && rxLstnr.is())
@@ -510,7 +510,7 @@ sal_Bool SAL_CALL
             const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     BOOL bRes = FALSE;
     if (!bDisposing && rxLstnr.is())
@@ -526,7 +526,7 @@ OUString SAL_CALL
     MacSpellChecker::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return A2OU( "Mac OS X Spell Checker" );
 }
 
@@ -535,14 +535,14 @@ void SAL_CALL
     MacSpellChecker::initialize( const Sequence< Any >& rArguments )
         throw(Exception, RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (!pPropHelper)
     {
         INT32 nLen = rArguments.getLength();
         if (2 == nLen)
         {
-            Reference< XPropertySet >   xPropSet;
+            Reference< XPropertySet	>	xPropSet;
             rArguments.getConstArray()[0] >>= xPropSet;
             //rArguments.getConstArray()[1] >>= xDicList;
 
@@ -552,7 +552,7 @@ void SAL_CALL
             //! when the object is not longer used.
             pPropHelper = new PropertyHelper_Spell( (XSpellChecker *) this, xPropSet );
             xPropHelper = pPropHelper;
-            pPropHelper->AddAsPropListener();   //! after a reference is established
+            pPropHelper->AddAsPropListener();	//! after a reference is established
         }
         else
             DBG_ERROR( "wrong number of arguments in sequence" );
@@ -565,12 +565,12 @@ void SAL_CALL
     MacSpellChecker::dispose()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (!bDisposing)
     {
         bDisposing = TRUE;
-        EventObject aEvtObj( (XSpellChecker *) this );
+        EventObject	aEvtObj( (XSpellChecker *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
 }
@@ -580,7 +580,7 @@ void SAL_CALL
     MacSpellChecker::addEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (!bDisposing && rxListener.is())
         aEvtListeners.addInterface( rxListener );
@@ -591,7 +591,7 @@ void SAL_CALL
     MacSpellChecker::removeEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (!bDisposing && rxListener.is())
         aEvtListeners.removeInterface( rxListener );
@@ -605,7 +605,7 @@ void SAL_CALL
 OUString SAL_CALL MacSpellChecker::getImplementationName()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     return getImplementationName_Static();
 }
@@ -614,7 +614,7 @@ OUString SAL_CALL MacSpellChecker::getImplementationName()
 sal_Bool SAL_CALL MacSpellChecker::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
@@ -628,7 +628,7 @@ sal_Bool SAL_CALL MacSpellChecker::supportsService( const OUString& ServiceName 
 Sequence< OUString > SAL_CALL MacSpellChecker::getSupportedServiceNames()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     return getSupportedServiceNames_Static();
 }
@@ -637,9 +637,9 @@ Sequence< OUString > SAL_CALL MacSpellChecker::getSupportedServiceNames()
 Sequence< OUString > MacSpellChecker::getSupportedServiceNames_Static()
         throw()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
-    Sequence< OUString > aSNS( 1 ); // auch mehr als 1 Service moeglich
+    Sequence< OUString > aSNS( 1 );	// auch mehr als 1 Service moeglich
     aSNS.getArray()[0] = A2OU( SN_SPELLCHECKER );
     return aSNS;
 }

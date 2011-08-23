@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,20 +46,20 @@ public class InstallationOngoingCtrl extends PanelController {
     private String helpFile;
     private String nextDialog = new String("InstallationCompleted");
     private String previousDialog = new String("InstallationImminent");
-
+            
     public InstallationOngoingCtrl() {
         super("InstallationOngoing", new InstallationOngoing());
         helpFile = "String_Helpfile_InstallationOngoing";
     }
-
+    
     public String getNext() {
         return new String("InstallationCompleted");
     }
-
+    
     public String getPrevious() {
         return new String("InstallationImminent");
     }
-
+    
     public final String getHelpFileName () {
         return this.helpFile;
     }
@@ -89,15 +89,15 @@ public class InstallationOngoingCtrl extends PanelController {
             PackageCollector.sortPackages(installData.getOldPackages(), sortedUninstallPackages, "uninstall");
             installData.setOldPackages(sortedUninstallPackages);
         }
-
+         
         Installer installer = InstallerFactory.getInstance();
         installer.preInstallationOngoing();
     }
-
+   
     public void duringShow() {
-
+        
         Thread t = new Thread() {
-
+        
             InstallData installData = InstallData.getInstance();
             InstallationOngoing panel = (InstallationOngoing)getPanel();
             Vector installPackages = installData.getInstallPackages();
@@ -130,10 +130,10 @@ public class InstallationOngoingCtrl extends PanelController {
 
                     installer.installPackage(packageData);
                     installedPackages.add(packageData);
-
+                    
                     if ( installData.isAbortedInstallation() ) {
                         break;
-                    }
+                    }                    
                 }
 
                 if ( installData.isMajorUpgrade() ) {
@@ -167,8 +167,8 @@ public class InstallationOngoingCtrl extends PanelController {
                         SystemManager.deleteFile(removeFile);
                     }
                 }
-
-                installer.postInstallationOngoing();
+                
+                installer.postInstallationOngoing();        
 
                 String next = getNext();
                 getSetupFrame().setCurrentPanel(next, false, true);
@@ -186,7 +186,7 @@ public class InstallationOngoingCtrl extends PanelController {
 
         InstallData installData = InstallData.getInstance();
         if ( ! installData.isAbortedInstallation() ) {
-            InfoDir.prepareUninstallation();
+            InfoDir.prepareUninstallation();        
         }
 
         return repeatDialog;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,9 +70,9 @@ SvxLineTabDialog::SvxLineTabDialog
     BOOL bHasObj
 ) :
 
-    SfxTabDialog    ( pParent, CUI_RES( RID_SVXDLG_LINE ), pAttr ),
-    pDrawModel      ( pModel ),
-    pObj            ( pSdrObj ),
+    SfxTabDialog	( pParent, CUI_RES( RID_SVXDLG_LINE ), pAttr ),
+    pDrawModel		( pModel ),
+    pObj			( pSdrObj ),
     rOutAttrs       ( *pAttr ),
     pColorTab       ( pModel->GetColorTable() ),
     mpNewColorTab   ( pModel->GetColorTable() ),
@@ -122,7 +122,7 @@ SvxLineTabDialog::SvxLineTabDialog
 
     AddTabPage( RID_SVXPAGE_LINE_DEF, SvxLineDefTabPage::Create, 0);
     AddTabPage( RID_SVXPAGE_LINEEND_DEF, SvxLineEndDefTabPage::Create, 0);
-//  AddTabPage( RID_SVXPAGE_COLOR, SvxColorTabPage::Create, 0 );
+//	AddTabPage( RID_SVXPAGE_COLOR, SvxColorTabPage::Create, 0 );
 
     SetCurPageId( RID_SVXPAGE_LINE );
 

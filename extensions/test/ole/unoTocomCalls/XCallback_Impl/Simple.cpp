@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,9 +59,9 @@ STDMETHODIMP CSimple::func3(BSTR message)
 STDMETHODIMP CSimple::get__implementedInterfaces(LPSAFEARRAY *pVal)
 {
     HRESULT hr= S_OK;
-    SAFEARRAY *pArr=    SafeArrayCreateVector( VT_BSTR, 0, 3);
+    SAFEARRAY *pArr=	SafeArrayCreateVector( VT_BSTR, 0, 3);
     if( pArr)
-    {   long index=0;
+    {	long index=0;
         BSTR name1= SysAllocString(L"oletest.XSimple");
         BSTR name2= SysAllocString(L"oletest.XSimple2");
         BSTR name3= SysAllocString(L"oletest.XSimple3");

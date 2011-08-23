@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,10 +50,10 @@ using ::rtl::OUString ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 
-XMLSecurityContext_MSCryptImpl :: XMLSecurityContext_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory )
+XMLSecurityContext_MSCryptImpl :: XMLSecurityContext_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) 
     ://m_pKeysMngr( NULL ) ,
      m_xServiceManager( aFactory ),
-     m_xSecurityEnvironment( NULL )
+     m_xSecurityEnvironment( NULL ) 
 {
     //Init xmlsec library
     if( xmlSecInit() < 0 ) {
@@ -89,7 +89,7 @@ sal_Int32 SAL_CALL XMLSecurityContext_MSCryptImpl::addSecurityEnvironment(
     {
         throw RuntimeException() ;
     }
-
+    
     m_xSecurityEnvironment = aSecurityEnvironment;
 
     return 0;
@@ -101,7 +101,7 @@ sal_Int32 SAL_CALL XMLSecurityContext_MSCryptImpl::getSecurityEnvironmentNumber(
 {
     return 1;
 }
-
+    
 ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
     XMLSecurityContext_MSCryptImpl::getSecurityEnvironmentByIndex( sal_Int32 index )
     throw (::com::sun::star::uno::RuntimeException)
@@ -113,9 +113,9 @@ sal_Int32 SAL_CALL XMLSecurityContext_MSCryptImpl::getSecurityEnvironmentNumber(
     else
         throw RuntimeException() ;
 }
-
-::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
-    XMLSecurityContext_MSCryptImpl::getSecurityEnvironment(  )
+    
+::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL 
+    XMLSecurityContext_MSCryptImpl::getSecurityEnvironment(  ) 
     throw (::com::sun::star::uno::RuntimeException)
 {
     return m_xSecurityEnvironment;
@@ -246,10 +246,10 @@ void SAL_CALL XMLSecurityContext_MSCryptImpl :: setSecurityEnvironment( const Re
 }
 
 /* XXMLSecurityContext */
-Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContext_MSCryptImpl :: getSecurityEnvironment()
+Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContext_MSCryptImpl :: getSecurityEnvironment() 
     throw (RuntimeException)
 {
-    return  m_xSecurityEnvironment ;
+    return	m_xSecurityEnvironment ;
 }
 #endif
 
@@ -305,10 +305,10 @@ Reference< XSingleServiceFactory > XMLSecurityContext_MSCryptImpl :: impl_create
 
 #if 0
 /* XUnoTunnel */
-sal_Int64 SAL_CALL XMLSecurityContext_MSCryptImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier )
+sal_Int64 SAL_CALL XMLSecurityContext_MSCryptImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier ) 
 throw (RuntimeException)
 {
-    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
+    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) { 
         return ( sal_Int64 )this ;
     }
     return 0 ;

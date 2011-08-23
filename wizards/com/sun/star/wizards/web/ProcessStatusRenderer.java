@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@ import com.sun.star.wizards.common.IRenderer;
 /**
  * @author rpiterman
  * recieves status calls from the status dialog which
- * apears when the user clicks "create".
+ * apears when the user clicks "create". 
  * allocates strings from the resources to
  * display the current task status.
  * (renders the state to resource strings)

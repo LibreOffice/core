@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@
 #include "svx/svxgrahicitem.hxx"
 //#include "linectrl.hrc"
 #include <sfx2/request.hxx>
-#include "svx/ofaitem.hxx"
+#include "svx/ofaitem.hxx" 
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdmodel.hxx>
@@ -72,7 +72,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-#define MAX_BMP_WIDTH   16
+#define MAX_BMP_WIDTH 	16
 #define MAX_BMP_HEIGHT  16
 // define ----------------------------------------------------------------
 
@@ -95,7 +95,7 @@ static USHORT pLineRanges[] =
 
 /*************************************************************************
 |*
-|*  Dialog zum Aendern der Linien
+|*	Dialog zum Aendern der Linien
 |*
 \************************************************************************/
 
@@ -104,7 +104,7 @@ SvxLineTabPage::SvxLineTabPage
     Window* pParent,
     const SfxItemSet& rInAttrs
 ) :
-    SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_LINE ), rInAttrs ),
+    SvxTabPage			( pParent, CUI_RES( RID_SVXPAGE_LINE ), rInAttrs ),
     aFtLineStyle        ( this, CUI_RES( FT_LINE_STYLE ) ),
     aLbLineStyle        ( this, CUI_RES( LB_LINE_STYLE ) ),
     aFtColor            ( this, CUI_RES( FT_COLOR ) ),
@@ -126,26 +126,26 @@ SvxLineTabPage::SvxLineTabPage
     aFlLineEnds         ( this, CUI_RES( FL_LINE_ENDS ) ),
     aCtlPreview         ( this, CUI_RES( CTL_PREVIEW ) ),
     aFLSeparator        ( this, CUI_RES( FL_SEPARATOR ) ),
-
+    
     // #116827#
     maFLEdgeStyle       ( this, CUI_RES( FL_EDGE_STYLE ) ),
     maFTEdgeStyle       ( this, CUI_RES( FT_EDGE_STYLE ) ),
     maLBEdgeStyle       ( this, CUI_RES( LB_EDGE_STYLE ) ),
-
+    
     pSymbolList(NULL),
     bNewSize(false),
     nNumMenuGalleryItems(0),
     nSymbolType(SVX_SYMBOLTYPE_UNKNOWN), //unbekannt bzw. unchanged
     pSymbolAttr(NULL),
-    //#58425# Symbole auf einer Linie (z.B. StarChart)
+    //#58425# Symbole auf einer Linie (z.B. StarChart) 
     aFlSymbol           ( this, CUI_RES(FL_SYMBOL_FORMAT)),
     aSymbolMB           ( this, CUI_RES(MB_SYMBOL_BITMAP)),
     aSymbolWidthFT      ( this, CUI_RES(FT_SYMBOL_WIDTH)),
-    aSymbolWidthMF      ( this, CUI_RES(MF_SYMBOL_WIDTH)),
-    aSymbolHeightFT     ( this, CUI_RES(FT_SYMBOL_HEIGHT)),
-    aSymbolHeightMF     ( this, CUI_RES(MF_SYMBOL_HEIGHT)),
+    aSymbolWidthMF		( this, CUI_RES(MF_SYMBOL_WIDTH)),
+    aSymbolHeightFT		( this, CUI_RES(FT_SYMBOL_HEIGHT)),
+    aSymbolHeightMF		( this, CUI_RES(MF_SYMBOL_HEIGHT)),
     aSymbolRatioCB      ( this, CUI_RES(CB_SYMBOL_RATIO)),
-
+    
     bLastWidthModified(FALSE),
     aSymbolLastSize(Size(0,0)),
     bSymbols(FALSE),
@@ -311,7 +311,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     SFX_ITEMSET_ARG (&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE,sal_False); //add CHINA001 begin
     if (pPageTypeItem)
-        SetPageType(pPageTypeItem->GetValue()); //add CHINA001 end
+        SetPageType(pPageTypeItem->GetValue());	//add CHINA001 end
     if( nDlgType == 0 && pDashList )  //CHINA001 if( *pDlgType == 0 && pDashList ) // Linien-Dialog
     {
         USHORT nPos;
@@ -346,13 +346,13 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             // SelectStyleHdl_Impl( this );
         }
 
-        INetURLObject   aDashURL( pDashList->GetPath() );
+        INetURLObject	aDashURL( pDashList->GetPath() );
 
         aDashURL.Append( pDashList->GetName() );
         DBG_ASSERT( aDashURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-/*      // Ermitteln (evtl. abschneiden) des Namens und in
+/*		// Ermitteln (evtl. abschneiden) des Namens und in
         // der GroupBox darstellen
-        String          aString( ResId( RID_SVXSTR_TABLE, pMgr ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+        String			aString( ResId( RID_SVXSTR_TABLE, pMgr ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
         if ( aDashURL.getBase().Len() > 18 )
         {
@@ -404,7 +404,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 
         aLineURL.Append( pLineEndList->GetName() );
         DBG_ASSERT( aLineURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-/*      // Ermitteln (evtl. abschneiden) des Namens und in
+/*		// Ermitteln (evtl. abschneiden) des Namens und in
         // der GroupBox darstellen
         aString = String( ResId( RID_SVXSTR_TABLE, pMgr ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
@@ -505,8 +505,8 @@ int SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
 BOOL SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
     const SfxPoolItem* pOld = NULL;
-    USHORT  nPos;
-    BOOL    bModified = FALSE;
+    USHORT	nPos;
+    BOOL	bModified = FALSE;
 
     // Um evtl. Modifikationen der Liste vorzubeugen
     // werden Items anderer Seiten nicht gesetzt
@@ -516,7 +516,7 @@ BOOL SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
             nPos != aLbLineStyle.GetSavedValue() )
         {
-            XLineStyleItem* pStyleItem = NULL;
+            XLineStyleItem*	pStyleItem = NULL;
 
             if( nPos == 0 )
                 pStyleItem = new XLineStyleItem( XLINE_NONE );
@@ -891,8 +891,8 @@ BOOL SvxLineTabPage::FillXLSet_Impl()
 
 void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
 {
-    String      aString;
-    XLineStyle  eXLS; // XLINE_NONE, XLINE_SOLID, XLINE_DASH
+    String		aString;
+    XLineStyle	eXLS; // XLINE_NONE, XLINE_SOLID, XLINE_DASH
 
     // Linienstil
 /*
@@ -938,7 +938,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         SdrView* pView = new SdrView( pModel, &aVDev );
         pView->hideMarkHandles();
         SdrPageView* pPageView = pView->ShowSdrPage(pPage);
-//      SdrPageView* pPageView = pView->ShowSdrPage(pPage, Point());
+//		SdrPageView* pPageView = pView->ShowSdrPage(pPage, Point());
         SdrObject *pObj=NULL;
         long nSymTmp=nSymType;
         if(pSymbolList)
@@ -1226,10 +1226,10 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     else
         aMtrTransparent.SetText( String() );
 
-    if( !aLbStartStyle.IsEnabled()  &&
-        !aLbEndStyle.IsEnabled()    &&
+    if( !aLbStartStyle.IsEnabled()	&&
+        !aLbEndStyle.IsEnabled()	&&
         !aMtrStartWidth.IsEnabled() &&
-        !aMtrEndWidth.IsEnabled()   &&
+        !aMtrEndWidth.IsEnabled()	&&
         !aTsbCenterStart.IsEnabled()&&
         !aTsbCenterEnd.IsEnabled() )
     {
@@ -1309,7 +1309,7 @@ SfxTabPage* SvxLineTabPage::Create( Window* pWindow,
 
 //------------------------------------------------------------------------
 
-USHORT* SvxLineTabPage::GetRanges()
+USHORT*	SvxLineTabPage::GetRanges()
 {
     return( pLineRanges );
 }
@@ -1614,7 +1614,7 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
         // 3D View
         SdrView* pView = new SdrView( pModel, &aVDev );
         pView->hideMarkHandles();
-//      SdrPageView* pPageView = pView->ShowSdrPage(pPage, Point());
+//		SdrPageView* pPageView = pView->ShowSdrPage(pPage, Point());
         SdrPageView* pPageView = pView->ShowSdrPage(pPage);
 
         PopupMenu* pPopup = new PopupMenu;
@@ -1828,7 +1828,7 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, MetricField *, pField)
     nWidthVal = OutputDevice::LogicToLogic(nWidthVal,MAP_100TH_MM,(MapUnit)ePoolUnit );
     nHeightVal = OutputDevice::LogicToLogic(nHeightVal,MAP_100TH_MM,(MapUnit)ePoolUnit);
     aSymbolSize=Size(nWidthVal,nHeightVal);
-    double  fSizeRatio = (double)1;
+    double	fSizeRatio = (double)1;
 
     if(bRatio)
     {

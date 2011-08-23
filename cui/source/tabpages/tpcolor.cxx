@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@
 
 /*************************************************************************
 |*
-|*  Dialog zum Aendern und Definieren der Farben
+|*	Dialog zum Aendern und Definieren der Farben
 |*
 \************************************************************************/
 
@@ -84,13 +84,13 @@ SvxColorTabPage::SvxColorTabPage
     const SfxItemSet& rInAttrs
 ) :
 
-    SfxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_COLOR ), rInAttrs ),
+    SfxTabPage			( pParent, CUI_RES( RID_SVXPAGE_COLOR ), rInAttrs ),
 
     aFlProp             ( this, CUI_RES( FL_PROP ) ),
     aFtName             ( this, CUI_RES( FT_NAME ) ),
-    aEdtName            ( this, CUI_RES( EDT_NAME ) ),
-    aFtColor            ( this, CUI_RES( FT_COLOR ) ),
-    aLbColor            ( this, CUI_RES( LB_COLOR ) ),
+    aEdtName			( this, CUI_RES( EDT_NAME ) ),
+    aFtColor			( this, CUI_RES( FT_COLOR ) ),
+    aLbColor			( this, CUI_RES( LB_COLOR ) ),
 
     aTableNameFT        ( this, CUI_RES( FT_TABLE_NAME ) ),
     aValSetColorTable   ( this, CUI_RES( CTL_COLORTABLE ) ),
@@ -99,20 +99,20 @@ SvxColorTabPage::SvxColorTabPage
     aCtlPreviewNew      ( this, CUI_RES( CTL_PREVIEW_NEW ) ),
 
     aLbColorModel       ( this, CUI_RES( LB_COLORMODEL ) ),
-    aFtColorModel1      ( this, CUI_RES( FT_1 ) ),
-    aMtrFldColorModel1  ( this, CUI_RES( MTR_FLD_1 ) ),
-    aFtColorModel2      ( this, CUI_RES( FT_2 ) ),
-    aMtrFldColorModel2  ( this, CUI_RES( MTR_FLD_2 ) ),
-    aFtColorModel3      ( this, CUI_RES( FT_3 ) ),
-    aMtrFldColorModel3  ( this, CUI_RES( MTR_FLD_3 ) ),
-    aFtColorModel4      ( this, CUI_RES( FT_4 ) ),
-    aMtrFldColorModel4  ( this, CUI_RES( MTR_FLD_4 ) ),
-    aBtnAdd             ( this, CUI_RES( BTN_ADD ) ),
-    aBtnModify          ( this, CUI_RES( BTN_MODIFY ) ),
-    aBtnWorkOn          ( this, CUI_RES( BTN_WORK_ON ) ),
-    aBtnDelete          ( this, CUI_RES( BTN_DELETE ) ),
-    aBtnLoad            ( this, CUI_RES( BTN_LOAD ) ),
-    aBtnSave            ( this, CUI_RES( BTN_SAVE ) ),
+    aFtColorModel1		( this, CUI_RES( FT_1 ) ),
+    aMtrFldColorModel1	( this, CUI_RES( MTR_FLD_1 ) ),
+    aFtColorModel2		( this, CUI_RES( FT_2 ) ),
+    aMtrFldColorModel2	( this, CUI_RES( MTR_FLD_2 ) ),
+    aFtColorModel3		( this, CUI_RES( FT_3 ) ),
+    aMtrFldColorModel3	( this, CUI_RES( MTR_FLD_3 ) ),
+    aFtColorModel4		( this, CUI_RES( FT_4 ) ),
+    aMtrFldColorModel4	( this, CUI_RES( MTR_FLD_4 ) ),
+    aBtnAdd 			( this, CUI_RES( BTN_ADD ) ),
+    aBtnModify			( this, CUI_RES( BTN_MODIFY ) ),
+    aBtnWorkOn			( this, CUI_RES( BTN_WORK_ON ) ),
+    aBtnDelete			( this, CUI_RES( BTN_DELETE ) ),
+    aBtnLoad			( this, CUI_RES( BTN_LOAD ) ),
+    aBtnSave			( this, CUI_RES( BTN_SAVE ) ),
 
     rOutAttrs           ( rInAttrs ),
     pColorTab( NULL ),
@@ -228,8 +228,8 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
-            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-            INetURLObject   aURL( pColorTab->GetPath() );
+            String			aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+            INetURLObject	aURL( pColorTab->GetPath() );
 
             aURL.Append( pColorTab->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,36 +51,36 @@ class SdrView;
 class SvxTextAttrPage : public SvxTabPage
 {
 private:
-    FixedLine           aFlText;
+    FixedLine			aFlText;
     TriStateBox         aTsbAutoGrowWidth;
     TriStateBox         aTsbAutoGrowHeight;
-    TriStateBox         aTsbFitToSize;
-    TriStateBox         aTsbContour;
+    TriStateBox			aTsbFitToSize;
+    TriStateBox			aTsbContour;
     TriStateBox         aTsbWordWrapText;
     TriStateBox         aTsbAutoGrowSize;
 
 
-    FixedLine           aFlDistance;
-    FixedText           aFtLeft;
-    MetricField         aMtrFldLeft;
-    FixedText           aFtRight;
-    MetricField         aMtrFldRight;
-    FixedText           aFtTop;
-    MetricField         aMtrFldTop;
-    FixedText           aFtBottom;
-    MetricField         aMtrFldBottom;
+    FixedLine			aFlDistance;
+    FixedText			aFtLeft;
+    MetricField			aMtrFldLeft;
+    FixedText			aFtRight;
+    MetricField			aMtrFldRight;
+    FixedText			aFtTop;
+    MetricField			aMtrFldTop;
+    FixedText			aFtBottom;
+    MetricField			aMtrFldBottom;
 
-    FixedLine           aFlSeparator;
+    FixedLine			aFlSeparator;
 
-    FixedLine           aFlPosition;
-    SvxRectCtl          aCtlPosition;
-    TriStateBox         aTsbFullWidth;
+    FixedLine			aFlPosition;
+    SvxRectCtl			aCtlPosition;
+    TriStateBox			aTsbFullWidth;
 
-    const SfxItemSet&   rOutAttrs;
-    const SdrView*      pView;
+    const SfxItemSet&	rOutAttrs;
+    const SdrView*		pView;
 
-    BOOL                bAutoGrowSizeEnabled;
-    BOOL                bContourEnabled;
+    BOOL				bAutoGrowSizeEnabled;
+    BOOL				bContourEnabled;
     BOOL                bAutoGrowWidthEnabled;
     BOOL                bAutoGrowHeightEnabled;
     BOOL                bWordWrapTextEnabled;
@@ -102,17 +102,17 @@ public:
     SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs );
     ~SvxTextAttrPage();
 
-    static SfxTabPage*  Create( Window*, const SfxItemSet& );
-    static  USHORT*     GetRanges();
+    static SfxTabPage* 	Create( Window*, const SfxItemSet& );
+    static  USHORT*	    GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet & );
+    virtual BOOL 		FillItemSet( SfxItemSet& );
+    virtual void 		Reset( const SfxItemSet & );
 
-    virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );
+    virtual void 		PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void         Construct();
-    void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
-    virtual void            PageCreated(SfxAllItemSet aSet); // add CHINA001
+    void 		 Construct();
+    void		 SetView( const SdrView* pSdrView ) { pView = pSdrView; }
+    virtual void 			PageCreated(SfxAllItemSet aSet); // add CHINA001
 };
 
 /*************************************************************************

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,18 +48,18 @@
 class StarBASIC;
 
 
-#define NEWOBJECTMODE_LIB       1
-#define NEWOBJECTMODE_MOD       2
-#define NEWOBJECTMODE_DLG       3
-#define NEWOBJECTMODE_METH      4
+#define NEWOBJECTMODE_LIB		1
+#define NEWOBJECTMODE_MOD		2
+#define NEWOBJECTMODE_DLG		3
+#define NEWOBJECTMODE_METH		4
 
 class NewObjectDialog : public ModalDialog
 {
 private:
-    FixedText       aText;
-    Edit            aEdit;
-    OKButton        aOKButton;
-    CancelButton    aCancelButton;
+    FixedText		aText;
+    Edit			aEdit;
+    OKButton		aOKButton;
+    CancelButton	aCancelButton;
 
     DECL_LINK(OkButtonHandler, Button *);
 
@@ -67,19 +67,19 @@ public:
     NewObjectDialog(Window * pParent, USHORT nMode, bool bCheckName = false);
                 ~NewObjectDialog();
 
-    String      GetObjectName() const { return aEdit.GetText(); }
-    void        SetObjectName( const String& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.Len() ) );}
+    String		GetObjectName() const { return aEdit.GetText(); }
+    void		SetObjectName( const String& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.Len() ) );}
 };
 
 class ExportDialog : public ModalDialog
 {
 private:
-    RadioButton     maExportAsPackageButton;
-    RadioButton     maExportAsBasicButton;
-    OKButton        maOKButton;
-    CancelButton    maCancelButton;
+    RadioButton		maExportAsPackageButton;
+    RadioButton		maExportAsBasicButton;
+    OKButton		maOKButton;
+    CancelButton	maCancelButton;
 
-    sal_Bool        mbExportAsPackage;
+    sal_Bool		mbExportAsPackage;
 
     DECL_LINK(OkButtonHandler, Button *);
 
@@ -87,24 +87,24 @@ public:
     ExportDialog( Window * pParent );
     ~ExportDialog();
 
-    sal_Bool        isExportAsPackage( void ) { return mbExportAsPackage; }
+    sal_Bool		isExportAsPackage( void ) { return mbExportAsPackage; }
 };
 
 
 class ExtBasicTreeListBox : public BasicTreeListBox
 {
 protected:
-    virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
-    virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
+    virtual BOOL	EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
+    virtual BOOL	EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
 
-    virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData, SvLBoxEntry* pEntry );
-    virtual BOOL            NotifyAcceptDrop( SvLBoxEntry* pEntry );
+    virtual DragDropMode	NotifyStartDrag( TransferDataContainer& rData, SvLBoxEntry* pEntry );
+    virtual BOOL 			NotifyAcceptDrop( SvLBoxEntry* pEntry );
 
-    virtual BOOL    NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+    virtual BOOL	NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos );
-    virtual BOOL    NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+    virtual BOOL	NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos );
-    BOOL            NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+    BOOL			NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos, BOOL bMove );
 
 public:
@@ -112,57 +112,57 @@ public:
     ~ExtBasicTreeListBox();
 };
 
-#define LIBMODE_CHOOSER     1
-#define LIBMODE_MANAGER     2
+#define LIBMODE_CHOOSER		1
+#define LIBMODE_MANAGER		2
 
 class BasicCheckBox : public SvTabListBox
 {
 private:
-    USHORT              nMode;
-    SvLBoxButtonData*   pCheckButton;
+    USHORT 				nMode;
+    SvLBoxButtonData*	pCheckButton;
     ScriptDocument      m_aDocument;
-    void                Init();
+    void				Init();
 
 public:
                     BasicCheckBox( Window* pParent, const ResId& rResId );
                     ~BasicCheckBox();
 
-    SvLBoxEntry*    DoInsertEntry( const String& rStr, ULONG nPos = LISTBOX_APPEND );
-    SvLBoxEntry*    FindEntry( const String& rName );
+    SvLBoxEntry*	DoInsertEntry( const String& rStr, ULONG nPos = LISTBOX_APPEND );
+    SvLBoxEntry*	FindEntry( const String& rName );
 
-    void            CheckEntryPos( ULONG nPos, BOOL bCheck = TRUE );
-    BOOL            IsChecked( ULONG nPos ) const;
+    void			CheckEntryPos( ULONG nPos, BOOL bCheck = TRUE );
+    BOOL			IsChecked( ULONG nPos ) const;
 
-    virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
-    virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel );
-    virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
+    virtual void	InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
+    virtual BOOL	EditingEntry( SvLBoxEntry* pEntry, Selection& rSel );
+    virtual BOOL	EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
 
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
-    void            SetMode( USHORT n );
-    USHORT          GetMode() const         { return nMode; }
+    void			SetMode( USHORT n );
+    USHORT			GetMode() const			{ return nMode; }
 };
 
 class LibDialog: public ModalDialog
 {
 private:
-    OKButton        aOKButton;
-    CancelButton    aCancelButton;
-    FixedText       aStorageName;
-    BasicCheckBox   aLibBox;
+    OKButton 		aOKButton;
+    CancelButton	aCancelButton;
+    FixedText		aStorageName;
+    BasicCheckBox	aLibBox;
     FixedLine       aFixedLine;
-    CheckBox        aReferenceBox;
-    CheckBox        aReplaceBox;
+    CheckBox 		aReferenceBox;
+    CheckBox 		aReplaceBox;
 
 public:
                     LibDialog( Window* pParent );
                     ~LibDialog();
 
-    void            SetStorageName( const String& rName );
+    void			SetStorageName( const String& rName );
 
-    BasicCheckBox&  GetLibBox()                 { return aLibBox; }
-    BOOL            IsReference() const         { return aReferenceBox.IsChecked(); }
-    BOOL            IsReplace() const           { return aReplaceBox.IsChecked(); }
+    BasicCheckBox&	GetLibBox()					{ return aLibBox; }
+    BOOL			IsReference() const 		{ return aReferenceBox.IsChecked(); }
+    BOOL			IsReplace() const 			{ return aReplaceBox.IsChecked(); }
 
     void            EnableReference( BOOL b )   { aReferenceBox.Enable( b ); }
     void            EnableReplace( BOOL b )     { aReplaceBox.Enable( b ); }
@@ -179,7 +179,7 @@ public:
                     OrganizeDialog( Window* pParent, INT16 tabId, BasicEntryDescriptor& rDesc );
                     ~OrganizeDialog();
 
-    virtual short   Execute();
+    virtual short	Execute();
 
     DECL_LINK( ActivatePageHdl, TabControl * );
 };
@@ -187,33 +187,33 @@ public:
 class ObjectPage: public TabPage
 {
 protected:
-    FixedText           aLibText;
-    ExtBasicTreeListBox aBasicBox;
-    PushButton          aEditButton;
-    CancelButton        aCloseButton;
-    PushButton          aNewModButton;
-    PushButton          aNewDlgButton;
-    PushButton          aDelButton;
+    FixedText 			aLibText;
+    ExtBasicTreeListBox	aBasicBox;
+    PushButton			aEditButton;
+    CancelButton		aCloseButton;
+    PushButton			aNewModButton;
+    PushButton			aNewDlgButton;
+    PushButton			aDelButton;
 
     DECL_LINK( BasicBoxHighlightHdl, BasicTreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
-    void                CheckButtons();
+    void				CheckButtons();
     bool                GetSelection( ScriptDocument& rDocument, String& rLibName );
-    void                DeleteCurrent();
-    void                NewModule();
-    void                NewDialog();
-    void                EndTabDialog( USHORT nRet );
+    void				DeleteCurrent();
+    void				NewModule();
+    void				NewDialog();
+    void				EndTabDialog( USHORT nRet );
 
-    TabDialog*          pTabDlg;
+    TabDialog*			pTabDlg;
 
-    virtual void        ActivatePage();
-    virtual void        DeactivatePage();
+    virtual void		ActivatePage();
+    virtual void		DeactivatePage();
 
 public:
                         ObjectPage( Window* pParent, const ResId& rResId, USHORT nMode );
 
     void                SetCurrentEntry( BasicEntryDescriptor& rDesc );
-    void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
+    void				SetTabDlg( TabDialog* p ) { pTabDlg = p;}
 };
 
 
@@ -223,16 +223,16 @@ class LibPage: public TabPage
 {
 protected:
     FixedText           aBasicsText;
-    ListBox             aBasicsBox;
-    FixedText           aLibText;
-    BasicCheckBox       aLibBox;
-    PushButton          aEditButton;
-    CancelButton        aCloseButton;
-    PushButton          aPasswordButton;
-    PushButton          aExportButton;
-    PushButton          aNewLibButton;
-    PushButton          aInsertLibButton;
-    PushButton          aDelButton;
+    ListBox				aBasicsBox;
+    FixedText 			aLibText;
+    BasicCheckBox		aLibBox;
+    PushButton			aEditButton;
+    CancelButton		aCloseButton;
+    PushButton			aPasswordButton;
+    PushButton			aExportButton;
+    PushButton			aNewLibButton;
+    PushButton			aInsertLibButton;
+    PushButton			aDelButton;
 
     ScriptDocument      m_aCurDocument;
     LibraryLocation     m_eCurLocation;
@@ -241,36 +241,36 @@ protected:
     DECL_LINK( BasicSelectHdl, ListBox * );
     DECL_LINK( ButtonHdl, Button * );
     DECL_LINK( CheckPasswordHdl, SvxPasswordDialog * );
-    void                CheckButtons();
-    void                DeleteCurrent();
-    void                NewLib();
-    void                InsertLib();
-    void                implExportLib( const String& aLibName, const String& aTargetURL,
+    void				CheckButtons();
+    void				DeleteCurrent();
+    void				NewLib();
+    void				InsertLib();
+    void				implExportLib( const String& aLibName, const String& aTargetURL,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler );
-    void                Export();
-    void                ExportAsPackage( const String& aLibName );
-    void                ExportAsBasic( const String& aLibName );
-    void                EndTabDialog( USHORT nRet );
-    void                FillListBox();
+    void				Export();
+    void				ExportAsPackage( const String& aLibName );
+    void				ExportAsBasic( const String& aLibName );
+    void				EndTabDialog( USHORT nRet );
+    void				FillListBox();
     void                InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
-    void                SetCurLib();
-    SvLBoxEntry*        ImpInsertLibEntry( const String& rLibName, ULONG nPos );
-    virtual void        ActivatePage();
-    virtual void        DeactivatePage();
+    void				SetCurLib();
+    SvLBoxEntry*		ImpInsertLibEntry( const String& rLibName, ULONG nPos );
+    virtual void		ActivatePage();
+    virtual void		DeactivatePage();
 
-    TabDialog*          pTabDlg;
+    TabDialog*			pTabDlg;
 
 public:
                         LibPage( Window* pParent );
-    virtual             ~LibPage();
+    virtual             ~LibPage();                        
 
-    void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
+    void				SetTabDlg( TabDialog* p ) { pTabDlg = p;}
 };
 
 // Helper functions
 SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
     BasicTreeListBox& rBasicBox, const String& rLibName, String aModName, bool bMain = false );
-void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
+void createLibImpl( Window* pWin, const ScriptDocument& rDocument, 
                     BasicCheckBox* pLibBox, BasicTreeListBox* pBasicBox );
 
 #endif // _MODULDLG_HXX
