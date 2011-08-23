@@ -3330,8 +3330,8 @@ void ScInterpreter::ScMacro()
             PushString( refRes->GetString() );
     }
 
-    if (bVolatileMacro && meVolaileType == NOT_VOLATILE)
-        meVolaileType = VOLATILE_MACRO;
+    if (bVolatileMacro && meVolatileType == NOT_VOLATILE)
+        meVolatileType = VOLATILE_MACRO;
 }
 
 
@@ -3635,7 +3635,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     pFormatter( pDoc->GetFormatTable() ),
     mnStringNoValueError( errNoValue),
     bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() ),
-    meVolaileType(r.IsRecalcModeAlways() ? VOLATILE : NOT_VOLATILE)
+    meVolatileType(r.IsRecalcModeAlways() ? VOLATILE : NOT_VOLATILE)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTTT" );
 
@@ -4078,7 +4078,7 @@ StackVar ScInterpreter::Interpret()
             }
 
             if (FormulaCompiler::IsOpCodeVolatile(eOp))
-                meVolaileType = VOLATILE;
+                meVolatileType = VOLATILE;
 
             // Remember result matrix in case it could be reused.
             if (pTokenMatrixMap && sp && GetStackType() == svMatrix)
