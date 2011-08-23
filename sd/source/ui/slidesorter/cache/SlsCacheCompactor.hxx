@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ class BitmapCache;
 class BitmapCompressor;
 
 /** This is an interface class whose implementations are created via the
-    Create() factory method.
+    Create() factory method.  
 */
 class CacheCompactor
 {
@@ -70,7 +70,7 @@ public:
         cache.  This calls via a timer the Run() method.
     */
     virtual void RequestCompaction (void);
-
+        
 protected:
     BitmapCache& mrCache;
     sal_Int32 mnMaximalCacheSize;
@@ -83,7 +83,7 @@ protected:
         by the off-screen preview bitmaps.
     */
     virtual void Run (void) = 0;
-
+    
 private:
     /** This timer is used to collect calles to RequestCompaction() and
         eventually call Run().

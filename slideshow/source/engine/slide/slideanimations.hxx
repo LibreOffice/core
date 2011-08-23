@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ namespace slideshow
                 Slide show context, passing on common parameters
              */
             SlideAnimations( const SlideShowContext&     rContext,
-                             const ::basegfx::B2DVector& rSlideSize );
+                             const ::basegfx::B2DVector& rSlideSize );            
             ~SlideAnimations();
 
             /** Import animations from a SMIL root animation node.
@@ -80,8 +80,8 @@ namespace slideshow
                 XDrawPage's XAnimationNodeSupplier.
 
              */
-            bool importAnimations( const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::animations::XAnimationNode >&   xRootAnimationNode );
+            bool importAnimations( const ::com::sun::star::uno::Reference< 
+                                      ::com::sun::star::animations::XAnimationNode >&	xRootAnimationNode );
 
             /** Check, whether imported animations actually contain
                 any effects.
@@ -116,7 +116,7 @@ namespace slideshow
             void dispose();
 
         private:
-            SlideShowContext         maContext;
+            SlideShowContext		 maContext;
             const basegfx::B2DVector maSlideSize;
             AnimationNodeSharedPtr   mpRootNode;
         };

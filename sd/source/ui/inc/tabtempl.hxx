@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,26 +51,26 @@ class XLineEndList;
 class SdTabTemplateDlg : public SfxStyleDialog
 {
 private:
-    const SfxObjectShell&   rDocShell;
-    SdrView*                pSdrView;
+    const SfxObjectShell&	rDocShell;
+    SdrView*				pSdrView;
 
-    XColorTable*        pColorTab;
-    XGradientList*      pGradientList;
-    XHatchList*         pHatchingList;
-    XBitmapList*        pBitmapList;
-    XDashList*          pDashList;
-    XLineEndList*       pLineEndList;
+    XColorTable*		pColorTab;
+    XGradientList*		pGradientList;
+    XHatchList*			pHatchingList;
+    XBitmapList*		pBitmapList;
+    XDashList*			pDashList;
+    XLineEndList*		pLineEndList;
 
-    USHORT              nPageType;
-    USHORT              nDlgType;
-    USHORT              nPos;
-    ChangeType          nColorTableState;
-    ChangeType          nBitmapListState;
-    ChangeType          nGradientListState;
-    ChangeType          nHatchingListState;
+    USHORT				nPageType;
+    USHORT				nDlgType;
+    USHORT				nPos;
+    ChangeType			nColorTableState;
+    ChangeType			nBitmapListState;
+    ChangeType			nGradientListState;
+    ChangeType			nHatchingListState;
 
-    virtual void                PageCreated( USHORT nId, SfxTabPage &rPage );
-    virtual const SfxItemSet*   GetRefreshedSet();
+    virtual void				PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual const SfxItemSet* 	GetRefreshedSet();
 
 public:
                     SdTabTemplateDlg( Window* pParent,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,18 +65,18 @@ namespace sd { namespace framework {
 */
 class BasicToolBarFactory
     : protected ::cppu::BaseMutex,
-      public BasicToolBarFactoryInterfaceBase
+      public BasicToolBarFactoryInterfaceBase      
 {
 public:
     BasicToolBarFactory (
         const css::uno::Reference<com::sun::star::uno::XComponentContext>& rxContext);
     virtual ~BasicToolBarFactory (void);
-
+    
     virtual void SAL_CALL disposing (void);
 
-
+    
     // ToolBarFactory
-
+    
     virtual css::uno::Reference<com::sun::star::drawing::framework::XResource> SAL_CALL
         createResource (
             const css::uno::Reference<
@@ -91,14 +91,14 @@ public:
 
 
     // XInitialization
-
+    
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<com::sun::star::uno::Any>& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
 
-
+    
     // lang::XEventListener
-
+    
     virtual void SAL_CALL disposing (
         const css::lang::EventObject& rEventObject)
         throw (css::uno::RuntimeException);

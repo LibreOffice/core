@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,10 @@
 
 namespace accessibility {
 
-/** This class makes Impress shapes accessible.
+/**	This class makes Impress shapes accessible.
 */
 class AccessiblePresentationOLEShape
-    :   public AccessibleOLEShape
+    :	public AccessibleOLEShape
 {
 public:
     //=====  internal  ========================================================
@@ -47,8 +47,8 @@ public:
     virtual ~AccessiblePresentationOLEShape (void);
 
     //=====  XServiceInfo  ====================================================
-
-    /** Returns an identifier for the implementation of this object.
+    
+    /**	Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
@@ -56,12 +56,12 @@ public:
 
     //=====  internal  ========================================================
 
-    /// Create a name string that contains the accessible name.
+    ///	Create a name string that contains the accessible name.
     virtual ::rtl::OUString
         CreateAccessibleBaseName ()
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Create a description string that contains the accessible description.
+    ///	Create a description string that contains the accessible description.
     virtual ::rtl::OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);

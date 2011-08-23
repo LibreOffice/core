@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -552,7 +552,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             rReq.Done ();
             break;
         }
-        case SID_ZOOMING :  // kein Menueintrag, sondern aus dem Zoomdialog generiert
+        case SID_ZOOMING :	// kein Menueintrag, sondern aus dem Zoomdialog generiert
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -663,7 +663,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             Cancel();
 
             if( HasCurrentFunction(SID_BEZIER_EDIT) )
-            {   // ggf. die richtige Editfunktion aktivieren
+            {	// ggf. die richtige Editfunktion aktivieren
                 GetViewFrame()->GetDispatcher()->Execute(SID_SWITCH_POINTEDIT,
                                         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
             }
@@ -888,10 +888,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_DELETE_SNAPITEM:
         {
             SdrPageView* pPV;
-            Point   aMPos = GetActiveWindow()->PixelToLogic( maMousePos );
-            USHORT  nHitLog = (USHORT) GetActiveWindow()->PixelToLogic( Size(
+            Point	aMPos = GetActiveWindow()->PixelToLogic( maMousePos );
+            USHORT	nHitLog = (USHORT) GetActiveWindow()->PixelToLogic( Size(
                 FuPoor::HITPIX, 0 ) ).Width();
-            USHORT  nHelpLine;
+            USHORT	nHelpLine;
 
             mbMousePosFreezed = FALSE;
 
@@ -926,7 +926,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_DRAW_FONTWORK:
         case SID_DRAW_FONTWORK_VERTICAL:
         {
-            svx::FontworkBar::execute( mpView, rReq, GetViewFrame()->GetBindings() );       // SJ: can be removed  (I think)
+            svx::FontworkBar::execute( mpView, rReq, GetViewFrame()->GetBindings() );		// SJ: can be removed  (I think)
             Cancel();
             rReq.Done();
         }

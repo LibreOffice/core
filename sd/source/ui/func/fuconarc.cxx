@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,11 +66,11 @@ TYPEINIT1( FuConstructArc, FuConstruct );
 \************************************************************************/
 
 FuConstructArc::FuConstructArc (
-    ViewShell*  pViewSh,
-    ::sd::Window*       pWin,
-    ::sd::View*         pView,
+    ViewShell*	pViewSh,
+    ::sd::Window*		pWin,
+    ::sd::View* 		pView,
     SdDrawDocument* pDoc,
-    SfxRequest&     rReq )
+    SfxRequest& 	rReq )
     : FuConstruct( pViewSh, pWin, pView, pDoc, rReq )
 {
 }
@@ -103,7 +103,7 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
         SFX_REQUEST_ARG (rReq, pPhiStart, SfxUInt32Item, ID_VAL_ANGLESTART, FALSE);
         SFX_REQUEST_ARG (rReq, pPhiEnd, SfxUInt32Item, ID_VAL_ANGLEEND, FALSE);
 
-        Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
+        Rectangle	aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
                                    pCenterY->GetValue () - pAxisY->GetValue () / 2,
                                    pCenterX->GetValue () + pAxisX->GetValue () / 2,
                                    pCenterY->GetValue () + pAxisY->GetValue () / 2);
@@ -144,7 +144,7 @@ BOOL FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
             SfxItemSet aAttr(mpDoc->GetPool());
             SetStyleSheet(aAttr, pObj);
 
-//-/            pObj->NbcSetAttributes(aAttr, FALSE);
+//-/			pObj->NbcSetAttributes(aAttr, FALSE);
             pObj->SetMergedItemSet(aAttr);
         }
 
@@ -227,25 +227,25 @@ void FuConstructArc::Activate()
 
     switch( nSlotId )
     {
-        case SID_DRAW_ARC      :
+        case SID_DRAW_ARC	   :
         case SID_DRAW_CIRCLEARC:
         {
             aObjKind = OBJ_CARC;
         }
         break;
 
-        case SID_DRAW_PIE             :
-        case SID_DRAW_PIE_NOFILL      :
-        case SID_DRAW_CIRCLEPIE       :
+        case SID_DRAW_PIE			  :
+        case SID_DRAW_PIE_NOFILL	  :
+        case SID_DRAW_CIRCLEPIE 	  :
         case SID_DRAW_CIRCLEPIE_NOFILL:
         {
             aObjKind = OBJ_SECT;
         }
         break;
 
-        case SID_DRAW_ELLIPSECUT       :
+        case SID_DRAW_ELLIPSECUT	   :
         case SID_DRAW_ELLIPSECUT_NOFILL:
-        case SID_DRAW_CIRCLECUT        :
+        case SID_DRAW_CIRCLECUT 	   :
         case SID_DRAW_CIRCLECUT_NOFILL :
         {
             aObjKind = OBJ_CCUT;
@@ -262,7 +262,7 @@ void FuConstructArc::Activate()
     mpView->SetCurrentObj((UINT16)aObjKind);
 
     FuConstruct::Activate();
-//  FuDraw::Activate();
+//	FuDraw::Activate();
 }
 
 /*************************************************************************
@@ -274,7 +274,7 @@ void FuConstructArc::Activate()
 void FuConstructArc::Deactivate()
 {
     FuConstruct::Deactivate();
-//  FuDraw::Deactivate();
+//	FuDraw::Deactivate();
 }
 
 // #97016#

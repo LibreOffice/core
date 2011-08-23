@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,27 +53,27 @@ public:
     SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress );
     virtual ~SdFilter();
 
-    sal_Bool                    IsProgress() const { return mbShowProgress; }
-    sal_Bool                    IsDraw() const { return mbIsDraw; }
-    sal_Bool                    IsImpress() const { return !mbIsDraw; }
+    sal_Bool					IsProgress() const { return mbShowProgress; }
+    sal_Bool					IsDraw() const { return mbIsDraw; }
+    sal_Bool					IsImpress() const { return !mbIsDraw; }
     virtual sal_Bool            Export() = 0;
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >             mxModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >    mxStatusIndicator;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >				mxModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >	mxStatusIndicator;
 
-    SfxMedium&                  mrMedium;
-    ::sd::DrawDocShell&         mrDocShell;
-    SdDrawDocument&             mrDocument;
-    sal_Bool                    mbIsDraw : 1;
-    sal_Bool                    mbShowProgress : 1;
+    SfxMedium&					mrMedium;
+    ::sd::DrawDocShell&			mrDocShell;
+    SdDrawDocument&				mrDocument;
+    sal_Bool					mbIsDraw : 1;
+    sal_Bool					mbShowProgress : 1;
 
-    ::osl::Module*              OpenLibrary( const ::rtl::OUString& rLibraryName ) const;
-    void                        CreateStatusIndicator();
+    ::osl::Module*				OpenLibrary( const ::rtl::OUString& rLibraryName ) const;
+    void						CreateStatusIndicator();
 
 private:
 
-    ::rtl::OUString             ImplGetFullLibraryName( const ::rtl::OUString& rLibraryName ) const;
+    ::rtl::OUString				ImplGetFullLibraryName( const ::rtl::OUString& rLibraryName ) const;
 
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,13 +64,13 @@ public:
 
 
     // XInitialization
-
+    
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
 
-
+    
     // XSlideRenderer
-
+    
     virtual css::uno::Reference<css::awt::XBitmap> SAL_CALL createPreview (
         const ::css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
         const css::awt::Size& rMaximumPreviewPixelSize,
@@ -88,7 +88,7 @@ public:
         double nSlideAspectRatio,
         const css::awt::Size& rMaximumPreviewPixelSize)
         throw (css::uno::RuntimeException);
-
+    
 private:
     PreviewRenderer maPreviewRenderer;
 

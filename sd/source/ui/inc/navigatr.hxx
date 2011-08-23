@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,24 +36,24 @@
 #include "sdtreelb.hxx"
 #include "pres.hxx"
 
-#define NAVSTATE_NONE           0x00000000
+#define NAVSTATE_NONE			0x00000000
 
-#define NAVBTN_PEN_ENABLED      0x00000010
-#define NAVBTN_PEN_DISABLED     0x00000020
-#define NAVBTN_PEN_CHECKED      0x00000040
-#define NAVBTN_PEN_UNCHECKED    0x00000080
+#define NAVBTN_PEN_ENABLED		0x00000010
+#define NAVBTN_PEN_DISABLED 	0x00000020
+#define NAVBTN_PEN_CHECKED		0x00000040
+#define NAVBTN_PEN_UNCHECKED	0x00000080
 
-#define NAVTLB_UPDATE           0x00000100
+#define NAVTLB_UPDATE			0x00000100
 
-#define NAVBTN_FIRST_ENABLED    0x00001000
-#define NAVBTN_FIRST_DISABLED   0x00002000
-#define NAVBTN_PREV_ENABLED     0x00004000
-#define NAVBTN_PREV_DISABLED    0x00008000
+#define NAVBTN_FIRST_ENABLED	0x00001000
+#define NAVBTN_FIRST_DISABLED	0x00002000
+#define NAVBTN_PREV_ENABLED 	0x00004000
+#define NAVBTN_PREV_DISABLED	0x00008000
 
-#define NAVBTN_LAST_ENABLED     0x00010000
-#define NAVBTN_LAST_DISABLED    0x00020000
-#define NAVBTN_NEXT_ENABLED     0x00040000
-#define NAVBTN_NEXT_DISABLED    0x00080000
+#define NAVBTN_LAST_ENABLED 	0x00010000
+#define NAVBTN_LAST_DISABLED	0x00020000
+#define NAVBTN_NEXT_ENABLED 	0x00040000
+#define NAVBTN_NEXT_DISABLED	0x00080000
 
 // forward
 namespace sd {
@@ -72,16 +72,16 @@ class NavDocInfo
 public:
             NavDocInfo() { mpDocShell = NULL; }
 
-    BOOL    HasName() { return( (BOOL) bName ); }
-    BOOL    IsActive() { return( (BOOL) bActive ); }
+    BOOL	HasName() { return( (BOOL) bName ); }
+    BOOL	IsActive() { return( (BOOL) bActive ); }
 
-    void    SetName( BOOL bOn = TRUE ) { bName = bOn; }
-    void    SetActive( BOOL bOn = TRUE ) { bActive = bOn; }
+    void	SetName( BOOL bOn = TRUE ) { bName = bOn; }
+    void	SetActive( BOOL bOn = TRUE ) { bActive = bOn; }
 
 private:
     friend class SdNavigatorWin;
-    BOOL            bName   : 1;
-    BOOL            bActive : 1;
+    BOOL			bName	: 1;
+    BOOL			bActive : 1;
     ::sd::DrawDocShell* mpDocShell;
 };
 
@@ -98,19 +98,19 @@ public:
         SfxBindings* pBindings );
     virtual ~SdNavigatorWin();
 
-    virtual void                KeyInput( const KeyEvent& rKEvt );
+    virtual void				KeyInput( const KeyEvent& rKEvt );
 
-    void                        InitTreeLB( const SdDrawDocument* pDoc );
-    void                        RefreshDocumentLB( const String* pDocName = NULL );
+    void						InitTreeLB( const SdDrawDocument* pDoc );
+    void						RefreshDocumentLB( const String* pDocName = NULL );
 
-    BOOL                        InsertFile(const String& rFileName);
+    BOOL						InsertFile(const String& rFileName);
 
-    NavigatorDragType           GetNavigatorDragType();
-    void                        SetNavigatorDragType(NavigatorDragType eType) { meDragType = eType; }
+    NavigatorDragType			GetNavigatorDragType();
+    void						SetNavigatorDragType(NavigatorDragType eType) { meDragType = eType; }
 
 protected:
-    virtual void                Resize();
-    virtual long                Notify(NotifyEvent& rNEvt);
+    virtual void				Resize();
+    virtual long				Notify(NotifyEvent& rNEvt);
 
 
 private:
@@ -118,32 +118,32 @@ private:
     friend class SdNavigatorControllerItem;
     friend class SdPageNameControllerItem;
 
-    ToolBox                     maToolbox;
-    SdPageObjsTLB               maTlbObjects;
-    ListBox                     maLbDocs;
+    ToolBox						maToolbox;
+    SdPageObjsTLB				maTlbObjects;
+    ListBox 					maLbDocs;
 
-    ::sd::NavigatorChildWindow*     mpChildWinContext;
-    Size                        maSize;
-    Size                        maMinSize;
-//  Size                        maFltWinSize;
-    BOOL                        mbDocImported;
-    String                      maDropFileName;
-    NavigatorDragType           meDragType;
-    List*                       mpDocList;
-    SfxBindings*                mpBindings;
-    SdNavigatorControllerItem*  mpNavigatorCtrlItem;
-    SdPageNameControllerItem*   mpPageNameCtrlItem;
+    ::sd::NavigatorChildWindow*		mpChildWinContext;
+    Size						maSize;
+    Size						maMinSize;
+//	Size						maFltWinSize;
+    BOOL						mbDocImported;
+    String						maDropFileName;
+    NavigatorDragType			meDragType;
+    List*						mpDocList;
+    SfxBindings*				mpBindings;
+    SdNavigatorControllerItem*	mpNavigatorCtrlItem;
+    SdPageNameControllerItem*	mpPageNameCtrlItem;
 
-    ImageList                   maImageList;
-    ImageList                   maImageListH;
+    ImageList					maImageList;
+    ImageList					maImageListH;
 
     /** This flag controls whether all shapes or only the named shapes are
         shown.
     */
     bool                        mbShowAllShapes;
 
-    USHORT                      GetDragTypeSdResId( NavigatorDragType eDT, BOOL bImage = FALSE );
-    NavDocInfo*                 GetDocInfo();
+    USHORT						GetDragTypeSdResId( NavigatorDragType eDT, BOOL bImage = FALSE );
+    NavDocInfo*					GetDocInfo();
 
                                 DECL_LINK( GetFocusObjectsHdl, void * );
                                 DECL_LINK( SelectToolboxHdl, void * );
@@ -155,9 +155,9 @@ private:
                                 DECL_LINK( MenuSelectHdl, Menu * );
                                 DECL_LINK( ShapeFilterCallback, Menu * );
 
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
-    void                        SetDragImage();
-    void                        ApplyImageList();
+    virtual void				DataChanged( const DataChangedEvent& rDCEvt );
+    void						SetDragImage();
+    void						ApplyImageList();
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace slideshow
         public:
             virtual ~State() {}
 
-            /// Abstract, numerically encoded state ID
+            /// Abstract, numerically encoded state ID 
             typedef ::std::size_t StateId;
 
             /** This method returns a numerical state identifier.
@@ -62,7 +62,7 @@ namespace slideshow
                 clients can assume that the object's state has
                 changed.
 
-                @return an abstract, numerical state ID.
+                @return an abstract, numerical state ID. 
              */
             virtual StateId getStateId() const = 0;
         };

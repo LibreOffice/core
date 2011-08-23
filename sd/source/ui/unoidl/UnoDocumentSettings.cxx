@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,8 +123,8 @@ namespace sd
         virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
 
     private:
-        Reference< XModel >     mxModel;
-        SdXImpressDocument*     mpModel;
+        Reference< XModel >		mxModel;
+        SdXImpressDocument*		mpModel;
     };
 
     Reference< XInterface > SAL_CALL DocumentSettings_createInstance( SdXImpressDocument* pModel )
@@ -155,60 +155,60 @@ enum SdDocumentSettingsPropertyHandles
     {
         static PropertyMapEntry aImpressSettingsInfoMap[] =
         {
-            { MAP_LEN("IsPrintDrawing"),        HANDLE_PRINTDRAWING,        &::getBooleanCppuType(),                0,  MID_PRINTER },
-            { MAP_LEN("IsPrintNotes"),          HANDLE_PRINTNOTES,          &::getBooleanCppuType(),                0,  MID_PRINTER },
-            { MAP_LEN("IsPrintHandout"),        HANDLE_PRINTHANDOUT,        &::getBooleanCppuType(),                0,  MID_PRINTER },
-            { MAP_LEN("IsPrintOutline"),        HANDLE_PRINTOUTLINE,        &::getBooleanCppuType(),                0,  MID_PRINTER },
-            { MAP_LEN("SlidesPerHandout"),      HANDLE_SLIDESPERHANDOUT,    &::getCppuType((const sal_Int16*)0),    0,  MID_PRINTER },
-            { MAP_LEN("HandoutsHorizontal"),    HANDLE_HANDOUTHORIZONTAL,   &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintDrawing"),		HANDLE_PRINTDRAWING,		&::getBooleanCppuType(),				0,	MID_PRINTER },
+            { MAP_LEN("IsPrintNotes"),			HANDLE_PRINTNOTES,			&::getBooleanCppuType(),				0,	MID_PRINTER },
+            { MAP_LEN("IsPrintHandout"),		HANDLE_PRINTHANDOUT,		&::getBooleanCppuType(),				0,	MID_PRINTER },
+            { MAP_LEN("IsPrintOutline"),		HANDLE_PRINTOUTLINE,		&::getBooleanCppuType(),				0,	MID_PRINTER },
+            { MAP_LEN("SlidesPerHandout"),		HANDLE_SLIDESPERHANDOUT,	&::getCppuType((const sal_Int16*)0),	0,	MID_PRINTER },
+            { MAP_LEN("HandoutsHorizontal"),	HANDLE_HANDOUTHORIZONTAL,	&::getBooleanCppuType(),				0,	MID_PRINTER },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
         static PropertyMapEntry aDrawSettingsInfoMap[] =
         {
-            { MAP_LEN("MeasureUnit"),           HANDLE_MEASUREUNIT,         &::getCppuType((const sal_Int16*)0),    0,  0 },
-            { MAP_LEN("ScaleNumerator"),        HANDLE_SCALE_NUM,           &::getCppuType((const sal_Int32*)0),    0,  0 },
-            { MAP_LEN("ScaleDenominator"),      HANDLE_SCALE_DOM,           &::getCppuType((const sal_Int32*)0),    0,  0 },
+            { MAP_LEN("MeasureUnit"),			HANDLE_MEASUREUNIT,			&::getCppuType((const sal_Int16*)0),	0,	0 },
+            { MAP_LEN("ScaleNumerator"),		HANDLE_SCALE_NUM,			&::getCppuType((const sal_Int32*)0),	0,	0 },
+            { MAP_LEN("ScaleDenominator"),		HANDLE_SCALE_DOM,			&::getCppuType((const sal_Int32*)0),	0,	0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
         static PropertyMapEntry aCommonSettingsInfoMap[] =
         {
-            { MAP_LEN("DefaultTabStop"),        HANDLE_TABSTOP,             &::getCppuType((const sal_Int32*)0),    0,  0 },
-            { MAP_LEN("PrinterName"),           HANDLE_PRINTERNAME,         &::getCppuType((const OUString*)0),     0,  0 },
-            { MAP_LEN("PrinterSetup"),          HANDLE_PRINTERJOB,          &::getCppuType((const uno::Sequence < sal_Int8 > *)0),  0, MID_PRINTER },
+            { MAP_LEN("DefaultTabStop"),		HANDLE_TABSTOP,				&::getCppuType((const sal_Int32*)0),	0,	0 },
+            { MAP_LEN("PrinterName"),			HANDLE_PRINTERNAME,			&::getCppuType((const OUString*)0),		0,  0 },
+            { MAP_LEN("PrinterSetup"),			HANDLE_PRINTERJOB,			&::getCppuType((const uno::Sequence < sal_Int8 > *)0),	0, MID_PRINTER },
 #ifndef SVX_LIGHT
 
-            { MAP_LEN("IsPrintPageName"),       HANDLE_PRINTPAGENAME,       &::getBooleanCppuType(),                0,  MID_PRINTER },
-            { MAP_LEN("IsPrintDate"),           HANDLE_PRINTDATE,           &::getBooleanCppuType(),                0,  MID_PRINTER },
-            { MAP_LEN("IsPrintTime"),           HANDLE_PRINTTIME,           &::getBooleanCppuType(),                0,  MID_PRINTER },
-            { MAP_LEN("IsPrintHiddenPages"),    HANDLE_PRINTHIDENPAGES,     &::getBooleanCppuType(),                0,  MID_PRINTER },
-            { MAP_LEN("IsPrintFitPage"),        HANDLE_PRINTFITPAGE,        &::getBooleanCppuType(),                0,  MID_PRINTER },
-            { MAP_LEN("IsPrintTilePage"),       HANDLE_PRINTTILEPAGE,       &::getBooleanCppuType(),                0,  MID_PRINTER },
-            { MAP_LEN("IsPrintBooklet"),        HANDLE_PRINTBOOKLET,        &::getBooleanCppuType(),                0,  MID_PRINTER },
-            { MAP_LEN("IsPrintBookletFront"),   HANDLE_PRINTBOOKLETFRONT,   &::getBooleanCppuType(),                0,  MID_PRINTER },
-            { MAP_LEN("IsPrintBookletBack"),    HANDLE_PRINTBOOKLETBACK,    &::getBooleanCppuType(),                0,  MID_PRINTER },
-            { MAP_LEN("PrintQuality"),          HANDLE_PRINTQUALITY,        &::getCppuType((const sal_Int32*)0),    0,  MID_PRINTER },
+            { MAP_LEN("IsPrintPageName"),		HANDLE_PRINTPAGENAME,		&::getBooleanCppuType(),				0,	MID_PRINTER },
+            { MAP_LEN("IsPrintDate"),			HANDLE_PRINTDATE,			&::getBooleanCppuType(),				0,	MID_PRINTER },
+            { MAP_LEN("IsPrintTime"),			HANDLE_PRINTTIME,			&::getBooleanCppuType(),				0,	MID_PRINTER },
+            { MAP_LEN("IsPrintHiddenPages"),	HANDLE_PRINTHIDENPAGES,		&::getBooleanCppuType(),				0,	MID_PRINTER },
+            { MAP_LEN("IsPrintFitPage"),		HANDLE_PRINTFITPAGE,		&::getBooleanCppuType(),				0,	MID_PRINTER },
+            { MAP_LEN("IsPrintTilePage"),		HANDLE_PRINTTILEPAGE,		&::getBooleanCppuType(),				0,	MID_PRINTER },
+            { MAP_LEN("IsPrintBooklet"),		HANDLE_PRINTBOOKLET,		&::getBooleanCppuType(),				0,	MID_PRINTER },
+            { MAP_LEN("IsPrintBookletFront"),	HANDLE_PRINTBOOKLETFRONT,	&::getBooleanCppuType(),				0,	MID_PRINTER },
+            { MAP_LEN("IsPrintBookletBack"),	HANDLE_PRINTBOOKLETBACK,	&::getBooleanCppuType(),				0,	MID_PRINTER },
+            { MAP_LEN("PrintQuality"),			HANDLE_PRINTQUALITY,		&::getCppuType((const sal_Int32*)0),	0,	MID_PRINTER },
 #endif
-            { MAP_LEN("ColorTableURL"),         HANDLE_COLORTABLEURL,       &::getCppuType((const OUString*)0),     0,  0 },
-            { MAP_LEN("DashTableURL"),          HANDLE_DASHTABLEURL,        &::getCppuType((const OUString*)0),     0,  0 },
-            { MAP_LEN("LineEndTableURL"),       HANDLE_LINEENDTABLEURL,     &::getCppuType((const OUString*)0),     0,  0 },
-            { MAP_LEN("HatchTableURL"),         HANDLE_HATCHTABLEURL,       &::getCppuType((const OUString*)0),     0,  0 },
-            { MAP_LEN("GradientTableURL"),      HANDLE_GRADIENTTABLEURL,    &::getCppuType((const OUString*)0),     0,  0 },
-            { MAP_LEN("BitmapTableURL"),        HANDLE_BITMAPTABLEURL,      &::getCppuType((const OUString*)0),     0,  0 },
+            { MAP_LEN("ColorTableURL"),			HANDLE_COLORTABLEURL,		&::getCppuType((const OUString*)0),		0,	0 },
+            { MAP_LEN("DashTableURL"),			HANDLE_DASHTABLEURL,		&::getCppuType((const OUString*)0),		0,	0 },
+            { MAP_LEN("LineEndTableURL"),		HANDLE_LINEENDTABLEURL,		&::getCppuType((const OUString*)0),		0,	0 },
+            { MAP_LEN("HatchTableURL"),			HANDLE_HATCHTABLEURL,		&::getCppuType((const OUString*)0),		0,	0 },
+            { MAP_LEN("GradientTableURL"),		HANDLE_GRADIENTTABLEURL,	&::getCppuType((const OUString*)0),		0,	0 },
+            { MAP_LEN("BitmapTableURL"),		HANDLE_BITMAPTABLEURL,		&::getCppuType((const OUString*)0),		0,	0 },
 
-            { MAP_LEN("ForbiddenCharacters"),   HANDLE_FORBIDDENCHARS,      &::getCppuType((const Reference< XForbiddenCharacters >*)0),    0, 0 },
-            { MAP_LEN("ApplyUserData"),         HANDLE_APPLYUSERDATA,       &::getBooleanCppuType(),                0,  0 },
+            { MAP_LEN("ForbiddenCharacters"),	HANDLE_FORBIDDENCHARS,		&::getCppuType((const Reference< XForbiddenCharacters >*)0),	0, 0 },
+            { MAP_LEN("ApplyUserData"),			HANDLE_APPLYUSERDATA,		&::getBooleanCppuType(),				0,	0 },
 
-            { MAP_LEN("PageNumberFormat"),      HANDLE_PAGENUMFMT,          &::getCppuType((const sal_Int32*)0),    0,  0 },
-            { MAP_LEN("ParagraphSummation"),    HANDLE_PARAGRAPHSUMMATION,  &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("CharacterCompressionType"),HANDLE_CHARCOMPRESS,      &::getCppuType((sal_Int16*)0),          0,  0 },
-            { MAP_LEN("IsKernAsianPunctuation"),HANDLE_ASIANPUNCT,          &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("UpdateFromTemplate"),    HANDLE_UPDATEFROMTEMPLATE,  &::getBooleanCppuType(),                0,  0 },
+            { MAP_LEN("PageNumberFormat"),		HANDLE_PAGENUMFMT,			&::getCppuType((const sal_Int32*)0),	0,  0 },
+            { MAP_LEN("ParagraphSummation"),	HANDLE_PARAGRAPHSUMMATION,	&::getBooleanCppuType(),	            0,  0 },
+            { MAP_LEN("CharacterCompressionType"),HANDLE_CHARCOMPRESS,		&::getCppuType((sal_Int16*)0),	        0,  0 },
+            { MAP_LEN("IsKernAsianPunctuation"),HANDLE_ASIANPUNCT,			&::getBooleanCppuType(),	            0,  0 },
+            { MAP_LEN("UpdateFromTemplate"),	HANDLE_UPDATEFROMTEMPLATE,	&::getBooleanCppuType(),	            0,  0 },
             { MAP_LEN("PrinterIndependentLayout"),HANDLE_PRINTER_INDEPENDENT_LAYOUT,&::getCppuType((const sal_Int16*)0), 0,  0 },
             // --> PB 2004-08-23 #i33095#
-            { MAP_LEN("LoadReadonly"),          HANDLE_LOAD_READONLY,       &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("SaveVersionOnClose"),    HANDLE_SAVE_VERSION,        &::getBooleanCppuType(),                0,  0 },
+            { MAP_LEN("LoadReadonly"),			HANDLE_LOAD_READONLY,		&::getBooleanCppuType(),				0,  0 },
+            { MAP_LEN("SaveVersionOnClose"),	HANDLE_SAVE_VERSION,		&::getBooleanCppuType(),				0,  0 },
             // <--
             { NULL, 0, 0, NULL, 0, 0 }
         };
@@ -223,7 +223,7 @@ enum SdDocumentSettingsPropertyHandles
 using namespace ::sd;
 
 DocumentSettings::DocumentSettings( SdXImpressDocument* pModel )
-:   PropertySetHelper( createSettingsInfoImpl( !pModel->IsImpressDocument() ) ),
+:	PropertySetHelper( createSettingsInfoImpl( !pModel->IsImpressDocument() ) ),
     mxModel( pModel ),
     mpModel( pModel )
 {
@@ -698,9 +698,9 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                             else
                             {
                                 pItemSet = new SfxItemSet(pDoc->GetPool(),
-                                            SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
-                                            SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
-                                            ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
+                                            SID_PRINTER_NOTFOUND_WARN,	SID_PRINTER_NOTFOUND_WARN,
+                                            SID_PRINTER_CHANGESTODOC,	SID_PRINTER_CHANGESTODOC,
+                                            ATTR_OPTIONS_PRINT, 		ATTR_OPTIONS_PRINT,
                                             0 );
                             }
 
@@ -867,7 +867,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
     if( bOptionsChanged )
     {
-        if( !pPrinter )
+        if( !pPrinter )	
             pPrinter = pDocSh->GetPrinter( TRUE );
         SfxItemSet aNewOptions( pPrinter->GetOptions() );
         aNewOptions.Put( aOptionsPrintItem );

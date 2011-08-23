@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,16 +67,16 @@ private:
 
 
 
-// static
+// static 
 SdGlobalResourceContainer& SdGlobalResourceContainer::Instance (void)
 {
-    DBG_ASSERT(Implementation::mpInstance!=NULL,
+    DBG_ASSERT(Implementation::mpInstance!=NULL, 
         "SdGlobalResourceContainer::Instance(): instance has been deleted");
     // Maybe we should throw an exception when the instance has been deleted.
     return *Implementation::mpInstance;
 }
 
-SdGlobalResourceContainer*
+SdGlobalResourceContainer* 
     SdGlobalResourceContainer::Implementation::mpInstance = NULL;
 
 
@@ -88,7 +88,7 @@ void SdGlobalResourceContainer::AddResource (
     ::std::auto_ptr<SdGlobalResource> pResource)
 {
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
-
+    
     Implementation::ResourceList::iterator iResource;
     iResource = ::std::find (
         mpImpl->maResources.begin(),
@@ -115,7 +115,7 @@ void SdGlobalResourceContainer::AddResource (
     ::boost::shared_ptr<SdGlobalResource> pResource)
 {
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
-
+    
     Implementation::SharedResourceList::iterator iResource;
     iResource = ::std::find (
         mpImpl->maSharedResources.begin(),
@@ -162,10 +162,10 @@ SdGlobalResourceContainer::SdGlobalResourceContainer (void)
 
 
 
-SdGlobalResourceContainer::~SdGlobalResourceContainer (void)
+SdGlobalResourceContainer::~SdGlobalResourceContainer (void) 
 {
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
-
+    
     // Release the resources in reversed order of their addition to the
     // container.  This is because a resource A added before resource B
     // may have been created due to a request of B.  Thus B depends on A and

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,9 +72,9 @@ TYPEINIT1( FuConstructBezierPolygon, FuConstruct );
 \************************************************************************/
 
 FuConstructBezierPolygon::FuConstructBezierPolygon (
-    ViewShell* pViewSh,
+    ViewShell* pViewSh, 
     ::sd::Window* pWin,
-    ::sd::View* pView,
+    ::sd::View* pView, 
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq),
@@ -248,7 +248,7 @@ BOOL FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
         mpView->DeleteMarked();
         bDeleted = true;
     }
-
+    
     if ((!bPermanent && bCreated) || bDeleted)
     {
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
@@ -444,7 +444,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
                     basegfx::B2DPolygon aInnerPoly;
 
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
-
+                    
                     aInnerPoly.appendBezierSegment(
                         basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top()),
                         basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Top()),
@@ -463,7 +463,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
                     {
                         aInnerPoly.setClosed(true);
                     }
-
+                    
                     aPoly.append(aInnerPoly);
                     break;
                 }
@@ -471,14 +471,14 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
                 case SID_DRAW_XPOLYGON_NOFILL:
                 {
                     basegfx::B2DPolygon aInnerPoly;
-
+                    
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Top()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Right(), rRectangle.Center().Y()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Right(), rRectangle.Bottom()));
-
+                    
                     if(SID_DRAW_XPOLYGON_NOFILL == nID)
                     {
                         aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()));
@@ -497,7 +497,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
                     basegfx::B2DPolygon aInnerPoly;
                     const sal_Int32 nWdt(rRectangle.GetWidth());
                     const sal_Int32 nHgt(rRectangle.GetHeight());
-
+                    
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 30) / 100, rRectangle.Top() + (nHgt * 70) / 100));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top() + (nHgt * 15) / 100));
@@ -506,7 +506,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 80) / 100, rRectangle.Top() + (nHgt * 50) / 100));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 80) / 100, rRectangle.Top() + (nHgt * 75) / 100));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Bottom(), rRectangle.Right()));
-
+                    
                     if(SID_DRAW_POLYGON_NOFILL == nID)
                     {
                         aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()));

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,18 +40,18 @@ class SdDrawDocument;
 class SdInsertPagesObjsDlg : public ModalDialog
 {
 private:
-    SdPageObjsTLB           aLbTree;
-    CheckBox                aCbxLink;
-    CheckBox                aCbxMasters;
-    OKButton                aBtnOk;
-    CancelButton            aBtnCancel;
-    HelpButton              aBtnHelp;
+    SdPageObjsTLB			aLbTree;
+    CheckBox				aCbxLink;
+    CheckBox				aCbxMasters;
+    OKButton				aBtnOk;
+    CancelButton			aBtnCancel;
+    HelpButton				aBtnHelp;
 
-    SfxMedium*              pMedium;
-    const SdDrawDocument*   mpDoc;
-    const String&           rName;
+    SfxMedium*				pMedium;
+    const SdDrawDocument*	mpDoc;
+    const String&			rName;
 
-    void                    Reset();
+    void					Reset();
     DECL_LINK( SelectObjectHdl, void * );
 
 public:
@@ -61,9 +61,9 @@ public:
                                 const String& rFileName );
                 ~SdInsertPagesObjsDlg();
 
-    List*       GetList( USHORT nType );
-    BOOL        IsLink();
-    BOOL        IsRemoveUnnessesaryMasterPages() const;
+    List*   	GetList( USHORT nType );
+    BOOL		IsLink();
+    BOOL 		IsRemoveUnnessesaryMasterPages() const;
 };
 
 

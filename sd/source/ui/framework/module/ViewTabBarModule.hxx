@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ namespace sd { namespace framework {
 */
 class ViewTabBarModule
     : private sd::MutexOwner,
-      public ViewTabBarModuleInterfaceBase
+      public ViewTabBarModuleInterfaceBase      
 {
 public:
     /** Create a new module that controlls the view tab bar above the view
@@ -74,10 +74,10 @@ public:
         const css::uno::Reference<
             css::drawing::framework::XResourceId>& rxViewTabBarId);
     virtual ~ViewTabBarModule (void);
-
+    
     virtual void SAL_CALL disposing (void);
 
-
+    
     // XConfigurationChangeListener
 
     virtual void SAL_CALL notifyConfigurationChange (

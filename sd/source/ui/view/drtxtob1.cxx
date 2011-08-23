@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -318,14 +318,14 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         break;
 
         case FN_NUM_BULLET_ON:
-            if( pOLV )
+            if( pOLV ) 
                 pOLV->ToggleBullets();
         break;
 
         case SID_GROW_FONT_SIZE:
         case SID_SHRINK_FONT_SIZE:
         {
-            const SvxFontListItem* pFonts = (const SvxFontListItem*)mpViewShell->GetDocSh()->GetItem( SID_ATTR_CHAR_FONTLIST );
+            const SvxFontListItem* pFonts =	(const SvxFontListItem*)mpViewShell->GetDocSh()->GetItem( SID_ATTR_CHAR_FONTLIST );
             const FontList* pFontList = pFonts ? pFonts->GetFontList(): 0;
             if( pFontList )
             {
@@ -345,7 +345,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             if (aReplaceText.Len() > 0)
                 ReplaceTextWithSynonym( pOLV->GetEditView(), aReplaceText );
         }
-        break;
+        break;        
 
         default:
         {

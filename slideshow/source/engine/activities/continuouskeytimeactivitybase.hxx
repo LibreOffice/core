@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,24 +56,24 @@ namespace slideshow
                 This method will be called from perform(), already
                 equipped with the modified time (nMinNumberOfFrames, repeat,
                 acceleration and deceleration taken into account).
-
+                
                 @param nIndex
                 Current index of the key times/key values.
-
+                
                 @param nFractionalIndex
                 Fractional value from the [0,1] range, specifying
                 the position between nIndex and nIndex+1.
-
+                
                 @param nRepeatCount
                 Number of full repeats already performed
             */
-            virtual void perform( sal_uInt32    nIndex,
-                                  double        nFractionalIndex,
-                                  sal_uInt32    nRepeatCount ) const = 0;
+            virtual void perform( sal_uInt32	nIndex,
+                                  double 	   	nFractionalIndex,
+                                  sal_uInt32 	nRepeatCount ) const = 0;
 
             /// From SimpleContinuousActivityBase class
-            virtual void simplePerform( double      nSimpleTime,
-                                        sal_uInt32  nRepeatCount ) const;
+            virtual void simplePerform( double 		nSimpleTime, 
+                                        sal_uInt32 	nRepeatCount ) const;
 
         private:
             const ::basegfx::tools::KeyStopLerp maLerper;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,37 +50,37 @@ namespace slideshow
 
             virtual double calcTimeLag() const;
             virtual bool perform();
-
+            
         protected:
             /** Hook for derived classes
 
                 This method will be called from perform().
-
+                
                 @param nSimpleTime
                 Simple animation time, without repeat,
                 acceleration or deceleration applied. This value
                 is always in the [0,1] range, the repeat is
                 accounted for with the nRepeatCount parameter.
-
+                
                 @param nRepeatCount
                 Number of full repeats already performed
             */
             virtual void simplePerform( double nSimpleTime, sal_uInt32 nRepeatCount ) const = 0;
-
+            
             virtual void startAnimation();
 
         private:
             /// Time elapsed since activity started
-            ::canvas::tools::ElapsedTime    maTimer;
+            ::canvas::tools::ElapsedTime	maTimer;
 
             /// Simple duration of activity
-            const double                    mnMinSimpleDuration;
+            const double					mnMinSimpleDuration;
 
             /// Minimal number of frames to show (see ActivityParameters)
-            const sal_uInt32                mnMinNumberOfFrames;
+            const sal_uInt32				mnMinNumberOfFrames;
 
             /// Actual number of frames shown until now.
-            sal_uInt32                      mnCurrPerformCalls;
+            sal_uInt32						mnCurrPerformCalls;
         };
     }
 }

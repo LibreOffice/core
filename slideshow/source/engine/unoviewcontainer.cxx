@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@ namespace slideshow
             const UnoViewVector::iterator aEnd( maViews.end() );
 
             // already added?
-            if( ::std::find_if( maViews.begin(),
-                                aEnd,
+            if( ::std::find_if( maViews.begin(), 
+                                aEnd, 
                                 ::boost::bind(
                                     ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
                                     ::boost::cref( rView->getUnoView() ),
@@ -75,15 +75,15 @@ namespace slideshow
             return true;
         }
 
-        UnoViewSharedPtr UnoViewContainer::removeView( const uno::Reference< presentation::XSlideShowView >& xView )
+        UnoViewSharedPtr UnoViewContainer::removeView( const uno::Reference< presentation::XSlideShowView >& xView )        
         {
             // check whether same view is already added
             const UnoViewVector::iterator aEnd( maViews.end() );
             UnoViewVector::iterator aIter;
 
             // added in the first place?
-            if( (aIter=::std::find_if( maViews.begin(),
-                                       aEnd,
+            if( (aIter=::std::find_if( maViews.begin(), 
+                                       aEnd, 
                                        ::boost::bind(
                                            ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
                                            ::boost::cref( xView ),
@@ -95,10 +95,10 @@ namespace slideshow
                 return UnoViewSharedPtr();
             }
 
-            OSL_ENSURE(
-                ::std::count_if(
-                    maViews.begin(),
-                    aEnd,
+            OSL_ENSURE( 
+                ::std::count_if( 
+                    maViews.begin(), 
+                    aEnd, 
                     ::boost::bind(
                         ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
                         ::boost::cref( xView ),
@@ -120,16 +120,16 @@ namespace slideshow
             // remove locally
             const UnoViewVector::iterator aEnd( maViews.end() );
             UnoViewVector::iterator aIter;
-            if( (aIter=::std::find( maViews.begin(),
-                                    aEnd,
+            if( (aIter=::std::find( maViews.begin(), 
+                                    aEnd, 
                                     rView )) == aEnd )
             {
                 // view seemingly was not added, failed
                 return false;
             }
 
-            OSL_ENSURE( ::std::count( maViews.begin(),
-                                      aEnd,
+            OSL_ENSURE( ::std::count( maViews.begin(), 
+                                      aEnd, 
                                       rView ) == 1,
                         "UnoViewContainer::removeView(): View was added multiple times" );
 
@@ -144,7 +144,7 @@ namespace slideshow
             ::std::for_each( maViews.begin(),
                              maViews.end(),
                              ::boost::mem_fn(&UnoView::_dispose) );
-            maViews.clear();
+            maViews.clear();            
         }
     }
 }

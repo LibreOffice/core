@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ void ConfigurationControllerBroadcaster::AddListener(
             OUString::createFromAscii("invalid listener"),
             mxConfigurationController,
             0);
-
+    
     if (maListenerMap.find(rsEventType) == maListenerMap.end())
         maListenerMap[rsEventType] = ListenerList();
     ListenerDescriptor aDescriptor;
@@ -81,7 +81,7 @@ void ConfigurationControllerBroadcaster::RemoveListener(
             OUString::createFromAscii("invalid listener"),
             mxConfigurationController,
             0);
-
+    
     ListenerMap::iterator iMap;
     ListenerList::iterator iList;
     for (iMap=maListenerMap.begin(); iMap!=maListenerMap.end(); ++iMap)
@@ -144,7 +144,7 @@ void ConfigurationControllerBroadcaster::NotifyListeners (const ConfigurationCha
         ListenerList aList (iMap->second.begin(), iMap->second.end());
         NotifyListeners(aList,rEvent);
     }
-
+    
     // Notify the universal listeners.
     iMap = maListenerMap.find(OUString());
     if (iMap != maListenerMap.end())

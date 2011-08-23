@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,18 +58,18 @@ public:
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxCanvas);
 
     void RequestUpdate (const sal_Bool bUpdateAll);
-
+    
 private:
     CanvasUpdateRequester (const css::uno::Reference<css::rendering::XSpriteCanvas>& rxCanvas);
     ~CanvasUpdateRequester (void);
     class Deleter; friend class Deleter;
-
+    
     typedef ::std::vector<
         ::std::pair<
-            css::uno::Reference<css::rendering::XSpriteCanvas>,
+            css::uno::Reference<css::rendering::XSpriteCanvas>, 
            ::boost::shared_ptr<CanvasUpdateRequester> > > RequesterMap;
     static RequesterMap maRequesterMap;
-
+    
     css::uno::Reference<css::rendering::XSpriteCanvas> mxCanvas;
     ULONG mnUserEventId;
     sal_Bool mbUpdateFlag;

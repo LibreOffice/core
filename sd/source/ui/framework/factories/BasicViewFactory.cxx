@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -155,7 +155,7 @@ BasicViewFactory::BasicViewFactory (
 BasicViewFactory::~BasicViewFactory (void)
 {
 }
-
+    
 
 
 
@@ -174,7 +174,7 @@ void SAL_CALL BasicViewFactory::disposing (void)
     {
         ReleaseView(*iView, true);
     }
-
+    
     // Release the view shell container.  At this point no one other than us
     // should hold references to the view shells (at the moment this is a
     // trivial requirement, because no one other then us holds a shared
@@ -217,10 +217,10 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
         pWindow = VCLUnoHelper::GetWindow(xPane->getWindow());
 
     // Get the view frame.
-    SfxViewFrame* pFrame = NULL;
+    SfxViewFrame* pFrame = NULL; 
     if (mpBase != NULL)
         pFrame = mpBase->GetViewFrame();
-
+    
     if (pFrame != NULL && mpBase!=NULL && pWindow!=NULL)
     {
         // Try to get the view from the cache.
@@ -231,7 +231,7 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
         {
             pDescriptor = CreateView(rxViewId, *pFrame, *pWindow, xPane, pFrameView);
         }
-
+        
         if (pDescriptor.get() != NULL)
             xView = pDescriptor->mxView;
 
@@ -242,7 +242,7 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
         else
             pWindow->Resize();
     }
-
+    
     return xView;
 }
 
@@ -356,14 +356,14 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
     FrameView* pFrameView)
 {
     ::boost::shared_ptr<ViewDescriptor> pDescriptor (new ViewDescriptor());
-
+    
     pDescriptor->mpViewShell = CreateViewShell(
         rxViewId,
         rFrame,
         rWindow,
         pFrameView);
     pDescriptor->mxViewId = rxViewId;
-
+        
     if (pDescriptor->mpViewShell.get() != NULL)
     {
         const bool bIsCenterPane (
@@ -478,7 +478,7 @@ void BasicViewFactory::ReleaseView (
     bool bDoNotCache)
 {
     bool bIsCacheable (!bDoNotCache && IsCacheable(rpDescriptor));
-
+    
     if (bIsCacheable)
     {
         Reference<XRelocatableResource> xResource (rpDescriptor->mxView, UNO_QUERY);
@@ -498,14 +498,14 @@ void BasicViewFactory::ReleaseView (
             bIsCacheable = false;
         }
     }
-
+    
     if ( ! bIsCacheable)
     {
         // Shut down the current view shell.
         rpDescriptor->mpViewShell->Shutdown ();
         mpBase->GetDocShell()->Disconnect(rpDescriptor->mpViewShell.get());
         mpBase->GetViewShellManager()->DeactivateViewShell(rpDescriptor->mpViewShell.get());
-
+        
         Reference<XComponent> xComponent (rpDescriptor->mxView, UNO_QUERY);
         if (xComponent.is())
             xComponent->dispose();
@@ -583,7 +583,7 @@ bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& r
             if (xResource->relocateToAnchor(xNewAnchor))
                 bRelocationSuccessfull = true;
         }
-
+        
         if ( ! bRelocationSuccessfull)
         {
             ReleaseView(pDescriptor, true);

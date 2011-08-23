@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,21 +62,21 @@ namespace slideshow
 
                 const double nMax( ::std::max(nRed,::std::max(nGreen, nBlue)) );
                 const double nMin( ::std::min(nRed,::std::min(nGreen, nBlue)) );
-
+                
                 const double nDelta( nMax - nMin );
 
                 aRes.mnLuminance = (nMax + nMin) / 2.0;
-
+    
                 if( ::basegfx::fTools::equalZero( nDelta ) )
                 {
                     aRes.mnSaturation = 0.0;
-
+        
                     // hue undefined (achromatic case)
                     aRes.mnHue = 0.0;
                 }
                 else
                 {
-                    aRes.mnSaturation = aRes.mnLuminance > 0.5 ?
+                    aRes.mnSaturation = aRes.mnLuminance > 0.5 ? 
                         nDelta/(2.0-nMax-nMin) :
                         nDelta/(nMax + nMin);
 
@@ -111,7 +111,7 @@ namespace slideshow
                     return nValue2;
                 else if( nHue < 240.0 )
                     return nValue1 + (nValue2 - nValue1)*(240.0 - nHue)/60.0;
-                else
+                else 
                     return nValue1;
             }
 
@@ -126,9 +126,9 @@ namespace slideshow
                 RGBColor::RGBTriple aRes;
 
                 aRes.mnRed = hsl2rgbHelper( nVal2,
-                                            nVal1,
+                                            nVal1, 
                                             nHue + 120.0 );
-                aRes.mnGreen = hsl2rgbHelper( nVal2,
+                aRes.mnGreen = hsl2rgbHelper( nVal2, 
                                               nVal1,
                                               nHue );
                 aRes.mnBlue = hsl2rgbHelper( nVal2,
@@ -141,23 +141,23 @@ namespace slideshow
             /// Truncate range of value to [0,1]
             double truncateRangeStd( double nVal )
             {
-                return ::std::max( 0.0,
-                                   ::std::min( 1.0,
+                return ::std::max( 0.0, 
+                                   ::std::min( 1.0, 
                                                nVal ) );
             }
 
             /// Truncate range of value to [0,360]
             double truncateRangeHue( double nVal )
             {
-                return ::std::max( 0.0,
-                                   ::std::min( 360.0,
+                return ::std::max( 0.0, 
+                                   ::std::min( 360.0, 
                                                nVal ) );
             }
 
             /// convert RGB color to sal_uInt8, truncate range appropriately before
             sal_uInt8 colorToInt( double nCol )
             {
-                return static_cast< sal_uInt8 >(
+                return static_cast< sal_uInt8 >( 
                     ::basegfx::fround( truncateRangeStd( nCol ) * 255.0 ) );
             }
         }
@@ -180,7 +180,7 @@ namespace slideshow
             mnLuminance( nLuminance )
         {
         }
-
+       
         HSLColor::HSLColor() :
             maHSLTriple( 0.0, 0.0, 0.0 ),
             mnMagicValue( getMagic( maHSLTriple.mnLuminance,
@@ -203,16 +203,16 @@ namespace slideshow
                                     maHSLTriple.mnSaturation ) )
         {
         }
-
+        
         HSLColor::HSLColor( const RGBColor& rColor ) :
-            maHSLTriple( rgb2hsl( truncateRangeStd( rColor.getRed() ),
+            maHSLTriple( rgb2hsl( truncateRangeStd( rColor.getRed() ), 
                                   truncateRangeStd( rColor.getGreen() ),
                                   truncateRangeStd( rColor.getBlue() ) ) ),
             mnMagicValue( getMagic( maHSLTriple.mnLuminance,
                                     maHSLTriple.mnSaturation ) )
         {
         }
-
+                         
         double HSLColor::getHue() const
         {
             return maHSLTriple.mnHue;
@@ -233,8 +233,8 @@ namespace slideshow
             if( ::basegfx::fTools::equalZero( getSaturation() ) )
                 return getLuminance();
 
-            return hsl2rgbHelper( 2.0*getLuminance() - mnMagicValue,
-                                  mnMagicValue,
+            return hsl2rgbHelper( 2.0*getLuminance() - mnMagicValue, 
+                                  mnMagicValue, 
                                   getHue() + 120.0 );
         }
 
@@ -243,8 +243,8 @@ namespace slideshow
             if( ::basegfx::fTools::equalZero( getSaturation() ) )
                 return getLuminance();
 
-            return hsl2rgbHelper( 2.0*getLuminance() - mnMagicValue,
-                                  mnMagicValue,
+            return hsl2rgbHelper( 2.0*getLuminance() - mnMagicValue, 
+                                  mnMagicValue, 
                                   getHue() );
         }
 
@@ -253,8 +253,8 @@ namespace slideshow
             if( ::basegfx::fTools::equalZero( getSaturation() ) )
                 return getLuminance();
 
-            return hsl2rgbHelper( 2.0*getLuminance() - mnMagicValue,
-                                  mnMagicValue,
+            return hsl2rgbHelper( 2.0*getLuminance() - mnMagicValue, 
+                                  mnMagicValue, 
                                   getHue() - 120.0 );
         }
 
@@ -265,7 +265,7 @@ namespace slideshow
                                                  getLuminance() ) );
             return RGBColor( aColor.mnRed, aColor.mnGreen, aColor.mnBlue );
         }
-
+         
         RGBColor::RGBColor(const RGBColor& rLHS)
             : maRGBTriple( rLHS.maRGBTriple )
         {
@@ -277,7 +277,7 @@ namespace slideshow
             maRGBTriple.mnGreen = rLHS.getGreen();
             maRGBTriple.mnBlue = rLHS.getBlue();
             return *this;
-        }
+        }        
 
         HSLColor operator+( const HSLColor& rLHS, const HSLColor& rRHS )
         {
@@ -303,7 +303,7 @@ namespace slideshow
         HSLColor interpolate( const HSLColor& rFrom, const HSLColor& rTo, double t, bool bCCW )
         {
             const double nFromHue( rFrom.getHue() );
-            const double nToHue  ( rTo.getHue()   );
+            const double nToHue	 ( rTo.getHue()   );
 
             double nHue=0.0;
 
@@ -341,7 +341,7 @@ namespace slideshow
                              (1.0-t)*rFrom.getLuminance() + t*rTo.getLuminance() );
         }
 
-
+        
 
         // RGBColor
         // ===============================================
@@ -353,14 +353,14 @@ namespace slideshow
             mnBlue()
         {
         }
-
+       
         RGBColor::RGBTriple::RGBTriple( double nRed, double nGreen, double nBlue ) :
             mnRed( nRed ),
             mnGreen( nGreen ),
             mnBlue( nBlue )
         {
         }
-
+       
         RGBColor::RGBColor() :
             maRGBTriple( 0.0, 0.0, 0.0 )
         {
@@ -377,14 +377,14 @@ namespace slideshow
             maRGBTriple( nRed, nGreen, nBlue )
         {
         }
-
+        
         RGBColor::RGBColor( const HSLColor& rColor ) :
-            maRGBTriple( hsl2rgb( truncateRangeHue( rColor.getHue() ),
+            maRGBTriple( hsl2rgb( truncateRangeHue( rColor.getHue() ), 
                                   truncateRangeStd( rColor.getSaturation() ),
                                   truncateRangeStd( rColor.getLuminance() ) ) )
         {
         }
-
+                         
         double RGBColor::getHue() const
         {
             return rgb2hsl( getRed(),
@@ -427,7 +427,7 @@ namespace slideshow
                                                  getGreen(),
                                                  getBlue() ) );
             return HSLColor( aColor.mnHue, aColor.mnSaturation, aColor.mnLuminance );
-        }
+        }        
 
         ::cppcanvas::Color::IntSRGBA RGBColor::getIntegerColor() const
         {
@@ -436,7 +436,7 @@ namespace slideshow
                                            colorToInt( getBlue() ),
                                            255 );
         }
-
+        
         RGBColor operator+( const RGBColor& rLHS, const RGBColor& rRHS )
         {
             return RGBColor( rLHS.getRed() + rRHS.getRed(),
@@ -460,7 +460,7 @@ namespace slideshow
 
         RGBColor interpolate( const RGBColor& rFrom, const RGBColor& rTo, double t )
         {
-            return RGBColor( (1.0-t)*rFrom.getRed() + t*rTo.getRed(),
+            return RGBColor( (1.0-t)*rFrom.getRed() + t*rTo.getRed(), 
                              (1.0-t)*rFrom.getGreen() + t*rTo.getGreen(),
                              (1.0-t)*rFrom.getBlue() + t*rTo.getBlue() );
         }

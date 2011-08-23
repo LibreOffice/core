@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace slideshow
     namespace internal
     {
         template<typename LayerFunc,
-                 typename ShapeFunc> void LayerManager::manageViews(
+                 typename ShapeFunc> void LayerManager::manageViews( 
                      LayerFunc layerFunc,
                      ShapeFunc shapeFunc )
         {
@@ -75,7 +75,7 @@ namespace slideshow
                     pCurrLayer = pLayer;
                     pCurrViewLayer = layerFunc(pCurrLayer);
                 }
-
+                    
                 if( pCurrViewLayer )
                     shapeFunc(aIter->first,pCurrViewLayer);
 
@@ -173,7 +173,7 @@ namespace slideshow
                 {
                     iShape->second.reset();
                 }
-
+                
                 if( bMoreThanOneLayer )
                     maLayers.erase(maLayers.begin()+1,
                                    maLayers.end());
@@ -199,13 +199,13 @@ namespace slideshow
                 rView->clearAll();
 
             // add View to all registered shapes
-            manageViews(
+            manageViews( 
                 boost::bind(&Layer::addView,
                             _1,
-                            boost::cref(rView)),
+                            boost::cref(rView)), 
                 // repaint on view add
-                boost::bind(&Shape::addViewLayer,
-                            _1,
+                boost::bind(&Shape::addViewLayer, 
+                            _1, 
                             _2,
                             true) );
 
@@ -226,7 +226,7 @@ namespace slideshow
                                   rView) == mrViews.end() );
 
             // remove View from all registered shapes
-            manageViews(
+            manageViews( 
                 boost::bind(&Layer::removeView,
                             _1,
                             boost::cref(rView)),
@@ -262,12 +262,12 @@ namespace slideshow
                 return;
 
             // clear view area
-            ::std::for_each( mrViews.begin(),
-                             mrViews.end(),
+            ::std::for_each( mrViews.begin(), 
+                             mrViews.end(), 
                              ::boost::mem_fn(&View::clearAll) );
 
             // TODO(F3): resize and repaint all layers
-
+ 
             // render all shapes
             std::for_each( maAllShapes.begin(),
                            maAllShapes.end(),
@@ -281,12 +281,12 @@ namespace slideshow
             ENSURE_OR_THROW( rShape, "LayerManager::addShape(): invalid Shape" );
 
             // add shape to XShape hash map
-            if( !maXShapeHash.insert(
+            if( !maXShapeHash.insert( 
                     XShapeHash::value_type( rShape->getXShape(),
                                             rShape) ).second )
             {
                 // entry already present, nothing to do
-                return;
+                return; 
             }
 
             // add shape to appropriate layer
@@ -299,7 +299,7 @@ namespace slideshow
             rBgLayer->setShapeViews(rShapeEntry.first);
             rShapeEntry.second = rBgLayer;
         }
-
+        
         void LayerManager::implAddShape( const ShapeSharedPtr& rShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
@@ -333,7 +333,7 @@ namespace slideshow
 
             return true;
         }
-
+            
         void LayerManager::implRemoveShape( const ShapeSharedPtr& rShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
@@ -352,14 +352,14 @@ namespace slideshow
             // Actually, also add it if it was listed in
             // maUpdateShapes (might have just gone invisible).
             if( bShapeUpdateNotified ||
-                (rShape->isVisible() &&
+                (rShape->isVisible() && 
                  !rShape->isBackgroundDetached()) )
             {
                 LayerSharedPtr pLayer = aShapeEntry->second.lock();
                 if( pLayer )
                 {
-                    // store area early, once the shape is removed from
-                    // the layers, it no longer has any view references
+                    // store area early, once the shape is removed from 
+                    // the layers, it no longer has any view references 
                     pLayer->addUpdateRange( rShape->getUpdateArea() );
                 }
             }
@@ -369,7 +369,7 @@ namespace slideshow
 
             mbLayerAssociationDirty = true;
         }
-
+            
         ShapeSharedPtr LayerManager::lookupShape( const uno::Reference< drawing::XShape >& xShape ) const
         {
             ENSURE_OR_THROW( xShape.is(), "LayerManager::lookupShape(): invalid Shape" );
@@ -382,8 +382,8 @@ namespace slideshow
             return aIter->second;
         }
 
-        AttributableShapeSharedPtr LayerManager::getSubsetShape( const AttributableShapeSharedPtr&  rOrigShape,
-                                                                 const DocTreeNode&                 rTreeNode )
+        AttributableShapeSharedPtr LayerManager::getSubsetShape( const AttributableShapeSharedPtr& 	rOrigShape,
+                                                                 const DocTreeNode&					rTreeNode )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
 
@@ -494,7 +494,7 @@ namespace slideshow
         {
             if( !mbActive || mrViews.empty() )
                 return;
-
+            
             // hidden sprite-shape needs render() call still, to hide sprite
             if( rShape->isVisible() || rShape->isBackgroundDetached() )
                 maUpdateShapes.insert( rShape );
@@ -527,7 +527,7 @@ namespace slideshow
             // maUpdateShapes set, which is _animated_ (i.e. a
             // sprite).
             const ShapeUpdateSet::const_iterator aEnd=maUpdateShapes.end();
-            ShapeUpdateSet::const_iterator       aCurrShape=maUpdateShapes.begin();
+            ShapeUpdateSet::const_iterator 	     aCurrShape=maUpdateShapes.begin();
             while( aCurrShape != aEnd )
             {
                 if( (*aCurrShape)->isBackgroundDetached() )
@@ -545,8 +545,8 @@ namespace slideshow
                     // shape/layer association cache, or ptr back to
                     // layer at the shape?
 
-                    // cannot update shape directly, it's not
-                    // animated and update() calls will prolly
+                    // cannot update shape directly, it's not   
+                    // animated and update() calls will prolly  
                     // overwrite other page content.
                     addUpdateArea( *aCurrShape );
                 }
@@ -565,7 +565,7 @@ namespace slideshow
 
             if( !mbActive )
                 return bRet;
-
+            
             // going to render - better flush any pending layer reorg
             // now
             updateShapeLayers(false);
@@ -648,7 +648,7 @@ namespace slideshow
                 virtual ::cppcanvas::CustomSpriteSharedPtr createSprite( const ::basegfx::B2DSize& /*rSpriteSizePixel*/,
                                                                          double                    /*nSpritePrio*/ ) const
                 {
-                    ENSURE_OR_THROW( false,
+                    ENSURE_OR_THROW( false, 
                                       "DummyLayer::createSprite(): This method is not supposed to be called!" );
                     return ::cppcanvas::CustomSpriteSharedPtr();
                 }
@@ -666,7 +666,7 @@ namespace slideshow
 
                 virtual ::basegfx::B2DHomMatrix getSpriteTransformation() const
                 {
-                    OSL_ENSURE( false,
+                    OSL_ENSURE( false, 
                                 "BitmapView::getSpriteTransformation(): This method is not supposed to be called!" );
                     return ::basegfx::B2DHomMatrix();
                 }
@@ -705,10 +705,10 @@ namespace slideshow
                     // ViewLayer. Since we add the shapes in the
                     // maShapeSet order (which is also the render order),
                     // this is equivalent to a subsequent render() call)
-                    aIter->first->addViewLayer( pTmpLayer,
+                    aIter->first->addViewLayer( pTmpLayer, 
                                                 true );
 
-                    // and remove again, this is only temporary
+                    // and remove again, this is only temporary 
                     aIter->first->removeViewLayer( pTmpLayer );
                 }
                 catch( uno::Exception& )
@@ -739,13 +739,13 @@ namespace slideshow
 
             if( aShapeEntry == maAllShapes.end() )
                 return;
-
+            
             LayerSharedPtr pLayer = aShapeEntry->second.lock();
             if( pLayer )
                 pLayer->addUpdateRange( rShape->getUpdateArea() );
         }
 
-        void LayerManager::commitLayerChanges( std::size_t              nCurrLayerIndex,
+        void LayerManager::commitLayerChanges( std::size_t              nCurrLayerIndex, 
                                                LayerShapeMap::const_iterator  aFirstLayerShape,
                                                LayerShapeMap::const_iterator  aEndLayerShapes )
         {
@@ -762,8 +762,8 @@ namespace slideshow
                     // need to re-render whole layer - start from
                     // clean state
                     rLayer->clearContent();
-
-                    // render and remove from update set
+                    
+                    // render and remove from update set    
                     while( aFirstLayerShape != aEndLayerShapes )
                     {
                         maUpdateShapes.erase(aFirstLayerShape->first);
@@ -780,7 +780,7 @@ namespace slideshow
 
             LayerSharedPtr pLayer( Layer::createLayer(
                                        maPageBounds ));
-
+        
             // create ViewLayers for all registered views, and add to
             // newly created layer.
             ::std::for_each( mrViews.begin(),
@@ -817,7 +817,7 @@ namespace slideshow
 
             // to avoid tons of temporaries, create weak_ptr to Layers
             // beforehand
-            std::vector< LayerWeakPtr > aWeakLayers(maLayers.size());
+            std::vector< LayerWeakPtr > aWeakLayers(maLayers.size()); 
             std::copy(maLayers.begin(),maLayers.end(),aWeakLayers.begin());
 
             std::size_t                   nCurrLayerIndex(0);
@@ -830,7 +830,7 @@ namespace slideshow
             while( aCurrShapeEntry != aEndShapeEntry )
             {
                 const ShapeSharedPtr pCurrShape( aCurrShapeEntry->first );
-                const bool bThisIsBackgroundDetached(
+                const bool bThisIsBackgroundDetached( 
                     pCurrShape->isBackgroundDetached() );
 
                 if( bLastWasBackgroundDetached == true &&
@@ -839,9 +839,9 @@ namespace slideshow
                     // discontinuity found - current shape needs to
                     // get into a new layer
                     // --------------------------------------------
-
+                    
                     // commit changes to previous layer
-                    commitLayerChanges(nCurrLayerIndex,
+                    commitLayerChanges(nCurrLayerIndex, 
                                        aCurrLayerFirstShapeEntry,
                                        aCurrShapeEntry);
                     aCurrLayerFirstShapeEntry=aCurrShapeEntry;
@@ -870,7 +870,7 @@ namespace slideshow
                 {
                     // mismatch: shape is not contained in current
                     // layer - move shape to that layer, then.
-                    maLayers.at(nCurrLayerIndex)->setShapeViews(
+                    maLayers.at(nCurrLayerIndex)->setShapeViews( 
                         pCurrShape );
 
                     // layer got new shape(s), need full repaint, if
@@ -882,7 +882,7 @@ namespace slideshow
                         {
                             // old layer still valid? then we need to
                             // repaint former shape area
-                            pOldLayer->addUpdateRange(
+                            pOldLayer->addUpdateRange( 
                                 pCurrShape->getUpdateArea() );
                         }
 
@@ -894,7 +894,7 @@ namespace slideshow
 
                     aCurrShapeEntry->second = rCurrWeakLayer;
                 }
-
+                
                 // update layerbounds regardless of the fact that the
                 // shape might be contained in said layer
                 // already. updateBounds() is dumb and needs to
@@ -909,7 +909,7 @@ namespace slideshow
             }
 
             // commit very last layer data
-            commitLayerChanges(nCurrLayerIndex,
+            commitLayerChanges(nCurrLayerIndex, 
                                aCurrLayerFirstShapeEntry,
                                aCurrShapeEntry);
 

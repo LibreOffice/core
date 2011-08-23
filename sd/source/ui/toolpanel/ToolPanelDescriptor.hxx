@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public:
     /** Create a new descriptor for the given control.
         @param pControl
     */
-    ToolPanelDescriptor (::std::auto_ptr< ::Window> pControl,
+    ToolPanelDescriptor (::std::auto_ptr< ::Window> pControl, 
         const String& rTitle);
 
     ~ToolPanelDescriptor (void);
@@ -72,7 +72,7 @@ public:
 
     int GetTotalHeight (void) const;
     int GetWindowHeight (void) const;
-
+    
 private:
     ::std::auto_ptr< ::Window> mpControl;
     String msTitle;

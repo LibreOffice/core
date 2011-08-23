@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -190,7 +190,7 @@ void SAL_CALL BasicToolBarFactory::disposing (
 
 
 //===== XPaneFactory ==========================================================
-
+    
 Reference<XResource> SAL_CALL BasicToolBarFactory::createResource (
     const Reference<XResourceId>& rxToolBarId)
     throw (RuntimeException, IllegalArgumentException, WrappedTargetException)
@@ -198,7 +198,7 @@ Reference<XResource> SAL_CALL BasicToolBarFactory::createResource (
     ThrowIfDisposed();
 
     Reference<XResource> xToolBar;
-
+    
     if (rxToolBarId->getResourceURL().equals(FrameworkHelper::msViewTabBarURL))
     {
         xToolBar = new ViewTabBar(rxToolBarId, mxController);
@@ -206,7 +206,7 @@ Reference<XResource> SAL_CALL BasicToolBarFactory::createResource (
     else
         throw lang::IllegalArgumentException();
 
-
+    
     return xToolBar;
 }
 

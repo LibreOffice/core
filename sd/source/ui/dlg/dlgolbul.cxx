@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,10 +72,10 @@ OutlineBulletDlg::OutlineBulletDlg(
     ::Window* pParent,
     const SfxItemSet* pAttr,
     ::sd::View* pView )
-    : SfxTabDialog  ( pParent, SdResId(TAB_OUTLINEBULLET) ),
-      aInputSet     ( *pAttr ),
-      bTitle            ( FALSE ),
-      pSdView           ( pView )
+    : SfxTabDialog	( pParent, SdResId(TAB_OUTLINEBULLET) ),
+      aInputSet		( *pAttr ),
+      bTitle			( FALSE ),
+      pSdView			( pView )
 {
     FreeResource();
 
@@ -166,8 +166,8 @@ OutlineBulletDlg::OutlineBulletDlg(
 
     AddTabPage( RID_SVXPAGE_PICK_BULLET  );
     AddTabPage( RID_SVXPAGE_PICK_BMP   );
-    AddTabPage(RID_SVXPAGE_NUM_OPTIONS  );
-    AddTabPage(RID_SVXPAGE_NUM_POSITION );
+    AddTabPage(RID_SVXPAGE_NUM_OPTIONS 	);
+    AddTabPage(RID_SVXPAGE_NUM_POSITION	);
 
 }
 

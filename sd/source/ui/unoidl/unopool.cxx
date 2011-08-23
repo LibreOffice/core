@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,18 +42,18 @@ using namespace ::comphelper;
 
 LanguageType SdUnoGetLanguage( const lang::Locale& rLocale )
 {
-    //  empty language -> LANGUAGE_SYSTEM
+    //	empty language -> LANGUAGE_SYSTEM
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_SYSTEM;
 
     LanguageType eRet = MsLangId::convertLocaleToLanguage( rLocale );
     if ( eRet == LANGUAGE_NONE )
-        eRet = LANGUAGE_SYSTEM;         //! or throw an exception?
+        eRet = LANGUAGE_SYSTEM;			//! or throw an exception?
 
     return eRet;
 }
 
-class SdUnoDrawPool :   public SvxUnoDrawPool
+class SdUnoDrawPool :	public SvxUnoDrawPool
 {
 public:
     SdUnoDrawPool( SdDrawDocument* pModel ) throw();
@@ -87,7 +87,7 @@ void SdUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEnt
             lang::Locale aLocale;
             if( rValue >>= aLocale )
                 mpDrawModel->SetLanguage(
-                    SdUnoGetLanguage( aLocale ),
+                    SdUnoGetLanguage( aLocale ), 
                     (const USHORT)pEntry->mnHandle );
         }
     }

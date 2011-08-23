@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,24 +48,24 @@ class ViewShell;
 class Client : public SfxInPlaceClient
 {
     ViewShell*      mpViewShell;
-    SdrOle2Obj*     pSdrOle2Obj;
-    SdrGrafObj*     pSdrGrafObj;
+    SdrOle2Obj* 	pSdrOle2Obj;
+    SdrGrafObj* 	pSdrGrafObj;
     OutlinerParaObject* pOutlinerParaObj;
 
     virtual void    ObjectAreaChanged();
     virtual void    RequestNewObjectArea( Rectangle& );
     virtual void    ViewChanged();
-    virtual void    MakeVisible();
+    virtual void	MakeVisible();
 
 public:
     Client (SdrOle2Obj* pObj, ViewShell* pSdViewShell, ::Window* pWindow);
     virtual ~Client (void);
 
-    SdrOle2Obj*     GetSdrOle2Obj() const { return pSdrOle2Obj; }
-    void            SetSdrGrafObj(SdrGrafObj* pObj) { pSdrGrafObj = pObj; }
-    SdrGrafObj*     GetSdrGrafObj() const { return pSdrGrafObj; }
-    void            SetOutlinerParaObj (OutlinerParaObject* pObj) { pOutlinerParaObj = pObj; }
-    OutlinerParaObject*     GetOutlinerParaObject () const { return pOutlinerParaObj; }
+    SdrOle2Obj* 	GetSdrOle2Obj() const { return pSdrOle2Obj; }
+    void			SetSdrGrafObj(SdrGrafObj* pObj) { pSdrGrafObj = pObj; }
+    SdrGrafObj* 	GetSdrGrafObj() const { return pSdrGrafObj; }
+    void			SetOutlinerParaObj (OutlinerParaObject* pObj) { pOutlinerParaObj = pObj; }
+    OutlinerParaObject* 	GetOutlinerParaObject () const { return pOutlinerParaObj; }
 };
 
 } // end of namespace sd

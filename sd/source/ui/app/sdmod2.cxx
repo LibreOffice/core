@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -404,7 +404,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 DBG_ERROR("sd::SdModule::CalcFieldValueHdl(), unknown field type!");
             }
 
-            if( aRepresentation.Len() == 0 )                // TODO: Edit engine doesn't handle empty fields?
+            if( aRepresentation.Len() == 0 )				// TODO: Edit engine doesn't handle empty fields?
                 aRepresentation += sal_Unicode( ' ' );
             pInfo->SetRepresentation( aRepresentation );
         }
@@ -420,7 +420,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 |* virt. Methoden fuer Optionendialog
 |*
 \************************************************************************/
-SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
+SfxItemSet*	 SdModule::CreateItemSet( USHORT nSlot )
 {
     ::sd::FrameView* pFrameView = NULL;
     ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
@@ -453,7 +453,7 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
     SfxItemPool& rPool = GetPool();
     rPool.SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
 
-    SfxItemSet*  pRet = new SfxItemSet( rPool,
+    SfxItemSet*	 pRet = new SfxItemSet( rPool,
                         SID_ATTR_METRIC, SID_ATTR_METRIC,
                         SID_ATTR_DEFTABSTOP, SID_ATTR_DEFTABSTOP,
 
@@ -549,7 +549,7 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
 }
 void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
 {
-    const SfxPoolItem*  pItem = NULL;
+    const SfxPoolItem*	pItem = NULL;
     BOOL bNewDefTab = FALSE;
     BOOL bNewPrintOptions = FALSE;
     BOOL bMiscOptions = FALSE;
@@ -656,9 +656,9 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
     }
 
     SfxItemSet aPrintSet( GetPool(),
-                    SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
-                    SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
-                    ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
+                    SID_PRINTER_NOTFOUND_WARN,	SID_PRINTER_NOTFOUND_WARN,
+                    SID_PRINTER_CHANGESTODOC,	SID_PRINTER_CHANGESTODOC,
+                    ATTR_OPTIONS_PRINT, 		ATTR_OPTIONS_PRINT,
                     0 );
 
     // Drucken
@@ -671,7 +671,7 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
         // PrintOptionsSet setzen
         SdOptionsPrintItem aPrintItem( ATTR_OPTIONS_PRINT, pOptions );
         SfxFlagItem aFlagItem( SID_PRINTER_CHANGESTODOC );
-        USHORT      nFlags = 0;
+        USHORT		nFlags = 0;
 
         nFlags =  (aPrintItem.GetOptionsPrint().IsWarningSize() ? SFX_PRINTER_CHG_SIZE : 0) |
                 (aPrintItem.GetOptionsPrint().IsWarningOrientation() ? SFX_PRINTER_CHG_ORIENTATION : 0);
@@ -773,14 +773,14 @@ SfxTabPage* SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
         {
             case SID_SD_TP_CONTENTS:
             case SID_SI_TP_CONTENTS:
-            {   ::CreateTabPage fnCreatePage = pFact->GetSdOptionsContentsTabPageCreatorFunc();
+            {	::CreateTabPage fnCreatePage = pFact->GetSdOptionsContentsTabPageCreatorFunc();
                 if( fnCreatePage )
                     pRet = (*fnCreatePage)( pParent, rSet );
             }
             break;
             case SID_SD_TP_SNAP:
             case SID_SI_TP_SNAP:
-            {   ::CreateTabPage fnCreatePage = pFact->GetSdOptionsSnapTabPageCreatorFunc();
+            {	::CreateTabPage fnCreatePage = pFact->GetSdOptionsSnapTabPageCreatorFunc();
                 if( fnCreatePage )
                     pRet = (*fnCreatePage)( pParent, rSet );
             }

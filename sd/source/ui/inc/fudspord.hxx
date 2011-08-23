@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace sd {
 |*
 \************************************************************************/
 
-class FuDisplayOrder
+class FuDisplayOrder 
     : public FuPoor
 {
 public:
@@ -57,28 +57,28 @@ public:
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();        // Function aktivieren
-    virtual void Deactivate();      // Function deaktivieren
+    virtual void Activate();		// Function aktivieren
+    virtual void Deactivate();		// Function deaktivieren
 
 protected:
     virtual ~FuDisplayOrder (void);
     void implClearOverlay();
 
-    Pointer                 maPtr;
-    SdrObject*              mpRefObj;
-    SdrDropMarkerOverlay*   mpOverlay;
+    Pointer					maPtr;
+    SdrObject* 				mpRefObj;
+    SdrDropMarkerOverlay*	mpOverlay;
 
 private:
     FuDisplayOrder (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
+        ViewShell* pViewSh, 
+        ::sd::Window* pWin, 
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
+        SdDrawDocument* pDoc, 
+        SfxRequest& rReq);    
 };
 
 } // end of namespace sd
 
-#endif      // _SD_FUDSPORD_HXX
+#endif		// _SD_FUDSPORD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

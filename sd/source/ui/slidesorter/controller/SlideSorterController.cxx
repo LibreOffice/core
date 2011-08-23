@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -162,7 +162,7 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
 void SlideSorterController::Init (void)
 {
     mrView.HandleModelChange();
-
+    
     mpCurrentSlideManager.reset(new CurrentSlideManager(mrSlideSorter));
     mpPageSelector.reset(new PageSelector(mrSlideSorter));
     mpFocusManager.reset(new FocusManager(mrSlideSorter));
@@ -353,7 +353,7 @@ bool SlideSorterController::Command (
     bool bEventHasBeenHandled = false;
 
     ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-
+    
     switch (rEvent.GetCommand())
     {
         case COMMAND_CONTEXTMENU:
@@ -495,7 +495,7 @@ void SlideSorterController::PreModelChange (void)
     if (mbPostModelChangePending)
         return;
     mbPreModelChangeDone = true;
-
+    
     if (mrSlideSorter.GetViewShell() != NULL)
         mrSlideSorter.GetViewShell()->Broadcast(
             ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
@@ -598,7 +598,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
                 if (pActiveWindow != NULL)
                     pActiveWindow->SetDrawMode(nDrawMode);
                 mrView.HandleDrawModeChange();
-
+                
                 // When the system font has changed a layout has to be done.
                 mrView.Resize();
                 FontProvider::Instance().Invalidate();
@@ -628,7 +628,7 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
         {
             pSlideViewFrame->GetSlotState (SID_RELOAD, NULL, &rSet);
         }
-        else        // MI sagt: kein MDIFrame --> disablen
+        else		// MI sagt: kein MDIFrame --> disablen
         {
             rSet.DisableItem(SID_RELOAD);
         }
@@ -948,7 +948,7 @@ void SlideSorterController::SetDocumentSlides (const Reference<container::XIndex
     {
         ModelChangeLock aLock (*this);
         PreModelChange();
-
+        
         mrModel.SetDocumentSlides(rxSlides);
         mrView.Layout();
     }

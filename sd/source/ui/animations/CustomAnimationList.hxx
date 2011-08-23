@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,12 +68,12 @@ public:
     void update( MainSequencePtr pMainSequence );
 
     /** updates the given effect in the list */
-//  void update( CustomAnimationEffectPtr pEffect );
+//	void update( CustomAnimationEffectPtr pEffect );
 
     void update();
 
     /** removes the given effect to the list*/
-//  void remove( CustomAnimationEffectPtr pEffect );
+//	void remove( CustomAnimationEffectPtr pEffect );
 
     EffectSequence getSelection() const;
 
@@ -81,18 +81,18 @@ public:
     void onSelectionChanged( ::com::sun::star::uno::Any aSelection );
 
     // overrides
-    virtual void    SelectHdl();
-    virtual BOOL    DoubleClickHdl();
+    virtual void 	SelectHdl();
+    virtual BOOL 	DoubleClickHdl();
 
     virtual void    Paint( const Rectangle& rRect );
 
     virtual PopupMenu* CreateContextMenu( void );
-    virtual void    ExcecuteContextMenuAction( USHORT nSelectedPopupEntry );
-
+    virtual void	ExcecuteContextMenuAction( USHORT nSelectedPopupEntry );
+ 
     virtual void KeyInput( const KeyEvent& rKEvt );
-
-//  virtual SvLBoxEntry* CreateEntry() const;
-    virtual void    SetTabs();
+ 
+//	virtual SvLBoxEntry* CreateEntry() const;
+    virtual void	SetTabs();
 
     virtual void notify_change();
 
@@ -104,14 +104,14 @@ public:
     void clear();
 
 private:
-    bool    mbIgnorePaint;
+    bool	mbIgnorePaint;
 
     /** appends the given effect to the list*/
     void append( CustomAnimationEffectPtr pEffect );
 
     ICustomAnimationListController* mpController;
 
-    MainSequencePtr mpMainSequence;
+    MainSequencePtr	mpMainSequence;
 
     Image maImgEmpty;
 
