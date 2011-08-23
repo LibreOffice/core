@@ -86,7 +86,7 @@ class ODatabaseSource;
 //==========================================================================
 //= OConnection
 //==========================================================================
-class OConnection           :public ::comphelper::OBaseMutex
+class OConnection			:public ::comphelper::OBaseMutex
                             ,public OSubComponent
                             ,public ::connectivity::OConnectionWrapper
                             ,public OConnection_Base
@@ -95,16 +95,16 @@ class OConnection           :public ::comphelper::OBaseMutex
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
                             m_xMasterTables; // just to avoid the recreation of the catalog
-    OWeakRefArray           m_aStatements;
+    OWeakRefArray			m_aStatements;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                             m_xQueries;
-    OWeakRefArray           m_aComposers;
+    OWeakRefArray			m_aComposers;
 
     // the filter as set on the parent data link at construction of the connection
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableFilter;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >	m_aTableFilter;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >	m_aTableTypeFilter;
     ::comphelper::ComponentContext                      m_aContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >                     m_xMasterConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >				        m_xMasterConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XConnectionTools >          m_xConnectionTools;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XTableUIProvider >    m_xTableUIProvider;
 
@@ -114,13 +114,13 @@ protected:
     TSupportServices                m_aSupportServices;
 
 
-    OTableContainer*                m_pTables;
-    OViewContainer*                 m_pViews;
+    OTableContainer*			    m_pTables;
+    OViewContainer*				    m_pViews;
     ::dbtools::WarningsContainer    m_aWarnings;
     oslInterlockedCount             m_nInAppend;
-    sal_Bool                        m_bSupportsViews;       // true when the getTableTypes return "VIEW" as type
-    sal_Bool                        m_bSupportsUsers;
-    sal_Bool                        m_bSupportsGroups;
+    sal_Bool					    m_bSupportsViews;		// true when the getTableTypes return "VIEW" as type
+    sal_Bool					    m_bSupportsUsers;
+    sal_Bool					    m_bSupportsGroups;
 
 protected:
     virtual ~OConnection();
@@ -216,7 +216,7 @@ public:
     virtual void refresh(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rToBeRefreshed);
 
 protected:
-    inline  void checkDisposed() throw (::com::sun::star::lang::DisposedException)
+    inline	void checkDisposed() throw (::com::sun::star::lang::DisposedException)
     {
         if ( rBHelper.bDisposed || !m_xConnection.is() )
             throw ::com::sun::star::lang::DisposedException();
@@ -245,7 +245,7 @@ private:
 };
 
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 
 #endif // _DBA_CORE_CONNECTION_HXX_

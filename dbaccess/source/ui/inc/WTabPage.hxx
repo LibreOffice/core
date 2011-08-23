@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,20 +37,20 @@ namespace dbaui
     // Wizard Page
     // ========================================================
     class OCopyTableWizard;
-    class OWizardPage       : public TabPage
+    class OWizardPage		: public TabPage
     {
     protected:
-        OCopyTableWizard*           m_pParent;
-        sal_Bool                    m_bFirstTime;   // Page wird das erste mal gerufen ; should be set in the reset methode
+        OCopyTableWizard*			m_pParent;
+        sal_Bool					m_bFirstTime;	// Page wird das erste mal gerufen ; should be set in the reset methode
 
         OWizardPage( Window* pParent, const ResId& rResId );// : TabPage(pParent,rResId),m_pParent((OCopyTableWizard*)pParent),m_bFirstTime(sal_True) {};
 
     public:
-        virtual void        Reset ( )           = 0;
-        virtual sal_Bool    LeavePage()         = 0;
-        virtual String      GetTitle() const    = 0;
+        virtual	void		Reset ( )			= 0;
+        virtual sal_Bool	LeavePage()			= 0;
+        virtual String		GetTitle() const	= 0;
 
-        sal_Bool            IsFirstTime() const { return m_bFirstTime; }
+        sal_Bool			IsFirstTime() const { return m_bFirstTime; }
     };
 }
 #endif // DBAUI_WIZ_TABBPAGE_HXX

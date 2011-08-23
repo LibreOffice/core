@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,14 +116,14 @@ Reference<XPropertySetInfo>  SAL_CALL OAdabasSettingsDialog::getPropertySetInfo(
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 //------------------------------------------------------------------------------
-Dialog* OAdabasSettingsDialog::createDialog(Window* _pParent)
+Dialog*	OAdabasSettingsDialog::createDialog(Window* _pParent)
 {
     OAdabasStatPageDlg* pDlg = new OAdabasStatPageDlg(_pParent, m_pDatasourceItems, m_aContext.getLegacyServiceFactory(),m_aInitialSelection);
     return pDlg;
 }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

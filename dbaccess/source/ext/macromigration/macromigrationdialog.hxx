@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ namespace dbmm
 
         // Dialog overridables
         virtual BOOL    Close();
-        virtual short   Execute();
+        virtual short	Execute();
 
     private:
         void    impl_showCloseDocsError( bool _bShow );

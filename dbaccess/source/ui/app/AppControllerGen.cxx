@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -164,7 +164,7 @@ void OApplicationController::convertToView(const ::rtl::OUString& _sName)
         {
             ::rtl::OUString sName = aDlg.getName();
             ::rtl::OUString sCatalog = aDlg.getCatalog();
-            ::rtl::OUString sSchema  = aDlg.getSchema();
+            ::rtl::OUString sSchema	 = aDlg.getSchema();
             ::rtl::OUString sNewName(
                 ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sName, sal_False, ::dbtools::eInTableDefinitions ) );
             Reference<XPropertySet> xView = ::dbaui::createView(sNewName,xConnection,xSourceObject);
@@ -794,7 +794,7 @@ void OApplicationController::doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMod
     // special handling for mail, if more than one document is selected attach them all
     if ( _eOpenMode == E_OPEN_FOR_MAIL )
     {
-
+        
         ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator componentIter = aCompoments.begin();
         ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator componentEnd = aCompoments.end();
         ::rtl::OUString aDocTypeString;
@@ -839,7 +839,7 @@ ElementType OApplicationController::getElementType(const Reference< XContainer >
 }
 
 //........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

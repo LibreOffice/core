@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@ namespace dbaui
 {
 //......................................................................
 
-#define BROWSER_STANDARD_FLAGS      BROWSER_COLUMNSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL | \
+#define BROWSER_STANDARD_FLAGS		BROWSER_COLUMNSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL |	\
                                     BROWSER_HIDECURSOR | BROWSER_HIDESELECT | BROWSER_AUTO_HSCROLL | BROWSER_AUTO_VSCROLL
 
-#define COLUMN_ID_FIELDNAME     1
-#define COLUMN_ID_ORDER         2
+#define COLUMN_ID_FIELDNAME		1
+#define	COLUMN_ID_ORDER			2
 
     using namespace ::com::sun::star::uno;
     using namespace ::svt;
@@ -54,8 +54,8 @@ namespace dbaui
     class DbaMouseDownListBoxController : public ListBoxCellController
     {
     protected:
-        Link    m_aOriginalModifyHdl;
-        Link    m_aAdditionalModifyHdl;
+        Link	m_aOriginalModifyHdl;
+        Link	m_aAdditionalModifyHdl;
 
     public:
         DbaMouseDownListBoxController(ListBoxControl* _pParent)
@@ -131,7 +131,7 @@ DBG_NAME(IndexFieldsControl)
     {
         delete m_pSortingCell;
         delete m_pFieldNameCell;
-
+    
         DBG_DTOR(IndexFieldsControl,NULL);
     }
 
@@ -198,7 +198,7 @@ DBG_NAME(IndexFieldsControl)
         // insert rows for the the fields
         RowInserted(GetRowCount(), m_aFields.size(), sal_False);
         // insert an additional row for a new field for that index
-//      if(!m_nMaxColumnsInIndex || GetRowCount() < m_nMaxColumnsInIndex )
+//		if(!m_nMaxColumnsInIndex || GetRowCount() < m_nMaxColumnsInIndex )
         RowInserted(GetRowCount(), 1, sal_False);
         SetUpdateMode(sal_True);
 
@@ -282,7 +282,7 @@ DBG_NAME(IndexFieldsControl)
         // for the field name cell
         m_pFieldNameCell = new ListBoxControl(&GetDataWindow());
         m_pFieldNameCell->InsertEntry(String());
-        m_pFieldNameCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_FIELD );
+        m_pFieldNameCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_FIELD );		
         const ::rtl::OUString* pFields = _rAvailableFields.getConstArray();
         const ::rtl::OUString* pFieldsEnd = pFields + _rAvailableFields.getLength();
         for (;pFields < pFieldsEnd; ++pFields)
@@ -363,7 +363,7 @@ DBG_NAME(IndexFieldsControl)
                 {
                     sal_Int32 nRow = GetCurRow();
                     OSL_ENSURE(nRow < (sal_Int32)m_aFields.size(), "IndexFieldsControl::SaveModified: invalid current row!");
-                    if (nRow >= 0)  // may be -1 in case the control was empty
+                    if (nRow >= 0)	// may be -1 in case the control was empty
                     {
                         // remove the field from the selection
                         IndexFieldsIterator aPos = m_aFields.begin() + nRow;
@@ -436,9 +436,9 @@ DBG_NAME(IndexFieldsControl)
             m_aModifyHdl.Call(this);
 
         if (_pBox == m_pFieldNameCell)
-        {   // a field has been selected
+        {	// a field has been selected
             if (GetCurRow() >= GetRowCount() - 2)
-            {   // and we're in one of the last two rows
+            {	// and we're in one of the last two rows
                 String sSelectedEntry = m_pFieldNameCell->GetSelectEntry();
                 sal_Int32 nCurrentRow = GetCurRow();
                 sal_Int32 rowCount = GetRowCount();
@@ -446,14 +446,14 @@ DBG_NAME(IndexFieldsControl)
                 OSL_ENSURE(((sal_Int32)(m_aFields.size() + 1)) == rowCount, "IndexFieldsControl::OnListEntrySelected: inconsistence!");
 
                 if (sSelectedEntry.Len() && (nCurrentRow == rowCount - 1) /*&& (!m_nMaxColumnsInIndex || rowCount < m_nMaxColumnsInIndex )*/ )
-                {   // in the last row, an non-empty string has been selected
+                {	// in the last row, an non-empty string has been selected
                     // -> insert a new row
                     m_aFields.push_back(OIndexField());
                     RowInserted(GetRowCount(), 1);
                     Invalidate(GetRowRectPixel(nCurrentRow));
                 }
                 else if (!sSelectedEntry.Len() && (nCurrentRow == rowCount - 2))
-                {   // in the (last-1)th row, an empty entry has been selected
+                {	// in the (last-1)th row, an empty entry has been selected
                     // -> remove the last row
                     m_aFields.erase(m_aFields.end() - 1);
                     RowRemoved(GetRowCount() - 1, 1);
@@ -504,7 +504,7 @@ DBG_NAME(IndexFieldsControl)
     //------------------------------------------------------------------
 
 //......................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //......................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

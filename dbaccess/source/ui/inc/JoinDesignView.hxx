@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,16 +46,16 @@ namespace dbaui
     class OScrollWindowHelper;
     class OJoinTableView;
     class OTableWindow;
-
+    
     class OJoinDesignView : public ODataView
     {
     protected:
-        OScrollWindowHelper*    m_pScrollWindow;    // contains only the scrollbars
-        OJoinTableView*         m_pTableView;       // presents the upper window
-        OJoinController&        m_rController;
+        OScrollWindowHelper*	m_pScrollWindow;	// contains only the scrollbars
+        OJoinTableView*			m_pTableView;		// presents the upper window
+        OJoinController&		m_rController;
 
     public:
-        OJoinDesignView(Window* pParent,
+        OJoinDesignView(Window* pParent, 
                         OJoinController& _rController,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
         virtual ~OJoinDesignView();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -150,7 +150,7 @@ SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
         return pContext;
 
     static const ::rtl::OUString s_sStringConcat(RTL_CONSTASCII_USTRINGPARAM(" & "));
-    const SvXMLTokenMap&    rTokenMap   = m_rImport.GetCellElemTokenMap();
+    const SvXMLTokenMap&	rTokenMap	= m_rImport.GetCellElemTokenMap();
     Reference<XMultiServiceFactory> xFactor = m_rImport.getServiceFactory();
 
     m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
@@ -213,10 +213,10 @@ void OXMLFixedContent::EndElement()
             m_xComponent = xControl.get();
             xControl->setLabel(m_sLabel);
         }
-
+         
         m_pContainer->addCell(m_xComponent);
         m_rCell.setComponent(m_xComponent);
-
+        
         OXMLReportElementBase::EndElement();
     }
 }
@@ -232,7 +232,7 @@ void OXMLFixedContent::Characters( const ::rtl::OUString& rChars )
             static const ::rtl::OUString s_sStringConcat(RTL_CONSTASCII_USTRINGPARAM(" & "));
             m_sPageText += s_sStringConcat;
         }
-
+        
         m_sPageText += s_Quote + rChars + s_Quote;
     }
 }

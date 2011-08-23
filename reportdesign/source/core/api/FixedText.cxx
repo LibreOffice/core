@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ uno::Sequence< ::rtl::OUString > lcl_getFixedTextOptionals()
 DBG_NAME( rpt_OFixedText )
 // -----------------------------------------------------------------------------
 OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContext)
-:FixedTextBase(m_aMutex)
+:FixedTextBase(m_aMutex) 
 ,FixedTextPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFixedTextOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 {
@@ -64,7 +64,7 @@ OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContex
 OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContext
                        ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
                        ,uno::Reference< drawing::XShape >& _xShape)
-:FixedTextBase(m_aMutex)
+:FixedTextBase(m_aMutex) 
 ,FixedTextPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFixedTextOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 {
@@ -99,7 +99,7 @@ uno::Any SAL_CALL OFixedText::queryInterface( const uno::Type& _rType ) throw (u
 
 //IMPLEMENT_FORWARD_XINTERFACE2(OFixedText,FixedTextBase,FixedTextPropertySet)
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedText::dispose() throw(uno::RuntimeException)
+void SAL_CALL OFixedText::dispose() throw(uno::RuntimeException) 
 {
     FixedTextPropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
@@ -122,7 +122,7 @@ uno::Sequence< ::rtl::OUString > OFixedText::getSupportedServiceNames_Static(  )
     uno::Sequence< ::rtl::OUString > aServices(1);//2);
     aServices.getArray()[0] = SERVICE_FIXEDTEXT;
     //aServices.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText"));
-
+    
     return aServices;
 }
 //------------------------------------------------------------------------------

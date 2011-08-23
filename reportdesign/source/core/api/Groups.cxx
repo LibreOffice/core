@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@ OGroups::OGroups(const uno::Reference< report::XReportDefinition >& _xParent,con
     DBG_CTOR( rpt_OGroups,NULL);
 }
 //--------------------------------------------------------------------------
-// TODO: VirtualFunctionFinder: This is virtual function!
-//
+// TODO: VirtualFunctionFinder: This is virtual function! 
+// 
 OGroups::~OGroups()
 {
     DBG_DTOR( rpt_OGroups,NULL);
@@ -59,21 +59,21 @@ void OGroups::copyGroups(const uno::Reference< report::XGroups >& _xSource)
 {
     sal_Int32 nCount = _xSource->getCount();
     for (sal_Int32 i = 0; i != nCount; ++i)
-    {
+    {		
         OGroup* pGroup = new OGroup(this,m_xContext);
         m_aGroups.push_back(pGroup);
         uno::Reference<report::XGroup> xGroup(_xSource->getByIndex(i),uno::UNO_QUERY);
         pGroup->copyGroup(xGroup);
-    }
+    }	
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OGroups::dispose() throw(uno::RuntimeException)
+void SAL_CALL OGroups::dispose() throw(uno::RuntimeException) 
 {
     cppu::WeakComponentImplHelperBase::dispose();
 }
 // -----------------------------------------------------------------------------
-// TODO: VirtualFunctionFinder: This is virtual function!
-//
+// TODO: VirtualFunctionFinder: This is virtual function! 
+// 
 void SAL_CALL OGroups::disposing()
 {
     ::std::for_each(m_aGroups.begin(),m_aGroups.end(),::boost::mem_fn(&com::sun::star::report::XGroup::dispose));
@@ -98,7 +98,7 @@ uno::Reference< report::XGroup > SAL_CALL OGroups::createGroup(  ) throw (uno::R
 void SAL_CALL OGroups::insertByIndex( ::sal_Int32 Index, const uno::Any& aElement ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
+        ::osl::MutexGuard aGuard(m_aMutex);	
         sal_Bool bAdd = (Index == static_cast<sal_Int32>(m_aGroups.size()));
         if ( !bAdd )
             checkIndex(Index);
@@ -125,7 +125,7 @@ void SAL_CALL OGroups::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexOutO
 {
     uno::Reference< report::XGroup > xGroup;
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
+        ::osl::MutexGuard aGuard(m_aMutex);	
         checkIndex(Index);
         TGroups::iterator aPos = m_aGroups.begin();
         ::std::advance(aPos,Index);
@@ -141,7 +141,7 @@ void SAL_CALL OGroups::replaceByIndex( ::sal_Int32 Index, const uno::Any& Elemen
 {
     uno::Any aOldElement;
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
+        ::osl::MutexGuard aGuard(m_aMutex);	
         checkIndex(Index);
         uno::Reference< report::XGroup > xGroup(Element,uno::UNO_QUERY);
         if ( !xGroup.is() )

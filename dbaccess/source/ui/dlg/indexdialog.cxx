@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,8 +59,8 @@ namespace dbaui
     //------------------------------------------------------------------
     sal_Bool operator ==(const OIndexField& _rLHS, const OIndexField& _rRHS)
     {
-        return  (_rLHS.sFieldName == _rRHS.sFieldName)
-            &&  (_rLHS.bSortAscending == _rRHS.bSortAscending);
+        return	(_rLHS.sFieldName == _rRHS.sFieldName)
+            &&	(_rLHS.bSortAscending == _rRHS.bSortAscending);
     }
 
     //------------------------------------------------------------------
@@ -78,7 +78,7 @@ namespace dbaui
         ConstIndexFieldsIterator aLeft = _rLHS.begin();
         ConstIndexFieldsIterator aLeftEnd = _rLHS.end();
         ConstIndexFieldsIterator aRight = _rRHS.begin();
-        for (; aLeft != aLeftEnd; ++aLeft, ++aRight)
+        for	(; aLeft != aLeftEnd; ++aLeft, ++aRight)
         {
             if (*aLeft != *aRight)
                 return sal_False;
@@ -116,9 +116,9 @@ namespace dbaui
                 ::rtl::OUString sNewName(_rNewText);
                 ::rtl::OUString sAlias = ::dbtools::convertName2SQLName(sNewName,xMeta->getExtraNameCharacters());
                 if ( ( xMeta->supportsMixedCaseQuotedIdentifiers() )
-                        ?
-                        sAlias != sNewName
-                        :
+                        ? 
+                        sAlias != sNewName 
+                        : 
                 !sNewName.equalsIgnoreAsciiCase(sAlias))
                     return sal_False;
             }
@@ -180,23 +180,23 @@ namespace dbaui
     //==================================================================
 DBG_NAME(DbaIndexDialog)
 //------------------------------------------------------------------
-    DbaIndexDialog::DbaIndexDialog( Window* _pParent, const Sequence< ::rtl::OUString >& _rFieldNames,
-                                    const Reference< XNameAccess >& _rxIndexes,
+    DbaIndexDialog::DbaIndexDialog(	Window* _pParent, const Sequence< ::rtl::OUString >& _rFieldNames, 
+                                    const Reference< XNameAccess >& _rxIndexes, 
                                     const Reference< XConnection >& _rxConnection,
                                     const Reference< XMultiServiceFactory >& _rxORB,sal_Int32 _nMaxColumnsInIndex)
         :ModalDialog( _pParent, ModuleRes(DLG_INDEXDESIGN))
         ,m_xConnection(_rxConnection)
         ,m_aGeometrySettings(E_DIALOG, ::rtl::OUString::createFromAscii("dbaccess.tabledesign.indexdialog"))
-        ,m_aActions                         (this, ModuleRes(TLB_ACTIONS))
-        ,m_aIndexes                         (this, ModuleRes(CTR_INDEXLIST))
-        ,m_aIndexDetails                    (this, ModuleRes(FL_INDEXDETAILS))
-        ,m_aDescriptionLabel                (this, ModuleRes(FT_DESC_LABEL))
-        ,m_aDescription                     (this, ModuleRes(FT_DESCRIPTION))
-        ,m_aUnique                          (this, ModuleRes(CB_UNIQUE))
-        ,m_aFieldsLabel                     (this, ModuleRes(FT_FIELDS))
-        ,m_pFields(new IndexFieldsControl   (this, ModuleRes(CTR_FIELDS),_nMaxColumnsInIndex,::dbtools::getBooleanDataSourceSetting( m_xConnection, "AddIndexAppendix" )))
-        ,m_aClose                           (this, ModuleRes(PB_CLOSE))
-        ,m_aHelp                            (this, ModuleRes(HB_HELP))
+        ,m_aActions							(this, ModuleRes(TLB_ACTIONS))
+        ,m_aIndexes							(this, ModuleRes(CTR_INDEXLIST))
+        ,m_aIndexDetails					(this, ModuleRes(FL_INDEXDETAILS))
+        ,m_aDescriptionLabel				(this, ModuleRes(FT_DESC_LABEL))
+        ,m_aDescription						(this, ModuleRes(FT_DESCRIPTION))
+        ,m_aUnique							(this, ModuleRes(CB_UNIQUE))
+        ,m_aFieldsLabel						(this, ModuleRes(FT_FIELDS))
+        ,m_pFields(new IndexFieldsControl	(this, ModuleRes(CTR_FIELDS),_nMaxColumnsInIndex,::dbtools::getBooleanDataSourceSetting( m_xConnection, "AddIndexAppendix" )))
+        ,m_aClose							(this, ModuleRes(PB_CLOSE))
+        ,m_aHelp							(this, ModuleRes(HB_HELP))
         ,m_pIndexes(NULL)
         ,m_pPreviousSelection(NULL)
         ,m_bEditAgain(sal_False)
@@ -240,17 +240,17 @@ DBG_NAME(DbaIndexDialog)
         m_aClose.SetClickHdl(LINK(this, DbaIndexDialog, OnCloseDialog));
 
         // get our most recent geometry settings
-//      if (m_aGeometrySettings.Exists())
-//      {
-//          Point aPos;
-//          m_aGeometrySettings.GetPosition(aPos.X(), aPos.Y());
-//          SetPosPixel(aPos);
-//      }
+//		if (m_aGeometrySettings.Exists())
+//		{
+//			Point aPos;
+//			m_aGeometrySettings.GetPosition(aPos.X(), aPos.Y());
+//			SetPosPixel(aPos);
+//		}
 
         // if all of the indexes have an empty description, we're not interested in displaying it
         Indexes::const_iterator aCheck;
 
-        for (   aCheck = m_pIndexes->begin();
+        for (	aCheck = m_pIndexes->begin();
                 aCheck != m_pIndexes->end();
                 ++aCheck
             )
@@ -294,7 +294,7 @@ DBG_NAME(DbaIndexDialog)
 
         SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
         sal_Bool bSelectedAnything = NULL != pSelected;
-
+        
 
         if (pSelected)
         {
@@ -344,9 +344,9 @@ DBG_NAME(DbaIndexDialog)
         delete m_pFields;
 
         // save our geometry settings
-//      Point aPos = GetPosPixel();
-//      m_aGeometrySettings.SetPosition(aPos.X(), aPos.Y());
-
+//		Point aPos = GetPosPixel();
+//		m_aGeometrySettings.SetPosition(aPos.X(), aPos.Y());
+    
         DBG_DTOR(DbaIndexDialog,NULL);
     }
 
@@ -552,7 +552,7 @@ DBG_NAME(DbaIndexDialog)
             OnDropIndex(sal_False);
             return;
         }
-
+        
         SQLExceptionInfo aExceptionInfo;
         try
         {
@@ -619,7 +619,7 @@ DBG_NAME(DbaIndexDialog)
         {
             // the descriptor
             Indexes::const_iterator aSelected = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(pSelected->GetUserData());
-
+            
             if (aSelected->isModified() || aSelected->isNew())
             {
                 QueryBox aQuestion(this, ModuleRes(QUERY_SAVE_CURRENT_INDEX));
@@ -656,7 +656,7 @@ DBG_NAME(DbaIndexDialog)
     IMPL_LINK( DbaIndexDialog, OnEntryEdited, SvLBoxEntry*, _pEntry )
     {
         Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
-
+        
         DBG_ASSERT(aPosition >= m_pIndexes->begin() && aPosition < m_pIndexes->end(),
             "DbaIndexDialog::OnEntryEdited: invalid entry!");
 
@@ -739,7 +739,7 @@ DBG_NAME(DbaIndexDialog)
         // no double fields
         DECLARE_STL_STDKEY_SET( String, StringBag );
         StringBag aExistentFields;
-        for (   ConstIndexFieldsIterator aFieldCheck = _rPos->aFields.begin();
+        for (	ConstIndexFieldsIterator aFieldCheck = _rPos->aFields.begin();
                 aFieldCheck != _rPos->aFields.end();
                 ++aFieldCheck
             )
@@ -830,7 +830,7 @@ DBG_NAME(DbaIndexDialog)
 
         // commit the old data
         if (m_aIndexes.FirstSelected() != m_pPreviousSelection)
-        {   // (this call may happen in case somebody ended an in-place edit with 'return', so we need to check this before committing)
+        {	// (this call may happen in case somebody ended an in-place edit with 'return', so we need to check this before committing)
             if (!implCommitPreviouslySelected())
             {
                 m_aIndexes.SelectNoHandlerCall(m_pPreviousSelection);
@@ -871,7 +871,7 @@ DBG_NAME(DbaIndexDialog)
         {
             // The physical toolbar changed its outlook and shows another logical toolbar!
             // We have to set the correct high contrast mode on the new tbx manager.
-            //  pMgr->SetHiContrast( IsHiContrastMode() );
+            //	pMgr->SetHiContrast( IsHiContrastMode() );
             checkImageList();
         }
     }
@@ -880,9 +880,9 @@ DBG_NAME(DbaIndexDialog)
     {
         ModalDialog::DataChanged( rDCEvt );
 
-        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
-            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
-            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS	)	||
+            ( rDCEvt.GetType() == DATACHANGED_DISPLAY	))	&&
+            ( rDCEvt.GetFlags() & SETTINGS_STYLE		))
         {
             // Check if we need to get new images for normal/high contrast mode
             checkImageList();
@@ -893,7 +893,7 @@ DBG_NAME(DbaIndexDialog)
     {
         sal_Int16 nN = IMG_INDEX_DLG_SC;
         sal_Int16 nH = IMG_INDEX_DLG_SCH;
-        if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
+        if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )	 	 
         {
             nN = IMG_INDEX_DLG_LC;
             nH = IMG_INDEX_DLG_LCH;
@@ -910,7 +910,7 @@ DBG_NAME(DbaIndexDialog)
             Size aDlgSize = GetSizePixel();
             // adjust size of dlg
             SetSizePixel(Size(aDlgSize.Width() + _rDiff.Width(),
-                              aDlgSize.Height() + _rDiff.Height())
+                              aDlgSize.Height() + _rDiff.Height())	
                         );
             Size aIndexSize = m_aIndexes.GetSizePixel();
             m_aIndexes.SetPosSizePixel(m_aIndexes.GetPosPixel() + Point(0,_rDiff.Height()),
@@ -934,7 +934,7 @@ DBG_NAME(DbaIndexDialog)
     }
 
 //......................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //......................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -190,7 +190,7 @@ uno::Sequence< beans::Property > SAL_CALL ReportComponentHandler::getSupportedPr
 {
     ::std::vector< beans::Property > aNewProps;
     m_pInfoService->getExcludeProperties( aNewProps, m_xFormComponentHandler );
-
+    
     return aNewProps.empty() ? uno::Sequence< beans::Property > () : uno::Sequence< beans::Property > (&(*aNewProps.begin()),aNewProps.size());
 }
 

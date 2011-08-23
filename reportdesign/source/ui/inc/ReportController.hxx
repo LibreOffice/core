@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,55 +79,55 @@ namespace rptui
     class OAddFieldWindow;
     class OSectionWindow;
 
-    typedef ::dbaui::OSingleDocumentController  OReportController_BASE;
-    typedef ::cppu::ImplHelper5 <   ::com::sun::star::container::XContainerListener
+    typedef ::dbaui::OSingleDocumentController	OReportController_BASE;
+    typedef ::cppu::ImplHelper5	<	::com::sun::star::container::XContainerListener
                                 ,   ::com::sun::star::beans::XPropertyChangeListener
                                 ,   ::com::sun::star::view::XSelectionSupplier
-                                ,   ::com::sun::star::util::XModeSelector
-                                ,   ::com::sun::star::embed::XVisualObject
-                                >   OReportController_Listener;
+                                ,	::com::sun::star::util::XModeSelector
+                                ,	::com::sun::star::embed::XVisualObject
+                                >	OReportController_Listener;
 
-    class OReportController :    public OReportController_BASE
+    class OReportController :	 public OReportController_BASE
                                 ,public OReportController_Listener
                                 ,public SfxListener
                                 ,public ::comphelper::OPropertyStateContainer
                                 ,public ::comphelper::OPropertyArrayUsageHelper < OReportController_BASE >
     {
     private:
-        OModuleClient           m_aModuleClient;
+        OModuleClient	        m_aModuleClient;
         ::cppu::OInterfaceContainerHelper
                                 m_aSelectionListeners;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> 
                                 m_aCollapsedSections;
-        TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
+        TransferableDataHelper	m_aSystemClipboard;		// content of the clipboard
         TransferableClipboardListener*
-                                m_pClipbordNotifier;    /// notifier for changes in the clipboard
-        OGroupsSortingDialog*   m_pGroupsFloater;
+                                m_pClipbordNotifier;	/// notifier for changes in the clipboard
+        OGroupsSortingDialog*	m_pGroupsFloater;
 
         OXReportControllerObserver* m_pReportControllerObserver;
 
         ODesignView*  getDesignView() const   { return static_cast< ODesignView* >( getView() ); }
-
+        
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>          m_xReportDefinition;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportEngine>              m_xReportEngine;
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XComponentLoader>           m_xFrameLoader;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xRowSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >    m_xRowSetMediator;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >            m_xFormatter;   // a number formatter working with the report's NumberFormatsSupplier
-        mutable ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >          m_xHoldAlive;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > 			m_xFormatter;	// a number formatter working with the report's NumberFormatsSupplier
+        mutable ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >			m_xHoldAlive;
         mutable ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
-        ::com::sun::star::awt::Size                                                             m_aVisualAreaSize;
+        ::com::sun::star::awt::Size												                m_aVisualAreaSize;
 
-        ::boost::shared_ptr<rptui::OReportModel>
+        ::boost::shared_ptr<rptui::OReportModel> 
                                 m_aReportModel;
-        ::rtl::OUString         m_sName;                /// name for the report definition
+        ::rtl::OUString			m_sName;			    /// name for the report definition
         ::rtl::OUString         m_sLastActivePage;      /// last active property browser page
-        ::rtl::OUString         m_sMode;                /// the current mode of the controller
-        sal_Int32               m_nSplitPos;            /// the position of the splitter
+        ::rtl::OUString         m_sMode;      			/// the current mode of the controller
+        sal_Int32				m_nSplitPos;		    /// the position of the splitter
         sal_Int32               m_nPageNum;             /// the page number from the restoreView call
         sal_Int32               m_nSelectionCount;
-        ::sal_Int64             m_nAspect;
+        ::sal_Int64				m_nAspect;
         sal_Int16               m_nZoomValue;
         SvxZoomType             m_eZoomType;
         sal_Bool                m_bShowRuler;
@@ -142,7 +142,7 @@ namespace rptui
 
         /** creates a formatted field in the given section with the given formula as data field
         *
-        * \param _aArgs
+        * \param _aArgs 
         * \param _xSection the section where to create the formatted field
         * \param _sFunction the function which will be set at the data field.
         */
@@ -161,7 +161,7 @@ namespace rptui
 
         /** append a new group or remove it with undo.
         *
-        * \param _bAppend
+        * \param _bAppend 
         * \param _aArgs The args which contains a element named PROPERTY_GROUP of type report::XGroup.
         */
         void modifyGroup(const bool _bAppend, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aArgs);
@@ -176,7 +176,7 @@ namespace rptui
 
         /** add or remove me as listener at the report definition
         *
-        * \param _bAdd
+        * \param _bAdd 
         */
         void listen(const bool _bAdd);
 
@@ -197,17 +197,17 @@ namespace rptui
         sal_Int32 getGroupPosition(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xGroup);
 
         /** calls propertyChanged when the header or footer is really turned on.
-            @param  _rEvent the group
-            @param  _bShow  when <TRUE/> the header and footer will be shown otherwise not
+            @param	_rEvent	the group
+            @param	_bShow	when <TRUE/> the header and footer will be shown otherwise not
         */
         void notifyGroupSections(const ::com::sun::star::container::ContainerEvent& _rEvent
                                 ,bool _bShow);
 
         /** change the sections for a group
-            @param  _sPropName  the header or footer
-            @param  _xGroup the group
-            @param  _nGroupPos  the position of the group inside the groups collection or the previous index when it was removed
-            @param  _bShow  when <TRUE/> the header and footer will be shown otherwise not
+            @param	_sPropName	the header or footer
+            @param	_xGroup	the group
+            @param	_nGroupPos	the position of the group inside the groups collection or the previous index when it was removed
+            @param	_bShow	when <TRUE/> the header and footer will be shown otherwise not
         */
         void groupChange( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup
                          ,const ::rtl::OUString& _sPropName
@@ -224,14 +224,14 @@ namespace rptui
         void shrinkSectionBottom(::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection);
         void shrinkSectionTop(::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection);
     public:
-
+        
         void shrinkSection(USHORT _nUndoStrId, ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection, sal_Int32 _nShrinkId);
 
-        /** opens the file open dialog to allow the user to select a image which will be
+        /** opens the file open dialog to allow the user to select a image which will be 
         * bound to a newly created image button.
         */
         void insertGraphic();
-
+        
         /** resets the floater
         */
         void updateFloater();
@@ -244,7 +244,7 @@ namespace rptui
 
         /** inserts a label - field pair into the current selected section
         *
-        * \param aArgs
+        * \param aArgs 
         */
         void addPairControls(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs);
 
@@ -256,7 +256,7 @@ namespace rptui
 
         /** creates a formatted filed with TODAY() function and if set also an NOW() function
         *
-        * \param _aArgs
+        * \param _aArgs 
         */
         void createDateTime(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aArgs);
 
@@ -308,7 +308,7 @@ namespace rptui
         void createDefaultControl(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aArgs);
 
         /** fills the state for the feture request.
-            @param  _sProperty  the property which should be filled in the value
+            @param  _sProperty  the property which should be filled in the value 
             @param  _rState     the state to fill
         */
         void impl_fillState_nothrow(const ::rtl::OUString& _sProperty,dbaui::FeatureState& _rState) const;
@@ -328,9 +328,9 @@ namespace rptui
         DECL_LINK( OnOpenHelpAgent, void* );
         short saveModified();
         // all the features which should be handled by this class
-        virtual void            describeSupportedFeatures();
+        virtual void			describeSupportedFeatures();
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual dbaui::FeatureState GetState(sal_uInt16 nId) const;
+        virtual dbaui::FeatureState	GetState(sal_uInt16 nId) const;
         // execute a feature
         virtual void Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
@@ -338,7 +338,7 @@ namespace rptui
 
         virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
-
+    
         virtual ~OReportController();
     public:
         OReportController(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & the_context);
@@ -355,26 +355,26 @@ namespace rptui
 
         virtual void impl_onModifyChanged();
 
-        //  const ::connectivity::OSQLParseNode* getParseTree() const { return m_aSqlIterator.getParseTree();}
+        //	const ::connectivity::OSQLParseNode* getParseTree() const { return m_aSqlIterator.getParseTree();}
         // need for undo's and redo's
         SfxUndoManager* getUndoMgr();
 
         /** returns <TRUE/> when the command is enbaled
-            @param  _nCommand   the command id
-            @param  _xControlFormat the report control format
+            @param	_nCommand	the command id
+            @param	_xControlFormat the report control format
         */
-        sal_Bool                            isFormatCommandEnabled(sal_uInt16 _nCommand
+        sal_Bool							isFormatCommandEnabled(sal_uInt16 _nCommand
                                                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlFormat>& _xControlFormat) const;
-
-        virtual sal_Bool                    Construct(Window* pParent);
+                                            
+        virtual sal_Bool					Construct(Window* pParent);
         // XEventListener
-        virtual void SAL_CALL               disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL				disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::frame::XController
-        virtual sal_Bool SAL_CALL           suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
+        virtual sal_Bool SAL_CALL			suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::lang::XComponent
-        virtual void        SAL_CALL disposing();
+        virtual void		SAL_CALL disposing();
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
@@ -430,10 +430,10 @@ namespace rptui
 
         /** returns the current position of the splitter
         *
-        * \return
+        * \return 
         */
-        inline sal_Int32    getSplitPos() const { return m_nSplitPos;}
-        inline void         setSplitPos(sal_Int32 _nSplitPos)       { m_nSplitPos = _nSplitPos;}
+        inline sal_Int32	getSplitPos() const { return m_nSplitPos;}
+        inline void			setSplitPos(sal_Int32 _nSplitPos)		{ m_nSplitPos = _nSplitPos;}
 
         /** creates a new report from the report definition.
          *
@@ -450,11 +450,11 @@ namespace rptui
 
         /** returns the number formatter
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getReportNumberFormatter() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > 	getReportNumberFormatter() const;
 
         /** return the SdrModel of the real model
         *
-        * \return
+        * \return 
         */
         ::boost::shared_ptr<rptui::OReportModel> getSdrModel();
 

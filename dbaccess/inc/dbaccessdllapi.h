@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,18 +28,18 @@
 
 #ifndef INCLUDED_DBACCESSDLLAPI_H
 #define INCLUDED_DBACCESSDLLAPI_H
-
+                                                                                                                             
 #ifndef _SAL_TYPES_H_
 #include "sal/types.h"
 #endif
-
+                                                                                                                             
 #if defined(DBACCESS_DLLIMPLEMENTATION)
 #define DBACCESS_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
 #else
 #define DBACCESS_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 #define DBACCESS_DLLPRIVATE SAL_DLLPRIVATE
-
+                                                                                                                             
 #endif /* INCLUDED_DBACCESSDLLAPI_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

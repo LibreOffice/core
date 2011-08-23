@@ -36,9 +36,9 @@ namespace dbaccess
     class ORowSetBase;
     typedef struct
     {
-        ORowSetMatrix::iterator     aIterator;
-        ::com::sun::star::uno::Any  aBookmark;
-        ORowSetBase*                pRowSet;
+        ORowSetMatrix::iterator		aIterator;
+        ::com::sun::star::uno::Any	aBookmark;
+        ORowSetBase*				pRowSet;
     } ORowSetCacheIterator_Helper;
 
     DECLARE_STL_STDKEY_MAP(sal_Int32,ORowSetCacheIterator_Helper,ORowSetCacheMap);
@@ -47,9 +47,9 @@ namespace dbaccess
     class ORowSetCacheIterator
     {
         friend class ORowSetCache;
-        ORowSetCacheMap::iterator   m_aIter;
-        ORowSetCache*               m_pCache;
-        ORowSetBase*                m_pRowSet;
+        ORowSetCacheMap::iterator	m_aIter;
+        ORowSetCache*				m_pCache;
+        ORowSetBase*				m_pRowSet;
     protected:
         ORowSetCacheIterator(const ORowSetCacheMap::iterator& _rIter,ORowSetCache* _pCache,ORowSetBase* _pRowSet)
             : m_aIter(_rIter)
@@ -77,9 +77,9 @@ namespace dbaccess
         bool operator !=(const ORowSetMatrix::iterator& _rRH) const;
         bool operator ==(const ORowSetMatrix::iterator& _rRH) const;
 
-        void setBookmark(const ::com::sun::star::uno::Any&  _rBookmark);
+        void setBookmark(const ::com::sun::star::uno::Any&	_rBookmark);
         ::com::sun::star::uno::Any getBookmark() const { return m_aIter->second.aBookmark; }
-        ::osl::Mutex*   getMutex() const;
+        ::osl::Mutex*	getMutex() const;
 
         ORowSetCacheMap::iterator getIter() const { return m_aIter; }
     };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@
 class PopupMenu;
 namespace dbaui
 {
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XServiceInfo> TToolboxController_BASE;
+    typedef ::cppu::ImplHelper1	<	::com::sun::star::lang::XServiceInfo> TToolboxController_BASE;
 
     class OToolboxController : public ::svt::ToolboxController
                               ,public TToolboxController_BASE
     {
         DECLARE_STL_USTRINGACCESS_MAP(sal_Bool,TCommandState);
-        OModuleClient   m_aModuleClient;
-        TCommandState   m_aStates;
-        sal_uInt16      m_nToolBoxId;
+        OModuleClient 	m_aModuleClient;
+        TCommandState	m_aStates;
+        sal_uInt16		m_nToolBoxId;
 
         ::std::auto_ptr<PopupMenu> getMenu();
     public:

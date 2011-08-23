@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,10 +35,10 @@ namespace dbaui
     //==================================================================
     class OSplitterView : public Window
     {
-        Splitter*                           m_pSplitter;
-        Window*                             m_pLeft;
-        Window*                             m_pRight;
-        sal_Bool                            m_bVertical;
+        Splitter*							m_pSplitter;
+        Window*								m_pLeft;
+        Window*								m_pRight;
+        sal_Bool							m_bVertical;
 
         void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
         DECL_LINK( SplitHdl, Splitter* );

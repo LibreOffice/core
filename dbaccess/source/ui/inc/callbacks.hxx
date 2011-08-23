@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,15 +64,15 @@ namespace dbaui
         /** handler for StartDrag requests
             @return <TRUE/> if a drag operation was started
         */
-        virtual sal_Bool    requestDrag( sal_Int8 _nAction, const Point& _rPosPixel ) = 0;
+        virtual sal_Bool	requestDrag( sal_Int8 _nAction, const Point& _rPosPixel ) = 0;
 
         /** check whether or not a drop request should be accepted
         */
-        virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors ) = 0;
+        virtual sal_Int8	queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors ) = 0;
 
         /** execute a drop request
         */
-        virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt ) = 0;
+        virtual sal_Int8	executeDrop( const ExecuteDropEvent& _rEvt ) = 0;
     };
 
     //====================================================================
@@ -117,11 +117,11 @@ namespace dbaui
     {
     public:
         /// called when a drag operation done with a Transferable has been finished
-        virtual void        dragFinished( ) = 0;
+        virtual void		dragFinished( ) = 0;
     };
 
 //........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //........................................................................
 
 #endif // _DBACCESS_UI_CALLBACKS_HXX_

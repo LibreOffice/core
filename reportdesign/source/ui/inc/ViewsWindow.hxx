@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ namespace rptui
     class OEndMarker;
     class OReportSection;
     class OSectionView;
-
+    
 
     // -----------------------------------------------------------------------------
     struct RectangleLess : public ::std::binary_function< Rectangle, Rectangle, bool>
@@ -64,7 +64,7 @@ namespace rptui
         CompareMode m_eCompareMode;
         Point       m_aRefPoint;
         RectangleLess(CompareMode _eCompareMode,const Point& _rRefPoint ) : m_eCompareMode(_eCompareMode),m_aRefPoint(_rRefPoint){}
-        bool operator() (const Rectangle& lhs, const Rectangle& rhs) const
+        bool operator() (const Rectangle& lhs, const Rectangle& rhs) const 
         {
             switch(m_eCompareMode)
             {
@@ -114,13 +114,13 @@ namespace rptui
         }
     };
 
-    class OViewsWindow :    public Window
-                        ,   public utl::ConfigurationListener
+    class OViewsWindow :	public Window
+                        ,	public utl::ConfigurationListener
                         ,   public IMarkedSection
     {
         typedef ::std::multimap<Rectangle,::std::pair<SdrObject*,OSectionView*>,RectangleLess>      TRectangleMap;
     public:
-        typedef ::std::vector< ::boost::shared_ptr<OSectionWindow> >                                TSectionsMap;
+        typedef ::std::vector< ::boost::shared_ptr<OSectionWindow> >								TSectionsMap;
 
         struct TReportPairHelper : public ::std::unary_function< TSectionsMap::value_type, OReportSection >
         {
@@ -131,18 +131,18 @@ namespace rptui
         };
         struct TStartMarkerHelper : public ::std::unary_function< TSectionsMap::value_type, OStartMarker >
         {
-            OStartMarker& operator() (const TSectionsMap::value_type& lhs) const
+            OStartMarker& operator() (const TSectionsMap::value_type& lhs) const 
             {
                 return lhs->getStartMarker();
             }
         };
     private:
-        TSectionsMap                            m_aSections;
-        svtools::ColorConfig                    m_aColorConfig;
-        OReportWindow*                          m_pParent;
+        TSectionsMap							m_aSections;
+        svtools::ColorConfig					m_aColorConfig;
+        OReportWindow*							m_pParent;
         ::rtl::OUString                         m_sShapeType;
-        sal_Bool                                m_bInSplitHandler;
-        sal_Bool                                m_bInUnmark;
+        sal_Bool								m_bInSplitHandler;
+        sal_Bool								m_bInUnmark;
 
         void ImplInitSettings();
         /** returns the iterator at pos _nPos or the end()
@@ -163,7 +163,7 @@ namespace rptui
         virtual void Paint( const Rectangle& rRect );
         virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
     public:
-        OViewsWindow(
+        OViewsWindow( 
             OReportWindow* _pReportWindow);
         virtual ~OViewsWindow();
 
@@ -176,26 +176,26 @@ namespace rptui
         */
         void initialize();
 
-        inline OReportWindow*       getView()           const { return m_pParent; }
+        inline OReportWindow*		getView()			const { return m_pParent; }
 
         /** removes the section at the given position.
         *
         * \param _nPosition Zero based.
         */
-        void            removeSection(USHORT _nPosition);
+        void			removeSection(USHORT _nPosition);
 
         /** adds a new section at position _nPosition.
             If the section is <NULL/> nothing happens.
             If the position is grater than the current elements, the section will be appended.
         */
-        void            addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
+        void			addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
                                     ,const ::rtl::OUString& _sColorEntry
                                     ,USHORT _nPosition = USHRT_MAX);
 
-        USHORT          getSectionCount() const;
+        USHORT			getSectionCount() const;
         /** return the section at the given position
         *
-        * \param _nPos
+        * \param _nPos 
         * \return the section at this pos or an empty section
         */
         ::boost::shared_ptr<OSectionWindow> getSectionWindow(const USHORT _nPos) const;
@@ -204,23 +204,23 @@ namespace rptui
         *
         * \param _bVisible
         */
-        void            toggleGrid(sal_Bool _bVisible);
+        void			toggleGrid(sal_Bool _bVisible);
         void            setGridSnap(BOOL bOn);
         void            setDragStripes(BOOL bOn);
 
         /** returns the total accumulated height of all sections until _pSection is reached
         */
-        sal_Int32       getTotalHeight() const;
+        sal_Int32		getTotalHeight() const;
 
-        inline bool     empty() const { return m_aSections.empty(); }
-        void            SetMode( DlgEdMode m_eMode );
-        void            SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
+        inline bool		empty() const { return m_aSections.empty(); }
+        void 			SetMode( DlgEdMode m_eMode );
+        void			SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
         rtl::OUString   GetInsertObjString() const;
         /** copies the current selection in this section
         */
         void Copy();
 
-        /** returns if paste is allowed
+        /**	returns if paste is allowed
         *
         * \return <TRUE/> if paste is allowed
         */
@@ -247,27 +247,27 @@ namespace rptui
         *
         * @param _pSectionView The view where the objects should not be unmarked.
         */
-        void            unmarkAllObjects(OSectionView* _pSectionView);
+        void			unmarkAllObjects(OSectionView* _pSectionView);
 
         /** returns the report section window for the given xsection
-            @param  _xSection   the section
+            @param	_xSection	the section
         */
-        // ::boost::shared_ptr<OSectionWindow>  getReportSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
+        // ::boost::shared_ptr<OSectionWindow>	getReportSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
         ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
 
         /** checks if the keycode is known by the child windows
-            @param  _rCode  the keycode
+            @param	_rCode	the keycode
             @return <TRUE/> if the keycode is handled otherwise <FALSE/>
         */
-        sal_Bool        handleKeyEvent(const KeyEvent& _rEvent);
+        sal_Bool		handleKeyEvent(const KeyEvent& _rEvent);
 
         /** the the section as marked or not marked
-            @param  _pSectionView   the section where to set the marked flag
-            @param  _bMark  the marked flag
+            @param	_pSectionView	the section where to set the marked flag
+            @param	_bMark	the marked flag
         */
-        void            setMarked(OSectionView* _pSectionView,sal_Bool _bMark);
-        void            setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,sal_Bool _bMark);
-        void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
+        void			setMarked(OSectionView* _pSectionView,sal_Bool _bMark);
+        void			setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,sal_Bool _bMark);
+        void			setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
 
         // IMarkedSection
         ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const;

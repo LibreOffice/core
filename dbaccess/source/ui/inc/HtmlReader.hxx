@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,22 +43,22 @@ namespace dbaui
     class OHTMLReader : public HTMLParser, public ODatabaseExport
     {
         String              m_sCurrent;
-        sal_Int32           m_nTableCount;
-        sal_Int16           m_nWidth;
-        sal_Int16           m_nColumnWidth;     // max. Spaltenbreite
-        sal_Bool            m_bMetaOptions;     // true when we scaned the meta information
-        sal_Bool            m_bSDNum;
-
+        sal_Int32			m_nTableCount;
+        sal_Int16			m_nWidth;
+        sal_Int16			m_nColumnWidth;		// max. Spaltenbreite
+        sal_Bool			m_bMetaOptions;		// true when we scaned the meta information
+        sal_Bool			m_bSDNum;
+        
     protected:
-        virtual void        NextToken( int nToken ); // Basisklasse
-        virtual sal_Bool    CreateTable(int nToken);
+        virtual void		NextToken( int nToken ); // Basisklasse
+        virtual sal_Bool	CreateTable(int nToken);
         virtual TypeSelectionPageFactory
                              getTypeSelectionPageFactory();
 
-        void                TableDataOn(SvxCellHorJustify& eVal,int nToken);
-        void                TableFontOn(::com::sun::star::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);
-        sal_Int16           GetWidthPixel( const HTMLOption* pOption );
-        void                setTextEncoding();
+        void				TableDataOn(SvxCellHorJustify& eVal,int nToken);
+        void				TableFontOn(::com::sun::star::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);
+        sal_Int16			GetWidthPixel( const HTMLOption* pOption );
+        void				setTextEncoding();
         void                fetchOptions();
         virtual ~OHTMLReader();
     public:
@@ -78,8 +78,8 @@ namespace dbaui
                     const OTypeInfoMap* _pInfoMap,
                     sal_Bool _bAutoIncrementEnabled);
 
-        virtual     SvParserState CallParser();// Basisklasse
-        virtual     void          release();
+        virtual		SvParserState CallParser();// Basisklasse
+        virtual		void		  release();
         // birgt nur korrekte Daten, wenn der 1. CTOR benutzt wurde
     };
 

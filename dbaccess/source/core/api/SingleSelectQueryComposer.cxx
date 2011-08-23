@@ -90,19 +90,19 @@ namespace dbaccess {
 namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
 }
 
-#define STR_SELECT      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "))
-#define STR_FROM        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM "))
-#define STR_WHERE       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE "))
-#define STR_GROUP_BY    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" GROUP BY "))
-#define STR_HAVING      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" HAVING "))
-#define STR_ORDER_BY    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ORDER BY "))
-#define STR_AND         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" AND "))
-#define STR_OR          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" OR "))
-#define STR_LIKE        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" LIKE "))
-#define STR_EQUAL       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = "))
-#define L_BRACKET       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("("))
-#define R_BRACKET       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"))
-#define COMMA           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","))
+#define STR_SELECT		::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "))
+#define STR_FROM		::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM "))
+#define STR_WHERE		::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE "))
+#define STR_GROUP_BY	::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" GROUP BY "))
+#define STR_HAVING		::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" HAVING "))
+#define STR_ORDER_BY	::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ORDER BY "))
+#define STR_AND			::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" AND "))
+#define STR_OR			::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" OR "))
+#define STR_LIKE		::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" LIKE "))
+#define STR_EQUAL		::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = "))
+#define L_BRACKET		::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("("))
+#define R_BRACKET		::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"))
+#define COMMA			::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","))
 
 namespace
 {
@@ -316,8 +316,8 @@ void SAL_CALL OSingleSelectQueryComposer::disposing(void)
     resetIterator( m_aSqlIterator, true );
     resetIterator( m_aAdditiveIterator, true );
 
-    m_xConnectionTables = NULL;
-    m_xConnection       = NULL;
+    m_xConnectionTables	= NULL;
+    m_xConnection		= NULL;
 
     clearCurrentCollections();
 }
@@ -496,7 +496,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference<
         }
 
     ::rtl::OUString aName,aNewName;
-    column->getPropertyValue(PROPERTY_NAME)         >>= aName;
+    column->getPropertyValue(PROPERTY_NAME)			>>= aName;
 
     if ( !m_xMetaData->supportsOrderByUnrelated() && m_aCurrentColumns[SelectColumns] && !m_aCurrentColumns[SelectColumns]->hasByName(aName))
     {
@@ -507,7 +507,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference<
 
     // filter anhaengen
     // select ohne where und order by aufbauen
-    ::rtl::OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
+    ::rtl::OUString aQuote	= m_xMetaData->getIdentifierQuoteString();
     if ( m_aCurrentColumns[SelectColumns]->hasByName(aName) )
     {
         Reference<XPropertySet> xColumn;
@@ -517,10 +517,10 @@ void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference<
         OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Function"))),"Property FUNCTION not available!");
 
         ::rtl::OUString sRealName,sTableName;
-        xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
-        xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
+        xColumn->getPropertyValue(PROPERTY_REALNAME)	>>= sRealName;
+        xColumn->getPropertyValue(PROPERTY_TABLENAME)	>>= sTableName;
         sal_Bool bFunction = sal_False;
-        xColumn->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Function"))) >>= bFunction;
+        xColumn->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Function")))	>>= bFunction;
         if ( sRealName == aName )
         {
             if ( bFunction )
@@ -766,7 +766,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
     ::std::vector< ::rtl::OUString> aNames;
     ::rtl::Reference< OSQLColumns> aSelectColumns;
     sal_Bool bCase = sal_True;
-    Reference< XNameAccess> xQueryColumns;
+    Reference< XNameAccess>	xQueryColumns;
     if ( m_nCommandType == CommandType::QUERY )
     {
         Reference<XColumnsSupplier> xSup(m_xConnectionQueries->getByName(m_sCommand),UNO_QUERY);
@@ -883,7 +883,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
             if ( aFind != aSelectColumns->get().end() )
             {
                 if ( aUsedSelectColumns.find( nFoundSelectColumnPos ) != aUsedSelectColumns.end() )
-                {   // we found a column name which exists twice
+                {	// we found a column name which exists twice
                     // so we start after the first found
                     do
                     {
@@ -1042,9 +1042,9 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
             ::rtl::OUString aColumnName;
 
 
-            //  pCondition->parseNodeToStr(aValue,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
+            //	pCondition->parseNodeToStr(aValue,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
             pCondition->parseNodeToStr( aValue, m_xConnection, NULL );
-            //  pCondition->getChild(0)->parseNodeToStr(aColumnName,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
+            //	pCondition->getChild(0)->parseNodeToStr(aColumnName,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
             pCondition->getChild(0)->parseNodeToStr( aColumnName, m_xConnection, NULL );
 
             // don't display the column name
@@ -1245,7 +1245,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
 
         // Kriterium
         aItem.Handle = pCondition->getChild(1)->getNodeType();
-        aValue       = pCondition->getChild(1)->getTokenValue();
+        aValue		 = pCondition->getChild(1)->getTokenValue();
         for(i=0;i< pRhs->count();i++)
             pRhs->getChild(i)->parseNodeToPredicateStr(aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
 
@@ -1304,14 +1304,14 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
     if(m_pTables && m_pTables->getCount() > 1)
     {
         ::rtl::OUString aCatalog,aSchema,aTable,aComposedName,aColumnName;
-        column->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
-        column->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
-        column->getPropertyValue(PROPERTY_TABLENAME)    >>= aTable;
-        column->getPropertyValue(PROPERTY_NAME)         >>= aColumnName;
+        column->getPropertyValue(PROPERTY_CATALOGNAME)	>>= aCatalog;
+        column->getPropertyValue(PROPERTY_SCHEMANAME)	>>= aSchema;
+        column->getPropertyValue(PROPERTY_TABLENAME)	>>= aTable;
+        column->getPropertyValue(PROPERTY_NAME)			>>= aColumnName;
 
         Sequence< ::rtl::OUString> aNames(m_pTables->getElementNames());
-        const ::rtl::OUString* pBegin   = aNames.getConstArray();
-        const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+        const ::rtl::OUString* pBegin	= aNames.getConstArray();
+        const ::rtl::OUString* pEnd		= pBegin + aNames.getLength();
 
         if(!aTable.getLength())
         { // we don't found a table name, now we must search every table for this column
@@ -1322,10 +1322,10 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
 
                 if(xColumnsSupp.is() && xColumnsSupp->getColumns()->hasByName(aColumnName))
                 {
-//                  Reference<XPropertySet> xTableProp(xColumnsSupp,UNO_QUERY);
-//                  xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
-//                  xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
-//                  xTableProp->getPropertyValue(PROPERTY_NAME)         >>= aTable;
+//					Reference<XPropertySet> xTableProp(xColumnsSupp,UNO_QUERY);
+//					xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)	>>= aCatalog;
+//					xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)	>>= aSchema;
+//					xTableProp->getPropertyValue(PROPERTY_NAME)			>>= aTable;
                     aTable = *pBegin;
                     break;
                 }
@@ -1349,14 +1349,14 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
                     if(xTableProp.is())
                     {
                         ::rtl::OUString aCatalog2,aSchema2,aTable2;
-                        xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog2;
-                        xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema2;
-                        xTableProp->getPropertyValue(PROPERTY_NAME)         >>= aTable2;
+                        xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)	>>= aCatalog2;
+                        xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)	>>= aSchema2;
+                        xTableProp->getPropertyValue(PROPERTY_NAME)			>>= aTable2;
                         if(aComp(aCatalog,aCatalog2) && aComp(aSchema,aSchema2) && aComp(aTable,aTable2))
                         {
-                            aCatalog    = aCatalog2;
-                            aSchema     = aSchema2;
-                            aTable      = aTable2;
+                            aCatalog	= aCatalog2;
+                            aSchema		= aSchema2;
+                            aTable		= aTable2;
                             break;
                         }
                     }
@@ -1559,7 +1559,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
     column->getPropertyValue(PROPERTY_VALUE) >>= aValue;
 
     ::rtl::OUStringBuffer aSQL;
-    const ::rtl::OUString aQuote    = m_xMetaData->getIdentifierQuoteString();
+    const ::rtl::OUString aQuote	= m_xMetaData->getIdentifierQuoteString();
     getColumns();
 
     if ( m_aCurrentColumns[SelectColumns] && m_aCurrentColumns[SelectColumns]->hasByName(aName) )
@@ -1571,8 +1571,8 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
         OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction"))),"Property AggregateFunctionnot available!");
 
         ::rtl::OUString sRealName,sTableName;
-        xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
-        xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
+        xColumn->getPropertyValue(PROPERTY_REALNAME)	>>= sRealName;
+        xColumn->getPropertyValue(PROPERTY_TABLENAME)	>>= sTableName;
         if(sTableName.indexOf('.',0) != -1)
         {
             ::rtl::OUString aCatlog,aSchema,aTable;
@@ -1648,8 +1648,8 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                             aSQL.appendAscii( "\'" );
                         }
                         aSQL.appendAscii( "0x" );
-                        const sal_Int8* pBegin  = aSeq.getConstArray();
-                        const sal_Int8* pEnd    = pBegin + aSeq.getLength();
+                        const sal_Int8* pBegin	= aSeq.getConstArray();
+                        const sal_Int8* pEnd	= pBegin + aSeq.getLength();
                         for(;pBegin != pEnd;++pBegin)
                         {
                             aSQL.append( (sal_Int32)*pBegin, 16 ).getStr();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
  ************************************************************************/
 #ifndef DBAUI_RELATION_TABLEVIEW_HXX
 #define DBAUI_RELATION_TABLEVIEW_HXX
-
+                                 
 #include "JoinTableView.hxx"
 #include <comphelper/containermultiplexer.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -40,12 +40,12 @@ namespace dbaui
                             ,   public OJoinTableView
                             ,   public ::comphelper::OContainerListener
     {
-        OTableConnection*                m_pExistingConnection; // is set when a connection was draged on an existing connection
+        OTableConnection*				 m_pExistingConnection; // is set when a connection was draged on an existing connection
         TTableConnectionData::value_type m_pCurrentlyTabConnData; // set when we creating a connection with more than one keycolumn
-        ::rtl::Reference< comphelper::OContainerListenerAdapter>
+        ::rtl::Reference< comphelper::OContainerListenerAdapter>                    
                                          m_pContainerListener;
         bool                             m_bInRemove;
-
+    
         virtual void ConnDoubleClicked( OTableConnection* pConnection );
         virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL bNewTable = FALSE);
 

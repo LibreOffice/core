@@ -82,7 +82,7 @@ namespace dbaccess
         virtual ~OContainerListener();
     };
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 
 #endif // DBA_CONTAINERLISTENER_HXX
 

@@ -296,8 +296,8 @@ class OSharedConnectionManager : public OConnectionHelper_BASE
      // contains the currently used master connections
     typedef struct
     {
-        Reference< XConnection >    xMasterConnection;
-        oslInterlockedCount         nALiveCount;
+        Reference< XConnection >	xMasterConnection;
+        oslInterlockedCount			nALiveCount;
     } TConnectionHolder;
 
     // the less-compare functor, used for the stl::map
@@ -312,13 +312,13 @@ class OSharedConnectionManager : public OConnectionHelper_BASE
         }
     };
 
-    typedef ::std::map< TDigestHolder,TConnectionHolder,TDigestLess>        TConnectionMap;      // holds the master connections
-    typedef ::std::map< Reference< XConnection >,TConnectionMap::iterator>  TSharedConnectionMap;// holds the shared connections
+    typedef ::std::map< TDigestHolder,TConnectionHolder,TDigestLess>		TConnectionMap;		 // holds the master connections
+    typedef ::std::map< Reference< XConnection >,TConnectionMap::iterator>	TSharedConnectionMap;// holds the shared connections
 
-    ::osl::Mutex                m_aMutex;
-    TConnectionMap              m_aConnections;         // remeber the master connection in conjunction with the digest
-    TSharedConnectionMap        m_aSharedConnection;    // the shared connections with conjunction with an iterator into the connections map
-    Reference< XProxyFactory >  m_xProxyFactory;
+    ::osl::Mutex				m_aMutex;
+    TConnectionMap				m_aConnections;			// remeber the master connection in conjunction with the digest
+    TSharedConnectionMap		m_aSharedConnection;	// the shared connections with conjunction with an iterator into the connections map
+    Reference< XProxyFactory >	m_xProxyFactory;
 
 protected:
     ~OSharedConnectionManager();
@@ -327,7 +327,7 @@ public:
     OSharedConnectionManager(const Reference< XMultiServiceFactory >& _rxServiceFactory);
 
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException);
-    Reference<XConnection> getConnection(   const rtl::OUString& url,
+    Reference<XConnection> getConnection(	const rtl::OUString& url,
                                             const rtl::OUString& user,
                                             const rtl::OUString& password,
                                             const Sequence< PropertyValue >& _aInfo,
@@ -364,7 +364,7 @@ void SAL_CALL OSharedConnectionManager::disposing( const ::com::sun::star::lang:
     }
 }
 
-Reference<XConnection> OSharedConnectionManager::getConnection( const rtl::OUString& url,
+Reference<XConnection> OSharedConnectionManager::getConnection(	const rtl::OUString& url,
                                         const rtl::OUString& user,
                                         const rtl::OUString& password,
                                         const Sequence< PropertyValue >& _aInfo,
@@ -375,15 +375,15 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const rtl::OUStr
     Sequence< PropertyValue > aInfoCopy(_aInfo);
     sal_Int32 nPos = aInfoCopy.getLength();
     aInfoCopy.realloc( nPos + 2 );
-    aInfoCopy[nPos].Name      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableFilter"));
+    aInfoCopy[nPos].Name	  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableFilter"));
     aInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableFilter;
-    aInfoCopy[nPos].Name      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableTypeFilter"));
+    aInfoCopy[nPos].Name	  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableTypeFilter"));
     aInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableTypeFilter; // #22377# OJ
 
     ::rtl::OUString sUser = user;
     ::rtl::OUString sPassword = password;
     if ((0 == sUser.getLength()) && (0 == sPassword.getLength()) && (0 != _pDataSource->m_pImpl->m_sUser.getLength()))
-    {   // ease the usage of this method. data source which are intended to have a user automatically
+    {	// ease the usage of this method. data source which are intended to have a user automatically
         // fill in the user/password combination if the caller of this method does not specify otherwise
         // 86951 - 05/08/2001 - frank.schoenheit@germany.sun.com
         sUser = _pDataSource->m_pImpl->m_sUser;
@@ -542,7 +542,7 @@ void ODatabaseSource::setName( const Reference< XDocumentDataSource >& _rxDocume
 Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getTypes" );
-    OTypeCollection aPropertyHelperTypes(   ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
+    OTypeCollection aPropertyHelperTypes(	::getCppuType( (const Reference< XFastPropertySet > *)0 ),
                                             ::getCppuType( (const Reference< XPropertySet > *)0 ),
                                             ::getCppuType( (const Reference< XMultiPropertySet > *)0 ));
 
@@ -662,7 +662,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
     ::rtl::OUString sUser(_rUid);
     ::rtl::OUString sPwd(_rPwd);
     if ((0 == sUser.getLength()) && (0 == sPwd.getLength()) && (0 != m_pImpl->m_sUser.getLength()))
-    {   // ease the usage of this method. data source which are intended to have a user automatically
+    {	// ease the usage of this method. data source which are intended to have a user automatically
         // fill in the user/password combination if the caller of this method does not specify otherwise
         sUser = m_pImpl->m_sUser;
         if (0 != m_pImpl->m_aPassword.getLength())
@@ -770,19 +770,19 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (Runt
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::createArrayHelper" );
     BEGIN_PROPERTY_HELPER(13)
-        DECL_PROP1(INFO,                        Sequence< PropertyValue >,  BOUND);
-        DECL_PROP1_BOOL(ISPASSWORDREQUIRED,                                 BOUND);
-        DECL_PROP1_BOOL(ISREADONLY,                                         READONLY);
-        DECL_PROP1(LAYOUTINFORMATION,           Sequence< PropertyValue >,  BOUND);
-        DECL_PROP1(NAME,                        ::rtl::OUString,            READONLY);
-        DECL_PROP2_IFACE(NUMBERFORMATSSUPPLIER, XNumberFormatsSupplier,     READONLY, TRANSIENT);
-        DECL_PROP1(PASSWORD,                    ::rtl::OUString,            TRANSIENT);
+        DECL_PROP1(INFO,						Sequence< PropertyValue >,  BOUND);
+        DECL_PROP1_BOOL(ISPASSWORDREQUIRED,									BOUND);
+        DECL_PROP1_BOOL(ISREADONLY,											READONLY);
+        DECL_PROP1(LAYOUTINFORMATION,			Sequence< PropertyValue >,  BOUND);
+        DECL_PROP1(NAME,						::rtl::OUString,			READONLY);
+        DECL_PROP2_IFACE(NUMBERFORMATSSUPPLIER,	XNumberFormatsSupplier,		READONLY, TRANSIENT);
+        DECL_PROP1(PASSWORD,					::rtl::OUString,			TRANSIENT);
         DECL_PROP2_IFACE(SETTINGS,              XPropertySet,               BOUND, READONLY);
-        DECL_PROP1_BOOL(SUPPRESSVERSIONCL,                                  BOUND);
-        DECL_PROP1(TABLEFILTER,                 Sequence< ::rtl::OUString >,BOUND);
-        DECL_PROP1(TABLETYPEFILTER,             Sequence< ::rtl::OUString >,BOUND);
-        DECL_PROP1(URL,                         ::rtl::OUString,            BOUND);
-        DECL_PROP1(USER,                        ::rtl::OUString,            BOUND);
+        DECL_PROP1_BOOL(SUPPRESSVERSIONCL,									BOUND);
+        DECL_PROP1(TABLEFILTER,					Sequence< ::rtl::OUString >,BOUND);
+        DECL_PROP1(TABLETYPEFILTER,				Sequence< ::rtl::OUString >,BOUND);
+        DECL_PROP1(URL,							::rtl::OUString,			BOUND);
+        DECL_PROP1(USER,						::rtl::OUString,			BOUND);
     END_PROPERTY_HELPER();
 }
 
@@ -823,7 +823,7 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
             case PROPERTY_ID_URL:
             {
                 bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_pImpl->m_sConnectURL);
-            }   break;
+            }	break;
             case PROPERTY_ID_INFO:
             {
                 Sequence<PropertyValue> aValues;
@@ -1124,7 +1124,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
     sal_Bool bNewPasswordGiven = sal_False;
 
     if (m_pImpl->m_bPasswordRequired && (0 == sPassword.getLength()))
-    {   // we need a password, but don't have one yet.
+    {	// we need a password, but don't have one yet.
         // -> ask the user
 
         // build an interaction request
@@ -1414,5 +1414,5 @@ Reference< XInterface > ODatabaseSource::getThis() const
     return *const_cast< ODatabaseSource* >( this );
 }
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
