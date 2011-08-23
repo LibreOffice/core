@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,55 +48,55 @@
 //-------------------------------------------------------------------------
 
 #define AUTO_USECATALOG(AUTO_Y)                                 \
-    CheckBox CB_USECATALOG                                      \
-    {                                                           \
-        Pos     = MAP_APPFONT ( 6 ,AUTO_Y) ;                    \
-        Size    = MAP_APPFONT ( PAGE_X -12 , CHECKBOX_HEIGHT ) ;   \
-        TabStop = TRUE ;                                        \
-        HelpId = HID_DSADMIN_USECATALOG;                        \
-        Text[ en-US ] = "Use catalog for file-based databases"; \
+    CheckBox CB_USECATALOG										\
+    {															\
+        Pos		= MAP_APPFONT ( 6 ,AUTO_Y) ;					\
+        Size	= MAP_APPFONT ( PAGE_X -12 , CHECKBOX_HEIGHT ) ;   \
+        TabStop = TRUE ;										\
+        HelpId = HID_DSADMIN_USECATALOG;						\
+        Text[ en-US ] = "Use catalog for file-based databases";	\
     };
 
 //-------------------------------------------------------------------------
 
 #define AUTO_FIXEDLINE_CONNSETTINGS(AUTO_Y) \
-    FixedLine FL_SEPARATOR1                                                                             \
-    {                                                                                                   \
-        Pos = MAP_APPFONT ( 4 , AUTO_Y ) ;                                                              \
-        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;                                          \
-        Text[ en-US ] = "Connection Settings";                                                          \
-    };                                                                                                  \
+    FixedLine FL_SEPARATOR1																				\
+    {																									\
+        Pos = MAP_APPFONT ( 4 , AUTO_Y ) ;																\
+        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;											\
+        Text[ en-US ] = "Connection Settings";														    \
+    };																									\
 
-#define AUTO_HOST_AND_PORT(AUTO_Y)                                                                      \
-    FixedText FT_HOSTNAME                                                                               \
-    {                                                                                                   \
-        Pos = MAP_APPFONT ( 6 , AUTO_Y + 2 ) ;                                                          \
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                          \
-        Text[ en-US ] = "~Host name";                                                                   \
-    };                                                                                                  \
-    Edit ET_HOSTNAME                                                                                    \
-    {                                                                                                   \
-        TabStop = TRUE ;                                                                                \
-        Border = TRUE ;                                                                                 \
-        HelpId = HID_DSADMIN_HOSTNAME;                                                                  \
-        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y ) ;                                                         \
-        Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;                                                       \
-    };                                                                                                  \
+#define AUTO_HOST_AND_PORT(AUTO_Y)																		\
+    FixedText FT_HOSTNAME																				\
+    {																									\
+        Pos = MAP_APPFONT ( 6 , AUTO_Y + 2 ) ;						                                    \
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;											\
+        Text[ en-US ] = "~Host name";																    \
+    };																									\
+    Edit ET_HOSTNAME																					\
+    {																									\
+        TabStop = TRUE ;																				\
+        Border = TRUE ;																					\
+        HelpId = HID_DSADMIN_HOSTNAME;																	\
+        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y ) ;				                                            \
+        Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;														\
+    };																									\
                                                                                                         \
-    FixedText FT_PORTNUMBER                                                                             \
-    {                                                                                                   \
-        Pos = MAP_APPFONT ( 6 , AUTO_Y + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2 ) ;                  \
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                          \
-        Text[ en-US ] = "~Port number";                                                                 \
-    };                                                                                                  \
-    NumericField NF_PORTNUMBER                                                                          \
-    {                                                                                                   \
-        TabStop = TRUE ;                                                                                \
-        Border = TRUE ;                                                                                 \
-        HelpId = HID_DSADMIN_PORTNUMBER;                                                                \
+    FixedText FT_PORTNUMBER																				\
+    {																									\
+        Pos = MAP_APPFONT ( 6 , AUTO_Y + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2 ) ;	                \
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;											\
+        Text[ en-US ] = "~Port number";															        \
+    };																									\
+    NumericField NF_PORTNUMBER																			\
+    {																									\
+        TabStop = TRUE ;																				\
+        Border = TRUE ;																					\
+        HelpId = HID_DSADMIN_PORTNUMBER;																\
         NoThousandSep = TRUE;                                                                           \
         Pos = MAP_APPFONT ( EDIT_X , AUTO_Y +UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT ) ;                  \
-        Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;                                                       \
+        Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;														\
     };
 //-------------------------------------------------------------------------
 
@@ -393,7 +393,7 @@ TabPage PAGE_ODBC
         HelpId = HID_DSADMIN_ODBC_OPTIONS;
     };
 
-    AUTO_USECATALOG(        3*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS )
+    AUTO_USECATALOG(		3*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS )
 };
 
 TabPage PAGE_ADABAS
@@ -434,11 +434,11 @@ TabPage PAGE_ADABAS
     };
     NumericField NF_CACHE_SIZE
     {
-        Pos             = MAP_APPFONT ( EDIT_X , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT -1 ) ;
-        Size            = MAP_APPFONT ( 40 , EDIT_HEIGHT ) ;
-        Border          = TRUE ;
-        TabStop         = TRUE ;
-        Spin            = TRUE ;
+        Pos				= MAP_APPFONT ( EDIT_X , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT -1 ) ;
+        Size			= MAP_APPFONT ( 40 , EDIT_HEIGHT ) ;
+        Border			= TRUE ;
+        TabStop			= TRUE ;
+        Spin			= TRUE ;
         SpinSize        = 1;
         StrictFormat    = TRUE;
     };
@@ -451,11 +451,11 @@ TabPage PAGE_ADABAS
     };
     NumericField NF_DATA_INCREMENT
     {
-        Pos             = MAP_APPFONT ( EDIT_X , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT -1 ) ;
-        Size            = MAP_APPFONT ( 40 , EDIT_HEIGHT ) ;
-        Border          = TRUE ;
-        TabStop         = TRUE ;
-        Spin            = TRUE ;
+        Pos				= MAP_APPFONT ( EDIT_X , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT -1 ) ;
+        Size			= MAP_APPFONT ( 40 , EDIT_HEIGHT ) ;
+        Border			= TRUE ;
+        TabStop			= TRUE ;
+        Spin			= TRUE ;
         SpinSize        = 1;
         StrictFormat    = TRUE;
     };
@@ -502,8 +502,8 @@ TabPage PAGE_ADABAS
 
     PushButton PB_STAT
     {
-        Pos                 = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS, PAGE_Y - BUTTON_HEIGHT - UNRELATED_CONTROLS ) ;
-        Size                = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Pos					= MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS, PAGE_Y - BUTTON_HEIGHT - UNRELATED_CONTROLS ) ;
+        Size				= MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         Text[ en-US ] = "E~xtended...";
     };
 
@@ -511,9 +511,9 @@ TabPage PAGE_ADABAS
 };
 
 //.........................................................................
-#define MYSQL_YDIST 53
-#define MYSQL_FL_Y  8
-#define MYSQL_DRIVERCLASS_Y 8
+#define MYSQL_YDIST	53
+#define MYSQL_FL_Y	8
+#define MYSQL_DRIVERCLASS_Y	8
 
 TabPage PAGE_MYSQL_ODBC
 {

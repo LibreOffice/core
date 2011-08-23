@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ ORelationTableConnectionData::ORelationTableConnectionData( const TTableWindowDa
 {
     DBG_CTOR(ORelationTableConnectionData,NULL);
     m_aConnName = rConnName;
-
+    
     if ( m_aConnName.Len() )
         SetCardinality();
 }
@@ -178,13 +178,13 @@ void ORelationTableConnectionData::SetCardinality()
 BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const
 {
     // check if Table has the primary key column dependig on _eEConnectionSide
-    USHORT  nPrimKeysCount      = 0,
-            nValidLinesCount    = 0;
+    USHORT	nPrimKeysCount		= 0,
+            nValidLinesCount	= 0;
     const Reference< XNameAccess> xKeyColumns = dbtools::getPrimaryKeyColumns_throw(i_xTable);
     if ( xKeyColumns.is() )
     {
         Sequence< ::rtl::OUString> aKeyColumns = xKeyColumns->getElementNames();
-        const ::rtl::OUString* pKeyIter = aKeyColumns.getConstArray();
+        const ::rtl::OUString* pKeyIter	= aKeyColumns.getConstArray();
         const ::rtl::OUString* pKeyEnd  = pKeyIter + aKeyColumns.getLength();
 
         for(;pKeyIter != pKeyEnd;++pKeyIter)
@@ -260,14 +260,14 @@ namespace dbaui
 //-------------------------------------------------------------------------
 bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs)
 {
-    bool bEqual = (lhs.m_nUpdateRules == rhs.m_nUpdateRules)
+    bool bEqual = (lhs.m_nUpdateRules == rhs.m_nUpdateRules) 
         && (lhs.m_nDeleteRules == rhs.m_nDeleteRules)
         && (lhs.m_nCardinality == rhs.m_nCardinality)
         && (lhs.getReferencingTable() == rhs.getReferencingTable())
         && (lhs.getReferencedTable() == rhs.getReferencedTable())
         && (lhs.m_aConnName == rhs.m_aConnName)
         && (lhs.m_vConnLineData.size() == rhs.m_vConnLineData.size());
-
+    
     if ( bEqual )
     {
         std::vector< OConnectionLineDataRef >::const_iterator aIter = lhs.m_vConnLineData.begin();
@@ -297,7 +297,7 @@ BOOL ORelationTableConnectionData::Update()
     // reassign the keys because the orientaion could be changed
     Reference<XPropertySet> xTableProp(getReferencingTable()->getTable());
     Reference< XIndexAccess> xKeys ( getReferencingTable()->getKeys());
-
+    
     if ( !xKeys.is() )
         return FALSE;
     ////////////////////////////////////////////////////////////
@@ -348,7 +348,7 @@ BOOL ORelationTableConnectionData::Update()
                     }
                 }
             }
-
+            
             if ( xColumns->hasElements() )
                 xAppend->appendByDescriptor(xKey);
         }
@@ -384,14 +384,14 @@ xKey.clear();
                     for ( ; pIter != pEnd ; ++pIter )
                     {
                         xColumn.set(xColumns->getByName(*pIter),UNO_QUERY_THROW);
-                        xColumn->getPropertyValue(PROPERTY_NAME)            >>= sName;
-                        xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)   >>= sRelatedColumn;
+                        xColumn->getPropertyValue(PROPERTY_NAME)			>>= sName; 
+                        xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)	>>= sRelatedColumn;
 
                         OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
                         OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
                         for(;aIter != aEnd;++aIter)
                         {
-                            if(    (*aIter)->GetSourceFieldName() == sName
+                            if(    (*aIter)->GetSourceFieldName() == sName 
                                 && (*aIter)->GetDestFieldName() == sRelatedColumn )
                             {
                                 break;
@@ -411,8 +411,8 @@ xKey.clear();
                     }
                 }
                 catch(Exception&)
-                {
-                }
+                {                    
+                }                
             }
         }
     xKey.clear();
@@ -424,7 +424,7 @@ xKey.clear();
         ::dbtools::throwGenericSQLException(sError,NULL);
     }
 
-//  OSL_ENSURE(xKey.is(),"No key found have insertion!");
+//	OSL_ENSURE(xKey.is(),"No key found have insertion!");
 
     // The fields the relation marks may not be the same as our LineDatas mark after the relation has been updated
     if ( xColSup.is() )
@@ -446,8 +446,8 @@ xKey.clear();
             {
                 OConnectionLineDataRef pNewData = CreateLineDataObj();
 
-                xColumn->getPropertyValue(PROPERTY_NAME)            >>= sName;
-                xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)   >>= sRelatedColumn;
+                xColumn->getPropertyValue(PROPERTY_NAME)			>>= sName; 
+                xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)	>>= sRelatedColumn;
 
                 pNewData->SetSourceFieldName(sName);
                 pNewData->SetDestFieldName(sRelatedColumn);

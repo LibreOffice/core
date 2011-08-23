@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ namespace dbaui
     //==================================================================
     class OTableBorderWindow : public Window
     {
-        Splitter                            m_aHorzSplitter;
-        OTableFieldDescWin*                 m_pFieldDescWin;
-        OTableEditorCtrl*                   m_pEditorCtrl;
+        Splitter							m_aHorzSplitter;
+        OTableFieldDescWin*					m_pFieldDescWin;
+        OTableEditorCtrl*					m_pEditorCtrl;
 
         void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
         void ArrangeChilds( long nSplitPos ,Rectangle& rRect);
@@ -58,8 +58,8 @@ namespace dbaui
         virtual void Resize();
         virtual void GetFocus();
 
-        OTableEditorCtrl*       GetEditorCtrl() const { return m_pEditorCtrl; }
-        OTableFieldDescWin*     GetDescWin()    const { return m_pFieldDescWin; }
+        OTableEditorCtrl*		GetEditorCtrl() const { return m_pEditorCtrl; }
+        OTableFieldDescWin*		GetDescWin()	const { return m_pFieldDescWin; }
     };
     //==================================================================
     class OTableDesignView : public ODataView
@@ -72,33 +72,33 @@ namespace dbaui
             NONE
         };
     private:
-        ::com::sun::star::lang::Locale      m_aLocale;
-        OTableBorderWindow*                 m_pWin;
-        OTableController&                   m_rController;
-        ChildFocusState                     m_eChildFocus;
+        ::com::sun::star::lang::Locale		m_aLocale;
+        OTableBorderWindow*					m_pWin;
+        OTableController&					m_rController;
+        ChildFocusState						m_eChildFocus;
 
         IClipboardTest* getActiveChild() const;
     protected:
-
+        
 
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect);
 
     public:
-        OTableDesignView(   Window* pParent,
+        OTableDesignView(	Window* pParent, 
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&,
                             OTableController& _rController);
         virtual ~OTableDesignView();
 
         // window overloads
-        virtual long            PreNotify( NotifyEvent& rNEvt );
-        virtual void            GetFocus();
+        virtual long			PreNotify( NotifyEvent& rNEvt );
+        virtual void			GetFocus();
 
-        OTableEditorCtrl*       GetEditorCtrl() const { return m_pWin ? m_pWin->GetEditorCtrl() : NULL; }
-        OTableFieldDescWin*     GetDescWin()    const { return m_pWin ? m_pWin->GetDescWin() : NULL; }
-        OTableController&       getController() const { return m_rController; }
+        OTableEditorCtrl*		GetEditorCtrl() const { return m_pWin ? m_pWin->GetEditorCtrl() : NULL; }
+        OTableFieldDescWin*		GetDescWin()	const { return m_pWin ? m_pWin->GetDescWin() : NULL; }
+        OTableController&		getController() const { return m_rController; }
 
-        ::com::sun::star::lang::Locale      getLocale() const { return m_aLocale;}
+        ::com::sun::star::lang::Locale		getLocale() const { return m_aLocale;}
 
         // IClipboardTest
         virtual sal_Bool isCutAllowed();

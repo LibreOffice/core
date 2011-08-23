@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,14 +51,14 @@ namespace rptxml
         ::std::vector< ::std::vector<TCell> >                                               m_aGrid;
         ::std::vector<sal_Int32>                                                            m_aHeight;
         ::std::vector<sal_Int32>                                                            m_aWidth;
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >              m_xSection;
-        ::rtl::OUString                                                                     m_sStyleName;
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >	            m_xSection;
+        ::rtl::OUString															            m_sStyleName;
         sal_Int32                                                                           m_nColSpan;
         sal_Int32                                                                           m_nRowSpan;
         sal_Int32                                                                           m_nRowIndex;
         sal_Int32                                                                           m_nColumnIndex;
         ORptFilter& GetOwnImport();
-
+    
         OXMLTable(const OXMLTable&);
         void operator =(const OXMLTable&);
     public:
@@ -85,7 +85,7 @@ namespace rptxml
 
         void incrementRowIndex();
         inline void incrementColumnIndex()  { ++m_nColumnIndex; }
-
+        
         inline sal_Int32 getRowIndex() const { return m_nRowIndex; }
         inline sal_Int32 getColumnIndex() const { return m_nColumnIndex; }
 

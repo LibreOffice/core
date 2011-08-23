@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ namespace dbaui
     sal_Bool OJoinExchObj::isFormatAvailable( const DataFlavorExVector& _rFormats ,SotFormatStringId _nSlotID)
     {
         DataFlavorExVector::const_iterator aCheckEnd = _rFormats.end();
-        for (   DataFlavorExVector::const_iterator aCheck = _rFormats.begin();
+        for	(	DataFlavorExVector::const_iterator aCheck = _rFormats.begin();
                 aCheck != aCheckEnd;
                 ++aCheck
             )
@@ -174,6 +174,6 @@ namespace dbaui
     }
 
 
-}   // namespace dbaui
+}	// namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

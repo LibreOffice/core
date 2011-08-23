@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,7 +115,7 @@ namespace dbaui
             {
                 FeatureSet aCurrentSet;
                 const ::comphelper::NamedValueCollection aCurrentFeatures( aDriverConfig.getFeatures( *pattern ).getNamedValues() );
-
+                
                 const FeatureMapping* pFeatureMapping = lcl_getFeatureMappings();
                 while ( pFeatureMapping->pAsciiFeatureName )
                 {

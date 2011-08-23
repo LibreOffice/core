@@ -48,8 +48,8 @@ namespace dbaccess
      // is used when the source supports keys
     class OptimisticSet : public OKeySet
     {
-        ::connectivity::OSQLParser                              m_aSqlParser;
-        ::connectivity::OSQLParseTreeIterator                   m_aSqlIterator;
+        ::connectivity::OSQLParser				                m_aSqlParser;
+        ::connectivity::OSQLParseTreeIterator	                m_aSqlIterator;
 
         ::std::map<sal_Int32,sal_Int32>                         m_aJoinedColumns;
         ::std::map<sal_Int32,sal_Int32>                         m_aJoinedKeyColumns;
@@ -58,9 +58,9 @@ namespace dbaccess
 
         /**
             getComposedTableName return the composed table name for the query
-            @param _sCatalog    the catalogname may be empty
-            @param _sSchema     the schemaname may be empty
-            @param _sTable      the tablename
+            @param _sCatalog	the catalogname may be empty
+            @param _sSchema		the schemaname may be empty
+            @param _sTable		the tablename
 
             @return the composed name
         */

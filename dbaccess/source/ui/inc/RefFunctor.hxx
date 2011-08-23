@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,10 +47,10 @@ namespace dbaui
         {
             m_aFunction(_aType.get());
         }
-//      inline void operator()(const ::rtl::Reference<T>& _aType)
-//      {
-//          m_aFunction(_aType.get());
-//      }
+//		inline void operator()(const ::rtl::Reference<T>& _aType)
+//		{
+//			m_aFunction(_aType.get());
+//		}
     };
 // -----------------------------------------------------------------------------
 } // namespace dbaui

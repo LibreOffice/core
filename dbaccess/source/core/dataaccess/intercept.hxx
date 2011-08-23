@@ -159,10 +159,10 @@ private:
 
     cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
     PropertyChangeListenerContainer*    m_pStatCL;
-    sal_Bool                            m_bAllowEditDoc;
+    sal_Bool							m_bAllowEditDoc;
 };
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 
 #endif //DBA_INTERCEPT_HXX
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,8 +130,8 @@ void OAppBorderWindow::Resize()
     //////////////////////////////////////////////////////////////////////
     // Abmessungen parent window
     Size aOutputSize( GetOutputSize() );
-    long nOutputWidth   = aOutputSize.Width();
-    long nOutputHeight  = aOutputSize.Height();
+    long nOutputWidth	= aOutputSize.Width();
+    long nOutputHeight	= aOutputSize.Height();
     long nX = 0;
 
     Size aFLSize = LogicToPixel( Size( 3, 8 ), MAP_APPFONT );
@@ -197,13 +197,13 @@ OApplicationView* OAppBorderWindow::getView() const
 }
 
 // -----------------------------------------------------------------------------
-OApplicationSwapWindow* OAppBorderWindow::getPanel() const
+OApplicationSwapWindow*	OAppBorderWindow::getPanel() const
 {
     return static_cast< OApplicationSwapWindow* >( m_pPanel->getChildWindow() );
 }
 
 // -----------------------------------------------------------------------------
-OApplicationDetailView* OAppBorderWindow::getDetailView() const
+OApplicationDetailView*	OAppBorderWindow::getDetailView() const
 {
     return m_pDetailView;
 }
@@ -530,7 +530,7 @@ void OApplicationView::showPreview(const Reference< XContent >& _xContent)
     getDetailView()->showPreview(_xContent);
 }
 // -----------------------------------------------------------------------------
-void OApplicationView::showPreview( const ::rtl::OUString& _sDataSourceName,
+void OApplicationView::showPreview(	const ::rtl::OUString& _sDataSourceName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                                     const ::rtl::OUString& _sName,
                                     sal_Bool _bTable)

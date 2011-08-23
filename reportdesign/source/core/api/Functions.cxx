@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,20 +49,20 @@ OFunctions::OFunctions(const uno::Reference< report::XFunctionsSupplier >& _xPar
     DBG_CTOR( rpt_OFunctions,NULL);
 }
 //--------------------------------------------------------------------------
-// TODO: VirtualFunctionFinder: This is virtual function!
-//
+// TODO: VirtualFunctionFinder: This is virtual function! 
+// 
 OFunctions::~OFunctions()
 {
     DBG_DTOR( rpt_OFunctions,NULL);
 }
 //--------------------------------------------------------------------------
-void SAL_CALL OFunctions::dispose() throw(uno::RuntimeException)
+void SAL_CALL OFunctions::dispose() throw(uno::RuntimeException) 
 {
     cppu::WeakComponentImplHelperBase::dispose();
 }
 // -----------------------------------------------------------------------------
-// TODO: VirtualFunctionFinder: This is virtual function!
-//
+// TODO: VirtualFunctionFinder: This is virtual function! 
+// 
 void SAL_CALL OFunctions::disposing()
 {
     ::std::for_each(m_aFunctions.begin(),m_aFunctions.end(),::boost::mem_fn(&com::sun::star::report::XFunction::dispose));
@@ -83,7 +83,7 @@ uno::Reference< report::XFunction > SAL_CALL OFunctions::createFunction(  ) thro
 void SAL_CALL OFunctions::insertByIndex( ::sal_Int32 Index, const uno::Any& aElement ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
+        ::osl::MutexGuard aGuard(m_aMutex);	
         sal_Bool bAdd = (Index == static_cast<sal_Int32>(m_aFunctions.size()));
         if ( !bAdd )
             checkIndex(Index);
@@ -111,7 +111,7 @@ void SAL_CALL OFunctions::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexO
 {
     uno::Reference< report::XFunction > xFunction;
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
+        ::osl::MutexGuard aGuard(m_aMutex);	
         checkIndex(Index);
         TFunctions::iterator aPos = m_aFunctions.begin();
         ::std::advance(aPos,Index);
@@ -128,7 +128,7 @@ void SAL_CALL OFunctions::replaceByIndex( ::sal_Int32 Index, const uno::Any& Ele
 {
     uno::Any aOldElement;
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
+        ::osl::MutexGuard aGuard(m_aMutex);	
         checkIndex(Index);
         uno::Reference< report::XFunction > xFunction(Element,uno::UNO_QUERY);
         if ( !xFunction.is() )

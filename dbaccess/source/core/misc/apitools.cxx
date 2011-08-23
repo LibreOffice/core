@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ void OSubComponent::release() throw ( )
                 }
 
                 OSL_ENSURE( m_refCount == 1, "OSubComponent::release: invalid ref count (before dispose)!" );
-
+                
                 // First dispose
                 dispose();
 

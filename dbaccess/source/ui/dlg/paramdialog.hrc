@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,19 +28,19 @@
 #ifndef _DBAUI_PARAMDIALOG_HRC_
 #define _DBAUI_PARAMDIALOG_HRC_
 
-#define LB_ALLPARAMS    1
-#define FL_PARAMS       2
-#define FT_VALUE        3
-#define ET_PARAM        4
-#define CB_NULLVAL      5
-#define BT_TRAVELNEXT   6
-#define BT_OK           7
-#define BT_CANCEL       8
-#define AB_PREV         9
-#define AB_NEXT         10
+#define LB_ALLPARAMS	1
+#define FL_PARAMS		2
+#define FT_VALUE		3
+#define ET_PARAM		4
+#define CB_NULLVAL		5
+#define BT_TRAVELNEXT	6
+#define BT_OK			7
+#define BT_CANCEL		8
+#define AB_PREV			9
+#define AB_NEXT			10
 
 
-#define STR_COULD_NOT_CONVERT_PARAM 1
+#define STR_COULD_NOT_CONVERT_PARAM	1
 
 #endif // _DBAUI_PARAMDIALOG_HRC_
 

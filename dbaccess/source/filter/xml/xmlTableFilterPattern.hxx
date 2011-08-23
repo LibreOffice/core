@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,10 +35,10 @@ namespace dbaxml
     class OXMLTableFilterList;
     class OXMLTableFilterPattern : public SvXMLImportContext
     {
-        OXMLTableFilterList&    m_rParent;
-        sal_Bool                m_bNameFilter;
+        OXMLTableFilterList&	m_rParent;
+        sal_Bool				m_bNameFilter;
     public:
-        OXMLTableFilterPattern( SvXMLImport& rImport
+        OXMLTableFilterPattern(	SvXMLImport& rImport
                                 ,sal_uInt16 nPrfx
                                 ,const ::rtl::OUString& rLName
                                 ,sal_Bool _bNameFilter

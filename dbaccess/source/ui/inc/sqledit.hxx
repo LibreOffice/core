@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,21 +39,21 @@ namespace dbaui
     class OSqlEdit : public MultiLineEditSyntaxHighlight, utl::ConfigurationListener
     {
     private:
-        Timer                   m_timerInvalidate;
-        Timer                   m_timerUndoActionCreation;
-        Link                    m_lnkTextModifyHdl;
-        String                  m_strOrigText;      // wird beim Undo wiederhergestellt
-        OQueryTextView*         m_pView;
-        BOOL                    m_bAccelAction;     // Wird bei Cut, Copy, Paste gesetzt
-        BOOL                    m_bStopTimer;
+        Timer					m_timerInvalidate;
+        Timer					m_timerUndoActionCreation;
+        Link					m_lnkTextModifyHdl;
+        String					m_strOrigText;		// wird beim Undo wiederhergestellt
+        OQueryTextView*			m_pView;
+        BOOL					m_bAccelAction;		// Wird bei Cut, Copy, Paste gesetzt
+        BOOL					m_bStopTimer;
         utl::SourceViewConfig   m_SourceViewConfig;
-        svtools::ColorConfig    m_ColorConfig;
+        svtools::ColorConfig	m_ColorConfig;
 
         DECL_LINK(OnUndoActionTimer, void*);
         DECL_LINK(OnInvalidateTimer, void*);
 
     private:
-        void            ImplSetFont();
+        void			ImplSetFont();
 
     protected:
         virtual void KeyInput( const KeyEvent& rKEvt );

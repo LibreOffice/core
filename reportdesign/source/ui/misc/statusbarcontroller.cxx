@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,10 +84,10 @@ Reference< XInterface > OStatusbarController::create(Reference< XComponentContex
 }
 IMPLEMENT_FORWARD_XINTERFACE2(OStatusbarController, ::svt::StatusbarController,OStatusbarController_BASE)
 
-OStatusbarController::OStatusbarController(const Reference< XMultiServiceFactory >& _rxORB)
+OStatusbarController::OStatusbarController(const Reference< XMultiServiceFactory >& _rxORB) 
 : m_nSlotId(0)
 ,m_nId(1)
-{
+{ 
     m_xServiceManager = _rxORB;
 }
 // -----------------------------------------------------------------------------
@@ -111,11 +111,11 @@ void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArgumen
             }
         }
         if ( m_aCommandURL.equalsAscii(".uno:ZoomSlider") )
-        {
+        {  
             m_pController = TStatusbarHelper::createFromQuery(new SvxZoomSliderControl(m_nSlotId = SID_ATTR_ZOOMSLIDER,m_nId,*pStatusBar));
         } // if ( m_aCommandURL.equalsAscii(".uno:ZoomSlider") )
         else if ( m_aCommandURL.equalsAscii(".uno:Zoom") )
-        {
+        {  
             m_pController = TStatusbarHelper::createFromQuery(new SvxZoomStatusBarControl(m_nSlotId = SID_ATTR_ZOOM,m_nId,*pStatusBar));
         }
 

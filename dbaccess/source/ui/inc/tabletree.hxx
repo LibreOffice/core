@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ protected:
                     m_xConnection;      // the connection we're working for, set in implOnNewConnection, called by UpdateTableList
     ::std::auto_ptr< ImageProvider >
                     m_pImageProvider;   // provider for our images
-    sal_Bool        m_bVirtualRoot; // should the first entry be visible
+    sal_Bool		m_bVirtualRoot; // should the first entry be visible
     bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?
 
 public:
@@ -75,12 +75,12 @@ public:
 
     ~OTableTreeListBox();
 
-    typedef ::std::pair< ::rtl::OUString,sal_Bool>  TTableViewName;
-    typedef ::std::vector< TTableViewName >         TNames;
+    typedef ::std::pair< ::rtl::OUString,sal_Bool>	TTableViewName;
+    typedef ::std::vector< TTableViewName >			TNames;
 
     void    suppressEmptyFolders() { m_bNoEmptyFolders = true; }
 
-    /** call when HiContrast change.
+    /** call when HiContrast change. 
     */
     void notifyHiContrastChanged();
 
@@ -103,16 +103,16 @@ public:
     */
     void    UpdateTableList(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
-            )   throw(::com::sun::star::sdbc::SQLException);
+            )	throw(::com::sun::star::sdbc::SQLException);
 
     /** fill the table list with the tables and views determined by the two given containers.
         The views sequence is used to determine which table is of type view.
-        @param      _rxConnection   the connection where you got the object names from. Must not be NULL.
+        @param		_rxConnection   the connection where you got the object names from. Must not be NULL.
                                     Used to split the full qualified names into it's parts.
-        @param      _rTables        table/view sequence
-        @param      _rViews         view sequence
+        @param		_rTables		table/view sequence
+        @param		_rViews			view sequence
     */
-    void    UpdateTableList(
+    void	UpdateTableList(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _rTables,
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _rViews
@@ -129,29 +129,29 @@ public:
 
     /** to be used if a foreign instance removed a table
     */
-    void    removedTable( const ::rtl::OUString& _rName );
+    void	removedTable( const ::rtl::OUString& _rName );
 
     /** returns the fully qualified name of a table entry
-        @param _pEntry
+        @param _pEntry 
             the entry whose name is to be obtained. Must not denote a folder entry.
     */
     String getQualifiedTableName( SvLBoxEntry* _pEntry ) const;
 
-    SvLBoxEntry*    getEntryByQualifiedName( const ::rtl::OUString& _rName );
+    SvLBoxEntry*	getEntryByQualifiedName( const ::rtl::OUString& _rName );
 
-    SvLBoxEntry*    getAllObjectsEntry() const;
+    SvLBoxEntry*	getAllObjectsEntry() const;
 
     /** does a wildcard check of the given entry
         <p>There are two different 'checked' states: If the user checks all children of an entry, this is different
         from checking the entry itself. The second is called 'wildcard' checking, 'cause in the resulting
         table filter it's represented by a wildcard.</p>
     */
-    void            checkWildcard(SvLBoxEntry* _pEntry);
+    void			checkWildcard(SvLBoxEntry* _pEntry);
 
     /** determine if the given entry is 'wildcard checked'
         @see checkWildcard
     */
-    sal_Bool        isWildcardChecked(SvLBoxEntry* _pEntry) const;
+    sal_Bool		isWildcardChecked(SvLBoxEntry* _pEntry) const;
 
 protected:
     virtual void InitEntry(SvLBoxEntry* _pEntry, const XubString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind);
@@ -180,11 +180,11 @@ protected:
     sal_Bool haveVirtualRoot() const { return m_bVirtualRoot; }
 
     /** fill the table list with the tables and views determined by the two given containers
-        @param      _rxConnection   the connection where you got the object names from. Must not be NULL.
+        @param		_rxConnection	the connection where you got the object names from. Must not be NULL.
                                     Used to split the full qualified names into it's parts.
-        @param      _rTables        table/view sequence, the second argument is <TRUE/> if it is a table, otherwise it is a view.
+        @param		_rTables		table/view sequence, the second argument is <TRUE/> if it is a table, otherwise it is a view.
     */
-    void    UpdateTableList(
+    void	UpdateTableList(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                 const TNames& _rTables
             );
@@ -192,7 +192,7 @@ protected:
 };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_TABLETREE_HXX_

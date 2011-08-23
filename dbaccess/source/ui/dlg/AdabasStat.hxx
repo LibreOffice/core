@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,32 +47,32 @@ namespace dbaui
     protected:
 
         FixedLine               m_FL_FILES;
-        FixedText               m_FT_SYSDEVSPACE;
-        OPropEditCtrl           m_ET_SYSDEVSPACE;
-        FixedText               m_FT_TRANSACTIONLOG;
-        OPropEditCtrl           m_ET_TRANSACTIONLOG;
-        FixedText               m_FT_DATADEVSPACE;
-        OPropListBoxCtrl        m_LB_DATADEVS;
+        FixedText				m_FT_SYSDEVSPACE;
+        OPropEditCtrl			m_ET_SYSDEVSPACE;
+        FixedText				m_FT_TRANSACTIONLOG;
+        OPropEditCtrl			m_ET_TRANSACTIONLOG;
+        FixedText				m_FT_DATADEVSPACE;
+        OPropListBoxCtrl		m_LB_DATADEVS;
         FixedLine               m_FL_SIZES;
-        FixedText               m_FT_SIZE;
-        OPropEditCtrl           m_ET_SIZE;
-        FixedText               m_FT_FREESIZE;
-        OPropEditCtrl           m_ET_FREESIZE;
-        FixedText               m_FT_MEMORYUSING;
-        OPropNumericEditCtrl    m_ET_MEMORYUSING;
+        FixedText				m_FT_SIZE;
+        OPropEditCtrl			m_ET_SIZE;
+        FixedText				m_FT_FREESIZE;
+        OPropEditCtrl			m_ET_FREESIZE;
+        FixedText				m_FT_MEMORYUSING;
+        OPropNumericEditCtrl	m_ET_MEMORYUSING;
 
-        OKButton                m_PB_OK;
+        OKButton				m_PB_OK;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                                m_xConnection;  /// valid as long as the page is active
-        sal_Bool                m_bErrorShown; // true when we shown already the error
+                                m_xConnection;	/// valid as long as the page is active
+        sal_Bool				m_bErrorShown; // true when we shown already the error 
 
         // check if the given table is accessable by the connected user
         sal_Bool checkSystemTable(const ::rtl::OUString& _rsSystemTable, ::rtl::OUString& _rsSchemaName );
         void showError();
 
     public:
-        OAdabasStatistics(  Window* pParent,
+        OAdabasStatistics(	Window* pParent,
                             const ::rtl::OUString& _rUser,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCurrentConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,14 +149,14 @@ namespace dbaui
         SharedConnection                m_xConnection;
         ::dbtools::DatabaseMetaData     m_aSdbMetaData;
         // </properties>
-        ::rtl::OUString                 m_sDataSourceName;      // the data source we're working for
+        ::rtl::OUString	                m_sDataSourceName;		// the data source we're working for
         DataSourceHolder                m_aDataSource;
         Reference< XModel >             m_xDocument;
-        Reference< XNumberFormatter >   m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
+        Reference< XNumberFormatter > 	m_xFormatter;	// a number formatter working with the connection's NumberFormatsSupplier
         sal_Int32                       m_nDocStartNumber;
-        sal_Bool                        m_bSuspended;   // is true when the controller was already suspended
-        sal_Bool                        m_bEditable;    // is the control readonly or not
-        sal_Bool                        m_bModified;    // is the data modified
+        sal_Bool		                m_bSuspended;	// is true when the controller was already suspended
+        sal_Bool		                m_bEditable;	// is the control readonly or not
+        sal_Bool		                m_bModified;	// is the data modified
         bool                            m_bNotAttached;
 
         OSingleDocumentControllerImpl( ::osl::Mutex& i_rMutex )
@@ -242,7 +242,7 @@ namespace dbaui
 
         return OSingleDocumentController_Base::queryInterface( _rType );
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< Type > SAL_CALL OSingleDocumentController::getTypes(  ) throw (RuntimeException)
     {
@@ -260,7 +260,7 @@ namespace dbaui
         }
         return aTypes;
     }
-
+    
     //--------------------------------------------------------------------
     void OSingleDocumentController::initializeConnection( const Reference< XConnection >& _rxForeignConn )
     {
@@ -394,9 +394,9 @@ namespace dbaui
         if ( _rSource.Source == getConnection() )
         {
             if (    !m_pImpl->m_bSuspended // when already suspended then we don't have to reconnect
-                &&  !getBroadcastHelper().bInDispose
-                &&  !getBroadcastHelper().bDisposed
-                &&  isConnected()
+                &&	!getBroadcastHelper().bInDispose  
+                &&	!getBroadcastHelper().bDisposed 
+                &&	isConnected() 
                 )
             {
                 losingConnection();
@@ -450,7 +450,7 @@ namespace dbaui
         if ( !bSuspend && !isConnected() )
             reconnect(sal_True);
 
-
+            
         return sal_True;
     }
 
@@ -549,12 +549,12 @@ namespace dbaui
 
     // -----------------------------------------------------------------------------
     ::rtl::OUString OSingleDocumentController::getDataSourceName() const
-    {
+    { 
         ::rtl::OUString sName;
         Reference< XPropertySet > xDataSourceProps( m_pImpl->m_aDataSource.getDataSourceProps() );
         if ( xDataSourceProps.is() )
             xDataSourceProps->getPropertyValue(PROPERTY_NAME) >>= sName;
-        return sName;
+        return sName; 
     }
     // -----------------------------------------------------------------------------
     void OSingleDocumentController::connectionLostMessage() const
@@ -566,13 +566,13 @@ namespace dbaui
             pWin = VCLUnoHelper::GetWindow(xWindow);
         if ( !pWin )
             pWin = getView()->Window::GetParent();
-
+        
         InfoBox(pWin, aMessage).Execute();
     }
     // -----------------------------------------------------------------------------
-    const Reference< XConnection >& OSingleDocumentController::getConnection() const
-    {
-        return m_pImpl->m_xConnection;
+    const Reference< XConnection >& OSingleDocumentController::getConnection() const 
+    { 
+        return m_pImpl->m_xConnection; 
     }
 
     // -----------------------------------------------------------------------------
@@ -606,7 +606,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------------
-    Reference< XDatabaseMetaData > OSingleDocumentController::getMetaData( ) const
+    Reference< XDatabaseMetaData > OSingleDocumentController::getMetaData( ) const 
     {
         Reference< XDatabaseMetaData > xMeta;
         try
@@ -658,7 +658,7 @@ namespace dbaui
         ::osl::MutexGuard aGuard( getMutex() );
         if ( m_bExternalTitle )
             return impl_getTitleHelper_throw()->getTitle ();
-
+        
         ::rtl::OUStringBuffer sTitle;
         Reference< XTitle > xTitle(getPrivateModel(),UNO_QUERY);
         if ( xTitle.is() )
@@ -674,7 +674,7 @@ namespace dbaui
         //    sTitle.appendAscii(" : ");
         //    sTitle.append(nCurrentView);
         //}
-
+        
         return sTitle.makeStringAndClear();
     }
     // -----------------------------------------------------------------------------
@@ -745,7 +745,7 @@ namespace dbaui
     }
 
 //........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

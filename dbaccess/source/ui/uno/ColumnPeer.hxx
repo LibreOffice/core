@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@ namespace dbaui
 {
 //.........................................................................
     class OFieldDescription;
-    class OColumnPeer   :   public VCLXWindow
+    class OColumnPeer	:	public VCLXWindow
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xORB;
-        OFieldDescription*                                                              m_pActFieldDescr;
+        OFieldDescription*		                                                        m_pActFieldDescr;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xColumn;
     public:
 
@@ -56,7 +56,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
     };
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 #endif //DBAUI_COLUMNPEER_HXX
 

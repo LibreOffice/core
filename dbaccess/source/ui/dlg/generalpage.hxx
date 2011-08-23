@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,15 +76,15 @@ namespace dbaui
         ::std::auto_ptr< OpenDocumentListBox >
                             m_pLB_DocumentList;
         OpenDocumentButton  m_aPB_OpenDocument;
-        FixedText           m_aTypePreLabel;
-        FixedText           m_aDatasourceTypeLabel;
+        FixedText			m_aTypePreLabel;
+        FixedText			m_aDatasourceTypeLabel;
         ::std::auto_ptr< ListBox >
                             m_pDatasourceType;
         FixedText           m_aFTDataSourceAppendix;
-        FixedText           m_aTypePostLabel;
-        FixedText           m_aSpecialMessage;
+        FixedText			m_aTypePostLabel;
+        FixedText			m_aSpecialMessage;
         sal_Bool            m_DBWizardMode;
-        String              m_sMySQLEntry;
+        String				m_sMySQLEntry;
         CreationMode        m_eOriginalCreationMode;
         DocumentDescriptor  m_aBrowsedDocument;
 
@@ -93,47 +93,47 @@ namespace dbaui
         ::std::vector< ::rtl::OUString> m_aURLPrefixes;
 
 
-        ::dbaccess::ODsnTypeCollection*
-                            m_pCollection;  /// the DSN type collection instance
-        ::rtl::OUString     m_eCurrentSelection;    /// currently selected type
-        ::dbaccess::DATASOURCE_TYPE     m_eNotSupportedKnownType;   /// if a data source of an unsupported, but known type is encountered ....
+        ::dbaccess::ODsnTypeCollection*	
+                            m_pCollection;	/// the DSN type collection instance
+        ::rtl::OUString     m_eCurrentSelection;	/// currently selected type
+        ::dbaccess::DATASOURCE_TYPE		m_eNotSupportedKnownType;	/// if a data source of an unsupported, but known type is encountered ....
 
         enum SPECIAL_MESSAGE
         {
             smNone,
             smUnsupportedType
         };
-        SPECIAL_MESSAGE     m_eLastMessage;
+        SPECIAL_MESSAGE		m_eLastMessage;
 
-        Link                m_aTypeSelectHandler;   /// to be called if a new type is selected
-        Link                m_aCreationModeHandler; /// to be called if a new type is selected
-        Link                m_aDocumentSelectionHandler;    /// to be called when a document in the RecentDoc list is selected
+        Link				m_aTypeSelectHandler;	/// to be called if a new type is selected
+        Link				m_aCreationModeHandler;	/// to be called if a new type is selected
+        Link				m_aDocumentSelectionHandler;    /// to be called when a document in the RecentDoc list is selected
         Link                m_aChooseDocumentHandler;       /// to be called when a recent document has been definately chosen
-        sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
-        sal_Bool            m_bUserGrabFocus : 1;
-        bool                m_bInitTypeList : 1;
+        sal_Bool			m_bDisplayingInvalid : 1;	// the currently displayed data source is deleted
+        sal_Bool			m_bUserGrabFocus : 1;
+        bool			    m_bInitTypeList : 1;
         bool                approveDataSourceType( const ::rtl::OUString& _sURLPrefix, String& _inout_rDisplayName );
-        void                insertDatasourceTypeEntryData(const ::rtl::OUString& _sType, String sDisplayName);
+        void				insertDatasourceTypeEntryData(const ::rtl::OUString& _sType, String sDisplayName);
 
     public:
-        static SfxTabPage*  Create(Window* pParent, const SfxItemSet& _rAttrSet, sal_Bool _bDBWizardMode = sal_False);
+        static SfxTabPage*	Create(Window* pParent, const SfxItemSet& _rAttrSet, sal_Bool _bDBWizardMode = sal_False);
 
         /// set a handler which gets called every time the user selects a new type
-        void            SetTypeSelectHandler(const Link& _rHandler) { m_aTypeSelectHandler = _rHandler; }
-        void            SetCreationModeHandler(const Link& _rHandler) { m_aCreationModeHandler = _rHandler; }
-        void            SetDocumentSelectionHandler( const Link& _rHandler) { m_aDocumentSelectionHandler = _rHandler; }
-        void            SetChooseDocumentHandler( const Link& _rHandler) { m_aChooseDocumentHandler = _rHandler; }
+        void			SetTypeSelectHandler(const Link& _rHandler) { m_aTypeSelectHandler = _rHandler; }
+        void			SetCreationModeHandler(const Link& _rHandler) { m_aCreationModeHandler = _rHandler; }
+        void			SetDocumentSelectionHandler( const Link& _rHandler) { m_aDocumentSelectionHandler = _rHandler; }
+        void			SetChooseDocumentHandler( const Link& _rHandler) { m_aChooseDocumentHandler = _rHandler; }
         CreationMode    GetDatabaseCreationMode() const;
 
         DocumentDescriptor  GetSelectedDocument() const;
 
         /// get the currently selected datasource type
-        ::rtl::OUString     GetSelectedType() const { return m_eCurrentSelection; }
+        ::rtl::OUString 	GetSelectedType() const { return m_eCurrentSelection; }
 
     protected:
         // SfxTabPage overridables
-        virtual BOOL FillItemSet(SfxItemSet& _rCoreAttrs);
-        virtual void Reset(const SfxItemSet& _rCoreAttrs);
+        virtual	BOOL FillItemSet(SfxItemSet& _rCoreAttrs);
+        virtual	void Reset(const SfxItemSet& _rCoreAttrs);
 
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
@@ -163,7 +163,7 @@ namespace dbaui
     };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 #endif // _DBAUI_GENERALPAGE_HXX_
 

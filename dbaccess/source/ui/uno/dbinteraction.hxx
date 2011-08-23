@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,9 +56,9 @@ namespace dbaui
     //=========================================================================
     //= BasicInteractionHandler
     //=========================================================================
-    typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::lang::XServiceInfo
-                                    ,   ::com::sun::star::task::XInteractionHandler2
-                                    >   BasicInteractionHandler_Base;
+    typedef ::cppu::WeakImplHelper2	<	::com::sun::star::lang::XServiceInfo
+                                    ,	::com::sun::star::task::XInteractionHandler2
+                                    >	BasicInteractionHandler_Base;
     /** implements an <type scope="com.sun.star.task">XInteractionHandler</type> for
         database related interaction requests.
         <p/>
@@ -95,17 +95,17 @@ namespace dbaui
                 impl_handle_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& i_Request );
 
         /// handle SQLExceptions (and derived classes)
-        void    implHandle(
+        void	implHandle(
                     const ::dbtools::SQLExceptionInfo& _rSqlInfo,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
 
         /// handle parameter requests
-        void    implHandle(
+        void	implHandle(
                     const ::com::sun::star::sdb::ParametersRequest& _rParamRequest,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
 
         /// handle document save requests
-        void    implHandle(
+        void	implHandle(
                     const ::com::sun::star::sdb::DocumentSaveRequest& _rParamRequest,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
 
@@ -124,7 +124,7 @@ namespace dbaui
             SUPPLY_DOCUMENTSAVE
         };
         /** check if a given continuation sequence contains a given continuation type<p/>
-            @return     the index within <arg>_rContinuations</arg> of the first occurence of a continuation
+            @return		the index within <arg>_rContinuations</arg> of the first occurence of a continuation
                         of the requested type, -1 of no such continuation exists
         */
         sal_Int32 getContinuation(
@@ -180,7 +180,7 @@ namespace dbaui
     };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_INTERACTION_HXX_

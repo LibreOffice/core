@@ -18,19 +18,19 @@
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-connector"/>
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-off-page-connector"/>
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-card"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-punched-tape"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-summing-junction"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-or"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-punched-tape"/> 
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-summing-junction"/> 
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-or"/> 
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-collate"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-sort"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-extract"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-merge"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-stored-data"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-delay"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-collate"/> 
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-sort"/> 
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-extract"/> 
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-merge"/> 
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-stored-data"/> 
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-delay"/> 
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-sequential-access"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-magnetic-disk"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-direct-access-storage"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-display"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-sequential-access"/> 
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-magnetic-disk"/> 
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-direct-access-storage"/> 
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-display"/> 
 </toolbar:toolbar>

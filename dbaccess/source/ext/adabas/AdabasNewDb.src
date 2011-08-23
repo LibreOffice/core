@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,23 +33,23 @@
 //==================================================================
 // NEWDB Admin
 //==================================================================
-#define WIN_X   268
-#define WIN_Y   210
-#define MOVE_Y  21
+#define WIN_X	268
+#define WIN_Y	210
+#define MOVE_Y	21
 #define ADJUST_X 45
 ModalDialog DLG_ADABAS_NEWDB
 {
-    Moveable    = TRUE ;
-    Closeable   = TRUE ;
-    OutputSize  = TRUE ;
-    SVLook      = TRUE;
-    HelpID      = HID_DLG_ADABAS_NEWDB ;
-    Size        = MAP_APPFONT ( WIN_X , WIN_Y + MOVE_Y) ;
+    Moveable	= TRUE ;
+    Closeable	= TRUE ;
+    OutputSize	= TRUE ;
+    SVLook		= TRUE;
+    HelpID		= HID_DLG_ADABAS_NEWDB ;
+    Size		= MAP_APPFONT ( WIN_X , WIN_Y + MOVE_Y) ;
 
     FixedText FT_DATABASENAME
     {
-        Pos     = MAP_APPFONT ( 12 , 6) ;
-        Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
+        Pos		= MAP_APPFONT ( 12 , 6) ;
+        Size	= MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
         Text[ en-US ] = "Database ~name";
 };
     Edit ET_DATABASENAME
@@ -58,50 +58,50 @@ ModalDialog DLG_ADABAS_NEWDB
         Pos     = MAP_APPFONT ( 77 + ADJUST_X, 5) ;
         Size    = MAP_APPFONT ( 161 - ADJUST_X, 12 ) ;
         TabStop = TRUE ;
-        HelpID  = HID_DLG_ADABAS_DBNAME ;
+        HelpID	= HID_DLG_ADABAS_DBNAME ;
     };
 
     FixedLine FL_USER
     {
-        Pos     = MAP_APPFONT ( 6 , 3 + MOVE_Y) ;
+        Pos		= MAP_APPFONT ( 6 , 3 + MOVE_Y) ;
         Size    = MAP_APPFONT ( WIN_X - 12 , 8 ) ;
         Text[ en-US ] = "User settings";
 };
 
     FixedText FT_CONUSR
     {
-        Pos     = MAP_APPFONT ( 12 , 31 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
+        Pos		= MAP_APPFONT ( 12 , 31 + MOVE_Y) ;
+        Size	= MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
         Text[ en-US ] = "~Control user";
 };
     FixedText FT_SYSUSR
     {
-        Pos     = MAP_APPFONT ( 12 , 14 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
+        Pos		= MAP_APPFONT ( 12 , 14 + MOVE_Y) ;
+        Size	= MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
         Text[ en-US ] = "~Administrator";
 };
     FixedText FT_DOMAIN_USR
     {
-        Pos     = MAP_APPFONT ( 12 , 48 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
+        Pos		= MAP_APPFONT ( 12 , 48 + MOVE_Y) ;
+        Size	= MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
         Text[ en-US ] = "~Domain user";
 };
 
     Edit ET_SYSUSR
     {
-        Border  = TRUE ;
+        Border	= TRUE ;
         Pos     = MAP_APPFONT ( 77 + ADJUST_X, 13 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 105 - ADJUST_X, 12 ) ;
+        Size	= MAP_APPFONT ( 105 - ADJUST_X, 12 ) ;
         TabStop = TRUE ;
-        HelpID  = HID_DLG_ADABAS_SYSUSR ;
+        HelpID	= HID_DLG_ADABAS_SYSUSR ;
     };
 
     PushButton PB_SYSPWD
     {
         Pos     = MAP_APPFONT ( 188 , 13 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 50 , 14 ) ;
+        Size	= MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        HelpID  = HID_DLG_ADABAS_SYSPWD ;
+        HelpID	= HID_DLG_ADABAS_SYSPWD ;
         Text[ en-US ] = "P~assword...";
 };
 
@@ -109,87 +109,87 @@ ModalDialog DLG_ADABAS_NEWDB
     {
         Border  = TRUE ;
         Pos     = MAP_APPFONT ( 77 + ADJUST_X, 30 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 105 - ADJUST_X, 12 ) ;
+        Size	= MAP_APPFONT ( 105 - ADJUST_X, 12 ) ;
         TabStop = TRUE ;
-        HelpID  = HID_DLG_ADABAS_CONUSR ;
+        HelpID	= HID_DLG_ADABAS_CONUSR ;
     };
 
     PushButton PB_CONPWD
     {
         Pos     = MAP_APPFONT ( 188 , 30 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 50 , 14 ) ;
+        Size	= MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        HelpID  = HID_DLG_ADABAS_CONPWD ;
+        HelpID	= HID_DLG_ADABAS_CONPWD ;
         Text[ en-US ] = "~Password...";
 };
     Edit ET_DOMAIN_USR
     {
         Pos     = MAP_APPFONT ( 77 + ADJUST_X, 47 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 105 - ADJUST_X, 12 ) ;
-        Border  = TRUE ;
+        Size	= MAP_APPFONT ( 105 - ADJUST_X, 12 ) ;
+        Border	= TRUE ;
         TabStop = TRUE ;
         ReadOnly= TRUE;
-        HelpID  = HID_DLG_ADABAS_USR ;
+        HelpID	= HID_DLG_ADABAS_USR ;
         Text = "adabas";
     };
 
     PushButton PB_DOMAINPWD
     {
         Pos     = MAP_APPFONT ( 188 , 47 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 50 , 14 ) ;
+        Size	= MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        HelpID  = HID_DLG_ADABAS_DOMAINPWD ;
+        HelpID	= HID_DLG_ADABAS_DOMAINPWD ;
         Text[ en-US ] = "Passwo~rd...";
 };
 
     FixedImage BMP_CON
     {
         Pos     = MAP_APPFONT ( 240 , 27 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 20 , 20 ) ;
-        HelpID  = HID_DLG_ADABAS_CON_PWD ;
+        Size	= MAP_APPFONT ( 20 , 20 ) ;
+        HelpID	= HID_DLG_ADABAS_CON_PWD ;
     };
     FixedImage BMP_SYS
     {
         Pos     = MAP_APPFONT ( 240 , 11 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 20 , 20 ) ;
-        HelpID  = HID_DLG_ADABAS_SYS_PWD ;
+        Size	= MAP_APPFONT ( 20 , 20 ) ;
+        HelpID	= HID_DLG_ADABAS_SYS_PWD ;
     };
     FixedImage BMP_DOMAIN
     {
         Pos     = MAP_APPFONT ( 240 , 44 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 20 , 20 ) ;
-        HelpID  = HID_DLG_ADABAS_DOMAIN_PWD ;
+        Size	= MAP_APPFONT ( 20 , 20 ) ;
+        HelpID	= HID_DLG_ADABAS_DOMAIN_PWD ;
     };
 
     FixedText FT_RESTORE
     {
-        Pos     = MAP_APPFONT ( 12 , 13 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
+        Pos		= MAP_APPFONT ( 12 , 13 + MOVE_Y) ;
+        Size	= MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
         Text[ en-US ] = "~Backup file";
 };
 
     Edit ET_RESTORE
     {
-        Border  = TRUE ;
+        Border	= TRUE ;
         Pos     = MAP_APPFONT ( 77 + ADJUST_X, 13 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 105 - ADJUST_X, 12 ) ;
+        Size	= MAP_APPFONT ( 105 - ADJUST_X, 12 ) ;
         TabStop = TRUE ;
-        HelpID  = HID_DLG_ADABAS_RESTORE ;
+        HelpID	= HID_DLG_ADABAS_RESTORE ;
     };
 
     PushButton PB_RESTORE
     {
         Pos     = MAP_APPFONT ( 188 , 13 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 50 , 14 ) ;
+        Size	= MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        HelpID  = HID_DLG_ADABAS_PBRESTORE ;
-        Text[ en-US ]   = "...";
+        HelpID	= HID_DLG_ADABAS_PBRESTORE ;
+        Text[ en-US ]	= "...";
 };
 
     /* DEVSPACE positions */
     FixedLine FL_DBSETTINGS
     {
-        Pos     = MAP_APPFONT ( 6 , 70 + MOVE_Y) ;
+        Pos		= MAP_APPFONT ( 6 , 70 + MOVE_Y) ;
         Size    = MAP_APPFONT ( WIN_X - 12 , 8 ) ;
         Text[ en-US ] = "Database settings";
 };
@@ -217,37 +217,37 @@ ModalDialog DLG_ADABAS_NEWDB
 
     Edit ET_SYSDEVSPACE
     {
-        Border  = TRUE ;
+        Border	= TRUE ;
         Pos     = MAP_APPFONT ( 77 + ADJUST_X, 81 + MOVE_Y) ;
         Size    = MAP_APPFONT ( 161 - ADJUST_X, 12 ) ;
         TabStop = TRUE ;
-        HelpID  = HID_DLG_ADABAS_SYSDEVSPACE ;
+        HelpID	= HID_DLG_ADABAS_SYSDEVSPACE ;
     };
 
     PushButton PB_SYSDEVSPACE
     {
-        Pos     = MAP_APPFONT ( WIN_X - 24, 81 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 12 , 12 ) ;
+        Pos		= MAP_APPFONT ( WIN_X - 24, 81 + MOVE_Y) ;
+        Size	= MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
-        HelpID  = HID_DLG_ADABAS_PBSYSDEVSPACE ;
-        Text[ en-US ]   = "...";
+        HelpID	= HID_DLG_ADABAS_PBSYSDEVSPACE ;
+        Text[ en-US ]	= "...";
 };
 
     Edit ET_TRANSACTIONLOG
     {
-        Border  = TRUE ;
+        Border	= TRUE ;
         Pos     = MAP_APPFONT ( 77 + ADJUST_X, 97 + MOVE_Y) ;
         Size    = MAP_APPFONT ( 161 - ADJUST_X, 12 ) ;
         TabStop = TRUE ;
-        HelpID  = HID_DLG_ADABAS_TRANSACTIONLOG ;
+        HelpID	= HID_DLG_ADABAS_TRANSACTIONLOG ;
     };
 
     PushButton PB_TRANSACTIONLOG
     {
-        Pos     = MAP_APPFONT ( WIN_X - 24, 97+ MOVE_Y) ;
-        Size    = MAP_APPFONT ( 12 , 12 ) ;
+        Pos		= MAP_APPFONT ( WIN_X - 24, 97+ MOVE_Y) ;
+        Size	= MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
-        HelpID  = HID_DLG_ADABAS_PBTRANSACTIONLOG ;
+        HelpID	= HID_DLG_ADABAS_PBTRANSACTIONLOG ;
         Text[ en-US ] = "...";
 };
 
@@ -255,18 +255,18 @@ ModalDialog DLG_ADABAS_NEWDB
     {
         Pos     = MAP_APPFONT ( 77 + ADJUST_X, 114 + MOVE_Y) ;
         Size    = MAP_APPFONT ( 161 - ADJUST_X, 12) ;
-        Border  = TRUE ;
+        Border	= TRUE ;
         TabStop = TRUE ;
-        HelpID  = HID_DLG_ADABAS_DATADEVSPACE ;
+        HelpID	= HID_DLG_ADABAS_DATADEVSPACE ;
     };
 
 
     PushButton PB_DATADEVSPACE
     {
-        Pos     = MAP_APPFONT ( WIN_X - 24, 114 + MOVE_Y) ;
-        Size    = MAP_APPFONT ( 12 , 12 ) ;
+        Pos		= MAP_APPFONT ( WIN_X - 24, 114 + MOVE_Y) ;
+        Size	= MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
-        HelpID  = HID_DLG_ADABAS_PBDATADEVSPACE ;
+        HelpID	= HID_DLG_ADABAS_PBDATADEVSPACE ;
         Text[ en-US ] = "...";
 };
     /* DEVSPACE sizes */
@@ -280,11 +280,11 @@ ModalDialog DLG_ADABAS_NEWDB
     {
         Pos             = MAP_APPFONT ( 77 + ADJUST_X, 131 + MOVE_Y) ;
         Size            = MAP_APPFONT ( 40 , 12 ) ;
-        Border          = TRUE ;
-        TabStop         = TRUE ;
-        Spin            = TRUE ;
+        Border			= TRUE ;
+        TabStop			= TRUE ;
+        Spin			= TRUE ;
 StrictFormat    = TRUE;
-        HelpID  = HID_DLG_ADABAS_TRANSACTIONLOG_SIZE ;
+        HelpID	= HID_DLG_ADABAS_TRANSACTIONLOG_SIZE ;
     };
     FixedText FT_DATADEVSPACE_SIZE
     {
@@ -296,11 +296,11 @@ StrictFormat    = TRUE;
     {
         Pos             = MAP_APPFONT ( 77 + ADJUST_X, 148 + MOVE_Y) ;
         Size            = MAP_APPFONT ( 40 , 12 ) ;
-        Border          = TRUE ;
-        TabStop         = TRUE ;
-        Spin            = TRUE ;
+        Border			= TRUE ;
+        TabStop			= TRUE ;
+        Spin			= TRUE ;
 StrictFormat    = TRUE;
-        HelpID  = HID_DLG_ADABAS_DATADEVSPACE_SIZE ;
+        HelpID	= HID_DLG_ADABAS_DATADEVSPACE_SIZE ;
     };
     FixedText FT_CACHE_SIZE
     {
@@ -312,11 +312,11 @@ StrictFormat    = TRUE;
     {
         Pos             = MAP_APPFONT ( 77 + ADJUST_X, 165 + MOVE_Y) ;
         Size            = MAP_APPFONT ( 40 , 12 ) ;
-        Border          = TRUE ;
-        TabStop         = TRUE ;
-        Spin            = TRUE ;
+        Border			= TRUE ;
+        TabStop			= TRUE ;
+        Spin			= TRUE ;
 StrictFormat    = TRUE;
-        HelpID          = HID_DLG_ADABAS_CACHE_SIZE ;
+        HelpID			= HID_DLG_ADABAS_CACHE_SIZE ;
     };
     FixedLine FL_END
     {
@@ -325,21 +325,21 @@ StrictFormat    = TRUE;
     };
     OKButton PB_OK
     {
-        Pos         = MAP_APPFONT ( WIN_X - 112, WIN_Y - 20 + MOVE_Y) ;
-        Size        = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop     = TRUE ;
-        DefButton   = TRUE ;
+        Pos			= MAP_APPFONT ( WIN_X - 112, WIN_Y - 20 + MOVE_Y) ;
+        Size		= MAP_APPFONT ( 50 , 14 ) ;
+        TabStop		= TRUE ;
+        DefButton	= TRUE ;
     };
     CancelButton PB_CANCEL
     {
-        Pos         = MAP_APPFONT ( WIN_X - 56 , WIN_Y - 20+ MOVE_Y) ;
-        Size        = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop     = TRUE ;
+        Pos			= MAP_APPFONT ( WIN_X - 56 , WIN_Y - 20+ MOVE_Y) ;
+        Size		= MAP_APPFONT ( 50 , 14 ) ;
+        TabStop		= TRUE ;
     };
 
     String STR_BACKUPFILE_LOAD
     {
-        Text[ en-US ]   = "Backup file information";
+        Text[ en-US ]	= "Backup file information";
 };
 
     Text[ en-US ] = "Create New Adabas D Database";
@@ -348,42 +348,42 @@ StrictFormat    = TRUE;
 Image CHECK_GREEN
 {
     ImageBitmap = Bitmap { File = "nu07.bmp"; };
-    MaskColor   = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+    MaskColor	= Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 Image UNCHECK_RED
 {
     ImageBitmap = Bitmap { File = "nu08.bmp"; };
-    MaskColor   = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+    MaskColor	= Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 Image DEFAULT_BLUE
 {
     ImageBitmap = Bitmap { File = "nu09.bmp"; };
-    MaskColor   = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+    MaskColor	= Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 /* Fehlermeldungen beim Erstellen einer Adabas DB */
 
 String STR_ADABAS_NO_PARAM_SET
 {
-    Text[ en-US ]   = "No entry could be written in the configuration file.";
+    Text[ en-US ]	= "No entry could be written in the configuration file.";
 };
 
 String STR_ADABAS_NO_DB_CREATED
 {
-    Text[ en-US ]   = "An error occurred as the DB files were being created.";
+    Text[ en-US ]	= "An error occurred as the DB files were being created.";
 };
 
 String STR_ADABAS_NO_SYSTEM_TABLES
 {
-    Text[ en-US ]   = "An error occurred as the system tables were being created.";
+    Text[ en-US ]	= "An error occurred as the system tables were being created.";
 };
 String STR_ADABAS_NO_BACKUP_FILE
 {
-    Text[ en-US ]   = "The backup file entered does not exist.";
+    Text[ en-US ]	= "The backup file entered does not exist.";
 };
 
 InfoBox INFO_STR_MAX_FILE_LENGTH
 {
-    Message[ en-US ]    = "The fully qualified file cannot be longer than \'#\' characters.";
+    Message[ en-US ]	= "The fully qualified file cannot be longer than \'#\' characters.";
 };
 
 String STR_NO_SAME_USER

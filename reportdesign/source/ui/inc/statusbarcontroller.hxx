@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@ namespace rptui
 {
     typedef ::comphelper::ImplementationReference<SfxStatusBarControl,::com::sun::star::frame::XStatusbarController> TStatusbarHelper;
 
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XServiceInfo> OStatusbarController_BASE;
+    typedef ::cppu::ImplHelper1	<	::com::sun::star::lang::XServiceInfo> OStatusbarController_BASE;
     class OStatusbarController : public ::svt::StatusbarController,
                                  public OStatusbarController_BASE
     {
         TStatusbarHelper m_pController;
-        sal_uInt16       m_nSlotId;
-        sal_uInt16       m_nId;
+        sal_uInt16		 m_nSlotId;
+        sal_uInt16		 m_nId;
     public:
         OStatusbarController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
 
@@ -62,7 +62,7 @@ namespace rptui
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
         // need by registration
-
+        
         virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
 
         // XInitialization
@@ -70,7 +70,7 @@ namespace rptui
 
         // XUpdatable
         virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
-
+    
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 
@@ -78,12 +78,12 @@ namespace rptui
         virtual ::sal_Bool SAL_CALL mouseButtonDown( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL mouseMove( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL mouseButtonUp( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL command( const ::com::sun::star::awt::Point& aPos,
-                                       ::sal_Int32 nCommand,
-                                       ::sal_Bool bMouseEvent,
+        virtual void SAL_CALL command( const ::com::sun::star::awt::Point& aPos, 
+                                       ::sal_Int32 nCommand, 
+                                       ::sal_Bool bMouseEvent, 
                                        const ::com::sun::star::uno::Any& aData ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL paint( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics,
-                                     const ::com::sun::star::awt::Rectangle& rOutputRectangle,
+        virtual void SAL_CALL paint( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics, 
+                                     const ::com::sun::star::awt::Rectangle& rOutputRectangle, 
                                      ::sal_Int32 nItemId, ::sal_Int32 nStyle ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL click() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL doubleClick() throw (::com::sun::star::uno::RuntimeException);

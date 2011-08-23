@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,9 +50,9 @@ namespace rptui
 
     //========================================================================
     class /* REPORTDESIGN_DLLPUBLIC */ OXReportControllerObserver
-        : public ::cppu::WeakImplHelper3<   ::com::sun::star::beans::XPropertyChangeListener
-                                        ,   ::com::sun::star::container::XContainerListener
-                                        ,   ::com::sun::star::util::XModifyListener
+        : public ::cppu::WeakImplHelper3<	::com::sun::star::beans::XPropertyChangeListener
+                                        ,   ::com::sun::star::container::XContainerListener 
+                                        ,	::com::sun::star::util::XModifyListener
                                         >
         /*,public SfxListener*/
     {
@@ -120,11 +120,11 @@ namespace rptui
         // void ModeChanged(); // will be called from 'Notify'
         DECL_LINK(SettingsChanged, VclWindowEvent* );
     private:
-
+        
         ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> >::const_iterator getSection(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild>& _xContainer) const;
-
+        
     };
-
+    
 } // namespace rptui
 
 #endif /* INCLUDED_REPORTCONTROLLEROBSERVER_HXX */

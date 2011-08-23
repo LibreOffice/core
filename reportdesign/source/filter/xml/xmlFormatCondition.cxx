@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,10 +79,10 @@ OXMLFormatCondition::OXMLFormatCondition( ORptFilter& rImport,
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
-                case XML_TOK_ENABLED:
+                case XML_TOK_ENABLED: 
                     m_xComponent->setEnabled(sValue == s_sTRUE);
                     break;
-                case XML_TOK_FORMULA:
+                case XML_TOK_FORMULA: 
                     m_xComponent->setFormula(ORptFilter::convertFormula(sValue));
                     break;
                 case XML_TOK_FORMAT_STYLE_NAME:

@@ -50,7 +50,7 @@ namespace dbaccess
                                public ::com::sun::star::lang::XServiceInfo
     {
     protected:
-        OColumns*       m_pColumns;
+        OColumns*		m_pColumns;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > m_xAggregateAsParameters;
 
     public:

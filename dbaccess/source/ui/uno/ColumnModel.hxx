@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,12 @@ namespace dbaui
 //==================================================================
 // OColumnControlModel
 //==================================================================
-typedef ::cppu::WeakAggComponentImplHelper4 <   ::com::sun::star::awt::XControlModel
-                                        ,   ::com::sun::star::lang::XServiceInfo
-                                        ,   ::com::sun::star::util::XCloneable
-                                        ,   ::com::sun::star::io::XPersistObject
-                                        >   OColumnControlModel_BASE;
-
+typedef ::cppu::WeakAggComponentImplHelper4 <	::com::sun::star::awt::XControlModel
+                                        ,	::com::sun::star::lang::XServiceInfo
+                                        ,	::com::sun::star::util::XCloneable
+                                        ,	::com::sun::star::io::XPersistObject
+                                        >	OColumnControlModel_BASE;
+ 
 class OColumnControlModel;
 
 class OColumnControlModel :  public ::comphelper::OMutexAndBroadcastHelper
@@ -64,13 +64,13 @@ class OColumnControlModel :  public ::comphelper::OMutexAndBroadcastHelper
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xORB;
 // [properties]
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xColumn;
-    ::rtl::OUString                 m_sDefaultControl;
-    ::com::sun::star::uno::Any      m_aTabStop;
-    sal_Bool                        m_bEnable;
-    sal_Int16                       m_nBorder;
-    sal_Int32                       m_nWidth;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>			m_xConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >		m_xColumn;
+    ::rtl::OUString					m_sDefaultControl;
+    ::com::sun::star::uno::Any		m_aTabStop;
+    sal_Bool						m_bEnable;
+    sal_Int16						m_nBorder;
+    sal_Int32						m_nWidth;
 // [properties]
 
     inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> getORB() const { return m_xORB; }
@@ -108,7 +108,7 @@ public:
 };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 #endif // DBAUI_COLUMNMODEL_HXX
 

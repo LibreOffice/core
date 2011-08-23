@@ -85,8 +85,8 @@ private:
 };
 
 //==========================================================================
-//= ODefinitionContainer -  base class of collections of database definition
-//=                         documents
+//= ODefinitionContainer -	base class of collections of database definition
+//=							documents
 //==========================================================================
 typedef ::cppu::ImplHelper7 <   ::com::sun::star::container::XIndexAccess
                             ,   ::com::sun::star::container::XNameContainer
@@ -124,15 +124,15 @@ private:
 protected:
     // we can't just hold a vector of XContentRefs, as after initialization they're all empty
     // cause we load them only on access
-    DocumentsIndexAccess    m_aDocuments;               // for a efficient index access
-    Documents               m_aDocumentMap;             // for a efficient name access
+    DocumentsIndexAccess	m_aDocuments;				// for a efficient index access
+    Documents				m_aDocumentMap;				// for a efficient name access
 
     ::cppu::OInterfaceContainerHelper
                             m_aApproveListeners;
     ::cppu::OInterfaceContainerHelper
                             m_aContainerListeners;
 
-    sal_Bool                m_bInPropertyChange;
+    sal_Bool				m_bInPropertyChange;
     bool                    m_bCheckSlash;
 
 protected:
@@ -163,7 +163,7 @@ public:
     */
     ODefinitionContainer(
           const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
-        , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&  _xParentContainer
+        , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&	_xParentContainer
         , const TContentPtr& _pImpl
         , bool _bCheckSlash = true
         );
@@ -221,42 +221,42 @@ protected:
     virtual void SAL_CALL disposing();
 
     /** create a object from it's persistent data within the configuration. To be overwritten by derived classes.
-        @param      _rName          the name the object has within the container
-        @return                     the newly created object or an empty reference if somthing went wrong
+        @param		_rName			the name the object has within the container
+        @return						the newly created object or an empty reference if somthing went wrong
     */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject(
         const ::rtl::OUString& _rName) = 0;
 
     /** get the object specified by the given name. If desired, the object will be read if not already done so.<BR>
-        @param      _rName              the object name
-        @param      _bReadIfNeccessary  if sal_True, the object will be created if necessary
-        @return                         the property set interface of the object. Usually the return value is not NULL, but
+        @param		_rName				the object name
+        @param		_bReadIfNeccessary	if sal_True, the object will be created if necessary
+        @return							the property set interface of the object. Usually the return value is not NULL, but
                                         if so, then the object could not be read from the configuration
-        @throws                         NoSuchElementException if there is no object with the given name.
-        @see    createObject
+        @throws							NoSuchElementException if there is no object with the given name.
+        @see	createObject
     */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >
                 implGetByName(const ::rtl::OUString& _rName, sal_Bool _bCreateIfNecessary) throw (::com::sun::star::container::NoSuchElementException);
 
     /** quickly checks if there already is an element with a given name. No access to the configuration occures, i.e.
         if there is such an object which is not already loaded, it won't be loaded now.
-        @param      _rName      the object name to check
-        @return                 sal_True if there already exists such an object
+        @param		_rName		the object name to check
+        @return					sal_True if there already exists such an object
     */
-    virtual sal_Bool checkExistence(const ::rtl::OUString& _rName);
+    virtual	sal_Bool checkExistence(const ::rtl::OUString& _rName);
 
     /** append a new object to the container. No plausibility checks are done, e.g. if the object is non-NULL or
         if the name is already used by another object or anything like this. This method is for derived classes
         which may support different methods to create and/or append objects, and don't want to deal with the
         internal structures of this class.<BR>
         The old component will not be disposed, this is the callers responsibility, too.
-        @param      _rName          the name of the new object
-        @param      _rxNewObject    the new object (not surprising, is it ?)
-        @see        createConfigKey
-        @see        implReplace
-        @see        implRemove
+        @param		_rName			the name of the new object
+        @param		_rxNewObject	the new object (not surprising, is it ?)
+        @see		createConfigKey
+        @see		implReplace
+        @see		implRemove
     */
-    void    implAppend(
+    void	implAppend(
         const ::rtl::OUString& _rName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _rxNewObject
         );
@@ -265,9 +265,9 @@ protected:
         or not there exists an object with the given name. This is the responsibility of the caller.<BR>
         Additionally the node for the given object will be removed from the registry (including all sub nodes).<BR>
         The old component will not be disposed, this is the callers responsibility, too.
-        @param          _rName      the objects name
-        @see            implReplace
-        @see            implAppend
+        @param			_rName		the objects name
+        @see			implReplace
+        @see			implAppend
     */
     void implRemove(const ::rtl::OUString& _rName);
 
@@ -276,11 +276,11 @@ protected:
         Additionally all object-related informations within the registry will be deleted. The new object config node,
         where the caller may want to store the new objects information, is returned.<BR>
         The old component will not be disposed, this is the callers responsibility, too.
-        @param          _rName              the objects name
-        @param          _rxNewObject        the new object
-        @param          _rNewObjectNode     the configuration node where the new object may be stored
-        @see            implAppend
-        @see            implRemove
+        @param			_rName				the objects name
+        @param			_rxNewObject		the new object
+        @param			_rNewObjectNode		the configuration node where the new object may be stored
+        @see			implAppend
+        @see			implRemove
     */
     void implReplace(
         const ::rtl::OUString& _rName,
@@ -304,8 +304,8 @@ protected:
     }
 
 private:
-    void    addObjectListener(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xNewObject);
-    void    removeObjectListener(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xNewObject);
+    void	addObjectListener(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xNewObject);
+    void	removeObjectListener(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xNewObject);
 
     /** approve that the object given may be inserted into the container. Should be overloaded by derived classes,
         the default implementation just checks the object to be non-void.
@@ -329,7 +329,7 @@ private:
     }
 };
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 
 #endif // _DBA_CORE_DEFINITIONCONTAINER_HXX_
 

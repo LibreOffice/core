@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,20 +63,20 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
                                      const Reference< XMultiServiceFactory >& _xFactory)
     : ModalDialog( pParent, ModuleRes(DLG_ADABASSTAT) )
     ,m_FL_FILES(            this , ModuleRes(FL_FILES))
-    ,m_FT_SYSDEVSPACE(      this , ModuleRes(FT_SYSDEVSPACE))
-    ,m_ET_SYSDEVSPACE(      this , STR_ADABAS_HELP_SYSDEVSPACE,ModuleRes(ET_SYSDEVSPACE))
-    ,m_FT_TRANSACTIONLOG(   this , ModuleRes(FT_TRANSACTIONLOG))
-    ,m_ET_TRANSACTIONLOG(   this , STR_ADABAS_HELP_TRANSACT,ModuleRes(ET_TRANSACTIONLOG))
-    ,m_FT_DATADEVSPACE(     this , ModuleRes(FT_DATADEVSPACE))
-    ,m_LB_DATADEVS(         this , STR_ADABAS_HELP_DATADEVSPACES,ModuleRes(LB_DATADEVS))
+    ,m_FT_SYSDEVSPACE(		this , ModuleRes(FT_SYSDEVSPACE))
+    ,m_ET_SYSDEVSPACE(		this , STR_ADABAS_HELP_SYSDEVSPACE,ModuleRes(ET_SYSDEVSPACE))
+    ,m_FT_TRANSACTIONLOG(	this , ModuleRes(FT_TRANSACTIONLOG))
+    ,m_ET_TRANSACTIONLOG(	this , STR_ADABAS_HELP_TRANSACT,ModuleRes(ET_TRANSACTIONLOG))
+    ,m_FT_DATADEVSPACE(		this , ModuleRes(FT_DATADEVSPACE))
+    ,m_LB_DATADEVS(			this , STR_ADABAS_HELP_DATADEVSPACES,ModuleRes(LB_DATADEVS))
     ,m_FL_SIZES(            this , ModuleRes(FL_SIZES))
-    ,m_FT_SIZE(             this , ModuleRes(FT_SIZE))
-    ,m_ET_SIZE(             this , STR_ADABAS_HELP_SIZE,ModuleRes(ET_SIZE))
-    ,m_FT_FREESIZE(         this , ModuleRes(FT_FREESIZE))
-    ,m_ET_FREESIZE(         this , STR_ADABAS_HELP_FREESIZE,ModuleRes(ET_FREESIZE))
-    ,m_FT_MEMORYUSING(      this , ModuleRes(FT_MEMORYUSING))
-    ,m_ET_MEMORYUSING(      this , STR_ADABAS_HELP_MEMORYUSING,ModuleRes(ET_MEMORYUSING))
-    ,m_PB_OK(               this , ModuleRes(PB_OK))
+    ,m_FT_SIZE(				this , ModuleRes(FT_SIZE))
+    ,m_ET_SIZE(				this , STR_ADABAS_HELP_SIZE,ModuleRes(ET_SIZE))
+    ,m_FT_FREESIZE(			this , ModuleRes(FT_FREESIZE))
+    ,m_ET_FREESIZE(			this , STR_ADABAS_HELP_FREESIZE,ModuleRes(ET_FREESIZE))
+    ,m_FT_MEMORYUSING(		this , ModuleRes(FT_MEMORYUSING))
+    ,m_ET_MEMORYUSING(		this , STR_ADABAS_HELP_MEMORYUSING,ModuleRes(ET_MEMORYUSING))
+    ,m_PB_OK(				this , ModuleRes(PB_OK))
     ,m_xConnection(_xCurrentConnection)
     ,m_bErrorShown(sal_False)
 {
@@ -90,17 +90,17 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
         Reference<XStatement> xStmt;
         Reference<XResultSet> xRes;
 
-        sal_Bool bCanSelect     = sal_False;
+        sal_Bool bCanSelect		= sal_False;
         ::rtl::OUString aStmt;
         ::rtl::OUString sSchema = _rUser.toAsciiUpperCase();
 
         Reference<XDatabaseMetaData> xMetaData;
-        // first read the sizes
+        // first read the sizes 
         try
         {
             xMetaData = m_xConnection->getMetaData();
             bCanSelect = checkSystemTable(::rtl::OUString::createFromAscii("SERVERDBSTATISTICS"),sSchema);
-
+        
             if(bCanSelect)
             {
                 aStmt = ::rtl::OUString::createFromAscii("SELECT SERVERDBSIZE, UNUSEDPAGES FROM ");
@@ -154,7 +154,7 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
             try
             {
                 bCanSelect = checkSystemTable(::rtl::OUString::createFromAscii("DATADEVSPACES"),sSchema);
-
+            
                 if(bCanSelect)
                 {
                     // then the db files
@@ -198,7 +198,7 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
                 try
                 {
                     bCanSelect = checkSystemTable(::rtl::OUString::createFromAscii("CONFIGURATION"),sSchema);
-
+                
                     if(bCanSelect)
                     {
                         aStmt = ::rtl::OUString::createFromAscii("SELECT * FROM ");

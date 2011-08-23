@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,18 +37,18 @@
 
 namespace dbaui
 {
-//  class OTableRow;
-//  friend SvStream& operator<<( SvStream& rStr, OTableRow& _rRow );
+//	class OTableRow;
+//	friend SvStream& operator<<( SvStream& rStr, OTableRow& _rRow ); 
 
     class OFieldDescription;
     class OTypeInfo;
     class OTableRow
     {
     private:
-        OFieldDescription*      m_pActFieldDescr;
-        long                    m_nPos;
-        bool                    m_bReadOnly;
-        bool                    m_bOwnsDescriptions;
+        OFieldDescription*		m_pActFieldDescr;
+        long					m_nPos;
+        bool					m_bReadOnly;
+        bool					m_bOwnsDescriptions;
 
     protected:
     public:
@@ -66,14 +66,14 @@ namespace dbaui
         BOOL IsPrimaryKey() const;
 
         /** returns the current position in the table.
-            @return
+            @return 
                 the current position in the table
         */
         inline long GetPos() const { return m_nPos; }
         inline void SetPos(sal_Int32 _nPos) { m_nPos = _nPos; }
 
         /** set the row readonly
-            @param  _bRead
+            @param	_bRead
                 if <TRUE/> then the row is redonly, otherwise not
         */
         inline void SetReadOnly( bool _bRead=true ){ m_bReadOnly = _bRead; }
@@ -84,8 +84,8 @@ namespace dbaui
         */
         inline bool IsReadOnly() const { return m_bReadOnly; }
 
-        friend SvStream& operator<<( SvStream& rStr,const OTableRow& _rRow );
-        friend SvStream& operator>>( SvStream& rStr, OTableRow& _rRow );
+        friend SvStream& operator<<( SvStream& rStr,const OTableRow& _rRow ); 
+        friend SvStream& operator>>( SvStream& rStr, OTableRow& _rRow ); 
     };
 }
 #endif // DBAUI_TABLEROW_HXX

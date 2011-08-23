@@ -38,18 +38,18 @@ namespace connectivity
         class OIndexColumn : public OAdabasColumn
         {
         protected:
-            sal_Bool    m_IsAscending;
+            sal_Bool	m_IsAscending;
         public:
             OIndexColumn();
-            OIndexColumn(   sal_Bool _IsAscending,
+            OIndexColumn(	sal_Bool _IsAscending,
                             const ::rtl::OUString& _Name,
                             const ::rtl::OUString& _TypeName,
                             const ::rtl::OUString& _DefaultValue,
-                            sal_Int32       _IsNullable,
-                            sal_Int32       _Precision,
-                            sal_Int32       _Scale,
-                            sal_Int32       _Type,
-                            sal_Bool        _IsAutoIncrement);
+                            sal_Int32		_IsNullable,
+                            sal_Int32		_Precision,
+                            sal_Int32		_Scale,
+                            sal_Int32		_Type,
+                            sal_Bool		_IsAutoIncrement);
 
             virtual void construct();
         };

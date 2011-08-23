@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@
 #include <svl/solar.hrc>
 
 #define EXPAND_PROTOCOL     "vnd.sun.star.expand:"
-#define ENTER_MOD_METHOD()  \
-    ::osl::MutexGuard aGuard(s_aMutex); \
+#define ENTER_MOD_METHOD()	\
+    ::osl::MutexGuard aGuard(s_aMutex);	\
     ensureImpl()
 
 //.........................................................................
@@ -53,7 +53,7 @@ namespace rptui
 */
 class OModuleImpl
 {
-    ResMgr* m_pRessources;
+    ResMgr*	m_pRessources;
 
 public:
     /// ctor
@@ -61,7 +61,7 @@ public:
     ~OModuleImpl();
 
     /// get the manager for the ressources of the module
-    ResMgr* getResManager();
+    ResMgr*	getResManager();
 };
 
 DBG_NAME( rpt_OModuleImpl )
@@ -83,7 +83,7 @@ OModuleImpl::~OModuleImpl()
 }
 
 //-------------------------------------------------------------------------
-ResMgr* OModuleImpl::getResManager()
+ResMgr*	OModuleImpl::getResManager()
 {
     // note that this method is not threadsafe, which counts for the whole class !
 
@@ -99,11 +99,11 @@ ResMgr* OModuleImpl::getResManager()
 //=========================================================================
 //= OModule
 //=========================================================================
-::osl::Mutex    OModule::s_aMutex;
-sal_Int32       OModule::s_nClients = 0;
-OModuleImpl*    OModule::s_pImpl = NULL;
+::osl::Mutex	OModule::s_aMutex;
+sal_Int32		OModule::s_nClients = 0;
+OModuleImpl*	OModule::s_pImpl = NULL;
 //-------------------------------------------------------------------------
-ResMgr* OModule::getResManager()
+ResMgr*	OModule::getResManager()
 {
     ENTER_MOD_METHOD();
     return s_pImpl->getResManager();
@@ -136,7 +136,7 @@ void OModule::ensureImpl()
 }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

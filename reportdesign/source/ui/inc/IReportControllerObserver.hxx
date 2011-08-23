@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@ namespace rptui
     protected:
         // IReportControllerObserver(){}
         virtual ~IReportControllerObserver() {}
-
+        
     public:
-
+        
         virtual void notifyPropertyChange( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent ) = 0;
         virtual void notifyElementInserted( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement ) = 0;
         virtual void handle( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement ) = 0;

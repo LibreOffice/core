@@ -560,7 +560,7 @@ Reference< XSQLQueryComposer >  OConnection::createQueryComposer(void) throw( Ru
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
-    //  Reference< XNumberFormatsSupplier >  xSupplier = pParent->getNumberFormatsSupplier();
+    //	Reference< XNumberFormatsSupplier >  xSupplier = pParent->getNumberFormatsSupplier();
     Reference< XSQLQueryComposer >  xComposer( new OQueryComposer( this ) );
     m_aComposers.push_back(WeakReferenceHelper(xComposer));
     return xComposer;
@@ -588,11 +588,11 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
             getMasterTables();
 
             if (m_xMasterTables.is() && m_xMasterTables->getTables().is())
-            {   // yes -> wrap them
+            {	// yes -> wrap them
                 m_pTables->construct(m_xMasterTables->getTables(),m_aTableFilter, m_aTableTypeFilter);
             }
             else
-            {   // no -> use an own container
+            {	// no -> use an own container
                 m_pTables->construct(m_aTableFilter, m_aTableTypeFilter);
             }
         }
@@ -890,5 +890,5 @@ Reference< XInterface > SAL_CALL OConnection::getTableEditor( const Reference< X
     return xReturn;
 }
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

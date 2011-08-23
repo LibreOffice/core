@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,10 +51,10 @@ namespace dbaui
     class ODatasourceConnector
     {
     protected:
-        Window*         m_pErrorMessageParent;
+        Window*			m_pErrorMessageParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         m_xORB;
-        ::rtl::OUString m_sContextInformation;
+        ::rtl::OUString	m_sContextInformation;
 
     public:
         ODatasourceConnector(
@@ -68,7 +68,7 @@ namespace dbaui
         );
 
         /// returns <TRUE/> if the object is able to create data source connections
-        sal_Bool    isValid() const { return m_xORB.is(); }
+        sal_Bool	isValid() const { return m_xORB.is(); }
 
         /** creates a connection to the data source, displays the possible error to the user, or returns it
         */
@@ -88,7 +88,7 @@ namespace dbaui
     };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_DATASOURCECONNECTOR_HXX_
