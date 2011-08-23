@@ -6620,7 +6620,7 @@ void ScInterpreter::ScIndirect()
             }
             while (false);
 
-            PushIllegalArgument();
+            PushError( errNoRef);
         }
     }
 }
