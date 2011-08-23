@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,20 +69,20 @@ public:
     void                SetNextHdl( const Link& rLink )
                             { aNextHdlLink = rLink; }
 
-    void                EnableTravel(BOOL bNext, BOOL bPrev);
-    inline String       GetNote() { return aEditED.GetText(); }
-    inline void         SetNote(const String& rTxt) { aEditED.SetText(rTxt); }
+    void				EnableTravel(BOOL bNext, BOOL bPrev);
+    inline String		GetNote() { return aEditED.GetText(); }
+    inline void			SetNote(const String& rTxt) { aEditED.SetText(rTxt); }
 
-    void                ShowLastAuthor(const String& rAuthor, const String& rDate);
-    inline void         DontChangeAuthor()  { aAuthorBtn.Enable(FALSE); }
-    inline void         HideAuthor()        { aAuthorBtn.Hide(); }
-    inline void         SetReadonlyPostIt(BOOL bDisable)
+    void				ShowLastAuthor(const String& rAuthor, const String& rDate);
+    inline void			DontChangeAuthor()	{ aAuthorBtn.Enable(FALSE); }
+    inline void			HideAuthor()		{ aAuthorBtn.Hide(); }
+    inline void			SetReadonlyPostIt(BOOL bDisable)
                             {
                                 aOKBtn.Enable( !bDisable );
                                 aEditED.SetReadOnly( bDisable );
                                 aAuthorBtn.Enable( !bDisable );
                             }
-    inline BOOL         IsOkEnabled() const { return aOKBtn.IsEnabled(); }
+    inline BOOL 		IsOkEnabled() const { return aOKBtn.IsEnabled(); }
 
 private:
     FixedLine           aPostItFL;

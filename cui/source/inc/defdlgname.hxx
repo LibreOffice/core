@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,13 @@
 
 // define ----------------------------------------------------------------
 
-#define MESS_BTN_1  ((USHORT)0)
-#define MESS_BTN_2  ((USHORT)1)
+#define MESS_BTN_1	((USHORT)0)
+#define MESS_BTN_2	((USHORT)1)
 
 // const -----------------------------------------------------------------
 
-const short  RET_BTN_1  = 100;
-const short  RET_BTN_2  = 101;
+const short  RET_BTN_1	= 100;
+const short  RET_BTN_2	= 101;
 
 #endif
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,10 +86,10 @@ public:
         }
     }
 
-    BOOL                queryInterface( Uik aUik, XInterfaceRef & rOut );
-    void                acquire()                        { OWeakObject::acquire(); }
-    void                release()                        { OWeakObject::release(); }
-    void*               getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
+    BOOL				queryInterface( Uik aUik, XInterfaceRef & rOut );
+    void 				acquire() 						 { OWeakObject::acquire(); }
+    void 				release() 						 { OWeakObject::release(); }
+    void* 				getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 
     void attach( XDebuggingRef *p , XEngineRef *pEngine , XInvokationRef *pInvokation )
@@ -152,10 +152,10 @@ protected:
 
     osl::Condition m_aDebugCondition;
     XDebuggingRef *m_pDebuggingRef;
-    XEngineRef  *m_pEngineRef;
+    XEngineRef	*m_pEngineRef;
     XInvokationRef *m_pInvokationRef;
     int m_bIsRunning;
-    int m_bIsTerminating;       // The listeners ignore everything when set
+    int m_bIsTerminating;		// The listeners ignore everything when set
 };
 
 
@@ -205,13 +205,13 @@ void CmdDebugger::cmdLine()
             }
             else if( ! strncmp( pcLine , "sbp" , 3 ) ){
                 if( m_bIsRunning ) {
-                    (*m_pDebuggingRef)->setBreakPoint(  UString( L"<string>" ),
+                    (*m_pDebuggingRef)->setBreakPoint( 	UString( L"<string>" ),
                                                         atoi(&pcLine[3]) , TRUE );
                 }
             }
             else if( ! strncmp( pcLine , "rbp" , 3 ) ){
                 if( m_bIsRunning ) {
-                    (*m_pDebuggingRef)->setBreakPoint(  UString( L"<string>" ),
+                    (*m_pDebuggingRef)->setBreakPoint( 	UString( L"<string>" ),
                                                         atoi(&pcLine[3]) , FALSE );
                 }
             }
@@ -319,7 +319,7 @@ void CmdDebugger::cmdLine()
                                    "    dump Variable      : dv varname [CallStack]\n"
                                    "    set Variable       : sv varname value [CallStack]\n"
                                    "globals via XInvokation Interface :\n"
-                                   "    dump Global vars   : id\n"
+                                   "	dump Global vars   : id\n"
                                    "    dump Variable      : idv varname\n"
                                    "    set Variable       : isv varname value\n"
                                    "ContextInformation : ci\n"
@@ -352,8 +352,8 @@ void CmdDebugger::dumpIntrospectionToStream( const XIntrospectionAccessRef &ref,
     iMax = seqProp.getLen();
     Property *aProp = seqProp.getArray();
     for( i = 0; i < iMax ; i ++ ) {
-        fprintf( f, "  %s %s\n" ,   USTRING_TO_PCHAR( aProp[i].Type->getName() ),
-                                        USTRING_TO_PCHAR( aProp[i].Name ) );
+        fprintf( f, "  %s %s\n" , 	USTRING_TO_PCHAR( aProp[i].Type->getName() ),
+                                        USTRING_TO_PCHAR( aProp[i].Name	) );
     }
 
 }
@@ -369,7 +369,7 @@ void CmdDebugger::dumpVarToStream( const char *pc , const UsrAny &aValue, FILE *
         fprintf( f, "ENUM %s : %d\n", pc ,  aValue.getEnumAsINT32() );
     }
     else if( TypeClass_STRING == type ) {
-        fprintf( f, "STRING %s : %s\n" , pc ,  USTRING_TO_PCHAR( aValue.getString())     );
+        fprintf( f, "STRING %s : %s\n" , pc ,  USTRING_TO_PCHAR( aValue.getString())	 );
     }
     else if( TypeClass_BOOLEAN == type ) {
         fprintf( f, "BOOL %s : %d\n", pc , aValue.getBOOL() );
@@ -387,7 +387,7 @@ void CmdDebugger::dumpVarToStream( const char *pc , const UsrAny &aValue, FILE *
         fprintf( f, "UINT16 %s : %d\n", pc , (INT32) aValue.getUINT16() );
     }
     else if( TypeClass_UNSIGNED_BYTE == type ) {
-        fprintf( f, "Byte %s : %d\n", pc ,  (INT32) aValue.getBYTE() );
+        fprintf( f, "Byte %s : %d\n", pc ,	(INT32) aValue.getBYTE() );
     }
     else if( TypeClass_UNSIGNED_INT == type ) {
         fprintf( f, "UINT32 %s : %d\n", pc , aValue.getUINT32() );
@@ -519,7 +519,7 @@ int __LOADONCALLAPI main (int argc, char **argv)
 
     if( argc >1 && ! strcmp( argv[1] , "1" ) ) {
         fprintf( stderr, "one thread only\n" );
-        Script = UString(   L"print 'Hello World'\n" );
+        Script = UString( 	L"print 'Hello World'\n" );
         xEngine->runAsync( Script ,  XInterfaceRef(), args , XEngineListenerRef() );
     }
     else if( argc >1 && ! strcmp( argv[1] , "2" ) )  {

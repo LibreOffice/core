@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,40 +29,40 @@
 
 #include <svl/solar.hrc>
 
-#define RID_STR_LIB             1
-#define RID_TRLBOX              2
+#define RID_STR_LIB				1
+#define RID_TRLBOX				2
 // free
-#define RID_PB_EDIT             4
-#define RID_PB_CLOSE            5
-#define RID_PB_NEWMOD           6
-#define RID_PB_NEWDLG           7
-#define RID_PB_DELETE           8
-#define RID_PB_NEWLIB           9
-#define RID_PB_APPEND           10
-#define RID_PB_PASSWORD         11
-#define RID_LB_BASICS           12
-#define RID_STR_BASICS          13
+#define RID_PB_EDIT				4
+#define RID_PB_CLOSE			5
+#define RID_PB_NEWMOD     		6
+#define RID_PB_NEWDLG			7
+#define RID_PB_DELETE			8
+#define RID_PB_NEWLIB			9
+#define RID_PB_APPEND			10
+#define RID_PB_PASSWORD			11
+#define RID_LB_BASICS			12
+#define RID_STR_BASICS			13
 
-#define RID_PB_EXPORT           14
-#define RID_PB_EXPORT_PACKAGE   15
+#define RID_PB_EXPORT			14
+#define RID_PB_EXPORT_PACKAGE	15
 
-#define RID_TP_MOD              20
-#define RID_TP_LIB              21
-#define RID_TP_DLG              22
+#define RID_TP_MOD				20
+#define RID_TP_LIB				21
+#define RID_TP_DLG				22
 
-#define RID_TC_ORGANIZE         30
+#define RID_TC_ORGANIZE			30
 
-#define RID_PB_OK               31
+#define RID_PB_OK				31
 #define RID_PB_CANCEL           32
 #define RID_CTRL_LIBS           33
 #define RID_FL_OPTIONS          34
 #define RID_CB_REF              35
 #define RID_CB_REPL             36
-#define RID_FT_STORAGENAME      38
+#define RID_FT_STORAGENAME		38
 
-#define RID_FT_NEWLIB           40
-#define RID_ED_LIBNAME          41
-#define RB_EXPORTASPACKAGE      42
-#define RB_EXPORTASBASIC        43
+#define	RID_FT_NEWLIB			40
+#define	RID_ED_LIBNAME   		41
+#define	RB_EXPORTASPACKAGE		42
+#define	RB_EXPORTASBASIC		43
 
-#endif  // _MODULDLG_HRC
+#endif	// _MODULDLG_HRC

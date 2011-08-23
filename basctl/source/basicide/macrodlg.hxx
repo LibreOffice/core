@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,45 +38,45 @@
 
 #include <vcl/button.hxx>
 
-#define MACRO_CLOSE         10
-#define MACRO_OK_RUN        11
-#define MACRO_NEW           12
-#define MACRO_EDIT          14
-#define MACRO_ORGANIZE      15
-#define MACRO_ASSIGN        16
+#define MACRO_CLOSE			10
+#define MACRO_OK_RUN		11
+#define MACRO_NEW 			12
+#define MACRO_EDIT			14
+#define MACRO_ORGANIZE		15
+#define MACRO_ASSIGN		16
 
-#define MACROCHOOSER_ALL            1
-#define MACROCHOOSER_CHOOSEONLY     2
-#define MACROCHOOSER_RECORDING      3
+#define MACROCHOOSER_ALL			1
+#define MACROCHOOSER_CHOOSEONLY		2
+#define MACROCHOOSER_RECORDING		3
 
 class BasicManager;
 
 class MacroChooser : public SfxModalDialog
 {
 private:
-    FixedText               aMacroNameTxt;
-    Edit                    aMacroNameEdit;
-    FixedText               aMacroFromTxT;
-    FixedText               aMacrosSaveInTxt;
-    BasicTreeListBox        aBasicBox;
-    FixedText               aMacrosInTxt;
-    String                  aMacrosInTxtBaseStr;
-    SvTreeListBox           aMacroBox;
+    FixedText 				aMacroNameTxt;
+    Edit 					aMacroNameEdit;
+    FixedText 				aMacroFromTxT;
+    FixedText 				aMacrosSaveInTxt;
+    BasicTreeListBox		aBasicBox;
+    FixedText 				aMacrosInTxt;
+    String	 				aMacrosInTxtBaseStr;
+    SvTreeListBox			aMacroBox;
 
-    PushButton              aRunButton;
-    CancelButton            aCloseButton;
-    PushButton              aAssignButton;
-    PushButton              aEditButton;
-    PushButton              aNewDelButton;
-    PushButton              aOrganizeButton;
-    HelpButton              aHelpButton;
-    PushButton              aNewLibButton;
-    PushButton              aNewModButton;
+    PushButton				aRunButton;
+    CancelButton 			aCloseButton;
+    PushButton				aAssignButton;
+    PushButton				aEditButton;
+    PushButton				aNewDelButton;
+    PushButton 				aOrganizeButton;
+    HelpButton				aHelpButton;
+    PushButton 				aNewLibButton;
+    PushButton 				aNewModButton;
 
-    BOOL                bNewDelIsDel;
-    BOOL                bForceStoreBasic;
+    BOOL				bNewDelIsDel;
+    BOOL				bForceStoreBasic;
 
-    USHORT              nMode;
+    USHORT				nMode;
 
     DECL_LINK( MacroSelectHdl, SvTreeListBox * );
     DECL_LINK( MacroDoubleClickHdl, SvTreeListBox * );
@@ -84,31 +84,31 @@ private:
     DECL_LINK( EditModifyHdl, Edit * );
     DECL_LINK( ButtonHdl, Button * );
 
-    void                CheckButtons();
-    void                SaveSetCurEntry( SvTreeListBox& rBox, SvLBoxEntry* pEntry );
-    void                UpdateFields();
+    void				CheckButtons();
+    void				SaveSetCurEntry( SvTreeListBox& rBox, SvLBoxEntry* pEntry );
+    void				UpdateFields();
 
-    void                EnableButton( Button& rButton, BOOL bEnable );
+    void				EnableButton( Button& rButton, BOOL bEnable );
 
-    String              GetInfo( SbxVariable* pVar );
+    String				GetInfo( SbxVariable* pVar );
 
-    void                StoreMacroDescription();
-    void                RestoreMacroDescription();
+    void				StoreMacroDescription();
+    void				RestoreMacroDescription();
 
 public:
                         MacroChooser( Window* pParent, BOOL bCreateEntries = TRUE );
                         ~MacroChooser();
 
-    SbMethod*           GetMacro();
+    SbMethod*			GetMacro();
     void                DeleteMacro();
-    SbMethod*           CreateMacro();
+    SbMethod*			CreateMacro();
 
-    virtual short       Execute();
+    virtual short		Execute();
 
-    void                SetMode( USHORT nMode );
-    USHORT              GetMode() const { return nMode; }
+    void				SetMode( USHORT nMode );
+    USHORT				GetMode() const { return nMode; }
 };
 
-#endif  // _MACRODLG_HXX
+#endif	// _MACRODLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

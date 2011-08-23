@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,11 +34,11 @@
 #include <cppuhelper/implbase1.hxx>
 
 
-//  ----------------------------------------------------
-//  class OAccessibleMenuComponent
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class OAccessibleMenuComponent
+//	----------------------------------------------------
 
-typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
+typedef ::comphelper::OAccessibleExtendedComponentHelper	AccessibleExtendedComponentHelper_BASE;
 
 typedef ::cppu::ImplHelper1<
     ::com::sun::star::accessibility::XAccessibleSelection > OAccessibleMenuComponent_BASE;
@@ -47,13 +47,13 @@ class OAccessibleMenuComponent : public OAccessibleMenuBaseComponent,
                                  public OAccessibleMenuComponent_BASE
 {
 protected:
-    virtual sal_Bool        IsEnabled();
+    virtual sal_Bool		IsEnabled();
     virtual sal_Bool        IsVisible();
 
-    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    virtual void			FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
-    // OCommonAccessibleComponent
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL   implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    // OCommonAccessibleComponent 
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL	implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
 
 public:
     OAccessibleMenuComponent( Menu* pMenu );
@@ -77,13 +77,13 @@ public:
 
     // XAccessibleComponent
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(	) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleExtendedComponent
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(	) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
 

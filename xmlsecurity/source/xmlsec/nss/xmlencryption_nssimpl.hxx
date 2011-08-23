@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,6 +95,6 @@ class XMLEncryption_NssImpl : public ::cppu::WeakImplHelper3<
         static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
 } ;
 
-#endif  // _XMLENCRYPTION_NSSIMPL_HXX_
+#endif	// _XMLENCRYPTION_NSSIMPL_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

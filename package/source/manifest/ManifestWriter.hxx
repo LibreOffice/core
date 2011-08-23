@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <com/sun/star/packages/manifest/XManifestWriter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star { 
     namespace lang { class XMultiServiceFactory; class XSingleServiceFactory; }
 } } }
 
@@ -50,20 +50,20 @@ public:
     virtual ~ManifestWriter();
 
     // XManifestWriter
-    virtual void SAL_CALL writeManifestSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rStream, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& rSequence )
+    virtual void SAL_CALL writeManifestSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rStream, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& rSequence ) 
         throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) 
         throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
         throw (::com::sun::star::uno::RuntimeException);
 
     // Component constructor
-    static ::rtl::OUString static_getImplementationName();
-    static ::com::sun::star::uno::Sequence < ::rtl::OUString > static_getSupportedServiceNames();
+    static ::rtl::OUString static_getImplementationName();	
+    static ::com::sun::star::uno::Sequence < ::rtl::OUString > static_getSupportedServiceNames();	
     static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > createServiceFactory( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory );
     sal_Bool SAL_CALL static_supportsService(rtl::OUString const & rServiceName);
 };

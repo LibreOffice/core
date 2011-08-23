@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,23 +33,23 @@
 #include <sfx2/tabdlg.hxx>
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Border Background Pages buendeln
+    Beschreibung:	Border Background Pages buendeln
  --------------------------------------------------------------------*/
 
 class SvxBorderBackgroundDlg: public SfxTabDialog
 {
 public:
-    SvxBorderBackgroundDlg( Window *pParent,
+    SvxBorderBackgroundDlg(	Window *pParent,
                             const SfxItemSet& rCoreSet,
                             BOOL bEnableSelector = FALSE );
 
     ~SvxBorderBackgroundDlg();
 
 protected:
-    virtual void    PageCreated( USHORT nPageId, SfxTabPage& rTabPage );
+    virtual void 	PageCreated( USHORT nPageId, SfxTabPage& rTabPage );
 
 private:
-    BOOL    bEnableBackgroundSelector; // fuer Border/Background-Dlg
+    BOOL	bEnableBackgroundSelector; // fuer Border/Background-Dlg
 };
 
 

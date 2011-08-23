@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ class SvxJSearchOptionsPage;
 
 class SvxJSearchOptionsDialog : public SfxSingleTabDialog
 {
-    INT32                   nInitialTlFlags;
+    INT32					nInitialTlFlags;
     SvxJSearchOptionsPage  *pPage;
 
     // disallow copy-constructor and assignment-operator for now
@@ -65,10 +65,10 @@ public:
     virtual ~SvxJSearchOptionsDialog();
 
     // Window
-    virtual void    Activate();
+    virtual void	Activate();
 
-    INT32           GetTransliterationFlags() const;
-    void            SetTransliterationFlags( INT32 nSettings );
+    INT32			GetTransliterationFlags() const;
+    void 			SetTransliterationFlags( INT32 nSettings );
 };
 
 #endif

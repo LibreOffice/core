@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -348,7 +348,7 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
         Reference< XDocument > aInstanceDoc = getInstanceDocument(xResult);
         aResult = xSubmission->replace(getReplace(), aInstanceDoc, Reference< XFrame >());
     }
-
+        
     return ( aResult == CSubmission::SUCCESS );
 }
 
@@ -501,10 +501,10 @@ OUString lcl_message( const OUString& rID, const OUString& rText )
     return aMessage.makeStringAndClear();
 }
 
-void SAL_CALL Submission::submitWithInteraction(
-    const Reference<XInteractionHandler>& _rxHandler )
-    throw ( VetoException,
-            WrappedTargetException,
+void SAL_CALL Submission::submitWithInteraction( 
+    const Reference<XInteractionHandler>& _rxHandler ) 
+    throw ( VetoException, 
+            WrappedTargetException, 
             RuntimeException )
 {
     // as long as this class is not really threadsafe, we need to copy
@@ -526,14 +526,14 @@ void SAL_CALL Submission::submitWithInteraction(
     bool bValid = pModel->isValid();
     if( ! bValid )
     {
-        InvalidDataOnSubmitException aInvalidDataException(
+        InvalidDataOnSubmitException aInvalidDataException( 
             lcl_message(sID, OUSTRING(" due to invalid data") ), *this );
 
         if( _rxHandler.is() )
         {
             // labouriously create interaction request
-            comphelper::OInteractionRequest* pRequest
-                = new comphelper::OInteractionRequest(
+            comphelper::OInteractionRequest* pRequest 
+                = new comphelper::OInteractionRequest( 
                     makeAny( aInvalidDataException ) );
             Reference<XInteractionRequest> xRequest = pRequest;
 
@@ -577,7 +577,7 @@ void SAL_CALL Submission::submitWithInteraction(
     catch( const Exception& e )
     {
         // exception caught: re-throw as wrapped target exception
-        throw WrappedTargetException(
+        throw WrappedTargetException( 
             lcl_message( sID, OUSTRING(" due to exception being thrown") ),
             *this, makeAny( e ) );
     }
@@ -586,10 +586,10 @@ void SAL_CALL Submission::submitWithInteraction(
     {
         mxModel->rebuild();
     }
-    else
+    else 
     {
         // other failure: throw wrapped target exception, too.
-        throw WrappedTargetException(
+        throw WrappedTargetException( 
             lcl_message( sID, OUString() ), *this, Any() );
     }
 }
@@ -658,7 +658,7 @@ Reference< XDocument > Submission::getInstanceDocument(const Reference< XXPathOb
         if (aList->getLength() > 0)
             aDocument = aList->item(0)->getOwnerDocument();
     }
-    return aDocument;
+    return aDocument;            
 }
 
 Reference< XDocumentFragment > Submission::createSubmissionDocument(const Reference< XXPathObject >& aObj, sal_Bool bRemoveWSNodes)

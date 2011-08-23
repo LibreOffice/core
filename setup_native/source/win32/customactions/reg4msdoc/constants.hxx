@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,18 +25,18 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
  #ifndef _CONSTANTS_HXX_
  #define _CONSTANTS_HXX_
-
+ 
 extern const int MSWORD;
 extern const int MSEXCEL;
-extern const int MSPOWERPOINT;
-extern const int DEFAULT_HTML_EDITOR_FOR_IE;
-extern const int HTML_EDITOR;
+extern const int MSPOWERPOINT;	
+extern const int DEFAULT_HTML_EDITOR_FOR_IE;	
+extern const int HTML_EDITOR;	
 extern const int DEFAULT_SHELL_HTML_EDITOR;
 
  #endif
-
+ 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

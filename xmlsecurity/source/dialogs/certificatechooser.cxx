@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,16 +46,16 @@
 
 /* HACK: disable some warnings for MS-C */
 #ifdef _MSC_VER
-#pragma warning (disable : 4355)    // 4355: this used in initializer-list
+#pragma warning (disable : 4355)	// 4355: this used in initializer-list
 #endif
 
 using namespace ::com::sun::star;
 
-#define INVAL_SEL       0xFFFF
+#define INVAL_SEL		0xFFFF
 
 USHORT CertificateChooser::GetSelectedEntryPos( void ) const
 {
-    USHORT  nSel = INVAL_SEL;
+    USHORT	nSel = INVAL_SEL;
 
     SvLBoxEntry* pSel = maCertLB.FirstSelected();
     if( pSel )
@@ -65,15 +65,15 @@ USHORT CertificateChooser::GetSelectedEntryPos( void ) const
 }
 
 CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::XComponentContext>& _rxCtx, uno::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, const SignatureInformations& _rCertsToIgnore )
-    :ModalDialog    ( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTCHOOSER ) )
+    :ModalDialog	( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTCHOOSER ) )
     ,maCertsToIgnore( _rCertsToIgnore )
-    ,maHintFT       ( this, XMLSEC_RES( FT_HINT_SELECT ) )
-    ,maCertLB       ( this, XMLSEC_RES( LB_SIGNATURES ) )
-    ,maViewBtn      ( this, XMLSEC_RES( BTN_VIEWCERT ) )
-    ,maBottomSepFL  ( this, XMLSEC_RES( FL_BOTTOM_SEP ) )
-    ,maOKBtn        ( this, XMLSEC_RES( BTN_OK ) )
-    ,maCancelBtn    ( this, XMLSEC_RES( BTN_CANCEL ) )
-    ,maHelpBtn      ( this, XMLSEC_RES( BTN_HELP ) )
+    ,maHintFT		( this, XMLSEC_RES( FT_HINT_SELECT ) )
+    ,maCertLB		( this, XMLSEC_RES( LB_SIGNATURES ) )
+    ,maViewBtn		( this, XMLSEC_RES( BTN_VIEWCERT ) )
+    ,maBottomSepFL	( this, XMLSEC_RES( FL_BOTTOM_SEP ) )
+    ,maOKBtn		( this, XMLSEC_RES( BTN_OK ) )
+    ,maCancelBtn	( this, XMLSEC_RES( BTN_CANCEL ) )
+    ,maHelpBtn		( this, XMLSEC_RES( BTN_HELP ) )
 {
     static long nTabs[] = { 3, 0, 30*CS_LB_WIDTH/100, 60*CS_LB_WIDTH/100 };
     maCertLB.SetTabs( &nTabs[0] );
@@ -100,7 +100,7 @@ short CertificateChooser::Execute()
 {
     // #i48432#
     // We can't check for personal certificates before raising this dialog,
-    // because the mozilla implementation throws a NoPassword exception,
+    // because the mozilla implementation throws a NoPassword exception, 
     // if the user pressed cancel, and also if the database does not exist!
     // But in the later case, the is no password query, and the user is confused
     // that nothing happens when pressing "Add..." in the SignatureDialog.
@@ -201,7 +201,7 @@ void CertificateChooser::ImplInitialize()
 uno::Reference< dcss::security::XCertificate > CertificateChooser::GetSelectedCertificate()
 {
     uno::Reference< dcss::security::XCertificate > xCert;
-    USHORT  nSelected = GetSelectedEntryPos();
+    USHORT	nSelected = GetSelectedEntryPos();
     if ( nSelected < maCerts.getLength() )
         xCert = maCerts[ nSelected ];
     return xCert;

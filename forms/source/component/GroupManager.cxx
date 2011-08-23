@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,7 +94,7 @@ public:
     {
         return
             reinterpret_cast<sal_Int64>(lhs.m_xComponent.get())
-        <   reinterpret_cast<sal_Int64>(rhs.m_xComponent.get());
+        <	reinterpret_cast<sal_Int64>(rhs.m_xComponent.get());
     }
 };
 
@@ -350,7 +350,7 @@ void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) thro
     Reference<XPropertySet>  xSet(evt.Source, UNO_QUERY);
 
     // Component aus Gruppe entfernen
-    ::rtl::OUString     sGroupName;
+    ::rtl::OUString		sGroupName;
     if (hasProperty( PROPERTY_GROUP_NAME, xSet ))
         xSet->getPropertyValue( PROPERTY_GROUP_NAME ) >>= sGroupName;
     if (evt.PropertyName == PROPERTY_NAME) {
@@ -425,9 +425,9 @@ sal_Int32 OGroupManager::getGroupCount()
 void OGroupManager::getGroup(sal_Int32 nGroup, Sequence< Reference<XControlModel> >& _rGroup, ::rtl::OUString& _rName)
 {
     OSL_ENSURE(nGroup >= 0 && (size_t)nGroup < m_aActiveGroupMap.size(),"OGroupManager::getGroup: Invalid group index!");
-    OGroupArr::iterator aGroupPos   = m_aActiveGroupMap[nGroup];
-    _rName                          = aGroupPos->second.GetGroupName();
-    _rGroup                         = aGroupPos->second.GetControlModels();
+    OGroupArr::iterator aGroupPos	= m_aActiveGroupMap[nGroup];
+    _rName							= aGroupPos->second.GetGroupName();
+    _rGroup							= aGroupPos->second.GetControlModels();
 }
 
 //------------------------------------------------------------------
@@ -506,7 +506,7 @@ void OGroupManager::RemoveElement( const Reference<XPropertySet>& xSet )
         return;
 
     // Component aus Gruppe entfernen
-    ::rtl::OUString     sGroupName( GetGroupName( xSet ) );
+    ::rtl::OUString		sGroupName( GetGroupName( xSet ) );
 
     removeFromGroupMap(sGroupName,xSet);
 }
@@ -527,7 +527,7 @@ void OGroupManager::RemoveElement( const Reference<XPropertySet>& xSet )
 }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

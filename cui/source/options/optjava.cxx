@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,10 +56,10 @@
 
 // define ----------------------------------------------------------------
 
-#define CLASSPATH_DELIMITER SAL_PATHSEPARATOR
-#define STRIM( s )          s.EraseLeadingChars().EraseTrailingChars()
-#define BUTTON_BORDER       2
-#define RESET_TIMEOUT       300
+#define CLASSPATH_DELIMITER	SAL_PATHSEPARATOR
+#define STRIM( s )			s.EraseLeadingChars().EraseTrailingChars()
+#define BUTTON_BORDER		2
+#define	RESET_TIMEOUT		300
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
@@ -149,24 +149,24 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
 
     SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_OPTIONS_JAVA ), rSet ),
 
-    m_aJavaLine         ( this, CUI_RES( FL_JAVA ) ),
-    m_aJavaEnableCB     ( this, CUI_RES( CB_JAVA_ENABLE ) ),
-    m_aJavaFoundLabel   ( this, CUI_RES( FT_JAVA_FOUND ) ),
-    m_aJavaList         ( this, CUI_RES( LB_JAVA ) ),
-    m_aJavaPathText     ( this, CUI_RES( FT_JAVA_PATH ) ),
-    m_aAddBtn           ( this, CUI_RES( PB_ADD ) ),
-    m_aParameterBtn     ( this, CUI_RES( PB_PARAMETER ) ),
-    m_aClassPathBtn     ( this, CUI_RES( PB_CLASSPATH ) ),
+    m_aJavaLine			( this, CUI_RES( FL_JAVA ) ),
+    m_aJavaEnableCB		( this, CUI_RES( CB_JAVA_ENABLE ) ),
+    m_aJavaFoundLabel	( this, CUI_RES( FT_JAVA_FOUND ) ),
+    m_aJavaList			( this, CUI_RES( LB_JAVA ) ),
+    m_aJavaPathText		( this, CUI_RES( FT_JAVA_PATH ) ),
+    m_aAddBtn			( this, CUI_RES( PB_ADD ) ),
+    m_aParameterBtn		( this, CUI_RES( PB_PARAMETER ) ),
+    m_aClassPathBtn		( this, CUI_RES( PB_CLASSPATH ) ),
 
-    m_pParamDlg         ( NULL ),
-    m_pPathDlg          ( NULL ),
-    m_parJavaInfo       ( NULL ),
-    m_parParameters     ( NULL ),
-    m_pClassPath        ( NULL ),
-    m_nInfoSize         ( 0 ),
-    m_nParamSize        ( 0 ),
-    m_sInstallText      (       CUI_RES( STR_INSTALLED_IN ) ),
-    m_sAccessibilityText(       CUI_RES( STR_ACCESSIBILITY ) ),
+    m_pParamDlg			( NULL ),
+    m_pPathDlg			( NULL ),
+    m_parJavaInfo		( NULL ),
+    m_parParameters		( NULL ),
+    m_pClassPath		( NULL ),
+    m_nInfoSize			( 0 ),
+    m_nParamSize		( 0 ),
+    m_sInstallText		( 		CUI_RES( STR_INSTALLED_IN ) ),
+    m_sAccessibilityText(		CUI_RES( STR_ACCESSIBILITY ) ),
     m_sAddDialogText    (       CUI_RES( STR_ADDDLGTEXT ) ),
 
     xDialogListener     ( new ::svt::DialogClosedListener() )
@@ -650,7 +650,7 @@ void SvxJavaOptionsPage::AddFolder( const ::rtl::OUString& _rFolder )
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* SvxJavaOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage*	SvxJavaOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new SvxJavaOptionsPage( pParent, rAttrSet ) );
 }
@@ -678,7 +678,7 @@ BOOL SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
         bModified = TRUE;
     }
 
-    if ( m_pPathDlg )
+    if ( m_pPathDlg	)
     {
         ::rtl::OUString sPath( m_pPathDlg->GetClassPath() );
         if ( m_pPathDlg->GetOldPath() != String( sPath ) )
@@ -775,17 +775,17 @@ SvxJavaParameterDlg::SvxJavaParameterDlg( Window* pParent ) :
 
     ModalDialog( pParent, CUI_RES( RID_SVXDLG_JAVA_PARAMETER ) ),
 
-    m_aParameterLabel   ( this, CUI_RES( FT_PARAMETER ) ),
-    m_aParameterEdit    ( this, CUI_RES( ED_PARAMETER ) ),
-    m_aAssignBtn        ( this, CUI_RES( PB_ASSIGN ) ),
-    m_aAssignedLabel    ( this, CUI_RES( FT_ASSIGNED ) ),
-    m_aAssignedList     ( this, CUI_RES( LB_ASSIGNED ) ),
-    m_aExampleText      ( this, CUI_RES( FT_EXAMPLE ) ),
-    m_aRemoveBtn        ( this, CUI_RES( PB_REMOVE ) ),
-    m_aButtonsLine      ( this, CUI_RES( FL_BUTTONS ) ),
-    m_aOKBtn            ( this, CUI_RES( PB_PARAMETER_OK ) ),
-    m_aCancelBtn        ( this, CUI_RES( PB_PARAMETER_ESC ) ),
-    m_aHelpBtn          ( this, CUI_RES( PB_PARAMETER_HLP ) )
+    m_aParameterLabel	( this, CUI_RES( FT_PARAMETER ) ),
+    m_aParameterEdit	( this, CUI_RES( ED_PARAMETER ) ),
+    m_aAssignBtn		( this, CUI_RES( PB_ASSIGN ) ),
+    m_aAssignedLabel	( this, CUI_RES( FT_ASSIGNED ) ),
+    m_aAssignedList		( this, CUI_RES( LB_ASSIGNED ) ),
+    m_aExampleText		( this, CUI_RES( FT_EXAMPLE ) ),
+    m_aRemoveBtn		( this, CUI_RES( PB_REMOVE ) ),
+    m_aButtonsLine		( this, CUI_RES( FL_BUTTONS ) ),
+    m_aOKBtn			( this, CUI_RES( PB_PARAMETER_OK ) ),
+    m_aCancelBtn		( this, CUI_RES( PB_PARAMETER_ESC ) ),
+    m_aHelpBtn			( this, CUI_RES( PB_PARAMETER_HLP ) )
 
 {
     FreeResource();
@@ -885,7 +885,7 @@ short SvxJavaParameterDlg::Execute()
 
 // -----------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > SvxJavaParameterDlg::GetParameters() const
+Sequence< ::rtl::OUString >	SvxJavaParameterDlg::GetParameters() const
 {
     USHORT nCount = m_aAssignedList.GetEntryCount();
     Sequence< ::rtl::OUString > aParamList( nCount );
@@ -915,15 +915,15 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg( Window* pParent ) :
 
     ModalDialog( pParent, CUI_RES( RID_SVXDLG_JAVA_CLASSPATH ) ),
 
-    m_aPathLabel        ( this, CUI_RES( FT_PATH ) ),
-    m_aPathList         ( this, CUI_RES( LB_PATH ) ),
-    m_aAddArchiveBtn    ( this, CUI_RES( PB_ADDARCHIVE ) ),
-    m_aAddPathBtn       ( this, CUI_RES( PB_ADDPATH ) ),
-    m_aRemoveBtn        ( this, CUI_RES( PB_REMOVE_PATH ) ),
-    m_aButtonsLine      ( this, CUI_RES( FL_PATH_BUTTONS ) ),
-    m_aOKBtn            ( this, CUI_RES( PB_PATH_OK ) ),
-    m_aCancelBtn        ( this, CUI_RES( PB_PATH_ESC ) ),
-    m_aHelpBtn          ( this, CUI_RES( PB_PATH_HLP ) )
+    m_aPathLabel		( this, CUI_RES( FT_PATH ) ),
+    m_aPathList			( this, CUI_RES( LB_PATH ) ),
+    m_aAddArchiveBtn	( this, CUI_RES( PB_ADDARCHIVE ) ),
+    m_aAddPathBtn		( this, CUI_RES( PB_ADDPATH ) ),
+    m_aRemoveBtn		( this, CUI_RES( PB_REMOVE_PATH ) ),
+    m_aButtonsLine		( this, CUI_RES( FL_PATH_BUTTONS ) ),
+    m_aOKBtn			( this, CUI_RES( PB_PATH_OK ) ),
+    m_aCancelBtn		( this, CUI_RES( PB_PATH_ESC ) ),
+    m_aHelpBtn			( this, CUI_RES( PB_PATH_HLP ) )
 
 {
     FreeResource();

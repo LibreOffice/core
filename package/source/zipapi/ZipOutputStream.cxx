@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,18 +68,18 @@ ZipOutputStream::~ZipOutputStream( void )
         delete aZipList[i];
 }
 
-void SAL_CALL ZipOutputStream::setMethod( sal_Int32 nNewMethod )
+void SAL_CALL ZipOutputStream::setMethod( sal_Int32 nNewMethod ) 
     throw(RuntimeException)
 {
     nMethod = static_cast < sal_Int16 > (nNewMethod);
 }
-void SAL_CALL ZipOutputStream::setLevel( sal_Int32 nNewLevel )
+void SAL_CALL ZipOutputStream::setLevel( sal_Int32 nNewLevel ) 
     throw(RuntimeException)
 {
     aDeflater.setLevel( nNewLevel);
 }
 
-void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
+void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry, 
                         rtl::Reference < EncryptionData > &xEncryptData,
                         sal_Bool bEncrypt)
     throw(IOException, RuntimeException)
@@ -113,7 +113,7 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
     pCurrentEntry = &rEntry;
 }
 
-void SAL_CALL ZipOutputStream::closeEntry(  )
+void SAL_CALL ZipOutputStream::closeEntry(  ) 
     throw(IOException, RuntimeException)
 {
     ZipEntry *pEntry = pCurrentEntry;
@@ -170,7 +170,7 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
             bEncryptCurrentEntry = sal_False;
             rtl_cipher_destroy ( aCipher );
             pCurrentEncryptData->aDigest.realloc ( RTL_DIGEST_LENGTH_SHA1 );
-            aDigestResult = rtl_digest_getSHA1 ( aDigest,
+            aDigestResult = rtl_digest_getSHA1 ( aDigest, 
                                                  reinterpret_cast < sal_uInt8 * > ( pCurrentEncryptData->aDigest.getArray() ),
                                                  RTL_DIGEST_LENGTH_SHA1 );
             OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
@@ -180,7 +180,7 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
     }
 }
 
-void SAL_CALL ZipOutputStream::write( const Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+void SAL_CALL ZipOutputStream::write( const Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength ) 
     throw(IOException, RuntimeException)
 {
     switch (pCurrentEntry->nMethod)
@@ -204,14 +204,14 @@ void SAL_CALL ZipOutputStream::write( const Sequence< sal_Int8 >& rBuffer, sal_I
     }
 }
 
-void SAL_CALL ZipOutputStream::rawWrite( Sequence< sal_Int8 >& rBuffer, sal_Int32 /*nNewOffset*/, sal_Int32 nNewLength )
+void SAL_CALL ZipOutputStream::rawWrite( Sequence< sal_Int8 >& rBuffer, sal_Int32 /*nNewOffset*/, sal_Int32 nNewLength ) 
     throw(IOException, RuntimeException)
 {
     Sequence < sal_Int8 > aTmpBuffer ( rBuffer.getConstArray(), nNewLength );
     aChucker.WriteBytes( aTmpBuffer );
 }
 
-void SAL_CALL ZipOutputStream::rawCloseEntry(  )
+void SAL_CALL ZipOutputStream::rawCloseEntry(  ) 
     throw(IOException, RuntimeException)
 {
     if ( pCurrentEntry->nMethod == DEFLATED && ( pCurrentEntry->nFlag & 8 ) )
@@ -219,7 +219,7 @@ void SAL_CALL ZipOutputStream::rawCloseEntry(  )
     pCurrentEntry = NULL;
 }
 
-void SAL_CALL ZipOutputStream::finish(  )
+void SAL_CALL ZipOutputStream::finish(  ) 
     throw(IOException, RuntimeException)
 {
     if (bFinished)
@@ -295,7 +295,7 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
         throw IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), Reference< XInterface >() );
 
     ::rtl::OString sUTF8Name = ::rtl::OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
-    sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
+    sal_Int16 nNameLength 		= static_cast < sal_Int16 > ( sUTF8Name.getLength() );
 
     aChucker << CENSIG;
     aChucker << rEntry.nVersion;
@@ -344,7 +344,7 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
         throw IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), Reference< XInterface >() );
 
     ::rtl::OString sUTF8Name = ::rtl::OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
-    sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
+    sal_Int16 nNameLength 		= static_cast < sal_Int16 > ( sUTF8Name.getLength() );
 
     aChucker << LOCSIG;
     aChucker << rEntry.nVersion;
@@ -397,7 +397,7 @@ sal_uInt32 ZipOutputStream::getCurrentDosTime( )
         nYear-=1980;
     else if (nYear>80)
         nYear-=80;
-    sal_uInt32 nResult = static_cast < sal_uInt32>( ( ( ( aDateTime.Day) +
+    sal_uInt32 nResult = static_cast < sal_uInt32>( ( ( ( aDateTime.Day) + 
                                           ( 32 * (aDateTime.Month)) +
                                           ( 512 * nYear ) ) << 16) |
                                         ( ( aDateTime.Seconds/2) +
@@ -407,7 +407,7 @@ sal_uInt32 ZipOutputStream::getCurrentDosTime( )
 }
 /*
 
-   This is actually never used, so I removed it, but thought that the
+   This is actually never used, so I removed it, but thought that the 
    implementation details may be useful in the future...mtg 20010307
 
    I stopped using the time library and used the OSL version instead, but

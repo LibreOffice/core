@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ class EditorWindow;
 class ExtendedEdit : public Edit
 {
 private:
-    Accelerator     aAcc;
-    Link            aAccHdl;
-    Link            aGotFocusHdl;
-    Link            aLoseFocusHdl;
+    Accelerator		aAcc;
+    Link			aAccHdl;
+    Link			aGotFocusHdl;
+    Link			aLoseFocusHdl;
 
 protected:
     DECL_LINK( EditAccHdl, Accelerator * );
@@ -54,14 +54,14 @@ protected:
 public:
                     ExtendedEdit( Window* pParent, IDEResId nRes );
 
-    void            SetAccHdl( const Link& rLink )          { aAccHdl = rLink; }
-    void            SetLoseFocusHdl( const Link& rLink )    { aLoseFocusHdl = rLink; }
-    void            SetGotFocusHdl( const Link& rLink )     { aGotFocusHdl = rLink; }
-    Accelerator&    GetAccelerator()                        { return aAcc; }
+    void			SetAccHdl( const Link& rLink )			{ aAccHdl = rLink; }
+    void			SetLoseFocusHdl( const Link& rLink )	{ aLoseFocusHdl = rLink; }
+    void			SetGotFocusHdl( const Link& rLink )		{ aGotFocusHdl = rLink; }
+    Accelerator&	GetAccelerator() 						{ return aAcc; }
 };
 
-#endif  //NO_SPECIALEDIT
+#endif	//NO_SPECIALEDIT
 
-#endif  // _BASTYPE3_HXX
+#endif	// _BASTYPE3_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

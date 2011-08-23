@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxw = com::sun::star::xml::wrapper;
 
-#define DECLARE_ASCII( SASCIIVALUE )                                                                            \
+#define	DECLARE_ASCII( SASCIIVALUE )																			\
     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )
 
 SecurityEngine::SecurityEngine( const cssu::Reference< cssl::XMultiServiceFactory >& rxMSF )
@@ -72,18 +72,18 @@ sal_Bool SAL_CALL SecurityEngine::endMission(  )
     throw (com::sun::star::uno::RuntimeException)
 {
     sal_Bool rc = m_bMissionDone;
-
+    
     if (!rc)
     {
         clearUp( );
-
+        
         notifyResultListener();
         m_bMissionDone = true;
     }
-
+    
     m_xResultListener = NULL;
     m_xSAXEventKeeper = NULL;
-
+    
     return rc;
 }
 

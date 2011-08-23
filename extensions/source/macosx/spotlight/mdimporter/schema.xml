@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+ 
 <schema version="1.0" xmlns="http://www.apple.com/metadata"
                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                       xsi:schemaLocation="http://www.apple.com/metadata file:///System/Library/Frameworks/CoreServices.framework/Frameworks/Metadata.framework/Resources/MetadataSchema.xsd">
     <note>
         OpenOffice.org allows the user to enter 4 pieces of custom information in the document's metadata.
-        These metadata fields are described here for Spotlight's use.
+        These metadata fields are described here for Spotlight's use.		      
     </note>
     <attributes>
         <attribute name="org_openoffice_opendocument_custominfo1" type="CFString"/>

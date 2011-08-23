@@ -8,13 +8,13 @@
         <description> The  </description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="beta"/>
-        <supported-service>com.sun.star.deployment.UpdateInformationProvider</supported-service>
+        <status value="beta"/>        
+        <supported-service>com.sun.star.deployment.UpdateInformationProvider</supported-service>		
         <service-dependency>...</service-dependency>
         <type>com.sun.star.beans.NamedValue</type>
         <type>com.sun.star.beans.PropertyValue</type>
         <type>com.sun.star.container.XNameReplace</type>
-        <type>com.sun.star.deployment.UpdateInformationProvider</type>
+        <type>com.sun.star.deployment.UpdateInformationProvider</type>		
         <type>com.sun.star.io.XInputStream</type>
         <type>com.sun.star.io.XOutputStream</type>
         <type>com.sun.star.lang.XComponent</type>

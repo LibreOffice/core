@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ import java.util.HashMap;
 import java.util.Vector;
 
 public class SolarisHelper {
-
+    
     public SolarisHelper() {
     }
-
+    
     private void createLocalTempDir() {
         String mktempString = "/usr/bin/mktemp";
         File mktemp = new File(mktempString);
@@ -60,26 +60,26 @@ public class SolarisHelper {
             Vector returnErrorVector = new Vector();
             int returnValue = ExecuteProcess.executeProcessReturnVector(mktempCommandArray, returnVector, returnErrorVector);
             String uniqueLocalDir = (String) returnVector.get(0);
-
+                        
             data.setLocalTempPath(uniqueLocalDir);
-
+            
             String log = mktempCommand + "<br><b>Returns: " + uniqueLocalDir + "</b><br>";
             LogManager.addCommandsLogfileComment(log);
-
+            
             String installRoot = data.getInstallDir();
             File installRootTemp = new File(installRoot, "tmp");
-
+            
             if ( installRootTemp.exists() ) {
                 SystemManager.removeDirectory(installRootTemp);
             }
-
+            
             String linkCommand = "ln -s " + uniqueLocalDir + " " + installRootTemp.getPath();
             String[] linkCommandArray = new String[4];
             linkCommandArray[0] = "ln";
             linkCommandArray[1] = "-s";
             linkCommandArray[2] = uniqueLocalDir;
             linkCommandArray[3] = installRootTemp.getPath();
-
+            
             // Vector returnVector = new Vector();
             returnValue = ExecuteProcess.executeProcessReturnValue(linkCommandArray);
 
@@ -87,16 +87,16 @@ public class SolarisHelper {
             LogManager.addCommandsLogfileComment(log);
         }
     }
-
+    
     private void removeLocalTempDir() {
         InstallData data = InstallData.getInstance();
-
+        
         if ( data.getLocalTempPath() != null ) {
             File installRootTemp = new File(data.getInstallDir(), "tmp");
             if ( installRootTemp.exists() ) {
                 installRootTemp.delete(); // removing the link
                 SystemManager.createDirectory(installRootTemp);
-            }
+            }            
 
             File localTemp = new File(data.getLocalTempPath());
             if ( localTemp.exists() ) {
@@ -104,12 +104,12 @@ public class SolarisHelper {
             }
         }
     }
-
+    
     private Vector getAdminFileContent(boolean relocatable, boolean rdepends) {
 
         Vector adminFile = new Vector();
         InstallData data = InstallData.getInstance();
-
+        
         // if ( relocatable ) {
         //     String installDir =  data.getInstallDir();
         //     // installDir = installDir.replace(" ", "\\ ");
@@ -121,41 +121,41 @@ public class SolarisHelper {
         adminFile.add(mailLine);
 
         String conflictLine = "conflict=nochange";
-        if ( data.isUserInstallation() ) { conflictLine = "conflict=nochange"; }
+        if ( data.isUserInstallation() ) { conflictLine = "conflict=nochange"; }        
         adminFile.add(conflictLine);
 
         String runlevelLine = "runlevel=nocheck";
         adminFile.add(runlevelLine);
 
         String setuidLine = "setuid=quit";
-        if ( data.isUserInstallation() ) { setuidLine = "setuid=nocheck"; }
+        if ( data.isUserInstallation() ) { setuidLine = "setuid=nocheck"; }        
         adminFile.add(setuidLine);
 
         String actionLine = "action=nocheck";
         adminFile.add(actionLine);
 
         String partialLine = "partial=quit";
-        if ( data.isUserInstallation() ) { partialLine = "partial=nocheck"; }
+        if ( data.isUserInstallation() ) { partialLine = "partial=nocheck"; }        
         adminFile.add(partialLine);
 
         String instanceLine = "instance=unique";
         adminFile.add(instanceLine);
-
+        
         // String idependLine = "idepend=quit";
         String idependLine = "idepend=nocheck";
-        // if ( data.isUserInstallation() ) { idependLine = "idepend=nocheck"; }
+        // if ( data.isUserInstallation() ) { idependLine = "idepend=nocheck"; }        
         adminFile.add(idependLine);
 
         // String rdependLine = "rdepend=nocheck";
         String rdependLine = "rdepend=quit";
         if ( ! rdepends ) { rdependLine = "rdepend=nocheck"; }
-        if ( data.isUserInstallation() ) { rdependLine = "rdepend=nocheck"; }
+        if ( data.isUserInstallation() ) { rdependLine = "rdepend=nocheck"; }        
         adminFile.add(rdependLine);
 
         String spaceLine = "space=quit";
-        if ( data.isUserInstallation() ) { spaceLine = "space=nocheck"; }
+        if ( data.isUserInstallation() ) { spaceLine = "space=nocheck"; }        
         adminFile.add(spaceLine);
-
+        
         return adminFile;
     }
 
@@ -169,7 +169,7 @@ public class SolarisHelper {
 
         return mainVersion;
     }
-
+ 
     private String getPackageRevision(String version) {
         String revision = null;
 
@@ -180,7 +180,7 @@ public class SolarisHelper {
 
         return revision;
     }
-
+    
     private Vector getVectorOfNumbers(String version) {
         Vector numbers = new Vector();
         int pos = -1;
@@ -194,10 +194,10 @@ public class SolarisHelper {
             }
         } while ( pos > -1 );
 
-        numbers.add(version);
+        numbers.add(version);        
         return numbers;
     }
-
+    
     private int getMinimum(int a, int b) {
         int minimum;
 
@@ -209,10 +209,10 @@ public class SolarisHelper {
 
         return minimum;
     }
-
+    
     private String compareVersion(String firstVersion, String secondVersion) {
         // comparing strings with syntax 2.0.0
-        String comparison = "bothPackagesAreEqual";
+        String comparison = "bothPackagesAreEqual";        
         Vector firstVector = getVectorOfNumbers(firstVersion);
         Vector secondVector = getVectorOfNumbers(secondVersion);
 
@@ -232,7 +232,7 @@ public class SolarisHelper {
                 break;
             } else if ( second_ < first ) {
                 comparison = "secondPackageIsOlder";
-                break;
+                break;                
             }
         }
 
@@ -244,22 +244,22 @@ public class SolarisHelper {
             Vector logContent = LogManager.getModulesLogFile();
             File baseDir = new File(data.getInstallDefaultDir(), data.getProductDir());
             File uninstallDir = new File(baseDir, data.getUninstallDirName());
-            File modulesLogFile = new File(uninstallDir, "moduleSettingsLog.txt");
+            File modulesLogFile = new File(uninstallDir, "moduleSettingsLog.txt");        
             // System.err.println("Saving file: " + modulesLogFile.getPath());
             SystemManager.saveCharFileVector(modulesLogFile.getPath(), logContent);
-        }
+        }    
     }
 
     public void removeSolarisLockFile() {
         String lockFileName = "/tmp/.ai.pkg.zone.lock-afdb66cf-1dd1-11b2-a049-000d560ddc3e";
         File lockFile = new File(lockFileName);
-
+        
         if ( lockFile.exists() ) {
             // System.err.println("Found file: " + lockFileName);
             boolean deleted = lockFile.delete();
-        }
+        }        
     }
-
+    
     public String getSolarisDatabasePath(InstallData data) {
         String databasePath = null;
         databasePath = data.getInstallDir();
@@ -270,19 +270,19 @@ public class SolarisHelper {
         InstallData data = InstallData.getInstance();
         Vector removeFiles = data.getRemoveFiles();
         String adminFileName = "";
-
+        
         if ( relocatable ) {
             if ( rdepends ) {
                 adminFileName = "adminFileReloc";
             } else {
-                adminFileName = "adminFileRelocNoDepends";
+                adminFileName = "adminFileRelocNoDepends";            	
             }
         } else {
             if ( rdepends ) {
                 adminFileName = "adminFileNoReloc";
             } else {
                 adminFileName = "adminFileNoRelocNoDepends";
-            }
+            }     
         }
 
         Vector fileContent = getAdminFileContent(relocatable, rdepends);
@@ -292,7 +292,7 @@ public class SolarisHelper {
         if ( relocatable ) {
             if ( rdepends ) {
                 data.setAdminFileNameReloc(completeAdminFileName);
-            } else {
+            } else {            
                 data.setAdminFileNameRelocNoDepends(completeAdminFileName);
             }
         } else {
@@ -302,7 +302,7 @@ public class SolarisHelper {
                 data.setAdminFileNameNoRelocNoDepends(completeAdminFileName);
             }
         }
-
+        
         if ( ! adminFile.exists() ) {
             // only saving, if it did not exist
             SystemManager.saveCharFileVector(completeAdminFileName, fileContent);
@@ -322,11 +322,11 @@ public class SolarisHelper {
         env.put("LD_PRELOAD_32", data.getGetUidPath());
         data.setShellEnvironment(env);
     }
-
+    
     public String getVersionString(Vector returnVector) {
         String versionString = null;
         String versionLine = null;
-
+        
         for (int i = 0; i < returnVector.size(); i++) {
             String line = (String) returnVector.get(i);
             int pos = line.indexOf("REV=");
@@ -341,13 +341,13 @@ public class SolarisHelper {
             int pos = versionLine.lastIndexOf(" ");
             versionString = versionLine.substring(pos + 1, versionLine.length());
         }
-
+        
         return versionString;
     }
 
     public int getInstalledMinor(String version) {
-
-        int minor = 0;
+    
+        int minor = 0;	
 
         int pos = version.indexOf(".");
         if ( pos > -1 ) {
@@ -358,7 +358,7 @@ public class SolarisHelper {
                 reduced = reduced.substring(0, pos);
                 minor = Integer.parseInt(reduced);
             }
-        }
+        }    	
 
         return minor;
     }
@@ -375,7 +375,7 @@ public class SolarisHelper {
         if (( firstPackageMainVersion != null ) && ( secondPackageMainVersion != null )) {
             comparison = compareVersion(firstPackageMainVersion, secondPackageMainVersion);
         }
-
+        
         if ( comparison.equals("firstPackageIsOlder") ) {
             firstPackageIsOlder = true;
         } else if ( comparison.equals("secondPackageIsOlder") ) {
@@ -388,7 +388,7 @@ public class SolarisHelper {
                 comparison = compareVersion(firstPackageRevision, secondPackageRevision);
                 if ( comparison.equals("firstPackageIsOlder") ) {
                     firstPackageIsOlder = true;
-                } else {
+                } else {                    
                     firstPackageIsOlder = false;
                 }
             }
@@ -400,5 +400,5 @@ public class SolarisHelper {
 
         return firstPackageIsOlder;
     }
-
+    
 }

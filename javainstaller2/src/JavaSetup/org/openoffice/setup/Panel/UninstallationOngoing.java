@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public class UninstallationOngoing extends JPanel {
     private PanelLabel currentProgress;
     private JProgressBar progressBar;
     private JButton mStopButton;
-
+    
     public UninstallationOngoing() {
 
         InstallData data = InstallData.getInstance();
@@ -77,7 +77,7 @@ public class UninstallationOngoing extends JPanel {
         String progressButtonText = ResourceManager.getString("String_InstallationOngoing3");
         mStopButton.setText(progressButtonText);
         mStopButton.setEnabled(true);
-
+        
         innerbox.add(progressBar);
         innerbox.add(Box.createHorizontalStrut(10));
         innerbox.add(mStopButton);
@@ -105,5 +105,5 @@ public class UninstallationOngoing extends JPanel {
     public void addStopButtonActionListener(SetupActionListener actionListener) {
         mStopButton.addActionListener(actionListener);
     }
-
+    
 }

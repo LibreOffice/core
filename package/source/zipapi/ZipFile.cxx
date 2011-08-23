@@ -252,9 +252,9 @@ sal_Bool ZipFile::StaticFillData ( rtl::Reference < EncryptionData > & rData,
             sal_Int16 nSaltLength =   pBuffer[nPos++] & 0xFF;
             nSaltLength          |= ( pBuffer[nPos++] & 0xFF ) << 8;
             sal_Int16 nIVLength   = ( pBuffer[nPos++] & 0xFF );
-            nIVLength            |= ( pBuffer[nPos++] & 0xFF ) << 8;
+            nIVLength 			 |= ( pBuffer[nPos++] & 0xFF ) << 8;
             sal_Int16 nDigestLength = pBuffer[nPos++] & 0xFF;
-            nDigestLength        |= ( pBuffer[nPos++] & 0xFF ) << 8;
+            nDigestLength 	     |= ( pBuffer[nPos++] & 0xFF ) << 8;
 
             sal_Int16 nMediaTypeLength = pBuffer[nPos++] & 0xFF;
             nMediaTypeLength |= ( pBuffer[nPos++] & 0xFF ) << 8;
@@ -286,7 +286,7 @@ sal_Bool ZipFile::StaticFillData ( rtl::Reference < EncryptionData > & rData,
     return bOk;
 }
 
-Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference< XInputStream >& xStream,
+Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(	const Reference< XInputStream >& xStream,
                                                                 const rtl::Reference < EncryptionData > &rData )
         throw ( packages::WrongPasswordException, ZipIOException, RuntimeException )
 {

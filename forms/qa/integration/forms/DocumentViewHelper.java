@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ import org.openoffice.xforms.XMLDocument;
 */
 public class DocumentViewHelper
 {
-    private     XMultiServiceFactory    m_orb;
+    private     XMultiServiceFactory	m_orb;
     private     XController             m_controller;
     private     DocumentHelper          m_document;
 

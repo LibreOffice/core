@@ -30,7 +30,7 @@
 #define _UNOCONTROLS_STATUSINDICATOR_CTRL_HXX
 
 //____________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //____________________________________________________________________________________________________________
 
 #include <com/sun/star/awt/XControlModel.hpp>
@@ -44,12 +44,12 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 //____________________________________________________________________________________________________________
-//  includes of my own project
+//	includes of my own project
 //____________________________________________________________________________________________________________
 #include "basecontainercontrol.hxx"
 
 //____________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //____________________________________________________________________________________________________________
 
 namespace unocontrols{
@@ -60,44 +60,44 @@ namespace unocontrols{
 #define CSS_TASK    ::com::sun::star::task
 
 //____________________________________________________________________________________________________________
-//  defines
+//	defines
 //____________________________________________________________________________________________________________
 
-#define SERVICENAME_STATUSINDICATOR             "com.sun.star.task.XStatusIndicator"
-#define IMPLEMENTATIONNAME_STATUSINDICATOR      "stardiv.UnoControls.StatusIndicator"
+#define	SERVICENAME_STATUSINDICATOR				"com.sun.star.task.XStatusIndicator"
+#define	IMPLEMENTATIONNAME_STATUSINDICATOR		"stardiv.UnoControls.StatusIndicator"
 #define STATUSINDICATOR_FREEBORDER              5                                                       // border around and between the controls
-#define FIXEDTEXT_SERVICENAME                   "com.sun.star.awt.UnoControlFixedText"
-#define FIXEDTEXT_MODELNAME                     "com.sun.star.awt.UnoControlFixedTextModel"
-#define CONTROLNAME_TEXT                        "Text"                                                  // identifier the control in container
-#define CONTROLNAME_PROGRESSBAR                 "ProgressBar"                                           //              -||-
-#define STATUSINDICATOR_DEFAULT_TEXT            "\0"
-#define STATUSINDICATOR_BACKGROUNDCOLOR         TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )                // lighgray
-#define STATUSINDICATOR_LINECOLOR_BRIGHT        TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )                // white
-#define STATUSINDICATOR_LINECOLOR_SHADOW        TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )                // black
+#define FIXEDTEXT_SERVICENAME					"com.sun.star.awt.UnoControlFixedText"
+#define	FIXEDTEXT_MODELNAME						"com.sun.star.awt.UnoControlFixedTextModel"
+#define	CONTROLNAME_TEXT						"Text"													// identifier the control in container
+#define	CONTROLNAME_PROGRESSBAR					"ProgressBar"											//  			-||-
+#define	STATUSINDICATOR_DEFAULT_TEXT            "\0"
+#define	STATUSINDICATOR_BACKGROUNDCOLOR         TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )				// lighgray
+#define	STATUSINDICATOR_LINECOLOR_BRIGHT        TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )				// white
+#define	STATUSINDICATOR_LINECOLOR_SHADOW        TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )				// black
 #define STATUSINDICATOR_DEFAULT_WIDTH           300
 #define STATUSINDICATOR_DEFAULT_HEIGHT          25
 
 //____________________________________________________________________________________________________________
-//  structs, types
+//	structs, types
 //____________________________________________________________________________________________________________
 
 //____________________________________________________________________________________________________________
-//  class declaration
+//	class declaration
 //____________________________________________________________________________________________________________
 
-class StatusIndicator   : public CSS_AWT::XLayoutConstrains
+class StatusIndicator	: public CSS_AWT::XLayoutConstrains
                         , public CSS_TASK::XStatusIndicator
                         , public BaseContainerControl
 {
 
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  construct/destruct
+        //	construct/destruct
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
@@ -128,379 +128,379 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror
         */
 
-        virtual ~StatusIndicator();
+        virtual	~StatusIndicator();
 
         //---------------------------------------------------------------------------------------------------------
-        //  XInterface
+        //	XInterface
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short      give answer, if interface is supported
-            @descr      The interfaces are searched by type.
+            @short		give answer, if interface is supported
+            @descr		The interfaces are searched by type.
 
-            @seealso    XInterface
+            @seealso	XInterface
 
             @param      "rType" is the type of searched interface.
 
-            @return     Any     information about found interface
+            @return		Any		information about found interface
 
-            @onerror    A RuntimeException is thrown.
+            @onerror	A RuntimeException is thrown.
         */
 
         virtual CSS_UNO::Any SAL_CALL queryInterface( const CSS_UNO::Type& aType )
             throw( CSS_UNO::RuntimeException );
 
         /**_______________________________________________________________________________________________________
-            @short      increment refcount
-            @descr      -
+            @short		increment refcount
+            @descr		-
 
-            @seealso    XInterface
-            @seealso    release()
+            @seealso	XInterface
+            @seealso	release()
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    A RuntimeException is thrown.
+            @onerror	A RuntimeException is thrown.
         */
 
         virtual void SAL_CALL acquire() throw();
 
         /**_______________________________________________________________________________________________________
-            @short      decrement refcount
-            @descr      -
+            @short		decrement refcount
+            @descr		-
 
-            @seealso    XInterface
-            @seealso    acquire()
+            @seealso	XInterface
+            @seealso	acquire()
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    A RuntimeException is thrown.
+            @onerror	A RuntimeException is thrown.
         */
 
         virtual void SAL_CALL release() throw();
 
         //---------------------------------------------------------------------------------------------------------
-        //  XTypeProvider
+        //	XTypeProvider
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short      get information about supported interfaces
+            @short		get information about supported interfaces
             @descr      -
 
-            @seealso    XTypeProvider
+            @seealso	XTypeProvider
 
             @param      -
 
-            @return     Sequence of types of all supported interfaces
+            @return		Sequence of types of all supported interfaces
 
-            @onerror    A RuntimeException is thrown.
+            @onerror	A RuntimeException is thrown.
         */
 
         virtual CSS_UNO::Sequence< CSS_UNO::Type > SAL_CALL getTypes()
             throw( CSS_UNO::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XAggregation
+        //	XAggregation
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         */
 
         virtual CSS_UNO::Any SAL_CALL queryAggregation( const CSS_UNO::Type& aType )
             throw( CSS_UNO::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XStatusIndicator
+        //	XStatusIndicator
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL start(
-            const ::rtl::OUString&  sText   ,
+            const ::rtl::OUString&	sText	,
             sal_Int32 nRange
         ) throw( CSS_UNO::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL end() throw( CSS_UNO::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL reset() throw( CSS_UNO::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL setText( const ::rtl::OUString& sText ) throw( CSS_UNO::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( CSS_UNO::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XLayoutConstrains
+        // 	XLayoutConstrains
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         */
 
         virtual CSS_AWT::Size SAL_CALL getMinimumSize() throw( CSS_UNO::RuntimeException );
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         */
 
         virtual CSS_AWT::Size SAL_CALL getPreferredSize() throw( CSS_UNO::RuntimeException );
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         */
 
         virtual CSS_AWT::Size SAL_CALL calcAdjustedSize( const CSS_AWT::Size& aNewSize )
             throw( CSS_UNO::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XControl
+        //	XControl
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         */
 
         virtual void SAL_CALL createPeer(
-            const   CSS_UNO::Reference< CSS_AWT::XToolkit >&    xToolkit    ,
-            const   CSS_UNO::Reference< CSS_AWT::XWindowPeer >& xParent
+            const	CSS_UNO::Reference< CSS_AWT::XToolkit >&	xToolkit	,
+            const	CSS_UNO::Reference< CSS_AWT::XWindowPeer >&	xParent
         ) throw( CSS_UNO::RuntimeException );
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         */
 
         virtual sal_Bool SAL_CALL setModel( const CSS_UNO::Reference< CSS_AWT::XControlModel >& xModel )
             throw( CSS_UNO::RuntimeException );
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         */
 
         virtual CSS_UNO::Reference< CSS_AWT::XControlModel > SAL_CALL getModel()
             throw( CSS_UNO::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XComponent
+        //	XComponent
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         */
 
         virtual void SAL_CALL dispose() throw( CSS_UNO::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XWindow
+        //	XWindow
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         */
 
-        virtual void SAL_CALL setPosSize(   sal_Int32   nX      ,
-                                            sal_Int32   nY      ,
-                                            sal_Int32   nWidth  ,
-                                            sal_Int32   nHeight ,
-                                            sal_Int16   nFlags  ) throw( CSS_UNO::RuntimeException );
+        virtual void SAL_CALL setPosSize(	sal_Int32	nX		,
+                                            sal_Int32	nY		,
+                                            sal_Int32	nWidth	,
+                                            sal_Int32	nHeight	,
+                                            sal_Int16	nFlags	) throw( CSS_UNO::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  BaseControl
+        //	BaseControl
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         */
 
         static const CSS_UNO::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         */
 
         static const ::rtl::OUString impl_getStaticImplementationName();
 
 //____________________________________________________________________________________________________________
-//  protected methods
+//	protected methods
 //____________________________________________________________________________________________________________
 
 protected:
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         */
 
         virtual CSS_AWT::WindowDescriptor* impl_getWindowDescriptor(
@@ -508,16 +508,16 @@ protected:
         );
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         */
 
         virtual void impl_paint (
@@ -527,16 +527,16 @@ protected:
         );
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         */
 
         virtual void impl_recalcLayout( const CSS_AWT::WindowEvent& aEvent );
@@ -548,16 +548,16 @@ protected:
 private:
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
+        @short		-
+        @descr		-
 
-        @seealso    -
+        @seealso	-
 
-        @param      -
+        @param		-
 
-        @return     -
+        @return		-
 
-        @onerror    -
+        @onerror	-
     */
 
 //____________________________________________________________________________________________________________
@@ -566,10 +566,10 @@ private:
 
 private:
 
-    CSS_UNO::Reference< CSS_AWT::XFixedText >       m_xText         ;
-    CSS_UNO::Reference< CSS_AWT::XProgressBar >     m_xProgressBar  ;
+    CSS_UNO::Reference< CSS_AWT::XFixedText > 		m_xText			;
+    CSS_UNO::Reference< CSS_AWT::XProgressBar > 	m_xProgressBar	;
 
-};  // class StatusIndicator
+};	// class StatusIndicator
 
 // The name space aliases are only used in the header
 #undef CSS_UNO
@@ -577,8 +577,8 @@ private:
 #undef CSS_LANG
 #undef CSS_TASK
 
-}   // namespace unocontrols
+}	// namespace unocontrols
 
-#endif  // #ifndef _UNOCONTROLS_STATUSINDICATOR_CTRL_HXX
+#endif	// #ifndef _UNOCONTROLS_STATUSINDICATOR_CTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

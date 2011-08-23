@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ static CDE_RESULT cmpDicEntry_Impl( const String &rText1, const String &rText2 )
     if (rText1 == rText2)
         eRes = CDE_EQUAL;
     else
-    {   // similar = equal up to trailing '.' and hyphenation positions
+    {	// similar = equal up to trailing '.' and hyphenation positions
         // marked with '='
         if (getNormDicEntry_Impl( rText1 ) == getNormDicEntry_Impl( rText2 ))
             eRes = CDE_SIMILAR;
@@ -102,15 +102,15 @@ SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
 
     ModalDialog( pParent, CUI_RES( RID_SFXDLG_NEWDICT ) ),
 
-    aNameText       ( this, CUI_RES( FT_DICTNAME ) ),
-    aNameEdit       ( this, CUI_RES( ED_DICTNAME ) ),
-    aLanguageText   ( this, CUI_RES( FT_DICTLANG ) ),
-    aLanguageLB     ( this, CUI_RES( LB_DICTLANG ) ),
-    aExceptBtn      ( this, CUI_RES( BTN_EXCEPT ) ),
-    aNewDictBox     ( this, CUI_RES( GB_NEWDICT ) ),
-    aOKBtn          ( this, CUI_RES( BTN_NEWDICT_OK ) ),
-    aCancelBtn      ( this, CUI_RES( BTN_NEWDICT_ESC ) ),
-    aHelpBtn        ( this, CUI_RES( BTN_NEWDICT_HLP ) ),
+    aNameText		( this, CUI_RES( FT_DICTNAME ) ),
+    aNameEdit		( this, CUI_RES( ED_DICTNAME ) ),
+    aLanguageText	( this, CUI_RES( FT_DICTLANG ) ),
+    aLanguageLB		( this, CUI_RES( LB_DICTLANG ) ),
+    aExceptBtn		( this, CUI_RES( BTN_EXCEPT ) ),
+    aNewDictBox		( this, CUI_RES( GB_NEWDICT ) ),
+    aOKBtn			( this, CUI_RES( BTN_NEWDICT_OK ) ),
+    aCancelBtn		( this, CUI_RES( BTN_NEWDICT_ESC ) ),
+    aHelpBtn		( this, CUI_RES( BTN_NEWDICT_HLP ) ),
     xSpell( xSpl )
 {
     // Handler installieren
@@ -227,23 +227,23 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
 
     ModalDialog( pParent, CUI_RES( RID_SFXDLG_EDITDICT ) ),
 
-    aBookFT         ( this, CUI_RES( FT_BOOK ) ),
-    aAllDictsLB     ( this, CUI_RES( LB_ALLDICTS ) ),
-    aLangFT         ( this, CUI_RES( FT_DICTLANG ) ),
-    aLangLB         ( this, CUI_RES( LB_DICTLANG ) ),
-    aWordFT         ( this, CUI_RES( FT_WORD ) ),
-    aWordED         ( this, CUI_RES( ED_WORD ) ),
-    aReplaceFT      ( this, CUI_RES( FT_REPLACE ) ),
-    aReplaceED      ( this, CUI_RES( ED_REPLACE ) ),
-    aWordsLB        ( this, CUI_RES( TLB_REPLACE ) ),
-    aNewReplacePB   ( this, CUI_RES( PB_NEW_REPLACE ) ),
-    aDeletePB       ( this, CUI_RES( PB_DELETE_REPLACE ) ),
-    aEditDictsBox   ( this, CUI_RES( GB_EDITDICTS ) ),
-    aCloseBtn       ( this, CUI_RES( BTN_EDITCLOSE ) ),
-    aHelpBtn        ( this, CUI_RES( BTN_EDITHELP ) ),
-    sModify         (CUI_RES(STR_MODIFY)),
-    sNew            (aNewReplacePB.GetText()),
-    aDecoView       ( this),
+    aBookFT			( this, CUI_RES( FT_BOOK ) ),
+    aAllDictsLB		( this, CUI_RES( LB_ALLDICTS ) ),
+    aLangFT			( this, CUI_RES( FT_DICTLANG ) ),
+    aLangLB			( this, CUI_RES( LB_DICTLANG ) ),
+    aWordFT			( this, CUI_RES( FT_WORD ) ),
+    aWordED			( this, CUI_RES( ED_WORD ) ),
+    aReplaceFT		( this, CUI_RES( FT_REPLACE ) ),
+    aReplaceED		( this, CUI_RES( ED_REPLACE ) ),
+    aWordsLB		( this, CUI_RES( TLB_REPLACE ) ),
+    aNewReplacePB	( this, CUI_RES( PB_NEW_REPLACE ) ),
+    aDeletePB		( this, CUI_RES( PB_DELETE_REPLACE ) ),
+    aEditDictsBox	( this, CUI_RES( GB_EDITDICTS ) ),
+    aCloseBtn		( this, CUI_RES( BTN_EDITCLOSE ) ),
+    aHelpBtn		( this, CUI_RES( BTN_EDITHELP ) ),
+    sModify			(CUI_RES(STR_MODIFY)),
+    sNew			(aNewReplacePB.GetText()),
+    aDecoView		( this),
     xSpell          ( xSpl ),
     nOld            ( NOACTDICT ),
     bFirstSelect    (sal_True),
@@ -324,7 +324,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
         SetDicReadonly_Impl(xDic);
         sal_Bool bEnable = !IsDicReadonly_Impl();
         aNewReplacePB   .Enable( sal_False );
-        aDeletePB       .Enable( sal_False );
+        aDeletePB		.Enable( sal_False );
         aLangFT.Enable( bEnable );
         aLangLB.Enable( bEnable );
         ShowWords_Impl( nPos );
@@ -333,7 +333,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     else
     {
         aNewReplacePB.Disable();
-        aDeletePB    .Disable();
+        aDeletePB	 .Disable();
     }
     FreeResource();
 }
@@ -366,8 +366,8 @@ void SvxEditDictionaryDialog::SetDicReadonly_Impl(
     if (xDic.is())
     {
         Reference< frame::XStorable >  xStor( xDic, UNO_QUERY );
-        if (   !xStor.is()              // non persistent dictionary
-            || !xStor->hasLocation()    // not yet persistent
+        if (   !xStor.is() 				// non persistent dictionary
+            || !xStor->hasLocation()	// not yet persistent
             || !xStor->isReadonly() )
         {
             bDicIsReadonly = sal_False;
@@ -400,7 +400,7 @@ USHORT SvxEditDictionaryDialog::GetLBInsertPos(const String &rDicWord)
         if( COMPARE_LESS == eCmpRes )
             break;
     }
-    if (j < aWordsLB.GetEntryCount())   // entry found?
+    if (j < aWordsLB.GetEntryCount())	// entry found?
         nPos = j;
 
     return nPos;
@@ -415,7 +415,7 @@ void SvxEditDictionaryDialog::RemoveDictEntry(SvLBoxEntry* pEntry)
         String sTmpShort(aWordsLB.GetEntryText(pEntry, 0));
 
         Reference< XDictionary >  xDic = aDics.getConstArray()[ nLBPos ];
-        if (xDic->remove( sTmpShort ))  // sal_True on success
+        if (xDic->remove( sTmpShort ))	// sal_True on success
         {
             aWordsLB.GetModel()->Remove(pEntry);
         }
@@ -431,7 +431,7 @@ IMPL_LINK( SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox *, EMPTYARG )
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         aNewReplacePB.Enable( sal_False );
-        aDeletePB    .Enable( sal_False );
+        aDeletePB	 .Enable( sal_False );
         // Dictionary anzeigen
         ShowWords_Impl( nPos );
         // enable or disable new and delete button according to file attributes
@@ -547,7 +547,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
 
     if (aWordsLB.GetEntryCount())
     {
-        aWordED   .SetText( aWordsLB.GetEntryText(0LU, 0) );
+        aWordED	  .SetText( aWordsLB.GetEntryText(0LU, 0) );
         aReplaceED.SetText( aWordsLB.GetEntryText(0LU, 1) );
     }
 
@@ -576,7 +576,7 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
         // entries in the list box should exactly correspond to those from the
         // dictionary. Thus:
         aNewReplacePB.Enable(sal_False);
-        aDeletePB    .Enable( sal_True && !IsDicReadonly_Impl() );
+        aDeletePB	 .Enable( sal_True && !IsDicReadonly_Impl() );
     }
     return 0;
 };
@@ -596,7 +596,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
         aReplaceED.SetText(aStr);
         aDeletePB.Disable();
 
-        RemoveDictEntry(pEntry);    // remove entry from dic and list-box
+        RemoveDictEntry(pEntry);	// remove entry from dic and list-box
     }
     if(pBtn == &aNewReplacePB || aNewReplacePB.IsEnabled())
     {
@@ -690,9 +690,9 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
     xub_StrLen nWordLen=rEntry.Len();
     const String& rRepString = aReplaceED.GetText();
 
-    BOOL bEnableNewReplace  = FALSE;
-    BOOL bEnableDelete      = FALSE;
-    String aNewReplaceText  = sNew;
+    BOOL bEnableNewReplace	= FALSE;
+    BOOL bEnableDelete		= FALSE;
+    String aNewReplaceText	= sNew;
 
     if(pEdt == &aWordED)
     {
@@ -761,9 +761,9 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
     {
         String aReplaceText;
         String aWordText;
-        if (pFirstSel)  // a aWordsLB entry is selected
+        if (pFirstSel)	// a aWordsLB entry is selected
         {
-            aWordText    = aWordsLB.GetEntryText( pFirstSel, 0 );
+            aWordText	 = aWordsLB.GetEntryText( pFirstSel, 0 );
              aReplaceText = aWordsLB.GetEntryText( pFirstSel, 1 );
 
             aNewReplaceText = sModify;
@@ -778,7 +778,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
 
     aNewReplacePB.SetText( aNewReplaceText );
     aNewReplacePB.Enable( bEnableNewReplace && !IsDicReadonly_Impl() );
-    aDeletePB    .Enable( bEnableDelete     && !IsDicReadonly_Impl() );
+    aDeletePB	 .Enable( bEnableDelete     && !IsDicReadonly_Impl() );
 
     return 0;
 }

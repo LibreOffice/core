@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@ class AccessibleStateSetHelper;
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleTabPage
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXAccessibleTabPage
+//	----------------------------------------------------
 
 typedef ::comphelper::OAccessibleTextHelper AccessibleTextHelper_BASE;
 
@@ -53,44 +53,44 @@ typedef ::cppu::ImplHelper2<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::lang::XServiceInfo > VCLXAccessibleTabPage_BASE;
 
-class VCLXAccessibleTabPage :   public AccessibleTextHelper_BASE,
+class VCLXAccessibleTabPage :	public AccessibleTextHelper_BASE,
                                 public VCLXAccessibleTabPage_BASE
 {
     friend class VCLXAccessibleTabControl;
 
 private:
-    VCLExternalSolarLock*   m_pExternalLock;
-    TabControl*             m_pTabControl;
-    sal_uInt16              m_nPageId;
-    bool                    m_bFocused;
-    bool                    m_bSelected;
+    VCLExternalSolarLock*	m_pExternalLock;
+    TabControl*				m_pTabControl;
+    sal_uInt16				m_nPageId;
+    bool				    m_bFocused;
+    bool				    m_bSelected;
     ::rtl::OUString         m_sPageText;
 
 protected:
-    bool                    IsFocused();
-    bool                    IsSelected();
+    bool				    IsFocused();
+    bool				    IsSelected();
 
-    void                    SetFocused( bool bFocused );
-    void                    SetSelected( bool bSelected );
+    void					SetFocused( bool bFocused );
+    void					SetSelected( bool bSelected );
     void                    SetPageText( const ::rtl::OUString& sPageText );
     ::rtl::OUString         GetPageText();
 
-    void                    Update( bool bNew );
+    void					Update( bool bNew );
 
-    sal_uInt16              GetPageId() const { return m_nPageId; }
+    sal_uInt16				GetPageId() const { return m_nPageId; }
 
-    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    virtual void			FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
-    // OCommonAccessibleComponent
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL   implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    // OCommonAccessibleComponent 
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL	implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // OCommonAccessibleText
-    virtual ::rtl::OUString                 implGetText();
-    virtual ::com::sun::star::lang::Locale  implGetLocale();
-    virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
+    virtual ::rtl::OUString					implGetText();
+    virtual ::com::sun::star::lang::Locale	implGetLocale();
+    virtual void							implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
 
     // XComponent
-    virtual void SAL_CALL   disposing();
+    virtual void SAL_CALL	disposing();
 
 public:
     VCLXAccessibleTabPage( TabControl* pTabControl, sal_uInt16 nPageId );
@@ -129,7 +129,7 @@ public:
     virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleExtendedComponent
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(	) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
 

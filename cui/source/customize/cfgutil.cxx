@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -341,7 +341,7 @@ IMPL_LINK( SfxConfigFunctionListBox_Impl, TimerHdl, Timer*, pTimer)
 }
 
 void SfxConfigFunctionListBox_Impl::ClearAll()
-/*  Beschreibung
+/* 	Beschreibung
     L"oscht alle Eintr"age in der FunctionListBox, alle UserDaten und alle evtl.
     vorhandenen MacroInfos.
 */
@@ -378,7 +378,7 @@ void SfxConfigFunctionListBox_Impl::ClearAll()
 }
 
 SvLBoxEntry* SfxConfigFunctionListBox_Impl::GetEntry_Impl( const String& rName )
-/*  Beschreibung
+/* 	Beschreibung
     Ermittelt den SvLBoxEntry zu einem "ubergebenen String. Das setzt voraus, da\s
     die Namen eindeutig sind.
 */
@@ -395,7 +395,7 @@ SvLBoxEntry* SfxConfigFunctionListBox_Impl::GetEntry_Impl( const String& rName )
 }
 
 SvLBoxEntry* SfxConfigFunctionListBox_Impl::GetEntry_Impl( USHORT nId )
-/*  Beschreibung
+/* 	Beschreibung
     Ermittelt den SvLBoxEntry zu einer "ubergebenen Id.
 */
 {
@@ -412,7 +412,7 @@ SvLBoxEntry* SfxConfigFunctionListBox_Impl::GetEntry_Impl( USHORT nId )
 }
 
 SfxMacroInfo* SfxConfigFunctionListBox_Impl::GetMacroInfo()
-/*  Beschreibung
+/* 	Beschreibung
     Gibt die MacroInfo des selektierten Entry zur"uck ( sofern vorhanden ).
 */
 {
@@ -453,7 +453,7 @@ String SfxConfigFunctionListBox_Impl::GetCurLabel()
 }
 
 USHORT SfxConfigFunctionListBox_Impl::GetId( SvLBoxEntry *pEntry )
-/*  Beschreibung
+/*	Beschreibung
     Gibt die Ordnungsnummer ( SlotId oder Macro-Nummer ) des Eintrags zur"uck.
 */
 {
@@ -507,7 +507,7 @@ String SfxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
 }*/
 
 void SfxConfigFunctionListBox_Impl::FunctionSelected()
-/*  Beschreibung
+/*	Beschreibung
     Setzt die Balloonhelp zur"uck, da diese immer den Helptext des selektierten
     Entry anzeigen soll.
 */
@@ -673,7 +673,7 @@ void SfxConfigGroupListBox_Impl::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
 }
 
 String SfxConfigGroupListBox_Impl::GetGroup()
-/*  Beschreibung
+/*	Beschreibung
     Gibt den Namen der selektierten Funktionsgruppe bzw. des selektierten
     Basics zur"uck.
 */
@@ -789,7 +789,7 @@ namespace
             if ( xContext.is() )
                 xScripts.set( xContext->getScriptContainer(), UNO_QUERY );
         }
-
+            
         return Reference< XModel >( xScripts, UNO_QUERY );
     }
 
@@ -923,10 +923,10 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                 aAppBasTitle += aMacroName;
                 SvLBoxEntry *pEntry = InsertEntry( aAppBasTitle, 0 );
                 SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_BASICMGR, 0, pAppBasicMgr );
-    //          aArr.Insert( pInfo, aArr.Count() );
+    //			aArr.Insert( pInfo, aArr.Count() );
                 pEntry->SetUserData( pInfo );
                 pEntry->EnableChildsOnDemand( TRUE );
-    //          Expand( pEntry );
+    //			Expand( pEntry );
             }
         }
 
@@ -1053,8 +1053,8 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                             if (children[n]->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
                             {
 
-//                                  We call acquire on the XBrowseNode so that it does not
-//                                  get autodestructed and become invalid when accessed later.
+//									We call acquire on the XBrowseNode so that it does not
+//									get autodestructed and become invalid when accessed later.
                                 theChild->acquire();
 
                                 SfxGroupInfo_Impl* pInfo =
@@ -1109,7 +1109,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
         pEntry->EnableChildsOnDemand( TRUE );
     }
 
-/*  {
+/*	{
         String sSymbols( String::CreateFromAscii("Symbols") );
         SvLBoxEntry *pEntry = InsertEntry( sSymbols, 0 );
         SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_SPECIALCHARACTERS, 0, 0 ); // TODO last parameter should contain user data
@@ -1306,7 +1306,7 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
 
 //-----------------------------------------------
 void SfxConfigGroupListBox_Impl::GroupSelected()
-/*  Beschreibung
+/*	Beschreibung
     Eine Funktionsgruppe oder eine Basicmodul wurde selektiert. Alle Funktionen bzw.
     Macros werden in der Functionlistbox anzeigt.
 */
@@ -1374,7 +1374,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                     pInf->SetHelpText( pMeth->GetInfo()->GetComment() );
                 USHORT nId = SFX_APP()->GetMacroConfig()->GetSlotId( pInf );
                 if ( !nId )
-                    break;      // Kein Slot mehr frei
+                    break; 		// Kein Slot mehr frei
 
                 SvLBoxEntry* pFuncEntry =
                     pFunctionListBox->InsertEntry( pMeth->GetName(), NULL );
@@ -1522,7 +1522,7 @@ BOOL SfxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
 }
 
 void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
-/*  Beschreibung
+/*	Beschreibung
     Ein Basic oder eine Bibliothek werden ge"offnet
 */
 {
@@ -1610,7 +1610,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                         {
                             bIsRootNode = TRUE;
                         }
-
+                        
                         /* To mimic current starbasic behaviour we
                         need to make sure that only the current document
                         is displayed in the config tree. Tests below
@@ -1633,7 +1633,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                             if ( bIsRootNode )
                             {
                                 if ( !( (aName.equals(user) || aName.equals(share) || aName.equals(currentDocTitle) ) ) )
-                                    bDisplay=FALSE;
+                                    bDisplay=FALSE;							
                             }
                             if ( children[n].is() && children[n]->getType() != browse::BrowseNodeTypes::SCRIPT && bDisplay )
                             {
@@ -1723,7 +1723,7 @@ void SfxConfigGroupListBox_Impl::AddAndSelect( const SfxStringItem* , const SfxS
         String aCommand = String::CreateFromAscii(".uno:InsertSymbol?Symbols:string=");
         aCommand += pText->GetValue();
         pFunctionListBox->aArr.Insert( pGrpInfo, pFunctionListBox->aArr.Count() );
-        pGrpInfo->sCommand = aCommand;
+        pGrpInfo->sCommand = aCommand;	
         pGrpInfo->sLabel = String::CreateFromAscii("Symbols: ");
         pGrpInfo->sLabel += pText->GetValue();
         pFuncEntry->SetUserData( pGrpInfo );

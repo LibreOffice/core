@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,69 +53,69 @@ typedef cppu::WeakAggImplHelper1 < ::com::sun::star::awt::XFocusListener > BibGe
 
 class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
 {
-    Window              aControlParentWin;
-    FixedText           aIdentifierFT;
-    FixedText           aAuthTypeFT;
+    Window				aControlParentWin;
+    FixedText			aIdentifierFT;
+    FixedText			aAuthTypeFT;
     FixedText           aYearFT;
 
-    FixedText           aAuthorFT;
+    FixedText			aAuthorFT;
     FixedText           aTitleFT;
 
-    FixedText           aPublisherFT;
+    FixedText			aPublisherFT;
     FixedText           aAddressFT;
     FixedText           aISBNFT;
 
     FixedText           aChapterFT;
     FixedText           aPagesFT;
     FixedLine           aFirstFL;
-
+    
     FixedText           aEditorFT;
     FixedText           aEditionFT;
-
+    
     FixedText           aBooktitleFT;
     FixedText           aVolumeFT;
     FixedText           aHowpublishedFT;
-
+    
     FixedText           aOrganizationsFT;
     FixedText           aInstitutionFT;
     FixedText           aSchoolFT;
-
+    
     FixedText           aReportTypeFT;
     FixedText           aMonthFT;
     FixedLine           aSecondFL;
-
+    
     FixedText           aJournalFT;
     FixedText           aNumberFT;
     FixedText           aSeriesFT;
-
+    
     FixedText           aAnnoteFT;
     FixedText           aNoteFT;
     FixedText           aURLFT;
     FixedLine           aThirdFL;
 
     FixedText           aCustom1FT;
-    FixedText           aCustom2FT;
-    FixedText           aCustom3FT;
-    FixedText           aCustom4FT;
-    FixedText           aCustom5FT;
+    FixedText			aCustom2FT;
+    FixedText			aCustom3FT;
+    FixedText			aCustom4FT;
+    FixedText			aCustom5FT;
 
-    ScrollBar           aHoriScroll;
-    ScrollBar           aVertScroll;
+    ScrollBar			aHoriScroll;
+    ScrollBar			aVertScroll;
 
-    FixedText*          aFixedTexts[ FIELD_COUNT ];
-    sal_Int16           nFT2CtrlMap[ FIELD_COUNT ];
+    FixedText*			aFixedTexts[ FIELD_COUNT ];
+    sal_Int16			nFT2CtrlMap[ FIELD_COUNT ];
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
                         aControls[ FIELD_COUNT ];
 
-    Size                aStdSize;
-    Point               aBasePos;
+    Size				aStdSize;
+    Point				aBasePos;
 
-    String              aBibTypeArr[ TYPE_COUNT ];
-    String              sErrorPrefix;
-    String              sTableErrorString;
+    String				aBibTypeArr[ TYPE_COUNT ];
+    String				sErrorPrefix;
+    String				sTableErrorString;
 
-    String              sTypeColumnName;
+    String				sTypeColumnName;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
                         xCtrlContnr;
@@ -133,49 +133,49 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
                         xPosListener;
 
 
-    BibDataManager*     pDatMan;
+    BibDataManager*		pDatMan;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
                                 AddXControl( const String& rName, Point aPos, Size aSize, sal_uInt16 nHelpId,
                                             sal_Int16& rIndex );
 
-    void                        AddControlWithError( const rtl::OUString& rColumnName, const Point& rPos,
+    void						AddControlWithError( const rtl::OUString& rColumnName, const Point& rPos,
                                             const Size& rSize, String& rErrorString, String aColumnUIName,
                                             sal_uInt16 nHelpId, sal_uInt16 nIndexInFTArray );
 
-    void                        AdjustScrollbars();
+    void						AdjustScrollbars();
 
     DECL_LINK( ScrollHdl, ScrollBar* );
 
 protected:
-    virtual void                Resize();
-    void                        InitFixedTexts( void );     // create mnemonics and set text an all fixed texts
+    virtual void				Resize();
+    void						InitFixedTexts( void );		// create mnemonics and set text an all fixed texts
 
 public:
                                 BibGeneralPage(Window* pParent, BibDataManager* pDatMan);
-    virtual                     ~BibGeneralPage();
+    virtual						~BibGeneralPage();
 
-    inline const String&        GetErrorString() const;
+    inline const String&		GetErrorString() const;
 
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >&
                                 GetTypeListBoxModel() const;
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >&
                                 GetControlContainer() const;
 
-    inline BibDataManager*      GetDataManager();
+    inline BibDataManager* 		GetDataManager();
 
-    void                        CommitActiveControl();
+    void						CommitActiveControl();
 
-    virtual void SAL_CALL       disposing( const ::com::sun::star::lang::EventObject& Source ) throw( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL		disposing( const ::com::sun::star::lang::EventObject& Source ) throw( com::sun::star::uno::RuntimeException );
 
-    void SAL_CALL               focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException );
-    void SAL_CALL               focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException );
+    void SAL_CALL				focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException );
+    void SAL_CALL				focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException );
 
-    void                        RemoveListeners();
+    void						RemoveListeners();
 
-    virtual void                GetFocus();
+    virtual void				GetFocus();
 
-    virtual BOOL                HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
+    virtual BOOL				HandleShortCutKey( const KeyEvent& rKeyEvent );	// returns true, if key was handled
 };
 
 

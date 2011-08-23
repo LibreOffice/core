@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,9 +33,9 @@
 class MappingArray;
 
 //-----------------------------------------------------------------------------
-#define COLUMN_COUNT                31
-#define IDENTIFIER_POS              0
-#define AUTHORITYTYPE_POS           1
+#define COLUMN_COUNT 				31
+#define IDENTIFIER_POS				0
+#define AUTHORITYTYPE_POS			1
 #define AUTHOR_POS                  2
 #define TITLE_POS                   3
 #define YEAR_POS                    4
@@ -68,16 +68,16 @@ class MappingArray;
 //-----------------------------------------------------------------------------
 struct StringPair
 {
-    rtl::OUString   sRealColumnName;
-    rtl::OUString   sLogicalColumnName;
+    rtl::OUString 	sRealColumnName;
+    rtl::OUString  	sLogicalColumnName;
 };
 //-----------------------------------------------------------------------------
 struct Mapping
 {
-    rtl::OUString       sTableName;
-    rtl::OUString       sURL;
-    sal_Int16           nCommandType;
-    StringPair          aColumnPairs[COLUMN_COUNT];
+    rtl::OUString 		sTableName;
+    rtl::OUString		sURL;
+    sal_Int16			nCommandType;
+    StringPair 			aColumnPairs[COLUMN_COUNT];
 
     Mapping() :
         nCommandType(0){}
@@ -85,55 +85,55 @@ struct Mapping
 //-----------------------------------------------------------------------------
 struct BibDBDescriptor
 {
-    rtl::OUString   sDataSource;
-    rtl::OUString   sTableOrQuery;
-    sal_Int32       nCommandType;
+    rtl::OUString 	sDataSource;
+    rtl::OUString  	sTableOrQuery;
+    sal_Int32 		nCommandType;
 };
 //-----------------------------------------------------------------------------
 
 class BibConfig : public utl::ConfigItem
 {
-    rtl::OUString   sDataSource;
-    rtl::OUString   sTableOrQuery;
-    sal_Int32       nTblOrQuery;
+    rtl::OUString 	sDataSource;
+    rtl::OUString 	sTableOrQuery;
+    sal_Int32 		nTblOrQuery;
 
-    rtl::OUString   sQueryField;
-    rtl::OUString   sQueryText;
-    MappingArray*               pMappingsArr;
-    long            nBeamerSize;
-    long            nViewSize;
+    rtl::OUString 	sQueryField;
+    rtl::OUString 	sQueryText;
+    MappingArray*				pMappingsArr;
+    long 			nBeamerSize;
+    long 			nViewSize;
     sal_Bool        bShowColumnAssignmentWarning;
 
-    rtl::OUString               aColumnDefaults[COLUMN_COUNT];
+    rtl::OUString 				aColumnDefaults[COLUMN_COUNT];
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
 public:
     BibConfig();
     ~BibConfig();
 
-    virtual void    Commit();
+    virtual void	Commit();
     virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 
-    BibDBDescriptor         GetBibliographyURL();
-    void                    SetBibliographyURL(const BibDBDescriptor& rDesc);
+    BibDBDescriptor			GetBibliographyURL();
+    void					SetBibliographyURL(const BibDBDescriptor& rDesc);
 
-    const Mapping*          GetMapping(const BibDBDescriptor& rDesc) const;
-    void                    SetMapping(const BibDBDescriptor& rDesc, const Mapping* pMapping);
+    const Mapping* 			GetMapping(const BibDBDescriptor& rDesc) const;
+    void					SetMapping(const BibDBDescriptor& rDesc, const Mapping* pMapping);
 
-    const rtl::OUString&    GetDefColumnName(sal_uInt16 nIndex) const
+    const rtl::OUString&	GetDefColumnName(sal_uInt16 nIndex) const
                                             {return aColumnDefaults[nIndex];}
 
 
-    void                    setBeamerSize(long nSize) {SetModified(); nBeamerSize = nSize;}
-    long                    getBeamerSize()const {return nBeamerSize;}
-    void                    setViewSize(long nSize) {SetModified(); nViewSize = nSize;}
-    long                    getViewSize() {return nViewSize;}
+    void					setBeamerSize(long nSize) {SetModified(); nBeamerSize = nSize;}
+    long					getBeamerSize()const {return nBeamerSize;}
+    void					setViewSize(long nSize) {SetModified(); nViewSize = nSize;}
+    long					getViewSize() {return nViewSize;}
 
-    const rtl::OUString&    getQueryField() const {return sQueryField;}
-    void                    setQueryField(const rtl::OUString& rSet) {SetModified(); sQueryField = rSet;}
+    const rtl::OUString&	getQueryField() const {return sQueryField;}
+    void					setQueryField(const rtl::OUString& rSet) {SetModified(); sQueryField = rSet;}
 
-    const rtl::OUString&    getQueryText() const {return sQueryText;}
-    void                    setQueryText(const rtl::OUString& rSet) {SetModified(); sQueryText = rSet;}
+    const rtl::OUString&	getQueryText() const {return sQueryText;}
+    void					setQueryText(const rtl::OUString& rSet) {SetModified(); sQueryText = rSet;}
 
     sal_Bool                IsShowColumnAssignmentWarning() const
                                 { return bShowColumnAssignmentWarning;}

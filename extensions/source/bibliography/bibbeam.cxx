@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,9 +53,9 @@ using namespace ::com::sun::star::uno;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
-#define PROPERTY_FRAME                      1
-#define ID_TOOLBAR                          1
-#define ID_GRIDWIN                          2
+#define PROPERTY_FRAME						1
+#define ID_TOOLBAR							1
+#define ID_GRIDWIN							2
 
 //.........................................................................
 namespace bib
@@ -66,14 +66,14 @@ namespace bib
 
     void HandleTaskPaneList( Window* pWindow, BOOL bAddToList )
     {
-        Window*             pParent = pWindow->GetParent();
+        Window*				pParent = pWindow->GetParent();
 
         DBG_ASSERT( pParent, "-GetTaskPaneList(): everybody here should have a parent!" );
 
-        SystemWindow*       pSysWin = pParent->GetSystemWindow();
+        SystemWindow*		pSysWin = pParent->GetSystemWindow();
         if( pSysWin )
         {
-            TaskPaneList*   pTaskPaneList = pSysWin->GetTaskPaneList();
+            TaskPaneList*	pTaskPaneList = pSysWin->GetTaskPaneList();
             if( pTaskPaneList )
             {
                 if( bAddToList )
@@ -91,16 +91,16 @@ namespace bib
                 :public Window //DockingWindow
     {
     private:
-            Reference< awt::XWindow >           m_xGridWin;
-            Reference< awt::XControlModel >     m_xGridModel;
-            Reference< awt::XControl >          m_xControl;
-            Reference< awt::XControlContainer > m_xControlContainer;
+            Reference< awt::XWindow >			m_xGridWin;
+            Reference< awt::XControlModel >		m_xGridModel;
+            Reference< awt::XControl > 			m_xControl;
+            Reference< awt::XControlContainer >	m_xControlContainer;
             // #100312# ---------
             Reference< frame::XDispatchProviderInterception> m_xDispatchProviderInterception;
-
+            
     protected:
 
-            virtual void        Resize();
+            virtual void		Resize();
 
     public:
 
@@ -154,7 +154,7 @@ namespace bib
 
             if ( m_xGridModel.is() && xMgr.is())
             {
-                uno::Reference< XPropertySet >  xPropSet( m_xGridModel, UNO_QUERY );
+                uno::Reference< XPropertySet >	xPropSet( m_xGridModel, UNO_QUERY );
 
                 if ( xPropSet.is() && m_xGridModel.is() )
                 {
@@ -289,7 +289,7 @@ namespace bib
             xReturn = pGridWin->getDispatchProviderInterception();
         return xReturn;
     }
-
+    
     //---------------------------------------------------------------------
     void BibBeamer::SetXController(const uno::Reference< frame::XController > & xCtr)
     {
@@ -316,7 +316,7 @@ namespace bib
     }
 
 //.........................................................................
-}   // namespace bib
+}	// namespace bib
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ using namespace ::ucbhelper;
 
 SvxFramesComboBox::SvxFramesComboBox ( Window* pParent, const ResId& rResId,
                                         SfxDispatcher* pDispatch )
-:   ComboBox (pParent, rResId)
+:	ComboBox (pParent, rResId)
 {
     TargetList* pList = new TargetList;
     SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
@@ -88,9 +88,9 @@ SvxFramesComboBox::~SvxFramesComboBox ()
 {
 }
 //########################################################################
-//#                                                                      #
-//# ComboBox-Control for URL's with History and Autocompletion           #
-//#                                                                      #
+//#																		 #
+//# ComboBox-Control for URL's with History and Autocompletion			 #
+//#																		 #
 //########################################################################
 
 /*************************************************************************
@@ -100,9 +100,9 @@ SvxFramesComboBox::~SvxFramesComboBox ()
 |************************************************************************/
 
 SvxHyperURLBox::SvxHyperURLBox( Window* pParent, INetProtocol eSmart, BOOL bAddresses )
-: SvtURLBox         ( pParent, eSmart ),
+: SvtURLBox			( pParent, eSmart ),
   DropTargetHelper  ( this ),
-  mbAccessAddress   (bAddresses)
+  mbAccessAddress	(bAddresses)
 {
 }
 
@@ -113,7 +113,7 @@ sal_Int8 SvxHyperURLBox::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
 
 sal_Int8 SvxHyperURLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
+    TransferableDataHelper	aDataHelper( rEvt.maDropEvent.Transferable );
     String                  aString;
     sal_Int8                nRet = DND_ACTION_NONE;
 
@@ -158,19 +158,19 @@ long SvxHyperURLBox::PreNotify( NotifyEvent& rNEvt )
 SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
                                                    const ResId &rResId,
                                                    const SfxItemSet& rItemSet )
-:   IconChoicePage          ( pParent, rResId, rItemSet ),
-    mpGrpMore               ( NULL ),
-    mpFtFrame               ( NULL ),
-    mpCbbFrame              ( NULL ),
-    mpFtForm                ( NULL ),
-    mpLbForm                ( NULL ),
-    mpFtIndication          ( NULL ),
-    mpEdIndication          ( NULL ),
-    mpFtText                ( NULL ),
-    mpEdText                ( NULL ),
-    mpBtScript              ( NULL ),
+:	IconChoicePage			( pParent, rResId, rItemSet ),
+    mpGrpMore				( NULL ),
+    mpFtFrame				( NULL ),
+    mpCbbFrame				( NULL ),
+    mpFtForm				( NULL ),
+    mpLbForm				( NULL ),
+    mpFtIndication			( NULL ),
+    mpEdIndication			( NULL ),
+    mpFtText				( NULL ),
+    mpEdText				( NULL ),
+    mpBtScript				( NULL ),
     mbIsCloseDisabled       ( sal_False ),
-    mpDialog                ( pParent ),
+    mpDialog				( pParent ),
     mbStdControlsInit       ( FALSE ),
     aEmptyStr()
 {
@@ -192,7 +192,7 @@ SvxHyperlinkTabPageBase::~SvxHyperlinkTabPageBase ()
         delete mpFtIndication;
         delete mpEdIndication;
         delete mpFtText;
-        delete mpEdText ;
+        delete mpEdText	;
         delete mpBtScript;
     }
 
@@ -218,16 +218,16 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
 {
     if ( !mbStdControlsInit )
     {
-        mpGrpMore     = new FixedLine           ( this, ResId (GRP_MORE, *m_pResMgr) );
-        mpFtFrame     = new FixedText           ( this, ResId (FT_FRAME, *m_pResMgr) );
+        mpGrpMore	  = new FixedLine			( this, ResId (GRP_MORE, *m_pResMgr) );
+        mpFtFrame	  = new FixedText			( this, ResId (FT_FRAME, *m_pResMgr) );
         mpCbbFrame    = new SvxFramesComboBox   ( this, ResId (CB_FRAME, *m_pResMgr), GetDispatcher() );
-        mpFtForm      = new FixedText           ( this, ResId (FT_FORM, *m_pResMgr) );
-        mpLbForm      = new ListBox             ( this, ResId (LB_FORM, *m_pResMgr) );
-        mpFtIndication= new FixedText           ( this, ResId (FT_INDICATION, *m_pResMgr) );
-        mpEdIndication= new Edit                ( this, ResId (ED_INDICATION, *m_pResMgr) );
-        mpFtText      = new FixedText           ( this, ResId (FT_TEXT, *m_pResMgr) );
-        mpEdText      = new Edit                ( this, ResId (ED_TEXT, *m_pResMgr) );
-        mpBtScript    = new ImageButton         ( this, ResId (BTN_SCRIPT, *m_pResMgr) );
+        mpFtForm	  = new FixedText			( this, ResId (FT_FORM, *m_pResMgr) );
+        mpLbForm	  = new ListBox				( this, ResId (LB_FORM, *m_pResMgr) );
+        mpFtIndication= new FixedText			( this, ResId (FT_INDICATION, *m_pResMgr) );
+        mpEdIndication= new Edit				( this, ResId (ED_INDICATION, *m_pResMgr) );
+        mpFtText	  = new FixedText			( this, ResId (FT_TEXT, *m_pResMgr) );
+        mpEdText	  = new Edit				( this, ResId (ED_TEXT, *m_pResMgr) );
+        mpBtScript	  = new ImageButton			( this, ResId (BTN_SCRIPT, *m_pResMgr) );
 
         mpBtScript->SetClickHdl ( LINK ( this, SvxHyperlinkTabPageBase, ClickScriptHdl_Impl ) );
 
@@ -246,7 +246,7 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
 
 BOOL SvxHyperlinkTabPageBase::MoveToExtraWnd( Point aNewPos, BOOL bDisConnectDlg )
 {
-    BOOL bReturn =  mpMarkWnd->MoveTo ( aNewPos );
+    BOOL bReturn = 	mpMarkWnd->MoveTo ( aNewPos );
 
     if( bDisConnectDlg )
         mpMarkWnd->ConnectToDialog( FALSE );
@@ -267,7 +267,7 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd ()
     // Size of dialog-window in screen pixels
     Rectangle aDlgRect( mpDialog->GetWindowExtentsRelative( NULL ) );
     Point aDlgPos ( aDlgRect.TopLeft() );
-    Size aDlgSize ( mpDialog->GetSizePixel () );
+    Size aDlgSize (	mpDialog->GetSizePixel () );
 
     // Absolute size of the screen
     Rectangle aScreen( mpDialog->GetDesktopRectPixel() );
@@ -531,8 +531,8 @@ BOOL SvxHyperlinkTabPageBase::FileExists( const INetURLObject& rURL )
     {
         try
         {
-            Content     aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
-            ::rtl::OUString aTitle;
+            Content		aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+            ::rtl::OUString	aTitle;
 
             aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= aTitle;
             bRet = ( aTitle.getLength() > 0 );
@@ -599,10 +599,10 @@ void SvxHyperlinkTabPageBase::GetDataFromCommonFields( String& aStrName,
                                              String& aStrIntName, String& aStrFrame,
                                              SvxLinkInsertMode& eMode )
 {
-    aStrIntName = mpEdText->GetText();
-    aStrName    = mpEdIndication->GetText();
-    aStrFrame   = mpCbbFrame->GetText();
-    eMode       = (SvxLinkInsertMode) (mpLbForm->GetSelectEntryPos()+1);
+    aStrIntName	= mpEdText->GetText();
+    aStrName	= mpEdIndication->GetText();
+    aStrFrame	= mpCbbFrame->GetText();
+    eMode		= (SvxLinkInsertMode) (mpLbForm->GetSelectEntryPos()+1);
     if( IsHTMLDoc() )
         eMode = (SvxLinkInsertMode) ( UINT16(eMode) | HLINK_HTMLMODE );
 }
@@ -662,8 +662,8 @@ BOOL SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet& rOut)
 
 String SvxHyperlinkTabPageBase::CreateUiNameFromURL( const String& aStrURL )
 {
-    String          aStrUiURL;
-    INetURLObject   aURLObj( aStrURL );
+    String			aStrUiURL;
+    INetURLObject	aURLObj( aStrURL );
 
     switch(aURLObj.GetProtocol())
     {
@@ -673,7 +673,7 @@ String SvxHyperlinkTabPageBase::CreateUiNameFromURL( const String& aStrURL )
         case INET_PROT_FTP :
             {
                 //remove password from name
-                INetURLObject   aTmpURL(aURLObj);
+                INetURLObject	aTmpURL(aURLObj);
                 aTmpURL.SetPass(aEmptyStr);
                 aStrUiURL = aTmpURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
             }

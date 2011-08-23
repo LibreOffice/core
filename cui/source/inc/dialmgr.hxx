@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@
 class ResMgr;
 struct CuiResMgr
 {
-    static ResMgr*      GetResMgr();
+    static ResMgr*		GetResMgr();
 };
 
-#define CUI_MGR()   (*CuiResMgr::GetResMgr())
-#define CUI_RES(i)      ResId(i,CUI_MGR())
-#define CUI_RESSTR(i)   UniString(ResId(i,CUI_MGR()))
-#define CUI_RESSSTR(i)  String(ResId(i,CUI_MGR()))
+#define CUI_MGR()	(*CuiResMgr::GetResMgr())
+#define CUI_RES(i)		ResId(i,CUI_MGR())
+#define CUI_RESSTR(i)	UniString(ResId(i,CUI_MGR()))
+#define CUI_RESSSTR(i)	String(ResId(i,CUI_MGR()))
 
 #endif
 

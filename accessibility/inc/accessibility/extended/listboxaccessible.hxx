@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,12 +53,12 @@ namespace accessibility
         SvTreeListBox* m_pWindow;
 
     protected:
-        inline SvTreeListBox*       getListBox() const
+        inline SvTreeListBox*		getListBox() const
         {
-            return  const_cast< ListBoxAccessibleBase* >( this )->m_pWindow;
+            return	const_cast< ListBoxAccessibleBase* >( this )->m_pWindow;
         }
 
-        inline  bool                    isAlive() const     { return NULL != m_pWindow; }
+        inline	bool					isAlive() const		{ return NULL != m_pWindow; }
 
     public:
         ListBoxAccessibleBase( SvTreeListBox& _rWindow );
@@ -84,13 +84,13 @@ namespace accessibility
         DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
     private:
-        ListBoxAccessibleBase( );                                           // never implemented
-        ListBoxAccessibleBase( const ListBoxAccessibleBase& );              // never implemented
-        ListBoxAccessibleBase& operator=( const ListBoxAccessibleBase& );   // never implemented
+        ListBoxAccessibleBase( );											// never implemented
+        ListBoxAccessibleBase( const ListBoxAccessibleBase& );				// never implemented
+        ListBoxAccessibleBase& operator=( const ListBoxAccessibleBase& );	// never implemented
     };
 
 //........................................................................
-}   // namespace accessibility
+}	// namespace accessibility
 //........................................................................
 
 #endif // ACCESSIBILITY_EXT_LISTBOX_ACCESSIBLE

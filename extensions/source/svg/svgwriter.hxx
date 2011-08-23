@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,25 +36,25 @@
 // -------------
 
 class SVGWriter : public NMSP_CPPU::OWeakObject, NMSP_SVG::XSVGWriter
-{
+{	
 private:
 
-    REF( NMSP_LANG::XMultiServiceFactory )  mxFact;
-
+    REF( NMSP_LANG::XMultiServiceFactory )	mxFact;
+                                            
                                             SVGWriter();
-
-public:
-
+                                            
+public:										
+                                            
                                             SVGWriter( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr );
-    virtual                                 ~SVGWriter();
-
-    // XInterface
-    virtual ANY SAL_CALL                    queryInterface( const NMSP_UNO::Type & rType ) throw( NMSP_UNO::RuntimeException );
-    virtual void SAL_CALL                   acquire() throw();
-    virtual void SAL_CALL                   release() throw();
-
-    // XSVGWriter
-    virtual void SAL_CALL                   write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHandler,
+    virtual 								~SVGWriter();
+                                            
+    // XInterface							
+    virtual ANY SAL_CALL					queryInterface( const NMSP_UNO::Type & rType ) throw( NMSP_UNO::RuntimeException );
+    virtual void SAL_CALL					acquire() throw();
+    virtual void SAL_CALL					release() throw();
+                                            
+    // XSVGWriter							
+    virtual void SAL_CALL					write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHandler,
                                                    const SEQ( sal_Int8 )& rMtfSeq ) throw( NMSP_UNO::RuntimeException );
 };
 

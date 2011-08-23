@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,37 +124,37 @@ import "ocidl.idl";
         [id(70), helpstring("method inMulDimArrayByte2")] HRESULT inMulDimArrayByte2([in] SAFEARRAY(unsigned char) val);
         [id(71), helpstring("method outMore")] HRESULT outMore([out]long* val1, [out]long* val2);
 
-        [id(72), helpstring("method optional1")]
+        [id(72), helpstring("method optional1")] 
         HRESULT optional1([in] long val1, [in, optional] VARIANT* val2);
-        [id(73), helpstring("method optional2")]
+        [id(73), helpstring("method optional2")] 
         HRESULT optional2([out] long* val1, [out, optional] VARIANT* val2);
-        [id(74), helpstring("method optional3")]
+        [id(74), helpstring("method optional3")] 
         HRESULT optional3([in, optional] VARIANT* val1, [in, optional] VARIANT* val2);
-        [id(75), helpstring("method optional4")]
+        [id(75), helpstring("method optional4")] 
         HRESULT optional4([in, out, optional] VARIANT* val1, [in, out, optional] VARIANT* val2);
-        [id(76), helpstring("method optional5")]
+        [id(76), helpstring("method optional5")] 
         HRESULT optional5([out, optional] VARIANT* val1, [out, optional] VARIANT* val2);
         //midl creates for val4 a BSTR "4" as default value in the TLB. The midl complains
         //but the error message seems to be not for this case.
         //in defaultvalue2 val4 has an VT_I4 in the TLB. This must be a bug!
-        [id(77), helpstring("method defaultvalue1")]
-        HRESULT defaultvalue1([in, defaultvalue(1)] long val1,
+        [id(77), helpstring("method defaultvalue1")] 
+        HRESULT defaultvalue1([in, defaultvalue(1)] long val1, 
                               [in, defaultvalue(2)] double* val2,
                              // [in, defaultvalue(3)] VARIANT val3, //ok
                               [in, defaultvalue(4)] VARIANT* val4);
 
         // bug im midl: when val3 and val4 are pointers then the generated header cretates
         // for all params default values:
-        //HRESULT STDMETHODCALLTYPE defaultvalue2(
+        //HRESULT STDMETHODCALLTYPE defaultvalue2( 
         //            /* [defaultvalue][in] */ long *val1 = 10,
         //    /* [defaultvalue][in] */ double *val2 = 3.14,
         //    /* [defaultvalue][in] */ VARIANT *val3 = 10,
         //    /* [defaultvalue][in] */ VARIANT *val4 = 100) = 0;
-        // And that does not compile.
-        //Therefore we must not include the midl generated header, instead use
+        // And that does not compile. 
+        //Therefore we must not include the midl generated header, instead use 
         // #import to create the interface header
-        [id(78), helpstring("method defaultvalue2")]
-        HRESULT defaultvalue2([in, out, defaultvalue(1)]long* val1,
+        [id(78), helpstring("method defaultvalue2")] 
+        HRESULT defaultvalue2([in, out, defaultvalue(1)]long* val1, 
                               [in, out, defaultvalue(2)] double* val2,
                              // [in, out, defaultvalue(3)] VARIANT *val3,
                               [in, out, defaultvalue(4)] VARIANT *val4);
@@ -164,7 +164,7 @@ import "ocidl.idl";
         [id(80), helpstring("method varargfunc2")]
         HRESULT varargfunc2([out] long* val1, [out] SAFEARRAY(VARIANT)* val2);
 
-
+        
         [id(86), helpstring("method inSequenceByteDim2")] HRESULT inSequenceByteDim2([in] SAFEARRAY(byte) val);
         [id(87), helpstring("method inCurrency")] HRESULT inCurrency([in] CY val);
         [id(88), helpstring("method outCurrency")] HRESULT outCurrency([out] CY* val);
@@ -195,9 +195,9 @@ import "ocidl.idl";
         [propputref, id(107), helpstring("property prprefVariant")] HRESULT prprefVariant([in] VARIANT* newVal);
         [propget, id(108), helpstring("property prprefDecimal")] HRESULT prprefDecimal([out, retval] DECIMAL* pVal);
         [propputref, id(108), helpstring("property prprefDecimal")] HRESULT prprefDecimal([in] DECIMAL* newVal);
-        [id(109), helpstring("method optional6")] HRESULT optional6([in,optional] VARIANT* val1,
+        [id(109), helpstring("method optional6")] HRESULT optional6([in,optional] VARIANT* val1, 
             [in,optional] VARIANT * val2, [in,optional] VARIANT* val3, [in,optional] VARIANT* val4);
-        [id(110), helpstring("method optional7")] HRESULT optional7([out,optional] VARIANT* val1,
+        [id(110), helpstring("method optional7")] HRESULT optional7([out,optional] VARIANT* val1, 
             [out,optional] VARIANT * val2, [out,optional] VARIANT* val3, [out,optional] VARIANT* val4);
 
         [propget, id(111), helpstring("property prpMultiArg1")] HRESULT prpMultiArg1([in,out,optional] VARIANT* val1, [in,out,optional] VARIANT* val2, [out, optional, retval] VARIANT* pVal);

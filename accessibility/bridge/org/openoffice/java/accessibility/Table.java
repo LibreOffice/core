@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,18 +34,18 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.accessibility.*;
 
 public class Table extends DescendantManager implements javax.accessibility.Accessible {
-
+    
     protected Table(XAccessible xAccessible, XAccessibleContext xAccessibleContext, boolean multiselectable) {
         super(xAccessible, xAccessibleContext, multiselectable);
     }
-
+    
     protected void setActiveDescendant(javax.accessibility.Accessible descendant) {
         javax.accessibility.Accessible oldAD = activeDescendant;
         activeDescendant = descendant;
         firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_ACTIVE_DESCENDANT_PROPERTY,
             oldAD, descendant);
     }
-
+    
     protected void setActiveDescendant(Object any) {
         javax.accessibility.Accessible descendant = null;
         try {
@@ -61,50 +61,50 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
-
+    
     protected void add(XAccessible unoAccessible) {
         if (unoAccessible != null) {
             TableCell cell = new TableCell(unoAccessible);
-            // The AccessBridge for Windows expects an instance of AccessibleContext
+            // The AccessBridge for Windows expects an instance of AccessibleContext 
             // as parameters
             firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_CHILD_PROPERTY,
                 null, cell.getAccessibleContext());
         }
     }
-
+    
     protected void remove(XAccessible unoAccessible) {
         if (unoAccessible != null) {
             TableCell cell = new TableCell(unoAccessible);
-            // The AccessBridge for Windows expects an instance of AccessibleContext
+            // The AccessBridge for Windows expects an instance of AccessibleContext 
             // as parameters
             firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_CHILD_PROPERTY,
                 cell.getAccessibleContext(), null);
         }
     }
-
+    
     protected void add(Object any) {
         try {
             add((XAccessible) AnyConverter.toObject(AccessibleObjectFactory.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
-
+    
     protected void remove(Object any) {
         try {
             remove((XAccessible) AnyConverter.toObject(AccessibleObjectFactory.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
-
+    
     /**
     * Update the proxy objects appropriatly on property change events
     */
     protected class AccessibleTableListener extends AccessibleDescendantManagerListener {
-
+        
         protected AccessibleTableListener() {
             super();
         }
-
+        
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
@@ -124,24 +124,24 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
             }
         }
     }
-
+    
     protected XAccessibleEventListener createEventListener() {
         return new AccessibleTableListener();
     }
-
+    
     /** Creates the AccessibleContext associated with this object */
     public javax.accessibility.AccessibleContext createAccessibleContext() {
         return new AccessibleTable();
     }
-
+    
     protected class AccessibleTable extends AccessibleDescendantManager implements javax.accessibility.AccessibleExtendedTable {
-
+ 
         protected XAccessibleTable unoAccessibleTable;
-
+        
         public AccessibleTable() {
             unoAccessibleTable = (XAccessibleTable) UnoRuntime.queryInterface(XAccessibleTable.class, unoAccessibleContext);
         }
-
+        
         /** Gets the role of this object */
         public javax.accessibility.AccessibleRole getAccessibleRole() {
             return javax.accessibility.AccessibleRole.TABLE;
@@ -151,7 +151,7 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
         public javax.accessibility.AccessibleTable getAccessibleTable() {
             return this;
         }
-
+        
         /** Returns the specified Accessible child of the object */
         public javax.accessibility.Accessible getAccessibleChild(int i) {
             javax.accessibility.Accessible child = null;
@@ -171,12 +171,12 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
             }
             return child;
         }
-
+        
         /*
         * AccessibleComponent
         */
 
-        /** Returns the Accessible child, if one exists, contained at the local coordinate Point */
+        /** Returns the Accessible child, if one exists, contained at the local coordinate Point */     
         public javax.accessibility.Accessible getAccessibleAt(java.awt.Point p) {
             javax.accessibility.Accessible child = null;
             try {
@@ -195,11 +195,11 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
             }
             return child;
         }
-
+        
         /*
         * AccessibleSelection
         */
-
+        
         /** Returns an Accessible representing the specified selected child of the object */
         public javax.accessibility.Accessible getAccessibleSelection(int i) {
             javax.accessibility.Accessible child = null;
@@ -219,11 +219,11 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
             }
             return child;
         }
-
+        
         /*
         * AccessibleTable
         */
-
+        
         /** Returns the Accessible at a specified row and column in the table. */
         public javax.accessibility.Accessible getAccessibleAt(int r, int c) {
             javax.accessibility.Accessible child = null;
@@ -242,7 +242,7 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
             } catch (com.sun.star.uno.RuntimeException e) {
             }
             return child;
-        }
+        }    
 
         /** Returns the caption for the table. */
         public javax.accessibility.Accessible getAccessibleCaption() {
@@ -271,7 +271,7 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
             }
         }
 
-        /**
+        /** 
          * Returns the number of columns occupied by the Accessible
          * at a specified row and column in the table.
          */
@@ -313,7 +313,7 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
         }
 
         /**
-         * Returns the number of rows occupied by the Accessible
+         * Returns the number of rows occupied by the Accessible 
          * at a specified row and column in the table.
          */
         public int getAccessibleRowExtentAt(int r, int c) {
@@ -378,9 +378,9 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
             }
         }
 
-        /**
-         * Returns a boolean value indicating whether the accessible
-         * at a specified row and column is selected.
+        /** 
+         * Returns a boolean value indicating whether the accessible 
+         * at a specified row and column is selected. 
          */
         public boolean isAccessibleSelected(int r, int c) {
             try {
@@ -453,17 +453,17 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
             } catch (com.sun.star.uno.RuntimeException e) {
                 return -1;
             }
-        }
+        }       
     }
-
+    
     class TableCell extends java.awt.Component implements javax.accessibility.Accessible {
-
+        
         protected XAccessible unoAccessible;
-
+        
         public TableCell(XAccessible xAccessible) {
             unoAccessible = xAccessible;
         }
-
+        
         public Object[] create(Object[] targetSet) {
             try {
                 java.util.ArrayList list = new java.util.ArrayList(targetSet.length);
@@ -480,9 +480,9 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
                 return null;
             }
         }
-
+        
         javax.accessibility.AccessibleContext accessibleContext = null;
-
+        
         /** Returns the AccessibleContext associated with this object */
         public javax.accessibility.AccessibleContext getAccessibleContext() {
             if (accessibleContext == null) {
@@ -500,15 +500,15 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
             }
             return accessibleContext;
         }
-
+        
         protected class AccessibleTableCell extends javax.accessibility.AccessibleContext {
-
+            
             XAccessibleContext unoAccessibleContext;
-
+            
             public AccessibleTableCell(XAccessibleContext xAccessibleContext) {
                 unoAccessibleContext = xAccessibleContext;
             }
-
+            
             /** Returns the accessible name of this object */
             public String getAccessibleName() {
                 try {
@@ -517,12 +517,12 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
                     return null;
                 }
             }
-
+            
             /** Sets the accessible name of this object */
             public void setAccessibleName(String name) {
                 // Not supported
             }
-
+            
             /** Returns the accessible name of this object */
             public String getAccessibleDescription() {
                 try {
@@ -531,12 +531,12 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
                     return null;
                 }
             }
-
+            
             /** Sets the accessible name of this object */
             public void setAccessibleDescription(String name) {
                 // Not supported
             }
-
+            
             /** Returns the accessible role of this object */
             public javax.accessibility.AccessibleRole getAccessibleRole() {
                 try {
@@ -547,7 +547,7 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
                     return null;
                 }
             }
-
+            
             /** Gets the locale of the component */
             public java.util.Locale getLocale() throws java.awt.IllegalComponentStateException {
                 try {
@@ -559,16 +559,16 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
                     return Table.this.getLocale();
                 }
             }
-
+            
             /** Gets the 0-based index of this object in its accessible parent */
             public int getAccessibleIndexInParent() {
                 try {
                     return unoAccessibleContext.getAccessibleIndexInParent();
                 } catch (com.sun.star.uno.RuntimeException e) {
                     return -1;
-                }
+                } 
             }
-
+            
             /** Returns the number of accessible children of the object. */
             public int getAccessibleChildrenCount() {
                 try {
@@ -577,7 +577,7 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
                     return 0;
                 }
             }
-
+            
             /** Returns the specified Accessible child of the object. */
             public javax.accessibility.Accessible getAccessibleChild(int i) {
                 javax.accessibility.Accessible child = null;
@@ -595,7 +595,7 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
                 }
                 return child;
             }
-
+            
             /** Returns the state set of this object */
             public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
                 try {
@@ -605,7 +605,7 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
                     return AccessibleStateAdapter.getDefunctStateSet();
                 }
             }
-
+                        
             /** Returns the relation set of this object */
             public javax.accessibility.AccessibleRelationSet getAccessibleRelationSet() {
                 try {
@@ -613,7 +613,7 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
                     if (unoAccessibleRelationSet == null) {
                         return null;
                     }
-
+                    
                     javax.accessibility.AccessibleRelationSet relationSet = new javax.accessibility.AccessibleRelationSet();
                     int count = unoAccessibleRelationSet.getRelationCount();
                     for (int i = 0; i < count; i++) {
@@ -655,68 +655,68 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
                     return null;
                 }
             }
-
+            
             /** Gets the AccessibleComponent associated with this object that has a graphical representation */
             public javax.accessibility.AccessibleComponent getAccessibleComponent() {
                 try {
                     XAccessibleComponent unoAccessibleComponent = (XAccessibleComponent)
                         UnoRuntime.queryInterface(XAccessibleComponent.class, unoAccessibleContext);
-                    return (unoAccessibleComponent != null) ?
+                    return (unoAccessibleComponent != null) ? 
                         new AccessibleComponentImpl(unoAccessibleComponent) : null;
                 } catch (com.sun.star.uno.RuntimeException e) {
                     return null;
                 }
             }
-
+            
             /** Gets the AccessibleAction associated with this object that has a graphical representation */
             public javax.accessibility.AccessibleAction getAccessibleAction() {
                 try {
                     XAccessibleAction unoAccessibleAction = (XAccessibleAction)
                         UnoRuntime.queryInterface(XAccessibleAction.class, unoAccessibleContext);
-                    return (unoAccessibleAction != null) ?
+                    return (unoAccessibleAction != null) ? 
                         new AccessibleActionImpl(unoAccessibleAction) : null;
                 } catch (com.sun.star.uno.RuntimeException e) {
                     return null;
                 }
             }
-
+            
             /** Gets the AccessibleText associated with this object that has a graphical representation */
             public javax.accessibility.AccessibleText getAccessibleText() {
-
+                
                 if (disposed)
                     return null;
-
+                
                 try {
                     XAccessibleText unoAccessibleText = (XAccessibleText)
                         UnoRuntime.queryInterface(XAccessibleText.class, unoAccessibleContext);
-                    return (unoAccessibleText != null) ?
+                    return (unoAccessibleText != null) ? 
                         new AccessibleTextImpl(unoAccessibleText) : null;
                 } catch (com.sun.star.uno.RuntimeException e) {
                     return null;
                 }
             }
-
+            
             /** Gets the AccessibleValue associated with this object that has a graphical representation */
             public javax.accessibility.AccessibleValue getAccessibleValue() {
                 try {
                     XAccessibleValue unoAccessibleValue = (XAccessibleValue)
                         UnoRuntime.queryInterface(XAccessibleValue.class, unoAccessibleContext);
-                    return (unoAccessibleValue != null) ?
+                    return (unoAccessibleValue != null) ? 
                         new AccessibleValueImpl(unoAccessibleValue) : null;
                 } catch (com.sun.star.uno.RuntimeException e) {
                     return null;
                 }
             }
-
+            
             /** Gets the AccessibleText associated with this object presenting text on the display */
             public javax.accessibility.AccessibleIcon[] getAccessibleIcon() {
                 try {
-                    XAccessibleImage unoAccessibleImage = (XAccessibleImage)
+                    XAccessibleImage unoAccessibleImage = (XAccessibleImage) 
                         UnoRuntime.queryInterface(XAccessibleImage.class, unoAccessibleContext);
                     if (unoAccessibleImage != null) {
                         javax.accessibility.AccessibleIcon[] icons = { new AccessibleIconImpl(unoAccessibleImage) };
                         return icons;
-                    }
+                    } 
                 } catch (com.sun.star.uno.RuntimeException e) {
                 }
                 return null;

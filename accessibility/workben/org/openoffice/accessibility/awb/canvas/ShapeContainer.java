@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,18 +87,18 @@ public class ShapeContainer
         if (aShape == null)
         {
             aShape = new CanvasShape (aNode, maCanvas);
-
+                        
                         if (aNode instanceof XAccessibleEventBroadcaster)
                            ((XAccessibleEventBroadcaster) aNode).addEventListener(aShape);
-
+                        
             // Update bounding box that includes all objects.
            if (maShapeList.size() == 0)
                maBoundingBox = aShape.GetBBox();
            else
                maBoundingBox = maBoundingBox.union (aShape.GetBBox());
-
+                
             maShapeList.put (aNode, aShape);
-
+        
             maCanvas.repaint();
 
             return true;
@@ -117,7 +117,7 @@ public class ShapeContainer
         {
                         if (aNode instanceof XAccessibleEventBroadcaster)
                            ((XAccessibleEventBroadcaster) aNode).removeEventListener(aShape);
-
+                        
             maShapeList.remove (aNode);
             maCanvas.SelectObject (null);
             maCanvas.repaint ();

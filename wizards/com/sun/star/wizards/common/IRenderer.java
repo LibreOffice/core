@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@ package com.sun.star.wizards.common;
  * A General interface which gives a string
  * that represents the rendered argument object.
  * Can be used to reference resources, internationalizartion
- * a.s.o
+ * a.s.o 
  */
 public interface IRenderer
 {

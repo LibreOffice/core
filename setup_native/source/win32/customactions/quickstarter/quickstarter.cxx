@@ -15,7 +15,7 @@ std::string GetOfficeInstallationPath(MSIHANDLE handle)
     std::string progpath;
     DWORD sz = 0;
     LPTSTR dummy = TEXT("");
-
+    
     if (MsiGetProperty(handle, TEXT("INSTALLLOCATION"), dummy, &sz) == ERROR_MORE_DATA)
     {
         sz++; // space for the final '\0'
@@ -23,7 +23,7 @@ std::string GetOfficeInstallationPath(MSIHANDLE handle)
         LPTSTR buff = reinterpret_cast<LPTSTR>(_alloca(nbytes));
         ZeroMemory(buff, nbytes);
         MsiGetProperty(handle, TEXT("INSTALLLOCATION"), buff, &sz);
-        progpath = buff;
+        progpath = buff;            
     }
     return progpath;
 }
@@ -33,7 +33,7 @@ std::string GetOfficeProductName(MSIHANDLE handle)
     std::string productname;
     DWORD sz = 0;
     LPTSTR dummy = TEXT("");
-
+    
     if (MsiGetProperty(handle, TEXT("ProductName"), dummy, &sz) == ERROR_MORE_DATA)
     {
         sz++; // space for the final '\0'
@@ -41,7 +41,7 @@ std::string GetOfficeProductName(MSIHANDLE handle)
         LPTSTR buff = reinterpret_cast<LPTSTR>(_alloca(nbytes));
         ZeroMemory(buff, nbytes);
         MsiGetProperty(handle, TEXT("ProductName"), buff, &sz);
-        productname = buff;
+        productname = buff;            
     }
     return productname;
 }
@@ -51,7 +51,7 @@ std::string GetQuickstarterLinkName(MSIHANDLE handle)
     std::string quickstarterlinkname;
     DWORD sz = 0;
     LPTSTR dummy = TEXT("");
-
+    
     if (MsiGetProperty(handle, TEXT("Quickstarterlinkname"), dummy, &sz) == ERROR_MORE_DATA)
     {
         sz++; // space for the final '\0'
@@ -59,7 +59,7 @@ std::string GetQuickstarterLinkName(MSIHANDLE handle)
         LPTSTR buff = reinterpret_cast<LPTSTR>(_alloca(nbytes));
         ZeroMemory(buff, nbytes);
         MsiGetProperty(handle, TEXT("Quickstarterlinkname"), buff, &sz);
-        quickstarterlinkname = buff;
+        quickstarterlinkname = buff;            
     }
     else if (MsiGetProperty(handle, TEXT("ProductName"), dummy, &sz) == ERROR_MORE_DATA)
     {
@@ -68,7 +68,7 @@ std::string GetQuickstarterLinkName(MSIHANDLE handle)
         LPTSTR buff = reinterpret_cast<LPTSTR>(_alloca(nbytes));
         ZeroMemory(buff, nbytes);
         MsiGetProperty(handle, TEXT("ProductName"), buff, &sz);
-        quickstarterlinkname = buff;
+        quickstarterlinkname = buff;            
     }
     return quickstarterlinkname;
 }
@@ -82,13 +82,13 @@ inline bool IsValidHandle( HANDLE handle )
 static HANDLE WINAPI _CreateToolhelp32Snapshot( DWORD dwFlags, DWORD th32ProcessID )
 {
     typedef HANDLE (WINAPI *FN_PROC)( DWORD dwFlags, DWORD th32ProcessID );
-    static FN_PROC  lpProc = NULL;
+    static FN_PROC	lpProc = NULL;
 
-    HANDLE  hSnapshot = NULL;
+    HANDLE	hSnapshot = NULL;
 
     if ( !lpProc )
     {
-        HMODULE hLibrary = GetModuleHandle("KERNEL32.DLL");
+        HMODULE	hLibrary = GetModuleHandle("KERNEL32.DLL");
 
         if ( hLibrary )
             lpProc = reinterpret_cast< FN_PROC >(GetProcAddress( hLibrary, "CreateToolhelp32Snapshot" ));
@@ -103,13 +103,13 @@ static HANDLE WINAPI _CreateToolhelp32Snapshot( DWORD dwFlags, DWORD th32Process
 static BOOL WINAPI _Process32First( HANDLE hSnapshot, PROCESSENTRY32 *lppe32 )
 {
     typedef BOOL (WINAPI *FN_PROC)( HANDLE hSnapshot, PROCESSENTRY32 *lppe32 );
-    static FN_PROC  lpProc = NULL;
+    static FN_PROC	lpProc = NULL;
 
-    BOOL    fSuccess = FALSE;
+    BOOL	fSuccess = FALSE;
 
     if ( !lpProc )
     {
-        HMODULE hLibrary = GetModuleHandle("KERNEL32.DLL");
+        HMODULE	hLibrary = GetModuleHandle("KERNEL32.DLL");
 
         if ( hLibrary )
             lpProc = reinterpret_cast< FN_PROC >(GetProcAddress( hLibrary, "Process32First" ));
@@ -124,13 +124,13 @@ static BOOL WINAPI _Process32First( HANDLE hSnapshot, PROCESSENTRY32 *lppe32 )
 static BOOL WINAPI _Process32Next( HANDLE hSnapshot, PROCESSENTRY32 *lppe32 )
 {
     typedef BOOL (WINAPI *FN_PROC)( HANDLE hSnapshot, PROCESSENTRY32 *lppe32 );
-    static FN_PROC  lpProc = NULL;
+    static FN_PROC	lpProc = NULL;
 
-    BOOL    fSuccess = FALSE;
+    BOOL	fSuccess = FALSE;
 
     if ( !lpProc )
     {
-        HMODULE hLibrary = GetModuleHandle("KERNEL32.DLL");
+        HMODULE	hLibrary = GetModuleHandle("KERNEL32.DLL");
 
         if ( hLibrary )
             lpProc = reinterpret_cast< FN_PROC >(GetProcAddress( hLibrary, "Process32Next" ));
@@ -144,18 +144,18 @@ static BOOL WINAPI _Process32Next( HANDLE hSnapshot, PROCESSENTRY32 *lppe32 )
 
 static std::string GetProcessImagePath_9x( DWORD dwProcessId )
 {
-    std::string sImagePath;
+    std::string	sImagePath;
 
-    HANDLE  hSnapshot = _CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
+    HANDLE	hSnapshot = _CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
 
     if ( IsValidHandle( hSnapshot ) )
     {
-        PROCESSENTRY32  pe32 = { 0 };
+        PROCESSENTRY32	pe32 = { 0 };
 
         pe32.dwSize = sizeof(PROCESSENTRY32);
 
-        BOOL    fSuccess = _Process32First( hSnapshot, &pe32 );
-        bool    found = false;
+        BOOL	fSuccess = _Process32First( hSnapshot, &pe32 );
+        bool	found = false;
 
         while ( !found && fSuccess )
         {
@@ -179,11 +179,11 @@ static DWORD WINAPI _GetModuleFileNameExA( HANDLE hProcess, HMODULE hModule, LPS
 {
     typedef DWORD (WINAPI *FN_PROC)( HANDLE hProcess, HMODULE hModule, LPSTR lpFileName, DWORD nSize );
 
-    static FN_PROC  lpProc = NULL;
+    static FN_PROC	lpProc = NULL;
 
     if ( !lpProc )
     {
-        HMODULE hLibrary = LoadLibrary("PSAPI.DLL");
+        HMODULE	hLibrary = LoadLibrary("PSAPI.DLL");
 
         if ( hLibrary )
             lpProc = reinterpret_cast< FN_PROC >(GetProcAddress( hLibrary, "GetModuleFileNameExA" ));
@@ -198,13 +198,13 @@ static DWORD WINAPI _GetModuleFileNameExA( HANDLE hProcess, HMODULE hModule, LPS
 
 static std::string GetProcessImagePath_NT( DWORD dwProcessId )
 {
-    std::string sImagePath;
+    std::string	sImagePath;
 
-    HANDLE  hProcess = OpenProcess( PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, dwProcessId );
+    HANDLE	hProcess = OpenProcess( PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, dwProcessId );
 
     if ( IsValidHandle( hProcess ) )
     {
-        CHAR    szPathBuffer[MAX_PATH] = "";
+        CHAR	szPathBuffer[MAX_PATH] = "";
 
         if ( _GetModuleFileNameExA( hProcess, NULL, szPathBuffer, sizeof(szPathBuffer) ) )
             sImagePath = szPathBuffer;

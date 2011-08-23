@@ -2,7 +2,7 @@
 /***************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,12 +44,12 @@ using namespace std;
  */
 class Guess{
     public:
-
+        
         /**
          * Default init
          */
         Guess();
-
+        
         /**
          * Init from a string like [en-UK-utf8] and the rank
          */
@@ -60,9 +60,9 @@ class Guess{
         string GetLanguage();
         string GetCountry();
         string GetEncoding();
-
+        
         bool operator==(string lang);
-
+        
     protected:
         string language_str;
         string country_str;

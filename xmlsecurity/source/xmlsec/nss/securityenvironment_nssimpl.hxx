@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,16 +67,16 @@ class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper4<
     ::com::sun::star::lang::XUnoTunnel >
 {
 private :
-
+        
     std::list< PK11SlotInfo* > m_Slots;
     typedef std::list< PK11SlotInfo* >::const_iterator CIT_SLOTS;
 
     osl::Mutex m_mutex;
-
-        CERTCertDBHandle*                   m_pHandler ;
-        std::list< PK11SymKey* >            m_tSymKeyList ;
-        std::list< SECKEYPublicKey* >       m_tPubKeyList ;
-        std::list< SECKEYPrivateKey* >      m_tPriKeyList ;
+    
+        CERTCertDBHandle*					m_pHandler ;
+        std::list< PK11SymKey* >			m_tSymKeyList ;
+        std::list< SECKEYPublicKey* >		m_tPubKeyList ;
+        std::list< SECKEYPrivateKey* >		m_tPriKeyList ;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
 
     public :
@@ -122,7 +122,7 @@ private :
         virtual ::rtl::OUString SAL_CALL getSecurityEnvironmentInformation(  ) throw (::com::sun::star::uno::RuntimeException);
 
         //Methods from XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
+        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) 
             throw (::com::sun::star::uno::RuntimeException);
 
         static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
@@ -176,6 +176,6 @@ private:
 
 } ;
 
-#endif  // _XSECURITYENVIRONMENT_NSSIMPL_HXX_
+#endif	// _XSECURITYENVIRONMENT_NSSIMPL_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

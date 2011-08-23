@@ -30,7 +30,7 @@
 #define _OCONNECTIONPOINTCONTAINERHELPER_HXX
 
 //______________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //______________________________________________________________________________________________________________
 
 #include <com/sun/star/lang/XConnectionPointContainer.hpp>
@@ -39,11 +39,11 @@
 #include <cppuhelper/propshlp.hxx>
 
 //______________________________________________________________________________________________________________
-//  includes of my own project
+//	includes of my own project
 //______________________________________________________________________________________________________________
 
 //______________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //______________________________________________________________________________________________________________
 
 namespace unocontrols{
@@ -52,25 +52,25 @@ namespace unocontrols{
 #define CSS_LANG    ::com::sun::star::lang
 
 //______________________________________________________________________________________________________________
-//  defines
+//	defines
 //______________________________________________________________________________________________________________
 
 //______________________________________________________________________________________________________________
-//  class declaration OConnectionPointContainerHelper
+//	class declaration OConnectionPointContainerHelper
 //______________________________________________________________________________________________________________
 
-class OConnectionPointContainerHelper   :   public  CSS_LANG::XConnectionPointContainer
-                                        ,   public  ::cppu::OWeakObject
+class OConnectionPointContainerHelper	:	public	CSS_LANG::XConnectionPointContainer
+                                        ,	public	::cppu::OWeakObject
 {
 
 //______________________________________________________________________________________________________________
-//  public methods
+//	public methods
 //______________________________________________________________________________________________________________
 
 public:
 
     //__________________________________________________________________________________________________________
-    //  construct/destruct
+    //	construct/destruct
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -101,62 +101,62 @@ public:
         @onerror
     */
 
-    virtual ~OConnectionPointContainerHelper();
+    virtual	~OConnectionPointContainerHelper();
 
     //________________________________________________________________________________________________________
-    //  XInterface
+    //	XInterface
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short      give answer, if interface is supported
-        @descr      The interfaces are searched by type.
+        @short		give answer, if interface is supported
+        @descr		The interfaces are searched by type.
 
-        @seealso    XInterface
+        @seealso	XInterface
 
         @param      "rType" is the type of searched interface.
 
-        @return     Any     information about found interface
+        @return		Any		information about found interface
 
-        @onerror    A RuntimeException is thrown.
+        @onerror	A RuntimeException is thrown.
     */
 
     virtual CSS_UNO::Any SAL_CALL queryInterface( const CSS_UNO::Type& aType )
         throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short      increment refcount
-        @descr      -
+        @short		increment refcount
+        @descr		-
 
-        @seealso    XInterface
-        @seealso    release()
+        @seealso	XInterface
+        @seealso	release()
 
-        @param      -
+        @param		-
 
-        @return     -
+        @return		-
 
-        @onerror    A RuntimeException is thrown.
+        @onerror	A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL acquire() throw();
 
     /**_______________________________________________________________________________________________________
-        @short      decrement refcount
-        @descr      -
+        @short		decrement refcount
+        @descr		-
 
-        @seealso    XInterface
-        @seealso    acquire()
+        @seealso	XInterface
+        @seealso	acquire()
 
-        @param      -
+        @param		-
 
-        @return     -
+        @return		-
 
-        @onerror    A RuntimeException is thrown.
+        @onerror	A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL release() throw();
 
     //__________________________________________________________________________________________________________
-    //  XConnectionPointContainer
+    //	XConnectionPointContainer
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -206,8 +206,8 @@ public:
     */
 
     virtual void SAL_CALL advise(
-        const   CSS_UNO::Type&                              aType ,
-        const   CSS_UNO::Reference< CSS_UNO::XInterface >&  xListener
+        const	CSS_UNO::Type&                              aType ,
+        const	CSS_UNO::Reference< CSS_UNO::XInterface >&  xListener
     ) throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
@@ -224,8 +224,8 @@ public:
     */
 
     virtual void SAL_CALL unadvise(
-        const   CSS_UNO::Type&                              aType       ,
-        const   CSS_UNO::Reference< CSS_UNO::XInterface >&  xListener
+        const	CSS_UNO::Type&                              aType		,
+        const	CSS_UNO::Reference< CSS_UNO::XInterface >&  xListener
     ) throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
@@ -244,22 +244,22 @@ public:
     ::cppu::OMultiTypeInterfaceContainerHelper& impl_getMultiTypeContainer();
 
 //______________________________________________________________________________________________________________
-//  private variables
+//	private variables
 //______________________________________________________________________________________________________________
 
 private:
 
-    ::osl::Mutex&                                   m_aSharedMutex          ;
-    ::cppu::OMultiTypeInterfaceContainerHelper      m_aMultiTypeContainer   ;   // Container to hold listener
+    ::osl::Mutex&									m_aSharedMutex			;
+    ::cppu::OMultiTypeInterfaceContainerHelper		m_aMultiTypeContainer	;	// Container to hold listener
 
-};  // class OConnectionPointContainerHelper
+};	// class OConnectionPointContainerHelper
 
 // The namespace aliases are only used in this header
 #undef CSS_UNO
 #undef CSS_LANG
 
-}   // namespace unocontrols
+}	// namespace unocontrols
 
-#endif  // #ifndef _OCONNECTIONPOINTCONTAINERHELPER_HXX
+#endif	// #ifndef _OCONNECTIONPOINTCONTAINERHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

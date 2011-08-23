@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,44 +47,44 @@ using namespace com::sun::star::xml::sax;
 
 ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const Sequence < Sequence < PropertyValue > > &rManList )
 {
-    const OUString sFileEntryElement    ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_FILE_ENTRY ) );
-    const OUString sManifestElement     ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_MANIFEST ) );
+    const OUString sFileEntryElement   	( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_FILE_ENTRY ) );
+    const OUString sManifestElement    	( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_MANIFEST ) );
     const OUString sEncryptionDataElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ENCRYPTION_DATA ) );
-    const OUString sAlgorithmElement    ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ALGORITHM ) );
+    const OUString sAlgorithmElement	( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ALGORITHM ) );
     const OUString sStartKeyGenerationElement ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_START_KEY_GENERATION ) );
     const OUString sKeyDerivationElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_KEY_DERIVATION ) );
 
-    const OUString sCdataAttribute      ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CDATA ) );
-    const OUString sMediaTypeAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_MEDIA_TYPE ) );
-    const OUString sVersionAttribute    ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_VERSION ) );
-    const OUString sFullPathAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_FULL_PATH ) );
-    const OUString sSizeAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SIZE ) );
-    const OUString sKeySizeAttribute    ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_SIZE ) );
-    const OUString sSaltAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SALT ) );
+    const OUString sCdataAttribute     	( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CDATA ) );
+    const OUString sMediaTypeAttribute 	( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_MEDIA_TYPE ) );
+    const OUString sVersionAttribute 	( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_VERSION ) );
+    const OUString sFullPathAttribute  	( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_FULL_PATH ) );
+    const OUString sSizeAttribute 		( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SIZE ) );
+    const OUString sKeySizeAttribute	( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_SIZE ) );
+    const OUString sSaltAttribute 		( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SALT ) );
     const OUString sInitialisationVectorAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_INITIALISATION_VECTOR ) );
     const OUString sIterationCountAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ITERATION_COUNT ) );
-    const OUString sAlgorithmNameAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM_NAME ) );
+    const OUString sAlgorithmNameAttribute 	( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM_NAME ) );
     const OUString sStartKeyGenerationNameAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_START_KEY_GENERATION_NAME ) );
-    const OUString sKeyDerivationNameAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_DERIVATION_NAME ) );
-    const OUString sChecksumTypeAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM_TYPE ) );
-    const OUString sChecksumAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM) );
+    const OUString sKeyDerivationNameAttribute 	( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_DERIVATION_NAME ) );
+    const OUString sChecksumTypeAttribute 	( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM_TYPE ) );
+    const OUString sChecksumAttribute 	( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM) );
 
-    const OUString sFullPathProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
-    const OUString sVersionProperty     ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) );
-    const OUString sMediaTypeProperty   ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
-    const OUString sIterationCountProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
-    const OUString sSaltProperty        ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
+    const OUString sFullPathProperty  	( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
+    const OUString sVersionProperty 	( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) );
+    const OUString sMediaTypeProperty 	( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
+    const OUString sIterationCountProperty	( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
+    const OUString sSaltProperty 		( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
     const OUString sInitialisationVectorProperty( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
-    const OUString sSizeProperty        ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
-    const OUString sDigestProperty      ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) );
+    const OUString sSizeProperty 		( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
+    const OUString sDigestProperty 		( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) );
 
-    const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
-    const OUString sBlowfish            ( RTL_CONSTASCII_USTRINGPARAM ( "Blowfish CFB" ) );
-    const OUString sPBKDF2              ( RTL_CONSTASCII_USTRINGPARAM ( "PBKDF2" ) );
-    const OUString sChecksumType        ( RTL_CONSTASCII_USTRINGPARAM ( CHECKSUM_TYPE ) );
-    const OUString sStartKeySize        ( RTL_CONSTASCII_USTRINGPARAM ( START_KEY_SIZE ) );
-    const OUString sDerivedKeySize      ( RTL_CONSTASCII_USTRINGPARAM ( DERIVED_KEY_SIZE ) );
-    const OUString sSHA1                ( RTL_CONSTASCII_USTRINGPARAM ( ALGORITHM_SHA1 ) );
+    const OUString sWhiteSpace 			( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
+    const OUString sBlowfish 			( RTL_CONSTASCII_USTRINGPARAM ( "Blowfish CFB" ) );
+    const OUString sPBKDF2 				( RTL_CONSTASCII_USTRINGPARAM ( "PBKDF2" ) );
+    const OUString sChecksumType 		( RTL_CONSTASCII_USTRINGPARAM ( CHECKSUM_TYPE ) );
+    const OUString sStartKeySize 		( RTL_CONSTASCII_USTRINGPARAM ( START_KEY_SIZE ) );
+    const OUString sDerivedKeySize 		( RTL_CONSTASCII_USTRINGPARAM ( DERIVED_KEY_SIZE ) );
+    const OUString sSHA1 		        ( RTL_CONSTASCII_USTRINGPARAM ( ALGORITHM_SHA1 ) );
 
     ::comphelper::AttributeList * pRootAttrList = new ::comphelper::AttributeList;
     const Sequence < PropertyValue > *pSequence = rManList.getConstArray();
@@ -139,7 +139,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
           || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII ) ) )
           || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII ) ) )
           || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII ) ) ) 
           || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ) ) )
 
           || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII ) ) )

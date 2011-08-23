@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     FixedText   m_aHeightFT;
     MetricField m_aHeightMF;
     CheckBox    m_aKeepRatioCB;
-
+    
     FixedLine   m_aSeparatorFL;
 
     FixedLine   m_aAnchorFL;
@@ -71,7 +71,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     MetricField m_aHoriByMF;
     FixedText   m_aHoriToFT;
     ListBox     m_aHoriToLB;
-
+    
     CheckBox    m_aHoriMirrorCB;
 
     FixedText   m_aVertFT;
@@ -82,16 +82,16 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     ListBox     m_aVertToLB;
 
     CheckBox    m_aFollowCB;
-
+    
     SvxSwFrameExample m_aExampleWN;
-
+    
     Link        m_aValidateLink;
-
+    
     //'string provider'
     SvxSwFramePosString m_aFramePosString;
-
+    
     Rectangle           m_aRect; //size of all selected objects
-    Rectangle           m_aWorkArea;
+    Rectangle           m_aWorkArea; 
     Point               m_aAnchorPos;
 
     FrmMap* m_pVMap;
@@ -103,7 +103,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     short   m_nOldHRel;
     short   m_nOldV;
     short   m_nOldVRel;
-
+    
     double  m_fWidthHeightRatio; //width-to-height ratio to support the KeepRatio button
     USHORT  m_nHtmlMode;
     bool    m_bHtmlMode;
@@ -115,7 +115,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     bool    m_bIsInRightToLeft;
 
 
-
+    
     DECL_LINK( RangeModifyHdl, Edit * );
     DECL_LINK( AnchorTypeHdl, RadioButton * );
     DECL_LINK( PosHdl, ListBox * );
@@ -123,7 +123,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     DECL_LINK( MirrorHdl, CheckBox * );
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( ProtectHdl, TriStateBox *);
-
+    
     void            InitPos(short nAnchorType, USHORT nH, USHORT nHRel,
                             USHORT nV,  USHORT nVRel,
                             long   nX,  long   nY);
@@ -136,10 +136,10 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 
     void            UpdateExample();
 
-public:
+public:     
     SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
     ~SvxSwPosSizeTabPage();
-
+    
     static SfxTabPage* Create( Window*, const SfxItemSet& );
     static USHORT*     GetRanges();
 
@@ -149,9 +149,9 @@ public:
     virtual int  DeactivatePage( SfxItemSet* pSet );
 
     void    EnableAnchorTypes(USHORT nAnchorEnable);
-
+    
     void SetValidateFramePosLink( const Link& rLink )
-            {m_aValidateLink = rLink;}
+            {m_aValidateLink = rLink;}        
 
     void SetView( const SdrView* pSdrView );
 };

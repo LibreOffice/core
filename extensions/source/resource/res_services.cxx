@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, XRegistryKey 
             Reference< XRegistryKey > xNewKey =
                 pRegistryKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") )
                     + loop->sImplementationName + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ) ) );
-
+    
             for( sal_Int32 i = 0; i < loop->aSupportedServices.getLength(); ++i )
                 xNewKey->createKey( loop->aSupportedServices.getConstArray()[i]);
 
@@ -91,7 +91,7 @@ sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, XRegistryKey 
                 xNewKey->setStringValue( loop->aSupportedServices[ 0 ] );
             }
         }
-
+        
         return sal_True;
     }
     catch (Exception &)
@@ -124,7 +124,7 @@ void * SAL_CALL component_getFactory(
         }
     }
     return pRet;
-}
+}                                                                                                         
 
 }   // extern "C"
 

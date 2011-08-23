@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,17 +39,17 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 
 //==========================================================================
-//  FmShowColsDialog
+//	FmShowColsDialog
 //==========================================================================
 
 class FmShowColsDialog : public ModalDialog
 {
-    ListBox         m_aList;
-    FixedText       m_aLabel;
-    OKButton        m_aOK;
-    CancelButton    m_aCancel;
+    ListBox			m_aList;
+    FixedText		m_aLabel;
+    OKButton		m_aOK;
+    CancelButton	m_aCancel;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >   m_xColumns;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > 	m_xColumns;
 
 public:
     FmShowColsDialog( Window* pParent );

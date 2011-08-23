@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,40 +55,40 @@ namespace bib
     {
         private:
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >            m_xController;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xToolBarRef;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xGridRef;
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                  m_xGridWin;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >			m_xController;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > 				m_xToolBarRef;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > 				m_xGridRef;
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >					m_xGridWin;
 
-            BibDataManager*         pDatMan;
-            BibToolBar*             pToolBar;
-            BibGridwin*             pGridWin;
+            BibDataManager* 		pDatMan;
+            BibToolBar* 			pToolBar;
+            BibGridwin* 			pGridWin;
 
             DECL_LINK( RecalcLayout_Impl, void* );
 
         protected:
 
-            void                    createToolBar();
-            void                    createGridWin();
+            void					createToolBar();
+            void					createGridWin();
 
             // FormControlContainer ----------
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
                     getControlContainer();
         public:
             // #100312# -------------------
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception >
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception > 
                     getDispatchProviderInterception();
 
             BibBeamer(Window* pParent,BibDataManager* pDatMan, WinBits nStyle = WB_3DLOOK );
             ~BibBeamer();
 
-            void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);
+            void	SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);
 
-            virtual void            GetFocus();
+            virtual void			GetFocus();
     };
 
 //.........................................................................
-}   // namespace bib
+}	// namespace bib
 //.........................................................................
 
 #endif

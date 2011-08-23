@@ -398,7 +398,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         }
         return true;
     }
-
+    
     /* ------------------------------------------------------------------ */
     /** verifies that the content of a given cell equals a given string
     */
@@ -425,7 +425,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         );
         cell.setString( text );
     }
-
+   
     /* ------------------------------------------------------------------ */
     /** sets a numeric value in a given cell
     */
@@ -436,7 +436,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         );
         cell.setValue( value );
     }
-
+   
     /* ------------------------------------------------------------------ */
     /** sets a numeric value in a given cell
     */
@@ -450,7 +450,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         String[][] args = new String[][] { new String[] { "=INVALID_FUNCTION()" } };
         cell.setFormulaArray( args );
     }
-
+   
     /* ------------------------------------------------------------------ */
     /** binds the given control model to the given cell in the first sheet,
      *  using the given service name for the binding
@@ -469,7 +469,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         NamedValue[] parameters = new NamedValue[] { new NamedValue() };
         parameters[0].Name = "BoundCell";
         parameters[0].Value = address;
-
+        
         XValueBinding cellBinding = (XValueBinding)UnoRuntime.queryInterface( XValueBinding.class,
             m_document.createInstanceWithArguments( _bindingServiceName, parameters )
         );
@@ -492,7 +492,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     {
         CellRangeAddress listSourceAddress = new CellRangeAddress( (short)0, (int)_sourceCol, (int)_rowStart, (int)_sourceCol, (int)_rowEnd );
         NamedValue addressParameter = new NamedValue( "CellRange", listSourceAddress );
-
+        
         XListEntrySource listSource = (XListEntrySource)UnoRuntime.queryInterface( XListEntrySource.class,
             m_document.createInstanceWithArguments( "com.sun.star.table.CellRangeListSource", new NamedValue[]{ addressParameter } )
         );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,36 +48,36 @@ class SdrView;
 class SvxTextAnimationPage : public SfxTabPage
 {
 private:
-    FixedLine           aFlEffect;
-    FixedText           aFtEffects;
-    ListBox             aLbEffect;
-    //ValueSet          aCtlEffect;
-    FixedText           aFtDirection;
-    ImageButton         aBtnUp;
-    ImageButton         aBtnLeft;
-    ImageButton         aBtnRight;
-    ImageButton         aBtnDown;
+    FixedLine			aFlEffect;
+    FixedText			aFtEffects;
+    ListBox				aLbEffect;
+    //ValueSet			aCtlEffect;
+    FixedText			aFtDirection;	
+    ImageButton			aBtnUp;
+    ImageButton			aBtnLeft;
+    ImageButton			aBtnRight;
+    ImageButton			aBtnDown;
 
-    FixedLine           aFlProperties;
-    TriStateBox         aTsbStartInside;
-    TriStateBox         aTsbStopInside;
+    FixedLine			aFlProperties;	
+    TriStateBox			aTsbStartInside;
+    TriStateBox			aTsbStopInside;
 
-    FixedText           aFtCount;
-    TriStateBox         aTsbEndless;
-    NumericField        aNumFldCount;
+    FixedText			aFtCount;
+    TriStateBox			aTsbEndless;
+    NumericField		aNumFldCount;
 
-    FixedText           aFtAmount;
-    TriStateBox         aTsbPixel;
-    MetricField         aMtrFldAmount;
+    FixedText			aFtAmount;
+    TriStateBox			aTsbPixel;
+    MetricField			aMtrFldAmount;
 
-    FixedText           aFtDelay;
-    TriStateBox         aTsbAuto;
-    MetricField         aMtrFldDelay;
+    FixedText			aFtDelay;
+    TriStateBox			aTsbAuto;
+    MetricField			aMtrFldDelay;
 
-    const SfxItemSet&   rOutAttrs;
-    SdrTextAniKind      eAniKind;
-    FieldUnit           eFUnit;
-    SfxMapUnit          eUnit;
+    const SfxItemSet&	rOutAttrs;
+    SdrTextAniKind		eAniKind;
+    FieldUnit			eFUnit;
+    SfxMapUnit			eUnit;
 
 #ifdef _SVX_TEXTANIM_CXX
     DECL_LINK( SelectEffectHdl_Impl, void * );
@@ -86,8 +86,8 @@ private:
     DECL_LINK( ClickPixelHdl_Impl, void * );
     DECL_LINK( ClickDirectionHdl_Impl, ImageButton * );
 
-    void                SelectDirection( SdrTextAniDirection nValue );
-    USHORT              GetSelectedDirection();
+    void				SelectDirection( SdrTextAniDirection nValue );
+    USHORT				GetSelectedDirection();
 #endif
 
 public:
@@ -95,13 +95,13 @@ public:
     SvxTextAnimationPage( Window* pWindow, const SfxItemSet& rInAttrs );
     ~SvxTextAnimationPage();
 
-    static SfxTabPage*  Create( Window*, const SfxItemSet& );
-    static  USHORT*     GetRanges();
+    static SfxTabPage* 	Create( Window*, const SfxItemSet& );
+    static  USHORT*	    GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet & );
+    virtual BOOL 		FillItemSet( SfxItemSet& );
+    virtual void 		Reset( const SfxItemSet & );
 
-    void         Construct();
+    void 		 Construct();
 };
 
 /*************************************************************************
@@ -112,10 +112,10 @@ public:
 class SvxTextTabDialog : public SfxTabDialog
 {
 private:
-    const SfxItemSet&   rOutAttrs;
-    const SdrView*      pView;
+    const SfxItemSet&	rOutAttrs;
+    const SdrView*		pView;
 
-    virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void		PageCreated( USHORT nId, SfxTabPage &rPage );
 
 public:
 

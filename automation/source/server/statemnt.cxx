@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -169,7 +169,7 @@ StatementFlow::StatementFlow( ULONG nServiceId, SCmdStream *pCmdIn, ImplRemoteCo
     if( nParams & PARAM_USHORT_1 )  pCmdIn->Read( nSNr1 );
     if( nParams & PARAM_ULONG_1 )   pCmdIn->Read( nLNr1 );
     if( nParams & PARAM_STR_1 )     pCmdIn->Read( aString1 );
-    if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 ); // sollte nie auftreten!!
+    if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 );	// sollte nie auftreten!!
 
 #if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Reading FlowControl: " );
@@ -196,7 +196,7 @@ void StatementFlow::SendViaSocket()
     bSending = TRUE;
     if ( pCommLink )
     {
-        if ( !pCommLink->TransferDataStream( pRet->GetStream() ) )  // tritt ein Fehler auf, so wird sofort gelöscht ...
+        if ( !pCommLink->TransferDataStream( pRet->GetStream() ) )	// tritt ein Fehler auf, so wird sofort gelöscht ...
             pCommLink = NULL;
     }
     else
@@ -225,15 +225,15 @@ BOOL StatementFlow::Execute()
             if ( !bUseIPC )
             {
                 // bBool1 wurde im CTOR auf FALSE initialisiert
-                if ( !bBool1 )  // also erster Durchlauf
+                if ( !bBool1 )	// also erster Durchlauf
                 {
                     pRemoteControl->pRetStream = pRet->GetStream();
-                    bBool1 = TRUE;  // wurde im CTOR auf FALSE initialisiert
+                    bBool1 = TRUE;	// wurde im CTOR auf FALSE initialisiert
                     nRetryCount = nRetryCount * 4;
                 }
-                if ( pRemoteControl->pRetStream && (nRetryCount--) )    // also solange nicht abgeholt
+                if ( pRemoteControl->pRetStream && (nRetryCount--) )	// also solange nicht abgeholt
                 {
-                    return FALSE;   // Bitte einmal vom Callstack runter
+                    return FALSE;	// Bitte einmal vom Callstack runter
                 }
             }
 
@@ -246,7 +246,7 @@ BOOL StatementFlow::Execute()
     {
     case F_EndCommandBlock:
         if ( !bUseIPC )
-        {   // wird oben abgehandelt
+        {	// wird oben abgehandelt
             pRet->Reset();
             IsError = FALSE;
         }
@@ -265,7 +265,7 @@ BOOL StatementFlow::Execute()
         #endif
 
         break;
-//  case RET_:
+//	case RET_:
     default:
         DBG_ERROR( "Unknown Flowcontrol" );
         break;
@@ -287,7 +287,7 @@ static short ImpGetRType( Window *pWin, SmartId aUId )
     if( (nUId & 0xE0000000) == 0 ) // keine auto ID
         nRT = C_NoType;
     else {
-//      if( (nUId & 0x1F) == 0 ) // globale Resource
+//		if( (nUId & 0x1F) == 0 ) // globale Resource
         if( (nUId & 0x1FF) == 0 ) // globale Resource GH: soweit ich das verstanden habe 1FF
             nRT = (short)(C_TabPage - 1 + (nUId >> 29));
         else
@@ -307,68 +307,68 @@ static short ImpGetRType( Window *pWin, SmartId aUId )
 #endif
     WindowType eRT = pWin->GetType();
     switch( eRT ) {
-        case WINDOW_WINDOW:             nRT = C_Window            ; break;
+        case WINDOW_WINDOW:				nRT = C_Window		      ; break;
 
-        case WINDOW_TABCONTROL:         nRT = C_TabControl        ; break;
-        case WINDOW_RADIOBUTTON:        nRT = C_RadioButton       ; break;
-        case WINDOW_CHECKBOX:           nRT = C_CheckBox          ; break;
-        case WINDOW_TRISTATEBOX:        nRT = C_TriStateBox       ; break;
-        case WINDOW_EDIT:               nRT = C_Edit              ; break;
-        case WINDOW_MULTILINEEDIT:      nRT = C_MultiLineEdit     ; break;
-        case WINDOW_MULTILISTBOX:       nRT = C_MultiListBox      ; break;
-        case WINDOW_LISTBOX:            nRT = C_ListBox           ; break;
-        case WINDOW_COMBOBOX:           nRT = C_ComboBox          ; break;
-        case WINDOW_PUSHBUTTON:         nRT = C_PushButton        ; break;
-        case WINDOW_SPINFIELD:          nRT = C_SpinField         ; break;
-        case WINDOW_PATTERNFIELD:       nRT = C_PatternField      ; break;
-        case WINDOW_NUMERICFIELD:       nRT = C_NumericField      ; break;
-        case WINDOW_METRICFIELD:        nRT = C_MetricField       ; break;
-        case WINDOW_CURRENCYFIELD:      nRT = C_CurrencyField     ; break;
-        case WINDOW_DATEFIELD:          nRT = C_DateField         ; break;
-        case WINDOW_TIMEFIELD:          nRT = C_TimeField         ; break;
-        case WINDOW_IMAGERADIOBUTTON:   nRT = C_ImageRadioButton  ; break;
-        case WINDOW_NUMERICBOX:         nRT = C_NumericBox        ; break;
-        case WINDOW_METRICBOX:          nRT = C_MetricBox         ; break;
-        case WINDOW_CURRENCYBOX:        nRT = C_CurrencyBox       ; break;
-        case WINDOW_DATEBOX:            nRT = C_DateBox           ; break;
-        case WINDOW_TIMEBOX:            nRT = C_TimeBox           ; break;
-        case WINDOW_IMAGEBUTTON:        nRT = C_ImageButton       ; break;
-        case WINDOW_MENUBUTTON:         nRT = C_MenuButton        ; break;
-        case WINDOW_MOREBUTTON:         nRT = C_MoreButton        ; break;
+        case WINDOW_TABCONTROL:			nRT = C_TabControl        ; break;
+        case WINDOW_RADIOBUTTON:		nRT = C_RadioButton       ; break;
+        case WINDOW_CHECKBOX:			nRT = C_CheckBox          ; break;
+        case WINDOW_TRISTATEBOX:		nRT = C_TriStateBox       ; break;
+        case WINDOW_EDIT:				nRT = C_Edit              ; break;
+        case WINDOW_MULTILINEEDIT:		nRT = C_MultiLineEdit     ; break;
+        case WINDOW_MULTILISTBOX:		nRT = C_MultiListBox      ; break;
+        case WINDOW_LISTBOX:			nRT = C_ListBox           ; break;
+        case WINDOW_COMBOBOX:			nRT = C_ComboBox          ; break;
+        case WINDOW_PUSHBUTTON:			nRT = C_PushButton        ; break;
+        case WINDOW_SPINFIELD:			nRT = C_SpinField         ; break;
+        case WINDOW_PATTERNFIELD:		nRT = C_PatternField      ; break;
+        case WINDOW_NUMERICFIELD:		nRT = C_NumericField      ; break;
+        case WINDOW_METRICFIELD:		nRT = C_MetricField       ; break;
+        case WINDOW_CURRENCYFIELD:		nRT = C_CurrencyField     ; break;
+        case WINDOW_DATEFIELD:			nRT = C_DateField         ; break;
+        case WINDOW_TIMEFIELD:			nRT = C_TimeField         ; break;
+        case WINDOW_IMAGERADIOBUTTON:	nRT = C_ImageRadioButton  ; break;
+        case WINDOW_NUMERICBOX:			nRT = C_NumericBox        ; break;
+        case WINDOW_METRICBOX:			nRT = C_MetricBox         ; break;
+        case WINDOW_CURRENCYBOX:		nRT = C_CurrencyBox       ; break;
+        case WINDOW_DATEBOX:			nRT = C_DateBox           ; break;
+        case WINDOW_TIMEBOX:			nRT = C_TimeBox           ; break;
+        case WINDOW_IMAGEBUTTON:		nRT = C_ImageButton       ; break;
+        case WINDOW_MENUBUTTON:			nRT = C_MenuButton        ; break;
+        case WINDOW_MOREBUTTON:			nRT = C_MoreButton        ; break;
 
 
-        case WINDOW_TABPAGE:            nRT = C_TabPage;        break;
-        case WINDOW_MODALDIALOG:        nRT = C_ModalDlg;       break;
-        case WINDOW_FLOATINGWINDOW:     nRT = C_FloatWin;       break;
-        case WINDOW_MODELESSDIALOG:     nRT = C_ModelessDlg;    break;
-        case WINDOW_WORKWINDOW:         nRT = C_WorkWin;        break;
-        case WINDOW_DOCKINGWINDOW:      nRT = C_DockingWin;     break;
+        case WINDOW_TABPAGE:			nRT = C_TabPage;		break;
+        case WINDOW_MODALDIALOG:		nRT = C_ModalDlg;		break;
+        case WINDOW_FLOATINGWINDOW:		nRT = C_FloatWin;		break;
+        case WINDOW_MODELESSDIALOG:		nRT = C_ModelessDlg;	break;
+        case WINDOW_WORKWINDOW:			nRT = C_WorkWin;		break;
+        case WINDOW_DOCKINGWINDOW:		nRT = C_DockingWin;		break;
 
-        case WINDOW_MESSBOX:            nRT = C_MessBox;        break;
-        case WINDOW_INFOBOX:            nRT = C_InfoBox;        break;
-        case WINDOW_WARNINGBOX:         nRT = C_WarningBox;     break;
-        case WINDOW_ERRORBOX:           nRT = C_ErrorBox;       break;
-        case WINDOW_QUERYBOX:           nRT = C_QueryBox;       break;
+        case WINDOW_MESSBOX:			nRT = C_MessBox;		break;
+        case WINDOW_INFOBOX:			nRT = C_InfoBox;		break;
+        case WINDOW_WARNINGBOX:			nRT = C_WarningBox;		break;
+        case WINDOW_ERRORBOX:			nRT = C_ErrorBox;		break;
+        case WINDOW_QUERYBOX:			nRT = C_QueryBox;		break;
 #if 0 //ifndef VCL
-        case WINDOW_FILEDIALOG:         nRT = C_FileDlg;        break;
-        case WINDOW_PATHDIALOG:         nRT = C_PathDlg;        break;
-        case WINDOW_PRINTDIALOG:        nRT = C_PrintDlg;       break;
-        case WINDOW_PRINTERSETUPDIALOG: nRT = C_PrinterSetupDlg;break;
-        case WINDOW_COLORDIALOG:        nRT = C_ColorDlg;       break;
+        case WINDOW_FILEDIALOG:			nRT = C_FileDlg;		break;
+        case WINDOW_PATHDIALOG:			nRT = C_PathDlg;		break;
+        case WINDOW_PRINTDIALOG:		nRT = C_PrintDlg;		break;
+        case WINDOW_PRINTERSETUPDIALOG:	nRT = C_PrinterSetupDlg;break;
+        case WINDOW_COLORDIALOG:		nRT = C_ColorDlg;		break;
 #endif
-        case WINDOW_TABDIALOG:          nRT = C_TabDlg;         break;
-//      case WINDOW_TABDIALOG:          nRT = C_SingleTabDlg;   break;
+        case WINDOW_TABDIALOG:			nRT = C_TabDlg;			break;
+//		case WINDOW_TABDIALOG:			nRT = C_SingleTabDlg;	break;
 
-        case WINDOW_PATTERNBOX:         nRT = C_PatternBox;     break;
-        case WINDOW_TOOLBOX:            nRT = C_ToolBox;        break;
-// Gibts nicht       case WINDOW_VALUESET:          nRT = C_ValueSet;       break;
-        case WINDOW_CONTROL:            nRT = C_Control;        break;
-        case WINDOW_OKBUTTON:           nRT = C_OkButton;       break;
-        case WINDOW_CANCELBUTTON:       nRT = C_CancelButton;   break;
-        case WINDOW_BUTTONDIALOG:       nRT = C_ButtonDialog;   break;
-        case WINDOW_TREELISTBOX:        nRT = C_TreeListBox;    break;
+        case WINDOW_PATTERNBOX:			nRT = C_PatternBox;		break;
+        case WINDOW_TOOLBOX:			nRT = C_ToolBox;		break;
+// Gibts nicht       case WINDOW_VALUESET:			nRT = C_ValueSet;		break;
+        case WINDOW_CONTROL:			nRT = C_Control;		break;
+        case WINDOW_OKBUTTON:			nRT = C_OkButton;		break;
+        case WINDOW_CANCELBUTTON:		nRT = C_CancelButton;	break;
+        case WINDOW_BUTTONDIALOG:		nRT = C_ButtonDialog;	break;
+        case WINDOW_TREELISTBOX:		nRT = C_TreeListBox;	break;
 
-        case WINDOW_DIALOG:             nRT = C_Dialog;         break;
+        case WINDOW_DIALOG:				nRT = C_Dialog;			break;
     }
 #ifdef DBG_UTIL
     // Die Werte n sind bei den WindowTypen nicht mehr vergeben, werden aber in der AutoID noch verwendet
@@ -704,7 +704,7 @@ BOOL StatementSlot::Execute()
     }
 
 
-/*  Neues Verfahren ab 334!
+/*	Neues Verfahren ab 334!
     Neue Methode zum einstellen, daß Modale Dialoge immer Asynchron aufgerufen werden
     und echter Returnwert, ob Slot geklappt hat
     und Testen ob Slot überhaupt durch UI aufgerufen werden kann        */
@@ -755,13 +755,13 @@ StatementCommand::StatementCommand( StatementList *pAfterThis, USHORT MethodId, 
     m_pDbgWin->AddText( " Methode: " );
     m_pDbgWin->AddText( aSmartMethodId.GetText() );
     m_pDbgWin->AddText( " Params:" );
-    if( nParams & PARAM_USHORT_1 )  {m_pDbgWin->AddText( " n1:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr1 ) );}
-    if( nParams & PARAM_USHORT_2 )  {m_pDbgWin->AddText( " n2:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr2 ) );}
-    if( nParams & PARAM_USHORT_3 )  {m_pDbgWin->AddText( " n3:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr3 ) );}
-    if( nParams & PARAM_USHORT_4 )  {m_pDbgWin->AddText( " n4:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr4 ) );}
-    if( nParams & PARAM_ULONG_1 )   {m_pDbgWin->AddText( " nl1:" );m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );}
-    if( nParams & PARAM_STR_1 )     {m_pDbgWin->AddText( " s1:" );m_pDbgWin->AddText( aString1 );}
-    if( nParams & PARAM_STR_2 )     {m_pDbgWin->AddText( " s2:" );m_pDbgWin->AddText( aString2 );}
+    if( nParams & PARAM_USHORT_1 )	{m_pDbgWin->AddText( " n1:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr1 ) );}
+    if( nParams & PARAM_USHORT_2 )	{m_pDbgWin->AddText( " n2:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr2 ) );}
+    if( nParams & PARAM_USHORT_3 )	{m_pDbgWin->AddText( " n3:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr3 ) );}
+    if( nParams & PARAM_USHORT_4 )	{m_pDbgWin->AddText( " n4:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr4 ) );}
+    if( nParams & PARAM_ULONG_1 )	{m_pDbgWin->AddText( " nl1:" );m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );}
+    if( nParams & PARAM_STR_1 )		{m_pDbgWin->AddText( " s1:" );m_pDbgWin->AddText( aString1 );}
+    if( nParams & PARAM_STR_2 )		{m_pDbgWin->AddText( " s2:" );m_pDbgWin->AddText( aString2 );}
     if( nParams & PARAM_BOOL_1 )    {m_pDbgWin->AddText( " b1:" );m_pDbgWin->AddText( bBool1 ? "TRUE" : "FALSE" );}
     if( nParams & PARAM_BOOL_2 )    {m_pDbgWin->AddText( " b2:" );m_pDbgWin->AddText( bBool2 ? "TRUE" : "FALSE" );}
     m_pDbgWin->AddText( "\n" );
@@ -788,28 +788,28 @@ StatementCommand::StatementCommand( SCmdStream *pCmdIn )
     aSmartMethodId = SmartId( nMethodId );
     pCmdIn->Read( nParams );
 
-    if( nParams & PARAM_USHORT_1 )  pCmdIn->Read( nNr1 );
-    if( nParams & PARAM_USHORT_2 )  pCmdIn->Read( nNr2 );
-    if( nParams & PARAM_USHORT_3 )  pCmdIn->Read( nNr3 );
-    if( nParams & PARAM_USHORT_4 )  pCmdIn->Read( nNr4 );
-    if( nParams & PARAM_ULONG_1 )   pCmdIn->Read( nLNr1 );
-    if( nParams & PARAM_STR_1 )     pCmdIn->Read( aString1 );
-    if( nParams & PARAM_STR_2 )     pCmdIn->Read( aString2 );
-    if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 );
-    if( nParams & PARAM_BOOL_2 )    pCmdIn->Read( bBool2 );
+    if( nParams & PARAM_USHORT_1 )	pCmdIn->Read( nNr1 );
+    if( nParams & PARAM_USHORT_2 )	pCmdIn->Read( nNr2 );
+    if( nParams & PARAM_USHORT_3 )	pCmdIn->Read( nNr3 );
+    if( nParams & PARAM_USHORT_4 )	pCmdIn->Read( nNr4 );
+    if( nParams & PARAM_ULONG_1 )	pCmdIn->Read( nLNr1 );
+    if( nParams & PARAM_STR_1 )		pCmdIn->Read( aString1 );
+    if( nParams & PARAM_STR_2 )		pCmdIn->Read( aString2 );
+    if( nParams & PARAM_BOOL_1 )	pCmdIn->Read( bBool1 );
+    if( nParams & PARAM_BOOL_2 )	pCmdIn->Read( bBool2 );
 
 #if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Reading Conmmand:" );
     m_pDbgWin->AddText( " Methode: " );
     m_pDbgWin->AddText( aSmartMethodId.GetText() );
     m_pDbgWin->AddText( " Params:" );
-    if( nParams & PARAM_USHORT_1 )  {m_pDbgWin->AddText( " n1:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr1 ) );}
-    if( nParams & PARAM_USHORT_2 )  {m_pDbgWin->AddText( " n2:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr2 ) );}
-    if( nParams & PARAM_USHORT_3 )  {m_pDbgWin->AddText( " n3:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr3 ) );}
-    if( nParams & PARAM_USHORT_4 )  {m_pDbgWin->AddText( " n4:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr4 ) );}
-    if( nParams & PARAM_ULONG_1 )   {m_pDbgWin->AddText( " nl1:" );m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );}
-    if( nParams & PARAM_STR_1 )     {m_pDbgWin->AddText( " s1:" );m_pDbgWin->AddText( aString1 );}
-    if( nParams & PARAM_STR_2 )     {m_pDbgWin->AddText( " s2:" );m_pDbgWin->AddText( aString2 );}
+    if( nParams & PARAM_USHORT_1 )	{m_pDbgWin->AddText( " n1:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr1 ) );}
+    if( nParams & PARAM_USHORT_2 )	{m_pDbgWin->AddText( " n2:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr2 ) );}
+    if( nParams & PARAM_USHORT_3 )	{m_pDbgWin->AddText( " n3:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr3 ) );}
+    if( nParams & PARAM_USHORT_4 )	{m_pDbgWin->AddText( " n4:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr4 ) );}
+    if( nParams & PARAM_ULONG_1 )	{m_pDbgWin->AddText( " nl1:" );m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );}
+    if( nParams & PARAM_STR_1 )		{m_pDbgWin->AddText( " s1:" );m_pDbgWin->AddText( aString1 );}
+    if( nParams & PARAM_STR_2 )		{m_pDbgWin->AddText( " s2:" );m_pDbgWin->AddText( aString2 );}
     if( nParams & PARAM_BOOL_1 )    {m_pDbgWin->AddText( " b1:" );m_pDbgWin->AddText( bBool1 ? "TRUE" : "FALSE" );}
     if( nParams & PARAM_BOOL_2 )    {m_pDbgWin->AddText( " b2:" );m_pDbgWin->AddText( bBool2 ? "TRUE" : "FALSE" );}
     m_pDbgWin->AddText( "\n" );
@@ -851,7 +851,7 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
             pBase = pBase->GetParent();
     }
 
-    {   // Klammerung, so daß der String nicht während der Rekursion bestehen bleibt
+    {	// Klammerung, so daß der String nicht während der Rekursion bestehen bleibt
         String aName;
         BOOL bSkip = FALSE;
 
@@ -959,15 +959,15 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                     TypeString(pBase->GetType()).Append(aTypeSuffix).AppendAscii(": ").Append(aName), FALSE );
 
 
-            if ( pBase->GetType() == WINDOW_TOOLBOX )   // Buttons und Controls auf Toolboxen.
+            if ( pBase->GetType() == WINDOW_TOOLBOX )	// Buttons und Controls auf Toolboxen.
             {
                 ToolBox *pTB = ((ToolBox*)pBase);
                 USHORT i;
                 for ( i = 0; i < pTB->GetItemCount() ; i++ )
                 {
                     aName = String();
-//                  if ( aName.Len() == 0 )
-//                      aName = pTB->GetQuickHelpText();
+//					if ( aName.Len() == 0 )
+//						aName = pTB->GetQuickHelpText();
                     if ( aName.Len() == 0 )
                         aName = pTB->GetHelpText( pTB->GetItemId( i ) );
                     if ( aName.Len() == 0 )
@@ -1034,11 +1034,11 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                     }
                 }
 
-                return; // ToolBox ist hier schon komplett abgehandelt.
+                return;	// ToolBox ist hier schon komplett abgehandelt.
             }
 
 
-            if ( pBase->GetType() == WINDOW_BUTTONDIALOG    // Buttons auf Buttondialogen mit ID
+            if ( pBase->GetType() == WINDOW_BUTTONDIALOG	// Buttons auf Buttondialogen mit ID
                 || pBase->GetType() == WINDOW_MESSBOX
                 || pBase->GetType() == WINDOW_INFOBOX
                 || pBase->GetType() == WINDOW_WARNINGBOX
@@ -1078,24 +1078,24 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                             break;
                     }
 
-                    pRet->GenReturn ( RET_WinInfo, SmartId( aID ), (comm_ULONG)pBD->GetPushButton( pBD->GetButtonId(i) )->GetType(),    // So daß der Text angezeigt wird!
+                    pRet->GenReturn ( RET_WinInfo, SmartId( aID ), (comm_ULONG)pBD->GetPushButton( pBD->GetButtonId(i) )->GetType(),	// So daß der Text angezeigt wird!
                         TypeString(pBD->GetPushButton( pBD->GetButtonId(i) )->GetType()).AppendAscii(": ").Append(aName)
                         .AppendAscii(" ButtonId = ").Append(aID), FALSE );
                 }
 
-                return; // ButtonDialog ist hier schon komplett abgehandelt.
+                return;	// ButtonDialog ist hier schon komplett abgehandelt.
             }
 
 
             Menu* pMenu = GetMatchingMenu( pBase );
 
-            if ( pMenu )    // Menus
+            if ( pMenu )	// Menus
             {
                 USHORT i;
                 for ( i = 0; i < pMenu->GetItemCount() ; i++ )
                 {
                     USHORT nID = pMenu->GetItemId( i );
-
+                    
                     aName = String();
                     if ( aName.Len() == 0 )
                         aName = pMenu->GetHelpText( nID );
@@ -1135,7 +1135,7 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                     }
                 }
 
-                return; // Menu ist hier schon komplett abgehandelt.
+                return;	// Menu ist hier schon komplett abgehandelt.
             }
         }
     }
@@ -1152,8 +1152,8 @@ private:
 public:
     SysWinContainer( ToolBox *pClient );
     ~SysWinContainer();
-    virtual void    Resize();
-    virtual void    Resizing( Size& rSize );
+    virtual void	Resize();
+    virtual void	Resizing( Size& rSize );
 };
 
 SysWinContainer::SysWinContainer( ToolBox *pClient )
@@ -1180,8 +1180,8 @@ void SysWinContainer::Resize()
 {
     Size aSize( GetOutputSizePixel() );
     Resizing( aSize );
-//  aSize = pClientWin->GetSizePixel();
-//  aSize = pClientWin->CalcWindowSizePixel();
+//	aSize = pClientWin->GetSizePixel();
+//	aSize = pClientWin->CalcWindowSizePixel();
     if ( aSize != GetSizePixel() )
     {
         SetOutputSizePixel( aSize );
@@ -1215,9 +1215,9 @@ void SysWinContainer::Resizing( Size& rSize )
 
 class DisplayHidWin : public ToolBox
 {
-    Edit    *pEdit;
-    Size    aMinEditSize;
-    USHORT  nLastItemID;
+    Edit	*pEdit;
+    Size	aMinEditSize;
+    USHORT	nLastItemID;
     BOOL bIsDraging;
     BOOL bIsPermanentDraging;
     void SetDraging( BOOL bNewDraging );
@@ -1245,10 +1245,10 @@ public:
     DisplayHidWin();
     ~DisplayHidWin();
 
-    virtual void    Tracking( const TrackingEvent& rTEvt );
-    virtual void    Click();
-    virtual void    Select();
-    virtual void    SetText( const XubString& rStr );
+    virtual void	Tracking( const TrackingEvent& rTEvt );
+    virtual void	Click();
+    virtual void	Select();
+    virtual void	SetText( const XubString& rStr );
 
     void SetDisplayText( const String &aNewText ){ pEdit->SetText(aNewText); }
     String GetDisplayText() const { return pEdit->GetText(); }
@@ -1262,7 +1262,7 @@ public:
     void ConfigSent() { bConfigChanged = FALSE; }
 
     BOOL IsSendData() { return GetItemState( TT_SEND_DATA ) == STATE_CHECK; }
-//  BOOL IsAllWin() { return GetItemState( TT_ALLWIN ) == STATE_CHECK; }
+//	BOOL IsAllWin() { return GetItemState( TT_ALLWIN ) == STATE_CHECK; }
 
     BOOL IsDraging() { return bIsDraging; }
 
@@ -1282,7 +1282,7 @@ DisplayHidWin::DisplayHidWin()
     SetOutStyle( TOOLBOX_STYLE_HANDPOINTER | TOOLBOX_STYLE_FLAT );
     pEdit = new Edit( this, WB_CENTER | WB_BORDER );
     aMinEditSize = GetItemRect( TT_OUTPUT ).GetSize();
-/**/    aMinEditSize=Size(20,20);
+/**/	aMinEditSize=Size(20,20);
     aMinEditSize.Width() *= 12;
     pEdit->SetSizePixel( aMinEditSize );
     pEdit->Show();
@@ -1326,8 +1326,8 @@ void DisplayHidWin::EnableButtons( ULONG nConf )
 
 void DisplayHidWin::Tracking( const TrackingEvent& rTEvt )
 {
-//  if ( nLastItemID == TT_SHOW && GetItemState( TT_SHOW ) == STATE_NOCHECK && ( rTEvt.IsTrackingEnded() || rTEvt.IsTrackingCanceled() ) )
-//      SetDraging( FALSE );
+//	if ( nLastItemID == TT_SHOW && GetItemState( TT_SHOW ) == STATE_NOCHECK && ( rTEvt.IsTrackingEnded() || rTEvt.IsTrackingCanceled() ) )
+//		SetDraging( FALSE );
     if ( nLastItemID == TT_SHOW && GetItemState( TT_SHOW ) == STATE_NOCHECK )
         EndTracking( ENDTRACK_CANCEL );
     ToolBox::Tracking( rTEvt);
@@ -1439,16 +1439,16 @@ BOOL StatementCommand::DisplayHID()
 {
     // Return TRUE -> reexecute command
 
-    if ( !bBool2 )  // Wird auf FALSE initialisiert
+    if ( !bBool2 )	// Wird auf FALSE initialisiert
     {
-        bBool2 = TRUE;              // Wir sind initialisiert.
-        GetTTSettings()->pDisplayInstance = this;   // Und haben die Macht (Alle anderen beenden sich)
+        bBool2 = TRUE;				// Wir sind initialisiert.
+        GetTTSettings()->pDisplayInstance = this;	// Und haben die Macht (Alle anderen beenden sich)
 
         if ( !(nParams & PARAM_ULONG_1) )
         {
-            if( GetTTSettings()->pDisplayHidWin )   // Nichts verändern
+            if( GetTTSettings()->pDisplayHidWin )	// Nichts verändern
                 nLNr1 = GetTTSettings()->pDisplayHidWin->GetConfig();
-            else    // Beim ersten Aufruf wollen wir alles richtig einstellen
+            else	// Beim ersten Aufruf wollen wir alles richtig einstellen
                 nLNr1 = DH_MODE_KURZNAME | DH_MODE_LANGNAME;
 
             if( ((nParams & PARAM_BOOL_1) && bBool1) )
@@ -1464,7 +1464,7 @@ BOOL StatementCommand::DisplayHID()
     if ( GetTTSettings()->pDisplayInstance && GetTTSettings()->pDisplayInstance != this )
     {
         DBG_WARNING("Mehrere DisplayHID am laufen");
-        return FALSE;       // Noch eine andere Instanz macht das gleiche!
+        return FALSE;		// Noch eine andere Instanz macht das gleiche!
     }
 
     if ( !GetTTSettings()->pDisplayHidWin )
@@ -1494,40 +1494,40 @@ BOOL StatementCommand::DisplayHID()
         {
 
 
-#define HIGHLIGHT_WIN( WinPtr )                                     \
-        {                                                           \
-            Color aLineColMem = WinPtr->GetLineColor();             \
-            WinPtr->SetLineColor( Color( COL_WHITE ) );             \
-            Color aFillColMem = WinPtr->GetFillColor();             \
-            WinPtr->SetFillColor( Color( COL_LIGHTRED ) );          \
-            RasterOp aROp = WinPtr->GetRasterOp();                  \
-            WinPtr->SetRasterOp( ROP_XOR );                         \
+#define HIGHLIGHT_WIN( WinPtr )										\
+        {															\
+            Color aLineColMem = WinPtr->GetLineColor();				\
+            WinPtr->SetLineColor( Color( COL_WHITE ) );				\
+            Color aFillColMem = WinPtr->GetFillColor();				\
+            WinPtr->SetFillColor( Color( COL_LIGHTRED ) );			\
+            RasterOp aROp = WinPtr->GetRasterOp();					\
+            WinPtr->SetRasterOp( ROP_XOR );							\
             Size aSz = WinPtr->PixelToLogic( WinPtr->GetSizePixel() );\
             ULONG nMaxCornerRadius = WinPtr->PixelToLogic( Point( 80, 0 ) ).X();\
             ULONG iCorner = std::max ((ULONG) 8, (ULONG) std::min( nMaxCornerRadius, (ULONG) std::min((ULONG) (aSz.Width() / 6), (ULONG)(aSz.Height() / 6))));\
             WinPtr->DrawRect(Rectangle(Point(),aSz), iCorner, iCorner);\
-            WinPtr->SetLineColor( aLineColMem );                    \
-            WinPtr->SetFillColor( aFillColMem );                    \
-            WinPtr->SetRasterOp( aROp );                            \
+            WinPtr->SetLineColor( aLineColMem );					\
+            WinPtr->SetFillColor( aFillColMem );					\
+            WinPtr->SetRasterOp( aROp );							\
         }
 
 
-#define SET_WIN( WinPtr )                                           \
-            if ( StatementList::WinPtrValid(WinPtr) )   \
-            {                                                       \
-                HIGHLIGHT_WIN ( WinPtr );                           \
+#define SET_WIN( WinPtr )											\
+            if ( StatementList::WinPtrValid(WinPtr) )	\
+            {														\
+                HIGHLIGHT_WIN ( WinPtr );							\
             }
 
-#define RESET_WIN( WinPtr )                                         \
-            if ( StatementList::WinPtrValid(WinPtr) )   \
-            {                                                       \
-                WinPtr->Invalidate( INVALIDATE_NOTRANSPARENT );     \
-                WinPtr->Update();       \
+#define RESET_WIN( WinPtr )											\
+            if ( StatementList::WinPtrValid(WinPtr) )	\
+            {														\
+                WinPtr->Invalidate( INVALIDATE_NOTRANSPARENT );		\
+                WinPtr->Update();		\
             }
 
 
             GetTTSettings()->Old = GetTTSettings()->Act;
-//          GetTTSettings()->Act = GetMouseWin();
+//			GetTTSettings()->Act = GetMouseWin();
             GetTTSettings()->Act = GetTTSettings()->pDisplayHidWin->LastMouseMoveWin();
 
             if ( !StatementList::WinPtrValid ( GetTTSettings()->Old ) )
@@ -1559,14 +1559,14 @@ BOOL StatementCommand::DisplayHID()
             }
             else if ( GetTTSettings()->Act )
             {
-//              SET_WIN(GetTTSettings()->Act);
+//				SET_WIN(GetTTSettings()->Act);
                 if ( GetTTSettings()->pDisplayHidWin->IsDisplayTextModified() && GetTTSettings()->pDisplayHidWin->GetDisplayText().Len() > 0 )
                 {
                     GetTTSettings()->Act->SetSmartUniqueId( SmartId( GetTTSettings()->pDisplayHidWin->GetDisplayText().ToInt32() ) );
                     GetTTSettings()->pDisplayHidWin->ClearDisplayTextModified();
                 }
             }
-/*          if ( Application::GetLastInputInterval() > 5000 )   // 5 Sekunden lang nix geschehen
+/*			if ( Application::GetLastInputInterval() > 5000 )	// 5 Sekunden lang nix geschehen
             {
                 GetTTSettings()->pDisplayHidWin->ToTop( TOTOP_NOGRABFOCUS );
             }
@@ -1574,12 +1574,12 @@ BOOL StatementCommand::DisplayHID()
             if ( GetTTSettings()->pDisplayHidWin->IsSendData() /*&& bBool2*/ && GetTTSettings()->Act )
             {
                 if ( !StatementFlow::bSending )
-                {   // Normalerweise syncronisierung über Protokoll. Hier ist das aber asyncron!!!
+                {	// Normalerweise syncronisierung über Protokoll. Hier ist das aber asyncron!!!
                     WriteControlData( GetTTSettings()->Act, GetTTSettings()->pDisplayHidWin->GetConfig() );
-                    new StatementFlow( this, F_EndCommandBlock );   // Kommando zum Senden erzeugen und in que eintragen
+                    new StatementFlow( this, F_EndCommandBlock );	// Kommando zum Senden erzeugen und in que eintragen
                 }
             }
-        }   //if ( GetTTSettings()->pDisplayHidWin->IsDraging() )
+        }	//if ( GetTTSettings()->pDisplayHidWin->IsDraging() )
         else
         {
             if ( GetTTSettings()->Act )
@@ -1589,17 +1589,17 @@ BOOL StatementCommand::DisplayHID()
             }
         }
 
-        if ( pFirst == this )   // Sollte immer so sein, aber besser isses
-            if ( pNext )        // Befehle warten auf Ausführung
-            {                   // An Ende neu einsortieren
+        if ( pFirst == this )	// Sollte immer so sein, aber besser isses
+            if ( pNext )		// Befehle warten auf Ausführung
+            {					// An Ende neu einsortieren
                 Advance();
                 QueStatement( NULL );
             }
-//          {                   // Ersten und 2. austauschen.
-//              pFirst = pNext;
-//              pNext = pNext->pNext;
-//              pFirst->pNext = this;
-//          }
+//			{					// Ersten und 2. austauschen.
+//				pFirst = pNext;
+//				pNext = pNext->pNext;
+//				pFirst->pNext = this;
+//			}
 
     }
     else
@@ -1624,8 +1624,8 @@ private:
 
     Timer InplaceTimer;
 
-//  virtual void MouseButtonUp( const MouseEvent& rMEvt );
-//  virtual void MouseMove( const MouseEvent& rMEvt );
+//	virtual void MouseButtonUp( const MouseEvent& rMEvt );
+//	virtual void MouseMove( const MouseEvent& rMEvt );
 
     PushButton PushButtonTT_PB_NEXT;
     GroupBox GroupBoxTT_GB_TRANSLATION;
@@ -1752,7 +1752,7 @@ IMPL_LINK( TranslateWin, DoSelect, PushButton*, EMPTYARG )
 {
     if ( bSelecting )
     {
-//      ReleaseMouse();
+//		ReleaseMouse();
         bSelecting = FALSE;
     }
     else
@@ -1760,7 +1760,7 @@ IMPL_LINK( TranslateWin, DoSelect, PushButton*, EMPTYARG )
         if ( TestChangedDataSaved() )
         {
             PushButtonTT_PB_RESTORE.Disable();
-//          CaptureMouse();
+//			CaptureMouse();
             bSelecting = TRUE;
         }
     }
@@ -1778,11 +1778,11 @@ IMPL_LINK( TranslateWin, DoRestore, PushButton*, EMPTYARG )
     sTT_E_NEW.SearchAndReplaceAll( CUniString("\\t"), CUniString("\t") );
 
     if ( StatementList::WinPtrValid( pTranslateWin ) && pTranslateWin->GetText().CompareTo( sTT_E_NEW ) == COMPARE_EQUAL )
-    {   // Im ersten schritt nur in der UI zurück
+    {	// Im ersten schritt nur in der UI zurück
         pTranslateWin->SetText( sTT_E_OLD );
     }
     else
-    {   // Im zweite Schritt auch den eingegebenen Text
+    {	// Im zweite Schritt auch den eingegebenen Text
         EditTT_E_NEW.SetText( FixedTextTT_FT_OLD.GetText() );
         PushButtonTT_PB_RESTORE.Disable();
     }
@@ -1867,14 +1867,14 @@ long TranslateWin::VCLEventHook( NotifyEvent& rEvt )
             }
             else if ( Act )
             {
-    //          SET_WIN(Act);
+    //			SET_WIN(Act);
             }
-    /*      if ( Application::GetLastInputInterval() > 5000 )   // 5 Sekunden lang nix geschehen
+    /*		if ( Application::GetLastInputInterval() > 5000 )	// 5 Sekunden lang nix geschehen
             {
                 ToTop();
             }
     */
-        }   //if ( bSelecting )
+        }	//if ( bSelecting )
         else
         {
             if ( Act )
@@ -1908,7 +1908,7 @@ long TranslateWin::VCLEventHook( NotifyEvent& rEvt )
                 EditTT_E_COMMENT.Enable();
                 PushButtonTT_PB_ACCEPT.Enable();
             }
-    //      ReleaseMouse();
+    //		ReleaseMouse();
             bSelecting = FALSE;
         }
     }
@@ -1916,9 +1916,9 @@ long TranslateWin::VCLEventHook( NotifyEvent& rEvt )
     return 0;
 }
 
-#define FDS_ACTION_COLLECT  1
-#define FDS_ACTION_MARK     2
-#define FDS_ACTION_UNMARK   3
+#define FDS_ACTION_COLLECT	1
+#define FDS_ACTION_MARK		2
+#define FDS_ACTION_UNMARK	3
 
 class FindShortcutErrors: public Search
 {
@@ -1934,7 +1934,7 @@ public:
 FindShortcutErrors::FindShortcutErrors()
 : Search( SEARCH_NOOVERLAP | SEARCH_NO_TOPLEVEL_WIN )
 {
-    SetAction( FDS_ACTION_COLLECT );    // Wir fange immer mit sammeln an, ODER??
+    SetAction( FDS_ACTION_COLLECT );	// Wir fange immer mit sammeln an, ODER??
 }
 
 void FindShortcutErrors::SetAction( USHORT nA )
@@ -1975,10 +1975,10 @@ BOOL FindShortcutErrors::IsWinOK( Window *pWin )
             case FDS_ACTION_MARK:
                 {
                     BOOL bMissing = FALSE;
-                    if ( !bHasAccel && aText.Len() )    // should there be an accelarator defined
+                    if ( !bHasAccel && aText.Len() )	// should there be an accelarator defined
                     {
 
-                        Window*     pChild;
+                        Window* 	pChild;
                         pChild = pWin->GetWindow( WINDOW_CLIENT );
 
                         if ( (pChild->GetType() == WINDOW_RADIOBUTTON) ||
@@ -2076,7 +2076,7 @@ String TranslateWin::MarkShortcutErrors( Window* pBase, BOOL bMark )
         FindShortcutErrors aFinder;
         if ( bMark )
         {
-            StatementList::SearchAllWin( pBase, aFinder, TRUE );    // collect Shortcuts first
+            StatementList::SearchAllWin( pBase, aFinder, TRUE );	// collect Shortcuts first
             aFinder.SetAction( FDS_ACTION_MARK );
         }
         else
@@ -2124,7 +2124,7 @@ void StatementCommand::Translate()
         GetTTSettings()->bToTop = FALSE;
     }
 
-//  GetTTSettings()->pTranslateWin->GetWindow( WINDOW_OVERLAP )->Enable( TRUE, TRUE );
+//	GetTTSettings()->pTranslateWin->GetWindow( WINDOW_OVERLAP )->Enable( TRUE, TRUE );
     GetTTSettings()->pTranslateWin->GetWindow( WINDOW_OVERLAP )->EnableInput( TRUE, TRUE );
 
     if ( GetTTSettings()->pTranslateWin->IsTranslationAvailable() )
@@ -2166,7 +2166,7 @@ void StatementCommand::Translate()
                 aTranslation += TypeString( pParentDialog->GetType() );
             }
             else
-                aTranslation.AppendAscii( "0;" );       // Zahl + leerer String
+                aTranslation.AppendAscii( "0;" );		// Zahl + leerer String
             aTranslation += ';';
 
             aTranslation += '\"';
@@ -2219,7 +2219,7 @@ void StatementCommand::Translate()
 }
 
 Window* StatementCommand::GetNextOverlap( Window* pBase )
-{   // Findet irgendwelche Overlap-Fenster, die schließbar aussehen
+{	// Findet irgendwelche Overlap-Fenster, die schließbar aussehen
     // Eventuell muß noch die Auswahl verfeinert werden.
 
     if ( pBase->GetType() != WINDOW_BORDERWINDOW )
@@ -2269,7 +2269,7 @@ Window* StatementCommand::GetNextRecoverWin()
             {
                 Window* pTB = pControl->GetChild( 0 );
                 if ( pControl->GetChildCount() == 1 && pTB->GetType() == WINDOW_TOOLBOX )
-//                  return pTB;
+//				    return pTB;
                     ;   // do not act on floating toolboxes #i38796
                 else
                     return pControl;
@@ -2323,25 +2323,25 @@ BOOL StatementCommand::Execute()
 
 
 #if OSL_DEBUG_LEVEL > 1
-#define REPORT_WIN_CLOSED(pControl, aInfo)          \
-    _REPORT_WIN_CLOSED(pControl, aInfo)             \
+#define	REPORT_WIN_CLOSED(pControl, aInfo)			\
+    _REPORT_WIN_CLOSED(pControl, aInfo)				\
     m_pDbgWin->AddText( aInfo.AppendAscii(" \"").Append( pControl->GetText() ).AppendAscii("\" geschlossen, RType = ").Append( TypeString(pControl->GetType()) ).AppendAscii(", UId = ").Append( UIdString(pControl->GetSmartUniqueOrHelpId()) ) );
 #else
-#define REPORT_WIN_CLOSED(pControl, aInfo) _REPORT_WIN_CLOSED(pControl, aInfo)
+#define	REPORT_WIN_CLOSED(pControl, aInfo) _REPORT_WIN_CLOSED(pControl, aInfo)
 #endif
 
-#define REPORT_WIN_CLOSEDc(pControl, aInfo )        \
+#define	REPORT_WIN_CLOSEDc(pControl, aInfo )		\
     REPORT_WIN_CLOSED(pControl, CUniString(aInfo) )
 
-#define _REPORT_WIN_CLOSED(pControl, aInfo)         \
-    if ( aString1.Len() )                           \
-        aString1 += '\n';                           \
-    aString1 += aInfo;                              \
-    aString1.AppendAscii(" \"");                    \
-    aString1 += pControl->GetText();                \
+#define	_REPORT_WIN_CLOSED(pControl, aInfo)			\
+    if ( aString1.Len() )							\
+        aString1 += '\n';							\
+    aString1 += aInfo;								\
+    aString1.AppendAscii(" \"");					\
+    aString1 += pControl->GetText();				\
     aString1.AppendAscii("\" geschlossen, RType = ");\
-    aString1 += TypeString(pControl->GetType());    \
-    aString1.AppendAscii(", UId = ");               \
+    aString1 += TypeString(pControl->GetType());	\
+    aString1.AppendAscii(", UId = ");				\
     aString1 += UIdString(pControl->GetSmartUniqueOrHelpId());
 
 
@@ -2353,7 +2353,7 @@ BOOL StatementCommand::Execute()
                 nLNr1 = Time().GetTime() + nNr1/10;
                 bBool1 = TRUE;
             }
-            if ( Time().GetTime() < long(nLNr1) )   // Aktuelle Zeit kleiner Endzeit
+            if ( Time().GetTime() < long(nLNr1) )	// Aktuelle Zeit kleiner Endzeit
                 return FALSE;
             break;
         case RC_DisplayHid:
@@ -2364,11 +2364,11 @@ BOOL StatementCommand::Execute()
             {
                 if ( !bBool1 )
                 {
-                    nRetryCount = 150;      // das sollte reichen.
-                    bBool1 = TRUE;          // Nur beim ersten mal!
-                    nNr1 = 1;               // Welcher Button ist dran?
-                    nLNr1 = 0;              // Speichern des AppWin
-                    aString1 = UniString(); // Liste der geschlossenen Fenster
+                    nRetryCount = 150;		// das sollte reichen.
+                    bBool1 = TRUE;			// Nur beim ersten mal!
+                    nNr1 = 1;				// Welcher Button ist dran?
+                    nLNr1 = 0;				// Speichern des AppWin
+                    aString1 = UniString();	// Liste der geschlossenen Fenster
 
                     // So daß nacher auch wieder alles auf Default steht
                     nUseBindings = 0;
@@ -2390,7 +2390,7 @@ BOOL StatementCommand::Execute()
                     bBool2 = FALSE; // flag for wait when all windows are closed
                     pControl->GrabFocus();
 
-                    if (    pControl->GetType() != WINDOW_DOCKINGWINDOW
+                    if (	pControl->GetType() != WINDOW_DOCKINGWINDOW
                          && pControl->GetType() != WINDOW_FLOATINGWINDOW
                          && pControl->GetType() != WINDOW_MODELESSDIALOG
                          && pControl->GetType() != WINDOW_WORKWINDOW
@@ -2401,7 +2401,7 @@ BOOL StatementCommand::Execute()
                         short nRT = ImpGetRType( pControl, pControl->GetSmartUniqueOrHelpId() );
 
                         if ( nRT == C_TabControl && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_TABDIALOG )
-                        {   // Bei Tabcontrol den zugehörigen Tabdialog nehmen
+                        {	// Bei Tabcontrol den zugehörigen Tabdialog nehmen
                             pControl = pControl->GET_REAL_PARENT();
                             nRT = ImpGetRType( pControl, pControl->GetSmartUniqueOrHelpId() );
                         }
@@ -2436,7 +2436,7 @@ BOOL StatementCommand::Execute()
                                                 SET_WINP_CLOSING(pControl);
                                                 pBD->EndDialog(RET_OK);
                                             }
-                                            nNr1 = 10;  // Nochmal alle Buttons der Reihe nach
+                                            nNr1 = 10;	// Nochmal alle Buttons der Reihe nach
                                             break;
                                         case 4:
                                             if ( pBD->GetPushButton( BUTTONID_CANCEL ) )
@@ -2456,7 +2456,7 @@ BOOL StatementCommand::Execute()
                                             }
                                             nNr1++;
                                             break;
-                                        case 2:     // BUG 48239
+                                        case 2:		// BUG 48239
                                         case 1:
                                             if ( pBD->GetPushButton( BUTTONID_NO ) )
                                             {
@@ -2503,19 +2503,19 @@ BOOL StatementCommand::Execute()
 
                                 // Eigentlich nur bei TaskWindows! Hoffen wir mal, daß keine anderen DockingWindows dazwischen hauen.
                                 if ( (Window*)nLNr1 != pControl )
-                                    nNr1 = 1;       // Zum durchprobieren der Buttons beim Schließen
+                                    nNr1 = 1;		// Zum durchprobieren der Buttons beim Schließen
                                 nLNr1 = (ULONG)pControl;
 
                                 return FALSE;
                             }
                         }
                         if ( nRetryCount--
-                                && (    (pControl->GetType() == WINDOW_FLOATINGWINDOW)
-                                    ||  (pControl->GetType() == WINDOW_MODELESSDIALOG)
-                                    ||  (pControl->GetType() == WINDOW_WORKWINDOW)
-                                    ||  (pControl->GetType() == WINDOW_BORDERWINDOW) ) )
+                                && (	(pControl->GetType() == WINDOW_FLOATINGWINDOW)
+                                    ||	(pControl->GetType() == WINDOW_MODELESSDIALOG)
+                                    ||	(pControl->GetType() == WINDOW_WORKWINDOW)
+                                    ||	(pControl->GetType() == WINDOW_BORDERWINDOW) ) )
                         {
-    //                      if ( pControl->GetStyle() & WB_CLOSEABLE )
+    //						if ( pControl->GetStyle() & WB_CLOSEABLE )
                             {
 #ifdef RESET_APPLICATION_TO_BACKING_WINDOW
                                 // Special handling for last Document; do not close the Frame, only the Document
@@ -2535,7 +2535,7 @@ BOOL StatementCommand::Execute()
 
                                                 // nur bei TaskWindows!
                                                 if ( (Window*)nLNr1 != pControl )
-                                                    nNr1 = 1;       // Zum durchprobieren der Buttons beim Schließen
+                                                    nNr1 = 1;		// Zum durchprobieren der Buttons beim Schließen
                                                 nLNr1 = (ULONG)pControl;
 
                                                 return FALSE;
@@ -2552,7 +2552,7 @@ BOOL StatementCommand::Execute()
 
                                     // Eigentlich nur bei TaskWindows!
                                     if ( (Window*)nLNr1 != pControl )
-                                        nNr1 = 1;       // Zum durchprobieren der Buttons beim Schließen
+                                        nNr1 = 1;		// Zum durchprobieren der Buttons beim Schließen
                                     nLNr1 = (ULONG)pControl;
 
                                     return FALSE;
@@ -2568,7 +2568,7 @@ BOOL StatementCommand::Execute()
                     nLNr1 = Time().GetTime() + 100; // 100 = 1 Second
                     bBool2 = TRUE;
                 }
-                if ( Time().GetTime() < long(nLNr1) )   // Aktuelle Zeit kleiner Endzeit
+                if ( Time().GetTime() < long(nLNr1) )	// Aktuelle Zeit kleiner Endzeit
                     return FALSE;
                 else
                     pRet->GenReturn ( RET_Value, aSmartMethodId, aString1);
@@ -2588,7 +2588,7 @@ BOOL StatementCommand::Execute()
                     pRet->GenReturn ( RET_Value, aSmartMethodId, comm_USHORT(CONST_WSFinished) );
                 else
                 {
-                    if ( Time().GetTime() < long(nLNr1) )   // Aktuelle Zeit kleiner Endzeit
+                    if ( Time().GetTime() < long(nLNr1) )	// Aktuelle Zeit kleiner Endzeit
                         return FALSE;
                     pRet->GenReturn ( RET_Value, aSmartMethodId, comm_USHORT(CONST_WSTimeout) );
                 }
@@ -2602,12 +2602,12 @@ BOOL StatementCommand::Execute()
 
     switch ( nMethodId )
     {
-        case RC_AppDelay:       // Diese Befehle werden anderswo behandelt
+        case RC_AppDelay:		// Diese Befehle werden anderswo behandelt
         case RC_DisplayHid:
         case RC_ResetApplication:
         case RC_WaitSlot:
 
-        case RC_AppAbort:       // Sofortiges Löschen aller Befehle
+        case RC_AppAbort:		// Sofortiges Löschen aller Befehle
             break;
         case RC_Assert:
             {
@@ -2640,8 +2640,8 @@ BOOL StatementCommand::Execute()
         {
             BOOL bWait = FALSE;
             ReportError( GEN_RES_STR0( S_NO_ACTIVE_WINDOW ) );
-//          if ( Application::GetAppWindow() )
-//              bWait = Application::GetAppWindow()->IsWait();
+//			if ( Application::GetAppWindow() )
+//				bWait = Application::GetAppWindow()->IsWait();
             pRet->GenReturn ( RET_Value, aSmartMethodId, bWait );
             break;
         }
@@ -2690,12 +2690,12 @@ BOOL StatementCommand::Execute()
                 nUseBindings = 0;
             break;
         case RC_Profile:
-            //  Bei folgenden Parametern passiert folgendes:
-            //  ein boolean=false                   Alles Profiling stoppen (Ergebnisse liefern)
-            //  ein boolean=true, 1-4 ints          Einteilung der Zeiten in Kästchen
-            //  kein! boolean keine ints            loggen jeden Befehls
-            //  kein! boolean 1 int                 loggen alle int Millisekunden
-            //  ein String                          wird in das Logfile übernommen(sonst passiert nichts)
+            //	Bei folgenden Parametern passiert folgendes:
+            //	ein boolean=false					Alles Profiling stoppen (Ergebnisse liefern)
+            //	ein boolean=true, 1-4 ints			Einteilung der Zeiten in Kästchen
+            //	kein! boolean keine ints			loggen jeden Befehls
+            //	kein! boolean 1 int					loggen alle int Millisekunden
+            //  ein String							wird in das Logfile übernommen(sonst passiert nichts)
             if( !(nParams & PARAM_BOOL_1) || bBool1 )
             {
                 if ( !pProfiler )
@@ -2705,7 +2705,7 @@ BOOL StatementCommand::Execute()
                 }
 
                 if( !(nParams & PARAM_BOOL_1) && (nParams & PARAM_USHORT_1) )
-                {   // Autoprofiling: Profile nNr
+                {	// Autoprofiling: Profile nNr
                     if ( pProfiler->IsProfilingPerCommand() )
                     {
                         pProfiler->StopProfilingPerCommand();
@@ -2716,7 +2716,7 @@ BOOL StatementCommand::Execute()
                     pRet->GenReturn( RET_ProfileInfo, SmartId(), pProfiler->GetProfileHeader() );
                 }
                 else if ( nParams & PARAM_USHORT_1 )
-                {   // Partitioning initialisieren: Profile true [,nNr][,nNr][,nNr][,nNr]
+                {	// Partitioning initialisieren: Profile true [,nNr][,nNr][,nNr][,nNr]
                     comm_ULONG nAnzahl=0;
                     if ( nParams & PARAM_USHORT_1 ) { nAnzahl++; };
                     if ( nParams & PARAM_USHORT_2 ) { nAnzahl++; };
@@ -2736,13 +2736,13 @@ BOOL StatementCommand::Execute()
 
                     pProfiler->StartPartitioning();
                 }
-                else if( nParams == PARAM_STR_1 )   // Genau ein String!
-                {   // Nur einen String ins Profiling aufnehmen
+                else if( nParams == PARAM_STR_1 )	// Genau ein String!
+                {	// Nur einen String ins Profiling aufnehmen
                     aString1 += '\n';
                     pRet->GenReturn( RET_ProfileInfo, SmartId(), aString1 );
                 }
                 else
-                {   // Normales Profiling je Kommando: profile
+                {	// Normales Profiling je Kommando: profile
                     if ( pProfiler->IsAutoProfiling() )
                     {
                         pRet->GenReturn( RET_ProfileInfo, SmartId(), pProfiler->GetAutoProfiling() );
@@ -2754,7 +2754,7 @@ BOOL StatementCommand::Execute()
                     pRet->GenReturn( RET_ProfileInfo, SmartId(), pProfiler->GetProfileHeader() );
                 }
             }
-            else        // Profiling wieder ausschalten: Profile false
+            else		// Profiling wieder ausschalten: Profile false
                 if ( pProfiler )
                 {
                     if ( pProfiler->IsProfilingPerCommand() )
@@ -2797,7 +2797,7 @@ BOOL StatementCommand::Execute()
                 {
                     if ( nErr == 1 )
                         ReportError( GEN_RES_STR0( S_NO_POPUP ) );
-                    else
+                    else 
                         ReportError( GEN_RES_STR0( S_NO_SUBMENU ) );
                     break;
                 }
@@ -2811,8 +2811,8 @@ BOOL StatementCommand::Execute()
                         {
                             nItemCount = pMenu->GetItemCount();
                             if ( pMenu->GetMenuFlags() & MENU_FLAG_HIDEDISABLEDENTRIES )
-                            {   // jep, we have to adjust the count
-                                BOOL bLastWasSeperator = TRUE;  // TRUE for Separator at the top
+                            {	// jep, we have to adjust the count
+                                BOOL bLastWasSeperator = TRUE;	// TRUE for Separator at the top
                                 for ( USHORT i = 0 ; i < pMenu->GetItemCount() ; i++ )
                                 {
                                     if ( !pMenu->IsItemEnabled( pMenu->GetItemId( i ) ) )
@@ -2824,7 +2824,7 @@ BOOL StatementCommand::Execute()
                                         bLastWasSeperator = pMenu->GetItemType( i ) == MENUITEM_SEPARATOR;
                                     }
                                 }
-                                if ( bLastWasSeperator )    // Separator at bottom
+                                if ( bLastWasSeperator )	// Separator at bottom
                                     nItemCount--;
                             }
                         }
@@ -2840,8 +2840,8 @@ BOOL StatementCommand::Execute()
                         {
                             nPhysicalIndex = nNr1;
                             if ( pMenu->GetMenuFlags() & MENU_FLAG_HIDEDISABLEDENTRIES )
-                            {   // jep, we have to adjust the position
-                                BOOL bLastWasSeperator = TRUE;  // TRUE for Separator at the top
+                            {	// jep, we have to adjust the position
+                                BOOL bLastWasSeperator = TRUE;	// TRUE for Separator at the top
                                 USHORT nVisibleCount = 0;
                                 for ( USHORT i = 0 ; i < pMenu->GetItemCount() && nVisibleCount < nNr1 ; i++ )
                                 {
@@ -2879,7 +2879,7 @@ BOOL StatementCommand::Execute()
                         {
                             USHORT nLogicalPos = pMenu->GetItemPos(nNr1);
                             if ( MENU_ITEM_NOTFOUND != nLogicalPos && pMenu->GetMenuFlags() & MENU_FLAG_HIDEDISABLEDENTRIES )
-                            {   // jep, we have to adjust the position
+                            {	// jep, we have to adjust the position
                                 if ( !pMenu->IsItemEnabled( nNr1 ) )
                                     nLogicalPos = MENU_ITEM_NOTFOUND;
                                 else
@@ -3011,8 +3011,8 @@ BOOL StatementCommand::Execute()
                             nErrorcode = aDir.GetError();
                             if ( !nErrorcode && !aDir.MakeDir() )
                                 nErrorcode = FSYS_ERR_UNKNOWN;
-//  Workaround für Bug 60693
-//                              nErrorcode = aDir.GetError();
+//	Workaround für Bug 60693
+//								nErrorcode = aDir.GetError();
                         }
                         break;
                     case RC_FileCopy:
@@ -3128,10 +3128,10 @@ BOOL StatementCommand::Execute()
                             {
                                 pRet->GenReturn ( RET_Value, aSmartMethodId, aPath );
                             }
-
-
-
-/* keep old Implementation for now
+                            
+                            
+                            
+/* keep old Implementation for now                            
                             // neues Verzeichnis einlesen
                             if ( (nParams & PARAM_STR_1) )
                             {
@@ -3156,7 +3156,7 @@ BOOL StatementCommand::Execute()
                                     nDirPos = 0;
                                     FileStat aFS( aEntry );
                                     if ( !aFS.IsKind( FSYS_KIND_WILD ) && !aFS.IsKind( FSYS_KIND_DIR ) && aEntry.Exists() )
-                                    {   // Sonderbehandlung für genau einen Eintrag
+                                    {	// Sonderbehandlung für genau einen Eintrag
                                         if ( !aFS.IsKind( FSYS_KIND_DIR ) && ( aDirEntryKind == FSYS_KIND_DIR ) )
                                             pRet->GenReturn ( RET_Value, aSmartMethodId, String() );
                                         else
@@ -3322,9 +3322,9 @@ BOOL StatementCommand::Execute()
         case RC_GetMouseStyle:
             {
                 Pointer aPointer;
-//              if ( DragManager::GetDragManager() )
-//                  aPointer = DragManager::GetDragManager()->GetDragPointer();
-//              else
+//				if ( DragManager::GetDragManager() )
+//					aPointer = DragManager::GetDragManager()->GetDragPointer();
+//				else
                 {
                     Window *pActualWin = GetMouseWin();
                     if ( pActualWin )
@@ -3354,7 +3354,7 @@ BOOL StatementCommand::Execute()
 
 #if OSL_DEBUG_LEVEL > 1
                     USHORT nEntries = Dir( aDestPath, FSYS_KIND_FILE | FSYS_KIND_DIR ).Count();
-                    (void) nEntries; /* avoid warning about unused parameter */
+                    (void) nEntries; /* avoid warning about unused parameter */ 
 #endif
                     // The Count is only larger than 2 is the path is a directory which is not empty
                     // the Count of 2 results from the "." and ".." directory
@@ -3586,15 +3586,15 @@ StatementControl::StatementControl( SCmdStream *pCmdIn, USHORT nControlIdType )
     pCmdIn->Read( nMethodId );
     pCmdIn->Read( nParams );
 
-    if( nParams & PARAM_USHORT_1 )  pCmdIn->Read( nNr1 );
-    if( nParams & PARAM_USHORT_2 )  pCmdIn->Read( nNr2 );
-    if( nParams & PARAM_USHORT_3 )  pCmdIn->Read( nNr3 );
-    if( nParams & PARAM_USHORT_4 )  pCmdIn->Read( nNr4 );
-    if( nParams & PARAM_ULONG_1 )   pCmdIn->Read( nLNr1 );
-    if( nParams & PARAM_STR_1 )     pCmdIn->Read( aString1 );
-    if( nParams & PARAM_STR_2 )     pCmdIn->Read( aString2 );
-    if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 );
-    if( nParams & PARAM_BOOL_2 )    pCmdIn->Read( bBool2 );
+    if( nParams & PARAM_USHORT_1 )	pCmdIn->Read( nNr1 );
+    if( nParams & PARAM_USHORT_2 )	pCmdIn->Read( nNr2 );
+    if( nParams & PARAM_USHORT_3 )	pCmdIn->Read( nNr3 );
+    if( nParams & PARAM_USHORT_4 )	pCmdIn->Read( nNr4 );
+    if( nParams & PARAM_ULONG_1 )	pCmdIn->Read( nLNr1 );
+    if( nParams & PARAM_STR_1 )		pCmdIn->Read( aString1 );
+    if( nParams & PARAM_STR_2 )		pCmdIn->Read( aString2 );
+    if( nParams & PARAM_BOOL_1 )	pCmdIn->Read( bBool1 );
+    if( nParams & PARAM_BOOL_2 )	pCmdIn->Read( bBool2 );
 
 #if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Reading Control: UId: " );
@@ -3602,13 +3602,13 @@ StatementControl::StatementControl( SCmdStream *pCmdIn, USHORT nControlIdType )
     m_pDbgWin->AddText( " Methode: " );
     m_pDbgWin->AddText( String::CreateFromInt32( nMethodId ) );
     m_pDbgWin->AddText( " Params:" );
-    if( nParams & PARAM_USHORT_1 )  {m_pDbgWin->AddText( " n1:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr1 ) );}
-    if( nParams & PARAM_USHORT_2 )  {m_pDbgWin->AddText( " n2:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr2 ) );}
-    if( nParams & PARAM_USHORT_3 )  {m_pDbgWin->AddText( " n3:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr3 ) );}
-    if( nParams & PARAM_USHORT_4 )  {m_pDbgWin->AddText( " n4:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr4 ) );}
-    if( nParams & PARAM_ULONG_1 )   {m_pDbgWin->AddText( " nl1:" );m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );}
-    if( nParams & PARAM_STR_1 )     {m_pDbgWin->AddText( " s1:" );m_pDbgWin->AddText( aString1 );}
-    if( nParams & PARAM_STR_2 )     {m_pDbgWin->AddText( " s2:" );m_pDbgWin->AddText( aString2 );}
+    if( nParams & PARAM_USHORT_1 )	{m_pDbgWin->AddText( " n1:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr1 ) );}
+    if( nParams & PARAM_USHORT_2 )	{m_pDbgWin->AddText( " n2:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr2 ) );}
+    if( nParams & PARAM_USHORT_3 )	{m_pDbgWin->AddText( " n3:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr3 ) );}
+    if( nParams & PARAM_USHORT_4 )	{m_pDbgWin->AddText( " n4:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr4 ) );}
+    if( nParams & PARAM_ULONG_1 )	{m_pDbgWin->AddText( " nl1:" );m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );}
+    if( nParams & PARAM_STR_1 )		{m_pDbgWin->AddText( " s1:" );m_pDbgWin->AddText( aString1 );}
+    if( nParams & PARAM_STR_2 )		{m_pDbgWin->AddText( " s2:" );m_pDbgWin->AddText( aString2 );}
 /*    if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 );
     if( nParams & PARAM_BOOL_2 )    pCmdIn->Read( bBool2 );*/
     m_pDbgWin->AddText( "\n" );
@@ -3616,7 +3616,7 @@ StatementControl::StatementControl( SCmdStream *pCmdIn, USHORT nControlIdType )
 }
 
 BOOL IsDialog(Window *pWin)
-{   // Alles was von SystemWindow abgeleitet ist
+{	// Alles was von SystemWindow abgeleitet ist
     if ( !pWin )
         return FALSE;
 
@@ -3649,10 +3649,10 @@ BOOL IsDialog(Window *pWin)
 
 
             return TRUE;
-//          break;
+//			break;
         default:
             return FALSE;
-//          break;
+//			break;
     }
 }
 
@@ -3817,7 +3817,7 @@ void StatementControl::AnimateMouse( Window *pControl, Point aWohin )
     aDiff *= 1000;
     aDiff /= nSteps;
 
-    StatementList::bExecuting = TRUE;       // Bah ist das ein ekliger Hack
+    StatementList::bExecuting = TRUE;		// Bah ist das ein ekliger Hack
                                                 // Das verhindert, daß schon der nächste Befehl ausgeführt wird.
 
     for ( ; nSteps ; nSteps-- )
@@ -3830,7 +3830,7 @@ void StatementControl::AnimateMouse( Window *pControl, Point aWohin )
         SafeReschedule();
     }
     pControl->SetPointerPosPixel(aZiel);
-    StatementList::bExecuting = FALSE;  // Bah ist das ein ekliger Hack
+    StatementList::bExecuting = FALSE;	// Bah ist das ein ekliger Hack
 }
 
 
@@ -3844,13 +3844,13 @@ BOOL StatementControl::MaybeDoTypeKeysDelay( Window *pTestWindow )
         Timer aTimer;
         aTimer.SetTimeout( nTimeWait );
         aTimer.Start();
-        StatementList::bExecuting = TRUE;       // Bah ist das ein ekliger Hack
+        StatementList::bExecuting = TRUE;		// Bah ist das ein ekliger Hack
                                                     // Das verhindert, daß schon der nächste Befehl ausgeführt wird.
         while ( aTimer.IsActive() )
         {
             SafeReschedule( TRUE );
         }
-        StatementList::bExecuting = FALSE;  // Bah ist das ein ekliger Hack
+        StatementList::bExecuting = FALSE;	// Bah ist das ein ekliger Hack
         if ( !WinPtrValid(pTestWindow ) )
         {
             ReportError( aUId, GEN_RES_STR1( S_WINDOW_DISAPPEARED, MethodString( nMethodId ) ) );
@@ -3862,7 +3862,7 @@ BOOL StatementControl::MaybeDoTypeKeysDelay( Window *pTestWindow )
 
 BOOL StatementControl::HandleVisibleControls( Window *pControl )
 {
-    if( pControl )      // Also auch bei Disabled nicht jedoch bei Invisible
+    if( pControl )		// Also auch bei Disabled nicht jedoch bei Invisible
     {
         switch( nMethodId )
         {
@@ -3874,11 +3874,11 @@ BOOL StatementControl::HandleVisibleControls( Window *pControl )
             break;
         case M_GetPosX:
             if ( pControl->GetType() == WINDOW_DOCKINGWINDOW && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_FLOATINGWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für FloatingWindows
+                pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für FloatingWindows
             if ( pControl->GetType() == WINDOW_TABCONTROL && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_TABDIALOG )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für TabDialoge
+                pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für TabDialoge
             if ( pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_BORDERWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für Border
+                pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für Border
             if ( (nParams & PARAM_BOOL_1) && bBool1 )
                 pControl = pControl->GetWindow( WINDOW_OVERLAP );
 
@@ -3893,11 +3893,11 @@ BOOL StatementControl::HandleVisibleControls( Window *pControl )
             break;
         case M_GetPosY:
             if ( pControl->GetType() == WINDOW_DOCKINGWINDOW && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_FLOATINGWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für FloatingWindows
+                pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für FloatingWindows
             if ( pControl->GetType() == WINDOW_TABCONTROL && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_TABDIALOG )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für TabDialoge
+                pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für TabDialoge
             if ( pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_BORDERWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für Border
+                pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für Border
             if ( (nParams & PARAM_BOOL_1) && bBool1 )
                 pControl = pControl->GetWindow( WINDOW_OVERLAP );
 
@@ -3912,11 +3912,11 @@ BOOL StatementControl::HandleVisibleControls( Window *pControl )
             break;
         case M_GetSizeX:
             if ( pControl->GetType() == WINDOW_DOCKINGWINDOW && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_FLOATINGWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für FloatingWindows
+                pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für FloatingWindows
             if ( pControl->GetType() == WINDOW_TABCONTROL && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_TABDIALOG )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für TabDialoge
+                pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für TabDialoge
             if ( pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_BORDERWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für Border
+                pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für Border
             if ( (nParams & PARAM_BOOL_1) && bBool1 )
                 pControl = pControl->GetWindow( WINDOW_OVERLAP );
 
@@ -3924,11 +3924,11 @@ BOOL StatementControl::HandleVisibleControls( Window *pControl )
             break;
         case M_GetSizeY:
             if ( pControl->GetType() == WINDOW_DOCKINGWINDOW && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_FLOATINGWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für FloatingWindows
+                pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für FloatingWindows
             if ( pControl->GetType() == WINDOW_TABCONTROL && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_TABDIALOG )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für TabDialoge
+                pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für TabDialoge
             if ( pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_BORDERWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für Border
+                pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für Border
             if ( (nParams & PARAM_BOOL_1) && bBool1 )
                 pControl = pControl->GetWindow( WINDOW_OVERLAP );
 
@@ -3937,11 +3937,11 @@ BOOL StatementControl::HandleVisibleControls( Window *pControl )
         case M_SnapShot:
             {
                 if ( pControl->GetType() == WINDOW_DOCKINGWINDOW && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_FLOATINGWINDOW )
-                    pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für FloatingWindows
+                    pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für FloatingWindows
                 if ( pControl->GetType() == WINDOW_TABCONTROL && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_TABDIALOG )
-                    pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für TabDialoge
+                    pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für TabDialoge
                 if ( pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_BORDERWINDOW )
-                    pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für Border
+                    pControl = pControl->GET_REAL_PARENT();		// Sonderbehandlung für Border
                 if ( (nParams & PARAM_BOOL_1) && bBool1 )
                     pControl = pControl->GetWindow( WINDOW_OVERLAP );
 
@@ -3966,7 +3966,7 @@ BOOL StatementControl::HandleVisibleControls( Window *pControl )
                     nNr4 = std::min((USHORT)(pControl->GetSizePixel().Height() + 2*(USHORT)aStart.Y()),nNr4);
                 }
                 if( nParams & PARAM_USHORT_4 )
-                {   // Zuschneiden
+                {	// Zuschneiden
                     Point aPt(-nNr1,-nNr2);
                     Size aSz(nNr3,nNr4);
                     VirtualDevice aVDev( *pControl );
@@ -4012,9 +4012,9 @@ BOOL StatementControl::HandleVisibleControls( Window *pControl )
 
 BOOL StatementControl::HandleCommonMethods( Window *pControl )
 {
-    switch( nMethodId )     // Diese können an jedem Window ausgeführt werden
+    switch( nMethodId )		// Diese können an jedem Window ausgeführt werden
     {
-        case M_Exists:          // Oben schon Behandelt. Unterdrückt hier nur Fehler
+        case M_Exists:			// Oben schon Behandelt. Unterdrückt hier nur Fehler
         case M_NotExists:
         case M_IsEnabled:
         case M_IsVisible:
@@ -4035,12 +4035,12 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
             break;
         case M_TypeKeys:
             {
-                if( !(nParams & PARAM_USHORT_1) )   // Anzahl wiederholungen
+                if( !(nParams & PARAM_USHORT_1) )	// Anzahl wiederholungen
                     nNr1 = 1;
-                if( !(nParams & PARAM_BOOL_1) )     // Follow Focus
-                    bBool1 = FALSE;     // so bleibt das bisherige Verhalten
+                if( !(nParams & PARAM_BOOL_1) )		// Follow Focus
+                    bBool1 = FALSE;		// so bleibt das bisherige Verhalten
 
-                if ( !bBool1 )          // Altes Verhalten
+                if ( !bBool1 )			// Altes Verhalten
                     pControl->GrabFocus();
                 else    // If focus is not inside given control we grab it once.
                 {
@@ -4052,7 +4052,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
 
                 // maybe this can get removed since we are using GetPreferredKeyInputWindow()
                 if ( pControl->GetType() == WINDOW_COMBOBOX )
-                {   // Bei COMBOBOX an das Edit direkt liefern
+                {	// Bei COMBOBOX an das Edit direkt liefern
                     Window *pTemp = NULL;
                     for ( USHORT i = 0 ; i < pControl->GetChildCount() && !pTemp ; i++ )
                         if ( pControl->GetChild( i )->GetType() == WINDOW_EDIT )
@@ -4071,12 +4071,12 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                             if ( !pFocus || !pControl->IsWindowOrChild( pFocus, TRUE ) )
                                 pControl->GrabFocus();
                         }
-                        if ( bBool1 )   // Jedesmal das FocusWindow finden
+                        if ( bBool1 )	// Jedesmal das FocusWindow finden
                         {
                             Window *pFocus = GetpApp()->GetFocusWindow();
                             if ( pFocus && pControl->IsWindowOrChild( pFocus, TRUE ) )
                                 pDeliverHere = pFocus;
-                            else    // sonst fallback auf das Basisfenster
+                            else	// sonst fallback auf das Basisfenster
                                 pDeliverHere = pControl;
                         }
                         pDeliverHere = pDeliverHere->GetPreferredKeyInputWindow();
@@ -4118,7 +4118,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                                         aCh += 'a';
                                 break;
                                 case KEYGROUP_MISC:
-                                    {                           //  CR  ESC TAB BACK
+                                    {							//  CR  ESC TAB BACK
                                         ByteString aPrintableMisc("\x0d\x1b\x09\x08 **+-*/.,<>=",16);
                                         if ( nKeyCode-KEY_RETURN < aPrintableMisc.Len()
                                             && nKeyCode != KEY_INSERT && nKeyCode != KEY_DELETE )
@@ -4147,7 +4147,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                                 aEvent = KeyEvent(aCh, KeyCode(KEYGROUP_NUM + aCh-'0', 0));
                             else if ( aPrintableMisc.Search(aCh) != STRING_NOTFOUND )
                                 aEvent = KeyEvent(aCh, KeyCode(KEYGROUP_MISC + (USHORT)aPrintableMisc.Search(aCh), 0));
-                            else    // Sollte eigentlich nicht auftreten
+                            else	// Sollte eigentlich nicht auftreten
                                 aEvent = KeyEvent(aCh, KeyCode());
                         }
                         ImplKeyInput( pDeliverHere, aEvent );
@@ -4177,11 +4177,11 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                 Size aS = pControl->GetOutputSizePixel();
                 Point aPos = Point(aS.Width() * nNr1 / 100,aS.Height() * nNr2 / 100);
                 Window *pActualWin = pControl->FindWindow( aPos );
-//                  AnimateMouse( pControl, aPos );
+//					AnimateMouse( pControl, aPos );
 
                 if ( pActualWin )
                     aPos = pActualWin->AbsoluteScreenToOutputPixel( pControl->OutputToAbsoluteScreenPixel ( aPos ) );
-//                  aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
+//					aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
                 else
                     pActualWin = pControl;
 
@@ -4200,12 +4200,12 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
 
                 if ( pActualWin )
                     aPos = pActualWin->AbsoluteScreenToOutputPixel( pControl->OutputToAbsoluteScreenPixel ( aPos ) );
-//                  aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
+//					aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
                 else
                     pActualWin = pControl;
 
                 AnimateMouse( pActualWin, aPos );
-//                  pActualWin->GrabFocus();
+//					pActualWin->GrabFocus();
                 MouseEvent aMEvt( aPos, 1, MOUSE_SIMPLECLICK|MOUSE_SELECT, nButton );
                 ImplMouseButtonUp( pActualWin, aMEvt );
             }
@@ -4220,13 +4220,13 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                 if ( pActualWin )
                 {
                     aPos = pActualWin->AbsoluteScreenToOutputPixel( pControl->OutputToAbsoluteScreenPixel ( aPos ) );
-//                  aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
+//					aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
                 }
                 else
                     pActualWin = pControl;
 
                 AnimateMouse( pActualWin, aPos );
-//                  pActualWin->GrabFocus();
+//					pActualWin->GrabFocus();
                 MouseEvent aMEvt( aPos, 0, MOUSE_SIMPLEMOVE|MOUSE_DRAGMOVE, nButton );
                 ImplMouseMove( pActualWin, aMEvt );
             }
@@ -4241,7 +4241,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                 if ( pActualWin )
                 {
                     aPos = pActualWin->AbsoluteScreenToOutputPixel( pControl->OutputToAbsoluteScreenPixel ( aPos ) );
-//                  aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
+//					aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
                 }
                 else
                     pActualWin = pControl;
@@ -4314,7 +4314,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                         if ( pActualWin )
                         {
                             aPos = pActualWin->AbsoluteScreenToOutputPixel( pControl->OutputToAbsoluteScreenPixel ( aPos ) );
-    //                      aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
+    //		    			aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
                             pControl = pActualWin;
                         }
                     }
@@ -4380,12 +4380,12 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                     break;
                 }
 
-                pControl = pTemp;   // So daß wir unten ohne Fehler durchkommen
+                pControl = pTemp;	// So daß wir unten ohne Fehler durchkommen
                 SplitWindow *pSW = (SplitWindow*) pTemp;
 
-//  Rectangle           GetAutoHideRect() const;
-//  Rectangle           GetFadeInRect() const;
-//  Rectangle           GetFadeOutRect() const;
+//	Rectangle			GetAutoHideRect() const;
+//	Rectangle			GetFadeInRect() const;
+//	Rectangle			GetFadeOutRect() const;
 
                 switch( nMethodId )
                 {
@@ -4407,7 +4407,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                             ImplMouseButtonDown( pControl, aMEvnt, FORCE_DIRECT_CALL );
                             ImplMouseButtonUp  ( pControl, aMEvnt, FORCE_DIRECT_CALL );
                         }
-//                              pSW->AutoHide();
+//								pSW->AutoHide();
                         break;
                     case M_IsFadeIn:
                         pRet->GenReturn ( RET_Value, aUId, pSW->IsFadeOutButtonVisible() );
@@ -4496,7 +4496,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                 }
 
                 if( !(nParams & PARAM_USHORT_1) )
-                    nNr1 = CONST_ALIGN_RIGHT;       // default is right Scrollbar(vertical)
+                    nNr1 = CONST_ALIGN_RIGHT;		// default is right Scrollbar(vertical)
 
                 if ( (nNr1 != CONST_ALIGN_RIGHT) && (nNr1 != CONST_ALIGN_BOTTOM) )
                 {
@@ -4604,7 +4604,7 @@ BOOL StatementControl::Execute()
                 case M_GetState:
                     break;
                 case M_IsEnabled:
-                    nMethodId = _M_IsEnabled;   // Umlabeln, da die Behandlung essentiell anders ist!
+                    nMethodId = _M_IsEnabled;	// Umlabeln, da die Behandlung essentiell anders ist!
                     break;
                 default:
                     pControl = NULL;
@@ -4619,25 +4619,25 @@ BOOL StatementControl::Execute()
         case M_NotExists:
             Time aT;
             USHORT aSeconds = aT.GetMin()*60+aT.GetSec();
-            if ( !bBool2 )          // wurde im Konstruktor auf FALSE gesetzt
+            if ( !bBool2 )			// wurde im Konstruktor auf FALSE gesetzt
             {
                 bBool2 = TRUE;
                 nNr2 = aSeconds;
                 if( !(nParams & PARAM_USHORT_1) )
-                    nNr1 = 0;       // defaultmäßig sofort zurück
+                    nNr1 = 0;		// defaultmäßig sofort zurück
             }
-            if ( aSeconds < nNr2 )          // Falls die Stunde umgesprungen ist
+            if ( aSeconds < nNr2 )			// Falls die Stunde umgesprungen ist
                 aSeconds += 60*60;
 
             if ( /* !IsAccessable(pControl)#87019# */ !pControl || !pControl->IsVisible() )
                 pControl = NULL;
             if ( ((nMethodId == M_Exists) && pControl) ||
                  ((nMethodId == M_NotExists) && !pControl) )
-            {   // Wenn Bedingung erfüllt
+            {	// Wenn Bedingung erfüllt
                 pRet->GenReturn ( RET_Value, aUId, (comm_BOOL)TRUE );
             }
             else
-                if ( aSeconds <= nNr2 + nNr1 )      // Zeit ist noch nicht abgelaufen
+                if ( aSeconds <= nNr2 + nNr1 )		// Zeit ist noch nicht abgelaufen
                     return FALSE;
                 else
                     pRet->GenReturn ( RET_Value, aUId, (comm_BOOL)FALSE );
@@ -4645,13 +4645,13 @@ BOOL StatementControl::Execute()
             Advance();
             delete this;
             return TRUE;
-//          break;
+//			break;
     }
 
 
     short nRT = 0;
 
-    if( pControl )          // Das Fenster Existiert irgendwo, kann aber auch hidden sein!
+    if( pControl )			// Das Fenster Existiert irgendwo, kann aber auch hidden sein!
     {
         nRT = ImpGetRType( pControl, aUId );   // If not Numeric pControl is used
 #if OSL_DEBUG_LEVEL > 1
@@ -4663,8 +4663,8 @@ BOOL StatementControl::Execute()
 
     if (   nRT == C_Window &&       // Search for WorkWindow to satisfy these commands
          ( nMethodId == M_Close
-//      || nMethodId == M_Size
-//      || nMethodId == M_Move
+//		|| nMethodId == M_Size
+//		|| nMethodId == M_Move
         || nMethodId == M_IsMax
         || nMethodId == M_IsMin
         || nMethodId == M_IsRestore
@@ -4703,7 +4703,7 @@ BOOL StatementControl::Execute()
         // TODO: handle GetFocus for all Methods and Windows like this (remove part below)
         //       See for impact of changed focus for HandleVisibleControls() (taking Snapshots might be different, possible exclude those methods)
         if (( (nRT == C_TreeListBox) && !bBool2 )
-            && nMethodId != M_TypeKeys          // TypeKeys macht das selbst, falls eigenes Focushandling gewünscht
+            && nMethodId != M_TypeKeys			// TypeKeys macht das selbst, falls eigenes Focushandling gewünscht
             && nMethodId != M_MouseDown
             && nMethodId != M_MouseUp
             && nMethodId != M_MouseMove
@@ -4745,7 +4745,7 @@ BOOL StatementControl::Execute()
               || nRT == C_TreeListBox
              )
             || nMethodId == M_OpenContextMenu )
-            && nMethodId != M_TypeKeys          // TypeKeys macht das selbst, falls eigenes Focushandling gewünscht
+            && nMethodId != M_TypeKeys			// TypeKeys macht das selbst, falls eigenes Focushandling gewünscht
             && nMethodId != M_MouseDown
             && nMethodId != M_MouseUp
             && nMethodId != M_MouseMove
@@ -4754,7 +4754,7 @@ BOOL StatementControl::Execute()
 
 /*  leads to problems because settext sets the text whereas typekeys adds to the text.
         if ( bDoTypeKeysDelay && nMethodId == M_SetText && ( nParams & PARAM_STR_1 ) )
-        {   // Hier wird das Statement auf ein TypeKeys umgebogen
+        {	// Hier wird das Statement auf ein TypeKeys umgebogen
             nMethodId = M_TypeKeys;
             nParams = PARAM_BOOL_1 | PARAM_STR_1;
             bBool1 = TRUE;
@@ -4799,7 +4799,7 @@ BOOL StatementControl::Execute()
                             pRet->GenReturn ( RET_Value, aUId, ((TabControl*)pControl)->GetTabPage(((TabControl*)pControl)->GetCurPageId())->GetSmartUniqueOrHelpId().GetText());
                             break;
                         case M_SetPage :
-                            {       // Wegen lokaler Variablen
+                            {		// Wegen lokaler Variablen
                                 TabControl *pTControl = ((TabControl*)pControl);
                                 USHORT nActive = pTControl->GetCurPageId();
                                 USHORT i,anz;
@@ -4828,7 +4828,7 @@ BOOL StatementControl::Execute()
                                     i++;
                                     if ( i >= pTControl->GetPageCount() )
                                         i = 0;
-                                    if ( !MaybeDoTypeKeysDelay( pTControl ) || !MaybeDoTypeKeysDelay( pTControl ) || !MaybeDoTypeKeysDelay( pTControl ) )   // 3 Mal aufrufen
+                                    if ( !MaybeDoTypeKeysDelay( pTControl ) || !MaybeDoTypeKeysDelay( pTControl ) || !MaybeDoTypeKeysDelay( pTControl ) )	// 3 Mal aufrufen
                                         break;
                                 }
                                 if ( !aID.Matches( aWantedID ) )
@@ -5027,7 +5027,7 @@ BOOL StatementControl::Execute()
                                             if ( bUnselectBeforeSelect )
                                                 pLB->SetNoSelection();
                                             pLB->SelectEntryPos( nPos, bBool1 );
-                                            if ( pLB->IsEntryPosSelected( nPos ) ? !bBool1 : bBool1 )   // XOR rein mit BOOL
+                                            if ( pLB->IsEntryPosSelected( nPos ) ? !bBool1 : bBool1 )	// XOR rein mit BOOL
                                                 ReportError( aUId, GEN_RES_STR2( S_METHOD_FAILED, MethodString( nMethodId ), aString1 ) );
                                         }
                                     }
@@ -5040,7 +5040,7 @@ BOOL StatementControl::Execute()
                                             if ( bUnselectBeforeSelect )
                                                 pLB->SetNoSelection();
                                             pLB->SelectEntryPos( nNr1-1, bBool1 );
-                                            if ( pLB->IsEntryPosSelected( nNr1-1 ) ? !bBool1 : bBool1 ) // XOR rein mit BOOL
+                                            if ( pLB->IsEntryPosSelected( nNr1-1 ) ? !bBool1 : bBool1 )	// XOR rein mit BOOL
                                                 ReportError( aUId, GEN_RES_STR2( S_METHOD_FAILED, MethodString( nMethodId ), UniString::CreateFromInt32( nNr1 ) ) );
                                         }
                                     }
@@ -5281,10 +5281,10 @@ BOOL StatementControl::Execute()
                 case C_ToolBox:
                     {
                         ToolBox *pTB = ((ToolBox*)pControl);
-                        if ( !aUId.Matches( pTB->GetSmartUniqueOrHelpId() ) )   // Also Button auf der ToolBox gefunden
+                        if ( !aUId.Matches( pTB->GetSmartUniqueOrHelpId() ) )	// Also Button auf der ToolBox gefunden
                         {
                             if ( (nParams == PARAM_NONE) || (nParams == PARAM_USHORT_1) )
-                            {           // Wir fälschen einen Parameter
+                            {			// Wir fälschen einen Parameter
                                 if ( aUId.HasNumeric() )
                                 {
                                     nParams |= PARAM_ULONG_1;
@@ -5364,13 +5364,13 @@ BOOL StatementControl::Execute()
                             case M_Click :
                                 {
                                     FIND_ITEM;
-                                    if ( bItemFound )   // FIND_ITEM Erfolgreich
+                                    if ( bItemFound )	// FIND_ITEM Erfolgreich
                                     {
                                         Rectangle aRect = pTB->GetItemRect(pTB->GetItemId(nItemPos));
                                         if ( aRect.IsEmpty() )
                                         {
                                             pTB->ExecuteCustomMenu();
-/*                                          aRect = pTB->GetMenubuttonRect();
+/*					                        aRect = pTB->GetMenubuttonRect();
                                             MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
                                             ImplMouseButtonDown( pTB, aMEvnt );*/
 
@@ -5395,7 +5395,7 @@ BOOL StatementControl::Execute()
                             case M_TearOff :
                                 {
                                     FIND_ITEM;
-                                    if ( bItemFound )   // FIND_ITEM Erfolgreich
+                                    if ( bItemFound )	// FIND_ITEM Erfolgreich
                                     {
                                         Rectangle aRect = pTB->GetItemPosDropDownRect( nItemPos );
                                         AnimateMouse( pControl, aRect.Center() );
@@ -5404,13 +5404,13 @@ BOOL StatementControl::Execute()
 
                                         Window *pWin = NULL;
                                         // Wait for the window to open.
-                                        StatementList::bExecuting = TRUE;       // Bah ist das ein ekliger Hack
-                                        {                                           // Das verhindert, daß schon der nächste Befehl ausgeführt wird.
+                                        StatementList::bExecuting = TRUE;		// Bah ist das ein ekliger Hack
+                                        {											// Das verhindert, daß schon der nächste Befehl ausgeführt wird.
                                             Time aDelay;
                                             while ( !pWin && ( (pWin = GetPopupFloatingWin()) == NULL ) && ( Time() - aDelay ).GetSec() < 15 )
                                                 SafeReschedule();
                                         }
-                                        StatementList::bExecuting = FALSE;  // Bah ist das ein ekliger Hack
+                                        StatementList::bExecuting = FALSE;	// Bah ist das ein ekliger Hack
 
                                         if ( pWin && pWin->GetType() == WINDOW_FLOATINGWINDOW )
                                         {
@@ -5430,7 +5430,7 @@ BOOL StatementControl::Execute()
                             case M_OpenMenu :
                                 {
                                     FIND_ITEM;
-                                    if ( bItemFound )   // FIND_ITEM Erfolgreich
+                                    if ( bItemFound )	// FIND_ITEM Erfolgreich
                                     {
                                         Rectangle aRect = pTB->GetItemPosDropDownRect( nItemPos );
                                         AnimateMouse( pControl, aRect.Center() );
@@ -5449,7 +5449,7 @@ BOOL StatementControl::Execute()
                             case _M_IsEnabled:
                                 {
                                     FIND_ITEM;
-                                    if ( bItemFound )   // FIND_ITEM Erfolgreich
+                                    if ( bItemFound )	// FIND_ITEM Erfolgreich
                                     {
                                         pRet->GenReturn ( RET_Value, aUId, pTB->IsItemEnabled( pTB->GetItemId(nItemPos) ) );
                                     }
@@ -5458,7 +5458,7 @@ BOOL StatementControl::Execute()
                             case M_GetState :
                                 {
                                     FIND_ITEM;
-                                    if ( bItemFound )   // FIND_ITEM Erfolgreich
+                                    if ( bItemFound )	// FIND_ITEM Erfolgreich
                                     {
                                         switch (nNr1)
                                         {
@@ -5509,7 +5509,7 @@ BOOL StatementControl::Execute()
                             case M_IsMax:
                             case M_Minimize:
                             case M_Maximize:
-                            case M_Help:        // Alles was unten weiterbehandelt werden soll
+                            case M_Help:		// Alles was unten weiterbehandelt werden soll
                                 goto DockingWin;
                             default:
                                 ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "ToolBox" ) );
@@ -5524,7 +5524,7 @@ BOOL StatementControl::Execute()
 
 
 
-#define GET_NTH_ENTRY_LBOX( First, Next, Anzahl)    \
+#define GET_NTH_ENTRY_LBOX( First, Next, Anzahl)	\
     SvLBoxEntry *pThisEntry = ((SvTreeListBox*)pControl)->First(); \
     { \
         int niTemp = Anzahl; \
@@ -5586,16 +5586,16 @@ BOOL StatementControl::Execute()
                                 bBool1 = TRUE;
                             if( nParams & PARAM_STR_1 )
                             {
-/*                                  ListBox *pLB = ((ListBox*)pControl);
+/*									ListBox *pLB = ((ListBox*)pControl);
                                 if ( pLB->GetEntryPos( aString1 ) == LISTBOX_ENTRY_NOTFOUND )
                                     ReportError( aUId, GEN_RES_STR2( S_ENTRY_NOT_FOUND, MethodString( nMethodId ), aString1 ) );
                                 else
                                 {
                                     pLB->SelectEntry( aString1, bBool1 );
-                                    if ( pLB->IsEntrySelected( aString1 ) ? !bBool1 : bBool1 )  // XOR rein mit BOOL
+                                    if ( pLB->IsEntrySelected( aString1 ) ? !bBool1 : bBool1 )	// XOR rein mit BOOL
                                         ReportError( aUId, GEN_RES_STR2( S_METHOD_FAILED, MethodString( nMethodId ), aString1 ) );
                                 }
-*/                                  ReportError( aUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
+*/									ReportError( aUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
                             }
                             else
                             {
@@ -5766,7 +5766,7 @@ BOOL StatementControl::Execute()
                                         pThisEntry = (SvLBoxEntry*)pTree->GetEntryAtVisPos( nNr1-1 );
                                     }
                                 }
-
+                            
                                 if ( pThisEntry )
                                 {
                                     if ( ! (nParams & PARAM_USHORT_2) )
@@ -5827,7 +5827,7 @@ BOOL StatementControl::Execute()
     /*
 
 
-    BOOL            MakeFieldVisible( long nRow, USHORT nColId, BOOL bComplete = FALSE );
+    BOOL			MakeFieldVisible( long nRow, USHORT nColId, BOOL bComplete = FALSE );
     // access to dynamic values of cursor row
     String          GetColumnTitle( USHORT nColumnId ) const;
     USHORT          GetColumnId( USHORT nPos ) const;
@@ -5836,7 +5836,7 @@ BOOL StatementControl::Execute()
     long            GetCurRow() const { return nCurRow; }
     USHORT          GetCurColumnId() const { return nCurColId; }
     BOOL            GoToRow( long nRow );
-    BOOL            GoToRowAndDoNotModifySelection( long nRow );
+    BOOL			GoToRowAndDoNotModifySelection( long nRow );
     BOOL            GoToColumnId( USHORT nColId );
     BOOL            GoToRowColumnId( long nRow, USHORT nColId );
     // selections
@@ -5857,11 +5857,11 @@ BOOL StatementControl::Execute()
     long            NextSelectedRow();
     const MultiSelection* GetSelection() const
                     { return bMultiSelection ? uRow.pSel : 0; }
-    void            SetSelection( const MultiSelection &rSelection );
+    void			SetSelection( const MultiSelection &rSelection );
 
     virtual String  GetCellText(long _nRow, USHORT _nColId) const;
     USHORT GetColumnCount() const { return ColCount(); }
-protected:
+protected:   
     virtual long    GetRowCount() const;
 
 
@@ -5872,9 +5872,9 @@ protected:
             void InvalidateHandleColumn();
 
             CellControllerRef Controller() const { return aController; }
-            sal_Int32   GetBrowserFlags() const { return m_nBrowserFlags; }
+            sal_Int32	GetBrowserFlags() const { return m_nBrowserFlags; }
 
-            virtual void ActivateCell(long nRow, sal_uInt16 nCol, sal_Bool bSetCellFocus = sal_True);
+            virtual void ActivateCell(long nRow, sal_uInt16	nCol, sal_Bool bSetCellFocus = sal_True);
             virtual void DeactivateCell(sal_Bool bUpdate = sal_True);
 
 
@@ -5927,9 +5927,9 @@ protected:
                                                     }
                                                 }
                                                 break;
-
-
-
+                                                
+                                                
+                                                
                                                 /*
                                             case M_GetSelCount :
                                                 pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetSelectionCount()));
@@ -5971,16 +5971,16 @@ protected:
                                                     bBool1 = TRUE;
                                                 if( nParams & PARAM_STR_1 )
                                                 {
-                / *                                 ListBox *pLB = ((ListBox*)pControl);
+                / *									ListBox *pLB = ((ListBox*)pControl);
                                                     if ( pLB->GetEntryPos( aString1 ) == LISTBOX_ENTRY_NOTFOUND )
                                                         ReportError( aUId, GEN_RES_STR2( S_ENTRY_NOT_FOUND, MethodString( nMethodId ), aString1 ) );
                                                     else
                                                     {
                                                         pLB->SelectEntry( aString1, bBool1 );
-                                                        if ( pLB->IsEntrySelected( aString1 ) ? !bBool1 : bBool1 )  // XOR rein mit BOOL
+                                                        if ( pLB->IsEntrySelected( aString1 ) ? !bBool1 : bBool1 )	// XOR rein mit BOOL
                                                             ReportError( aUId, GEN_RES_STR2( S_METHOD_FAILED, MethodString( nMethodId ), aString1 ) );
                                                     }
-                * /                                 ReportError( aUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
+                * /									ReportError( aUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
                                                 }
                                                 else
                                                 {
@@ -6137,7 +6137,7 @@ protected:
                                             else
                                                    pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pELB->getSelIndex() +1));
                                             break;
-/*                                      xxxcase M_SetNoSelection :
+/*						                xxxcase M_SetNoSelection :
                                             ((ListBox*)pControl)->SetNoSelection();
                                             ((ListBox*)pControl)->Select();
                                             break; */
@@ -6196,16 +6196,16 @@ protected:
                                                                     pRet->GenReturn ( RET_Value, aUId, aContent );
                                                                 }
                                                                 break;
-                                                            case TypeClass_STRING:
+                                                            case TypeClass_STRING:			
                                                                 {
                                                                     ::rtl::OUString aContent;
                                                                     aCell >>= aContent;
                                                                     pRet->GenReturn ( RET_Value, aUId, aContent );
                                                                 }
                                                                 break;
-                                                            //case TypeClass_FLOAT:         break;
-                                                            //case TypeClass_DOUBLE:        break;
-                                                            //case TypeClass_OCTET:         break;
+                                                            //case TypeClass_FLOAT:			break;
+                                                            //case TypeClass_DOUBLE:		break;
+                                                            //case TypeClass_OCTET:			break;
                                                             case TypeClass_BYTE:
                                                             case TypeClass_SHORT:
                                                             case TypeClass_LONG:
@@ -6287,7 +6287,7 @@ protected:
                                                 if ( ValueOK( aUId, CUniString("GetSelIndex"), nNr1, pTC->GetSelectedRows().size() ) )
                                                     pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRows()[nNr1-1] +1 ) );
                                                 break;
-/*                                          case M_GetSelText :
+/*										    case M_GetSelText :
                                                 if ( ! (nParams & PARAM_USHORT_1) )
                                                     nNr1 = 1;
                                                 if ( ValueOK(aUId, CUniString("GetSelText"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
@@ -6384,7 +6384,7 @@ protected:
                             else
                                 ReportError( aUId, GEN_RES_STR1( S_ALLOWED_ONLY_IN_DOCKING_MODE, MethodString( nMethodId ) ) );
                             break;
-                        case M_Help:        // Alles was unten weiterbehandelt werden soll
+                        case M_Help:		// Alles was unten weiterbehandelt werden soll
                             goto MoreDialog;
 
                         default:
@@ -6432,7 +6432,7 @@ protected:
                             SET_WINP_CLOSING(pControl);
                             ((FloatingWindow*)pControl)->Close();
                             break;
-                        case M_Help:        // Alles was unten weiterbehandelt werden soll
+                        case M_Help:		// Alles was unten weiterbehandelt werden soll
                         case M_Move:
                             goto MoreDialog;
                         default:
@@ -6515,7 +6515,7 @@ protected:
                         case M_Size:
                         case M_Move:
                             goto FloatWin;
-//                          break;
+//							break;
                         case M_IsMax :
                             pRet->GenReturn ( RET_Value, aUId, ((WorkWindow*)pControl)->IsMaximized() );
                             break;
@@ -6536,7 +6536,7 @@ protected:
                             ((WorkWindow*)pControl)->Maximize( FALSE );
                             ((WorkWindow*)pControl)->Restore();
                             break;
-                        case M_Help:        // Alles was unten weiterbehandelt werden soll
+                        case M_Help:		// Alles was unten weiterbehandelt werden soll
                             goto MoreDialog;
                         default:
                             ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "WorkWindow" ) );
@@ -6577,7 +6577,7 @@ protected:
                                 break;
                         }
                         if ( bDone )
-                            break;  // break the case here else continue at C_ButtonDialog
+                            break;	// break the case here else continue at C_ButtonDialog
                     }
                 case C_ButtonDialog:
                     {
@@ -6743,7 +6743,7 @@ protected:
 #if OSL_DEBUG_LEVEL > 1
             m_pDbgWin->AddText( CUniString("Reschedule command (requed) (").Append( UniString::CreateFromInt32(nRetryCount) ).AppendAscii(")\n") );
 #endif
-            QueStatement( this );   // will que at the start of the list
+            QueStatement( this );	// will que at the start of the list
         }
         else
         {

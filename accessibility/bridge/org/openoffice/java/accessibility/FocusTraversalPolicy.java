@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,17 +42,17 @@ public class FocusTraversalPolicy extends java.awt.FocusTraversalPolicy {
     }
 
     /** Returns the Component that should receive the focus after aComponent */
-    public java.awt.Component getComponentAfter(java.awt.Container focusCycleRoot,
+    public java.awt.Component getComponentAfter(java.awt.Container focusCycleRoot, 
         java.awt.Component aComponent) {
         return null;
     }
-
+    
     /** Returns the Component that should receive the focus before aComponent */
-    public java.awt.Component getComponentBefore(java.awt.Container focusCycleRoot,
+    public java.awt.Component getComponentBefore(java.awt.Container focusCycleRoot, 
         java.awt.Component aComponent) {
         return null;
     }
-
+    
     /** Returns the default Component to focus */
     public java.awt.Component getDefaultComponent(java.awt.Container focusCycleRoot) {
         // getDefaultComponent must not return null for Windows to make them focusable.
@@ -68,12 +68,12 @@ public class FocusTraversalPolicy extends java.awt.FocusTraversalPolicy {
         }
         return null;
     }
-
+    
     /** Returns the first Component in the traversal cycle */
     public java.awt.Component getFirstComponent(java.awt.Container focusCycleRoot) {
         return null;
     }
-
+    
     /** Returns the Component that should receive the focus when a Window is made visible for the first time */
     public java.awt.Component getInitialComponent(java.awt.Window window) {
         if (window instanceof NativeFrame) {
@@ -81,7 +81,7 @@ public class FocusTraversalPolicy extends java.awt.FocusTraversalPolicy {
         }
         return null;
     }
-
+    
     /** Returns the last Component in the traversal cycle */
     public java.awt.Component getLastComponent(java.awt.Container focusCycleRoot) {
         return null;

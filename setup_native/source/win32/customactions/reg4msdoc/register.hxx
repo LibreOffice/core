@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef _REGISTER_HXX_
 #define _REGISTER_HXX_
 
@@ -71,7 +71,7 @@ bool IsRegisteredFor(MSIHANDLE handle, int State);
     application type or not */
 bool query_preselect_registration_for_ms_application(
     MSIHANDLE handle, int Register);
-
+    
 // StarOffice 6.0 saved the registration
 // state in HKEY_LOCAL_MACHINE\Software\
 // Microsoft\Windows\CurrentVersion\Uninstall\

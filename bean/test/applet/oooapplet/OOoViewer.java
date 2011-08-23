@@ -1,7 +1,7 @@
 //*************************************************************************
 //
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ public class OOoViewer extends Applet {
     private OOoBean oBean;
 
     static private CustomURLClassLoader m_loader;
-
+    
     Object  m_objBean;
-
+    
     public void init() {
         try {
             if (m_loader == null) {
@@ -88,7 +88,7 @@ public class OOoViewer extends Applet {
         Method methLoad = beanClass.getMethod(
             "loadFromURL", new Class[] {
                 String.class, arProp.getClass() });
-
+        
         methLoad.invoke(m_objBean, new Object[] {"private:factory/swriter", null});
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -102,9 +102,9 @@ public class OOoViewer extends Applet {
             e.printStackTrace();
         } catch (java.lang.NoSuchMethodException e) {
             e.printStackTrace();        }
-
-
-
+        
+        
+        
         validate();
     }
 
@@ -135,11 +135,11 @@ public class OOoViewer extends Applet {
 final class CustomURLClassLoader extends URLClassLoader {
 
     private Vector resourcePaths;
-
+    
     public CustomURLClassLoader( URL[] urls ) {
         super( urls );
     }
-
+    
     protected Class findClass( String name ) throws ClassNotFoundException {
         // This is only called via this.loadClass -> super.loadClass ->
         // this.findClass, after this.loadClass has already called
@@ -149,10 +149,10 @@ final class CustomURLClassLoader extends URLClassLoader {
     }
 
 
-
+    
     protected Class loadClass( String name, boolean resolve )
         throws ClassNotFoundException
-    {
+    {          
         Class c = findLoadedClass( name );
         if ( c == null ) {
             try {
@@ -179,12 +179,12 @@ final class CustomURLClassLoader extends URLClassLoader {
 
     public URL getResource(String name) {
         if (resourcePaths == null) return null;
-
+        
         URL result = super.getResource(name);
         if (result != null) {
             return result;
         }
-
+        
         URL u = null;
         URI uri = null;
         for (Enumeration e = resourcePaths.elements(); e.hasMoreElements();) {

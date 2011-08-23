@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,46 +48,46 @@ const USHORT aPosToExportArr[] =
     HTML_CFG_WRITER
 };
 
-//#define DEPRECATED_ENTRY  0xFFFF
+//#define DEPRECATED_ENTRY	0xFFFF
 
 const USHORT aExportToPosArr[] =
 {
-    0,  //HTML 3.2
-    1,  //MS Internet Explorer 4.0
-    3,  //StarWriter
-    2   //Netscape Navigator 4.0
+    0,	//HTML 3.2
+    1,	//MS Internet Explorer 4.0
+    3,	//StarWriter
+    2	//Netscape Navigator 4.0
 };
 // -----------------------------------------------------------------------
 
 OfaHtmlTabPage::OfaHtmlTabPage(Window* pParent, const SfxItemSet& rSet) :
         SfxTabPage( pParent, CUI_RES( RID_OFAPAGE_HTMLOPT ), rSet ),
-    aFontSizeGB     ( this, CUI_RES( GB_FONTSIZE       ) ),
-    aSize1FT        ( this, CUI_RES( FT_SIZE1          ) ),
-    aSize1NF        ( this, CUI_RES( NF_SIZE1          ) ),
-    aSize2FT        ( this, CUI_RES( FT_SIZE2          ) ),
-    aSize2NF        ( this, CUI_RES( NF_SIZE2          ) ),
-    aSize3FT        ( this, CUI_RES( FT_SIZE3          ) ),
-    aSize3NF        ( this, CUI_RES( NF_SIZE3          ) ),
-    aSize4FT        ( this, CUI_RES( FT_SIZE4          ) ),
-    aSize4NF        ( this, CUI_RES( NF_SIZE4          ) ),
-    aSize5FT        ( this, CUI_RES( FT_SIZE5          ) ),
-    aSize5NF        ( this, CUI_RES( NF_SIZE5          ) ),
-    aSize6FT        ( this, CUI_RES( FT_SIZE6          ) ),
-    aSize6NF        ( this, CUI_RES( NF_SIZE6          ) ),
-    aSize7FT        ( this, CUI_RES( FT_SIZE7          ) ),
-    aSize7NF        ( this, CUI_RES( NF_SIZE7          ) ),
-    aImportGB       ( this, CUI_RES( GB_IMPORT     ) ),
-    aNumbersEnglishUSCB ( this, CUI_RES( CB_NUMBERS_ENGLISH_US ) ),
-    aUnknownTagCB   ( this, CUI_RES( CB_UNKNOWN_TAGS ) ),
+    aFontSizeGB		( this, CUI_RES( GB_FONTSIZE	   ) ),
+    aSize1FT        ( this, CUI_RES( FT_SIZE1	       ) ),
+    aSize1NF        ( this, CUI_RES( NF_SIZE1	       ) ),
+    aSize2FT        ( this, CUI_RES( FT_SIZE2	       ) ),
+    aSize2NF        ( this, CUI_RES( NF_SIZE2	       ) ),
+    aSize3FT        ( this, CUI_RES( FT_SIZE3	       ) ),
+    aSize3NF        ( this, CUI_RES( NF_SIZE3	       ) ),
+    aSize4FT        ( this, CUI_RES( FT_SIZE4	       ) ),
+    aSize4NF        ( this, CUI_RES( NF_SIZE4	       ) ),
+    aSize5FT        ( this, CUI_RES( FT_SIZE5	       ) ),
+    aSize5NF        ( this, CUI_RES( NF_SIZE5	       ) ),
+    aSize6FT        ( this, CUI_RES( FT_SIZE6	       ) ),
+    aSize6NF        ( this, CUI_RES( NF_SIZE6	       ) ),
+    aSize7FT        ( this, CUI_RES( FT_SIZE7	       ) ),
+    aSize7NF        ( this, CUI_RES( NF_SIZE7	       ) ),
+    aImportGB       ( this, CUI_RES( GB_IMPORT	   ) ),
+    aNumbersEnglishUSCB	( this, CUI_RES( CB_NUMBERS_ENGLISH_US ) ),
+    aUnknownTagCB	( this, CUI_RES( CB_UNKNOWN_TAGS ) ),
     aIgnoreFontNamesCB( this, CUI_RES( CB_IGNORE_FONTNAMES ) ),
-    aExportGB       ( this, CUI_RES( GB_EXPORT       ) ),
+    aExportGB		( this, CUI_RES( GB_EXPORT       ) ),
     aExportLB       ( this, CUI_RES( LB_EXPORT       ) ),
     aStarBasicCB    ( this, CUI_RES( CB_STARBASIC    ) ),
     aStarBasicWarningCB(this, CUI_RES( CB_STARBASIC_WARNING    ) ),
     aPrintExtensionCB( this,CUI_RES(CB_PRINT_EXTENSION )),
     aSaveGrfLocalCB ( this, CUI_RES( CB_LOCAL_GRF    ) ),
-    aCharSetFT      ( this, CUI_RES( FT_CHARSET      ) ),
-    aCharSetLB      ( this, CUI_RES( LB_CHARSET      ) )
+    aCharSetFT		( this, CUI_RES( FT_CHARSET      ) ),
+    aCharSetLB		( this, CUI_RES( LB_CHARSET      ) )
 
 {
     FreeResource();
@@ -126,7 +126,7 @@ OfaHtmlTabPage::~OfaHtmlTabPage()
 
 --------------------------------------------------*/
 
-SfxTabPage* OfaHtmlTabPage::Create( Window* pParent,
+SfxTabPage*	OfaHtmlTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet )
 {
     return new OfaHtmlTabPage(pParent, rAttrSet);
@@ -203,10 +203,10 @@ void OfaHtmlTabPage::Reset( const SfxItemSet& )
     aIgnoreFontNamesCB.Check(pHtmlOpt->IsIgnoreFontFamily());
     USHORT nExport = pHtmlOpt->GetExportMode();
     if( nExport >= ( sizeof( aExportToPosArr ) / sizeof( USHORT ) ) )
-        nExport = 4;    // default for bad config entry is NS 4.0
+        nExport = 4;	// default for bad config entry is NS 4.0
     USHORT nPosArr = aExportToPosArr[ nExport ];
-//  if( nPosArr == DEPRECATED_ENTRY )
-//      nPosArr = aExportToPosArr[ 4 ];     // again: NS 4.0 is default
+//	if( nPosArr == DEPRECATED_ENTRY )
+//		nPosArr = aExportToPosArr[ 4 ];		// again: NS 4.0 is default
     aExportLB.SelectEntryPos( nPosArr );
     aExportLB.SaveValue();
 

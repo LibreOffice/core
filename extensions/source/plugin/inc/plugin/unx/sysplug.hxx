@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@
 class UnxPluginComm : public PluginComm, public PluginConnector
 {
 private:
-    static int  nConnCounter;
+    static int	nConnCounter;
 
-    pid_t       m_nCommPID;
+    pid_t		m_nCommPID;
 public:
     UnxPluginComm( const String& mimetype,
                    const String& library,

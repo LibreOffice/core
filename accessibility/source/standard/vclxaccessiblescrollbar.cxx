@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,7 +119,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleScrollBar, VCLXAccessibleCompone
 
 ::rtl::OUString VCLXAccessibleScrollBar::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleScrollBar" );
+    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleScrollBar" );	
 }
 
 // -----------------------------------------------------------------------------
@@ -158,11 +158,11 @@ sal_Bool VCLXAccessibleScrollBar::doAccessibleAction ( sal_Int32 nIndex ) throw 
         ScrollType eScrollType;
         switch ( nIndex )
         {
-            case 0:     eScrollType = SCROLL_LINEUP;    break;
-            case 1:     eScrollType = SCROLL_LINEDOWN;  break;
-            case 2:     eScrollType = SCROLL_PAGEUP;    break;
-            case 3:     eScrollType = SCROLL_PAGEDOWN;  break;
-            default:    eScrollType = SCROLL_DONTKNOW;  break;
+            case 0:		eScrollType = SCROLL_LINEUP;	break;
+            case 1:		eScrollType = SCROLL_LINEDOWN;	break;
+            case 2:		eScrollType = SCROLL_PAGEUP;	break;
+            case 3:		eScrollType = SCROLL_PAGEDOWN;	break;
+            default:	eScrollType = SCROLL_DONTKNOW;	break;
         }
         if ( pScrollBar->DoScrollAction( eScrollType ) )
             bReturn = sal_True;
@@ -184,11 +184,11 @@ sal_Bool VCLXAccessibleScrollBar::doAccessibleAction ( sal_Int32 nIndex ) throw 
 
     switch ( nIndex )
     {
-        case 0:     sDescription = ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_DECLINE ) );      break;
-        case 1:     sDescription = ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_INCLINE ) );      break;
-        case 2:     sDescription = ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_DECBLOCK ) );     break;
-        case 3:     sDescription = ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_INCBLOCK ) );     break;
-        default:                                                                                        break;
+        case 0:		sDescription = ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_DECLINE ) );		break;
+        case 1:		sDescription = ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_INCLINE ) );		break;
+        case 2:		sDescription = ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_DECBLOCK ) );		break;
+        case 3:		sDescription = ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_INCBLOCK ) );		break;
+        default:																						break;
     }
 
     return sDescription;
@@ -203,7 +203,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleScrollBar::getAccessibleActionK
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    return Reference< XAccessibleKeyBinding >();
+    return Reference< XAccessibleKeyBinding >();	
 }
 
 // -----------------------------------------------------------------------------
@@ -262,7 +262,7 @@ Any VCLXAccessibleScrollBar::getMaximumValue(  ) throw (RuntimeException)
     VCLXScrollBar* pVCLXScrollBar = static_cast< VCLXScrollBar* >( GetVCLXWindow() );
     if ( pVCLXScrollBar )
         aValue <<= (sal_Int32) pVCLXScrollBar->getMaximum();
-
+                
     return aValue;
 }
 
@@ -274,7 +274,7 @@ Any VCLXAccessibleScrollBar::getMinimumValue(  ) throw (RuntimeException)
 
     Any aValue;
     aValue <<= (sal_Int32) 0;
-
+    
     return aValue;
 }
 
