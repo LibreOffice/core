@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ void BorderHandler::attribute(Id rName, Value & rVal)
             if( pProperties.get())
             {
                 pProperties->resolve(*this);
-                ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
+                ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,  
                                                                                 m_aBorderLines[m_nCurrentBorderPosition], m_bOOXML );
                 OSL_ENSURE(m_nCurrentBorderPosition < BORDER_COUNT, "too many border values");
                 ++m_nCurrentBorderPosition;
@@ -130,7 +130,7 @@ void BorderHandler::sprm(Sprm & rSprm)
     dmapper_logger->startElement("BorderHandler.sprm");
     dmapper_logger->attribute("sprm", rSprm.toString());
 #endif
-
+    
     /* WRITERFILTERSTATUS: table: BorderHandler_sprm */
     switch( rSprm.getId())
     {
@@ -139,18 +139,18 @@ void BorderHandler::sprm(Sprm & rSprm)
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblBorders_left:
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
-        case NS_ooxml::LN_CT_TblBorders_bottom:
+        case NS_ooxml::LN_CT_TblBorders_bottom: 
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblBorders_right:
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblBorders_insideH:
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblBorders_insideV:
-        {
+        {    
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
                 pProperties->resolve(*this);
-            ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
+            ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,  
                                    m_aBorderLines[rSprm.getId() - NS_ooxml::LN_CT_TblBorders_top], m_bOOXML );
 
             m_aFilledLines[ rSprm.getId( ) - NS_ooxml::LN_CT_TblBorders_top] = true;
@@ -158,25 +158,25 @@ void BorderHandler::sprm(Sprm & rSprm)
         break;
         default:;
     }
-
+    
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement("BorderHandler.sprm");
 #endif
-
+                              
 }
 /*-- 24.04.2007 09:09:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 PropertyMapPtr  BorderHandler::getProperties()
 {
-    static const PropertyIds aPropNames[BORDER_COUNT] =
+    static const PropertyIds aPropNames[BORDER_COUNT] = 
     {
         PROP_TOP_BORDER,
         PROP_LEFT_BORDER,
         PROP_BOTTOM_BORDER,
         PROP_RIGHT_BORDER,
         META_PROP_HORIZONTAL_BORDER,
-        META_PROP_VERTICAL_BORDER
+        META_PROP_VERTICAL_BORDER 
     };
     PropertyMapPtr pPropertyMap(new PropertyMap);
     // don't fill in default properties

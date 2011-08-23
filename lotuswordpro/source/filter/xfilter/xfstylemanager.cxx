@@ -61,8 +61,8 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#include    "xfstylemanager.hxx"
-#include    "ixfstyle.hxx"
+#include	"xfstylemanager.hxx"
+#include	"ixfstyle.hxx"
 
 XFStyleManager::XFStyleManager() : s_aStdArrowStyles( A2OUSTR("arrow") ), s_aTextStyles( A2OUSTR("T") ),
     s_aParaStyles( A2OUSTR("P") ),s_aListStyles( A2OUSTR("L") ),s_aSectionStyles( A2OUSTR("Sect") ),
@@ -77,7 +77,7 @@ XFStyleManager::~XFStyleManager()
     Reset();
 }
 
-void    XFStyleManager::Reset()
+void	XFStyleManager::Reset()
 {
     if( s_pOutlineStyle )
     {
@@ -103,21 +103,21 @@ void    XFStyleManager::Reset()
     s_aFontDecls.clear();
 }
 
-void    XFStyleManager::AddFontDecl(rtl::OUString name, rtl::OUString family, sal_Bool fixed)
+void	XFStyleManager::AddFontDecl(rtl::OUString name, rtl::OUString family, sal_Bool fixed)
 {
     s_aFontDecls.push_back( XFFontDecl(name, family, fixed) );
 }
 
-void    XFStyleManager::AddFontDecl(XFFontDecl& aFontDecl)
+void	XFStyleManager::AddFontDecl(XFFontDecl& aFontDecl)
 {
     s_aFontDecls.push_back(aFontDecl);
 }
 
-IXFStyle*   XFStyleManager::AddStyle(IXFStyle *pStyle)
+IXFStyle*	XFStyleManager::AddStyle(IXFStyle *pStyle)
 {
     assert(pStyle);
-    rtl::OUString   name;
-    IXFStyle    *pStyleRet = NULL;
+    rtl::OUString	name;
+    IXFStyle	*pStyleRet = NULL;
 
     if( !pStyle )
         return NULL;
@@ -228,7 +228,7 @@ IXFStyle*   XFStyleManager::AddStyle(IXFStyle *pStyle)
     return pStyleRet;
 }
 
-IXFStyle*   XFStyleManager::FindStyle(rtl::OUString name)
+IXFStyle*	XFStyleManager::FindStyle(rtl::OUString name)
 {
     IXFStyle *pStyle = (IXFStyle*)FindParaStyle(name);
     if( pStyle )
@@ -281,7 +281,7 @@ IXFStyle*   XFStyleManager::FindStyle(rtl::OUString name)
     return NULL;
 }
 
-XFParaStyle*    XFStyleManager::FindParaStyle(rtl::OUString name)
+XFParaStyle*	XFStyleManager::FindParaStyle(rtl::OUString name)
 {
     IXFStyle *pStyle = s_aParaStyles.FindStyle(name);
     if( pStyle )
@@ -290,7 +290,7 @@ XFParaStyle*    XFStyleManager::FindParaStyle(rtl::OUString name)
         return (XFParaStyle*)s_aStdParaStyles.FindStyle(name);
 }
 
-XFTextStyle*    XFStyleManager::FindTextStyle(rtl::OUString name)
+XFTextStyle*	XFStyleManager::FindTextStyle(rtl::OUString name)
 {
     IXFStyle *pStyle = s_aTextStyles.FindStyle(name);
     if( pStyle )
@@ -299,25 +299,25 @@ XFTextStyle*    XFStyleManager::FindTextStyle(rtl::OUString name)
         return (XFTextStyle*)s_aStdTextStyles.FindStyle(name);
 }
 
-void    XFStyleManager::SetLineNumberConfig(XFLineNumberConfig *pLNConf)
+void	XFStyleManager::SetLineNumberConfig(XFLineNumberConfig *pLNConf)
 {
     s_aConfigManager.SetLineNumberConfig(pLNConf);
 }
 
-void    XFStyleManager::SetFootnoteConfig(XFFootnoteConfig *pFNConfig)
+void	XFStyleManager::SetFootnoteConfig(XFFootnoteConfig *pFNConfig)
 {
     s_aConfigManager.SetFootnoteConfig(pFNConfig);
 }
 
-void    XFStyleManager::SetEndnoteConfig(XFEndnoteConfig *pENConfig)
+void	XFStyleManager::SetEndnoteConfig(XFEndnoteConfig *pENConfig)
 {
     s_aConfigManager.SetEndnoteConfig(pENConfig);
 }
 
-void    XFStyleManager::ToXml(IXFStream *pStrm)
+void	XFStyleManager::ToXml(IXFStream *pStrm)
 {
-    std::vector<XFFontDecl>::iterator   itDecl;
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    std::vector<XFFontDecl>::iterator	itDecl;
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     pStrm->StartElement( A2OUSTR("office:font-decls") );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,14 @@
 
 #include "xmlfiltercommon.hrc"
 
-#define CTRL_XML_FILTER_LIST            1
-#define PB_XML_FILTER_NEW               2
-#define PB_XML_FILTER_EDIT              3
-#define PB_XML_FILTER_TEST              4
-#define PB_XML_FILTER_DELETE            5
-#define PB_XML_FILTER_SAVE              6
-#define PB_XML_FILTER_OPEN              7
-#define BTN_XML_FILTER_HELP             8
-#define PB_XML_FILTER_CLOSE             9
+#define CTRL_XML_FILTER_LIST			1
+#define PB_XML_FILTER_NEW				2
+#define PB_XML_FILTER_EDIT				3
+#define PB_XML_FILTER_TEST				4
+#define PB_XML_FILTER_DELETE			5
+#define PB_XML_FILTER_SAVE				6
+#define PB_XML_FILTER_OPEN				7
+#define BTN_XML_FILTER_HELP				8
+#define PB_XML_FILTER_CLOSE				9
 
 #endif

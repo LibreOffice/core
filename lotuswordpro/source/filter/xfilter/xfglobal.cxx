@@ -62,17 +62,17 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#include    "xfglobal.hxx"
-#include    "xffontfactory.hxx"
-#include    "xfstylemanager.hxx"
+#include	"xfglobal.hxx"
+#include	"xffontfactory.hxx"
+#include	"xfstylemanager.hxx"
 
-int XFGlobal::s_nFrameID = 1;
+int	XFGlobal::s_nFrameID = 1;
 int XFGlobal::s_nGraphID = 1;
 int XFGlobal::s_nSectionID = 1;
-int XFGlobal::s_nTableID = 1;
-int XFGlobal::s_nNoteID = 1;
+int	XFGlobal::s_nTableID = 1;
+int	XFGlobal::s_nNoteID = 1;
 int XFGlobal::s_nStrokeDashID = 1;
-int XFGlobal::s_nAreaID = 1;
+int	XFGlobal::s_nAreaID = 1;
 
 //For chart object, /2005/2
 int XFGlobal::s_nObjID = 1;
@@ -127,7 +127,7 @@ rtl::OUString XFGlobal::GenImageName()
     return A2OUSTR("Graphic") + Int32ToOUString(s_nImageID++);
 }
 
-void    XFGlobal::Reset()
+void	XFGlobal::Reset()
 {
     s_nSectionID = 1;
     s_nFrameID = 1;
@@ -138,10 +138,10 @@ void    XFGlobal::Reset()
     s_nObjID = 1;
 }
 
-void    XFGlobalReset()
+void	XFGlobalReset()
 {
-//  XFFontFactory::Reset();
-//  XFStyleManager::Reset();
+//	XFFontFactory::Reset();
+//	XFStyleManager::Reset();
     XFGlobal::Reset();
 }
 

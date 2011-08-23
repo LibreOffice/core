@@ -1,0 +1,194 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "dialogs.hrc"
+
+//#define FLT_WIN_3D                827
+
+#define BTN_FAVORITES			1
+#define BTN_GEO					2
+#define BTN_REPRESENTATION		3
+#define BTN_LIGHT				4
+#define BTN_TEXTURE				5
+#define BTN_MATERIAL			6
+#define BTN_UPDATE				7
+#define BTN_ASSIGN				8
+
+// Unterer Teil
+#define BTN_PERSPECTIVE			9
+#define BTN_CHANGE_TO_3D		10
+#define BTN_LATHE_OBJ			11
+#define CTL_PREVIEW				12
+#define CTL_LIGHT_PREVIEW		13
+
+// Favoriten
+#define CTL_FAVORITES			20
+#define FL_FAVORITES                   21
+#define BTN_ONLY_3D  			22
+#define BTN_ALL_ATTRIBUTES  	23
+
+// Geometrie
+#define FT_HORIZONTAL			24
+#define NUM_HORIZONTAL			25
+#define FT_VERTICAL				26
+#define NUM_VERTICAL			27
+#define FL_SEGMENTS                    28
+#define FT_PERCENT_DIAGONAL		29
+#define MTR_PERCENT_DIAGONAL	30
+#define FT_BACKSCALE			31
+#define MTR_BACKSCALE			32
+#define FT_END_ANGLE			33
+#define MTR_END_ANGLE			34
+#define FT_DEPTH				35
+#define MTR_DEPTH				36
+#define FL_GEOMETRIE                   37
+
+#define BTN_NORMALS_OBJ			38
+#define BTN_NORMALS_FLAT		39
+#define BTN_NORMALS_SPHERE		40
+#define BTN_TWO_SIDED_LIGHTING	41
+#define BTN_NORMALS_INVERT		42
+#define FL_NORMALS                             43
+
+#define BTN_DOUBLE_SIDED 		44
+
+// Darstellung
+#define FT_SHADEMODE			45
+#define LB_SHADEMODE			46
+#define BTN_SHADOW_3D           47
+#define FT_SLANT                48
+#define MTR_SLANT               49
+#define FL_SHADOW              50
+#define FT_DISTANCE				51
+#define MTR_DISTANCE			52
+#define FT_FOCAL_LENGTH 		53
+#define MTR_FOCAL_LENGTH 		54
+#define FL_CAMERA              55
+#define FL_REPRESENTATION      56
+
+// Beleuchtung
+#define BTN_LIGHT_1				60
+#define BTN_LIGHT_2				61
+#define BTN_LIGHT_3				62
+#define BTN_LIGHT_4				63
+#define BTN_LIGHT_5				64
+#define BTN_LIGHT_6				65
+#define BTN_LIGHT_7				66
+#define BTN_LIGHT_8				67
+#define LB_LIGHT_1  			68
+#define LB_LIGHT_2  			69
+#define LB_LIGHT_3  			70
+#define LB_LIGHT_4  			71
+#define LB_LIGHT_5  			72
+#define LB_LIGHT_6  			73
+#define LB_LIGHT_7  			74
+#define LB_LIGHT_8  			75
+#define BTN_LIGHT_COLOR			76
+#define FT_LIGHTSOURCE                 77
+#define LB_AMBIENTLIGHT			78
+#define BTN_AMBIENT_COLOR		79
+#define FT_AMBIENTLIGHT                80
+#define FL_LIGHT                               81
+
+// Texturen
+#define FT_TEX_KIND				90
+#define BTN_TEX_LUMINANCE		91
+#define BTN_TEX_COLOR			92
+#define FT_TEX_MODE				93
+#define BTN_TEX_REPLACE			94
+#define BTN_TEX_MODULATE		95
+#define BTN_TEX_BLEND			96
+#define FT_TEX_PROJECTION_X		97
+#define BTN_TEX_PARALLEL_X		98
+#define BTN_TEX_CIRCLE_X		99
+#define BTN_TEX_OBJECT_X		100
+#define FT_TEX_PROJECTION_Y		101
+#define BTN_TEX_PARALLEL_Y		102
+#define BTN_TEX_CIRCLE_Y		103
+#define BTN_TEX_OBJECT_Y		104
+#define FT_TEX_FILTER			105
+#define BTN_TEX_FILTER			106
+#define FL_TEXTURE                             107
+
+// Material
+//#define CTL_MATERIAL				110
+#define FL_MATERIAL                            111
+
+#define FT_MAT_COLOR				112
+#define LB_MAT_COLOR				113
+#define BTN_MAT_COLOR				114
+#define FT_MAT_EMISSION				115
+#define LB_MAT_EMISSION				116
+#define BTN_EMISSION_COLOR          117
+#define FT_MAT_SPECULAR				118
+#define LB_MAT_SPECULAR				119
+#define BTN_SPECULAR_COLOR          120
+#define FT_MAT_SPECULAR_INTENSITY	121
+#define MTR_MAT_SPECULAR_INTENSITY	122
+#define FL_MAT_SPECULAR                        123
+#define FT_MAT_FAVORITES   			124
+#define LB_MAT_FAVORITES   			125
+
+
+//#define BTN_MAT_FAVORITES   		125
+//#define BTN_MAT_EDITOR      		126
+
+
+// high contrast
+#define BMP_FAVORITES_H				129
+#define BMP_GEO_H					130
+#define BMP_REPRESENTATION_H		131		
+#define BMP_LIGHT_H					132
+#define BMP_TEXTURE_H				133
+#define BMP_MATERIAL_H				134
+#define BMP_UPDATE_H				135
+#define BMP_ASSIGN_H				136
+#define BMP_CHANGE_TO_3D_H			137	
+#define BMP_LATHE_OBJ_H				138
+#define BMP_PERSPECTIVE_H			139	
+#define BMP_ONLY_3D_H				140
+#define BMP_ALL_ATTRIBUTES_H		141		
+#define BMP_NORMALS_OBJ_H			142	
+#define BMP_NORMALS_FLAT_H			143	
+#define BMP_NORMALS_SPHERE_H		144		
+#define BMP_NORMALS_INVERT_H		145		
+#define BMP_TWO_SIDED_LIGHTING_H	146			
+#define BMP_DOUBLE_SIDED_H			147	
+#define BMP_SHADOW_3D_H				148
+#define BMP_3DLIGHT_H				149
+#define BMP_LIGHT_COLOR_H			150	
+#define BMP_AMBIENT_COLOR_H			151	
+#define BMP_TEX_LUMINANCE_H			152	
+#define BMP_TEX_COLOR_H				153
+#define BMP_TEX_REPLACE_H			154	
+#define BMP_TEX_MODULATE_H			155	
+#define BMP_TEX_BLEND_H				156
+#define BMP_TEX_OBJECT_H			157	
+#define BMP_TEX_PARALLEL_H			158	
+#define BMP_TEX_CIRCLE_H			159	
+#define BMP_TEX_FILTER_H			160	
+#define BMP_COLORDLG_H				161
+

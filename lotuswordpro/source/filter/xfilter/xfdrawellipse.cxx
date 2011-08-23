@@ -61,8 +61,8 @@
  * Change History
  * 2004-2-18 create this file.
  ************************************************************************/
-#include    "xfdrawellipse.hxx"
-#include    <cmath>
+#include	"xfdrawellipse.hxx"
+#include	<cmath>
 
 XFDrawEllipse::XFDrawEllipse()
 {
@@ -76,18 +76,18 @@ XFDrawEllipse::XFDrawEllipse()
 
 void XFDrawEllipse::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     //not support yet.
     if( m_bUseAngle )
     {
-        double  x1 = m_aCenterPoint.GetX() + m_fRadiusX*cos(m_fStartAngle*2*PI/360);
+        double	x1 = m_aCenterPoint.GetX() + m_fRadiusX*cos(m_fStartAngle*2*PI/360);
         double  x2 = m_aCenterPoint.GetX() + m_fRadiusX*cos(m_fEndAngle*2*PI/360);
         double  y1 = m_aCenterPoint.GetY() + m_fRadiusY*sin(m_fStartAngle*2*PI/360);
         double  y2 = m_aCenterPoint.GetY() + m_fRadiusY*sin(m_fEndAngle*2*PI/360);
-        double  width;
-        double  height;
+        double	width;
+        double	height;
 
         double x11 = MIN3(m_aCenterPoint.GetX()-m_fRadiusX,x1,x2);
         double x12 = MAX3(m_aCenterPoint.GetX()+m_fRadiusX,x1,x2);
@@ -104,10 +104,10 @@ void XFDrawEllipse::ToXml(IXFStream *pStrm)
     }
     else
     {
-        double  x = m_aCenterPoint.GetX() - m_fRadiusX;
+        double	x = m_aCenterPoint.GetX() - m_fRadiusX;
         double  y = m_aCenterPoint.GetY() - m_fRadiusY;
-        double  width = m_fRadiusX*2;
-        double  height = m_fRadiusY*2;
+        double	width = m_fRadiusX*2;
+        double	height = m_fRadiusY*2;
         SetPosition(x,y,width,height);
     }
 

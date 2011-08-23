@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPPRINTERINFO_HXX
@@ -68,8 +68,8 @@
 #include "lwpatomholder.hxx"
 #include "lwpobjstrm.hxx"
 /**
- * @brief   printer info used in VO_DOCUMENT
- *      not parsed yet
+ * @brief	printer info used in VO_DOCUMENT
+ *		not parsed yet
 */
 class LwpPrinterInfo
 {

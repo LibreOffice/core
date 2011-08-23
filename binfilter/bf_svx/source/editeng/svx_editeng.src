@@ -1,0 +1,454 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include <editeng.hrc>
+#include <helpid.hrc>
+
+String RID_EDITUNDO_DEL
+{
+    Text [ de ] = "Löschen" ;
+    Text [ en-US ] = "Delete" ;
+    Text[ pt ] = "Eliminar";
+    Text[ ru ] = "Удалить";
+    Text[ el ] = "Διαγραφή";
+    Text[ nl ] = "Wissen";
+    Text[ fr ] = "Supprimer";
+    Text[ es ] = "Borrar";
+    Text[ fi ] = "Poista";
+    Text[ ca ] = "Suprimeix";
+    Text[ it ] = "Elimina";
+    Text[ sk ] = "Zmazať";
+    Text[ da ] = "Slet";
+    Text[ sv ] = "Radera";
+    Text[ pl ] = "Usuń";
+    Text[ pt-BR ] = "Excluir";
+    Text[ th ] = "ลบ";
+    Text[ ja ] = "削除";
+    Text[ ko ] = "삭제";
+    Text[ zh-CN ] = "删除";
+    Text[ zh-TW ] = "刪除";
+    Text[ tr ] = "Sil";
+    Text[ hi-IN ] = "मिटाओ";
+    Text[ ar ] = "حذف";
+    Text[ he ] = "‮מחיקה‬";
+};
+
+String RID_EDITUNDO_MOVE
+{
+    Text [ de ] = "Verschieben" ;
+    Text [ en-US ] = "Move" ;
+    Text[ pt ] = "Mover";
+    Text[ ru ] = "Переместить";
+    Text[ el ] = "Μετακίνηση";
+    Text[ nl ] = "Verplaatsen";
+    Text[ fr ] = "Déplacer";
+    Text[ es ] = "Desplazar";
+    Text[ fi ] = "Siirrä";
+    Text[ ca ] = "Mou";
+    Text[ it ] = "Sposta";
+    Text[ sk ] = "Presunúť";
+    Text[ da ] = "Flyt";
+    Text[ sv ] = "Flytta";
+    Text[ pl ] = "Przesuń";
+    Text[ pt-BR ] = "Mover";
+    Text[ th ] = "ย้าย";
+    Text[ ja ] = "移動";
+    Text[ ko ] = "이동";
+    Text[ zh-CN ] = "移动";
+    Text[ zh-TW ] = "移動";
+    Text[ tr ] = "Taşı";
+    Text[ hi-IN ] = "स्थानान्तर";
+    Text[ ar ] = "إزاحة";
+    Text[ he ] = "‮הזזה‬";
+};
+
+String RID_EDITUNDO_INSERT
+{
+    Text [ de ] = "Einfügen" ;
+    Text [ en-US ] = "Insert" ;
+    Text[ pt ] = "Inserir";
+    Text[ ru ] = "Вставить";
+    Text[ el ] = "Εισαγωγή";
+    Text[ nl ] = "Invoegen";
+    Text[ fr ] = "Insérer";
+    Text[ es ] = "Insertar";
+    Text[ fi ] = "Lisää";
+    Text[ ca ] = "Insereix";
+    Text[ it ] = "Inserisci";
+    Text[ sk ] = "Vložiť";
+    Text[ da ] = "Indsæt";
+    Text[ sv ] = "Infoga";
+    Text[ pl ] = "Wstaw";
+    Text[ pt-BR ] = "Inserir";
+    Text[ th ] = "แทรก";
+    Text[ ja ] = "挿入";
+    Text[ ko ] = "삽입";
+    Text[ zh-CN ] = "插入";
+    Text[ zh-TW ] = "插入";
+    Text[ tr ] = "Ekle";
+    Text[ hi-IN ] = "जोड़ो";
+    Text[ ar ] = "إدراج";
+    Text[ he ] = "‮הוספה‬";
+};
+
+String RID_EDITUNDO_REPLACE
+{
+    Text [ de ] = "Ersetzen" ;
+    Text [ en-US ] = "Replace" ;
+    Text[ pt ] = "Substituir";
+    Text[ ru ] = "Заменить";
+    Text[ el ] = "Αντικατάσταση";
+    Text[ nl ] = "Vervangen";
+    Text[ fr ] = "Remplacer";
+    Text[ es ] = "Reemplazar";
+    Text[ fi ] = "Korvaa";
+    Text[ ca ] = "Reemplaça";
+    Text[ it ] = "Sostituisci";
+    Text[ sk ] = "Nahradiť";
+    Text[ da ] = "Erstat";
+    Text[ sv ] = "Ersätt";
+    Text[ pl ] = "Zamień";
+    Text[ pt-BR ] = "Substituir";
+    Text[ th ] = "แทนที่";
+    Text[ ja ] = "置換";
+    Text[ ko ] = "바꾸기";
+    Text[ zh-CN ] = "替换";
+    Text[ zh-TW ] = "代替";
+    Text[ tr ] = "Değiştir";
+    Text[ hi-IN ] = "प्रतिस्थापन";
+    Text[ ar ] = "استبدال";
+    Text[ he ] = "‮החלפה‬";
+};
+
+String RID_EDITUNDO_SETATTRIBS
+{
+    Text [ de ] = "Attribute anwenden" ;
+    Text [ en-US ] = "Apply attributes" ;
+    Text[ pt ] = "Aplicar atributos";
+    Text[ ru ] = "Применить атрибуты";
+    Text[ el ] = "Εφαρμογή ιδιοτήτων";
+    Text[ nl ] = "Attributen toepassen";
+    Text[ fr ] = "Appliquer les attributs";
+    Text[ es ] = "Aplicar atributos";
+    Text[ fi ] = "Käytä määritteitä";
+    Text[ ca ] = "Aplica els atributs";
+    Text[ it ] = "Applica attributi";
+    Text[ sk ] = "Použiť atribúty";
+    Text[ da ] = "Anvend attributter";
+    Text[ sv ] = "Använd attribut";
+    Text[ pl ] = "Zastosuj atrybuty";
+    Text[ pt-BR ] = "Aplicar atributos";
+    Text[ th ] = "ใช้คุณลักษณะ";
+    Text[ ja ] = "属性を適用";
+    Text[ ko ] = "속성 적용";
+    Text[ zh-CN ] = "使用属性";
+    Text[ zh-TW ] = "使用屬性";
+    Text[ tr ] = "Öznitelikleri kullan";
+    Text[ hi-IN ] = "ऐट्रिब्यूट्स लागू करो";
+    Text[ ar ] = "استخدام السمات";
+    Text[ he ] = "‮ישום תכונות‬";
+};
+
+String RID_EDITUNDO_RESETATTRIBS
+{
+    Text [ de ] = "Attribute zurücksetzen" ;
+    Text [ en-US ] = "Reset attributes" ;
+    Text[ pt ] = "Repor atributos";
+    Text[ ru ] = "Восстановить атрибуты";
+    Text[ el ] = "Επαναφορά ιδιοτήτων";
+    Text[ nl ] = "Attributen herstellen";
+    Text[ fr ] = "Restaurer les attributs";
+    Text[ es ] = "Restablecer atributos";
+    Text[ fi ] = "Palauta määritteet";
+    Text[ ca ] = "Reinicia els atributs";
+    Text[ it ] = "Reimposta attributi";
+    Text[ sk ] = "Obnoviť atribúty";
+    Text[ da ] = "Nulstil attributer";
+    Text[ sv ] = "Återställ attribut";
+    Text[ pl ] = "Resetuj atrybuty";
+    Text[ pt-BR ] = "Redefinir atributos";
+    Text[ th ] = "กำหนดคุณลักษณะใหม่";
+    Text[ ja ] = "属性を元に戻す";
+    Text[ ko ] = "속성 원래대로";
+    Text[ zh-CN ] = "重设属性";
+    Text[ zh-TW ] = "重設屬性";
+    Text[ tr ] = "Öznitelikleri başa al";
+    Text[ hi-IN ] = "ऐट्रिब्यूट्स रिसेट्ट करो";
+    Text[ ar ] = "إعادة تعيين السمات";
+    Text[ he ] = "‮איפוס תכונות‬";
+};
+
+String RID_EDITUNDO_INDENT
+{
+    Text [ de ] = "Einrücken" ;
+    Text [ en-US ] = "Indent" ;
+    Text[ pt ] = "Avançar";
+    Text[ ru ] = "Отступ";
+    Text[ el ] = "Εσοχή";
+    Text[ nl ] = "Inspringing";
+    Text[ fr ] = "Mettre en retrait";
+    Text[ es ] = "Sangría";
+    Text[ fi ] = "Sisennä";
+    Text[ ca ] = "Sagnat";
+    Text[ it ] = "Rientro";
+    Text[ sk ] = "Odsadenie";
+    Text[ da ] = "Indryk";
+    Text[ sv ] = "Dra in";
+    Text[ pl ] = "Wcięcie";
+    Text[ pt-BR ] = "Recuo";
+    Text[ th ] = "ระยะเยื้อง";
+    Text[ ja ] = "挿入";
+    Text[ ko ] = "들여쓰기";
+    Text[ zh-CN ] = "缩进";
+    Text[ zh-TW ] = "縮排";
+    Text[ tr ] = "Girinti";
+    Text[ hi-IN ] = "इन्डेन्ट";
+    Text[ ar ] = "إزاحة";
+    Text[ he ] = "‮כניסה‬";
+};
+
+String RID_EDITUNDO_SETSTYLE
+{
+    Text [ de ] = "Vorlagen anwenden" ;
+    Text [ en-US ] = "Apply Styles" ;
+    Text[ pt ] = "Aplicar estilos";
+    Text[ ru ] = "Применить стили";
+    Text[ el ] = "Εφαρμογή προτύπων";
+    Text[ nl ] = "Opmaakprofielen toepassen";
+    Text[ fr ] = "Appliquer les styles";
+    Text[ es ] = "Aplicar estilos";
+    Text[ fi ] = "Käytä tyylejä";
+    Text[ ca ] = "Aplica els estils";
+    Text[ it ] = "Applica modelli";
+    Text[ sk ] = "Použiť štýly";
+    Text[ da ] = "Anvend typografier";
+    Text[ sv ] = "Använd mallar";
+    Text[ pl ] = "Zastosuj style";
+    Text[ pt-BR ] = "Aplicar Estilos";
+    Text[ th ] = "ใช้ลักษณะ";
+    Text[ ja ] = "スタイルを適用";
+    Text[ ko ] = "스타일 적용";
+    Text[ zh-CN ] = "使用样式";
+    Text[ zh-TW ] = "使用樣式";
+    Text[ tr ] = "Şablonları kullan";
+    Text[ hi-IN ] = "शैलियों को लागू करो";
+    Text[ ar ] = "استخدام نماذج";
+    Text[ he ] = "‮ישום סגנונות‬";
+};
+
+String RID_EDITUNDO_TRANSLITERATE
+{
+    Text [ de ] = "Groß-/Kleinschreibung";
+    Text [ en-US ] = "Case/Characters";
+    Text [ x-comment ] = "; nk03.04.01: hier passt Englisch Uebesetzung besser.";
+    Text[ pt ] = "Caixa/Caracteres";
+    Text[ ru ] = "Регистр";
+    Text[ el ] = "Κεφαλαία/Πεζά";
+    Text[ nl ] = "Hoofdletters/kleine letters";
+    Text[ fr ] = "Casse/Caractères";
+    Text[ es ] = "Mayúsculas/minúsculas";
+    Text[ fi ] = "Muuta kirjainkoko";
+    Text[ ca ] = "Majúscules/minúscules";
+    Text[ it ] = "Maiuscole/minuscole";
+    Text[ sk ] = "Veľkosť/znaky";
+    Text[ da ] = "Store og små bogstaver";
+    Text[ sv ] = "Bokstäver/tecken";
+    Text[ pl ] = "Wielkie i małe litery";
+    Text[ pt-BR ] = "Caixa/Caracteres";
+    Text[ th ] = "ตัวพิมพ์/ตัวอักขระ";
+    Text[ ja ] = "文字種の変換";
+    Text[ ko ] = "문자 바꾸기";
+    Text[ zh-CN ] = "变化字母和字体格式";
+    Text[ zh-TW ] = "變化字母和字型格式";
+    Text[ tr ] = "Koşul/Karakterler";
+    Text[ hi-IN ] = "केस/अक्षरें";
+    Text[ ar ] = "الكتابة بأحرف كبيرة أو صغيرة";
+    Text[ he ] = "‮סיווג אותיות‬";
+};
+
+
+Menu RID_MENU_SPELL
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_SPELLING ;
+            HelpId = HID_EDITENG_SPELLER_START;
+            Text [ de ] = "~Rechtschreibprüfung..." ;
+            Text [ en-US ] = "~Spellcheck..." ;
+            Text [ x-comment ] = "; triple dots (...) are required now at the end of the text";
+            Text[ pt ] = "Or~tografia";
+            Text[ ru ] = "~Проверка орфографии";
+            Text[ el ] = "Ορθογραφικός έλεγχος";
+            Text[ nl ] = "~Spellingcontrole";
+            Text[ fr ] = "~Vérification orthographique...";
+            Text[ es ] = "~Revisión ortográfica...";
+            Text[ fi ] = "~Oikeinkirjoituksen tarkistus";
+            Text[ ca ] = "~Ortografia";
+            Text[ it ] = "Controllo ~ortografico...";
+            Text[ sk ] = "~Kontrola pravopisu";
+            Text[ da ] = "~Stavekontrol";
+            Text[ sv ] = "~Rättstavning...";
+            Text[ pl ] = "~Pisownia";
+            Text[ pt-BR ] = "Verificação ~Ortográfica";
+            Text[ th ] = "~ตรวจสอบการสะกด";
+            Text[ ja ] = "文章校正(~S)...";
+            Text[ ko ] = "맞춤법 검사(~S)...";
+            Text[ zh-CN ] = "拼写检查(~S)...";
+            Text[ zh-TW ] = "拼寫檢查(~S)...";
+            Text[ tr ] = "~Yazım Kontrolü...";
+            Text[ hi-IN ] = "~अक्षर की जाँच";
+            Text[ ar ] = "تد~قيق إملائي";
+            Text[ he ] = "‮בדיקת איות‬";
+        };
+        MenuItem
+        {
+            Identifier = MN_INSERT ;
+            HelpId = HID_EDITENG_SPELLER_ADDWORD;
+            SubMenu = Menu
+            {
+            };
+            Text [ de ] = "~Aufnehmen" ;
+            Text [ en-US ] = "~Add" ;
+            Text[ pt ] = "~Adicionar";
+            Text[ ru ] = "Добавить";
+            Text[ el ] = "Πρ~οσθήκη";
+            Text[ nl ] = "~Toevoegen";
+            Text[ fr ] = "~Ajouter";
+            Text[ es ] = "~Incluir";
+            Text[ fi ] = "Lis~ää";
+            Text[ ca ] = "~Afegeix";
+            Text[ it ] = "A~ggiungi";
+            Text[ sk ] = "Prid~ať";
+            Text[ da ] = "Ti~lføj";
+            Text[ sv ] = "~Lägg till";
+            Text[ pl ] = "~Dodaj";
+            Text[ pt-BR ] = "~Adicionar";
+            Text[ th ] = "เ~พิ่ม";
+            Text[ ja ] = "追加(~A)";
+            Text[ ko ] = "추가(~A)";
+            Text[ zh-CN ] = "加入(~A)";
+            Text[ zh-TW ] = "加入(~A)";
+            Text[ tr ] = "Ekle";
+            Text[ hi-IN ] = "~जोड़ो";
+            Text[ ar ] = "إضافة";
+            Text[ he ] = "‮הוספה‬";
+        };
+        MenuItem
+        {
+            Identifier = MN_IGNORE ;
+            HelpId = HID_EDITENG_SPELLER_IGNORE;
+            Text [ de ] = "Alle i~gnorieren" ;
+            Text [ en-US ] = "Ignore All" ;
+            Text[ pt ] = "I~gnorar tudo";
+            Text[ ru ] = "Пропустить все";
+            Text[ el ] = "Παρά~βλεψη όλων";
+            Text[ nl ] = "Alle ~negeren";
+            Text[ fr ] = "Tout ~ignorer";
+            Text[ es ] = "I~gnorar todo";
+            Text[ fi ] = "Ohita kaikki";
+            Text[ ca ] = "Ignora'ls tots";
+            Text[ it ] = "~Ignora tutto";
+            Text[ sk ] = "Ignorovať všetko";
+            Text[ da ] = "I~gnorer alle";
+            Text[ sv ] = "~Ignorera alla";
+            Text[ pl ] = "Ignoruj wszystko";
+            Text[ pt-BR ] = "Ignorar Tudo";
+            Text[ th ] = "เพิกเฉยทั้งหมด";
+            Text[ ja ] = "すべて無視する";
+            Text[ ko ] = "모두 무시";
+            Text[ zh-CN ] = "全部忽略";
+            Text[ zh-TW ] = "全部忽略";
+            Text[ tr ] = "Tümünü yok say";
+            Text[ hi-IN ] = "सब उपेक्षा करो";
+            Text[ ar ] = "تجاهل الكل";
+            Text[ he ] = "‮התעלמות מהכל‬";
+        };
+        MenuItem
+        {
+            Identifier = MN_AUTOCORR ;
+            HelpId = HID_EDITENG_SPELLER_AUTOCORRECT;
+            SubMenu = Menu
+            {
+            };
+            Text [ de ] = "Auto~Korrektur" ;
+            Text [ en-US ] = "AutoCorrect" ;
+            Text[ pt ] = "Auto~Correcção";
+            Text[ ru ] = "Автозамена";
+            Text[ el ] = "Αυτόματη ~Διόρθωση";
+            Text[ nl ] = "~AutoCorrectie";
+            Text[ fr ] = "AutoCo~rrection";
+            Text[ es ] = "~Corrección automática";
+            Text[ fi ] = "Automaattinen korjaus";
+            Text[ ca ] = "Auto~correcció";
+            Text[ it ] = "~Correzione automatica";
+            Text[ sk ] = "Automatické opravy";
+            Text[ da ] = "Auto~Korrektur";
+            Text[ sv ] = "Auto~Korrigering";
+            Text[ pl ] = "Autokorekta";
+            Text[ pt-BR ] = "AutoCorreção";
+            Text[ th ] = "แก้ไขอัตโนมัติ";
+            Text[ ja ] = "オートコレクト";
+            Text[ ko ] = "자동 수정";
+            Text[ zh-CN ] = "自动更正";
+            Text[ zh-TW ] = "自動校正";
+            Text[ tr ] = "Otomatik düzeltme";
+            Text[ hi-IN ] = "स्वयं ठीक करो";
+            Text[ ar ] = "تصحيح تلقائي";
+            Text[ he ] = "‮תיקון אוטומטי‬";
+        };
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

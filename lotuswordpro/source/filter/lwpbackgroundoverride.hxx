@@ -53,12 +53,12 @@
  *
  *
  ************************************************************************/
-#ifndef     _LWPBACKGROUNDOVERRIDE_HXX
-#define     _LWPBACKGROUNDOVERRIDE_HXX
+#ifndef		_LWPBACKGROUNDOVERRIDE_HXX
+#define		_LWPBACKGROUNDOVERRIDE_HXX
 
 
-#include    "lwpoverride.hxx"
-#include    "lwpbackgroundstuff.hxx"
+#include	"lwpoverride.hxx"
+#include	"lwpbackgroundstuff.hxx"
 
 class LwpObjectStream;
 class LwpBackgroundOverride : public LwpOverride
@@ -86,7 +86,7 @@ public:
     LwpBackgroundStuff* GetBGStuff() { return &m_aStuff; }
 
 private:
-    LwpBackgroundStuff  m_aStuff;
+    LwpBackgroundStuff	m_aStuff;
 };
 
 #endif

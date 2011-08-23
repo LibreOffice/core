@@ -1,0 +1,246 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+ // include ---------------------------------------------------------------
+#define __RSC
+
+#ifndef _ERRCODE_HXX
+#include <tools/errcode.hxx>
+#endif
+
+#include "svxerr.hxx"
+#include "dialogs.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // Error-Context ---------------------------------------------------------
+Resource RID_SVXERRCTX
+{
+};
+ // Error-Code ------------------------------------------------------------
+Resource RID_SVXERRCODE
+{
+    String ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT&ERRCODE_RES_MASK
+    {
+        Text [ de ] = "Eine unverknüpfte Grafik konnte nicht geladen werden" ;
+        Text [ en-US ] = "An unlinked graphic could not be loaded";
+        Text[ pt ] = "Foi impossível carregar uma imagem não ligada.";
+        Text[ ru ] = "Невозможно загрузить несвязанные графические объекты";
+        Text[ el ] = "Δεν ήταν δυνατόν να φορτωθεί κάποιο γραφικό χωρίς σύνδεση";
+        Text[ nl ] = "Niet-gekoppelde afbeelding kan niet worden geladen";
+        Text[ fr ] = "Une image (non liée) n'a pas pu être chargée.";
+        Text[ es ] = "No se pudo cargar una imagen no vinculada";
+        Text[ fi ] = "Linkittämätöntä kuvaa ei voitu ladata";
+        Text[ ca ] = "No s'ha pogut carregar la imatge no enllaçada";
+        Text[ it ] = "Non è stato possibile caricare un'immagine non collegata";
+        Text[ sk ] = "Nie je možné načítať nepripojený obrázok";
+        Text[ da ] = "Det var ikke muligt at indlæse en ikke-kædet grafik";
+        Text[ sv ] = "Ett grafikobjekt utan länk kunde inte laddas";
+        Text[ pl ] = "Nie można załadować niepołączonej grafiki";
+        Text[ pt-BR ] = "Não foi possível carregar uma figura não vinculada.";
+        Text[ th ] = "ไม่สามารถโหลดกราฟิคที่ไม่เชื่อมโยงได้";
+        Text[ ja ] = "リンクされていない図は読み込みできません";
+        Text[ ko ] = "연결되지 않은 그래픽은 로드하지 못했습니다.";
+        Text[ zh-CN ] = "无法装入一个尚未链接的图形";
+        Text[ zh-TW ] = "無法載入一個尚未連結的圖形";
+        Text[ tr ] = "Bağlantı oluşturulmamış bir grafik yüklenemedi";
+        Text[ hi-IN ] = "लिंक हटाया हुआ सुचित्र को लोड नहीं कर सकते है";
+        Text[ ar ] = "تعذر تحميل إحدى الصور الغير مرتبطة";
+        Text[ he ] = "‮לא ניתן לטעון עצם גרפי שקישורו נותק‬";
+    };
+    String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
+    {
+        Text [ de ] = "Die Formular-Schicht wurden nicht geladen, da notwendige IO-Services (stardiv.uno.io.*) nicht instantiiert werden konnten";
+        Text [ en-US ] = "The form layer wasn't loaded as the required IO-services (stardiv.uno.io.*) could not be instantiated";
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "Impossível carregar a camada do formulário: foi impossível instanciar os serviços IO (stardiv.uno.io.*) necessários";
+        Text[ ru ] = "Не загружен слой формы, так как не удалось создать экземпляр службы IO (stardiv.uno.io.*).";
+        Text[ el ] = "Δεν φορτώθηκε η στρώση της φόρμας, επειδή δεν ήταν δυνατόν να γίνει ενημέρωση κάποιων απαιτουμένων υπηρεσιών εισόδου - εξόδου (stardiv.uno.io.*).";
+        Text[ nl ] = "Formulierniveau kan niet worden geladen omdat noodzakelijke io--services (stardiv.uno.io.*) niet kunnen worden geïnitieerd.";
+        Text[ fr ] = "La couche de formulaire n'a pas été chargée : impossible d'instancier les services IO (stardiv.uno.io.*) requis.";
+        Text[ es ] = "No se cargó la capa de formulario porque no se pudieron instanciar servicios IO necesarios (stardiv.uno.io.*)";
+        Text[ fi ] = "Lomakekerrosta ei ladattu, koska vaadittujen IO-palveluiden (stardiv.uno.io.*) käyttö ei onnistunut";
+        Text[ ca ] = "La capa del formulari no estava carregada quan no s'han pogut instanciar els serveis IO (stardiv.uno.io.*) necessaris";
+        Text[ it ] = "Lo strato del formulario non è stato caricato poichè stato possibile creare i servizi IO (strdiv.uno.io.*) necessari.";
+        Text[ sk ] = "Vrstva formulára nebola načítaná, pretože nie je možné vytvoriť požadované IO služby (stardiv.uno.io.*).";
+        Text[ da ] = "Formularlaget blev ikke indlæst, fordi det ikke var muligt at instantiere den krævede IO-service (stardiv.uno.io.*).";
+        Text[ sv ] = "Formulärskiktet laddades inte eftersom nödvändig IO-service (stardiv.uno.io.*) inte kunde instantieras.";
+        Text[ pl ] = "Warstwa formularza nie została załadowana, ponieważ nie można utworzyć instancji wymaganych usług we-wy (stardiv.uno.io.*)";
+        Text[ pt-BR ] = "Não foi possível carregar a camada do formulário pois não foi possível instanciar os serviços IO (stardiv.uno.io.*) necessários.";
+        Text[ th ] = "ไม่ได้โหลดระดับของแบบฟอร์มเป็น IO-services (stardiv.uno.io.*) อย่างที่ต้องการไม่สามารถถูกแสดงให้เห็นตัวอย่าง";
+        Text[ ja ] = "IOサービス(stardiv.uno.io.*)がインストールできなかったため、フォーム層は読み込まれませんでした。";
+        Text[ ko ] = "필요한 IO 서비스(stardiv.uno.io.*)의 인스턴스를 생성하지 못했으므로 양식 계층이 로드되지 않았습니다.";
+        Text[ zh-CN ] = "因为无法安装需要的 IO 服务(stardiv.uno.io.*)，所以不能装入表单分层信息";
+        Text[ zh-TW ] = "因為沒有安裝必要的 IO 服務(stardiv.uno.io.*)而無法載入表單層次。";
+        Text[ tr ] = "Gerekli IO hizmetleri (stardiv.uno.io.*) başlatılamadığı için, form düzeyi yüklenemedi.";
+        Text[ hi-IN ] = "आवश्यक IO-सेवों (stardiv.uno.io.*) को प्रारंभ नहीं करने के कारण फ़ॉर्म का परत को लोड नहीं कर सकते है ";
+        Text[ ar ] = "لم يتم تحميل طبقة الاستمارة، إذ تعذر إنشاء خدمات IO اللازمة (stardiv.uno.io.*)";
+        Text[ he ] = "‮לא ניתן להפעיל את שירתי הקלט\\פלט הנדרשים (stardiv.uno.io.*) ולכן רובד הטפסים לא נטען.‬";
+    };
+    String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_WRITE) & ERRCODE_RES_MASK
+    {
+        Text [ de ] = "Die Formular-Schicht wurden nicht geschrieben, da notwendige IO-Services (stardiv.uno.io.*) nicht instantiiert werden konnten";
+        Text [ en-US ] = "The form layer wasn't written as the required IO services (stardiv.uno.io.*) could not be instantiated";
+        Text[ pt ] = "Impossível escrever a camada do formulário: foi impossível instanciar os serviços IO (stardiv.uno.io.*) necessários.";
+        Text[ ru ] = "Не записан слой формы, так как не удалось создать экземпляр службы IO (stardiv.uno.io.*).";
+        Text[ el ] = "Δεν φορτώθηκε η στρώση της φόρμας, επειδή δεν ήταν δυνατόν να γίνει ενημέρωση κάποιων απαιτουμένων υπηρεσιών εισόδου - εξόδου (stardiv.uno.io.*).";
+        Text[ nl ] = "Formulierniveau is niet geschreven omdat noodzakelijke io-services (stardiv.uno.io.*) niet kunnen worden geïnitieerd.";
+        Text[ fr ] = "La couche de formulaire n'a pas été écrite : impossible d'instancier les services IO (stardiv.uno.io.*) requis.";
+        Text[ es ] = "No se pudo escribir la capa de formulario porque no se pudieron instanciar servicios IO necesarios (stardiv.uno.io.*)";
+        Text[ fi ] = "Lomakekerrosta ei kirjoitettu, koska vaadittujen IO-palveluiden (stardiv.uno.io.*) käyttö ei onnistunut";
+        Text[ ca ] = "La capa del formulari no estava escrita quan no s'han pogut instanciar els serveis IO (stardiv.uno.io.*) necessaris";
+        Text[ it ] = "Lo strato del formulario non è stato scritto perché non non è stato possibile creare i servizi IO (stardiv.uno.io.*) necessari.";
+        Text[ sk ] = "Vrstva formulára nebola zapísaná, pretože nie je možné vytvoriť požadované IO služby (stardiv.uno.io.*).";
+        Text[ da ] = "Formularlaget blev ikke skrevet, fordi det ikke var muligt at instantiere den krævede IO-service (stardiv.uno.io.*).";
+        Text[ sv ] = "Formulärskiktet skrevs inte eftersom nödvändig IO-service (stardiv.uno.io.*) inte kunde instantieras";
+        Text[ pl ] = "Warstwa formularza nie została zapisana, ponieważ nie można utworzyć instancji wymaganych usług we-wy (stardiv.uno.io.*)";
+        Text[ pt-BR ] = "Não foi possível gravar a camada do formulário pois não foi possível instanciar os serviços IO (stardiv.uno.io.*) necessários.";
+        Text[ th ] = "ไม่สามารถเขียนระดับของแบบฟอร์มเป็น IO services (stardiv.uno.io.*) อย่างที่ต้องการไม่สามารถถูกแสดงให้เห็นตัวอย่าง";
+        Text[ ja ] = "IOサービス(stardiv.uno.io.*)がインストールできなかったため、フォーム層は書きこめませんでした。";
+        Text[ ko ] = "필요한 IO 서비스(stardiv.uno.io.*)의 인스턴스를 생성하지 못했으므로 양식 계층이 작성되지 않았습니다.";
+        Text[ zh-CN ] = "因为无法安装需要的 IO 服务(stardiv.uno.io.*)，所以不能写入表单分层信息";
+        Text[ zh-TW ] = "因為沒有安裝必要的 IO 服務(stardiv.uno.io.*)而無法寫入表單層次。";
+        Text[ tr ] = "Gerekli IO hizmetleri (stardiv.uno.io.*) başlatılamadığı için, form düzeyi yazılamadı.";
+        Text[ hi-IN ] = "आवश्यक IO-सवों (stardiv.uno.io.*) को प्रारंभ नहीं करने के कारण फ़ॉर्म का परत को लिख नहीं सकते है";
+        Text[ ar ] = "لم يتم كتابة طبقة الاستمارة، إذ تعذر إنشاء خدمات IO اللازمة (stardiv.uno.io.*)";
+        Text[ he ] = "‮לא ניתן להפעיל את שירתי הקלט\\פלט הנדרשים (stardiv.uno.io.*) ולכן רובד הטפסים לא נכתב.‬";
+    };
+    String (ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
+    {
+        Text [ de ] = "Beim Lesen der Formular-Controls trat ein Fehler auf. Die Formular-Schicht wurde nicht geladen";
+        Text [ en-US ] = "An error occurred while reading the form controls. The form layer has not been loaded";
+        Text[ pt ] = "Ocorreu um erro na leitura dos controlos do formulário. Foi impossível carregar a camada do formulário.";
+        Text[ ru ] = "Ошибка чтения элементов управления формы. Не загружен слой формы";
+        Text[ el ] = "Κατά την ανάγνωση των στοιχείων ελέγχου της φόρμας παρουσιάστηκε ένα σφάλμα. Η στρώση της φόρμας δεν φορτώθηκε.";
+        Text[ nl ] = "Fout bij lezen van formulier-controls. Formulierniveau is niet geladen.";
+        Text[ fr ] = "Une erreur est survenue lors de la lecture des contrôles de formulaire. La couche de formulaire n'a pas été chargée.";
+        Text[ es ] = "Ha ocurrido un error al leer los controles de formulario. No se cargó la capa de formulario.";
+        Text[ fi ] = "Lomakkeen ohjausobjekteja luettaessa ilmeni virhe. Lomakekerrosta ei ole ladattu";
+        Text[ ca ] = "Hi ha hagut un error en llegir els controls del formulari. No s'ha pogut carregar la capa del formulari";
+        Text[ it ] = "Si è verificato un errore nella lettura del formulario Controls. Lo strato del formulario non è stato caricato";
+        Text[ sk ] = "Nastala chyba pri načítavaní formulárových prvkov. Vrstva formulára nebola načítaná.";
+        Text[ da ] = "Der opstod en fejl under læsning af formular-kontrolelementerne. Formularlaget blev ikke indlæst.";
+        Text[ sv ] = "Det uppstod ett fel vid läsning av formulär-controls. Formulärskiktet laddades inte";
+        Text[ pl ] = "Wystąpił błąd podczas odczytu formantów formularza. Warstwa formularza nie została załadowana";
+        Text[ pt-BR ] = "Ocorreu um erro na leitura dos controles do formulário. Não foi possível carregar a camada do formulário.";
+        Text[ th ] = "เกิดความผิดพลาดขณะอ่านตัวควบคุมแบบฟอร์ม ระดับของแบบฟอร์มยังไม่ได้ถูกโหลด";
+        Text[ ja ] = "フォーム層の読み取り中にエラー発生。このフォーム層は読み込まれていません。";
+        Text[ ko ] = "양식 컨트롤을 읽을 때 오류가 발생했습니다. 양식 계층이 로드되지 않았습니다.";
+        Text[ zh-CN ] = "在读取表单控制区时发生一个错误。无法装入表单分层信息。";
+        Text[ zh-TW ] = "在讀取表單控制項時發生錯誤。無法載入表單層次。";
+        Text[ tr ] = "Form komut öğeleri okunurken bir hata oluştu. Form düzeyi yüklenemedi.";
+        Text[ hi-IN ] = "फ़ॉर्म नियंत्रणों को पढ़ने के समय गलती घटित हुआ । फ़ॉर्म का परत को लोड़ नहीं कर सकते है";
+        Text[ ar ] = "حدث خطأ أثناء قراءة عناصر تحكم الاستمارة. لم يتم تحميل طبقة الاستمارة";
+        Text[ he ] = "‮ארעה שגיאה בעת קריאת פקדי הטפסים ולכן רובד הטפסים לא נטען.‬";
+    };
+    String (ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_CLASS_WRITE) & ERRCODE_RES_MASK
+    {
+        Text [ de ] = "Beim Schreiben der Formular-Controls trat ein Fehler auf. Die Formular-Schicht wurde nicht gespeichert";
+        Text [ en-US ] = "An error occurred while writing the form controls. The form layer has not been saved";
+        Text[ pt ] = "Ocorreu um erro ao escrever os controlos do formulário. Foi impossível guardar a camada do formulário.";
+        Text[ ru ] = "Ошибка записи элементов управления формы. Не сохранен слой формы";
+        Text[ el ] = "Κατά την εγγραφή των στοιχείων ελέγχου της φόρμας παρουσιάστηκε ένα σφάλμα. Η στρώση της φόρμας δεν φορτώθηκε.";
+        Text[ nl ] = "Fout bij schrijven van formulier-controls. Formulierniveau is niet opgeslagen.";
+        Text[ fr ] = "Une erreur est survenue lors de l'écriture des contrôles de formulaire. La couche de formulaire n'a pas été enregistrée.";
+        Text[ es ] = "Ha ocurrido un error al escribir los controles de formulario. No se guardó la capa de formulario.";
+        Text[ fi ] = "Lomakkeen ohjausobjekteja kirjoitettaessa ilmeni virhe. Lomakekerrosta ei ole tallennettu";
+        Text[ ca ] = "Hi ha hagut un error en llegir els controls del formulari. No s'ha pogut desar la capa del formulari";
+        Text[ it ] = "Si è verificato un errore durante la compilazione del formulario controls. Lo strato del formulario non è stato salvato.";
+        Text[ sk ] = "Nastala chyba pri zapisovaní formulárových prvkov. Vrstva formulára nebola uložená.";
+        Text[ da ] = "Der opstod en fejl under skrivning af formular-kontrolelementerne. Formularlaget blev ikke gemt.";
+        Text[ sv ] = "Det uppstod ett fel vid skrivning av formulär-controls. Formulärskiktet sparades inte";
+        Text[ pl ] = "Wystąpił błąd podczas zapisu formantów formularza. Warstwa formularza nie została zapisana";
+        Text[ pt-BR ] = "Ocorreu um erro ao gravar os controles do formulário. Não foi possível salvar a camada do formulário.";
+        Text[ th ] = "เกิดความผิดพลาดขณะเขียนตัวควบคุมแบบฟอร์ม ระดับของแบบฟอร์มยังไม่ได้ถูกบันทึก";
+        Text[ ja ] = "フォーム層の書き込み中にエラー発生。フォーム層は保存されていません。";
+        Text[ ko ] = "양식 컨트롤을 기록할 때 오류가 발생했습니다. 양식 계층이 저장되지 않았습니다.";
+        Text[ zh-CN ] = "在写入表单控制区时发生一个错误。无法存盘表单分层信息。";
+        Text[ zh-TW ] = "在寫入表單控制項時發生一個錯誤。沒有儲存表單層次。";
+        Text[ tr ] = "Form komut öğeleri yazılırken bir hata oluştu. Form düzeyi kaydedilemedi.";
+        Text[ hi-IN ] = "फ़ॉर्म नियंत्रणों को लिखने के समय गलती घटित हुआ । फ़ॉर्म का परत को संचित नहीं कर सकते है";
+        Text[ ar ] = "حدث خطأ أثناء كتابة عناصر تحكم الاستمارة. لم يتم حفظ طبقة الاستمارة";
+        Text[ he ] = "‮ארעה שגיאה בעת כתיבת פקדי הטפסים ולכן רובד הטפסים לא נשמר.‬";
+    };
+    String (ERRCODE_SVX_BULLETITEM_NOBULLET | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
+    {
+        Text [ de ] = "Beim Lesen eines Bullets trat ein Fehler auf. Es konnten nicht alle Bullets geladen werden";
+        Text [ en-US ] = "An error occurred while reading one of the bullets. Not all of the bullets were loaded.";
+        Text[ pt ] = "Surgiu um erro durante a leitura de uma marca. Foi impossível carregá-las todas.";
+        Text[ ru ] = "Ошибка чтения маркера. Не удается загрузить все маркеры.";
+        Text[ el ] = "Παρουσιάστηκε σφάλμα κατά την ανάγνωση μιας από τις κουκίδες. Δεν φορτώθηκαν όλες οι κουκίδες.";
+        Text[ nl ] = "Fout bij laden van opsommingsteken. Niet alle tekens kunnen worden geladen.";
+        Text[ fr ] = "Une erreur s'est produite pendant la lecture d'une puce. Certaines puces n'ont pas pu être chargées.";
+        Text[ es ] = "Ha ocurrido un error al leer una viñeta. No se pudieron cargar todas las viñetas.";
+        Text[ fi ] = "Luettelomerkkiä luettaessa on ilmennyt virhe. Kaikkia luettelomerkkejä ei ladattu.";
+        Text[ ca ] = "Hi ha hagut un error en llegir un pic. No s'han pogut carregar tots el pics.";
+        Text[ it ] = "Durante la lettura di un bullet si è verificato un errore. Non è stato possibile caricare tutti i bullet.";
+        Text[ sk ] = "Nastala chyba pri načítavaní jednej z odrážok. Nie všetky odrážky boli načítané.";
+        Text[ da ] = "Der opstod en fejl ved læsning af et punkttegn. Det var ikke muligt at indlæse alle punkttegn.";
+        Text[ sv ] = "Det uppstod ett fel vid läsning av en punkt. Det gick inte att ladda alla punkter";
+        Text[ pl ] = "Wystąpił błąd podczas odczytu wypunktowania. Nie można załadować wszystkich wypunktowań.";
+        Text[ pt-BR ] = "Ocorreu um erro durante a leitura de uma das marcas. Não foi possível carregar todas elas.";
+        Text[ th ] = "เกิดความผิดพลาดขณะอ่านหนึ่งในสัญลักษณ์แสดงหัวข้อย่อย  ไม่ทั้งหมดของสัญลักษณ์แสดงหัวข้อย่อยถูกโหลด";
+        Text[ ja ] = "箇条書きを読み込むときにエラーが発生しました。すべての箇条書きは読み込めませんでした。";
+        Text[ ko ] = "글머리 기호를 읽는 중 오류가 발생했습니다. 글머리 기호를 모두 로드하지 못했습니다.";
+        Text[ zh-CN ] = "在读取一个项目符号时发生错误。无法装入全部的项目符号。";
+        Text[ zh-TW ] = "在讀取一個項目符號時發生錯誤。無法載入所有的項目符號。";
+        Text[ tr ] = "Madde işaretleri okunurken hata oluştu. Bu nedenle tüm madde işaretleri yüklenemedi.";
+        Text[ hi-IN ] = "किसी एक बुल्लेट्स को पढ़ने के समय गलती घटित हुआ । सब बुल्लेटों को लोड़ नहीं कर सकते है ।";
+        Text[ ar ] = "حدث خطأ أثناء قراءة إحدى علامات التعداد. تعذر تحميل كل علامات التعداد.";
+        Text[ he ] = "‮ארעה שגיאה בעת קריאת אחד מנקודות הכותרה (bullets). לא כל הנקודות נטענו.‬";
+    };
+
+
+    String ERRCODE_SVX_VBASIC_STORAGE_EXIST & ERRCODE_RES_MASK
+    {
+        Text [ de ] = "Der im Dokument enthaltene originale VBA Basic Code wird nicht gespeichert." ;
+        Text [ en-US ] = "The original VBA Basic Code contained in the document will not be saved.";
+        Text[ pt ] = "O código VBA original contido no documento não será guardado.";
+        Text[ ru ] = "Содержащийся в документе исходный код VBA Basic сохранен не будет.";
+        Text[ el ] = "Δεν θα γίνει αποθήκευση του αυθεντικού VBA basic code που περιέχεται στο έγγραφο.";
+        Text[ nl ] = "De originele VBA Basic-code in dit document wordt niet opgeslagen.";
+        Text[ fr ] = "Le code VBA basic d'origine contenu dans le document ne sera pas enregistré.";
+        Text[ es ] = "No se guardará el Basic Code VBA incluido en el documento.";
+        Text[ fi ] = "Asiakirjan alkuperäistä VBA-peruskoodia ei tallenneta.";
+        Text[ ca ] = "No es desarà el Basic Code VBA inclós en el document.";
+        Text[ it ] = "Non è possibile salvare il codice VBA Basic contenuto nel documeto.";
+        Text[ sk ] = "Kód VBA Basic pôvodne obsiahnutý v dokumente nebude uložený.";
+        Text[ da ] = "Den originale VBA Basic Code, som er indeholdt i dokumentet, gemmes ikke.";
+        Text[ sv ] = "Original-VBA-Basic-koden som finns i dokumentet sparas inte.";
+        Text[ pl ] = "Zawarty w dokumencie oryginalny kod VBA nie zostanie zapisany.";
+        Text[ pt-BR ] = "O código BASIC VBA original contido no documento não será salvo.";
+        Text[ th ] = "มีต้นฉบับ VBA Basic Code ในเอกสารที่จะไม่ถูกบันทึก";
+        Text[ ja ] = "ドキュメントに含まれているオリジナルの VBA Basic Code は保存されません。";
+        Text[ ko ] = "문서에 포함되어 있는 원래 VBA Basic Code는 저장되지 않습니다.";
+        Text[ zh-CN ] = "不会存盘文档中含有的源VBA Basic Code。";
+        Text[ zh-TW ] = "文件含有的源 VBA basic 碼不會被儲存。";
+        Text[ tr ] = "Belgede bulunan ilk VBA basic kodu kaydedilmeyecek.";
+        Text[ hi-IN ] = "लेखपत्र का यथार्थ VBA Basic Code को संचित नहीं कर सकते है ।";
+        Text[ ar ] = "لن يتم حفظ الـ  VBA Basic Codeالأصلي الموجود في المستند.";
+        Text[ he ] = "‮קוד הבייסיק ה VBA המקורי שבמסמך לא ישמר.‬";
+    };
+};
+ // ********************************************************************** EOF

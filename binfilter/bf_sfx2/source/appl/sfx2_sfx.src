@@ -1,0 +1,257 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include "sfx.hrc"
+
+String STR_NONAME
+{
+    Text [ de ] = "Unbenannt" ;
+    Text [ en-US ] = "Untitled" ;
+    Text[ pt ] = "Sem nome";
+    Text[ ru ] = "Документ";
+    Text[ el ] = "Δίχως όνομα";
+    Text[ nl ] = "naamloos";
+    Text[ fr ] = "Sans nom";
+    Text[ es ] = "Sin nombre";
+    Text[ fi ] = "Nimetön";
+    Text[ ca ] = "Sense nom";
+    Text[ it ] = "Senza nome";
+    Text[ sk ] = "Bez_názvu";
+    Text[ da ] = "ikke-navngivet";
+    Text[ sv ] = "Namnlös";
+    Text[ pl ] = "Bez tytułu";
+    Text[ pt-BR ] = "Sem nome";
+    Text[ th ] = "ไม่มีชื่อ";
+    Text[ ja ] = "無題";
+    Text[ ko ] = "제목 없음";
+    Text[ zh-CN ] = "未命名";
+    Text[ zh-TW ] = "未命名";
+    Text[ tr ] = "İsimsiz";
+    Text[ hi-IN ] = "नाम रहित";
+    Text[ ar ] = "بدون عنوان";
+    Text[ he ] = "‮ללא כותרת‬";
+};
+
+
+String STR_CLOSE
+{
+    Text [ de ] = "Schließen" ;
+    Text [ en-US ] = "Close" ;
+    Text[ pt ] = "Fechar";
+    Text[ ru ] = "Закрыть";
+    Text[ el ] = "Κλείσιμο";
+    Text[ nl ] = "Sluiten";
+    Text[ fr ] = "Fermer";
+    Text[ es ] = "Cerrar";
+    Text[ fi ] = "Sulje";
+    Text[ ca ] = "Tanca";
+    Text[ it ] = "Chiudi";
+    Text[ sk ] = "Zavrieť";
+    Text[ da ] = "Luk";
+    Text[ sv ] = "Stäng";
+    Text[ pl ] = "Zamknij";
+    Text[ pt-BR ] = "Fechar";
+    Text[ th ] = "ปิด";
+    Text[ ja ] = "閉じる";
+    Text[ ko ] = "닫기";
+    Text[ zh-CN ] = "关闭";
+    Text[ zh-TW ] = "關閉";
+    Text[ tr ] = "Kapat";
+    Text[ hi-IN ] = "बन्द करो";
+    Text[ ar ] = "إغلاق";
+    Text[ he ] = "‮סגירה‬";
+};
+
+
+
+
+
+
+
+String STR_STANDARD
+{
+    Text [ de ] = "Standard" ;
+    Text [ en-US ] = "Standard" ;
+    Text[ pt ] = "Padrão";
+    Text[ ru ] = "По умолчанию";
+    Text[ el ] = "Προεπιλογή";
+    Text[ nl ] = "Standaard";
+    Text[ fr ] = "Par défaut";
+    Text[ es ] = "Predeterminado";
+    Text[ fi ] = "Vakio";
+    Text[ ca ] = "Predeterminat";
+    Text[ it ] = "Standard";
+    Text[ sk ] = "Štandardný";
+    Text[ da ] = "Standard";
+    Text[ sv ] = "Standard";
+    Text[ pl ] = "Standardowy";
+    Text[ pt-BR ] = "Padrão";
+    Text[ th ] = "มาตรฐาน";
+    Text[ ja ] = "標準";
+    Text[ ko ] = "표준";
+    Text[ zh-CN ] = "标准";
+    Text[ zh-TW ] = "標準";
+    Text[ tr ] = "Standart";
+    Text[ hi-IN ] = "स्टान्डार्ड";
+    Text[ ar ] = "قياسي";
+    Text[ he ] = "‮רגיל‬";
+};
+
+
+
+String STR_HUMAN_APPNAME
+{
+    Text  = "%PRODUCTNAME" ;
+};
+
+
+
+
+
+
+String STR_UNDO
+{
+    /* ### ACHTUNG: Neuer Text in Resource? R�ckg�ngig:  : R�ckg�ngig:  */
+    Text [ de ] = "Rückgängig: " ;
+    Text [ en-US ] = "Undo: " ;
+    Text[ pt ] = "Anular: ";
+    Text[ ru ] = "Отменить:  ";
+    Text[ el ] = "Αναί~ρεση: ";
+    Text[ nl ] = "Ongedaan maken:";
+    Text[ fr ] = "Annuler : ";
+    Text[ es ] = "Deshacer: ";
+    Text[ fi ] = "Kumoa: ";
+    Text[ ca ] = "Desfés: ";
+    Text[ it ] = "Annulla ";
+    Text[ sk ] = "Späť: ";
+    Text[ da ] = "Fortryd: ";
+    Text[ sv ] = "Ångra:  ";
+    Text[ pl ] = "Co~fnij: ";
+    Text[ pt-BR ] = "~Desfazer: ";
+    Text[ th ] = "เลิกทำ: ";
+    Text[ ja ] = "元に戻す: ";
+    Text[ ko ] = "실행 취소: ";
+    Text[ zh-CN ] = "撤消命令： ";
+    Text[ zh-TW ] = "復原：";
+    Text[ tr ] = "Geri al: ";
+    Text[ hi-IN ] = "अनावृत्ति: ";
+    Text[ ar ] = "تراجع: ";
+    Text[ he ] = "‮ביטול פעולה:‬";
+};
+
+String STR_REDO
+{
+    Text [ de ] = "Wiederherstellen: " ;
+    Text [ en-US ] = "Re~do: " ;
+    Text[ pt ] = "Restaurar: ";
+    Text[ ru ] = "Вернуть: ";
+    Text[ el ] = "Επανεκτέλεση: ";
+    Text[ nl ] = "Herstellen:";
+    Text[ fr ] = "Restaurer : ";
+    Text[ es ] = "Restaurar: ";
+    Text[ fi ] = "Tois~ta: ";
+    Text[ ca ] = "Restaurar: ";
+    Text[ it ] = "Ripristina: ";
+    Text[ sk ] = "Z~novu: ";
+    Text[ da ] = "Gendan: ";
+    Text[ sv ] = "Återställ:  ";
+    Text[ pl ] = "Ponów: ";
+    Text[ pt-BR ] = "Re~fazer: ";
+    Text[ th ] = "~ทำซ้ำ: ";
+    Text[ ja ] = "やり直し(~D):";
+    Text[ ko ] = "다시 실행(~D):";
+    Text[ zh-CN ] = "恢复撤消命令 (~D)";
+    Text[ zh-TW ] = "恢復撤消指令(~D):";
+    Text[ tr ] = "~Yinele: ";
+    Text[ hi-IN ] = "फ़िर से ~करो: ";
+    Text[ ar ] = "إعادة: ";
+    Text[ he ] = "‮שחזור פעולה:‬";
+};
+
+String STR_REPEAT
+{
+    Text [ de ] = "Letzter ~Befehl: " ;
+    Text [ en-US ] = "~Repeat: " ;
+    Text[ pt ] = "~Repetir: ";
+    Text[ ru ] = "Повторить:  ";
+    Text[ el ] = "Επανάληψη: ";
+    Text[ nl ] = "~Herhalen:";
+    Text[ fr ] = "~Répéter : ";
+    Text[ es ] = "~Repetir: ";
+    Text[ fi ] = "~Toista: ";
+    Text[ ca ] = "~Repeteix: ";
+    Text[ it ] = "Ultimo ~comando: ";
+    Text[ sk ] = "Opako~vať: ";
+    Text[ da ] = "Sidste ~kommado: ";
+    Text[ sv ] = "Senaste ~kommando:  ";
+    Text[ pl ] = "Powtó~rz: ";
+    Text[ pt-BR ] = "~Repetir: ";
+    Text[ th ] = "~ซ้ำ: ";
+    Text[ ja ] = "繰り返し(~R):";
+    Text[ ko ] = "반복(~R):";
+    Text[ zh-CN ] = "上一个命令(~R)";
+    Text[ zh-TW ] = "上一個指令(~R)";
+    Text[ tr ] = "Son ~komutu yinele: ";
+    Text[ hi-IN ] = "~दुहराना: ";
+    Text[ ar ] = "الأمر الأخير: ";
+    Text[ he ] = "‮בצוע חוזר:‬";
+};
+
+
+QueryBox MSG_QUERY_LASTVERSION
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Alle �nderungen aufheben? : Alle �nderungen aufheben? */
+    Message [ de ] = "Alle Änderungen aufheben?" ;
+    Message [ en-US ] = "Cancel all changes?" ;
+    Message[ pt ] = "Cancelar todas as modificações?";
+    Message[ ru ] = "Отменить все изменения?";
+    Message[ el ] = "Ακύρωση όλων των αλλαγών;";
+    Message[ nl ] = "Alle wijzigingen ongedaan maken?";
+    Message[ fr ] = "Annuler toutes les modifications ?";
+    Message[ es ] = "¿Cancelar todos los cambios?";
+    Message[ fi ] = "Peruutetaanko kaikki muutokset?";
+    Message[ ca ] = "Cancel.la tots els canvis?";
+    Message[ it ] = "Volete annullare tutte le modifiche?";
+    Message[ sk ] = "Zrušiť všetky zmeny?";
+    Message[ da ] = "Vil du annullere alle ændringer?";
+    Message[ sv ] = "Ångra alla ändringar?";
+    Message[ pl ] = "Anulować wszystkie zmiany?";
+    Message[ pt-BR ] = "Cancelar todas as alterações?";
+    Message[ th ] = "ยกเลิกการเปลี่ยนแปลงหรือไม่?";
+    Message[ ja ] = "すべての変更を解除しますか。";
+    Message[ ko ] = "모든 변경 내용을 취소하시겠습니까?";
+    Message[ zh-CN ] = "要取消更改?";
+    Message[ zh-TW ] = "取消所有的變更？";
+    Message[ tr ] = "Tüm değişiklikleri iptal et?";
+    Message[ hi-IN ] = "सब परिवर्तनों को रद्द करना है?";
+    Message[ ar ] = "هل تريد رفض كل التغييرات؟";
+    Message[ he ] = "‮האם לבטל כל השינויים?‬";
+};
+

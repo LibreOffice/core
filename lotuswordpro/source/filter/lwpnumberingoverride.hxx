@@ -62,10 +62,10 @@
 * 2005-01-12 Create and implement.
 ************************************************************************/
 
-#ifndef     _LWPNUMBERINGOVERRIDE_HXX
-#define     _LWPNUMBERINGOVERRIDE_HXX
+#ifndef		_LWPNUMBERINGOVERRIDE_HXX
+#define		_LWPNUMBERINGOVERRIDE_HXX
 
-#include    "lwpoverride.hxx"
+#include	"lwpoverride.hxx"
 
 class LwpObjectStream;
 class LwpNumberingOverride : public LwpOverride
@@ -76,10 +76,10 @@ public:
 
     enum
     {
-        NO_LEVEL        = 0x0001,
-        NO_POSITION     = 0x0002,
-        HEADING         = 0x0004,
-        SMARTLEVEL      = 0x0008
+        NO_LEVEL		= 0x0001,
+        NO_POSITION		= 0x0002,
+        HEADING			= 0x0004,
+        SMARTLEVEL		= 0x0008
     };
 public:
     virtual void Read(LwpObjectStream *pStrm);
@@ -109,8 +109,8 @@ public:
     inline void RevertSmartLevel();
     //end add
 private:
-    sal_uInt16  m_nLevel;
-    sal_uInt16  m_nPosition;
+    sal_uInt16	m_nLevel;
+    sal_uInt16	m_nPosition;
 };
 
 inline sal_uInt16 LwpNumberingOverride::GetLevel() const

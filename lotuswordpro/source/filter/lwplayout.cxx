@@ -59,8 +59,8 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
- Feb 2005           Process gemotry, margins
+ Jan 2005			Created
+ Feb 2005			Process gemotry, margins
  ************************************************************************/
 
 #include "lwplayout.hxx"
@@ -108,7 +108,7 @@ sal_Bool LwpVirtualLayout::MarginsSameAsParent()
 }
 
 /**
-* @descr:   Get column width
+* @descr: 	Get column width
 *
 */
 double LwpVirtualLayout::GetColWidth(sal_uInt16 /*nIndex*/)
@@ -119,7 +119,7 @@ double LwpVirtualLayout::GetColWidth(sal_uInt16 /*nIndex*/)
 }
 
 /**
-* @descr:   Get the gap between columns
+* @descr: 	Get the gap between columns
 *
 */
 double LwpVirtualLayout::GetColGap(sal_uInt16 /*nIndex*/)
@@ -130,7 +130,7 @@ double LwpVirtualLayout::GetColGap(sal_uInt16 /*nIndex*/)
 }
 
 /**
-* @descr:   Whether it is honoring protection
+* @descr: 	Whether it is honoring protection
 *
 */
 sal_Bool LwpVirtualLayout::HonorProtection()
@@ -159,7 +159,7 @@ sal_Bool LwpVirtualLayout::HonorProtection()
 }
 
 /**
-* @descr:   Whether it is protected
+* @descr: 	Whether it is protected
 *
 */
 sal_Bool LwpVirtualLayout::IsProtected()
@@ -190,7 +190,7 @@ sal_Bool LwpVirtualLayout::IsProtected()
 }
 
 /**
-* @descr:   Whether it has protection
+* @descr: 	Whether it has protection
 *
 */
 sal_Bool LwpVirtualLayout::HasProtection()
@@ -208,7 +208,7 @@ sal_Bool LwpVirtualLayout::HasProtection()
 }
 
 /**
-* @descr:   Whether it is a mirror layout
+* @descr: 	Whether it is a mirror layout
 *
 */
 sal_Bool LwpVirtualLayout::IsComplex()
@@ -217,7 +217,7 @@ sal_Bool LwpVirtualLayout::IsComplex()
 }
 
 /**
-* @descr:   Get usewhen pointer
+* @descr: 	Get usewhen pointer
 *
 */
 LwpUseWhen* LwpVirtualLayout::GetUseWhen()
@@ -336,7 +336,7 @@ sal_Bool LwpVirtualLayout::IsMinimumHeight()
 }
 
 /**
-* @descr:   Get parent layout
+* @descr: 	Get parent layout
 *
 */
 LwpVirtualLayout* LwpVirtualLayout::GetParentLayout()
@@ -377,7 +377,7 @@ sal_Bool LwpVirtualLayout::IsStyleLayout()
 }
 
 /**
-* @descr:   Find child layout by layout type
+* @descr: 	Find child layout by layout type
 *
 */
 LwpVirtualLayout* LwpVirtualLayout::FindChildByType(LWP_LAYOUT_TYPE eType)
@@ -403,7 +403,7 @@ LwpVirtualLayout* LwpVirtualLayout::FindChildByType(LWP_LAYOUT_TYPE eType)
 }
 
 /**
-* @descr:   Whether the size of layout is fit the graphic
+* @descr: 	Whether the size of layout is fit the graphic
 *
 */
 sal_Bool LwpVirtualLayout::IsFitGraphic()
@@ -412,7 +412,7 @@ sal_Bool LwpVirtualLayout::IsFitGraphic()
 }
 
 /**
-* @descr:   Whether the width of layout is auto grow
+* @descr: 	Whether the width of layout is auto grow
 *
 */
 sal_Bool LwpVirtualLayout::IsAutoGrowWidth()
@@ -421,7 +421,7 @@ sal_Bool LwpVirtualLayout::IsAutoGrowWidth()
 }
 
 /**
-* @descr:   Determine whether the layout width is to margin
+* @descr: 	Determine whether the layout width is to margin
 *
 */
 sal_Bool LwpVirtualLayout::IsInlineToMargin()
@@ -437,8 +437,8 @@ void LwpAssociatedLayouts::Read(LwpObjectStream* pStrm)
 }
 
 /**
-* @descr:   Looking for the layout which follows the pStartLayout
-* @param:   pStartLayout - the layout which is used for looking for its following layout
+* @descr: 	Looking for the layout which follows the pStartLayout
+* @param:  	pStartLayout - the layout which is used for looking for its following layout
 */
 LwpVirtualLayout* LwpAssociatedLayouts::GetLayout(LwpVirtualLayout *pStartLayout)
 {
@@ -638,7 +638,7 @@ void LwpMiddleLayout::Read()
 #include "lwplaypiece.hxx"
 
 /**
-* @descr:   Get the geometry of current layout
+* @descr: 	Get the geometry of current layout
 *
 */
 LwpLayoutGeometry* LwpMiddleLayout::GetGeometry()
@@ -656,7 +656,7 @@ LwpLayoutGeometry* LwpMiddleLayout::GetGeometry()
 }
 
 /**
-* @descr:   Get layout height, measured by "cm"
+* @descr: 	Get layout height, measured by "cm"
 *
 */
 double LwpMiddleLayout::GetGeometryHeight()
@@ -671,7 +671,7 @@ double LwpMiddleLayout::GetGeometryHeight()
 }
 
 /**
-* @descr:   Get layout width, measured by "cm"
+* @descr: 	Get layout width, measured by "cm"
 *
 */
 double LwpMiddleLayout::GetGeometryWidth()
@@ -686,7 +686,7 @@ double LwpMiddleLayout::GetGeometryWidth()
 }
 
 /**
-* @descr:   Whether the margins is same as parent layout
+* @descr: 	Whether the margins is same as parent layout
 *
 */
 BOOL LwpMiddleLayout::MarginsSameAsParent()
@@ -705,8 +705,8 @@ BOOL LwpMiddleLayout::MarginsSameAsParent()
 }
 
 /**
-* @descr:   Get margin
-* @param:   nWhichSide - 0: left, 1: right, 2:top, 3: bottom
+* @descr: 	Get margin
+* @param:  	nWhichSide - 0: left, 1: right, 2:top, 3: bottom
 */
 double LwpMiddleLayout::GetMarginsValue(const sal_uInt8 &nWhichSide)
 {
@@ -742,8 +742,8 @@ double LwpMiddleLayout::GetMarginsValue(const sal_uInt8 &nWhichSide)
     return LwpVirtualLayout::GetMarginsValue(nWhichSide);
 }
 /**
- * @descr:  Get extmargin value
- * @param:  nWhichSide - 0: left, 1: right, 2:top, 3: bottom
+ * @descr:	Get extmargin value
+ * @param:	nWhichSide - 0: left, 1: right, 2:top, 3: bottom
  * @param:
  * @return:
 */
@@ -820,7 +820,7 @@ XFBorders* LwpMiddleLayout::GetXFBorders()
     if(pBorderStuff&&pBorderStuff->GetSide() != 0)
     {
         //copy from lwpparastyle.
-        XFBorders   *pXFBorders = new XFBorders();
+        XFBorders	*pXFBorders = new XFBorders();
         // apply 4 borders respectively
         LwpBorderStuff::BorderType pType[] = { LwpBorderStuff::LEFT, LwpBorderStuff::RIGHT,
             LwpBorderStuff::TOP, LwpBorderStuff::BOTTOM };
@@ -935,7 +935,7 @@ sal_uInt16 LwpMiddleLayout::GetScaleMode(void)
 void LwpMiddleLayout::SetScaleMode(sal_uInt16 nVal)
 {
     m_nOverrideFlag |= OVER_SCALING;
-//  nVal |= LwpLayoutScale::MAINTAIN_ASPECT_RATIO;
+//	nVal |= LwpLayoutScale::MAINTAIN_ASPECT_RATIO;
     GetLayoutScale()->SetScaleMode(nVal);
 }
 
@@ -1100,7 +1100,7 @@ sal_Bool LwpMiddleLayout::IsSizeRightToContent(void)
 }
 
 /**
-* @descr:   Get layout height
+* @descr: 	Get layout height
 *
 */
 double LwpMiddleLayout::GetHeight()
@@ -1109,7 +1109,7 @@ double LwpMiddleLayout::GetHeight()
 }
 
 /**
-* @descr:   Get layout height
+* @descr: 	Get layout height
 *
 */
 double LwpMiddleLayout::GetWidth()
@@ -1117,7 +1117,7 @@ double LwpMiddleLayout::GetWidth()
     return GetGeometryWidth();
 }
 /**
-* @descr:   Get layout orgin point
+* @descr: 	Get layout orgin point
 *
 */
 LwpPoint LwpMiddleLayout::GetOrigin()
@@ -1146,8 +1146,8 @@ void LwpMiddleLayout::SetScaleHeight(double fVal)
 }
 
 /**
-* @descr:   Whether the fill is pattern fill or not
-* @return:  True if yes, false if not.
+* @descr: 	Whether the fill is pattern fill or not
+* @return:	True if yes, false if not.
 */
 sal_Bool LwpMiddleLayout::IsPatternFill()
 {
@@ -1161,8 +1161,8 @@ sal_Bool LwpMiddleLayout::IsPatternFill()
 }
 
 /**
-* @descr:   Get the fill pattern style. Data are saved in a XFBGImage object
-* @return:  the fill pattern style.
+* @descr: 	Get the fill pattern style. Data are saved in a XFBGImage object
+* @return:	the fill pattern style.
 */
 XFBGImage* LwpMiddleLayout::GetFillPattern()
 {
@@ -1177,7 +1177,7 @@ XFBGImage* LwpMiddleLayout::GetFillPattern()
 }
 
 /**
-* @descr:   Whether the height and width of layout is auto grow
+* @descr: 	Whether the height and width of layout is auto grow
 *
 */
 sal_Bool LwpMiddleLayout::IsAutoGrow()
@@ -1198,7 +1198,7 @@ sal_Bool LwpMiddleLayout::IsAutoGrow()
 }
 
 /**
-* @descr:   Whether the height of layout is auto grow down
+* @descr: 	Whether the height of layout is auto grow down
 *
 */
 sal_Bool LwpMiddleLayout::IsAutoGrowDown()
@@ -1216,7 +1216,7 @@ sal_Bool LwpMiddleLayout::IsAutoGrowDown()
 }
 
 /**
-* @descr:   Whether the height of layout is auto grow up
+* @descr: 	Whether the height of layout is auto grow up
 *
 */
 sal_Bool LwpMiddleLayout::IsAutoGrowUp()
@@ -1234,7 +1234,7 @@ sal_Bool LwpMiddleLayout::IsAutoGrowUp()
 }
 
 /**
-* @descr:   Whether the height of layout is auto grow down
+* @descr: 	Whether the height of layout is auto grow down
 *
 */
 sal_Bool LwpMiddleLayout::IsAutoGrowLeft()
@@ -1252,7 +1252,7 @@ sal_Bool LwpMiddleLayout::IsAutoGrowLeft()
 }
 
 /**
-* @descr:   Whether the height of layout is auto grow down
+* @descr: 	Whether the height of layout is auto grow down
 *
 */
 sal_Bool LwpMiddleLayout::IsAutoGrowRight()
@@ -1271,7 +1271,7 @@ sal_Bool LwpMiddleLayout::IsAutoGrowRight()
 
 
 /**
-* @descr:   Get contents orientation
+* @descr: 	Get contents orientation
 *
 */
 sal_uInt8 LwpMiddleLayout::GetContentOrientation()
@@ -1291,7 +1291,7 @@ sal_uInt8 LwpMiddleLayout::GetContentOrientation()
 }
 
 /**
-* @descr:   Whether it is honoring protection
+* @descr: 	Whether it is honoring protection
 *
 */
 sal_Bool LwpMiddleLayout::HonorProtection()
@@ -1326,7 +1326,7 @@ sal_Bool LwpMiddleLayout::HonorProtection()
 }
 
 /**
-* @descr:   Whether it is pretected
+* @descr: 	Whether it is pretected
 *
 */
 sal_Bool LwpMiddleLayout::IsProtected()
@@ -1375,7 +1375,7 @@ sal_Bool LwpMiddleLayout::IsProtected()
 }
 
 /**
-* @descr:   Get watermark layout
+* @descr: 	Get watermark layout
 *
 */
 LwpVirtualLayout* LwpMiddleLayout::GetWaterMarkLayout()
@@ -1393,7 +1393,7 @@ LwpVirtualLayout* LwpMiddleLayout::GetWaterMarkLayout()
 }
 
 /**
-* @descr:   Create and reture xfbgimage object for watermark
+* @descr: 	Create and reture xfbgimage object for watermark
 *
 */
 XFBGImage* LwpMiddleLayout::GetXFBGImage()
@@ -1454,7 +1454,7 @@ XFBGImage* LwpMiddleLayout::GetXFBGImage()
 }
 
 /**
-* @descr:   Whether the page uses the printer setting
+* @descr: 	Whether the page uses the printer setting
 *
 */
 sal_Bool LwpMiddleLayout::GetUsePrinterSettings()
@@ -1534,7 +1534,7 @@ void LwpLayout::Read()
 }
 
 /**
-* @descr:   Get columns number
+* @descr: 	Get columns number
 *
 */
 sal_uInt16 LwpLayout::GetNumCols()
@@ -1559,8 +1559,8 @@ sal_uInt16 LwpLayout::GetNumCols()
 }
 
 /**
-* @descr:   Get column width
-* @param:   the order of column
+* @descr: 	Get column width
+* @param:	the order of column
 */
 double LwpLayout::GetColWidth(sal_uInt16 nIndex)
 {
@@ -1584,8 +1584,8 @@ double LwpLayout::GetColWidth(sal_uInt16 nIndex)
 }
 
 /**
-* @descr:   Get gap between columns
-* @param:   the order of column
+* @descr: 	Get gap between columns
+* @param:	the order of column
 */
 double LwpLayout::GetColGap(sal_uInt16 nIndex)
 {
@@ -1608,7 +1608,7 @@ double LwpLayout::GetColGap(sal_uInt16 nIndex)
 }
 
 /**
-* @descr:   Create and return XFColumns object
+* @descr: 	Create and return XFColumns object
 *
 */
 XFColumns* LwpLayout::GetXFColumns()
@@ -1638,7 +1638,7 @@ XFColumns* LwpLayout::GetXFColumns()
     {
         XFColumn* pColumn = new XFColumn();
         sal_Int32 nWidth = static_cast<sal_Int32>(GetColWidth(nIndex));
-        nWidth=8305/nCols;  //relative width
+        nWidth=8305/nCols;	//relative width
         pColumn->SetRelWidth(nWidth);
 
         //the left and right margins is 0;
@@ -1660,7 +1660,7 @@ XFColumns* LwpLayout::GetXFColumns()
 }
 
 /**
-* @descr:   Create and return XFColumnSep object
+* @descr: 	Create and return XFColumnSep object
 *
 */
 XFColumnSep* LwpLayout::GetColumnSep()
@@ -1678,9 +1678,9 @@ XFColumnSep* LwpLayout::GetColumnSep()
     if(pBorderStuff)
     {
         LwpBorderStuff::BorderType eType = LwpBorderStuff::LEFT;
-        LwpColor    aColor = pBorderStuff->GetSideColor(eType);
-        double  fWidth = pBorderStuff->GetSideWidth(eType);
-        //sal_uInt16    nType = pBorderStuff->GetSideType(eType);
+        LwpColor	aColor = pBorderStuff->GetSideColor(eType);
+        double	fWidth = pBorderStuff->GetSideWidth(eType);
+        //sal_uInt16	nType = pBorderStuff->GetSideType(eType);
 
         XFColumnSep* pColumnSep = new XFColumnSep();
         XFColor aXFColor(aColor.To24Color());
@@ -1696,7 +1696,7 @@ XFColumnSep* LwpLayout::GetColumnSep()
 }
 
 /**
-* @descr:   Get use when type
+* @descr: 	Get use when type
 *
 */
 LwpLayout::UseWhenType LwpLayout::GetUseWhenType()
@@ -1735,7 +1735,7 @@ LwpLayout::UseWhenType LwpLayout::GetUseWhenType()
 }
 
 /**
-* @descr:   Get use page
+* @descr: 	Get use page
 *
 */
 sal_uInt16 LwpLayout::GetUsePage()
@@ -1757,7 +1757,7 @@ sal_uInt16 LwpLayout::GetUsePage()
 }
 
 /**
-* @descr:   Get usewhen pointer
+* @descr: 	Get usewhen pointer
 *
 */
 LwpUseWhen* LwpLayout::VirtualGetUseWhen()
@@ -1775,7 +1775,7 @@ LwpUseWhen* LwpLayout::VirtualGetUseWhen()
 }
 
 /**
-* @descr:   Whether it is use on all pages
+* @descr: 	Whether it is use on all pages
 *
 */
 sal_Bool LwpLayout::IsUseOnAllPages()
@@ -1797,7 +1797,7 @@ sal_Bool LwpLayout::IsUseOnAllPages()
 }
 
 /**
-* @descr:   Whether it is use on all even pages
+* @descr: 	Whether it is use on all even pages
 *
 */
 sal_Bool LwpLayout::IsUseOnAllEvenPages()
@@ -1819,7 +1819,7 @@ sal_Bool LwpLayout::IsUseOnAllEvenPages()
 }
 
 /**
-* @descr:   Whether it is use on all odd pages
+* @descr: 	Whether it is use on all odd pages
 *
 */
 sal_Bool LwpLayout::IsUseOnAllOddPages()
@@ -1841,7 +1841,7 @@ sal_Bool LwpLayout::IsUseOnAllOddPages()
 }
 
 /**
-* @descr:   Whether it is use on current page
+* @descr: 	Whether it is use on current page
 *
 */
 sal_Bool LwpLayout::IsUseOnPage()
@@ -1895,8 +1895,8 @@ XFShadow* LwpLayout::GetXFShadow()
     if( pShadow )
     {
         LwpColor color = pShadow->GetColor();
-        double  offsetX = pShadow->GetOffsetX();
-        double  offsetY = pShadow->GetOffsetY();
+        double	offsetX = pShadow->GetOffsetX();
+        double	offsetY = pShadow->GetOffsetY();
 
         if( offsetX && offsetY && color.IsValidColor() )
         {
@@ -1986,7 +1986,7 @@ void LwpPlacableLayout::Read()
         {
             m_nWrapType = LAY_WRAP_AROUND;
             m_nBuoyancy = LAY_BUOYNEUTRAL;
-            m_nBaseLineOffset    = 0;
+            m_nBaseLineOffset	 = 0;
         }
         m_LayRelativity.ReadIndexed( pStrm);
         if(pStrm->CheckExtra())
@@ -2050,7 +2050,7 @@ LwpLayoutRelativity* LwpPlacableLayout::GetRelativityPiece()
     return NULL;
 }
 /**
-* @descr:   Get relative type
+* @descr: 	Get relative type
 *
 */
 sal_uInt8 LwpPlacableLayout::GetRelativeType()
@@ -2063,7 +2063,7 @@ sal_uInt8 LwpPlacableLayout::GetRelativeType()
     return LwpVirtualLayout::GetRelativeType();
 }
 /**
-* @descr:   Get relative from where type
+* @descr: 	Get relative from where type
 *
 */
 sal_uInt8 LwpPlacableLayout::GetRelativeFromWhere()
@@ -2076,7 +2076,7 @@ sal_uInt8 LwpPlacableLayout::GetRelativeFromWhere()
     return 0;
 }
 /**
-* @descr:   Get relative distance
+* @descr: 	Get relative distance
 *
 */
 LwpPoint LwpPlacableLayout::GetRelativeDistance()
@@ -2090,7 +2090,7 @@ LwpPoint LwpPlacableLayout::GetRelativeDistance()
     return aPoint;
 }
 /**
-* @descr:   Get tether type
+* @descr: 	Get tether type
 *
 */
 sal_uInt8 LwpPlacableLayout::GetTetherType()
@@ -2103,7 +2103,7 @@ sal_uInt8 LwpPlacableLayout::GetTetherType()
     return 0;
 }
 /**
-* @descr:   Get tether where type
+* @descr: 	Get tether where type
 *
 */
 sal_uInt8 LwpPlacableLayout::GetTetherWhere()
@@ -2116,7 +2116,7 @@ sal_uInt8 LwpPlacableLayout::GetTetherWhere()
     return 0;
 }
 /**
-* @descr:   Get offset from the baseline
+* @descr: 	Get offset from the baseline
 *
 */
 sal_Int32 LwpPlacableLayout::GetBaseLineOffset()
@@ -2147,7 +2147,7 @@ sal_Int32 LwpPlacableLayout::GetBaseLineOffset()
 
 }
 /**
-* @descr:   whether the parent layout is page layout
+* @descr: 	whether the parent layout is page layout
 *
 */
 sal_Bool LwpPlacableLayout::IsAnchorPage()
@@ -2164,7 +2164,7 @@ sal_Bool LwpPlacableLayout::IsAnchorPage()
     return sal_False;
 }
 /**
-* @descr:   whether the parent layout is frame layout
+* @descr: 	whether the parent layout is frame layout
 *
 */
 sal_Bool LwpPlacableLayout::IsAnchorFrame()
@@ -2180,7 +2180,7 @@ sal_Bool LwpPlacableLayout::IsAnchorFrame()
     return sal_False;
 }
 /**
-* @descr:   whether the parent layout is cell layout
+* @descr: 	whether the parent layout is cell layout
 *
 */
 sal_Bool LwpPlacableLayout::IsAnchorCell()
@@ -2197,7 +2197,7 @@ sal_Bool LwpPlacableLayout::IsAnchorCell()
 }
 
 /**
-* @descr:   Get font style for setting position of frame
+* @descr: 	Get font style for setting position of frame
 *
 */
 XFFont* LwpPlacableLayout::GetFont()
@@ -2205,7 +2205,7 @@ XFFont* LwpPlacableLayout::GetFont()
     return m_pFont;
 }
 /**
-* @descr:   Set font style for setting position of frame
+* @descr: 	Set font style for setting position of frame
 *
 */
 void LwpPlacableLayout::SetFont(XFFont * pFont)

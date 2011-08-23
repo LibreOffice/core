@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ public:
        Convert CP to FC.
 
        @param aCpIn    CP to convert
-
+       
        @return FC associated with CP
      */
     virtual Fc cp2fc(const Cp & aCpIn) const = 0;
@@ -76,7 +76,7 @@ public:
        Convert FC to CP.
 
        @param aFcIn    FC to convert
-
+       
        @return CP associated with FC
      */
     virtual Cp fc2cp(const Fc & aFcIn) const = 0;
@@ -119,7 +119,7 @@ public:
     */
     virtual Cp getLastCp() const = 0;
 
-    /**
+    /** 
         Return last FC.
     */
     virtual Fc getLastFc() const = 0;
@@ -138,7 +138,7 @@ public:
     */
     virtual Fc getFc(sal_uInt32 nIndex) const = 0;
 
-    /**
+    /** 
         Create CpAndFc from Cp.
 
         @param rCp   the Cp
@@ -147,7 +147,7 @@ public:
     */
     virtual CpAndFc createCpAndFc(const Cp & rCp, PropertyType eType) const = 0;
 
-    /**
+    /** 
         Create CpAndFc from Fc.
 
         @param rFc   the Fc
@@ -166,7 +166,7 @@ public:
 
 /**
    Dump piece table.
-
+   
    @param o             stream to dump to
    @param rPieceTable   piece table to dump
 */

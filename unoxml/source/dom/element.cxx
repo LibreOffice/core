@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,14 +113,14 @@ namespace DOM
             sal_Int32 nAttributeToken=FastToken::DONTKNOW;
 
             if( pAttr->ns && strlen((char*)pAttr->ns->prefix) )
-                nAttributeToken = getTokenWithPrefix( i_rContext,
-                                                      (sal_Char*)pAttr->ns->prefix,
+                nAttributeToken = getTokenWithPrefix( i_rContext, 
+                                                      (sal_Char*)pAttr->ns->prefix, 
                                                       (sal_Char*)xName );
             else
                 nAttributeToken = getToken( i_rContext, (sal_Char*)xName );
 
             if( nAttributeToken != FastToken::DONTKNOW )
-                i_rContext.mxAttribList->add( nAttributeToken,
+                i_rContext.mxAttribList->add( nAttributeToken, 
                                               OUStringToOString(pNode->getNodeValue(),
                                                                 RTL_TEXTENCODING_UTF8));
         }
@@ -140,8 +140,8 @@ namespace DOM
             if( nElementToken == FastToken::DONTKNOW )
             {
                 const OUString aNamespace;
-                const OUString aElementName( (sal_Char*)xPrefix,
-                                             strlen((char*)xPrefix),
+                const OUString aElementName( (sal_Char*)xPrefix, 
+                                             strlen((char*)xPrefix), 
                                              RTL_TEXTENCODING_UTF8 );
 
                 if( xParentHandler.is() )
@@ -181,8 +181,8 @@ namespace DOM
             else
             {
                 const OUString aNamespace;
-                const OUString aElementName( (sal_Char*)xPrefix,
-                                             strlen((char*)xPrefix),
+                const OUString aElementName( (sal_Char*)xPrefix, 
+                                             strlen((char*)xPrefix), 
                                              RTL_TEXTENCODING_UTF8 );
 
                 i_rContext.mxCurrentHandler->endUnknownElement( aNamespace, aElementName );
@@ -278,8 +278,8 @@ namespace DOM
     }
 
     /**
-    Returns a NodeList of all descendant Elements with a given tag name,
-    in the order in which they are
+    Returns a NodeList of all descendant Elements with a given tag name, 
+    in the order in which they are 
     encountered in a preorder traversal of this Element tree.
     */
     Reference< XNodeList > CElement::getElementsByTagName(const OUString& name)
@@ -290,7 +290,7 @@ namespace DOM
     }
 
     /**
-    Returns a NodeList of all the descendant Elements with a given local
+    Returns a NodeList of all the descendant Elements with a given local 
     name and namespace URI in the order in which they are encountered in
     a preorder traversal of this Element tree.
     */
@@ -528,7 +528,7 @@ namespace DOM
     }
 
     /**
-    Adds a new attribute.
+    Adds a new attribute. 
     */
     void CElement::setAttributeNS(
             const OUString& namespaceURI, const OUString& qualifiedName, const OUString& value)

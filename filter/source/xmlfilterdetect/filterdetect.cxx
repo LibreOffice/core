@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -217,7 +217,7 @@ Reference< com::sun::star::frame::XModel > xModel;
     if((clipBoardFormat.match(OUString::createFromAscii("doctype:"))))
     {
             ::rtl::OString tryStr = ::rtl::OUStringToOString(clipBoardFormat.copy(8),RTL_TEXTENCODING_ASCII_US).getStr();
-            // OSL_ENSURE( sal_False, tryStr);
+            // OSL_ENSURE( sal_False, tryStr);			
             if (resultString.indexOf(tryStr) >= 0)
             {
                     sTypeName = checkType;

@@ -175,7 +175,7 @@ private:
 protected:
     VbaSiteModelRef     mxSiteModel;        /// Common control properties.
     ControlModelRef     mxCtrlModel;        /// Specific control properties.
-
+    
 private:
     VbaFormControlVector maControls;        /// All embedded form controls.
     AxClassTable         maClassTable;      /// Class identifiers for exotic embedded controls.
@@ -199,7 +199,7 @@ public:
                             StorageBase& rVbaFormStrg,
                             const ::rtl::OUString& rModuleName,
                             rtl_TextEncoding eTextEnc );
-
+                            
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxGlobalFactory;
 };

@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 #include "lwpglobalmgr.hxx"
 #include "lwpsilverbullet.hxx"
@@ -106,7 +106,7 @@ void LwpSilverBullet::Read()
 
 /**
  * @short:   Register bullet or numbering style-list and store the returned
- *          name from XFStyleManager.
+ *			name from XFStyleManager.
  * @descr:
  */
 void LwpSilverBullet::RegisterStyle()
@@ -192,7 +192,7 @@ void LwpSilverBullet::RegisterStyle()
     else
     {
         //register bullet style-list
-/*      for (sal_uInt8 nC = 1; nC < 11; nC++)
+/*		for (sal_uInt8 nC = 1; nC < 11; nC++)
         {
             pListStyle->SetListBullet(nC, this->GetBulletChar(), this->GetBulletFontName(),
                 this->GetPrefix(), this->GetSuffix());
@@ -282,7 +282,7 @@ LwpPara* LwpSilverBullet::GetBulletPara()
  * @short:   Get numbering character of the bullet vo_para.
  * @descr:
  * @param:   pParaNumber a pionter to the structure LwpFribParaNumber which
- *          includes numbering prefix, format and suffix.
+ *			includes numbering prefix, format and suffix.
  * @return:  An OUString object which store the numbering character.
  */
 rtl::OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber* pParaNumber)
@@ -383,8 +383,8 @@ sal_uInt16 LwpSilverBullet::GetDisplayLevel(sal_uInt8 nPos)
 
 /**
  * @descr:   Get the additional information, "Division name" or "Section Name" from document
- *      variable frib according to numbering position. Whether we should add a
- *      Division/Section name or not is determined by the hidelevels of the frib.
+ *		variable frib according to numbering position. Whether we should add a
+ *		Division/Section name or not is determined by the hidelevels of the frib.
  * @param:   nPos position of the numbering.
  * @return:  Division or Section name.
  */

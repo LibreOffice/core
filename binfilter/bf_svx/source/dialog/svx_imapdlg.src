@@ -1,0 +1,367 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+ // include ---------------------------------------------------------------
+#include "helpid.hrc"
+#include "imapdlg.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXDLG_IMAP ----------------------------------------------------
+Control RID_SVXCTL_IMAP
+{
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 6 , 56 ) ;
+    HelpId = HID_IMAPDLG_GRAPHWND ;
+};
+
+/******************************************************************************/
+Menu RID_SVXMN_IMAP
+{
+    ItemList  =
+    {
+        MenuItem
+        {
+            Identifier = MN_URL ;
+            Text [ de ] = "~Beschreibung..." ;
+            Text [ en-US ] = "Description..." ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Descrição...";
+            Text[ ru ] = "Описание...";
+            Text[ el ] = "~Περιγραφή...";
+            Text[ nl ] = "~Beschrijving...";
+            Text[ fr ] = "~Description...";
+            Text[ es ] = "~Descripción...";
+            Text[ fi ] = "Kuvaus...";
+            Text[ ca ] = "~Descripció...";
+            Text[ it ] = "D~escrizione...";
+            Text[ sk ] = "Popis...";
+            Text[ da ] = "Beskrivelse...";
+            Text[ sv ] = "~Beskrivning...";
+            Text[ pl ] = "Opis...";
+            Text[ pt-BR ] = "Descrição...";
+            Text[ th ] = "คำอธิบาย...";
+            Text[ ja ] = "説明...";
+            Text[ ko ] = "설명...";
+            Text[ zh-CN ] = "说明...";
+            Text[ zh-TW ] = "描述...";
+            Text[ tr ] = "Açıklama...";
+            Text[ hi-IN ] = "विवरण...";
+            Text[ ar ] = "...الوصف";
+            Text[ he ] = "‮תאור...‬";
+        };
+        MenuItem
+        {
+            Identifier = MN_MACRO ;
+            Text [ de ] = "Ma~kro..." ;
+            Text [ en-US ] = "~Macro..." ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Ma~cro...";
+            Text[ ru ] = "Макрос...";
+            Text[ el ] = "Μα~κροεντολή...";
+            Text[ nl ] = "Ma~cro...";
+            Text[ fr ] = "Ma~cro...";
+            Text[ es ] = "Ma~cro...";
+            Text[ fi ] = "~Makro...";
+            Text[ ca ] = "~Macro...";
+            Text[ it ] = "Macro...";
+            Text[ sk ] = "~Makro...";
+            Text[ da ] = "Makro...";
+            Text[ sv ] = "Ma~kro...";
+            Text[ pl ] = "~Makro...";
+            Text[ pt-BR ] = "~Macro...";
+            Text[ th ] = "~มาโคร...";
+            Text[ ja ] = "マクロ(~M)...";
+            Text[ ko ] = "매크로(~M)...";
+            Text[ zh-CN ] = "宏(~M)...";
+            Text[ zh-TW ] = "巨集(~M)...";
+            Text[ tr ] = "Makro...";
+            Text[ hi-IN ] = "~मॉक्रो...";
+            Text[ ar ] = "...ماكرو";
+            Text[ he ] = "‮הפעלת מאקרו...‬";
+        };
+        MenuItem
+        {
+            Identifier = MN_ACTIVATE ;
+            Text [ de ] = "~Aktiv" ;
+            Text [ en-US ] = "Active" ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Activo";
+            Text[ ru ] = "Активный";
+            Text[ el ] = "Ενερ~γά";
+            Text[ nl ] = "~Actief";
+            Text[ fr ] = "~Actif";
+            Text[ es ] = "~Activo";
+            Text[ fi ] = "Aktiivinen";
+            Text[ ca ] = "Actiu";
+            Text[ it ] = "~Attivo";
+            Text[ sk ] = "Aktívny";
+            Text[ da ] = "Aktiv";
+            Text[ sv ] = "~Aktiv";
+            Text[ pl ] = "Aktywny";
+            Text[ pt-BR ] = "Ativo";
+            Text[ th ] = "ใช้งานอยู่";
+            Text[ ja ] = "アクティブ";
+            Text[ ko ] = "활성";
+            Text[ zh-CN ] = "使用";
+            Text[ zh-TW ] = "啟動";
+            Text[ tr ] = "Etkin";
+            Text[ hi-IN ] = "क्रियाशील";
+            Text[ ar ] = "نشط";
+            Text[ he ] = "~Aktiv";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_POSITION ;
+            Text [ de ] = "A~nordnung" ;
+            Text [ en-US ] = "Arrange" ;
+            SubMenu = Menu
+            {
+                ItemList  =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_FRAME_TO_TOP ;
+                        Text [ de ] = "Ganz nach ~vorn" ;
+                        Text [ en-US ] = "Bring to Front" ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "P~rimeiro plano";
+                        Text[ ru ] = "Вынести на ~передний план";
+                        Text[ el ] = "Μεταφορά σε π~ρώτο πλάνο";
+                        Text[ nl ] = "~Vooraan";
+                        Text[ fr ] = "Tout à l'~avant";
+                        Text[ es ] = "Traer al ~frente";
+                        Text[ fi ] = "Tuo eteen";
+                        Text[ ca ] = "Porta al davant";
+                        Text[ it ] = "Porta in primo piano";
+                        Text[ sk ] = "Preniesť do popredia";
+                        Text[ da ] = "~Placer forrest";
+                        Text[ sv ] = "Längst ~fram";
+                        Text[ pl ] = "~Przesuń na wierzch";
+                        Text[ pt-BR ] = "Trazer para a Frente";
+                        Text[ th ] = "นำไปด้านหน้า";
+                        Text[ ja ] = "最前面へ移動";
+                        Text[ ko ] = "맨 앞으로";
+                        Text[ zh-CN ] = "移动到最上面";
+                        Text[ zh-TW ] = "移動到最上面";
+                        Text[ tr ] = "En öne getir";
+                        Text[ hi-IN ] = "सामने लाओ";
+                        Text[ ar ] = "إحضار إلى الأمام";
+                        Text[ he ] = "Ganz nach ~vorn";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_MOREFRONT ;
+                        Text [ de ] = "W~eiter nach vorn" ;
+                        Text [ en-US ] = "Bring ~Forward" ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Mais para a frente";
+                        Text[ ru ] = "Переместить ~вперед";
+                        Text[ el ] = "Μ~εταφορά ένα επίπεδο εμπρός";
+                        Text[ nl ] = "Naar v~oren";
+                        Text[ fr ] = "V~ers l'avant";
+                        Text[ es ] = "Traer ~adelante";
+                        Text[ fi ] = "Siirrä ~eteenpäin";
+                        Text[ ca ] = "Porta ~més endavant";
+                        Text[ it ] = "Porta più avanti";
+                        Text[ sk ] = "Preniesť ~bližšie";
+                        Text[ da ] = "F~lyt fremad";
+                        Text[ sv ] = "Längre fra~m";
+                        Text[ pl ] = "P~rzesuń do przodu";
+                        Text[ pt-BR ] = "A~vançar";
+                        Text[ th ] = "นำ~ส่งต่อ";
+                        Text[ ja ] = "さらに前へ(~F)";
+                        Text[ ko ] = "앞으로 이동(~F)";
+                        Text[ zh-CN ] = "上移一层(~F)";
+                        Text[ zh-TW ] = "上移一層(~F)";
+                        Text[ tr ] = "Bir öne getir";
+                        Text[ hi-IN ] = "~आगे लाओ";
+                        Text[ ar ] = "إحضار أماماً";
+                        Text[ he ] = "W~eiter nach vorn";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_MOREBACK ;
+                        Text [ de ] = "Weiter ~nach hinten" ;
+                        Text [ en-US ] = "Send Back~ward" ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "Mais para o f~undo";
+                        Text[ ru ] = "Переместить ~назад";
+                        Text[ el ] = "~Μεταφορά πίσω";
+                        Text[ nl ] = "Naar a~chteren";
+                        Text[ fr ] = "~Vers l'arrière";
+                        Text[ es ] = "Enviar a~trás";
+                        Text[ fi ] = "Siirrä taakse~päin";
+                        Text[ ca ] = "Envia cap ~enrere";
+                        Text[ it ] = "Porta più i~ndietro";
+                        Text[ sk ] = "P~reniesť ďalej";
+                        Text[ da ] = "Flyt bag~ud";
+                        Text[ sv ] = "Längre ba~k";
+                        Text[ pl ] = "Pr~zesuń do tyłu";
+                        Text[ pt-BR ] = "Rec~uar";
+                        Text[ th ] = "ส่งย้อน~กลับ";
+                        Text[ ja ] = "さらに後へ(~W)";
+                        Text[ ko ] = "뒤로 이동(~W)";
+                        Text[ zh-CN ] = "下移一层(~W)";
+                        Text[ zh-TW ] = "下移一層(~W)";
+                        Text[ tr ] = "Bir alta gönder";
+                        Text[ hi-IN ] = "पि~छली ओर भेजो";
+                        Text[ ar ] = "إرسال خلفاَ";
+                        Text[ he ] = "Weiter ~nach hinten";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_FRAME_TO_BOTTOM ;
+                        Text [ de ] = "Ganz nach ~hinten" ;
+                        Text [ en-US ] = "~Send to Back" ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "Enviar para ~trás";
+                        Text[ ru ] = "На ~задний план";
+                        Text[ el ] = "Μεταφορά σε ~δεύτερο πλάνο";
+                        Text[ nl ] = "~Achteraan";
+                        Text[ fr ] = "Tout à l'a~rrière";
+                        Text[ es ] = "Enviar al ~fondo";
+                        Text[ fi ] = "Vie ~taakse";
+                        Text[ ca ] = "~Envia al fons";
+                        Text[ it ] = "Porta in fondo";
+                        Text[ sk ] = "Odo~slať na pozadie";
+                        Text[ da ] = "Placer ~bagest";
+                        Text[ sv ] = "Längst b~ak";
+                        Text[ pl ] = "Prz~esuń na spód";
+                        Text[ pt-BR ] = "Enviar para Trá~s";
+                        Text[ th ] = "~ย้ายไปไว้ข้างหลังสุด";
+                        Text[ ja ] = "最背面へ移動(~S)";
+                        Text[ ko ] = "맨 뒤로(~S)";
+                        Text[ zh-CN ] = "移到底层(~S)";
+                        Text[ zh-TW ] = "移動到最下面(~S)";
+                        Text[ tr ] = "En alta gönder";
+                        Text[ hi-IN ] = "पीछे ~भेजो";
+                        Text[ ar ] = "إرسال إلى الخلف";
+                        Text[ he ] = "Ganz nach ~hinten";
+                    };
+                };
+            };
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Disposição";
+            Text[ ru ] = "Расположить";
+            Text[ el ] = "~Τακτοποίηση";
+            Text[ nl ] = "~Positie";
+            Text[ fr ] = "~Disposition";
+            Text[ es ] = "~Disposición";
+            Text[ fi ] = "Järjestä";
+            Text[ ca ] = "Organitza";
+            Text[ it ] = "~Disponi";
+            Text[ sk ] = "Usporiadať";
+            Text[ da ] = "Placering";
+            Text[ sv ] = "~Placering";
+            Text[ pl ] = "Rozmieszczenie";
+            Text[ pt-BR ] = "Organizar";
+            Text[ th ] = "จัดเรียง";
+            Text[ ja ] = "整列";
+            Text[ ko ] = "배치";
+            Text[ zh-CN ] = "排序";
+            Text[ zh-TW ] = "排序";
+            Text[ tr ] = "Sıralama";
+            Text[ hi-IN ] = "क्रम में रखो";
+            Text[ ar ] = "ترتيب";
+            Text[ he ] = "‮סידור‬";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_MARK_ALL ;
+            /* ### ACHTUNG: Neuer Text in Resource? Alles ausw~�hlen : Alles ausw~�hlen */
+            /* ### ACHTUNG: Neuer Text in Resource? Alles ausw~�hlen : Alles ausw~�hlen */
+            Text [ de ] = "Alles ausw~ählen" ;
+            Text [ en-US ] = "Select ~All" ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Seleccionar t~udo";
+            Text[ ru ] = "Выделить все";
+            Text[ el ] = "Επιλογή όλ~ων";
+            Text[ nl ] = "Alles ~selecteren";
+            Text[ fr ] = "Tout s~électionner";
+            Text[ es ] = "~Seleccionar todo";
+            Text[ fi ] = "~Valitse kaikki";
+            Text[ ca ] = "Selecciona ~tots";
+            Text[ it ] = "Seleziona tutto";
+            Text[ sk ] = "Vybrať ~všetko";
+            Text[ da ] = "Marker alt";
+            Text[ sv ] = "~Välj ut allt";
+            Text[ pl ] = "Zaznacz ~wszystko";
+            Text[ pt-BR ] = "Selecionar ~Tudo";
+            Text[ th ] = "เลือก~ทั้งหมด";
+            Text[ ja ] = "すべて選択(~A)";
+            Text[ ko ] = "모두 선택(~A)";
+            Text[ zh-CN ] = "全部选中(~A)";
+            Text[ zh-TW ] = "全部選取(~A)";
+            Text[ tr ] = "Tümünü seç";
+            Text[ hi-IN ] = "~सब चुनो";
+            Text[ ar ] = "تحديد الكل";
+            Text[ he ] = "‮בחירה כוללת‬";
+        };
+        MenuItem
+        {
+            Identifier = MN_DELETE ;
+            /* ### ACHTUNG: Neuer Text in Resource? ~L�schen : ~L�schen */
+            /* ### ACHTUNG: Neuer Text in Resource? ~L�schen : ~L�schen */
+            Text [ de ] = "~Löschen" ;
+            Text [ en-US ] = "~Delete" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Die Selektion l�schen : Die Selektion l�schen */
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "E~liminar";
+            Text[ ru ] = "Удалить";
+            Text[ el ] = "Διαγρα~φή";
+            Text[ nl ] = "~Wissen";
+            Text[ fr ] = "~Supprimer";
+            Text[ es ] = "~Borrar";
+            Text[ fi ] = "~Poista";
+            Text[ ca ] = "~Suprimeix";
+            Text[ it ] = "~Cancella";
+            Text[ sk ] = "~Zmazať";
+            Text[ da ] = "~Slet";
+            Text[ sv ] = "~Radera";
+            Text[ pl ] = "~Usuń";
+            Text[ pt-BR ] = "E~xcluir";
+            Text[ th ] = "~ลบ";
+            Text[ ja ] = "削除(~D)";
+            Text[ ko ] = "삭제(~D)";
+            Text[ zh-CN ] = "删除(~D)";
+            Text[ zh-TW ] = "刪除(~D)";
+            Text[ tr ] = "Sil";
+            Text[ hi-IN ] = "~मिटाओ";
+            Text[ ar ] = "حذف";
+            Text[ he ] = "‮מחיקה‬";
+        };
+    };
+};

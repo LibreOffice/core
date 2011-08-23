@@ -61,7 +61,7 @@
 #include <tools/stream.hxx>
 
 /**
- * @brief   encapsulate XInputStream to provide SvStream like interfaces
+ * @brief	encapsulate XInputStream to provide SvStream like interfaces
 */
 class LwpSvStream
 {
@@ -71,7 +71,7 @@ public:
     sal_Int64 SeekRel( sal_Int64 pos );
     sal_Int64 Tell();
     sal_Int64 Seek( sal_Int64 pos );
-//  sal_Int64 GetLength();
+//	sal_Int64 GetLength();
     static const sal_uInt32 LWP_STREAM_BASE;
 
     // added by  for small file feature

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ namespace DOM
 
         virtual void SAL_CALL fastSaxify( Context& io_rContext );
 
-         // Breaks this node into two nodes at the specified offset, keeping
+         // Breaks this node into two nodes at the specified offset, keeping 
          // both in the tree as siblings.
          virtual Reference< XText > SAL_CALL splitText(sal_Int32 offset)
              throw (RuntimeException);

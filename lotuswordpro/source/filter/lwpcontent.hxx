@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPCONTENT_HXX
@@ -88,23 +88,23 @@ protected:
     /* Flag bits */
     enum
     {
-        CF_CHANGED              =   0x0001,
-        CF_MODIFIED             =   0x0004,
-        CF_LOCAL                =   0x0008,
-        CF_INFOOTNOTE           =   0x0010,
-        CF_METACHANGED          =   0x0020,
-        CF_PRIVATE              =   0x0040,
-        CF_DEACTIVATED          =   0x0080,
-        CF_VALUECHANGED         =   0x0100,
-        CF_DISABLEVALUECHECKING =   0x0200,
-        CF_DONTNOTIFYDOCUMENT   =   0x0400,     // for numeric formatting
-        CF_ISOVERRIDE           =   0x0800,
-        CF_ISBULLET             =   0x1000,
-        CF_CONTINUEDON          =   0x2000,
-        CF_CONTINUEDFROM        =   0x4000,
+        CF_CHANGED				=	0x0001,
+        CF_MODIFIED				=	0x0004,
+        CF_LOCAL				=	0x0008,
+        CF_INFOOTNOTE			= 	0x0010,
+        CF_METACHANGED			=	0x0020,
+        CF_PRIVATE				=	0x0040,
+        CF_DEACTIVATED			=	0x0080,
+        CF_VALUECHANGED			=	0x0100,
+        CF_DISABLEVALUECHECKING	=	0x0200,
+        CF_DONTNOTIFYDOCUMENT	=	0x0400,		// for numeric formatting
+        CF_ISOVERRIDE			=	0x0800,
+        CF_ISBULLET				=	0x1000,
+        CF_CONTINUEDON			=	0x2000,
+        CF_CONTINUEDFROM		=	0x4000,
 
         // Bits that should be transferred when we duplicate a content
-        CF_COPYMASK             = (CF_MODIFIED | CF_PRIVATE)
+        CF_COPYMASK				= (CF_MODIFIED | CF_PRIVATE)
     };
 protected:
     void Read();

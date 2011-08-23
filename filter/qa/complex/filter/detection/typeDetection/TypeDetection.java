@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -184,14 +184,14 @@ import util.utils;
  */
 public class TypeDetection extends ComplexTestCase {
 
-    /**
+    /** 
      * @member m_xDetection     the object to test
      * @member helper           instacne of helper class
      */
-
+    
     static XTypeDetection   m_xDetection;
     static Helper helper = null;
-
+    
     /**
      * A function to tell the framework, which test functions are available.
      * @return All test methods.
@@ -216,17 +216,17 @@ public class TypeDetection extends ComplexTestCase {
         // create TypeDetection
         XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();
         assure("Could not get XMultiServiceFactory", xMSF != null);
-
+        
         Object oInterface = xMSF.createInstance(
                                         "com.sun.star.document.TypeDetection");
-
+                                        
         if (oInterface == null) {
             failed("Service wasn't created") ;
         }
 
         XInterface oObj = (XInterface) oInterface ;
         log.println("ImplName: "+utils.getImplName(oObj));
-
+        
         m_xDetection = (XTypeDetection)
                 UnoRuntime.queryInterface(XTypeDetection.class, oInterface);
         Enumeration k = param.keys();
@@ -236,7 +236,7 @@ public class TypeDetection extends ComplexTestCase {
         }
         // create instrace of helper class
         helper = new Helper(param, log);
-
+        
     }
 
     /**
@@ -246,8 +246,8 @@ public class TypeDetection extends ComplexTestCase {
     }
 
     /**
-     * The <code>MediaDescriptor</code> was filled with the URL of a file. The
-     * <code>type</code> of the file is kown and must be returned by
+     * The <code>MediaDescriptor</code> was filled with the URL of a file. The 
+     * <code>type</code> of the file is kown and must be returned by 
      * <code>MediaDescriptor</code>
      *
      * Syntax of files.csv:
@@ -260,7 +260,7 @@ public class TypeDetection extends ComplexTestCase {
             Vector CSVData =  helper.getToDoList(
                                     (String)param.get("csv.files"));
             Enumeration allToDos = CSVData.elements();
-
+            
             while (allToDos.hasMoreElements()){
                 Vector toDo = (Vector) allToDos.nextElement();
 
@@ -268,17 +268,17 @@ public class TypeDetection extends ComplexTestCase {
                 String fileURL  = (String) toDo.get(1);
                 String URLfileType = (String) toDo.get(2);
                 String StreamfileType = (String) toDo.get(3);
-
+                
                 fileURL =  utils.getFullURL(helper.ensureEndingFileSep(
                               (String)param.get("TestDocumentPath")) + fileURL);
-
-                log.println("actual '"+ fileAlias +
+                
+                log.println("actual '"+ fileAlias + 
                                         "' ['" + URLfileType + "']: '" + fileURL);
-
+                
                 checkMediaDescriptorURL(fileAlias, fileURL, URLfileType);
                 checkMediaDescriptorXInputStream(fileAlias, fileURL, StreamfileType);
             }
-
+            
         } catch (ClassCastException e){
             failed(e.toString(), true);
         }
@@ -294,17 +294,17 @@ public class TypeDetection extends ComplexTestCase {
      */
     private void checkMediaDescriptorURL(
                             String fileAlias, String fileURL, String fileType){
-
+                                
         PropertyValue[] MediaDescriptor = helper.createMediaDescriptor(
             new String[] {"URL"},
             new Object[] {fileURL});
             log.println("check only by URL...");
-
+                
             String type = m_xDetection.queryTypeByDescriptor(
                                helper.createInOutPropertyValue(MediaDescriptor), true);
-
+            
             boolean fileTypeOK = helper.checkFileType(type, fileType);
-
+            
             assure("\nURL-test         : " + fileAlias + ":\n\treturned type: '" + type +
                    "'\n\texpected type: '" + fileType + "'",fileTypeOK ,true);
     }
@@ -321,34 +321,34 @@ public class TypeDetection extends ComplexTestCase {
      */
     private void checkMediaDescriptorXInputStream(
                              String fileAlias, String fileURL, String fileType){
-
+        
         XInputStream xStream = null;
-
+        
         try{
             xStream = helper.getFileStream( fileURL );
         } catch (NotConnectedException e) {
             failed("Could not get XInputStream from file :'" + fileURL + "'",true);
             return;
         }
-
+            
         PropertyValue[] MediaDescriptor = helper.createMediaDescriptor(
             new String[] {"InputStream"},
             new Object[] {xStream});
             log.println("check only by XInputStream...");
-
+                
             String type = m_xDetection.queryTypeByDescriptor(
                                helper.createInOutPropertyValue(MediaDescriptor), true);
-
+            
             boolean fileTypeOK = helper.checkFileType(type, fileType);
-
+            
             assure("\nXInputStream-test: " + fileAlias + ":\n\treturned type: '" + type +
                    "'\n\texpected type: '" + fileType + "'", fileTypeOK, true);
-
+            
     }
 
     /**
-     * The <code>MediaDescriptor</code> was filled with the URL of a file. The
-     * <code>type</code> of the file is kown and must be returned by
+     * The <code>MediaDescriptor</code> was filled with the URL of a file. The 
+     * <code>type</code> of the file is kown and must be returned by 
      * <code>MediaDescriptor</code>
      *
      * Syntax of files.csv:
@@ -358,31 +358,31 @@ public class TypeDetection extends ComplexTestCase {
     public void checkPreselectedType() {
         try{
             log.println("### checkPreselectedType() ###");
-
+            
             Vector CSVData =  helper.getToDoList(
                                     (String)param.get("csv.preselectedType"));
             Enumeration allToDos = CSVData.elements();
-
+            
             while (allToDos.hasMoreElements()){
                 try{
                     Vector toDo = (Vector) allToDos.nextElement();
-
+                
                     String fileAlias = (String) toDo.get(0);
                     String fileURL  = helper.getURLforfileAlias(fileAlias);
                     String preselectFileType = (String) toDo.get(1);
                     String expectedFileType = (String) toDo.get(2);
-
+                    
                     PropertyValue[] MediaDescriptor = helper.createMediaDescriptor(
                         new String[] {"URL", "MediaType"},
                         new Object[] {fileURL, preselectFileType});
-                    log.println("check '" + fileAlias + "' with MediaType: '" +
+                    log.println("check '" + fileAlias + "' with MediaType: '" + 
                                 preselectFileType + "'");
 
                     String type = m_xDetection.queryTypeByDescriptor(
                                    helper.createInOutPropertyValue(MediaDescriptor), true);
 
                     boolean fileTypeOK = helper.checkFileType(type, expectedFileType);
-
+                    
                     assure("\n" + fileAlias + ":\n\treturned type: '" + type +
                                     "'\n\texpected type: '" + expectedFileType + "'",
                                     fileTypeOK, true);
@@ -390,9 +390,9 @@ public class TypeDetection extends ComplexTestCase {
                     } catch (FileAliasNotFoundException e){
                         failed(e.toString(),true);
                     }
-
+                
             }
-
+            
         } catch (ClassCastException e){
             failed(e.toString(), true);
         }
@@ -407,12 +407,12 @@ public class TypeDetection extends ComplexTestCase {
     public void checkPreselectedFilter() {
         try{
             log.println("### checkPreselectedFilter() ###");
-
+            
             Vector CSVData =  helper.getToDoList(
                                     (String)param.get("csv.preselectedFilter"));
 
             Enumeration allToDos = CSVData.elements();
-
+            
             while (allToDos.hasMoreElements()){
                 try{
                     Vector toDo = (Vector) allToDos.nextElement();
@@ -427,27 +427,27 @@ public class TypeDetection extends ComplexTestCase {
                     PropertyValue[] MediaDescriptor = helper.createMediaDescriptor(
                         new String[] {"URL","FilterName",
                                                   "FilterOptions","FilterData"},
-                        new Object[] {fileURL, filterName,
+                        new Object[] {fileURL, filterName, 
                                                    filterOptions, filterData});
 
-                    log.println("check '" + fileAlias + "' with filter: '" +
+                    log.println("check '" + fileAlias + "' with filter: '" + 
                                 filterName + "'");
 
                     String type = m_xDetection.queryTypeByDescriptor(
                                helper.createInOutPropertyValue(MediaDescriptor), true);
 
                     boolean fileTypeOK = helper.checkFileType(type, expectedType);
-
+                    
                     assure("\n" + fileAlias + ":\n\treturned type: '" + type +
                                     "'\n\texpected type: '" + expectedType + "'",
                                     fileTypeOK,true);
-
+                  
                 } catch (FileAliasNotFoundException e){
                     failed(e.toString(),true);
                 }
 
             }
-
+            
         } catch (ClassCastException e){
             failed(e.toString(), true);
         }
@@ -463,7 +463,7 @@ public class TypeDetection extends ComplexTestCase {
 
             Vector CSVData =  helper.getToDoList((String)param.get("csv.serviceName"));
             Enumeration allToDos = CSVData.elements();
-
+            
             while (allToDos.hasMoreElements()){
                 try{
                     Vector toDo = (Vector) allToDos.nextElement();
@@ -472,7 +472,7 @@ public class TypeDetection extends ComplexTestCase {
                     String fileURL  = helper.getURLforfileAlias(fileAlias);
                     String serviceName = (String) toDo.get(1);
                     String fileType = helper.getTypeforfileAlias(fileAlias);
-
+                
                     PropertyValue[] MediaDescriptor = helper.createMediaDescriptor(
                         new String[] {"URL", "DocumentSerivce"},
                         new Object[] {fileURL, serviceName});
@@ -482,7 +482,7 @@ public class TypeDetection extends ComplexTestCase {
                                    helper.createInOutPropertyValue(MediaDescriptor), true);
 
                     boolean fileTypeOK = helper.checkFileType(type, fileType);
-
+                    
                     assure("\n" + fileAlias + ":\n\treturned type: '" + type +
                                     "'\t\nexpected type: '" + fileType + "'",
                                     fileTypeOK, true);
@@ -490,17 +490,17 @@ public class TypeDetection extends ComplexTestCase {
                 } catch (FileAliasNotFoundException e){
                     failed(e.toString(),true);
                 }
-
+                  
             }
-
+            
         } catch (ClassCastException e){
             failed(e.toString(), true);
         }
      }
-
+     
      public void checkStreamLoader(){
          try{
-
+             
             /*
              *als Dateien die typeDetection.props und eine der csv-Dateien
              *benutzten. diese können per dmake einfach auf andere Rechte setzten
@@ -508,22 +508,22 @@ public class TypeDetection extends ComplexTestCase {
              */
             log.println("### checkStreamLoader() ###");
             String[] urls = new String[2];
-
+            
             urls[0] = helper.getClassURLString("TypeDetection.props");
             urls[1] = helper.getClassURLString("files.csv");
-
+            
             for (int j=0; j<urls.length; j++){
                 String fileURL  = urls[j];
                 File file = new File(fileURL);
                 fileURL =  utils.getFullURL(fileURL);
-
+                
                 PropertyValue[] MediaDescriptor = helper.createMediaDescriptor(
                                                         new String[] {"URL"},
                                                         new Object[] {fileURL});
-
+                                                        
                 if (file.canWrite()) log.println("check writable file...");
                 else log.println("check readonly file...");
-
+                
                 PropertyValue[][] inOut = helper.createInOutPropertyValue(MediaDescriptor);
                 PropertyValue[] in = inOut[0];
                 log.println("in-Parameter:");
@@ -542,18 +542,18 @@ public class TypeDetection extends ComplexTestCase {
                     if ((out[i].Name.equals("ReadOnly")) && (out[i].Value.toString().equals("true"))) bReadOnly = true;
                     log.println("["+i+"] '" + out[i].Name + "':'" + out[i].Value.toString()+"'");
                 }
-
+                
                 if (file.canWrite() && bReadOnly)
                     assure("\nStreamLoader: file '"+ fileURL +"' is writable but out-Parameter does contain 'ReadOnly' property",false ,true);
                 else if ((!file.canWrite()) && (!bReadOnly))
                     assure("\nStreamLoader: file '"+ fileURL +"'is readonly but out-Parameter does not contain 'ReadOnly' property",false ,true);
                 else assure("all ok",true,true);
-
+                
             }
 
          } catch (ClassCastException e){
             failed(e.toString(), true);
         }
-
+        
      }
 }

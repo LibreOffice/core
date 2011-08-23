@@ -1,0 +1,252 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <bf_svx/svxids.hrc>
+
+/*
+SfxSlotInfo SID_DRAW_LINE
+{
+    Slotname [ de ] = "ZeichnenLinie" ;
+    HelpText [ de ] = "Zeichnen einer Linie" ;
+    Slotname [ en-US ] = "DrawLine" ;
+    HelpText [ en-US ] = "Draw a line" ;
+    Slotname [ de ] = "ZeichnenLinie" ;
+};
+SfxSlotInfo SID_DRAW_RECT
+{
+    Slotname [ de ] = "ZeichnenRechteck" ;
+    HelpText [ de ] = "Zeichnen eines Rechtecks" ;
+    Slotname [ en-US ] = "DrawRectangle" ;
+    HelpText [ en-US ] = "Draw a rectangle" ;
+    Slotname [ de ] = "ZeichnenRechteck" ;
+};
+SfxSlotInfo SID_DRAW_ELLIPSE
+{
+    Slotname [ de ] = "ZeichnenEllipse" ;
+    HelpText [ de ] = "Zeichnen einer Ellipse" ;
+    Slotname [ en-US ] = "DrawEllipse" ;
+    HelpText [ en-US ] = "Draw ellipse" ;
+    Slotname [ de ] = "ZeichnenEllipse" ;
+};
+SfxSlotInfo SID_DRAW_POLYGON
+{
+    Slotname [ de ] = "ZeichnenPolygon" ;
+    HelpText [ de ] = "Zeichnen eines Polygons" ;
+    Slotname [ en-US ] = "DrawPolygon" ;
+    HelpText [ en-US ] = "Draw a polygon" ;
+    Slotname [ de ] = "ZeichnenPolygon" ;
+};
+SfxSlotInfo SID_DRAW_ARC
+{
+    Slotname [ de ] = "ZeichnenBogen" ;
+    HelpText [ de ] = "Zeichnen eines Kreisbogens" ;
+    Slotname [ en-US ] = "DrawArc" ;
+    HelpText [ en-US ] = "Draw an arc" ;
+    Slotname [ de ] = "ZeichnenBogen" ;
+};
+SfxSlotInfo SID_DRAW_PIE
+{
+    Slotname [ de ] = "ZeichnenKreissegment" ;
+    HelpText [ de ] = "Zeichnen eines Kreissegments" ;
+    Slotname [ en-US ] = "DrawCirclePie" ;
+    HelpText [ en-US ] = "Draws Circle Pies" ;
+    Slotname [ de ] = "ZeichnenKreissegment" ;
+};
+SfxSlotInfo SID_DRAW_CIRCLECUT
+{
+    Slotname [ de ] = "ZeichnenKreisabschnitt" ;
+    HelpText [ de ] = "Zeichnen eines Kreisabschnitts" ;
+    Slotname [ en-US ] = "DrawEllipseSection" ;
+    HelpText [ en-US ] = "Draw Circle Section" ;
+    Slotname [ de ] = "ZeichnenKreisabschnitt" ;
+};
+SfxSlotInfo SID_DRAW_TEXT
+{
+    Slotname [ de ] = "ZeichnenText" ;
+    HelpText [ de ] = "Eingabe von Zeichentext" ;
+    Slotname [ en-US ] = "DrawText" ;
+    HelpText [ en-US ] = "Insert draw text" ;
+    Slotname [ de ] = "ZeichnenText" ;
+};
+SfxSlotInfo SID_DRAW_CAPTION
+{
+    Slotname [ de ] = "ZeichnenLegende" ;
+    HelpText [ de ] = "Legende einfügen" ;
+    Slotname [ en-US ] = "DrawLegend" ;
+    HelpText [ en-US ] = "Insert a legend" ;
+    Slotname [ de ] = "ZeichnenLegende" ;
+};
+
+
+
+
+SfxSlotInfo SID_INSERT_PUSHBUTTON
+{
+    Slotname [ de ] = "EinfügenPushbutton" ;
+    HelpText [ de ] = "Einfügen eines Pushbuttons" ;
+    Slotname [ en-US ] = "InsertPushButton" ;
+    HelpText [ en-US ] = "Insert a push button" ;
+    Slotname [ de ] = "EinfügenPushbutton" ;
+};
+SfxSlotInfo SID_INSERT_CHECKBOX
+{
+    Slotname [ de ] = "EinfügenCheckbox" ;
+    HelpText [ de ] = "Einfügen einer Checkbox" ;
+    Slotname [ en-US ] = "InsertCheckbox" ;
+    HelpText [ en-US ] = "Insert a checkbox" ;
+    Slotname [ de ] = "EinfügenCheckbox" ;
+};
+SfxSlotInfo SID_INSERT_RADIOBUTTON
+{
+    Slotname [ de ] = "EinfügenRadiobutton" ;
+    HelpText [ de ] = "Einfügen eines Radiobutton" ;
+    Slotname [ en-US ] = "InsertRadiobutton" ;
+    HelpText [ en-US ] = "Insert a radio button" ;
+    Slotname [ de ] = "EinfügenRadiobutton" ;
+};
+SfxSlotInfo SID_INSERT_SPINBUTTON
+{
+    Slotname [ de ] = "EinfügenSpinbutton" ;
+    HelpText [ de ] = "Einfügen eines Spinbutton" ;
+    Slotname [ en-US ] = "InsertSpinbutton" ;
+    HelpText [ en-US ] = "Insert a spin button" ;
+    Slotname [ de ] = "EinfügenSpinbutton" ;
+};
+SfxSlotInfo SID_INSERT_FIXEDTEXT
+{
+    Slotname [ de ] = "EinfügenFixedtext" ;
+    HelpText [ de ] = "Einfügen eines Fixedtexts" ;
+    Slotname [ en-US ] = "InsertFixedText" ;
+    HelpText [ en-US ] = "Insert a fixed text" ;
+    Slotname [ de ] = "EinfügenFixedtext" ;
+};
+SfxSlotInfo SID_INSERT_GROUPBOX
+{
+    Slotname [ de ] = "EinfügenGroupbox" ;
+    HelpText [ de ] = "Einfügen einer Groupbox" ;
+    Slotname [ en-US ] = "InsertGroupbox" ;
+    HelpText [ en-US ] = "Insert a groupbox" ;
+    Slotname [ de ] = "EinfügenGroupbox" ;
+};
+
+SfxSlotInfo SID_INSERT_LISTBOX
+{
+    Slotname [ de ] = "EinfügenListbox" ;
+    HelpText [ de ] = "Einfügen einer Listbox" ;
+    Slotname [ en-US ] = "InsertListbox" ;
+    HelpText [ en-US ] = "Insert a listbox" ;
+    Slotname [ de ] = "EinfügenListbox" ;
+};
+SfxSlotInfo SID_INSERT_COMBOBOX
+{
+    Slotname [ de ] = "EinfügenCombobox" ;
+    HelpText [ de ] = "Einfügen einer Combobox" ;
+    Slotname [ en-US ] = "InsertCombobox" ;
+    HelpText [ en-US ] = "Insert a combobox" ;
+    Slotname [ de ] = "EinfügenCombobox" ;
+};
+SfxSlotInfo SID_INSERT_EDIT
+{
+    Slotname [ de ] = "EinfügenEdit" ;
+    HelpText [ de ] = "Einfügen eines Edits" ;
+    Slotname [ en-US ] = "InsertEdit" ;
+    HelpText [ en-US ] = "Insert an edit field" ;
+    Slotname [ de ] = "EinfügenEdit" ;
+};
+SfxSlotInfo SID_INSERT_HSCROLLBAR
+{
+    Slotname [ de ] = "EinfügenHScrollbar" ;
+    HelpText [ de ] = "Einfügen eines horizontalen Scrollbars" ;
+    Slotname [ en-US ] = "InsertHScrollbar" ;
+    HelpText [ en-US ] = "Insert a horizontal scrollbar" ;
+    Slotname [ de ] = "EinfügenHScrollbar" ;
+};
+SfxSlotInfo SID_INSERT_VSCROLLBAR
+{
+    Slotname [ de ] = "EinfügenVScrollbar" ;
+    HelpText [ de ] = "Einfügen eines vertikalen Scrollbars" ;
+    Slotname [ en-US ] = "InsertVScrollbar" ;
+    HelpText [ en-US ] = "Insert a vertical scrollbar" ;
+    Slotname [ de ] = "EinfügenVScrollbar" ;
+};
+SfxSlotInfo SID_INSERT_PREVIEW
+{
+    Slotname [ de ] = "Preview" ;
+    HelpText [ de ] = "Preview" ;
+    Slotname [ en-US ] = "Preview" ;
+    HelpText [ en-US ] = "Preview" ;
+    Slotname [ de ] = "Preview" ;
+};
+
+
+
+
+SfxSlotInfo SID_INSERT_URLBUTTON
+{
+    Slotname [ de ] = "EinfügenURLButton" ;
+    HelpText [ de ] = "Einfügen eines URL-Buttons" ;
+    Slotname [ en-US ] = "InsertURLButton" ;
+    HelpText [ en-US ] = "Insert a URL button" ;
+    Slotname [ de ] = "EinfügenURLButton" ;
+};
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

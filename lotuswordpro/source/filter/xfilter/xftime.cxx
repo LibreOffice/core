@@ -61,7 +61,7 @@
  * Change History
  * 2005-01-21 create this file.
  ************************************************************************/
-#include    "xftime.hxx"
+#include	"xftime.hxx"
 
 XFTime::XFTime()
 {
@@ -73,9 +73,9 @@ XFTime::~XFTime()
 {
 }
 
-void    XFTime::ToXml(IXFStream *pStrm)
+void	XFTime::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     if( GetStyleName().getLength() > 0 )

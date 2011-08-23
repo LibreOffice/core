@@ -1,0 +1,120 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include "fmresids.hrc"
+#include "fmsearch.hrc"
+#include "fmhelp.hrc"
+
+
+
+
+ErrorBox RID_SVXERR_SEARCH_NORECORD
+{
+    Buttons = WB_OK;
+    Message [ de ] = "Es wurden keine Datensätze, die zu Ihren Angaben passen, gefunden !" ;
+    Message [ en-US ] = "No records corresponding to your data found!";
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Impossível encontrar registos de dados correspondentes às indicações fornecidas!";
+    Message[ ru ] = "Не найдено записей, соответствующих вашему запросу!";
+    Message[ el ] = "Δεν βρέθηκαν εγγραφές, οι οποίες να εκπληρώνουν τα δεδομένα σας!";
+    Message[ nl ] = "Er zijn geen records gevonden die bij de vermelde gegevens passen!";
+    Message[ fr ] = "Aucun enregistrement trouvé qui corresponde à vos indications !";
+    Message[ es ] = "¡No se encontró ningún registro de datos adecuado a su información!";
+    Message[ fi ] = "Tietoja vastaavia tietueita ei löytynyt.";
+    Message[ ca ] = "No s'ha trobat cap registre que es correspongui a la vostra data!";
+    Message[ it ] = "Non sono stati trovati record di dati corrispondenti ai vostri dati!";
+    Message[ sk ] = "Neboli nájdené žiadne zodpovedajúce záznamy!";
+    Message[ da ] = "Der blev ikke fundet nogen dataposter, som svarer til dine angivelser!";
+    Message[ sv ] = "Inga dataposter som passar till dina uppgifter har hittats!";
+    Message[ pl ] = "Nie znaleziono żadnych rekordów odpowiadających wpisanym danym!";
+    Message[ pt-BR ] = "Não foi possível encontrar registros de dados correspondentes às indicações fornecidas!";
+    Message[ th ] = "ไม่มีระเบียนที่เป็นผลมาจากการพบข้อมูลของคุณ!";
+    Message[ ja ] = "入力項目に該当するレコードが見つかりません。";
+    Message[ ko ] = "사용자의 데이터와 맞는 레코드를 찾지 못했습니다.";
+    Message[ zh-CN ] = "没有找到符合您给定的数据条目！";
+    Message[ zh-TW ] = "沒有找到符合您指定的資料條目﹗";
+    Message[ tr ] = "Girdiğiniz verilere uygun veri kümeleri bulunamadı!";
+    Message[ hi-IN ] = "आपके ड़ॉटा केलिए कोई उचित लेखा नहीं मिला!";
+    Message[ ar ] = "تعذر العثور على سجلات بيانات تتماشى مع بياناتك !";
+    Message[ he ] = "‮לא אותרו רשומות מתאימות לנתונים!‬";
+};
+
+ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
+{
+    Buttons = WB_OK;
+    Message [ de ] = "Es trat ein nicht näher bekannter Fehler auf. Die Suche konnte nicht beendet werden !" ;
+    Message [ en-US ] = "An unknown error occurred. The search could  not be terminated!";
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Surgiu um erro desconhecido. Impossível concluir a procura!";
+    Message[ ru ] = "Неизвестная ошибка. Невозможно закончить поиск!";
+    Message[ el ] = "Παρουσιάστηκε άγνωστο σφάλμα. Η αναζήτηση δεν ήταν δυνατόν να ολοκληρωθεί!";
+    Message[ nl ] = "Er is een onbekende fout opgetreden: De zoekactie kan niet worden beëindigd!";
+    Message[ fr ] = "Une erreur inconnue est survenue. La recherche n'a pas pu être terminée !";
+    Message[ es ] = "Ha ocurrido un error desconocido. La búsqueda no se pudo completar.";
+    Message[ fi ] = "Ilmeni tuntematon virhe. Hakua ei voitu suorittaa loppuun.";
+    Message[ ca ] = "S'ha produït un error desconegut. No s'ha pogut completar la cerca.";
+    Message[ it ] = "Impossibile terminare la ricerca. Si è verificato un errore non ben definito.";
+    Message[ sk ] = "Nastala neznáma chyba. Hľadanie nemožno ukončiť!";
+    Message[ da ] = "Der opstod en ukendt fejl. Det var ikke muligt at afslutte søgningen!";
+    Message[ sv ] = "Det har uppstått ett okänt fel. Det gick inte att avsluta sökningen!";
+    Message[ pl ] = "Wystąpił nieznany błąd. Nie można ukończyć wyszukiwania!";
+    Message[ pt-BR ] = "Ocorreu um erro desconhecido. Não foi possível concluir a pesquisa!";
+    Message[ th ] = "เกิดข้อผิดพลาดที่ไม่รู้จัก ไม่สามารถเลิกการค้นหา!";
+    Message[ ja ] = "確認できないエラーが発生しました。検索は終了できません。";
+    Message[ ko ] = "알 수 없는 오류가 발생했습니다. 검색을 마치지 못했습니다.";
+    Message[ zh-CN ] = "出现一个不明的错误。无法结束搜寻命令！";
+    Message[ zh-TW ] = "出現一個不明的錯誤。無法結束搜尋！";
+    Message[ tr ] = "Ayrıntıları bilinmeyen bir hata oluştu. Arama işlemi tamamlanamadı!";
+    Message[ hi-IN ] = "एक अज्ञात गलती घटित हुआ । खोज को समाप्त नहीं कर सकते है !";
+    Message[ ar ] = "حدث خطأ غير معروف. تعذر إنهاء البحث !";
+    Message[ he ] = "‮ארעה שגיאה לא מוכרת. לא ניתן לסיים את החיפוש!‬";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

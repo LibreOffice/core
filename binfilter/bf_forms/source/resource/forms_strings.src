@@ -1,0 +1,531 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define NO_LOCALIZE_EXPORT
+
+#ifndef _FRM_RESOURCE_HRC_
+#include "frm_resource.hrc"
+#endif
+
+String RID_BASELISTBOX_ERROR_FILLLIST
+{
+    Text [ de ] = "Der Inhalt eines Kombinations- oder Listenfeldes konnte nicht ermittelt werden.";
+    Text [ en-US ] = "The contents of a combo box or list field could not be determined.";
+    Text[ pt ] = "Foi impossível determinar o conteúdo de uma caixa combinada ou caixa de listagem.";
+    Text[ ru ] = "Невозможно определить содержимое поля со списком или поля списка.";
+    Text[ el ] = "Δεν ήταν δυνατόν να γίνει αναγνώριση του περιεχομένου ενός πλαισίου συνδυασμού ή ενός πεδίου καταλόγου";
+    Text[ nl ] = "Inhoud combinatieveld of keuzelijst niet gevonden.";
+    Text[ fr ] = "Impossible de déterminer le contenu de la zone combinée/zone de liste.";
+    Text[ es ] = "No se pudo determinar ni el contenido del cuadro combinado ni el del listado.";
+    Text[ fi ] = "Yhdistelmäruudun tai luettelokentän sisältöä ei voitu määrittää.";
+    Text[ ca ] = "No s'ha pogut determinar el contingut d'un camp de llista o quadre combinat.";
+    Text[ it ] = "Non è stato possibile determinare il contenuto di una casella combinata o di una casella di riepilogo.";
+    Text[ sk ] = "Nebolo možné určiť obsah rozbaľovacieho menu alebo textového poľa.";
+    Text[ da ] = "Det var ikke muligt at bestemme indholdet for en kombinationsboks eller rulleliste.";
+    Text[ sv ] = "Innehållet i ett kombinationsfält eller en listruta kunde inte bestämmas.";
+    Text[ pl ] = "Nie można ustalić zawartości pola kombi lub pola listy.";
+    Text[ pt-BR ] = "Não foi possível determinar o conteúdo de uma caixa de combinação ou campo de listagem.";
+    Text[ th ] = "ไม่สามารถกำหนดเนื้อหาของกล่องคอมโบ้หรือเขตข้อมูลรายการได้";
+    Text[ ja ] = "コンボボックスまたはリストボックスの内容が確認できませんでした。";
+    Text[ ko ] = "콤보 상자 또는 목록 필드의 내용을 확인하지 못했습니다.";
+    Text[ zh-CN ] = "无法确定组合框或者列表框内的内容。";
+    Text[ zh-TW ] = "無法從資料庫內測定組合方塊或清單方塊的內容";
+    Text[ tr ] = "Kombinasyon alanı yada liste alanı algılanamıyor.";
+    Text[ hi-IN ] = "कॉम्बो बॉक्स अथवा सूची बॉक्स की विषय को निश्चित नहीं कर सकते है ।";
+    Text[ ar ] = "تعذر التعرف على محتويات مربع تحرير وسرد أو مربع قائمة.";
+    Text[ he ] = "Der Inhalt eines Kombinations- oder Listenfeldes konnte nicht ermittelt werden.";
+};
+
+String RID_STR_IMPORT_GRAPHIC
+{
+    Text [ de ] = "Grafik einfügen" ;
+    Text [ en-US ] = "Insert graphics" ;
+    Text[ pt ] = "Inserir imagem";
+    Text[ ru ] = "Вставить графический объект";
+    Text[ el ] = "Εισαγωγή γραφικού";
+    Text[ nl ] = "Afbeelding invoegen";
+    Text[ fr ] = "Insérer une image";
+    Text[ es ] = "Insertar una imagen";
+    Text[ fi ] = "Lisää grafiikka";
+    Text[ ca ] = "Insereix gràfics";
+    Text[ it ] = "Inserisci immagine";
+    Text[ sk ] = "Vložiť obrázok";
+    Text[ da ] = "Indsæt grafik";
+    Text[ sv ] = "Infoga grafik";
+    Text[ pl ] = "Wstaw grafikę";
+    Text[ pt-BR ] = "Inserir Figuras";
+    Text[ th ] = "แทรกกราฟิค";
+    Text[ ja ] = "図の挿入";
+    Text[ ko ] = "그림 삽입";
+    Text[ zh-CN ] = "插入图形";
+    Text[ zh-TW ] = "插入圖形";
+    Text[ tr ] = "Resim ekle";
+    Text[ hi-IN ] = "सुचित्र जोड़ो";
+    Text[ ar ] = "إدراج صورة";
+    Text[ he ] = "Grafik einfügen";
+};
+
+String RID_STR_CONTROL_SUBSTITUTED_NAME
+{
+    Text [ de ] = "ersetzt";
+    Text [ en-US ] = "substituted";
+    Text[ pt ] = "substituído";
+    Text[ ru ] = "подставлено";
+    Text[ el ] = "αντικαταστάθηκε";
+    Text[ nl ] = "vervangen";
+    Text[ fr ] = "remplacé";
+    Text[ es ] = "reemplazado";
+    Text[ fi ] = "korvattu";
+    Text[ ca ] = "substituït";
+    Text[ it ] = "sostituito";
+    Text[ sk ] = "nahradené";
+    Text[ da ] = "erstattet";
+    Text[ sv ] = "ersatt";
+    Text[ pl ] = "zamieniono";
+    Text[ pt-BR ] = "substituído";
+    Text[ th ] = "แทน";
+    Text[ ja ] = "置換";
+    Text[ ko ] = "대체됨";
+    Text[ zh-CN ] = "替换";
+    Text[ zh-TW ] = "替代";
+    Text[ tr ] = "değiştirildi";
+    Text[ hi-IN ] = "स्थानापन्न की हुयी";
+    Text[ ar ] = "مستبدل";
+    Text[ he ] = "ersetzt";
+};
+
+String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
+{
+    Text [ de ] = "Beim Laden dieses Controls trat ein Fehler auf. Es wurde daher durch einen Platzhalter ersetzt.";
+    Text [ en-US ] = "An error occurred while this control was being loaded. It was therefore replaced with a placeholder.";
+    Text[ pt ] = "Ao carregar este controlo ocorreu um erro. Por esta razão foi substituído por um marcador de posição.";
+    Text[ ru ] = "Ошибка загрузки элемента управления. Он был заменен полем подстановки.";
+    Text[ el ] = "Προέκυψε σφάλμα κατά τη φόρτωση αυτού του στοιχείου ελέγχου. Για αυτόν τον λόγο αντικαταστάθηκε με ένα πλαίσιο δείκτη τοποθέτησης.";
+    Text[ nl ] = "Fout bij het laden van control. Is vervangen door plaatsvervanger.";
+    Text[ fr ] = "Erreur lors du chargement de ce contrôle ; c'est pouquoi il a été remplacé par un substituant.";
+    Text[ es ] = "Ha ocurrido un error al cargar este Control. Por ello se ha reemplazado con un comodín.";
+    Text[ fi ] = "Tätä ohjausobjektia ladattaessa ilmeni virhe. Se korvattiin siksi paikkamerkillä.";
+    Text[ ca ] = "S'ha produït un error mentre aquest control es carregava. Per tant, s'ha reemplaçat per un marcador.";
+    Text[ it ] = "Durante il caricamento del control si è verificato un errore. Pertanto è stato sostituito con una variabile.";
+    Text[ sk ] = "Objavila sa chyba pri načítaní tohto ovládacieho prvku, ktorý bol preto nahradený len zástupcom.";
+    Text[ da ] = "Der opstod en fejl under indlæsningen af dette kontrolelement. Det blev derfor erstattet med en pladsholder.";
+    Text[ sv ] = "När denna control laddades uppstod ett fel. Därför ersattes den av en platshållare.";
+    Text[ pl ] = "Wystąpił błąd podczas ładowania tego formantu, więc zastąpiono go znakiem-wypełniaczem.";
+    Text[ pt-BR ] = "Ocorreu um erro durante o carregamento desse controle. Por isso ele foi substituído por um marcador de posição.";
+    Text[ th ] = "เกิดข้อผิดพลาดขณะกำลังโหลดตัวควบคุม เนื่องจากมันถูกแทนที่ด้วยตำแหน่งวางวัตถุ";
+    Text[ ja ] = "このコントロールの読み込み中にエラーが発生しました。それが原因でワイルドカードに置換されました。";
+    Text[ ko ] = "이 컨트롤 로드 중에 오류가 발생했습니다. 이 이유로 인해 플레이스홀더로 대체되었습니다.";
+    Text[ zh-CN ] = "装入这个字段时出现了一个错误，因此用通配符代替字段。";
+    Text[ zh-TW ] = "載入這個控制項時發生一個錯誤。但已經用一個萬用字元替代它。";
+    Text[ tr ] = "Komutlar yüklenirken hata oluştu. Bu yüzden eskideğerler ile değiştirildi.";
+    Text[ hi-IN ] = "इस नियंत्रण को लोड करने के समय गलती घटित हुआ । इसलिए इसको स्थानधारक द्वारा प्रतिस्थापित किया है ।";
+    Text[ ar ] = "حدث خطأ أثناء تحميل عنصر التحكم هذا. لهذا تم استبداله بعنصر نائب.";
+    Text[ he ] = "Beim Laden dieses Controls trat ein Fehler auf. Es wurde daher durch einen Platzhalter ersetzt.";
+};
+
+String RID_STR_READERROR
+{
+    Text [ de ] = "Fehler beim Lesen von Daten aus der Datenbank" ;
+    Text [ en-US ] = "Error reading data from database" ;
+    Text[ pt ] = "Erro ao ler dados da base de dados";
+    Text[ ru ] = "Ошибка чтения данных из базы данных";
+    Text[ el ] = "Σφάλμα κατά την ανάγνωση δεδομένων από τη βάση δεδομένων";
+    Text[ nl ] = "Fout bij lezen van gegevens in database";
+    Text[ fr ] = "Erreur lors de la lecture des données de la base de données";
+    Text[ es ] = "Error al leer datos de la base de datos";
+    Text[ fi ] = "On ilmennyt virhe luettaessa tietokannan tietoja.";
+    Text[ ca ] = "S'ha produït un error en llegir les dades de la base de dades";
+    Text[ it ] = "Errore durante la lettura di dati dal database";
+    Text[ sk ] = "Chyba pri čítaní­ dát z databázy";
+    Text[ da ] = "Fejl under læsning af data fra databasen";
+    Text[ sv ] = "Fel vid läsning av data från databasen";
+    Text[ pl ] = "Błąd odczytu danych z bazy";
+    Text[ pt-BR ] = "Ocorreu um erro ao ler dados do banco de dados";
+    Text[ th ] = "อ่านข้อมูลจากฐานข้อมูลผิดพลาด";
+    Text[ ja ] = "データベースからデータを読み取る時のエラー";
+    Text[ ko ] = "데이터베이스에 있는 데이터를 읽을 때 오류";
+    Text[ zh-CN ] = "在读取数据库数据时发生错误";
+    Text[ zh-TW ] = "在讀取資料庫時發生錯誤";
+    Text[ tr ] = "Hata: veritabanından veriler okunamıyor";
+    Text[ hi-IN ] = "लेखासंचय से डॉटा को पढ़ने के समय गलती";
+    Text[ ar ] = "حدث خطأ أثناء قراءة بيانات من قاعدة البيانات";
+    Text[ he ] = "Fehler beim Lesen von Daten aus der Datenbank";
+};
+
+String RID_STR_CONNECTERROR
+{
+    Text [ de ] = "Verbindungsaufbau gescheitert" ;
+    Text [ en-US ] = "Connection failed" ;
+    Text[ pt ] = "Não foi possível estabelecer ligação.";
+    Text[ ru ] = "Подключение повреждено";
+    Text[ el ] = "Η σύνδεση απέτυχε";
+    Text[ nl ] = "Kan geen verbinding tot stand brengen";
+    Text[ fr ] = "Connexion impossible";
+    Text[ es ] = "No se pudo efectuar la conexión.";
+    Text[ fi ] = "Yhteyden muodostaminen ei onnistunut.";
+    Text[ ca ] = "La connexió ha fallat";
+    Text[ it ] = "Impossibile creare il collegamento";
+    Text[ sk ] = "Spojenie prerušené";
+    Text[ da ] = "Det var ikke muligt at oprette forbindelsen";
+    Text[ sv ] = "Uppkoppling avbruten";
+    Text[ pl ] = "Połączenie nie powiodło się";
+    Text[ pt-BR ] = "Não foi possível estabelecer a conexão";
+    Text[ th ] = "การเชื่อมต่อล้มเหลว";
+    Text[ ja ] = "接続できませんでした。";
+    Text[ ko ] = "연결 실패";
+    Text[ zh-CN ] = "连接失败";
+    Text[ zh-TW ] = "連線失敗";
+    Text[ tr ] = "Bağlantı hatası";
+    Text[ hi-IN ] = "कनेक्शन असफल हुआ";
+    Text[ ar ] = "عملية الاتصال فشلت";
+    Text[ he ] = "Verbindungsaufbau gescheitert";
+};
+
+String RID_ERR_LOADING_FORM
+{
+    Text [ de ] = "Die Dateninhalte konnten nicht geladen werden.";
+    Text [ en-US ] = "The data content could not be loaded.";
+    Text[ pt ] = "Foi impossível carregar o conteúdo dos dados.";
+    Text[ ru ] = "Невозможно загрузить данные.";
+    Text[ el ] = "Δεν ήταν δυνατόν να γίνει φόρτωση των περιεχομένων των δεδομένων.";
+    Text[ nl ] = "De gegevens kunnen niet worden geladen.";
+    Text[ fr ] = "Impossible de charger le contenu des données.";
+    Text[ es ] = "No se pudieron cargar los contenidos de los datos.";
+    Text[ fi ] = "Tietosisällön lataaminen ei onnistunut.";
+    Text[ ca ] = "No s'ha pogut carregar el contingut de les dades.";
+    Text[ it ] = "Non è stato possibile caricare i contenuti.";
+    Text[ sk ] = "Obsah dát nemohol byť načítaný.";
+    Text[ da ] = "Det var ikke muligt at indlæse dataindholdet.";
+    Text[ sv ] = "Datainnehållet kunde inte laddas.";
+    Text[ pl ] = "Nie można załadować danych.";
+    Text[ pt-BR ] = "Não foi possível carregar o conteúdo dos dados.";
+    Text[ th ] = "ไม่สามารถโหลดเนื้อหาข้อมูลได้";
+    Text[ ja ] = "データ内容が読み込めませんでした。";
+    Text[ ko ] = "데이터 내용을 로드하지 못했습니다.";
+    Text[ zh-CN ] = "无法装入数据内容。";
+    Text[ zh-TW ] = "無法載入資料內容。";
+    Text[ tr ] = "Veri yüklenemedi";
+    Text[ hi-IN ] = "डॉटा विषय को लोड़ नहीं कर सकते है ।";
+    Text[ ar ] = "تعذر تحميل المحتويات البيانية.";
+    Text[ he ] = "Die Dateninhalte konnten nicht geladen werden.";
+};
+
+String RID_ERR_REFRESHING_FORM
+{
+    Text [ de ] = "Die Dateninhalte konnten nicht aktualisiert werden.";
+    Text [ en-US ] = "The data content could not be updated";
+    Text [ x-comment ] = "; The meaning here is 'refresh', not 'update'.";
+    Text[ pt ] = "Foi impossível actualizar o conteúdo dos dados.";
+    Text[ ru ] = "Невозможно обновить содержимое данных.";
+    Text[ el ] = "Δεν ήταν δυνατόν να γίνει ενημέρωση των περιεχομένων των δεδομένων.";
+    Text[ nl ] = "De gegevens kunnen niet worden bijgewerkt.";
+    Text[ fr ] = "Impossible d'actualiser le contenu des données.";
+    Text[ es ] = "No se pudieron actualizar los contenidos de los datos.";
+    Text[ fi ] = "Tietosisällön päivittäminen ei onnistunut.";
+    Text[ ca ] = "No s'ha pogut actualitzar el contingut de les dades";
+    Text[ it ] = "Non è stato possibile aggiornare i contenuti.";
+    Text[ sk ] = "Obsah dát nemohol byť aktualizovaný";
+    Text[ da ] = "Det var ikke muligt at opdatere dataindholdet.";
+    Text[ sv ] = "Datainnehållet kunde inte uppdateras.";
+    Text[ pl ] = "Nie można zaktualizować danych.";
+    Text[ pt-BR ] = "Não foi possível atualizar o conteúdo dos dados.";
+    Text[ th ] = "ไม่สามารถปรับปรุงเนื้อหาข้อมูลได้";
+    Text[ ja ] = "データ内容が更新できませんでした。";
+    Text[ ko ] = "데이터 내용을 업데이트하지 못했습니다.";
+    Text[ zh-CN ] = "无法更新数据内容。";
+    Text[ zh-TW ] = "無法更新資料內容。";
+    Text[ tr ] = "Veri içeriği güncellenemedi.";
+    Text[ hi-IN ] = "डॉटा विषय को अपडेट् नहीं कर सकते है ।";
+    Text[ ar ] = "تعذر تحديث المحتويات البيانية.";
+    Text[ he ] = "Die Dateninhalte konnten nicht aktualisiert werden.";
+};
+
+String RID_STR_ERR_INSERTRECORD
+{
+    Text [ de ] = "Fehler beim Einfügen des neuen Datensatzs";
+    Text [ en-US ] = "Error inserting the new record";
+    Text[ pt ] = "Erro ao inserir o novo registo de dados";
+    Text[ ru ] = "Ошибка вставки новой записи";
+    Text[ el ] = "Σφάλμα κατά την εισαγωγή της νέας εγγραφής";
+    Text[ nl ] = "Fout bij invoegen van nieuwe record";
+    Text[ fr ] = "Erreur lors de l'insertion du nouvel enregistrement";
+    Text[ es ] = "Error al insertar un nuevo registro de datos.";
+    Text[ fi ] = "Virhe lisättäessä uutta tietuetta.";
+    Text[ ca ] = "S'ha produït un error en inserir el nou registre";
+    Text[ it ] = "Errore nell'inserire il nuovo record di dati.";
+    Text[ sk ] = "Chyba pri vkladaní­ nového záznamu";
+    Text[ da ] = "Fejl ved indsættelse af den nye datapost";
+    Text[ sv ] = "Fel vid infogning av den nya dataposten";
+    Text[ pl ] = "Błąd wstawiania nowego rekordu";
+    Text[ pt-BR ] = "Ocorreu um erro ao inserir o novo registro";
+    Text[ th ] = "แทรกระเบียนใหม่ผิดพลาด";
+    Text[ ja ] = "新しいレコードを挿入する時のエラー";
+    Text[ ko ] = "새 레코드 삽입시 오류";
+    Text[ zh-CN ] = "在插入新数据条目时发生错误";
+    Text[ zh-TW ] = "在插入新資料條目時發生錯誤";
+    Text[ tr ] = "Yeni veri kümesi girerken hata oluştu.";
+    Text[ hi-IN ] = "नया अभिलेख को जोड़ने के समय गलती";
+    Text[ ar ] = "حدث خطأ أثناء إدراج السجل الجديد";
+    Text[ he ] = "Fehler beim Einfügen des neuen Datensatzs";
+};
+
+String RID_STR_ERR_UPDATERECORD
+{
+    Text [ de ] = "Fehler beim Schreiben des aktuellen Datensatzes";
+    Text [ en-US ] = "Error updating the current record";
+    Text[ pt ] = "Erro ao escrever o registo de dados activo";
+    Text[ ru ] = "Ошибка обновления текущей записи";
+    Text[ el ] = "Σφάλμα κατά την εγγραφή της τρέχουσας εγγραφής";
+    Text[ nl ] = "Fout bij schrijven van huidige record";
+    Text[ fr ] = "Erreur lors de l'écriture de l'enregistrement actif";
+    Text[ es ] = "Error al escribir el registro actual de datos.";
+    Text[ fi ] = "Virhe päivitettäessä nykyistä tietuetta.";
+    Text[ ca ] = "S'ha produït un error en actualitzar el registre actual";
+    Text[ it ] = "Errore nello scrivere il record di dati attivo";
+    Text[ sk ] = "Chyba pri aktualizácii aktuálneho záznamu";
+    Text[ da ] = "Fejl ved skrivning af den aktuelle datapost";
+    Text[ sv ] = "Fel vid skrivning av den aktuella dataposten";
+    Text[ pl ] = "Błąd aktualizacji bieżącego rekordu";
+    Text[ pt-BR ] = "Ocorreu um erro ao atualizar o registro atual";
+    Text[ th ] = "ปรับปรุงระเบียนปัจจุบันผิดพลาด";
+    Text[ ja ] = "現在のレコードを書き込む時のエラー";
+    Text[ ko ] = "현재의 데이터 레코드에서 오류";
+    Text[ zh-CN ] = "在更新当前数据条目时发生错误";
+    Text[ zh-TW ] = "在寫入資料條目時發生錯誤";
+    Text[ tr ] = "Yürürlükteki veri kümesi güncellenirken hata oluştu";
+    Text[ hi-IN ] = "वर्तमान अभिलेख को अपडेट् करने के समय गलती";
+    Text[ ar ] = "حدث خطأ أثناء كتابة السجل الحالي";
+    Text[ he ] = "Fehler beim Schreiben des aktuellen Datensatzes";
+};
+
+String RID_STR_ERR_DELETERECORD
+{
+    Text [ de ] = "Fehler beim Löschen des aktuellen Datensatzes";
+    Text [ en-US ] = "Error deleting the current record";
+    Text[ pt ] = "Erro ao eliminar o registo de dados activo";
+    Text[ ru ] = "Ошибка удаления текущей записи";
+    Text[ el ] = "Σφάλμα κατά την διαγραφή της τρέχουσας εγγραφής";
+    Text[ nl ] = "Fout bij wissen van huidige record";
+    Text[ fr ] = "Erreur lors de la suppression de l'enregistrement actif";
+    Text[ es ] = "Error al borrar el registro actual.";
+    Text[ fi ] = "Virhe poistettaessa nykyistä tietuetta.";
+    Text[ ca ] = "S'ha produït un error en suprimir el registre actual";
+    Text[ it ] = "Errore nel cancellare il record di dati attivo";
+    Text[ sk ] = "Chyba pri odstraňovaní­ aktuálneho záznamu";
+    Text[ da ] = "Fejl ved sletning af den aktuelle datapost";
+    Text[ sv ] = "Fel vid radering av den aktuella dataposten";
+    Text[ pl ] = "Błąd usuwania bieżącego rekordu";
+    Text[ pt-BR ] = "Ocorreu um erro ao excluir o registro atual";
+    Text[ th ] = "ลบระเบียนปัจจุบันผิดพลาด";
+    Text[ ja ] = "現在のレコードを削除する時のエラー";
+    Text[ ko ] = "현재 레코드 삭제시에 오류";
+    Text[ zh-CN ] = "在删除当前数据条目时发生错误";
+    Text[ zh-TW ] = "在刪除資料條目時發生錯誤";
+    Text[ tr ] = "Yürürlükteki veri kümesi silinirken hata oluştu.";
+    Text[ hi-IN ] = "वर्तमान अभिलेख को मिटाने के समय गलती";
+    Text[ ar ] = "حدث خطأ أثناء حذف السجل الحالي";
+    Text[ he ] = "Fehler beim Löschen des aktuellen Datensatzes";
+};
+
+String RID_STR_ERR_DELETERECORDS
+{
+    Text [ de ] = "Fehler beim Löschen der angegebenen Datensätze";
+    Text [ en-US ] = "Error deleting the specified records";
+    Text[ pt ] = "Erro ao eliminar os registos de dados indicados.";
+    Text[ ru ] = "Ошибка удаления указанной записи";
+    Text[ el ] = "Σφάλμα κατά την διαγραφή των επιλεγμένων εγγραφών";
+    Text[ nl ] = "Fout bij wissen van opgegeven records";
+    Text[ fr ] = "Erreur lors de la suppression des enregistrements spécifiés";
+    Text[ es ] = "Error al borrar los registros indicados.";
+    Text[ fi ] = "Virhe poistettaessa määritettyjä tietueita.";
+    Text[ ca ] = "S'ha produït un error en suprimir els registres indicats";
+    Text[ it ] = "Errore nel cancellare i record di dati specificati.";
+    Text[ sk ] = "Chyba pri odstraňovaní­ uvedených záznamov";
+    Text[ da ] = "Fejl ved sletning af de angivne dataposter";
+    Text[ sv ] = "Fel vid radering av de angivna dataposterna";
+    Text[ pl ] = "Błąd usuwania określonych rekordów";
+    Text[ pt-BR ] = "Ocorreu um erro ao excluir os registros especificados";
+    Text[ th ] = "ลบระเบียนที่ระบุผิดพลาด";
+    Text[ ja ] = "指定したレコードを削除する時のエラー";
+    Text[ ko ] = "지정된 레코드 삭제 중 오류";
+    Text[ zh-CN ] = "在删除指定的数据条目时发生错误";
+    Text[ zh-TW ] = "在刪除指定資料條目時發生錯誤";
+    Text[ tr ] = "Belirtilmiş veri kümesi silinirken hata oluştu.";
+    Text[ hi-IN ] = "निर्दिष्ट की हुयी अभिलेखों को मिटाने के समय गलती";
+    Text[ ar ] = "حدث خطأ أثناء حذف السجلات المدرجة";
+    Text[ he ] = "Fehler beim Löschen der angegebenen Datensätze";
+};
+
+String RID_STR_NEED_NON_NULL_OBJECT
+{
+    Text [ de ] = "Das Objekt darf nicht NULL sein.";
+    Text [ en-US ] = "The object cannot be NULL.";
+    Text[ pt ] = "O objecto não pode ser NULL.";
+    Text[ ru ] = "Объект не может быть NULL.";
+    Text[ el ] = "Το αντικείμενο δεν μπορεί να είναι ΚΕΝΟ.";
+    Text[ nl ] = "Het object mag niet NUL zijn.";
+    Text[ fr ] = "L'objet ne pas être NULL.";
+    Text[ es ] = "El objeto no puede ser NULL.";
+    Text[ fi ] = "Objekti ei voi olla NULL.";
+    Text[ ca ] = "L'objecte no pot ser NULL.";
+    Text[ it ] = "L'oggetto non deve essere NULL.";
+    Text[ sk ] = "Objekt nemôže byť NULL.";
+    Text[ da ] = "Objektet må ikke være NUL.";
+    Text[ sv ] = "Objektet får inte vara NULL.";
+    Text[ pl ] = "Obiekt nie może mieć wartości NULL.";
+    Text[ pt-BR ] = "O objeto não pode ser NULL.";
+    Text[ th ] = "วัตถุไม่สามารถเป็น NULL ได้";
+    Text[ ja ] = "オブジェクトが NULL ではいけません。";
+    Text[ ko ] = "개체가 NULL이면 안됩니다.";
+    Text[ zh-CN ] = "这个对象不可以是 NULL 。";
+    Text[ zh-TW ] = "這個物件不可以是 NULL 。";
+    Text[ tr ] = "Nesne NULL olamaz.";
+    Text[ hi-IN ] = "वस्तु NULL नहीं हो सकता है ।";
+    Text[ ar ] = "The object must not be NULL.";
+    Text[ he ] = "Das Objekt darf nicht NULL sein.";
+};
+
+String RID_STR_OPEN_GRAPHICS
+{
+    Text [ de ] = "Grafik einfügen aus...";
+    Text [ en-US ] = "Insert graphics from...";
+    Text[ pt ] = "Inserir imagem de...";
+    Text[ ru ] = "Вставить графические объекты из...";
+    Text[ el ] = "Εισαγωγή γραφικών από...";
+    Text[ nl ] = "Afbeelding invoegen uit...";
+    Text[ fr ] = "Insérer une image à partir de...";
+    Text[ es ] = "Insertar una imagen de...";
+    Text[ fi ] = "Lisää grafiikka kohteesta...";
+    Text[ ca ] = "Inserta un gràfic des de...";
+    Text[ it ] = "Inserisci l'immagine da...";
+    Text[ sk ] = "Vložiť obrázok z...";
+    Text[ da ] = "Indsæt grafik fra...";
+    Text[ sv ] = "Infoga grafik från...";
+    Text[ pl ] = "Wstaw grafikę z...";
+    Text[ pt-BR ] = "Inserir figuras de...";
+    Text[ th ] = "แทรกกราฟฟิคจาก...";
+    Text[ ja ] = "図の挿入に開く...";
+    Text[ ko ] = "삽입할 그림... ";
+    Text[ zh-CN ] = "插入图形从...";
+    Text[ zh-TW ] = "插入圖形從...";
+    Text[ tr ] = "'dan grafik ekle...";
+    Text[ hi-IN ] = "से सुचित्रों को जोड़ो...";
+    Text[ ar ] = "Insert graphics from...";
+    Text[ he ] = "Grafik einfügen aus...";
+};
+
+String RID_STR_CLEAR_GRAPHICS
+{
+    Text [ de ] = "Grafik entfernen";
+    Text [ en-US ] = "Remove graphics";
+    Text[ pt ] = "Remover imagem";
+    Text[ ru ] = "Удалить графические объекты";
+    Text[ el ] = "Κατάργηση γραφικών";
+    Text[ nl ] = "Afbeelding verwijderen";
+    Text[ fr ] = "Supprimer l'image";
+    Text[ es ] = "Borrar la imagen";
+    Text[ fi ] = "Poista grafiikka";
+    Text[ ca ] = "Elimina els gràfics";
+    Text[ it ] = "Elimina l'immagine";
+    Text[ sk ] = "Odstrániť obrázok";
+    Text[ da ] = "Fjern grafik";
+    Text[ sv ] = "Ta bort grafik";
+    Text[ pl ] = "Usuń grafikę";
+    Text[ pt-BR ] = "Remover figuras";
+    Text[ th ] = "เอากราฟฟิคออก";
+    Text[ ja ] = "図の削除";
+    Text[ ko ] = "그림 제거";
+    Text[ zh-CN ] = "删除图形";
+    Text[ zh-TW ] = "刪除圖形";
+    Text[ tr ] = "Grafik kaldır";
+    Text[ hi-IN ] = "सुचित्रों को हटाओ";
+    Text[ ar ] = "Remove graphics";
+    Text[ he ] = "Grafik entfernen";
+};
+
+
+String RID_STR_INVALIDSTREAM
+{
+    Text  = "Die �bergebene Stream-Komponente ist ung�ltig.";
+};
+
+String RID_STR_SYNTAXERROR
+{
+    Text [ de ] = "Fehler bei der Analyse des Anfrageausdrucks" ;
+    Text [ en-US ] = "Syntax error in query expression" ;
+    Text[ pt ] = "Erro ao analisar a expressão de consulta.";
+    Text[ ru ] = "Ошибка синтаксиса в выражении запроса";
+    Text[ el ] = "Σφάλμα κατά την ανάλυση του ορίσματος του ερωτήματος";
+    Text[ nl ] = "Fout bij de analyse van query-afdruk";
+    Text[ fr ] = "Erreur dans l'analyse de l'expression de la requête";
+    Text[ es ] = "Ha ocurrido un error al analizar la expresión de la consulta";
+    Text[ fi ] = "Syntaksivirhe kyselylausekkeessa";
+    Text[ ca ] = "S'ha produït un error en analitzar l'expressió de consulta";
+    Text[ it ] = "Errore nell'analizzare dell'espressione di ricerca";
+    Text[ sk ] = "Chyba syntaxu v dotaze";
+    Text[ da ] = "Fejl under analysen af forespørgseludtrykket";
+    Text[ sv ] = "Fel vid analys av frågeuttryck";
+    Text[ pl ] = "Błąd przy ocenie wydruku kwerendy";
+    Text[ pt-BR ] = "Ocorreu um erro ao analisar a expressão da consulta";
+    Text[ th ] = "ไวยกรณ์ในคำอธิบายแบบสอบถามผิดพลาด";
+    Text[ ja ] = "クエリー言語分析中でのエラー";
+    Text[ ko ] = "쿼리식을 분석하는 중 오류";
+    Text[ zh-CN ] = "查询语句出现语法错误。";
+    Text[ zh-TW ] = "在分解查詢語句時發生一個錯誤。";
+    Text[ tr ] = "Sorgu ifadesinde sözdizim hatası";
+    Text[ hi-IN ] = "जानकारी की वर्णन में सिन्टाक्स की गलती";
+    Text[ ar ] = "حدث خطأ أثناء تحليل عبارة الاستفسار";
+    Text[ he ] = "‮שגיאת תחביר בביטוי שאילתה‬";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

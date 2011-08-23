@@ -61,7 +61,7 @@
  * Change History
  * 2004-12-28 create this file.
  ************************************************************************/
-#include    "xfstyle.hxx"
+#include	"xfstyle.hxx"
 
 XFStyle::XFStyle()
 {
@@ -72,37 +72,37 @@ XFStyle::~XFStyle()
 {
 }
 
-rtl::OUString   XFStyle::GetStyleName()
+rtl::OUString	XFStyle::GetStyleName()
 {
     return m_strStyleName;
 }
 
-void    XFStyle::SetStyleName(const rtl::OUString& styleName)
+void	XFStyle::SetStyleName(const rtl::OUString& styleName)
 {
     m_strStyleName = styleName;
 }
 
-rtl::OUString   XFStyle::GetParentStyleName()
+rtl::OUString	XFStyle::GetParentStyleName()
 {
     return m_strParentStyleName;
 }
 
-void    XFStyle::SetParentStyleName(const rtl::OUString& styleName)
+void	XFStyle::SetParentStyleName(const rtl::OUString& styleName)
 {
     m_strParentStyleName = styleName;
 }
 
-enumXFStyle XFStyle::GetStyleFamily()
+enumXFStyle	XFStyle::GetStyleFamily()
 {
     return enumXFStyleUnknown;
 }
 
-void    XFStyle::SetStyleFamily(enumXFStyle family)
+void	XFStyle::SetStyleFamily(enumXFStyle family)
 {
     m_enumFamily = family;
 }
 
-sal_Bool    XFStyle::Equal(IXFStyle * /*pStyle*/)
+sal_Bool	XFStyle::Equal(IXFStyle * /*pStyle*/)
 {
     return sal_False;
 }

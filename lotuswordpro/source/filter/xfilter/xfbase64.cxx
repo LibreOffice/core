@@ -62,7 +62,7 @@
  * 2005-01-02 create this file.
  * 2005-02-28 make Encode_(...) to be inline for speed.
  ************************************************************************/
-#include    "xfbase64.hxx"
+#include	"xfbase64.hxx"
 
 const  sal_Char aBase64EncodeTable[] =
 { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -72,10 +72,10 @@ const  sal_Char aBase64EncodeTable[] =
 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/' };
 
 /**
- * @descr   Encode 3 byte to 4 byte.
- *          Please refer to RFC to get the base64 algorithm.
+ * @descr	Encode 3 byte to 4 byte.
+ *			Please refer to RFC to get the base64 algorithm.
  */
-inline void Encode_(sal_uInt8 *src, sal_Char* dest)
+inline void	Encode_(sal_uInt8 *src, sal_Char* dest)
 {
     sal_Int32 nBinaer = (((sal_uInt8)src[ 0]) << 16) +
         (((sal_uInt8)src[1]) <<  8) +
@@ -95,14 +95,14 @@ inline void Encode_(sal_uInt8 *src, sal_Char* dest)
 }
 
 /**
- * @descr   Base64 encode.
+ * @descr	Base64 encode.
  */
 rtl::OUString XFBase64::Encode(sal_uInt8 *buf, sal_Int32 len)
 {
-    sal_Char    *buffer;
-    sal_Int32   nNeeded;
-    sal_Int32   cycles = len/3;
-    sal_Int32   remain = len%3;
+    sal_Char	*buffer;
+    sal_Int32	nNeeded;
+    sal_Int32	cycles = len/3;
+    sal_Int32	remain = len%3;
 
     if( remain == 0 )
         nNeeded = cycles*4;

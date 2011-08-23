@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Feb 2005           Created
+ Feb 2005		 	Created
  ************************************************************************/
 #include <stdio.h>
 #include <tools/stream.hxx>
@@ -229,7 +229,7 @@ void LwpOleObject::Read()
         {
             // null pointers have a VO_INVALID type
             //if (VO_INVALID == m_pObjStrm->QuickReaduInt16())
-            //  return;
+            //	return;
 
             ID.Read(m_pObjStrm);
             //return m_pObjStrm->Locate(ID);
@@ -238,7 +238,7 @@ void LwpOleObject::Read()
         {
             ID.ReadIndexed(m_pObjStrm);
             //if (ID.IsNull())
-            //  return;
+            //	return;
 
             //return m_pObjStrm->Locate(ID);
         }

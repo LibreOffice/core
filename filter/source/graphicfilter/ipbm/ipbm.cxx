@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,34 +39,34 @@ class PBMReader {
 
 private:
 
-    SvStream*           mpPBM;          // Die einzulesende PBM-Datei
+    SvStream*			mpPBM;			// Die einzulesende PBM-Datei
 
-    BOOL                mbStatus;
-    BOOL                mbRemark;       // FALSE wenn sich stream in einem Kommentar befindet
-    BOOL                mbRaw;          // RAW/ASCII MODE
-    ULONG               mnMode;         // 0->PBM, 1->PGM, 2->PPM
-    Bitmap              maBmp;
-    BitmapWriteAccess*  mpAcc;
-    ULONG               mnWidth, mnHeight;  // Bildausmass in Pixeln
-    ULONG               mnCol;
-    ULONG               mnMaxVal;           // maximaler wert in den
-    BOOL                ImplCallback( USHORT nPercent );
-    BOOL                ImplReadBody();
-    BOOL                ImplReadHeader();
+    BOOL				mbStatus;
+    BOOL				mbRemark;		// FALSE wenn sich stream in einem Kommentar befindet
+    BOOL				mbRaw;			// RAW/ASCII MODE
+    ULONG				mnMode;			// 0->PBM, 1->PGM, 2->PPM
+    Bitmap				maBmp;
+    BitmapWriteAccess*	mpAcc;
+    ULONG				mnWidth, mnHeight;	// Bildausmass in Pixeln
+    ULONG				mnCol;
+    ULONG				mnMaxVal;			// maximaler wert in den
+    BOOL				ImplCallback( USHORT nPercent );
+    BOOL				ImplReadBody();
+    BOOL				ImplReadHeader();
 
 public:
                         PBMReader();
                         ~PBMReader();
-    BOOL                ReadPBM( SvStream & rPBM, Graphic & rGraphic );
+    BOOL				ReadPBM( SvStream & rPBM, Graphic & rGraphic );
 };
 
 //=================== Methoden von PBMReader ==============================
 
 PBMReader::PBMReader() :
-    mbStatus    ( TRUE ),
-    mbRemark    ( FALSE ),
-    mbRaw       ( TRUE ),
-    mpAcc       ( NULL )
+    mbStatus	( TRUE ),
+    mbRemark	( FALSE ),
+    mbRaw		( TRUE ),
+    mpAcc		( NULL )
 {
 }
 
@@ -162,10 +162,10 @@ BOOL PBMReader::ReadPBM( SvStream & rPBM, Graphic & rGraphic )
 
 BOOL PBMReader::ImplReadHeader()
 {
-    BYTE    nID[ 2 ];
-    BYTE    nDat;
-    BYTE    nMax, nCount = 0;
-    BOOL    bFinished = FALSE;
+    BYTE	nID[ 2 ];
+    BYTE	nDat;
+    BYTE	nMax, nCount = 0;
+    BOOL	bFinished = FALSE;
 
     *mpPBM >> nID[ 0 ] >> nID[ 1 ];
     if ( nID[ 0 ] != 'P' )
@@ -177,7 +177,7 @@ BOOL PBMReader::ImplReadHeader()
             mbRaw = FALSE;
         case '4' :
             mnMode = 0;
-            nMax = 2;               // number of parameters in Header
+            nMax = 2;				// number of parameters in Header
             mnMaxVal = 1;
             break;
         case '2' :
@@ -257,12 +257,12 @@ BOOL PBMReader::ImplReadHeader()
 
 BOOL PBMReader::ImplReadBody()
 {
-    BOOL    bPara, bFinished = FALSE;
-    BYTE    nDat = 0, nCount;
-    ULONG   nGrey, nRGB[3];
-    ULONG   nWidth = 0;
-    ULONG   nHeight = 0;
-    signed char nShift = 0;
+    BOOL	bPara, bFinished = FALSE;
+    BYTE	nDat = 0, nCount;
+    ULONG	nGrey, nRGB[3];
+    ULONG	nWidth = 0;
+    ULONG	nHeight = 0;
+    signed char	nShift = 0;
 
     if ( mbRaw )
     {
@@ -287,7 +287,7 @@ BOOL PBMReader::ImplReadBody()
                         nShift = 0;
                         nWidth = 0;
                         nHeight++;
-                        ImplCallback( (USHORT)( ( 100 * nHeight ) / mnHeight ) );   // processing output in percent
+                        ImplCallback( (USHORT)( ( 100 * nHeight ) / mnHeight ) );	// processing output in percent
                     }
                 }
                 break;
@@ -306,7 +306,7 @@ BOOL PBMReader::ImplReadBody()
                     {
                         nWidth = 0;
                         nHeight++;
-                        ImplCallback( (USHORT)( ( 100 * nHeight ) / mnHeight ) );   // processing output in percent
+                        ImplCallback( (USHORT)( ( 100 * nHeight ) / mnHeight ) );	// processing output in percent
                     }
                 }
                 break;
@@ -318,8 +318,8 @@ BOOL PBMReader::ImplReadBody()
                     if ( mpPBM->IsEof() || mpPBM->GetError() )
                         return FALSE;
 
-                    BYTE    nR, nG, nB;
-                    ULONG   nRed, nGreen, nBlue;
+                    BYTE	nR, nG, nB;
+                    ULONG	nRed, nGreen, nBlue;
                     *mpPBM >> nR >> nG >> nB;
                     nRed = 255 * nR / mnMaxVal;
                     nGreen = 255 * nG / mnMaxVal;
@@ -329,7 +329,7 @@ BOOL PBMReader::ImplReadBody()
                     {
                         nWidth = 0;
                         nHeight++;
-                        ImplCallback( (USHORT) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
+                        ImplCallback( (USHORT) ( ( 100 * nHeight ) / mnHeight ) );	// processing output in percent
                     }
                 }
                 break;
@@ -368,7 +368,7 @@ BOOL PBMReader::ImplReadBody()
                         nWidth = 0;
                         if ( ++nHeight == mnHeight )
                             bFinished = TRUE;
-                        ImplCallback( (USHORT) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
+                        ImplCallback( (USHORT) ( ( 100 * nHeight ) / mnHeight ) );	// processing output in percent
                     }
                 }
                 else
@@ -397,7 +397,7 @@ BOOL PBMReader::ImplReadBody()
                         nWidth = 0;
                         if ( ++nHeight == mnHeight )
                             bFinished = TRUE;
-                        ImplCallback( (USHORT) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
+                        ImplCallback( (USHORT) ( ( 100 * nHeight ) / mnHeight ) );	// processing output in percent
                     }
                     continue;
                 }
@@ -473,7 +473,7 @@ BOOL PBMReader::ImplReadBody()
                         nWidth = 0;
                         if ( ++nHeight == mnHeight )
                             bFinished = TRUE;
-                        ImplCallback( (USHORT) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
+                        ImplCallback( (USHORT) ( ( 100 * nHeight ) / mnHeight ) );	// processing output in percent
                     }
                     continue;
                 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -213,7 +213,7 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
                                  {
                                          rDGR.Read();
 
-                                         // FIXME: we really need a whole table of
+                                         // FIXME: we really need a whole table of 
                                          // $DWGCODEPAGE to encodings mappings
                                          if ( (strcmp(rDGR.GetS(),"ANSI_932")==0) ||
                           (strcmp(rDGR.GetS(),"ansi_932")==0) ||

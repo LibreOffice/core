@@ -61,14 +61,14 @@
  * Change History
  * 2005-01-21 create this file.
  ************************************************************************/
-#ifndef     _XFDATE_HXX
-#define     _XFDATE_HXX
+#ifndef		_XFDATE_HXX
+#define		_XFDATE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
+#include	"xfglobal.hxx"
+#include	"xfcontent.hxx"
 
 /**
- * @descr   Date obejct.
+ * @descr	Date obejct.
  */
 class XFDate : public XFContent
 {
@@ -78,43 +78,43 @@ public:
     virtual ~XFDate();
 
 public:
-    void    SetDate(XFDateTime& dt);
+    void	SetDate(XFDateTime& dt);
 
-    void    SetDate(const rtl::OUString& date);
+    void	SetDate(const rtl::OUString& date);
 
-    void    SetText(rtl::OUString& text);
+    void	SetText(rtl::OUString& text);
 
-    void    SetFixed(sal_Bool fixed = sal_True);
+    void	SetFixed(sal_Bool fixed = sal_True);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual	void	ToXml(IXFStream *pStrm);
 
 private:
-    sal_Bool    m_bFixed;
+    sal_Bool	m_bFixed;
     rtl::OUString m_strText;
-    XFDateTime  m_aDateTime;
-    rtl::OUString   m_strDate;
-    sal_Bool    m_bValued;
+    XFDateTime	m_aDateTime;
+    rtl::OUString	m_strDate;
+    sal_Bool	m_bValued;
 };
 
-inline  void XFDate::SetDate(XFDateTime& dt)
+inline	void XFDate::SetDate(XFDateTime& dt)
 {
     m_aDateTime = dt;
     m_strDate = DateTimeToOUString(m_aDateTime);
     m_bValued = sal_True;
 }
 
-inline void XFDate::SetDate(const rtl::OUString& date)
+inline void	XFDate::SetDate(const rtl::OUString& date)
 {
     m_strDate = date;
     m_bValued = sal_True;
 }
 
-inline  void XFDate::SetText(rtl::OUString& text)
+inline	void XFDate::SetText(rtl::OUString& text)
 {
     m_strText = text;
 }
 
-inline  void XFDate::SetFixed(sal_Bool fixed)
+inline	void XFDate::SetFixed(sal_Bool fixed)
 {
     m_bFixed = fixed;
 }
@@ -122,13 +122,13 @@ inline  void XFDate::SetFixed(sal_Bool fixed)
 class XFDateStart : public XFDate
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual	void	ToXml(IXFStream *pStrm);
 };
 
 class XFDateEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual	void	ToXml(IXFStream *pStrm);
 };
 
 

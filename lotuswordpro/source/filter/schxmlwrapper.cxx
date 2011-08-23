@@ -137,24 +137,24 @@
 #define XML_STRING(i, x) sal_Char __READONLY_DATA i[sizeof(x)] = x
 #define MAP_LEN(x) x, sizeof(x) - 1
 
-XML_STRING( sXML_metaStreamName,        "meta.xml");
-XML_STRING( sXML_styleStreamName,       "styles.xml" );
-XML_STRING( sXML_contentStreamName,     "content.xml" );
-XML_STRING( sXML_oldContentStreamName,  "Content.xml" );
+XML_STRING( sXML_metaStreamName, 		"meta.xml");
+XML_STRING( sXML_styleStreamName,		"styles.xml" );
+XML_STRING( sXML_contentStreamName,		"content.xml" );
+XML_STRING( sXML_oldContentStreamName,	"Content.xml" );
 
-XML_STRING( sXML_export_chart_meta_service,         "com.sun.star.comp.Chart.XMLMetaExporter" );
-XML_STRING( sXML_export_chart_styles_service,       "com.sun.star.comp.Chart.XMLStylesExporter" );
-XML_STRING( sXML_export_chart_content_service,      "com.sun.star.comp.Chart.XMLContentExporter" );
-XML_STRING( sXML_export_chart_old_content_service,  "com.sun.star.office.sax.exporter.Chart" );
+XML_STRING( sXML_export_chart_meta_service, 		"com.sun.star.comp.Chart.XMLMetaExporter" );
+XML_STRING( sXML_export_chart_styles_service, 		"com.sun.star.comp.Chart.XMLStylesExporter" );
+XML_STRING( sXML_export_chart_content_service,		"com.sun.star.comp.Chart.XMLContentExporter" );
+XML_STRING( sXML_export_chart_old_content_service,	"com.sun.star.office.sax.exporter.Chart" );
 
-XML_STRING( sXML_export_chart_allinone_service,         "com.sun.star.comp.Chart.XMLExporter" );
+XML_STRING( sXML_export_chart_allinone_service, 		"com.sun.star.comp.Chart.XMLExporter" );
 
 
 
-XML_STRING( sXML_import_chart_meta_service,         "com.sun.star.comp.Chart.XMLMetaImporter" );
-XML_STRING( sXML_import_chart_styles_service,       "com.sun.star.comp.Chart.XMLStylesImporter" );
-XML_STRING( sXML_import_chart_content_service,      "com.sun.star.comp.Chart.XMLContentImporter" );
-XML_STRING( sXML_import_chart_old_content_service,  "com.sun.star.office.sax.importer.Chart" );
+XML_STRING( sXML_import_chart_meta_service, 		"com.sun.star.comp.Chart.XMLMetaImporter" );
+XML_STRING( sXML_import_chart_styles_service,		"com.sun.star.comp.Chart.XMLStylesImporter" );
+XML_STRING( sXML_import_chart_content_service,		"com.sun.star.comp.Chart.XMLContentImporter" );
+XML_STRING( sXML_import_chart_old_content_service,	"com.sun.star.office.sax.importer.Chart" );
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -362,7 +362,7 @@ sal_Bool SchXMLWrapper::ExportStream(
         aAny <<= (sal_Bool)(sal_True);
         rOutputStream->SetProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Encrypted" )), aAny );
 
-        rOutputStream->SetBufferSize( 0x4000 );    // 16*1024
+        rOutputStream->SetBufferSize( 0x4000 );	   // 16*1024
 
         if( xDataSource.is())
             xDataSource->setOutputStream( new ::utl::OOutputStreamWrapper( *rOutputStream ));
@@ -439,7 +439,7 @@ sal_Bool SchXMLWrapper::Export()
         /** property map for export info set */
         PropertyMapEntry aExportInfoMap[] =
         {
-            { MAP_LEN( "UsePrettyPrinting"),0, &::getBooleanCppuType(),             ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "UsePrettyPrinting"),0, &::getBooleanCppuType(),				::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { NULL, 0, 0, NULL, 0, 0 }
         };
 

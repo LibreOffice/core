@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include "globdoc.hrc"
+String STR_HUMAN_SWGLOBDOC_NAME
+{
+    Text [ de ] = "Globaldokument" ;
+    Text [ en-US ] = "Master Document" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Documento-mestre";
+    Text[ ru ] = "Составной документ";
+    Text[ el ] = "Kύριο έγγραφο";
+    Text[ nl ] = "Masterdocument";
+    Text[ fr ] = "Document maître";
+    Text[ es ] = "Documento maestro";
+    Text[ fi ] = "Perusasiakirja";
+    Text[ ca ] = "Document mestre";
+    Text[ it ] = "Documento master";
+    Text[ sk ] = "Hlavný dokument";
+    Text[ da ] = "Hoveddokument";
+    Text[ sv ] = "Samlingsdokument";
+    Text[ pl ] = "Dokument główny";
+    Text[ pt-BR ] = "Documento Mestre";
+    Text[ th ] = "เอกสารต้นฉบับ";
+    Text[ ja ] = "マスタードキュメント";
+    Text[ ko ] = "마스터 문서";
+    Text[ zh-CN ] = "主控文档";
+    Text[ zh-TW ] = "主控文件";
+    Text[ tr ] = "Ana belge";
+    Text[ hi-IN ] = "मास्टर लेखपत्र";
+    Text[ ar ] = "مستند شامل";
+    Text[ he ] = "‮מסמך אב‬";
+};
+String STR_WRITER_GLOBALDOC_FULLTYPE_40
+{
+    Text = "%PRODUCTNAME 4.0 Global Document" ;
+};
+String STR_WRITER_GLOBALDOC_FULLTYPE_50
+{
+    Text = "%PRODUCTNAME 5.0 Global Document" ;
+};
+String STR_WRITER_GLOBALDOC_FULLTYPE
+{
+    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION Globaldokument" ;
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Master Document";
+    Text[ pt ] = "%PRODUCTNAME 6.0 Documento-mestre";
+    Text[ ru ] = "Составной документ (%PRODUCTNAME 6.0)";
+    Text[ el ] = "%PRODUCTNAME 6.0 - Κύριο έγγραφο";
+    Text[ nl ] = "%PRODUCTNAME 6.0 Masterdocument";
+    Text[ fr ] = "%PRODUCTNAME %PRODUCTVERSION Document maître";
+    Text[ es ] = "Documento maestro %PRODUCTNAME %PRODUCTVERSION ";
+    Text[ fi ] = "%PRODUCTNAME 6.0 -perusasiakirja";
+    Text[ ca ] = "%PRODUCTNAME 6.0 Document mestre";
+    Text[ it ] = "%PRODUCTNAME %PRODUCTVERSION Documento master";
+    Text[ sk ] = "Hlavný dokument %PRODUCTNAME %PRODUCTVERSION";
+    Text[ da ] = "%PRODUCTNAME 6.0 Hoveddokument";
+    Text[ sv ] = "%PRODUCTNAME %PRODUCTVERSION-samlingsdokument";
+    Text[ pl ] = "%PRODUCTNAME 6.0 - Dokument główny";
+    Text[ pt-BR ] = "Documento Mestre %PRODUCTNAME 6.0 ";
+    Text[ th ] = "เอกสารต้นฉบับ %PRODUCTNAME 6.0 ";
+    Text[ ja ] = "%PRODUCTNAME %PRODUCTVERSION マスタードキュメント";
+    Text[ ko ] = "%PRODUCTNAME %PRODUCTVERSION 마스터 문서";
+    Text[ zh-CN ] = "%PRODUCTNAME %PRODUCTVERSION 主控文档";
+    Text[ zh-TW ] = "%PRODUCTNAME %PRODUCTVERSION 主控文件";
+    Text[ tr ] = "%PRODUCTNAME 6.0 Ana Belge";
+    Text[ hi-IN ] = "%PRODUCTNAME 6.0 मास्टर लेखपत्र";
+    Text[ ar ] = "مستند شامل%PRODUCTNAME %PRODUCTVERSION ";
+    Text[ he ] = "%PRODUCTNAME 6.0 Global Dokument";
+};
+
+

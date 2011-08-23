@@ -1,0 +1,2377 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+ // include ------------------------------------------------------------------
+
+#include "sfx.hrc"
+#include "app.hrc"
+#include "helpid.hrc"
+
+InfoBox RID_DOCALREADYLOADED_DLG
+{
+    Message [ de ] = "Das Dokument war bereits geladen und wurde aktiviert." ;
+    Message [ en-US ] = "Document already open." ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "O documento já se encontra aberto e foi activado.";
+    Message[ ru ] = "Документ уже открыт.";
+    Message[ el ] = "Το έγγραφο είχε ήδη φορτωθεί και ενεργοποιήθηκε.";
+    Message[ nl ] = "Document is reeds geladen en geactiveerd.";
+    Message[ fr ] = "Document déjà chargé et activé.";
+    Message[ es ] = "El documento ya está cargado y activado.";
+    Message[ fi ] = "Asiakirja on jo avattu.";
+    Message[ ca ] = "Document ja obert.";
+    Message[ it ] = "Documento già aperto ed attivato.";
+    Message[ sk ] = "Dokument je už otvorený.";
+    Message[ da ] = "Dokumentet var allerede indlæst og blev aktiveret.";
+    Message[ sv ] = "Dokumentet var redan laddat och har aktiverats.";
+    Message[ pl ] = "Dokument jest już otwarty.";
+    Message[ pt-BR ] = "O documento já está aberto e ativado.";
+    Message[ th ] = "เปิดเอกสารแล้ว";
+    Message[ ja ] = "ドキュメントはすでに読み込まれアクティブになっています。";
+    Message[ ko ] = "문서는 로드 및 활성화되었습니다.";
+    Message[ zh-CN ] = "已经装入这个文件并处于使用状态。";
+    Message[ zh-TW ] = "已經載入這個檔案並處於使用狀態。";
+    Message[ tr ] = "Belge zaten yüklü ve açık.";
+    Message[ hi-IN ] = "लेखपत्र पहिले से ही खुला है ।";
+    Message[ ar ] = "الملف كان محملاً بالفعل وتم تنشيطه.";
+    Message[ he ] = "‮המסמך כבר פתוח.‬";
+};
+
+ErrorBox RID_CANTLOADDOC_DLG
+{
+    Message [ de ] = "Das Dokument kann nicht geladen werden." ;
+    Message [ en-US ] = "Cannot open document." ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Impossível abrir o documento.";
+    Message[ ru ] = "Невозможно открыть документ.";
+    Message[ el ] = "Δεν είναι δυνατόν να ανοιχθεί το έγγραφο.";
+    Message[ nl ] = "Het document kan niet worden geopend.";
+    Message[ fr ] = "Impossible de charger le document.";
+    Message[ es ] = "No es posible cargar el documento.";
+    Message[ fi ] = "Asiakirjan avaaminen ei onnistu.";
+    Message[ ca ] = "No es pot obrir el document.";
+    Message[ it ] = "Impossibile aprire il documento.";
+    Message[ sk ] = "Dokument nie je možné otvoriť";
+    Message[ da ] = "Det er ikke muligt at indlæse dokumentet.";
+    Message[ sv ] = "Dokumentet kan inte laddas.";
+    Message[ pl ] = "Nie można otworzyć dokumentu.";
+    Message[ pt-BR ] = "Não é possível abrir o documento.";
+    Message[ th ] = "ไม่สามารถเปิดเอกสารได้";
+    Message[ ja ] = "ドキュメントは読み込みできません。";
+    Message[ ko ] = "문서를 로드할 수 없습니다.";
+    Message[ zh-CN ] = "无法装入这个文档。";
+    Message[ zh-TW ] = "無法載入這個文件。";
+    Message[ tr ] = "Belge yüklenemiyor.";
+    Message[ hi-IN ] = "लेखपत्र को नहीं खोल सकते है ।";
+    Message[ ar ] = "لا يمكن تحميل المستند.";
+    Message[ he ] = "‮לא ניתן לפתוח את המסמך.‬";
+};
+
+ErrorBox MSG_ERR_READ_CFG
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ de ] = "Fehler beim Lesen der Konfiguration." ;
+    Message [ en-US ] = "Error reading configuration file." ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Erro durante a leitura do ficheiro de configuração.";
+    Message[ ru ] = "Ошибка чтения файла конфигурации.";
+    Message[ el ] = "Σφάλμα κατά την ανάγνωση του αρχείου διαμόρφωσης";
+    Message[ nl ] = "Fout bij lezen van configuratiebestand.";
+    Message[ fr ] = "Erreur de lecture de la configuration.";
+    Message[ es ] = "Error al leer el archivo de configuración.";
+    Message[ fi ] = "Kokoonpanotiedoston lukemisessa on ilmennyt virhe.";
+    Message[ ca ] = "S'ha produït un error al llegir el fitxer de configuració.";
+    Message[ it ] = "Errore durante la lettura del file di configurazione.";
+    Message[ sk ] = "Chyba pri čítaní­ z konfiguračné­ho súboru.";
+    Message[ da ] = "Fejl under læsning af konfiguration.";
+    Message[ sv ] = "Fel vid läsning av konfiguration.";
+    Message[ pl ] = "Błąd odczytu pliku konfiguracyjnego.";
+    Message[ pt-BR ] = "Ocorreu um erro ao ler o arquivo de configuração.";
+    Message[ th ] = "อ่านแฟ้มโครงแบบผิดพลาด";
+    Message[ ja ] = "設定ファイル読み取りの際のエラー。";
+    Message[ ko ] = "구성 파일을 읽던 중 오류";
+    Message[ zh-CN ] = "在读取配置文件时发生错误。";
+    Message[ zh-TW ] = "在讀取配置檔案時發生錯誤。";
+    Message[ tr ] = "Konfigürasyon dosyası okunurken hata oluştu.";
+    Message[ hi-IN ] = "Error reading configuration file.";
+    Message[ ar ] = "حدث خطأ أثناء قراءة ملف التكوين.";
+    Message[ he ] = "‮ארעה שגיאה בעת קריאת קובץ התצורה.‬";
+};
+
+ErrorBox MSG_ERR_WRITE_CFG
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ de ] = "Fehler beim Schreiben der Konfiguration." ;
+    Message [ en-US ] = "Error writing configuration file." ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Erro ao gravar o ficheiro de configuração.";
+    Message[ ru ] = "Ошибка записи файла конфигурации.";
+    Message[ el ] = "Σφάλμα κατά την εγγραφή του αρχείου διαμόρφωσης.";
+    Message[ nl ] = "Fout bij schrijven van configuratiebestand.";
+    Message[ fr ] = "Erreur lors de l'écriture du fichier de configuration.";
+    Message[ es ] = "Error al escribir el archivo de configuración.";
+    Message[ fi ] = "Kokoonpanotiedostoon kirjoittamisessa on ilmennyt virhe.";
+    Message[ ca ] = "S'ha produït un error en escriure al fitxer de configuració.";
+    Message[ it ] = "Errore durante la scrittura del file di configurazione.";
+    Message[ sk ] = "Chyba pri zápise do konfiguračného súboru.";
+    Message[ da ] = "Fejl under skrivning af konfiguration.";
+    Message[ sv ] = "Fel vid skrivning av konfigurationsfil.";
+    Message[ pl ] = "Błąd zapisu pliku konfiguracyjnego.";
+    Message[ pt-BR ] = "Ocorreu um erro ao gravar o arquivo de configuração.";
+    Message[ th ] = "เขียนแฟ้มโครงแบบผิดพลาด";
+    Message[ ja ] = "設定を読み込む際のエラー。";
+    Message[ ko ] = "구성 파일을 쓰던 중 오류";
+    Message[ zh-CN ] = "在写入配置文件时发出错误。";
+    Message[ zh-TW ] = "在寫入配置檔案時發出錯誤。";
+    Message[ tr ] = "Konfigürasyon dosyasına yazılırken hata oluştu.";
+    Message[ hi-IN ] = "रूप-रेखा फाइल को लिखने के समय गलती ।";
+    Message[ ar ] = "حدث خطأ أثناء كتابة ملف التكوين.";
+    Message[ he ] = "‮ארעה שגיאה בעת כתיבה לקובץ התצורה.‬";
+};
+
+ErrorBox MSG_ERR_OPEN_CFG
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ de ] = "Fehler beim Öffnen der Konfiguration." ;
+    Message [ en-US ] = "Error opening configuration file." ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Erro ao abrir o ficheiro de configuração.";
+    Message[ ru ] = "Ошибка открытия файла конфигурации.";
+    Message[ el ] = "Σφάλμα κατά το άνοιγμα του αρχείου διαμόρφωσης.";
+    Message[ nl ] = "Fout bij openen van configuratiebestand.";
+    Message[ fr ] = "Erreur lors de l'ouverture du fichier de configuration.";
+    Message[ es ] = "Error al abrir el archivo de configuración.";
+    Message[ fi ] = "Kokoonpanotiedoston avaamisessa on ilmennyt virhe.";
+    Message[ ca ] = "S'ha produït un error al obrir el fitxer de configuració.";
+    Message[ it ] = "Errore durante l'apertura del file di configurazione.";
+    Message[ sk ] = "Chyba pri otváraní­ konfiguračného súboru.";
+    Message[ da ] = "Fejl ved åbning af konfiguration.";
+    Message[ sv ] = "Fel vid öppning av konfiguration.";
+    Message[ pl ] = "Błąd otwierania pliku konfiguracji.";
+    Message[ pt-BR ] = "Ocorreu um erro ao abrir o arquivo de configuração.";
+    Message[ th ] = "เปิดแฟ้มโครงแบบผิดพลาด";
+    Message[ ja ] = "設定を開く際のエラー｡";
+    Message[ ko ] = "구성 파일을 열던 중 오류";
+    Message[ zh-CN ] = "在打开配置文件时发生错误。";
+    Message[ zh-TW ] = "在開啟配置檔時發生錯誤。";
+    Message[ tr ] = "Konfigürasyon dosyası açılırken hata oluştu.";
+    Message[ hi-IN ] = "रूप-रेखा फाइल को खोलने के समय गलती ।";
+    Message[ ar ] = "حدث خطأ أثناء فتح ملف التكوين.";
+    Message[ he ] = "‮שגיאה בעת פתיחת קובץ התצורה.‬";
+};
+
+ErrorBox MSG_ERR_FILETYPE_CFG
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ de ] = "Datei ist keine Konfigurationsdatei." ;
+    Message [ en-US ] = "File is not a configuration file." ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Este ficheiro não é um ficheiro de configuração.";
+    Message[ ru ] = "Файл не является файлом конфигурации.";
+    Message[ el ] = "Το αρχείο δεν είναι αρχείο διαμόρφωσης.";
+    Message[ nl ] = "Dit bestand is geen configuratiebestand.";
+    Message[ fr ] = "Ce fichier n'est pas un fichier de configuration.";
+    Message[ es ] = "El archivo no es un archivo de configuración.";
+    Message[ fi ] = "Tiedosto ei ole kokoonpanotiedosto.";
+    Message[ ca ] = "Aquest no és un fitxer de configuració.";
+    Message[ it ] = "Il file non è un file di configurazione.";
+    Message[ sk ] = "Súbor nie je konfiguračným súborom.";
+    Message[ da ] = "Filen er ikke en konfigurationsfil.";
+    Message[ sv ] = "Filen är inte en konfigurationsfil.";
+    Message[ pl ] = "Nie jest to plik konfiguracyjny.";
+    Message[ pt-BR ] = "O arquivo não é um arquivo de configuração.";
+    Message[ th ] = "แฟ้มไม่เป็นแฟ้มโครงแบบ";
+    Message[ ja ] = "ファイルは設定ファイルではありません。";
+    Message[ ko ] = "구성 파일이 아닙니다.";
+    Message[ zh-CN ] = "文件不是配置文件。";
+    Message[ zh-TW ] = "檔案不是配置檔案。";
+    Message[ tr ] = "Dosya, konfigürasyon dosyası değil.";
+    Message[ hi-IN ] = "फाइल रूप-रेखा फाइल नहीं है ।";
+    Message[ ar ] = "هذا الملف ليس ملف تكوين.";
+    Message[ he ] = "‮הקובץ אינו קובץ תצורה.‬";
+};
+
+ErrorBox MSG_ERR_VERSION_CFG
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ de ] = "Konfigurationsdatei hat falsche Version." ;
+    Message [ en-US ] = "Configuration file contains the wrong version." ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Versão errada do ficheiro de configuração.";
+    Message[ ru ] = "Файл конфигурации содержит неправильную версию.";
+    Message[ el ] = "Λάθος έκδοση του αρχείο διαμόρφωσης.";
+    Message[ nl ] = "Foutieve versie van configuratiebestand.";
+    Message[ fr ] = "Version incorrecte du fichier de configuration.";
+    Message[ es ] = "El archivo de configuración tiene una versión falsa.";
+    Message[ fi ] = "Kokoonpanotiedostossa on väärä versio.";
+    Message[ ca ] = "El fitxer de configuració té una versió falsa.";
+    Message[ it ] = "Il file di configurazione è di versione errata.";
+    Message[ sk ] = "Konfiguračný súbor obsahuje špatnú verziu.";
+    Message[ da ] = "Konfigurationsfilen indeholder forkert version.";
+    Message[ sv ] = "Konfigurationsfil har fel version.";
+    Message[ pl ] = "Plik konfiguracyjny ma nieprawidłową wersję.";
+    Message[ pt-BR ] = "Versão incorreta do arquivo de configuração.";
+    Message[ th ] = "แฟ้มโครงแบบมีเวอร์ชั่นไม่ถูกต้อง";
+    Message[ ja ] = "設定ファイルのバージョンが正しくありません。";
+    Message[ ko ] = "구성 파일의 버전이 틀립니다.";
+    Message[ zh-CN ] = "配置文件版本错误。";
+    Message[ zh-TW ] = "配置檔案版本錯誤。";
+    Message[ tr ] = "Konfigürasyon dosyasının sürümü yanlış.";
+    Message[ hi-IN ] = "रूप-रेखा फाइल में गलत अनुवाद है ।";
+    Message[ ar ] = "إصدار خاطئ لملف التكوين.";
+    Message[ he ] = "‮קובץ התצורה מכיל גרסה לא נכונה.‬";
+};
+
+ErrorBox MSG_ERR_WRITE_SBL
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ de ] = "Fehler beim Schreiben der BASIC-Bibliothek in\n'@'." ;
+    Message [ en-US ] = "Error recording BASIC library in\n'@'." ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Erro ao gravar a biblioteca BASIC em \n'@'.";
+    Message[ ru ] = "Ошибка записи библиотеки BASIC в \n'@'.";
+    Message[ el ] = "Σφάλμα κατά την εγγραφή της βιβλιοθήκης BASIC στο\n'@'.";
+    Message[ nl ] = "Fout bij schrijven van BASIC-bibliotheek in\n'@'.";
+    Message[ fr ] = "Erreur lors de l'écriture de la bibliothèque BASIC dans \n'@'.";
+    Message[ es ] = "Error al escribir la biblioteca BASIC en\n'@'.";
+    Message[ fi ] = "On ilmennyt virhe tallennettaessa BASIC-kirjastoa kohteessa \n'@'.";
+    Message[ ca ] = "S'ha produït un error al escriure la biblioteca BASIC a\n'@'.";
+    Message[ it ] = "Errore durante la scrittura della libreria BASIC nel file\n'@'.";
+    Message[ sk ] = "Chyba pri zaznamenávaní BASIC knižnice do\n'@'.";
+    Message[ da ] = "Fejl under skrivning af BASIC-biblioteket til \n'@'.";
+    Message[ sv ] = "Fel vid skrivning av BASIC-bibliotek i\n'@'.";
+    Message[ pl ] = "Błąd zapisu biblioteki BASIC w\n'@'.";
+    Message[ pt-BR ] = "Ocorreu um erro ao gravar a biblioteca BASIC em \n'@'.";
+    Message[ th ] = "บันทึกคลัง BASIC ใน\n'@' ผิดพลาด";
+    Message[ ja ] = "BASIC ライブラリを読み込む際のエラー｡\n読み込み先:'@'";
+    Message[ ko ] = "BASIC 라이브러리\n'@'에 쓰기시에 오류 .";
+    Message[ zh-CN ] = "BASIC 库在写入\n'@' 时发生错误。";
+    Message[ zh-TW ] = "BASIC 庫在寫入\n'@' 時發生錯誤。";
+    Message[ tr ] = "BASIC kitaplığı, \n'@' içine kaydedilirken hata oluştu.";
+    Message[ hi-IN ] = "'@'\n में BASIC को रेकोर्डिन्ग करने के समय गलती ।";
+    Message[ ar ] = "حدث خطأ أثناء كتابة مكتبة BASIC في\n'@'.";
+    Message[ he ] = "‮שגואה בעת הקלטת ספרית הבייסיק ב \n'@'.‬";
+};
+
+ErrorBox MSG_SIGNAL
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    Message [ de ] = "Es ist ein unerwarter Anwendungsfehler aufgetreten!\nSie können jetzt auf eigene Gefahr hin versuchen,\nalle offenen Dokumente zu sichern!\n\nSoll versucht werden, Ihre Arbeit zu sichern, bevor die Applikation beendet wird?" ;
+    Message [ en-US ] = "An unexpected program error has occurred.\n\nDo you want to try to save your changes in all open documents before the program is terminated?" ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Surgiu um erro de programa inesperado!\n\nPoderá agora, sob o seu próprio risco, \ntentar guardar todos os documentos abertos.\nTentar guardar o seu trabalho antes que a aplicação seja fechada?";
+    Message[ ru ] = "Неожиданная ошибка. Сохранить все \nоткрытые документы прежде чем программа будет закрыта?";
+    Message[ el ] = "Παρουσιάστηκε μη αναμενόμενο σφάλμα προγράμματος.\n\nΘέλετε να δοκιμάσετε να αποθηκεύσετε τις αλλαγές σας σε όλα τα ανοικτά έγγραφα πριν τον τερματισμό του προγράμματος;";
+    Message[ nl ] = "Er is een onverwachte programmafout opgetreden!\nU kunt nu op eigen risico proberen\nalle geopende documenten op te slaan!\n\nWilt u proberen uw werk op te slaan voordat de toepassing wordt beëindigd?";
+    Message[ fr ] = "Erreur d'application inattendue !\nVous pouvez tout de même essayer\nd'enregistrer les documents ouverts !\n\nEnregistrer votre travail avant fermeture de l'application ?";
+    Message[ es ] = "¡Se ha producido un error inesperado de la aplicación!\nUsted puede ahora, a riesgo propio, intentar\nsalvar todos los documentos abiertos!\n\n¿Desea guardar su trabajo antes de cerrar la aplicación?";
+    Message[ fi ] = "On ilmennyt odottamaton ohjelmavirhe.\n\nHaluatko yrittää tallentaa kaikkien avointen asiakirjojen muutokset ennen kuin ohjelma lopetetaan?";
+    Message[ ca ] = "S'ha produït un error inesperat a l'aplicació!\nAra podeu, assumint el risc, intentar\nsalvar tots els documents oberts!\n\nVoleu desar la feina abans de tancar l'aplicació?";
+    Message[ it ] = "Nell'applicazione si è verificato un errore inatteso!\nAdesso potete provare, a proprio rischio, di\nsalvare tutti i documenti aperti!\n\nVolete che si provi a salvare il lavoro prima di chiudere l'applicazione?";
+    Message[ sk ] = "V programe nastala neočakávaná chyba.\n\n Prajete si skúsiť uložiť zmeny vo všetkých otvorených dokumentoch pred ukončením programu?";
+    Message[ da ] = "Der opstod en uventet programfejl\nDu kan på eget ansvar prøve på at\ngemme alle åbne dokumenter!\n\nVil du prøve på at gemme dine dokumenter, før programmet afsluttes?";
+    Message[ sv ] = "Ett oväntat programfel har uppstått!\nDu kan nu på eget bevåg försöka\nspara alla öppna dokument!\n\nVill du försöka spara alla ändringar i dokumenten innan programmet avslutas?";
+    Message[ pl ] = "Wystąpił nieoczekiwany błąd w programie.\nCzy przed zakończeniem programu chcesz spróbować zapisać zmiany we wszystkich otwartych dokumentach?";
+    Message[ pt-BR ] = "Ocorreu um erro de programa inesperado!\n\nDeseja tentar salvar as mudanças nos documentos abertos antes do programa encerrar?";
+    Message[ th ] = "เกิดข้อผิดพลาดที่ไม่คาดคิดกับโปรแกรม \n\nคุณต้องการบันทึกการเปลี่ยนแปลงในเอกสารที่ nเปิดอยู่ทั้งหมดก่อนโปรแกรมถูกยกเลิกหรือไม่?";
+    Message[ ja ] = "予期しないプログラム エラーが発生しました。\nリスクはありますが\n開かれているドキュメントをすべて保存します。\n\nアプリケーションを終了する前に、作業中のドキュメントを保存しますか。";
+    Message[ ko ] = "예기치 않은 응용 프로그램 오류가 발생했습니다.\n사용자에게 위험 부담이 있지만 열려있는 모든 문서의 저장을 시도해 볼 수 있습니다!\n\n 응용 프로그램을 종료하기 전에 작업 내용을 저장하겠습니까?";
+    Message[ zh-CN ] = "发生了一个意外的程序错误！\n您现在可以尝试保存所有被打开的文件！\n您要在关闭这个应用程序之前保存所有的文件吗？";
+    Message[ zh-TW ] = "發生了一個意外的程式錯誤！\n您現在可以嘗試保存所有被開啟的檔案！\n您要在關閉這個應用程式之前儲存所有的檔案？";
+    Message[ tr ] = "Beklenmeyen bir program hatası oluştu!\nŞu an açık olan tüm belgeleri\nkaydetmeyi deneyebilirsiniz!\n\nUygulama kapatılmadan önce belgeleriniz kaydedilmeye çalışılsın mı?";
+    Message[ hi-IN ] = "प्रोग्राम् में आकस्मिक गलती घटित हुआ ।\n\nआप प्रोग्राम् को अंत करने से पहिले सब खुला हुआ लेखपत्रों में परिवर्तनों को संचित करना चाहते है ?";
+    Message[ ar ] = "حدث خطأ تطبيق غير متوقع!\nيمكنك الآن، على مسئوليتك الخاصة، محاولة حفظ \nكل المستندات المفتوحة!\n\nهل تريد محاولة حفظ عملك، قبل إنهاء التطبيق؟";
+    Message[ he ] = "‮ארעה שגיאה בלתי צפויה בתוכנית.\n\nהאם לנסות לשמור את השינוים בכל המסמכים הפתוחים לפני סגירת התוכנית?‬";
+};
+
+ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ de ] = "Beim Starten des Web-Browsers ist ein Fehler aufgetreten. Bitte überprüfen Sie die Einstellungen von %PRODUCTNAME unter 'Extras - Optionen - %PRODUCTNAME - Hilfsprogramme' und die Einstellungen Ihres Web-Browsers." ;
+    Message [ en-US ] = "An error occurred in starting the web browser. Please check the %PRODUCTNAME settings under 'Tools - Options - %PRODUCTNAME - External Programs' and the settings for your web browser.";
+    Message[ pt ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
+    Message[ ru ] = "Ошибка запуска веб-браузера.\nПроверьте настройки %PRODUCTNAME и веб-браузера.";
+    Message[ el ] = "Παρουσιάστηκε σφάλμα κατά την εκκίνηση του προγράμματος περιήγησης στο web.\nΕλέγξτε τις ρυθμίσεις του %PRODUCTNAME και του προγράμματος περιήγησης στο web.";
+    Message[ nl ] = "Fout bij starten van webbrowser.\nControleer de instellingen van %PRODUCTNAME en van de webbrowser.";
+    Message[ fr ] = "Erreur lors du lancement du navigateur Web. Vérifiez les paramètres de %PRODUCTNAME sous 'Outils - Options - %PRODUCTNAME - Programmes auxiliaires', ainsi que ceux du navigateur Web.";
+    Message[ es ] = "Se ha producido un error al iniciar el navegador web. Compruebe la configuración de %PRODUCTNAME en 'Herramientas - Opciones - %PRODUCTNAME - Programas auxiliares' así como la del navegador web. ";
+    Message[ fi ] = "Web-selaimen käynnistyksessä tapahtui virhe.\nTarkista %PRODUCTNAMEn ja Web-selaimen asetukset.";
+    Message[ ca ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
+    Message[ it ] = "Si è verificato un errore durante l'avvio del browser Web. Verificate le impostazioni di %PRODUCTNAME al menu 'Strumenti - Opzioni - %PRODUCTNAME - Programmi ausiliari' e le impostazioni del browser Web.";
+    Message[ sk ] = "Pri spúšťaní webového prehliadača nastala chyba.\nProsím skontrolujte nastavenia %PRODUCTNAME a webového prehliadača.";
+    Message[ da ] = "Fejl ved start af webbrowseren.\nKontroller indstillingerne for %PRODUCTNAME og for webbrowseren.";
+    Message[ sv ] = "Det uppstod ett fel när webbläsaren skulle startas. Kontrollera inställningarna i %PRODUCTNAME under 'Verktyg - Alternativ - %PRODUCTNAME - Hjälpprogram' och inställningarna i din webbläsare.";
+    Message[ pl ] = "Wystąpił błąd podczas uruchamiania przeglądarki stron WWW.\nSprawdź ustawienia programu %PRODUCTNAME i przeglądarki.";
+    Message[ pt-BR ] = "Ocorreu um erro ao iniciar o navegador da web.\nPor favor, verifique as configurações do %PRODUCTNAME em 'Ferramentas - Opções - %PRODUCTNAME - Programas externos' o navegador da web.";
+    Message[ th ] = "An error occurred in starting the web browser. Please check the %PRODUCTNAME settings under 'Tools - Options - %PRODUCTNAME - External Programs' and the settings for your web browser.";
+    Message[ ja ] = "webブラウザの起動時にエラーが発生しました。ツール → オプション → %PRODUCTNAME → ヘルププログラムで %PRODUCTNAME の設定とお使いの webブラウザの設定を確認してください。";
+    Message[ ko ] = "웹 브라우저를 시작하는 동안 오류가 발생했습니다. %PRODUCTNAME 의 '도구 - 옵션 - %PRODUCTNAME - 보조 프로그램의 설정 및 웹 브라우저 설정을 재검해보십시오.";
+    Message[ zh-CN ] = "启动浏览器时发生一个错误。\n请通过菜单\"工具\"-\"选项\"-\"%PRODUCTNAME -辅助程序\"来检查 %PRODUCTNAME 的设定及浏览器的设定。";
+    Message[ zh-TW ] = "啟動 Web 瀏覽器時發生一個錯誤。\n請透過「工具」-「選項」-「%PRODUCTNAME 輔助程式」來檢查 %PRODUCTNAME 的設定及瀏覽器的設定。";
+    Message[ tr ] = "Web tarayıcısını başlatırken bir hata oluştu.\nLütfen, %PRODUCTNAME ve web tarayıcınızın ayarlarını kontrol ediniz.";
+    Message[ hi-IN ] = "An error occurred in starting the web browser. Please check the %PRODUCTNAME settings under 'Tools - Options - %PRODUCTNAME - External Programs' and the settings for your web browser.";
+    Message[ ar ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
+    Message[ he ] = "‮ארעה שגיאה בעת איתחול הדפדפן. נא לבדוק הגדרות ב \"כלים\" > \"אפשרויות\" > %PRODUCTNAME > \"תוכניות חיצוניות\", וגם ההגדרות של הדפדפן עצמו.‬";
+};
+
+ErrorBox MSG_ERR_EXTERNAL_APP_NOT_FOUND
+{
+    BUTTONS = WB_OK;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ de ] = "Es konnte keine zugehörige externe Applikation für den angewählten Dateitypen gefunden werden.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME." ;
+    Message [ en-US ] = "No corresponding external application could be found for the given file type.\nPlease check the %PRODUCTNAME settings.";
+    Message[ pt ] = "An error occurred in starting the external application for the given file type.\nPlease check the %PRODUCTNAME settings.";
+    Message[ ru ] = "Для заданного типа файлов не найдено соответствующих внешних приложений.\nПроверьте настройки %PRODUCTNAME.";
+    Message[ el ] = "Δεν ήταν δυνατή η εύρεση αντίστοιχης εξωτερικής εφαρμογής για τον καθορισμένο τύπο αρχείου.\nΕλέγξτε τις ρυθμίσεις του %PRODUCTNAME.";
+    Message[ nl ] = "Er is geen bijbehorende externe toepassing voor de geselecteerde bestandstypen gevonden.\nControleer de instellingen van %PRODUCTNAME.";
+    Message[ fr ] = "Impossible de détecter une application externe correspondant au type de fichier spécifié.\nVérifiez le paramétrage de %PRODUCTNAME.";
+    Message[ es ] = "No se pudo encontrar ninguna aplicación exterior correspondiente al tipo de archivo seleccionado.\nCompruebe la configuración del %PRODUCTNAME.";
+    Message[ fi ] = "Annetulle tiedostotyypille ei löytynyt vastaavaa ulkoista sovellusta.\nTarkista %PRODUCTNAME-asetukset.";
+    Message[ ca ] = "An error occurred in starting the external application for the given file type.\nPlease check the %PRODUCTNAME settings.";
+    Message[ it ] = "Impossibile trovare le applicazioni esterne per il tipo di file selezionato.\\Verificate le impostazioni di %PRODUCTNAME.";
+    Message[ sk ] = "Pre zadaný typ súboru nebola nájdená žiadna vhodná externá aplikácia.\nProsím skontrolujte nastavenie %PRODUCTNAME.";
+    Message[ da ] = "Der kunne ikke findes nogen tilhørende ekstern applikation til den valgte filtype.\nKontroller indstillingerne for %PRODUCTNAME.";
+    Message[ sv ] = "Det gick inte att hitta något tillhörande externt program för den valda filtypen.\nKontrollera inställningarna i %PRODUCTNAME.";
+    Message[ pl ] = "Nie znaleziono aplikacji zewnętrznej, odpowiadającej podanemu typowi pliku.\nSprawdź ustawienia programu %PRODUCTNAME.";
+    Message[ pt-BR ] = "Não foi encontrado nenhuma aplicação externa associada ao tipo de arquivo selecionado.\nPor favor, verifique a configuração do %PRODUCTNAME.";
+    Message[ th ] = "No corresponding external application could be found for the given file type.\nPlease check the %PRODUCTNAME settings.";
+    Message[ ja ] = "選択したファイルの種類を開く外部アプリケーションが見つかりませんでした。\n%PRODUCTNAME 設定をもう一度確認してください。";
+    Message[ ko ] = "지정하신 파일 형식에 해당하는 응용 프로그램을 찾지 못했습니다.\n%PRODUCTNAME의 설정을 확인해보십시오.";
+    Message[ zh-CN ] = "没有找到用于打开指定文件类型的外来的应用程序。\n请您检查 %PRODUCTNAME 的设定。";
+    Message[ zh-TW ] = "沒有找到用於開啟指定檔案類型的外來的應用程式。\n請檢查 %PRODUCTNAME 的設定。";
+    Message[ tr ] = "Seçilen dosya tipine göre çalıştırılacak dış bir program bulunamadı.\\Lütfen, %PRODUCTNAME ayarlarını kontrol ediniz.";
+    Message[ hi-IN ] = "No corresponding external application could be found for the given file type.\nPlease check the %PRODUCTNAME settings.";
+    Message[ ar ] = "An error occurred in starting the external application for the given file type.\nPlease check the %PRODUCTNAME settings.";
+    Message[ he ] = "‮לא ניתן לאתר יישום המתאים לסוג קובץ זה.\nנא לבדוק באפשרויות %PRODUCTNAME.‬";
+};
+
+Resource SID_UNKNOWN
+{
+    String 1 "-" ;
+};
+
+Resource BMP_SFX_COLOR
+{
+    ExtraData =
+    {
+        SID_NEWDOC;             // 043
+        SID_OPENDOC;            // 044
+        SID_CLOSEDOC;           // 045
+        SID_RELOAD; 			// 046
+        SID_SAVEASDOC;          // 047
+        SID_PRINTDOC;           // 051
+        SID_SETUPPRINTER;       // 053
+        SID_QUITAPP;            // 054
+        SID_UNDO;               // 055
+        SID_REDO;               // 056
+        SID_REPEAT;             // 057
+        SID_CUT;                // 058
+        SID_COPY;               // 059
+        SID_PASTE;              // 060
+        SID_DELETE;             // 061
+        SID_SELECTALL;          // 062
+        SID_SAVEDOC;            // 063 vormals 046
+        SID_EXITANDRETURN;      // 064 vormals 054
+        SID_RECORDMACRO;        // 095
+        SID_EDITMACRO;          // 096
+        SID_HELPMENU;           // 098
+        SID_CONFIG;     		// 123
+        SID_CONFIGTOOLBOX;      // 124
+        0;
+    };
+};
+
+Resource BMP_SFX_MONO
+{
+    ExtraData =
+    {
+        SID_NEWDOC;             // 043
+        SID_OPENDOC;            // 044
+        SID_CLOSEDOC;           // 045
+        SID_RELOAD; 			// 046
+        SID_SAVEASDOC;          // 047
+        SID_PRINTDOC;           // 051
+        SID_SETUPPRINTER;       // 053
+        SID_QUITAPP;            // 054
+        SID_UNDO;               // 055
+        SID_REDO;               // 056
+        SID_REPEAT;             // 057
+        SID_CUT;                // 058
+        SID_COPY;               // 059
+        SID_PASTE;              // 060
+        SID_DELETE;             // 061
+        SID_SELECTALL;          // 062
+        SID_SAVEDOC;            // 063 vormals 046
+        SID_EXITANDRETURN;      // 064 vormals 054
+        SID_RECORDMACRO;        // 095
+        SID_EDITMACRO;          // 096
+        SID_HELPMENU;           // 098
+        SID_CONFIG;     		// 123
+        SID_CONFIGTOOLBOX;      // 124
+        0;
+    };
+};
+
+WarningBox RID_WARN_POST_MAILTO
+{
+    BUTTONS = WB_OK_CANCEL ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ de ] = "Ein Formular soll per E-Mail versendet werden.\nDadurch wird dem Empfänger Ihre E-Mail-Adresse bekannt." ;
+    Message [ en-US ] = "A form is to be sent by e-mail.\nThis means that the receiver will get to see your e-mail address." ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "O formulário será enviado por e-mail.\nO seu endereço electrónico será fornecido ao destinatário.";
+    Message[ ru ] = "Форма будет отправлена по электронной почте.\nПолучатель узнает ваш адрес электронной почты.";
+    Message[ el ] = "Πρόκειται να αποσταλλεί μια φόρμα μέσω e-mail.\nΠροσέξτε ότι σε αυτή τη περίπτωση γνωστοποιείται η διεύθυνση σας στον παραλήπτη";
+    Message[ nl ] = "Een formulier moet per e-mail gestuurd worden.\nDaardoor wordt uw e-mailadres bij de ontvanger bekend.";
+    Message[ fr ] = "Vous voulez envoyer un formulaire par e-mail.\nVous communiquerez ainsi votre adresse e-mail au destinataire.";
+    Message[ es ] = "Se debe enviar un formulario por correo electrónico.\nCon ello se dará a conocer al destinatario su dirección electrónica.";
+    Message[ fi ] = "Lomake lähetetään sähköpostitse.\nSähköpostiosoitteesi tulee lähettäjän tietoon.";
+    Message[ ca ] = "S'ha d'enviar un formulari per correu electrònic.\nAmb això el destinatari podrà saber la vostra direcció de correu electrònic.";
+    Message[ it ] = "Un formulario deve essere inviato via eMail.\nIn tal modo il destinatario verrà a conoscenza dell'indirizzo eMail dell'utente.";
+    Message[ sk ] = "Formulár bude odoslaný ako e-mail.\nTo znamená, že adresát sa dozvie vašu e-mail adresu.";
+    Message[ da ] = "Du vil sende en formular via e-mail.\nBemærk at modtageren herved får din e-mail-adresse.";
+    Message[ sv ] = "Ett formulär skall skickas per e-post.\nDetta innebär att mottagaren får reda på din e-postadress.";
+    Message[ pl ] = "Formularz ma zostać wysłany pocztą e-mail.\nSpowoduje to, że adresat pozna twój adres e-mail.";
+    Message[ pt-BR ] = "Será enviado um formulário pelo e-mail.\nO seu endereço de e-mail será fornecido ao destinatário.";
+    Message[ th ] = "ส่งฟอร์มโดยอีเมล์\nนี้หมายถึงว่าผู้รับจะได้เห็นที่อยู่อีเมล์ของคุณ";
+    Message[ ja ] = "フォームは E-mail で送信してください。\nそうすることでユーザーの E-mail アドレスが受信者に伝わります。";
+    Message[ ko ] = "양식을 전자 메일로 보냅니다 .\n그러면 받는 사람은 사용자의 전자 메일 주소를 보게됩니다.";
+    Message[ zh-CN ] = "应该借助电子邮件寄发表单。\n这样您的电子邮件地址也就传递给了收件人。";
+    Message[ zh-TW ] = "應該透過電子郵件寄發表單。\n這樣您的電子郵件地址也就傳遞給了收件者。";
+    Message[ tr ] = "E-posta ile form gönderilecek.\nBu şekilde alıcı e-posta adresinizi de görecektir.";
+    Message[ hi-IN ] = "इ-मेइल द्वारा फ़ॉर्म् को भेजना है ।\nइसका अर्थ है कि प्रातिग्राहक आपका इ-मेइल पता देख सकता है ।";
+    Message[ ar ] = "ينبغي إرسال استمارة بالبريد الإلكتروني.\nبهذه الطريقة سوف يعرف المستلم عنوان البريد الإلكتروني الخاص بك.";
+    Message[ he ] = "‮פעולה זו תחשף את כתובת הדואר של המשתמש.‬\n‮הטופס ישלח בדואר אלקטרוני.‬";
+};
+
+
+
+String GID_INTERN
+{
+    Text [ de ] = "Intern" ;
+    Text [ en-US ] = "Internal" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Interno";
+    Text[ ru ] = "Внутренний";
+    Text[ el ] = "Εσωτερικά";
+    Text[ nl ] = "Intern";
+    Text[ fr ] = "Interne";
+    Text[ es ] = "Interno";
+    Text[ fi ] = "Sisäinen";
+    Text[ ca ] = "Intern";
+    Text[ it ] = "Interno";
+    Text[ sk ] = "Interný";
+    Text[ da ] = "Intern";
+    Text[ sv ] = "Internt";
+    Text[ pl ] = "Wewnętrzny";
+    Text[ pt-BR ] = "Interno";
+    Text[ th ] = "ภายใน";
+    Text[ ja ] = "内部";
+    Text[ ko ] = "내부";
+    Text[ zh-CN ] = "内部";
+    Text[ zh-TW ] = "內部";
+    Text[ tr ] = "İç";
+    Text[ hi-IN ] = "भीतरी";
+    Text[ ar ] = "داخلي";
+    Text[ he ] = "‮פנימי‬";
+};
+
+String GID_APPLICATION
+{
+    Text [ de ] = "Applikation" ;
+    Text [ en-US ] = "Application" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Aplicação";
+    Text[ ru ] = "Приложение";
+    Text[ el ] = "Εφαρμογή";
+    Text[ nl ] = "Toepassing";
+    Text[ fr ] = "Application";
+    Text[ es ] = "Aplicación";
+    Text[ fi ] = "Sovellus";
+    Text[ ca ] = "Aplicació";
+    Text[ it ] = "Applicazione";
+    Text[ sk ] = "Aplikácia";
+    Text[ da ] = "Applikation";
+    Text[ sv ] = "Tillämpning";
+    Text[ pl ] = "Aplikacja";
+    Text[ pt-BR ] = "Aplicação";
+    Text[ th ] = "โปรแกรมประยุกต์";
+    Text[ ja ] = "アプリケーション";
+    Text[ ko ] = "응용 프로그램";
+    Text[ zh-CN ] = "应用程序";
+    Text[ zh-TW ] = "應用程式";
+    Text[ tr ] = "Uygulama";
+    Text[ hi-IN ] = "कार्यक्रम";
+    Text[ ar ] = "تطبيق";
+    Text[ he ] = "‮פעולה‬";
+};
+
+String GID_VIEW
+{
+    Text [ de ] = "Ansicht" ;
+    Text [ en-US ] = "View" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Visualizar";
+    Text[ ru ] = "Вид";
+    Text[ el ] = "Προβολή";
+    Text[ nl ] = "Beeld";
+    Text[ fr ] = "Affichage";
+    Text[ es ] = "Ver";
+    Text[ fi ] = "Näytä";
+    Text[ ca ] = "Veure";
+    Text[ it ] = "Visualizza";
+    Text[ sk ] = "~Zobraziť";
+    Text[ da ] = "Vis";
+    Text[ sv ] = "Vy";
+    Text[ pl ] = "Widok";
+    Text[ pt-BR ] = "Vista";
+    Text[ th ] = "มุมมอง";
+    Text[ ja ] = "表示";
+    Text[ ko ] = "보기";
+    Text[ zh-CN ] = "视图";
+    Text[ zh-TW ] = "檢視";
+    Text[ tr ] = "Görünüm";
+    Text[ hi-IN ] = "पूर्वदृश्य";
+    Text[ ar ] = "عرض";
+    Text[ he ] = "‮תצוגה‬";
+};
+
+String GID_DOCUMENT
+{
+    Text [ de ] = "Dokumente" ;
+    Text [ en-US ] = "Documents" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Documentos";
+    Text[ ru ] = "Документы";
+    Text[ el ] = "Έγγραφα";
+    Text[ nl ] = "Documenten";
+    Text[ fr ] = "Documents";
+    Text[ es ] = "Documentos";
+    Text[ fi ] = "Asiakirjat";
+    Text[ ca ] = "Documents";
+    Text[ it ] = "Documenti";
+    Text[ sk ] = "Dokumenty";
+    Text[ da ] = "Dokumenter";
+    Text[ sv ] = "Dokument";
+    Text[ pl ] = "Dokumenty";
+    Text[ pt-BR ] = "Documentos";
+    Text[ th ] = "เอกสาร";
+    Text[ ja ] = "ドキュメント";
+    Text[ ko ] = "문서";
+    Text[ zh-CN ] = "文档";
+    Text[ zh-TW ] = "文件";
+    Text[ tr ] = "Belge";
+    Text[ hi-IN ] = "लेखपत्रें";
+    Text[ ar ] = "مستندات";
+    Text[ he ] = "‮מסמכים‬";
+};
+
+String GID_EDIT
+{
+    Text [ de ] = "Bearbeiten" ;
+    Text [ en-US ] = "Edit" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Editar";
+    Text[ ru ] = "Изменить";
+    Text[ el ] = "Επεξεργασία";
+    Text[ nl ] = "Bewerken";
+    Text[ fr ] = "Édition";
+    Text[ es ] = "Editar";
+    Text[ fi ] = "Muokkaa";
+    Text[ ca ] = "Edita";
+    Text[ it ] = "Modifica";
+    Text[ sk ] = "Upraviť";
+    Text[ da ] = "Rediger";
+    Text[ sv ] = "Redigera";
+    Text[ pl ] = "Edytuj";
+    Text[ pt-BR ] = "Editar";
+    Text[ th ] = "แก้ไข";
+    Text[ ja ] = "編集";
+    Text[ ko ] = "편집";
+    Text[ zh-CN ] = "编辑";
+    Text[ zh-TW ] = "編輯";
+    Text[ tr ] = "Düzenle";
+    Text[ hi-IN ] = "संपादन";
+    Text[ ar ] = "تحرير";
+    Text[ he ] = "‮עריכה‬";
+};
+
+String GID_MACRO
+{
+    Text [ de ] = "BASIC" ;
+    Text [ en-US ] = "BASIC" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "BASIC";
+    Text[ ru ] = "BASIC";
+    Text[ el ] = "BASIC";
+    Text[ nl ] = "BASIC";
+    Text[ fr ] = "BASIC";
+    Text[ es ] = "BASIC";
+    Text[ fi ] = "BASIC";
+    Text[ ca ] = "BASIC";
+    Text[ it ] = "BASIC";
+    Text[ sk ] = "BASIC";
+    Text[ da ] = "BASIC";
+    Text[ sv ] = "BASIC";
+    Text[ pl ] = "BASIC";
+    Text[ pt-BR ] = "BASIC";
+    Text[ th ] = "BASIC";
+    Text[ ja ] = "BASIC";
+    Text[ ko ] = "BASIC";
+    Text[ zh-CN ] = "BASIC";
+    Text[ zh-TW ] = "BASIC";
+    Text[ tr ] = "BASIC";
+    Text[ hi-IN ] = "BASIC";
+    Text[ ar ] = "BASIC";
+    Text[ he ] = "‮בייסיק‬";
+};
+
+String GID_OPTIONS
+{
+    Text [ de ] = "Extras" ;
+    Text [ en-US ] = "Options" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Ferramentas";
+    Text[ ru ] = "Параметры";
+    Text[ el ] = "Εργαλεία";
+    Text[ nl ] = "Extra";
+    Text[ fr ] = "Options";
+    Text[ es ] = "Opciones";
+    Text[ fi ] = "Asetukset";
+    Text[ ca ] = "Opcions";
+    Text[ it ] = "Varie";
+    Text[ sk ] = "Nastavenia";
+    Text[ da ] = "Funktioner";
+    Text[ sv ] = "Verktyg";
+    Text[ pl ] = "Opcje";
+    Text[ pt-BR ] = "Opções";
+    Text[ th ] = "ตัวเลือก";
+    Text[ ja ] = "ツール";
+    Text[ ko ] = "옵션";
+    Text[ zh-CN ] = "其它";
+    Text[ zh-TW ] = "其它";
+    Text[ tr ] = "Araçlar";
+    Text[ hi-IN ] = "विकल्प";
+    Text[ ar ] = "خيارات";
+    Text[ he ] = "‮אפשרויות‬";
+};
+
+String GID_MATH
+{
+    Text [ de ] = "Math" ;
+    Text [ en-US ] = "Math" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Math";
+    Text[ ru ] = "Math";
+    Text[ el ] = "Math";
+    Text[ nl ] = "Math";
+    Text[ fr ] = "Math";
+    Text[ es ] = "Math";
+    Text[ fi ] = "Math";
+    Text[ ca ] = "Math";
+    Text[ it ] = "Math";
+    Text[ sk ] = "Matematika";
+    Text[ da ] = "Math";
+    Text[ sv ] = "Math";
+    Text[ pl ] = "Math";
+    Text[ pt-BR ] = "Math";
+    Text[ th ] = "คณิตศาสตร์";
+    Text[ ja ] = "数学";
+    Text[ ko ] = "Math";
+    Text[ zh-CN ] = "Math";
+    Text[ zh-TW ] = "數學";
+    Text[ tr ] = "Math";
+    Text[ hi-IN ] = "गणित";
+    Text[ ar ] = "Math";
+    Text[ he ] = "‮נוסחאות‬";
+};
+
+String GID_NAVIGATOR
+{
+    Text [ de ] = "Navigieren" ;
+    Text [ en-US ] = "Navigate" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Navegar";
+    Text[ ru ] = "Навигация";
+    Text[ el ] = "Περιήγηση";
+    Text[ nl ] = "Navigeren";
+    Text[ fr ] = "Navigation";
+    Text[ es ] = "Navegar";
+    Text[ fi ] = "Siirry";
+    Text[ ca ] = "Navega";
+    Text[ it ] = "Naviga";
+    Text[ sk ] = "Previesť";
+    Text[ da ] = "Naviger";
+    Text[ sv ] = "Navigera";
+    Text[ pl ] = "Nawigacja";
+    Text[ pt-BR ] = "Navegar";
+    Text[ th ] = "นำทาง";
+    Text[ ja ] = "ナビゲート";
+    Text[ ko ] = "탐색";
+    Text[ zh-CN ] = "浏览";
+    Text[ zh-TW ] = "瀏覽";
+    Text[ tr ] = "Dolaş";
+    Text[ hi-IN ] = "नाविगेट";
+    Text[ ar ] = "ملاحة";
+    Text[ he ] = "‮ניווט‬";
+};
+
+String GID_INSERT
+{
+    Text [ de ] = "Einfügen" ;
+    Text [ en-US ] = "Insert" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Inserir";
+    Text[ ru ] = "Вставить";
+    Text[ el ] = "Εισαγωγή";
+    Text[ nl ] = "Invoegen";
+    Text[ fr ] = "Insérer";
+    Text[ es ] = "Insertar";
+    Text[ fi ] = "Lisää";
+    Text[ ca ] = "Insereix";
+    Text[ it ] = "Inserisci";
+    Text[ sk ] = "Vložiť";
+    Text[ da ] = "Indsæt";
+    Text[ sv ] = "Infoga";
+    Text[ pl ] = "Wstaw";
+    Text[ pt-BR ] = "Inserir";
+    Text[ th ] = "แทรก";
+    Text[ ja ] = "挿入";
+    Text[ ko ] = "삽입";
+    Text[ zh-CN ] = "插入";
+    Text[ zh-TW ] = "插入";
+    Text[ tr ] = "Ekle";
+    Text[ hi-IN ] = "जोड़ो";
+    Text[ ar ] = "إدراج";
+    Text[ he ] = "‮הוספה‬";
+};
+
+String GID_FORMAT
+{
+    Text [ de ] = "Format" ;
+    Text [ en-US ] = "Format" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Formato";
+    Text[ ru ] = "Формат";
+    Text[ el ] = "Μορφή";
+    Text[ nl ] = "Formaat";
+    Text[ fr ] = "Format";
+    Text[ es ] = "Formato";
+    Text[ fi ] = "Muoto";
+    Text[ ca ] = "Formata";
+    Text[ it ] = "Formato";
+    Text[ sk ] = "Formát";
+    Text[ da ] = "Format";
+    Text[ sv ] = "Format";
+    Text[ pl ] = "Format";
+    Text[ pt-BR ] = "Formato";
+    Text[ th ] = "รูปแบบ";
+    Text[ ja ] = "書式";
+    Text[ ko ] = "서식";
+    Text[ zh-CN ] = "格式";
+    Text[ zh-TW ] = "格式";
+    Text[ tr ] = "Format";
+    Text[ hi-IN ] = "रचना";
+    Text[ ar ] = "تنسيق";
+    Text[ he ] = "‮עיצוב‬";
+};
+
+String GID_TEMPLATE
+{
+    Text [ de ] = "Vorlagen" ;
+    Text [ en-US ] = "Templates" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Modelos";
+    Text[ ru ] = "Шаблоны";
+    Text[ el ] = "Πρότυπα";
+    Text[ nl ] = "Sjablonen";
+    Text[ fr ] = "Modèles";
+    Text[ es ] = "Plantillas";
+    Text[ fi ] = "Mallit";
+    Text[ ca ] = "Plantilles";
+    Text[ it ] = "Modelli";
+    Text[ sk ] = "Šablóny";
+    Text[ da ] = "Skabeloner";
+    Text[ sv ] = "Mallar";
+    Text[ pl ] = "Szablony";
+    Text[ pt-BR ] = "Modelos";
+    Text[ th ] = "แม่แบบ";
+    Text[ ja ] = "テンプレートとスタイル";
+    Text[ ko ] = "서식 파일";
+    Text[ zh-CN ] = "样式";
+    Text[ zh-TW ] = "樣式";
+    Text[ tr ] = "Şablon";
+    Text[ hi-IN ] = "नमूनें";
+    Text[ ar ] = "قوالب";
+    Text[ he ] = "‮תבניות‬";
+};
+
+
+String GID_FRAME
+{
+    Text [ de ] = "Rahmen" ;
+    Text [ en-US ] = "Frame" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Moldura";
+    Text[ ru ] = "Рамка";
+    Text[ el ] = "Περίγραμμα";
+    Text[ nl ] = "Kader";
+    Text[ fr ] = "Cadre";
+    Text[ es ] = "Marco";
+    Text[ fi ] = "Kehys";
+    Text[ ca ] = "Marc";
+    Text[ it ] = "Cornice";
+    Text[ sk ] = "Rámček";
+    Text[ da ] = "Ramme";
+    Text[ sv ] = "Ram";
+    Text[ pl ] = "Ramka";
+    Text[ pt-BR ] = "Molduras";
+    Text[ th ] = "กรอบ";
+    Text[ ja ] = "枠";
+    Text[ ko ] = "프레임";
+    Text[ zh-CN ] = "框";
+    Text[ zh-TW ] = "框";
+    Text[ tr ] = "Çerçeve";
+    Text[ hi-IN ] = "फ्रेम्";
+    Text[ ar ] = "كادر";
+    Text[ he ] = "‮מסגרת‬";
+};
+
+String GID_GRAPHIC
+{
+    Text [ de ] = "Grafik" ;
+    Text [ en-US ] = "Graphic" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Imagem";
+    Text[ ru ] = "Графический объект";
+    Text[ el ] = "Γραφικό";
+    Text[ nl ] = "Afbeelding";
+    Text[ fr ] = "Image";
+    Text[ es ] = "Imagen";
+    Text[ fi ] = "Grafiikka";
+    Text[ ca ] = "Imatge";
+    Text[ it ] = "Immagine";
+    Text[ sk ] = "Obrázok";
+    Text[ da ] = "Grafik";
+    Text[ sv ] = "Grafik";
+    Text[ pl ] = "Grafika";
+    Text[ pt-BR ] = "Figura";
+    Text[ th ] = "กราฟิค";
+    Text[ ja ] = "図";
+    Text[ ko ] = "그래픽";
+    Text[ zh-CN ] = "图形";
+    Text[ zh-TW ] = "圖形";
+    Text[ tr ] = "Grafik";
+    Text[ hi-IN ] = "सुचित्र";
+    Text[ ar ] = "صورة";
+    Text[ he ] = "‮גרפיקה‬";
+};
+
+String GID_TABLE
+{
+    Text [ de ] = "Tabelle" ;
+    Text [ en-US ] = "Table" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Tabela";
+    Text[ ru ] = "Таблица";
+    Text[ el ] = "Πίνακας";
+    Text[ nl ] = "Tabel";
+    Text[ fr ] = "Table";
+    Text[ es ] = "Tabla";
+    Text[ fi ] = "Taulukko";
+    Text[ ca ] = "Taula";
+    Text[ it ] = "Tabella";
+    Text[ sk ] = "Tabuľka";
+    Text[ da ] = "Tabel";
+    Text[ sv ] = "Tabell";
+    Text[ pl ] = "Tabela";
+    Text[ pt-BR ] = "Tabela";
+    Text[ th ] = "ตาราง";
+    Text[ ja ] = "表";
+    Text[ ko ] = "시트";
+    Text[ zh-CN ] = "表格";
+    Text[ zh-TW ] = "表格";
+    Text[ tr ] = "Tablo";
+    Text[ hi-IN ] = "सारणी";
+    Text[ ar ] = "جدول";
+    Text[ he ] = "‮טבלה‬";
+};
+
+String GID_ENUMERATION
+{
+    Text [ de ] = "Nummerierung" ;
+    Text [ en-US ] = "Numbering" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Numeração";
+    Text[ ru ] = "Нумерация";
+    Text[ el ] = "Αρίθμηση";
+    Text[ nl ] = "Nummering";
+    Text[ fr ] = "Numérotation";
+    Text[ es ] = "Numeración";
+    Text[ fi ] = "Numerointi";
+    Text[ ca ] = "Numeració";
+    Text[ it ] = "Numerazione";
+    Text[ sk ] = "Číslovanie";
+    Text[ da ] = "Nummerering";
+    Text[ sv ] = "Numrering";
+    Text[ pl ] = "Numeracja";
+    Text[ pt-BR ] = "Numeração";
+    Text[ th ] = "ลำดับเลข";
+    Text[ ja ] = "番号付け";
+    Text[ ko ] = "번호 매기기";
+    Text[ zh-CN ] = "编号";
+    Text[ zh-TW ] = "編號";
+    Text[ tr ] = "Numaralama";
+    Text[ hi-IN ] = "संख्या देना";
+    Text[ ar ] = "الترقيم";
+    Text[ he ] = "‮מיספור‬";
+};
+
+String GID_DATA
+{
+    Text [ de ] = "Daten" ;
+    Text [ en-US ] = "Data" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Dados";
+    Text[ ru ] = "Данные";
+    Text[ el ] = "Δεδομένα";
+    Text[ nl ] = "Gegevens";
+    Text[ fr ] = "Données";
+    Text[ es ] = "Datos";
+    Text[ fi ] = "Tiedot";
+    Text[ ca ] = "Dades";
+    Text[ it ] = "Dati";
+    Text[ sk ] = "Dáta";
+    Text[ da ] = "Data";
+    Text[ sv ] = "Data";
+    Text[ pl ] = "Dane";
+    Text[ pt-BR ] = "Dados";
+    Text[ th ] = "ข้อมูล";
+    Text[ ja ] = "データ";
+    Text[ ko ] = "데이터";
+    Text[ zh-CN ] = "数据";
+    Text[ zh-TW ] = "資料";
+    Text[ tr ] = "Veri";
+    Text[ hi-IN ] = "ड़ॉटा";
+    Text[ ar ] = "بيانات";
+    Text[ he ] = "‮נתונים‬";
+};
+
+String GID_SPECIAL
+{
+    Text [ de ] = "Sonderfunktionen" ;
+    Text [ en-US ] = "Special Functions" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Funções especiais";
+    Text[ ru ] = "Специальные функции";
+    Text[ el ] = "Ειδικές λειτουργίες";
+    Text[ nl ] = "Speciale functies";
+    Text[ fr ] = "Fonctions spéciales";
+    Text[ es ] = "Funciones especiales";
+    Text[ fi ] = "Erikoistoiminnot";
+    Text[ ca ] = "Funcions especials";
+    Text[ it ] = "Funzioni speciali";
+    Text[ sk ] = "Špeciálne funkcie";
+    Text[ da ] = "Specialfunktioner";
+    Text[ sv ] = "Specialfunktioner";
+    Text[ pl ] = "Funkcje specjalne";
+    Text[ pt-BR ] = "Funções especiais";
+    Text[ th ] = "ฟังก์ชั่นพิเศษ";
+    Text[ ja ] = "特殊機能";
+    Text[ ko ] = "특수 함수";
+    Text[ zh-CN ] = "特殊功能";
+    Text[ zh-TW ] = "特殊功能";
+    Text[ tr ] = "Özel işlevler";
+    Text[ hi-IN ] = "विशेष फंक्शन्स";
+    Text[ ar ] = "مهام خاصة";
+    Text[ he ] = "‮תפקודים מיוחדים‬";
+};
+
+
+
+String GID_EXPLORER
+{
+    Text [ de ] = "Explorer" ;
+    Text [ en-US ] = "Explorer" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Explorer";
+    Text[ ru ] = "Проводник";
+    Text[ el ] = "Εξερευνητής";
+    Text[ nl ] = "Explorer";
+    Text[ fr ] = "Explorer";
+    Text[ es ] = "Explorador";
+    Text[ fi ] = "Resurssienhallinta";
+    Text[ ca ] = "Explorador";
+    Text[ it ] = "Explorer";
+    Text[ sk ] = "Prieskumník";
+    Text[ da ] = "Explorer";
+    Text[ sv ] = "Explorer";
+    Text[ pl ] = "Eksplorator";
+    Text[ pt-BR ] = "Explorer";
+    Text[ th ] = "ตัวสำรวจ";
+    Text[ ja ] = "エクスプローラ";
+    Text[ ko ] = "탐색기";
+    Text[ zh-CN ] = "资源管理器";
+    Text[ zh-TW ] = "檔案總管";
+    Text[ tr ] = "Explorer";
+    Text[ hi-IN ] = "एक्सप्लोरर";
+    Text[ ar ] = "المستكشف";
+    Text[ he ] = "‮סייר‬";
+};
+
+String GID_CONNECTOR
+{
+    Text [ de ] = "Verbinder" ;
+    Text [ en-US ] = "Connector" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Conector";
+    Text[ ru ] = "Соединительная линия";
+    Text[ el ] = "Σύνδεση";
+    Text[ nl ] = "Verbinding";
+    Text[ fr ] = "Connecteur";
+    Text[ es ] = "Conector";
+    Text[ fi ] = "Yhdysviiva";
+    Text[ ca ] = "Connectors";
+    Text[ it ] = "Connettore";
+    Text[ sk ] = "Spojnica";
+    Text[ da ] = "Forbindelse";
+    Text[ sv ] = "Förbindelse";
+    Text[ pl ] = "Łącznik";
+    Text[ pt-BR ] = "Conector";
+    Text[ th ] = "ตัวเชื่อมต่อ";
+    Text[ ja ] = "コネクタ";
+    Text[ ko ] = "연결자";
+    Text[ zh-CN ] = "连接符";
+    Text[ zh-TW ] = "連接符";
+    Text[ tr ] = "Bağlayıcı";
+    Text[ hi-IN ] = "कनेक्टर";
+    Text[ ar ] = "الرابط";
+    Text[ he ] = "‮מחבר‬";
+};
+
+String GID_MODIFY
+{
+    Text [ de ] = "Ändern" ;
+    Text [ en-US ] = "Modify" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Alterar";
+    Text[ ru ] = "Изменить";
+    Text[ el ] = "Τροποποίηση";
+    Text[ nl ] = "Wijzigen";
+    Text[ fr ] = "Modifier";
+    Text[ es ] = "Modificar";
+    Text[ fi ] = "Muuta";
+    Text[ ca ] = "Modifica";
+    Text[ it ] = "Modifica";
+    Text[ sk ] = "Upraviť";
+    Text[ da ] = "Modificer";
+    Text[ sv ] = "Ändra";
+    Text[ pl ] = "Modyfikuj";
+    Text[ pt-BR ] = "Alterar";
+    Text[ th ] = "ดัดแปลง";
+    Text[ ja ] = "変更";
+    Text[ ko ] = "수정";
+    Text[ zh-CN ] = "更改";
+    Text[ zh-TW ] = "修改";
+    Text[ tr ] = "Değiştir";
+    Text[ hi-IN ] = "सुधारो";
+    Text[ ar ] = "تعديل";
+    Text[ he ] = "‮שינוי‬";
+};
+
+String GID_DRAWING
+{
+    Text [ de ] = "Zeichnen" ;
+    Text [ en-US ] = "Drawing" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Desenhar";
+    Text[ ru ] = "Рисование";
+    Text[ el ] = "Σχεδίαση";
+    Text[ nl ] = "Tekenen";
+    Text[ fr ] = "Dessiner";
+    Text[ es ] = "Dibujar";
+    Text[ fi ] = "Piirros";
+    Text[ ca ] = "Dibuix";
+    Text[ it ] = "Disegna";
+    Text[ sk ] = "Kresba";
+    Text[ da ] = "Tegn";
+    Text[ sv ] = "Rita";
+    Text[ pl ] = "Rysunek";
+    Text[ pt-BR ] = "Desenho";
+    Text[ th ] = "วาดรูป";
+    Text[ ja ] = "図形描画";
+    Text[ ko ] = "그리기";
+    Text[ zh-CN ] = "绘图";
+    Text[ zh-TW ] = "繪圖";
+    Text[ tr ] = "Çizim";
+    Text[ hi-IN ] = "रेखाचित्र";
+    Text[ ar ] = "رسم";
+    Text[ he ] = "‮סרטוט‬";
+};
+
+String GID_CONTROLS
+{
+    Text [ de ] = "Kontrollelemente" ;
+    Text [ en-US ] = "Controls" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Controlos";
+    Text[ ru ] = "Элементы управления";
+    Text[ el ] = "Στοιχεία ελέγχου";
+    Text[ nl ] = "Controle-elementen";
+    Text[ fr ] = "Éléments de contrôle";
+    Text[ es ] = "Elementos de control";
+    Text[ fi ] = "Ohjausobjektit";
+    Text[ ca ] = "Controls";
+    Text[ it ] = "Elementi di controllo";
+    Text[ sk ] = "Ovládacie prvky";
+    Text[ da ] = "Kontrolelementer";
+    Text[ sv ] = "Kontrollelement";
+    Text[ pl ] = "Formanty";
+    Text[ pt-BR ] = "Controles";
+    Text[ th ] = "ตัวควบคุม";
+    Text[ ja ] = "コントロール要素";
+    Text[ ko ] = "컨트롤";
+    Text[ zh-CN ] = "控制";
+    Text[ zh-TW ] = "控制項";
+    Text[ tr ] = "Kumanda öğeleri";
+    Text[ hi-IN ] = "नियंत्रण";
+    Text[ ar ] = "عناصر تحكم";
+    Text[ he ] = "‮פקדים‬";
+};
+
+TabDialog SID_OPTIONS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 244 , 155 ) ;
+    Text [ de ] = "Optionen" ;
+    Text [ en-US ] = "Options" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    TabControl 1
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 15 ) ;
+        Size = MAP_APPFONT ( 221 , 130 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SFXPAGE_GENERAL ;
+                Text [ de ] = "Allgemeines" ;
+                Text [ en-US ] = "General" ;
+                PageResID = 256 ;
+                Text [ x-comment ] = " ";
+                Text[ pt ] = "Geral";
+                Text[ ru ] = "Общее";
+                Text[ el ] = "Γενικά";
+                Text[ nl ] = "Algemeen";
+                Text[ fr ] = "En général";
+                Text[ es ] = "General";
+                Text[ fi ] = "Yleiset";
+                Text[ ca ] = "General";
+                Text[ it ] = "Generale";
+                Text[ sk ] = "Všeobecný";
+                Text[ da ] = "Generelt";
+                Text[ sv ] = "Allmänt";
+                Text[ pl ] = "Ogólne";
+                Text[ pt-BR ] = "Geral";
+                Text[ th ] = "ทั่วไป";
+                Text[ ja ] = "全般";
+                Text[ ko ] = "일반";
+                Text[ zh-CN ] = "常规";
+                Text[ zh-TW ] = "一般";
+                Text[ tr ] = "Genel";
+                Text[ hi-IN ] = "सामान्य";
+                Text[ ar ] = "عام";
+                Text[ he ] = "‮כללי‬";
+            };
+            PageItem
+            {
+                Identifier = RID_SFXPAGE_SAVE ;
+                Text [ de ] = "Speichern" ;
+                Text [ en-US ] = "Save" ;
+                PageResID = 257 ;
+                Text [ x-comment ] = " ";
+                Text[ pt ] = "Guardar";
+                Text[ ru ] = "Сохранить";
+                Text[ el ] = "Αποθήκευση";
+                Text[ nl ] = "Opslaan";
+                Text[ fr ] = "Enregistrer";
+                Text[ es ] = "Guardar";
+                Text[ fi ] = "Tallenna";
+                Text[ ca ] = "Desa";
+                Text[ it ] = "Salva";
+                Text[ sk ] = "Uložiť";
+                Text[ da ] = "Gem";
+                Text[ sv ] = "Spara";
+                Text[ pl ] = "Zapisz";
+                Text[ pt-BR ] = "Salvar";
+                Text[ th ] = "บันทึก";
+                Text[ ja ] = "保存";
+                Text[ ko ] = "저장";
+                Text[ zh-CN ] = "存盘";
+                Text[ zh-TW ] = "儲存";
+                Text[ tr ] = "Kaydet";
+                Text[ hi-IN ] = "संचित करो";
+                Text[ ar ] = "حفظ";
+                Text[ he ] = "‮שמירה‬";
+            };
+            PageItem
+            {
+                Text [ de ] = "Pfade" ;
+                Text [ en-US ] = "Paths" ;
+                PageResID = 258 ;
+                Text [ x-comment ] = " ";
+                Text[ pt ] = "Atalhos";
+                Text[ ru ] = "Пути";
+                Text[ el ] = "Διαδρομές";
+                Text[ nl ] = "Pad";
+                Text[ fr ] = "Chemins";
+                Text[ es ] = "Rutas";
+                Text[ fi ] = "Polut";
+                Text[ ca ] = "Camins";
+                Text[ it ] = "Percorsi";
+                Text[ sk ] = "Cesty";
+                Text[ da ] = "Stier";
+                Text[ sv ] = "Sökvägar";
+                Text[ pl ] = "Ścieżki";
+                Text[ pt-BR ] = "Caminhos";
+                Text[ th ] = "เส้นทาง";
+                Text[ ja ] = "パス";
+                Text[ ko ] = "경로";
+                Text[ zh-CN ] = "路径";
+                Text[ zh-TW ] = "路徑";
+                Text[ tr ] = "Veri yolu";
+                Text[ hi-IN ] = "मार्ग";
+                Text[ ar ] = "مسارات";
+                Text[ he ] = "‮מסלולים‬";
+            };
+            PageItem
+            {
+                Identifier = RID_SFXPAGE_SPELL ;
+                Text [ de ] = "Rechtschreibprüfung" ;
+                Text [ en-US ] = "Spellcheck" ;
+                PageResID = 259 ;
+                Text [ x-comment ] = " ";
+                Text[ pt ] = "Verificar ortografia";
+                Text[ ru ] = "Проверка орфографии";
+                Text[ el ] = "Ορθογραφικός έλεγχος";
+                Text[ nl ] = "Spellingcontrole";
+                Text[ fr ] = "Vérification orthographique";
+                Text[ es ] = "Revisión ortográfica";
+                Text[ fi ] = "Oikeinkirjoituksen tarkistus";
+                Text[ ca ] = "Revisió ortogràfica";
+                Text[ it ] = "Controllo ortografico";
+                Text[ sk ] = "Kontrola pravopisu";
+                Text[ da ] = "Stavekontrol";
+                Text[ sv ] = "Rättstavningskontroll";
+                Text[ pl ] = "Sprawdzanie pisowni";
+                Text[ pt-BR ] = "Verificação ortográfica";
+                Text[ th ] = "ตรวจสอบการสะกด";
+                Text[ ja ] = "文章校正";
+                Text[ ko ] = "맞춤법 검사";
+                Text[ zh-CN ] = "拼写检查";
+                Text[ zh-TW ] = "拼寫檢查";
+                Text[ tr ] = "Yazım denetimi";
+                Text[ hi-IN ] = "अक्षर की जाँच";
+                Text[ ar ] = "التدقيق الإملائي";
+                Text[ he ] = "‮בדיקת איות‬";
+            };
+        };
+    };
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Opções";
+    Text[ ru ] = "Параметры";
+    Text[ el ] = "Επιλογές";
+    Text[ nl ] = "Opties";
+    Text[ fr ] = "Options";
+    Text[ es ] = "Opciones";
+    Text[ fi ] = "Asetukset";
+    Text[ ca ] = "Opcions";
+    Text[ it ] = "Opzioni";
+    Text[ sk ] = "Nastavenia";
+    Text[ da ] = "Indstillinger";
+    Text[ sv ] = "Alternativ";
+    Text[ pl ] = "Opcje";
+    Text[ pt-BR ] = "Opções";
+    Text[ th ] = "ตัวเลือก";
+    Text[ ja ] = "オプション";
+    Text[ ko ] = "옵션";
+    Text[ zh-CN ] = "选项";
+    Text[ zh-TW ] = "選項";
+    Text[ tr ] = "Seçenekler";
+    Text[ hi-IN ] = "विकल्प";
+    Text[ ar ] = "خيارات";
+    Text[ he ] = "‮אפשרויות‬";
+};
+
+InfoBox MSG_CANT_QUIT
+{
+    Message [ de ] = "Die Anwendung kann zur Zeit nicht beendet werden.\nBitte warten Sie das Ende aller Druckaufträge und/oder\nOLE-Aktivierungen ab und schließen Sie alle Dialoge." ;
+    Message [ en-US ] = "The application cannot be terminated at the moment.\nPlease wait until all print jobs and/or\nOLE actions have finished and close all dialogs." ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "De momento é impossível sair desta aplicação.\nAguarde a impressão de todos os documentos\n e/ou o fim das activações OLE e feche todos os diálogos.";
+    Message[ ru ] = "Выход из приложения в данный момент невозможен.\nПодождите окончания всех заданий печати и/или\n действий OLE и закройте все диалоги.";
+    Message[ el ] = "Προς το παρόν είναι αδύνατον να τερματιστεί αυτή η εφαρμογή.\nΠαρακαλώ περιμένετε μέχρι να εκτελεστούν όλες οι εργασίες εκτύπωσης και/ή\nοι";
+    Message[ nl ] = "De toepassing kan op dit moment niet worden beëindigd.\nWacht tot alle afdrukopdrachten en/of\nOLE-activiteiten zijn beëindigd en \nsluit alle dialoogvensters.";
+    Message[ fr ] = "Impossible de quitter l'application maintenant.\nVeuillez attendre la fin des activités d'impression et/ou des activations OLE\net fermez tous les dialogues.";
+    Message[ es ] = "La aplicación no se puede cerrar por el momento. \nPor favor espere hasta que finalice la impresión de\n todos los documentos y/o activaciones OLE\ny cierre todos los diálogos.";
+    Message[ fi ] = "Sovelluksen lopettaminen ei onnistu.\nOdota, että kaikki tulostustyöt ja/tai\nOLE-toiminnot ovat valmiit ja sulje kaikki valintaikkunat.";
+    Message[ ca ] = "L'aplicació no es pot tancar de moment. \nEspereu que s'acabi la impressió de\n tots els documents i/o activacions OLE\ni tanqueu tots els quadres de diàleg.";
+    Message[ it ] = "Impossibile uscire dall'applicazione in questo momento.\nAttendendete la concluisione della stampa e/o\n tutte le attivazioni OLE, quindi chiudete\ntutti i dialoghi.";
+    Message[ sk ] = "Aplikácia nemôže byť práve teraz ukončená.\nProsím počkajte, až dobehnú všetky tlačové úlohy a/alebo \nOLE akcie, a zavrite všetky dialógové okná.";
+    Message[ da ] = "Det er for tiden ikke muligt at afslutte programmet.\nVent venligst til alle udskriftsjob og/eller \nOLE-handlinger er afslutte og luk så alle dialoger.";
+    Message[ sv ] = "Programmet kan inte avslutas för tillfället.\nVänta tills alla utskriftsuppdrag och/eller\nOLE-aktiveringar är utförda och stäng alla dialoger.";
+    Message[ pl ] = "Aplikacji nie można teraz zakończyć.\nZaczekaj, aż zostaną zakończone zadania drukowania i/lub\nakcje OLE, a także zamknij wszystkie okna dialogowe.";
+    Message[ pt-BR ] = "Não é possível sair do aplicativo neste momento.\nAguarde a impressão de todos os documentos\n e/ou o fim das ações OLE e feche todos as caixas de diálogos.";
+    Message[ th ] = "ไม่สามารถยกเลิกดปรแกรมประยุกต์ขณะนี้ได้\nกรุณารอจนกว่าจะเสร็จสิ้นงานพิมพ์ทั้งหมดและ/หรือ\nการกระทำ OLE และปิดไดอะล็อกทั้งหมดก่อน";
+    Message[ ja ] = "現在プログラムは終了できません。\nすべての印刷ジョブまたは\nOLE アクションの終了を確認してから、すべてのダイアログを閉じてください。";
+    Message[ ko ] = "응용 프로그램을 현재 종료할 수 없습니다.\n인쇄 작업이 모두 끝날 때까지 또는\nOLE가 활성화될 때까지 기다렸다가 모든 대화 상자를 닫으십시오.";
+    Message[ zh-CN ] = "现在无法结束这个应用程序。\n请您稍等直到程序完成所有打印任务或OLE启动状态结束，\n然后再关闭所有对话框。";
+    Message[ zh-TW ] = "現在無法結束這個應用程式。\n請等候所有列印任務或OLE使用狀態已經結束﹐\n然後再關閉所有的對話方塊。";
+    Message[ tr ] = "Şu an uygulamadan çıkılamıyor.\nTüm yazdırma işlerinin ve/veya\nOLE işlemlerinin bitmesini bekleyip tüm pencereleri kapatın.";
+    Message[ hi-IN ] = "कार्यक्रम को क्षण मात्र में अंत नहीं कर सकते है ।\nकृपया सब छपाई कार्य और/अथवा\nOLE कार्य समाप्त होने तक ठहरिए और सब डयलॉगों को बन्द कीजिए ।";
+    Message[ ar ] = "لا يمكن إنهاء التطبيق حالياً.\nالرجاء الانتظار حتى انتهاء كل مهام الطباعة، و/أو\nتنشيطات OLE، ثم قم بإغلاق كل مربعات الحوار.";
+    Message[ he ] = "‮לא ניתן לסגור את היישום כעת.\nנא להמתין עד שכל משימות ההדפסה וה OLE יסתיימו ולסגור את כל תיבות הדו שיח.‬";
+};
+
+QueryBox MSG_IS_SERVER
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ de ] = "Die Applikation ist noch als Objekt- oder Druck-Server aktiv.\nSoll sie trotzdem geschlossen werden?" ;
+    Message [ en-US ] = "This application is as object or print server active.\nDo you want to terminate anyway?" ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Esta aplicação está ainda activa como servidor de objecto ou da impressora.\nMesmo assim, finalizar?";
+    Message[ ru ] = "Приложение еще активно как объект или сервер печати.\nЗакрыть его, несмотря на это?";
+    Message[ el ] = "Η εφαρμογή είναι ακόμη ενεργή ως διακομιστής αντικειμένου ή εκτύπωσης.\nΘέλετε να τερματιστεί;";
+    Message[ nl ] = "Deze toepassing is nog actief als object- of afdrukserver.\nToch afsluiten?";
+    Message[ fr ] = "Cette application est encore active en tant que serveur d'objets ou d'imprimante.\nInterrompre malgré tout ?";
+    Message[ es ] = "Esta aplicación está aún activa como servidor de objeto o de impresión.\n¿Desea finalizarla?";
+    Message[ fi ] = "Tämä sovellus on aktiivinen objekti- tai tulostuspalvelin.\nHaluatko lopettaa sovelluksen?";
+    Message[ ca ] = "Aquesta aplicació encara està activa com a servidor d'objecte o d'impressió.\nVoleu tancar-la?";
+    Message[ it ] = "Questa applicazione è un server attivo.\nTerminare in ogni caso?";
+    Message[ sk ] = "Táto aplikácia práve pracuje s objektami alebo s tlačou.\nPrejete si ju i napriek tomu ukončiť?";
+    Message[ da ] = "Denne applikation er stadig aktiv som objekt- eller printserver.\nSkal der lukkes alligevel?";
+    Message[ sv ] = "Tillämpningen är fortfarande aktiv antingen som objekt- eller skrivarserver.\nVill du ändå stänga den?";
+    Message[ pl ] = "Aplikacja jest jeszcze aktywna jako obiekt lub serwer wydruku.\nCzy ją mimo to zamknąć?";
+    Message[ pt-BR ] = "Esta aplicação ainda está ativa como servidor de objeto ou da impressora.\nMesmo assim, deseja finalizar?";
+    Message[ th ] = "โปรแกรมประยุกต์นี้เป็นวัตถุหรือเซิร์ฟเวอร์การพิมพ์ที่ทำงานอยู่\nคุณต้องการยกเลิกหรือไม่?";
+    Message[ ja ] = "アプリケーションは現在オブジェクトサーバーまたはプリントサーバーとしてアクティブです。\n閉じてもよろしいですか?";
+    Message[ ko ] = "개체 또는 프린터 서버로서 이 응용 프로그램이 아직 작동 중입니다.\n그래도 닫으시겠습니까?";
+    Message[ zh-CN ] = "这个应用程序作为对象或打印服务器还处于使用的状态。\n您还是要关闭它?";
+    Message[ zh-TW ] = "這個應用程式作為物件或列印伺服器還處於使用狀態。\n您還是要關閉它？";
+    Message[ tr ] = "Uygulama şu an nesne ya da yazdırma sunucusu olarak çalışıyor.\nYine de kapatılsın mı?";
+    Message[ hi-IN ] = "इस कार्यक्रम वस्तु की जैसे है अथवा छपाई सर्वर क्रियाशील है ।\nआप किसी तरह अंत करना चाहते है?";
+    Message[ ar ] = "ما زال هذا التطبيق نشطاً كمزوّد كائن أو مزود طباعة.\nهل تريد غلقه على الرغم من ذلك؟";
+    Message[ he ] = "‮יישום זה פעיל בתור שרת הדפסות או שרת עצמים.\nהאם לסגור אותו בכל זאת?‬";
+};
+
+
+
+
+
+String STR_RESWARNING
+{
+    Text [ de ] = "Die Systemresourcen werden knapp. Bitte beenden Sie andere Applikationen oder schließen Sie einige Fenster, bevor Sie weiterarbeiten." ;
+    Text [ en-US ] = "Limited system resources. Please quit other applications or close some windows before continuing." ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Recursos do sistema insuficientes. Por favor, saia dos outros programas ou feche algumas janelas antes de continuar.";
+    Text[ ru ] = "Ресурсы системы ограничены. Прежде чем продолжить работу, выйдите из других приложений или закройте некоторые окна.";
+    Text[ el ] = "Οι πόροι του συστήματος είναι ελάχιστοι. Παρακαλώ τερματίστε άλλες εφαρμογές ή κλείστε μερικά παράθυρα πριν συνεχίσετε.";
+    Text[ nl ] = "Onvoldoende systeemgeheugen beschikbaar. Sluit andere toepassingen af of sluit een aantal vensters voordat u uw werk voortzet.";
+    Text[ fr ] = "Ressources insuffisantes. Veuillez quitter les autres applications ou fermer certaines fenêtres avant de continuer.";
+    Text[ es ] = "No hay suficientes recursos del sistema. Por favor, elimine otras aplicaciones o cierre algunas ventanas antes de continuar.";
+    Text[ fi ] = "Järjestelmäresurssit ovat rajoitetut. Sulje muita sovelluksia tai ikkunoita ennen kuin jatkat.";
+    Text[ ca ] = "No hi ha prou recursos al sistema. Tanqueu altres aplicacions o finestres abans de continuar.";
+    Text[ it ] = "Risorse insufficienti. Uscire dalle altre applicazioni o chiudere alcune finestre prima di continuare.";
+    Text[ sk ] = "Vyčerpávajú sa systémové zdroje. Prosím ukončite iné aplikácie predtým, než budete pokračovať.";
+    Text[ da ] = "Begrænsede systemressourcer. Afslut venligst andre applikationer eller luk nogle vinduer, før du fortsætter.";
+    Text[ sv ] = "Inte tillräckligt med systemresurser. Avsluta andra program eller stäng några fönster innan du fortsätter.";
+    Text[ pl ] = "Zasoby systemu są ograniczone. Aby kontynuować, należy zamknąć inne aplikacje lub okna.";
+    Text[ pt-BR ] = "Não há recursos do sistema suficientes. Finalize os outros programas ou feche algumas janelas antes de continuar.";
+    Text[ th ] = "ทรัพยากรระบบจำกัด กรุณาเลิกโปรแกรมประยุกต์อื่นหรือปิดบางหน้าต่างลงก่อนทำต่อ";
+    Text[ ja ] = "システムリソースが限界に近づいています。作業を続ける前に、他のアプリケーションを終了するか、いくつかのウィンドウを閉じてください。";
+    Text[ ko ] = "시스템 자원이 부족합니다. 계속 진행하기 전에 다른 응용 프로그램을 중지하거나 열려있는 창을 닫으십시오.";
+    Text[ zh-CN ] = "系统资源不足。请您关闭其它的程序或者关闭一些视窗，然后重新尝试执行命令。";
+    Text[ zh-TW ] = "系統資源不足。請關閉其它的程式或者關閉一些視窗﹐然後重新嘗試執行指令。";
+    Text[ tr ] = "Sistem kaynakları azalıyor. Çalışmaya devam etmeden önce diğer uygulamaları ya da bir kaç pencere kapatın.";
+    Text[ hi-IN ] = "सिस्टम साधन सीमित है । कृपया आगे जारी रखने से पहिले अन्य कार्यक्रमों को त्याग दीजिए अथवा कुछ विन्डों को बन्द कीजिए ।";
+    Text[ ar ] = "مصادر النص تتضاءل. الرجاء إنهاء تطبيقات أخرى، أو إغلاق بعض النوافذ، قبل مواصلة العمل.";
+    Text[ he ] = "‮משאבי מערכת מוגבלים. יש לסגור יישומים אחרים לפני ביצוע פעולות נוספות ביישום זה.‬";
+};
+String STR_RESEXCEPTION
+{
+    Text [ de ] = "Wichtige Programmteile nicht gefunden. Bitte überprüfen Sie Ihre Installation." ;
+    Text [ en-US ] = "There are files missing. Please check application setup." ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Faltam alguns ficheiros importantes. Por favor, verifique a configuração do programa.";
+    Text[ ru ] = "Отсутствуют файлы. Проверьте установку приложения.";
+    Text[ el ] = "Δεν βρέθηκαν ορισμένα σημαντικά τμήματα του προγράμματος. Παρακαλώ ελέγξτε την εγκατάστασή σας.";
+    Text[ nl ] = "Er ontbreken belangrijke programmaonderdelen. Controleer of de installatie correct is uitgevoerd.";
+    Text[ fr ] = "Certains fichiers sont manquants. Veuillez vérifier le paramétrage de l'application.";
+    Text[ es ] = "No se encuentran archivos importantes del programa. Compruebe la instalación.";
+    Text[ fi ] = "Tiedostoja puuttuu. Tarkista sovelluksen asennus.";
+    Text[ ca ] = "No es poden trobar fitxers importants del programa. Comproveu la instal.lació.";
+    Text[ it ] = "Mancano alcuni file. Verificare la configurazione dell'applicazione.";
+    Text[ sk ] = "Niektoré súbory nie je možné nájsť. Prosím skontrolujte nastavenie aplikácie.";
+    Text[ da ] = "Vigtige programdele blev ikke fundet. Kontroller venligst din installation.";
+    Text[ sv ] = "Viktiga programdelar hittades inte. Kontrollera din installation.";
+    Text[ pl ] = "Brakuje niektórych plików. Sprawdź instalację aplikacji.";
+    Text[ pt-BR ] = "Estão faltando arquivos. Verifique a configuração do aplicativo.";
+    Text[ th ] = "มีบางแฟ้มตกหล่น  กรุณาตรวจสอบการติดตั้งโปรแกรมประยุกต์";
+    Text[ ja ] = "プログラムの大切な部分が見つかりません。インストールをチェックしてください。";
+    Text[ ko ] = "중요한 프로그램 부분을 찾지 못했습니다. 설치를 검사하십시오.";
+    Text[ zh-CN ] = "没有找到必要的程序组件。请检查您的安装。";
+    Text[ zh-TW ] = "沒有找到必要的程式元件。請檢查您的安裝。";
+    Text[ tr ] = "Önemli program öğeleri bulunamadı. Kurulumunuzu kontrol edin.";
+    Text[ hi-IN ] = "कुछ फाइलें अनुपस्थित है । कृपया कार्यक्रम सेटप की जाँच कीजिए ।";
+    Text[ ar ] = "تعذر العثور على أجزاء هامة من البرنامج. الرجاء التحقق من صحة عملية التثبيت عندك.";
+    Text[ he ] = "‮קבצים אחדים לא נמצאים. נא לבדוק את התקנת היישום.‬";
+};
+
+
+String STR_SYSRESEXCEPTION
+{
+    Text [ de ] = "Die Systemresourcen sind verbraucht. Bitte starten Sie die Anwendung neu." ;
+    Text [ en-US ] = "System resources exhausted. Please restart the application." ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Recursos do sistema esgotados. Reinicie a aplicação.";
+    Text[ ru ] = "Системные ресурсы исчерпаны. Перезапустите приложение.";
+    Text[ el ] = "Οι πόροι του συστήματος εξαντλήθηκαν. Παρακαλώ επανεκκινήστε την εφαρμογή.";
+    Text[ nl ] = "De systeemresources zijn verbruikt. Start de toepassing opnieuw.";
+    Text[ fr ] = "Les ressources du système sont épuisées. Veuillez relancer l'application .";
+    Text[ es ] = "Los recursos del sistema se han acabado. Por favor reinicie la aplicación.";
+    Text[ fi ] = "Järjestelmäresurssit ovat lopussa. Aloita sovellus uudelleen.";
+    Text[ ca ] = "Els recursos del sistema s'han esgotat. Reinicieu l'aplicació.";
+    Text[ it ] = "Le risorse del sistema sono esaurite. Riavviare l'applicazione.";
+    Text[ sk ] = "Systémové zdroje boli vyčerpané. Prosím spustite aplikáciu znova.";
+    Text[ da ] = "Systemressourcerne er opbrugt. Genstart venligst denne applikation.";
+    Text[ sv ] = "Inte tillräckligt med systemresurser. Starta om programmet.";
+    Text[ pl ] = "Zasoby systemu są wyczerpane. Uruchom ponownie aplikację.";
+    Text[ pt-BR ] = "Os recursos do sistema estão esgotados. Por favor, reinicie a aplicação.";
+    Text[ th ] = "ใช้ทรัพยากรระบบหมด  กรุณาเริ่มโปรแกรมประยุกต์ใหม่";
+    Text[ ja ] = "システムリソースが限界に達しました。アプリケーションを新しくスタートしてください。";
+    Text[ ko ] = "시스템 자원이 소모되었습니다. 응용 프로그램을 다시 시작하십시오.";
+    Text[ zh-CN ] = "系统资源已经用完。请您重新启动应用程序。";
+    Text[ zh-TW ] = "系統資源已經用完。請您重新啟動應用程式。";
+    Text[ tr ] = "Sistem kaynakları tükendi. Uygulamayı yeniden başlatınız.";
+    Text[ hi-IN ] = "सिस्टम साधन निश्शेषित है । कृपया कार्यक्रम को पुनः प्रारंभ कीजिए ।";
+    Text[ ar ] = "تم استهلاك كل مصادر النظام. الرجاء بدء التطبيق من جديد.";
+    Text[ he ] = "‮משאבי מערכת אזלו. יש לאתחל את היישום מחדש.‬";
+};
+
+ErrorBox MSG_ERR_SOINIT
+{
+    Message [ de ] = "Fehler beim Initialisieren des Objekt-Systems." ;
+    Message [ en-US ] = "Error initializing object-system." ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "Erro ao inicializar o sistema de objectos.";
+    Message[ ru ] = "Ошибка инициализации системы объекта.";
+    Message[ el ] = "Σφάλμα κατά την αρχικοποίηση του συστήματος αντικειμένων.";
+    Message[ nl ] = "Fout bij initialisatie van objectsysteem.";
+    Message[ fr ] = "Erreur lors de l'initialisation du système d'objets.";
+    Message[ es ] = "Error al inicializar el sistema objeto.";
+    Message[ fi ] = "Objektijärjestelmän alustamisessa on ilmennyt virhe.";
+    Message[ ca ] = "S'ha produït un error en inicialitzar el sistema d'objectes.";
+    Message[ it ] = "Errore durante l'inizializzazione del sistema oggetto.";
+    Message[ sk ] = "Chyba v inicializácii objektového systému.";
+    Message[ da ] = "Fejl ved initialisering af objekt-systemet.";
+    Message[ sv ] = "Fel vid initiering av objektsystem.";
+    Message[ pl ] = "Błąd inicjalizacji systemu obiektów.";
+    Message[ pt-BR ] = "Erro ao inicializar o sistema de objetos.";
+    Message[ th ] = "การเริ่มระบบวัตถุผิดพลาด";
+    Message[ ja ] = "オブジェクト システムの初期化の際のエラー｡";
+    Message[ ko ] = "개체 시스템 초기화시에 오류.";
+    Message[ zh-CN ] = "在初始化对象系统时发生错误。";
+    Message[ zh-TW ] = "在初始化物件系統時發生錯誤。";
+    Message[ tr ] = "Nesne sistemi başlatılırken hata oluştu.";
+    Message[ hi-IN ] = "वस्तु-सिस्टम को इनिश्यलैज़ करने के समय गलती ।";
+    Message[ ar ] = "حدث خطأ أثناء تهيئة نظام الكائنات.";
+    Message[ he ] = "‮שגיאה בעת איתחול מערכת העצמים.‬";
+};
+
+
+
+
+
+
+
+
+
+
+
+String RID_FULLSCREENTOOLBOX
+{
+    Text  = "" ;
+    /*
+    Text [ de ] = "Gesamtbild";
+    Text [ en-US ] = "Full screen";
+*/
+};
+
+ToolBox RID_FULLSCREENTOOLBOX
+{
+    HelpId = HID_FULLSCREENTOOLBOX ;
+    ButtonType = BUTTON_SYMBOL ;
+    LineSpacing = TRUE ;
+    Border = TRUE ;
+    Scroll = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Customize = TRUE ;
+    FloatingMode = TRUE ;
+    Hide = TRUE ;
+    _FloatingPosMapMode = MAP_APPFONT ;
+    _FloatingPosX = -50 ;
+    _FloatingPosY = -70 ;
+    FloatingLines = 1 ;
+    HideWhenDeactivate = TRUE ;
+    Align = BOXALIGN_TOP ;
+    ItemList  =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_WIN_FULLSCREEN ;
+        };
+    };
+};
+
+String STR_EVENT_STARTAPP
+{
+    Text [ de ] = "Programmstart" ;
+    Text [ en-US ] = "Start Application" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Iniciar programa";
+    Text[ ru ] = "Запустить приложение";
+    Text[ el ] = "Εκκίνηση εφαρμογής";
+    Text[ nl ] = "Programma starten";
+    Text[ fr ] = "Démarrage du programme";
+    Text[ es ] = "Iniciar aplicación";
+    Text[ fi ] = "Aloita sovellus";
+    Text[ ca ] = "Iniciar l'aplicació";
+    Text[ it ] = "Avvia applicazione";
+    Text[ sk ] = "Spustiť aplikáciu";
+    Text[ da ] = "Programstart";
+    Text[ sv ] = "Programstart";
+    Text[ pl ] = "Uruchom aplikację";
+    Text[ pt-BR ] = "Iniciar programa";
+    Text[ th ] = "เริ่มโปรแกรมประยุกต์";
+    Text[ ja ] = "プログラム起動時";
+    Text[ ko ] = "응용 프로그램 시작";
+    Text[ zh-CN ] = "启动程序";
+    Text[ zh-TW ] = "啟動程式";
+    Text[ tr ] = "Programı çalıştır";
+    Text[ hi-IN ] = "कार्यक्रम प्रारंभ करो";
+    Text[ ar ] = "بدء البرنامج";
+    Text[ he ] = "‮התחלת יישום‬";
+};
+
+String STR_EVENT_CLOSEAPP
+{
+    Text [ de ] = "Programmende" ;
+    Text [ en-US ] = "Close Application" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Sair do programa";
+    Text[ ru ] = "Закрыть приложение";
+    Text[ el ] = "Τερματισμός προγράμματος";
+    Text[ nl ] = "Programma beëindigen";
+    Text[ fr ] = "Fermeture du programme";
+    Text[ es ] = "Cerrar aplicación";
+    Text[ fi ] = "Sulje sovellus";
+    Text[ ca ] = "Tanca l'aplicació";
+    Text[ it ] = "Chiudi applicazione";
+    Text[ sk ] = "Ukončiť aplikáciu";
+    Text[ da ] = "Luk programmet";
+    Text[ sv ] = "Programslut";
+    Text[ pl ] = "Zamknij aplikację";
+    Text[ pt-BR ] = "Sair do programa";
+    Text[ th ] = "ปิดโปรแกรมประยุกต์";
+    Text[ ja ] = "プログラム終了時";
+    Text[ ko ] = "프로그램 닫기";
+    Text[ zh-CN ] = "结束程序";
+    Text[ zh-TW ] = "結束程式";
+    Text[ tr ] = "Programdan çıkış";
+    Text[ hi-IN ] = "कार्यक्रम बन्द करो";
+    Text[ ar ] = "نهاية البرنامج";
+    Text[ he ] = "‮יציאה מיישום‬";
+};
+
+String STR_EVENT_CREATEDOC
+{
+    Text [ de ] = "Dokument erzeugen" ;
+    Text [ en-US ] = "Create Document" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Criar documento";
+    Text[ ru ] = "Создать документ";
+    Text[ el ] = "Δημιουργία εγγράφου";
+    Text[ nl ] = "Document maken";
+    Text[ fr ] = "Créer un document";
+    Text[ es ] = "Crear documento";
+    Text[ fi ] = "Luo asiakirja";
+    Text[ ca ] = "Crea un document";
+    Text[ it ] = "Crea documento";
+    Text[ sk ] = "Vytvoriť dokument";
+    Text[ da ] = "Opret dokument";
+    Text[ sv ] = "Skapa dokument";
+    Text[ pl ] = "Utwórz dokument";
+    Text[ pt-BR ] = "Criar documento";
+    Text[ th ] = "สร้างเอกสาร";
+    Text[ ja ] = "ドキュメントの作成時";
+    Text[ ko ] = "문서 만들기";
+    Text[ zh-CN ] = "建立文档";
+    Text[ zh-TW ] = "製作文件";
+    Text[ tr ] = "Belge oluştur";
+    Text[ hi-IN ] = "लेखपत्र उत्पन्न करो";
+    Text[ ar ] = "إنشاء مستند";
+    Text[ he ] = "‮יצירת מסמך‬";
+};
+
+String STR_EVENT_CLOSEDOC
+{
+    Text [ de ] = "Dokument wird geschlossen" ;
+    Text [ en-US ] = "Document is closing" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Fechar documento";
+    Text[ ru ] = "Закрыть документ";
+    Text[ el ] = "Κλείσιμο εγγράφου";
+    Text[ nl ] = "Document sluiten";
+    Text[ fr ] = "Fermeture du document";
+    Text[ es ] = "El documento se va a cerrar.";
+    Text[ fi ] = "Sulje asiakirja";
+    Text[ ca ] = "Tanca el document";
+    Text[ it ] = "Il documento viene chiuso";
+    Text[ sk ] = "Dokument sa zatvára";
+    Text[ da ] = "Programmet lukkes";
+    Text[ sv ] = "Dokumentet stängs";
+    Text[ pl ] = "Zamknij dokument";
+    Text[ pt-BR ] = "Fechar Documento";
+    Text[ th ] = "ปิดเอกสาร";
+    Text[ ja ] = "ドキュメントを閉じる時";
+    Text[ ko ] = "문서를 닫는 중";
+    Text[ zh-CN ] = "正在关闭文档";
+    Text[ zh-TW ] = "正在關閉文件";
+    Text[ tr ] = "Belgeyi kapat";
+    Text[ hi-IN ] = "लेखपत्र बन्द करो";
+    Text[ ar ] = "سوف يتم إغلاق المستند";
+    Text[ he ] = "‮סגירת מסמך‬";
+};
+
+String STR_EVENT_PREPARECLOSEDOC
+{
+    Text [ de ] = "Dokument schließen" ;
+    Text [ en-US ] = "Close Document" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Fechar documento";
+    Text[ ru ] = "Закрыть документ";
+    Text[ el ] = "Κλείσιμο εγγράφου";
+    Text[ nl ] = "Document sluiten";
+    Text[ fr ] = "Fermer le document";
+    Text[ es ] = "Cerrar el documento";
+    Text[ fi ] = "Sulje asiakirja";
+    Text[ ca ] = "Tanca el document";
+    Text[ it ] = "Chiudi documento";
+    Text[ sk ] = "Zatvoriť dokument";
+    Text[ da ] = "Luk dokument";
+    Text[ sv ] = "Stäng dokument";
+    Text[ pl ] = "Zamknij dokument";
+    Text[ pt-BR ] = "Fechar Documento";
+    Text[ th ] = "ปิดเอกสาร";
+    Text[ ja ] = "ドキュメントを閉じた時";
+    Text[ ko ] = "문서 닫기";
+    Text[ zh-CN ] = "关闭文档";
+    Text[ zh-TW ] = "關閉文件";
+    Text[ tr ] = "Belgeyi kapat";
+    Text[ hi-IN ] = "लेखपत्र बन्द करो";
+    Text[ ar ] = "إغلاق المستند";
+    Text[ he ] = "‮סגירת מסמך‬";
+};
+
+String STR_EVENT_OPENDOC
+{
+    Text [ de ] = "Dokument öffnen" ;
+    Text [ en-US ] = "Open Document" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Abrir documento";
+    Text[ ru ] = "Открыть документ";
+    Text[ el ] = "Άνοιγμα εγγράφου";
+    Text[ nl ] = "Document openen";
+    Text[ fr ] = "Ouvrir un document";
+    Text[ es ] = "Abrir documento";
+    Text[ fi ] = "Avaa asiakirja";
+    Text[ ca ] = "Obre el document";
+    Text[ it ] = "Apri documento";
+    Text[ sk ] = "Otvoriť dokument";
+    Text[ da ] = "Åbn dokument";
+    Text[ sv ] = "Öppna dokument";
+    Text[ pl ] = "Otwórz dokument";
+    Text[ pt-BR ] = "Abrir documento";
+    Text[ th ] = "เปิดเอกสาร";
+    Text[ ja ] = "ドキュメントを開く時";
+    Text[ ko ] = "문서 열기";
+    Text[ zh-CN ] = "打开文档";
+    Text[ zh-TW ] = "開啟文件";
+    Text[ tr ] = "Belge aç";
+    Text[ hi-IN ] = "लेखपत्र खोलो";
+    Text[ ar ] = "فتح مستند";
+    Text[ he ] = "‮פתיחת מסך‬";
+};
+
+String STR_EVENT_SAVEDOC
+{
+    Text [ de ] = "Dokument sichern" ;
+    Text [ en-US ] = "Save Document" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Guardar documento";
+    Text[ ru ] = "Сохранить документ";
+    Text[ el ] = "Αποθήκευση εγγράφου";
+    Text[ nl ] = "Document opslaan";
+    Text[ fr ] = "Enregistrer le document";
+    Text[ es ] = "Guardar documento";
+    Text[ fi ] = "Tallenna asiakirja";
+    Text[ ca ] = "Desa el document";
+    Text[ it ] = "Salva documento";
+    Text[ sk ] = "Uložiť dokument";
+    Text[ da ] = "Gem dokument";
+    Text[ sv ] = "Spara dokument";
+    Text[ pl ] = "Zapisz dokument";
+    Text[ pt-BR ] = "Salvar documento";
+    Text[ th ] = "บันทึกเอกสาร";
+    Text[ ja ] = "ドキュメントの保存時";
+    Text[ ko ] = "문서 저장";
+    Text[ zh-CN ] = "保存文档";
+    Text[ zh-TW ] = "保存文件";
+    Text[ tr ] = "Belgeyi kaydet";
+    Text[ hi-IN ] = "लेखपत्र संचित करो";
+    Text[ ar ] = "حفظ المستند";
+    Text[ he ] = "‮שמירת מסמך‬";
+};
+
+String STR_EVENT_SAVEASDOC
+{
+    Text [ de ] = "Dokument sichern als" ;
+    Text [ en-US ] = "Save Document As" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Guardar como";
+    Text[ ru ] = "Сохранить документ как";
+    Text[ el ] = "Αποθήκευση εγγράφου ως";
+    Text[ nl ] = "Document opslaan als";
+    Text[ fr ] = "Enregistrer le document sous";
+    Text[ es ] = "Guardar documento como";
+    Text[ fi ] = "Tallenna asiakirja nimellä";
+    Text[ ca ] = "Desa el document com a";
+    Text[ it ] = "Salva documento con nome";
+    Text[ sk ] = "Uložiť dokument ako";
+    Text[ da ] = "Gem dokument som";
+    Text[ sv ] = "Spara dokument som";
+    Text[ pl ] = "Zapisz dokument jako";
+    Text[ pt-BR ] = "Salvar documento como";
+    Text[ th ] = "บันทึกเอกสารเป็น";
+    Text[ ja ] = "ドキュメントに名前を付けて保存する時";
+    Text[ ko ] = "문서를 다른 이름으로 저장";
+    Text[ zh-CN ] = "文档另存为";
+    Text[ zh-TW ] = "另存新檔";
+    Text[ tr ] = "Belgeyi farklı kaydet";
+    Text[ hi-IN ] = "लेखपत्र संचित करो जैसे";
+    Text[ ar ] = "حفظ المستند كـ";
+    Text[ he ] = "‮שמירת מסמך בשם‬";
+};
+
+String STR_EVENT_SAVEDOCDONE
+{
+    Text [ de ] = "Dokument wurde gesichert" ;
+    Text [ en-US ] = "Document has been saved" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "O documento foi guardado";
+    Text[ ru ] = "Документ сохранен";
+    Text[ el ] = "Το έγγραφο αποθηκεύτηκε";
+    Text[ nl ] = "Document is opgeslagen";
+    Text[ fr ] = "Le document a été enregistré";
+    Text[ es ] = "El documento se guardó";
+    Text[ fi ] = "Asiakirja on tallennettu";
+    Text[ ca ] = "S'ha desat el document";
+    Text[ it ] = "Il documento è stato salvato";
+    Text[ sk ] = "Dokument bol uložený";
+    Text[ da ] = "Dokumentet er blevet gemt";
+    Text[ sv ] = "Dokument har sparats";
+    Text[ pl ] = "Dokument został zapisany";
+    Text[ pt-BR ] = "O documento foi salvo";
+    Text[ th ] = "บันทึกเอกสารแล้ว";
+    Text[ ja ] = "ドキュメントが保存された時";
+    Text[ ko ] = "문서가 저장되었습니다.";
+    Text[ zh-CN ] = "文档已经存盘";
+    Text[ zh-TW ] = "文件已經儲存";
+    Text[ tr ] = "Belge kaydedildi";
+    Text[ hi-IN ] = "लेखपत्र को संचित किया";
+    Text[ ar ] = "تم حفظ المستند";
+    Text[ he ] = "‮המסמך נשמר‬";
+};
+
+String STR_EVENT_SAVEASDOCDONE
+{
+    Text [ de ] = "Dokument wurde gesichert als" ;
+    Text [ en-US ] = "Document has been saved as" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "O documento foi guardado como";
+    Text[ ru ] = "Документ сохранен как";
+    Text[ el ] = "Το έγγραφο αποθηκεύτηκε ως";
+    Text[ nl ] = "Document is opgeslagen als";
+    Text[ fr ] = "Le document a été enregistré sous";
+    Text[ es ] = "El documento se guardó como";
+    Text[ fi ] = "Asiakirja on tallennettu nimellä";
+    Text[ ca ] = "S'ha anomenat i desat el document";
+    Text[ it ] = "Il documento è stato salvato con il nome";
+    Text[ sk ] = "Dokument bol uložený ako";
+    Text[ da ] = "Dokumentet er blevet gemt som";
+    Text[ sv ] = "Dokument har sparats som";
+    Text[ pl ] = "Dokument został zapisany jako";
+    Text[ pt-BR ] = "O documento foi salvo como";
+    Text[ th ] = "บันทึกเอกสารเป็นแล้ว";
+    Text[ ja ] = "ドキュメントに名前を付けて保存した時";
+    Text[ ko ] = "문서가 다음의 이름으로 저장되었습니다";
+    Text[ zh-CN ] = "文档已经存盘为";
+    Text[ zh-TW ] = "文件已經儲存為";
+    Text[ tr ] = "Belge farklı kaydedildi";
+    Text[ hi-IN ] = "लेखपत्र को संचित किया जैसे";
+    Text[ ar ] = "تم حفظ المستند كـ";
+    Text[ he ] = "‮המסמך נשמר בשם‬";
+};
+
+String STR_EVENT_ACTIVATEDOC
+{
+    Text [ de ] = "Dokument aktivieren" ;
+    Text [ en-US ] = "Activate Document" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Activar documento";
+    Text[ ru ] = "Активировать документ";
+    Text[ el ] = "Ενεργοποίηση εγγράφου";
+    Text[ nl ] = "Document activeren";
+    Text[ fr ] = "Activer le document";
+    Text[ es ] = "Activar documento";
+    Text[ fi ] = "Aktivoi asiakirja";
+    Text[ ca ] = "Activa el document";
+    Text[ it ] = "Attiva documento";
+    Text[ sk ] = "Aktivovať dokument";
+    Text[ da ] = "Aktiver dokument";
+    Text[ sv ] = "Aktivera dokument";
+    Text[ pl ] = "Uaktywnij dokument";
+    Text[ pt-BR ] = "Ativar documento";
+    Text[ th ] = "เอกสารที่ใช้งานอยู่";
+    Text[ ja ] = "ドキュメントをアクティブにした時";
+    Text[ ko ] = "문서 활성화";
+    Text[ zh-CN ] = "启动文档";
+    Text[ zh-TW ] = "啟動文件";
+    Text[ tr ] = "Belgeyi etkinleştir";
+    Text[ hi-IN ] = "लेखपत्र संचालित करो";
+    Text[ ar ] = "تنشيط المستند";
+    Text[ he ] = "‮מסמך פעיל‬";
+};
+
+String STR_EVENT_DEACTIVATEDOC
+{
+    Text [ de ] = "Dokument deaktivieren" ;
+    Text [ en-US ] = "Deactivate Document" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Desactivar documento";
+    Text[ ru ] = "Деактивировать документ";
+    Text[ el ] = "Απενεργοποίηση εγγράφου";
+    Text[ nl ] = "Document deactiveren";
+    Text[ fr ] = "Désactiver le document";
+    Text[ es ] = "Desactivar documento";
+    Text[ fi ] = "Poista asiakirja käytöstä";
+    Text[ ca ] = "Desactiva el document";
+    Text[ it ] = "Disattiva documento";
+    Text[ sk ] = "Dezaktivovať dokument";
+    Text[ da ] = "Deaktiver dokument";
+    Text[ sv ] = "Deaktivera dokument";
+    Text[ pl ] = "Dezaktywuj dokument";
+    Text[ pt-BR ] = "Desativar documento";
+    Text[ th ] = "เอกสารที่ไม่ได้ใช้งาน";
+    Text[ ja ] = "ドキュメントを非アクティブにした時";
+    Text[ ko ] = "문서 비활성화";
+    Text[ zh-CN ] = "关闭文档";
+    Text[ zh-TW ] = "关闭文件";
+    Text[ tr ] = "Belgeyi  devreden çıkart";
+    Text[ hi-IN ] = "लेखपत्र निष्क्रिय करो";
+    Text[ ar ] = "إلغاء تنشيط المستند";
+    Text[ he ] = "‮מסמך לא פעיל‬";
+};
+
+String STR_EVENT_PRINTDOC
+{
+    Text [ de ] = "Dokument drucken" ;
+    Text [ en-US ] = "Print Document" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Imprimir documento";
+    Text[ ru ] = "Печатать документ";
+    Text[ el ] = "Εκτύπωση εγγράφου";
+    Text[ nl ] = "Document afdrukken";
+    Text[ fr ] = "Imprimer le document";
+    Text[ es ] = "Imprimir documento";
+    Text[ fi ] = "Tulosta asiakirja";
+    Text[ ca ] = "Imprimeix el document";
+    Text[ it ] = "Stampa documento";
+    Text[ sk ] = "Tlač dokumentu";
+    Text[ da ] = "Udskriv dokument";
+    Text[ sv ] = "Skriv ut dokument";
+    Text[ pl ] = "Drukuj dokument";
+    Text[ pt-BR ] = "Imprimir documento";
+    Text[ th ] = "พิมพ์เอกสาร";
+    Text[ ja ] = "ドキュメントの印刷時";
+    Text[ ko ] = "문서 인쇄";
+    Text[ zh-CN ] = "打印文档";
+    Text[ zh-TW ] = "列印文件";
+    Text[ tr ] = "Belgeyi yazdır";
+    Text[ hi-IN ] = "लेखपत्र छपाई";
+    Text[ ar ] = "طباعة المستند";
+    Text[ he ] = "‮הדפסת מסמך‬";
+};
+
+String STR_EVENT_MODIFYCHANGED
+{
+    Text [ de ] = "'Geändert'-Status wurde geändert" ;
+    Text [ en-US ] = "'Modified' status was changed" ;
+    Text[ pt ] = "'Modified' status was changed";
+    Text[ ru ] = "'Modified' status was changed";
+    Text[ el ] = "'Modified' status was changed";
+    Text[ nl ] = "'Modified' status was changed";
+    Text[ fr ] = "Le statut 'Modifié' a changé";
+    Text[ es ] = "El estado 'Modificado el' ha cambiado.";
+    Text[ fi ] = "'Modified' status was changed";
+    Text[ ca ] = "'Modified' status was changed";
+    Text[ it ] = "Lo stato 'Modificato' è stato cambiato";
+    Text[ sk ] = "'Modified' status bol zmenený";
+    Text[ da ] = "'Modified' status was changed";
+    Text[ sv ] = "Status 'Ändrad' har ändrats";
+    Text[ pl ] = "'Modified' status was changed";
+    Text[ pt-BR ] = "'Modified' status was changed";
+    Text[ th ] = "'Modified' status was changed";
+    Text[ ja ] = "｢変更｣ステータスの変更時";
+    Text[ ko ] = "'수정 날짜'의 상태가 변경됨";
+    Text[ zh-CN ] = "状态'已更改'已经更改。";
+    Text[ zh-TW ] = "狀態 [已變更] 已經變更。";
+    Text[ tr ] = "'Modified' status was changed";
+    Text[ hi-IN ] = "'Modified' status was changed";
+    Text[ ar ] = "'Modified' status was changed";
+    Text[ he ] = "'Modified' status was changed";
+};
+
+
+
+
+
+
+
+
+
+
+
+String RID_STR_NOWELCOMESCREEN
+{
+    Text [ de ] = "Tipps nicht mehr anzeigen" ;
+    Text [ en-US ] = "Don't display tips" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Não mostrar sugestões";
+    Text[ ru ] = "Не показывать всплывающие подсказки";
+    Text[ el ] = "Να μην εμφανιστούν άλλες συμβουλές";
+    Text[ nl ] = "Tips niet meer weergeven";
+    Text[ fr ] = "Ne plus afficher les astuces";
+    Text[ es ] = "No mostrar más las sugerencias";
+    Text[ fi ] = "Älä näytä vihjeitä.";
+    Text[ ca ] = "No mostris els consells";
+    Text[ it ] = "Non mostrare più i suggerimenti";
+    Text[ sk ] = "Nezobrazovať tipy";
+    Text[ da ] = "Vis ikke flere tip";
+    Text[ sv ] = "Visa inte tips mer";
+    Text[ pl ] = "Nie wyświetlaj wskazówek";
+    Text[ pt-BR ] = "Não exibir dicas";
+    Text[ th ] = "อย่าแสดงคำแนะนำ";
+    Text[ ja ] = "ヒントを表示しない";
+    Text[ ko ] = "팁! 표시하지 않음";
+    Text[ zh-CN ] = "不再显示提示";
+    Text[ zh-TW ] = "不要再顯示提示";
+    Text[ tr ] = "Öneri görüntüleme";
+    Text[ hi-IN ] = "सुझावों को मत दिखाओ";
+    Text[ ar ] = "عدم إظهار التلميحات مرة أخرى";
+    Text[ he ] = "‮לא להציג טיפים‬";
+};
+
+
+
+
+
+ //----------------------------------------------------------------------------
+
+String RID_ENVTOOLBOX
+{
+    Text [ de ] = "Funktionsleiste" ;
+    Text [ en-US ] = "Function Bar" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Barra de funções";
+    Text[ ru ] = "Панель функций";
+    Text[ el ] = "Γραμμή λειτουργιών";
+    Text[ nl ] = "Werkbalk";
+    Text[ fr ] = "Barre de fonctions";
+    Text[ es ] = "Barra de funciones";
+    Text[ fi ] = "Toimintorivi";
+    Text[ ca ] = "Barra de funcions";
+    Text[ it ] = "Barra delle funzioni";
+    Text[ sk ] = "Panel funkcií";
+    Text[ da ] = "Funktionslinje";
+    Text[ sv ] = "Funktionslist";
+    Text[ pl ] = "Pasek funkcji";
+    Text[ pt-BR ] = "Barra de funções";
+    Text[ th ] = "แถบฟังก์ชั่น";
+    Text[ ja ] = "ファンクションバー";
+    Text[ ko ] = "기능 모음";
+    Text[ zh-CN ] = "功能栏";
+    Text[ zh-TW ] = "功能列";
+    Text[ tr ] = "İşlev çubuğu";
+    Text[ hi-IN ] = "फंक्शन् पट्टी";
+    Text[ ar ] = "شريط المهام";
+    Text[ he ] = "‮סרגל פעולות נפוצות‬";
+};
+
+ToolBox RID_ENVTOOLBOX
+{
+    HelpId = RID_ENVTOOLBOX ;
+    ButtonType = BUTTON_SYMBOL ;
+    LineSpacing = TRUE ;
+    Border = TRUE ;
+    Scroll = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Customize = TRUE ;
+    FloatingMode = FALSE ;
+    Hide = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Align = BOXALIGN_TOP ;
+    ItemList  =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_OPENURL ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BROWSE_STOP ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NEWDOCDIRECT ;
+            DropDown = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NEWDOC ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OPENDOC ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SAVEDOC ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SAVEASDOC ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_EDITDOC ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DIRECTEXPORTDOCASPDF ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PRINTDOCDIRECT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FAX ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_CUT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_COPY ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PASTE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_UNDO ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_REDO ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NAVIGATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_STYLE_DESIGNER ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HYPERLINK_DIALOG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HYPERLINK_INSERT ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_WIN_FULLSCREEN ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_RECORDMACRO;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GALLERY ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_CLOSEDOC;
+            Hide = TRUE;
+        };
+    };
+};
+
+ // Image-Listen ----------------------------------------------------------
+
+#define IMAGE_ID_LIST\
+    IdList = {\
+        SID_OPENURL;\
+        SID_BROWSE_BACKWARD;\
+        SID_BROWSE_FORWARD;\
+        SID_BROWSE_STOP;\
+        SID_BROWSE_HOME;\
+        SID_RELOAD;\
+        SID_EDITDOC;\
+        SID_SAVEDOC;\
+        SID_CREATELINK;\
+        SID_PRINTDOCDIRECT;\
+        SID_CUT;\
+        SID_COPY;\
+        SID_UNDO;\
+        SID_REDO;\
+        SID_EXPLORER;\
+        SID_NAVIGATOR;\
+        SID_STYLE_DESIGNER;\
+        SID_AUTOBROWSE;\
+        SID_EXPLORER_CREATEFOLDER;\
+        SID_EXPLORER_CREATEBOOKMARK;\
+        SID_EXPLORER_CREATEWORKPLACE;\
+        SID_EXPLORER_CREATELINK;\
+        SID_EXPLORER_CREATEMAILINTRAY;\
+        SID_EXPLORER_CREATENEWSSERVER;\
+        SID_EXPLORER_CREATEFTPSERVER;\
+        SID_EXPLORER_CREATEDATABASE;\
+        SID_PROPERTIES;\
+        SID_EXPLORER_MAKEROOT;\
+        SID_EXPLORER_MAKEBMKDIR;\
+        SID_EXPLORER_PREVLEVEL;\
+        SID_EXPLORER_IMPORTBOOKMARKS;\
+        SID_EDIT_FRAMESET;\
+        SID_SPLIT_HORIZONTAL;\
+        SID_SPLIT_VERTICAL;\
+        SID_SPLIT_PARENT_HORIZONTAL;\
+        SID_SPLIT_PARENT_VERTICAL;\
+        SID_MODIFY_FRAME;\
+        SID_EXPLORER_SEARCHORIGINAL;\
+        SID_EXPLORER_DETAILS;\
+        SID_EXPLORER_ICONS;\
+    };\
+    IdCount = {\
+        40;\
+    };
+
+#ifndef IMAGE_STDBTN_COLOR
+#define IMAGE_STDBTN_COLOR Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
+#endif
+
+ImageList RID_DEFAULTIMAGELIST_SC
+{
+    Prefix = "sc";
+    MaskColor = IMAGE_STDBTN_COLOR ;
+    IMAGE_ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_LC
+{
+    Prefix = "lc";
+    MaskColor = IMAGE_STDBTN_COLOR ;
+    IMAGE_ID_LIST
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+WarningBox RID_SECURITY_WARNING_HYPERLINK
+{
+    HelpId = HID_WARNING_SECURITY_HYPERLINK;
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ de ] = "Dieser Hyperlink wird \"%s\" öffnen. Wollen Sie fortfahren?" ;
+    Message [ en-US ] = "This hyperlink is going to open \"%s\". Do you want to proceed?" ;
+    Message[ pt ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ ru ] = "Эта гиперссылка открывает %s. Продолжить?";
+    Message[ el ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ nl ] = "Met deze hyperlink wordt \"%s\" geopend. Wilt u doorgaan?";
+    Message[ fr ] = "Cet hyperlien ouvre \"%s\". Continuer ?";
+    Message[ es ] = "Este hiperenlace abrirá \"%s\". ¿Desea continuar?";
+    Message[ fi ] = "Tämä hyperlinkki avaa kohteen \"%s\". Haluatko jatkaa?";
+    Message[ ca ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ it ] = "Questo hyperlink apre \"%s\". Volete procedere?";
+    Message[ sk ] = "Tento odkaz otvorí \"%s\". Chcete pokračovať?";
+    Message[ da ] = "\"Dette hyperlink åbner \"\"%s\"\". Vil du fortsætte?\"";
+    Message[ sv ] = "Den här hyperlänken kommer att öppna \"%s\".  Vill du fortsätta?";
+    Message[ pl ] = "Użycie tego hiperłącza spowoduje otwarcie \"%s\". Czy chcesz kontynuować?";
+    Message[ pt-BR ] = "Este hiperlink abrirá \"%s\". Deseja continuar?";
+    Message[ th ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ ja ] = "このハイパーリンクを \"%s\" で開きます。続行しますか。";
+    Message[ ko ] = "이 하이퍼링크를 통해 \"%s\"이(가) 연결됩니다. 계속 진행하시겠습니까?";
+    Message[ zh-CN ] = "这个超链接将会打开 \"%s\" 。要继续吗？";
+    Message[ zh-TW ] = "這個超連結將會開啟 \"%s\" 。您要繼續嗎？";
+    Message[ tr ] = "Bu bağlantı \"%s\" adresini açacaktır. Devam etmek istiyor musunuz?";
+    Message[ hi-IN ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ ar ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ he ] = "‮קישור זה פותח \"%s\". האם להמשיך?‬";
+};
+
+
+ErrorBox RID_INVALID_URL_MSG
+{
+    Buttons = WB_OK ;
+    Message [ de ] = "Der URL ist ungültig." ;
+    Message [ en-US ] = "The URL is not valid." ;
+    Message[ pt ] = "The URL is not valid.";
+    Message[ ru ] = "The URL is not valid.";
+    Message[ el ] = "The URL is not valid.";
+    Message[ nl ] = "The URL is not valid.";
+    Message[ fr ] = "URL non valide";
+    Message[ es ] = "URL no válido.";
+    Message[ fi ] = "The URL is not valid.";
+    Message[ ca ] = "The URL is not valid.";
+    Message[ it ] = "URL non valido.";
+    Message[ sk ] = "URL je neplatné.";
+    Message[ da ] = "The URL is not valid.";
+    Message[ sv ] = "URL:en är ogiltig.";
+    Message[ pl ] = "The URL is not valid.";
+    Message[ pt-BR ] = "A URL não é válida";
+    Message[ th ] = "The URL is not valid.";
+    Message[ ja ] = "無効な URL です。";
+    Message[ ko ] = "이 URL은 유효하지 않습니다.";
+    Message[ zh-CN ] = "这个 URL 无效。";
+    Message[ zh-TW ] = "URL 無效。";
+    Message[ tr ] = "Bu geçersiz bir URL.";
+    Message[ hi-IN ] = "The URL is not valid.";
+    Message[ ar ] = "The URL is not valid.";
+    Message[ he ] = "Der URL ist ungültig.";
+};
+

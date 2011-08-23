@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,7 +115,7 @@ public:
 
     CustomShapePropertiesPtr        getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; }
 
-    table::TablePropertiesPtr       getTableProperties();
+    table::TablePropertiesPtr		getTableProperties();
 
     void                              setChildPosition( com::sun::star::awt::Point nPosition ){ maChPosition = nPosition; }
     void                              setChildSize( com::sun::star::awt::Size aSize ){ maChSize = aSize; }
@@ -130,12 +130,12 @@ public:
     void                            setName( const rtl::OUString& rName ) { msName = rName; }
     ::rtl::OUString                 getName( ) { return msName; }
     void                            setId( const rtl::OUString& rId ) { msId = rId; }
-    void                            setHidden( sal_Bool bHidden ) { mbHidden = bHidden; }
-    sal_Bool                        getHidden() const { return mbHidden; };
+    void							setHidden( sal_Bool bHidden ) { mbHidden = bHidden; }
+    sal_Bool						getHidden() const { return mbHidden; };
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
     void                            setSubTypeIndex( sal_uInt32 nSubTypeIndex ) { mnSubTypeIndex = nSubTypeIndex; }
-    sal_Int32                       getSubTypeIndex() const { return mnSubTypeIndex; }
+    sal_Int32						getSubTypeIndex() const { return mnSubTypeIndex; }
 
     // setDefaults has to be called if styles are imported (OfficeXML is not storing properties having the default value)
     void                            setDefaults();
@@ -159,7 +159,7 @@ public:
                             const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
                             ShapeIdMap* pShapeMap = 0 );
 
-    void                setXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rXShape )
+    void				setXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rXShape )
                             { mxShape = rXShape; };
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &
                         getXShape() const { return mxShape; }
@@ -197,17 +197,17 @@ protected:
     FillPropertiesPtr           mpFillPropertiesPtr;
     GraphicPropertiesPtr        mpGraphicPropertiesPtr;
     CustomShapePropertiesPtr    mpCustomShapePropertiesPtr;
-    table::TablePropertiesPtr   mpTablePropertiesPtr;
+    table::TablePropertiesPtr	mpTablePropertiesPtr;
     PropertyMap                 maShapeProperties;
     PropertyMap                 maDefaultShapeProperties;
     TextListStylePtr            mpMasterTextListStyle;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
 
-    rtl::OUString       msServiceName;
-    rtl::OUString       msName;
-    rtl::OUString       msId;
-    sal_Int32           mnSubType;      // if this type is not zero, then the shape is a placeholder
-    sal_Int32           mnSubTypeIndex;
+    rtl::OUString		msServiceName;
+    rtl::OUString		msName;
+    rtl::OUString		msId;
+    sal_Int32			mnSubType;      // if this type is not zero, then the shape is a placeholder
+    sal_Int32			mnSubTypeIndex;
 
     ShapeStyleRefMap   maShapeStyleRefs;
 
@@ -219,7 +219,7 @@ private:
     sal_Int32                       mnRotation;
     sal_Bool                        mbFlipH;
     sal_Bool                        mbFlipV;
-    sal_Bool                        mbHidden;
+    sal_Bool						mbHidden;
 };
 
 ::rtl::OUString GetShapeType( sal_Int32 nType );

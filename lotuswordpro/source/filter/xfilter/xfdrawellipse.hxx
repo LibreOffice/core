@@ -61,10 +61,10 @@
  * Change History
  * 2004-2-18 create this file.
  ************************************************************************/
-#ifndef     _XFDRAWELLIPSE_HXX
-#define     _XFDRAWELLIPSE_HXX
+#ifndef		_XFDRAWELLIPSE_HXX
+#define		_XFDRAWELLIPSE_HXX
 
-#include    "xfdrawobj.hxx"
+#include	"xfdrawobj.hxx"
 
 /**
  * @brief
@@ -83,42 +83,42 @@ public:
 
 public:
     /**
-     * @descr   Set ellipse center point.
+     * @descr	Set ellipse center point.
      */
-    void    SetCenterPoint(double x, double y);
+    void	SetCenterPoint(double x, double y);
 
     /**
-     * @descr   Set ellipse center point.
+     * @descr	Set ellipse center point.
      */
-    void    SetCenterPoint(XFPoint pt);
+    void	SetCenterPoint(XFPoint pt);
 
     /**
-     * @descr   Set ellipse radius.
+     * @descr	Set ellipse radius.
      */
-    void    SetRadius(double radiusX, double radiusY);
+    void	SetRadius(double radiusX, double radiusY);
 
     /**
-     * @descr   If only draw part of the ellipse, set the start angle and end angle.
+     * @descr	If only draw part of the ellipse, set the start angle and end angle.
      */
-    void    SetAngle(double start, double end);
+    void	SetAngle(double start, double end);
 
     /**
-     * @descr   Set ellipse draw type,please refer to enumXFDrawKind.
+     * @descr	Set ellipse draw type,please refer to enumXFDrawKind.
      */
-    void    SetDrawKind(enumXFDrawKind kind);
+    void	SetDrawKind(enumXFDrawKind kind);
 
     /**
-     * @descr   Output ellipse obejct.
+     * @descr	Output ellipse obejct.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    XFPoint m_aCenterPoint;
-    double  m_fRadiusX;
-    double  m_fRadiusY;
-    double  m_fStartAngle;
-    double  m_fEndAngle;
-    enumXFDrawKind  m_eDrawKind;
+    XFPoint	m_aCenterPoint;
+    double	m_fRadiusX;
+    double	m_fRadiusY;
+    double	m_fStartAngle;
+    double	m_fEndAngle;
+    enumXFDrawKind	m_eDrawKind;
     sal_Bool m_bUseAngle;
 };
 

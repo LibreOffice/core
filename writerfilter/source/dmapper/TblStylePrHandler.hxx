@@ -14,7 +14,7 @@ namespace dmapper {
 
 class DomainMapper;
 class PropertyMap;
-
+    
 enum TblStyleType
 {
     TBL_STYLE_UNKNOWN,
@@ -45,11 +45,11 @@ private:
 public:
     TblStylePrHandler( DomainMapper & rDMapper );
     virtual ~TblStylePrHandler( );
-
+    
     // Properties
     virtual void attribute(Id Name, Value & val);
     virtual void sprm(Sprm & sprm);
-
+    
     inline PropertyMapPtr       getProperties() { return m_pProperties; };
     inline TblStyleType         getType() { return m_nType; };
 

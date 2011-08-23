@@ -62,8 +62,8 @@
 * 2005-01-12 Create and implement.
 ************************************************************************/
 
-#include    "lwpnumberingoverride.hxx"
-#include    "lwpobjstrm.hxx"
+#include	"lwpnumberingoverride.hxx"
+#include	"lwpobjstrm.hxx"
 
 LwpNumberingOverride::LwpNumberingOverride()
 {
@@ -71,7 +71,7 @@ LwpNumberingOverride::LwpNumberingOverride()
     m_nPosition = 0;
 }
 
-void    LwpNumberingOverride::Read(LwpObjectStream *pStrm)
+void	LwpNumberingOverride::Read(LwpObjectStream *pStrm)
 {
     if (pStrm->QuickReadBool())
     {

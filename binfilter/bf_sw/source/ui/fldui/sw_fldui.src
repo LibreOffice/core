@@ -1,0 +1,1575 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+#define _FLDUI_SRC
+#include "fldui.hrc"
+#include "helpid.h"
+
+/*--------------------------------------------------------------------
+    Beschreibung: Strings fuer die Types
+ --------------------------------------------------------------------*/
+/*--------------------------------------------------------------------
+    Beschreibung: Strings fuer die Types
+ --------------------------------------------------------------------*/
+ //
+ // Bereich Dokument
+ //
+String STR_DATEFLD
+{
+    Text [ de ] = "Datum" ;
+    Text [ en-US ] = "Date" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Data";
+    Text[ ru ] = "Дата";
+    Text[ el ] = "Ημερομηνία";
+    Text[ nl ] = "Datum";
+    Text[ fr ] = "Date";
+    Text[ es ] = "Fecha";
+    Text[ fi ] = "Päivämäärä";
+    Text[ ca ] = "Data";
+    Text[ it ] = "Data";
+    Text[ sk ] = "Dátum";
+    Text[ da ] = "Dato";
+    Text[ sv ] = "Datum";
+    Text[ pl ] = "Data";
+    Text[ pt-BR ] = "Data";
+    Text[ th ] = "วันที่";
+    Text[ ja ] = "日付";
+    Text[ ko ] = "날짜";
+    Text[ zh-CN ] = "日期";
+    Text[ zh-TW ] = "日期";
+    Text[ tr ] = "Tarih";
+    Text[ hi-IN ] = "दिनांक";
+    Text[ ar ] = "التاريخ";
+    Text[ he ] = "‮תאריך‬";
+};
+String STR_TIMEFLD
+{
+    Text [ de ] = "Uhrzeit" ;
+    Text [ en-US ] = "Time" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Hora";
+    Text[ ru ] = "Время";
+    Text[ el ] = "Ώρα";
+    Text[ nl ] = "Tijd";
+    Text[ fr ] = "Heure";
+    Text[ es ] = "Hora";
+    Text[ fi ] = "Aika";
+    Text[ ca ] = "Hora";
+    Text[ it ] = "Orario";
+    Text[ sk ] = "Čas";
+    Text[ da ] = "Klokkeslæt";
+    Text[ sv ] = "Klockslag";
+    Text[ pl ] = "Godzina";
+    Text[ pt-BR ] = "Hora";
+    Text[ th ] = "เวลา";
+    Text[ ja ] = "時刻";
+    Text[ ko ] = "시간";
+    Text[ zh-CN ] = "时间";
+    Text[ zh-TW ] = "時間";
+    Text[ tr ] = "Saat";
+    Text[ hi-IN ] = "समय";
+    Text[ ar ] = "الوقت";
+    Text[ he ] = "‮שעה‬";
+};
+String STR_FILENAMEFLD
+{
+    Text [ de ] = "Dateiname" ;
+    Text [ en-US ] = "File name" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Nome do ficheiro";
+    Text[ ru ] = "Имя файла";
+    Text[ el ] = "Όνομα αρχείου";
+    Text[ nl ] = "Bestandsnaam";
+    Text[ fr ] = "Nom de fichier";
+    Text[ es ] = "Nombre del archivo";
+    Text[ fi ] = "Tiedoston nimi";
+    Text[ ca ] = "Nom del fitxer";
+    Text[ it ] = "Nome file";
+    Text[ sk ] = "Názov súboru";
+    Text[ da ] = "Filnavn";
+    Text[ sv ] = "Filnamn";
+    Text[ pl ] = "Nazwa pliku";
+    Text[ pt-BR ] = "Nome do arquivo";
+    Text[ th ] = "ชื่อแฟ้ม";
+    Text[ ja ] = "ファイル名";
+    Text[ ko ] = "파일 이름";
+    Text[ zh-CN ] = "文件名";
+    Text[ zh-TW ] = "檔案名";
+    Text[ tr ] = "Dosya adı";
+    Text[ hi-IN ] = "फाइल नाम";
+    Text[ ar ] = "اسم الملف";
+    Text[ he ] = "‮שם קובץ‬";
+};
+String STR_DBNAMEFLD
+{
+    Text [ de ] = "Datenbankname" ;
+    Text [ en-US ] = "Database Name" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Nome da base de dados";
+    Text[ ru ] = "Имя базы данных";
+    Text[ el ] = "Όνομα βάσης δεδομένων";
+    Text[ nl ] = "Naam database";
+    Text[ fr ] = "Nom de la base de données";
+    Text[ es ] = "Nombre de base de datos";
+    Text[ fi ] = "Tietokannan nimi";
+    Text[ ca ] = "Nom de la base de dades";
+    Text[ it ] = "Nome database";
+    Text[ sk ] = "Názov databázy";
+    Text[ da ] = "Databasenavn";
+    Text[ sv ] = "Databasnamn";
+    Text[ pl ] = "Nazwa bazy danych";
+    Text[ pt-BR ] = "Nome do Banco de Dados";
+    Text[ th ] = "ชื่อฐานข้อมูล";
+    Text[ ja ] = "データベース名";
+    Text[ ko ] = "데이터베이스 이름";
+    Text[ zh-CN ] = "数据库名称";
+    Text[ zh-TW ] = "資料庫名稱";
+    Text[ tr ] = "Veritabanı adı";
+    Text[ hi-IN ] = "लेखासंचय नाम";
+    Text[ ar ] = "اسم قاعدة البيانات";
+    Text[ he ] = "Datenbankname";
+};
+String STR_CHAPTERFLD
+{
+    Text [ de ] = "Kapitel" ;
+    Text [ en-US ] = "Chapter" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Capítulo";
+    Text[ ru ] = "Глава";
+    Text[ el ] = "Κεφάλαιο";
+    Text[ nl ] = "Hoofdstuk";
+    Text[ fr ] = "Chapitre";
+    Text[ es ] = "Capítulo";
+    Text[ fi ] = "Luku";
+    Text[ ca ] = "Capítol";
+    Text[ it ] = "Capitolo";
+    Text[ sk ] = "Kapitola";
+    Text[ da ] = "Kapitel";
+    Text[ sv ] = "Kapitel";
+    Text[ pl ] = "Rozdział";
+    Text[ pt-BR ] = "Capítulo";
+    Text[ th ] = "บท";
+    Text[ ja ] = "章";
+    Text[ ko ] = "장";
+    Text[ zh-CN ] = "章";
+    Text[ zh-TW ] = "章";
+    Text[ tr ] = "Bölüm";
+    Text[ hi-IN ] = "अध्याय";
+    Text[ ar ] = "الفصل";
+    Text[ he ] = "Kapitel";
+};
+String STR_PAGENUMBERFLD
+{
+    Text [ de ] = "Seitennummer" ;
+    Text [ en-US ] = "Page numbers" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Número de página";
+    Text[ ru ] = "Номера страницы";
+    Text[ el ] = "Αριθμός σελίδας";
+    Text[ nl ] = "Paginanummer";
+    Text[ fr ] = "Numéro de page";
+    Text[ es ] = "Número de página";
+    Text[ fi ] = "Sivunumero";
+    Text[ ca ] = "Número de pàgina";
+    Text[ it ] = "Numero pagina";
+    Text[ sk ] = "Čísla stránok";
+    Text[ da ] = "Sidetal";
+    Text[ sv ] = "Sidnummer";
+    Text[ pl ] = "Numer strony";
+    Text[ pt-BR ] = "Números de página";
+    Text[ th ] = "เลขหน้า";
+    Text[ ja ] = "ページ番号";
+    Text[ ko ] = "페이지 번호";
+    Text[ zh-CN ] = "页码";
+    Text[ zh-TW ] = "頁碼";
+    Text[ tr ] = "Sayfa numarası";
+    Text[ hi-IN ] = "पृष्ठ संख्या";
+    Text[ ar ] = "رقم الصفحة";
+    Text[ he ] = "‮מספרי עמודים‬";
+};
+String STR_DOCSTATFLD
+{
+    Text [ de ] = "Statistik" ;
+    Text [ en-US ] = "Statistics" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Estatística";
+    Text[ ru ] = "Статистика";
+    Text[ el ] = "Στατιστικά";
+    Text[ nl ] = "Statistiek";
+    Text[ fr ] = "Statistiques";
+    Text[ es ] = "Estadística";
+    Text[ fi ] = "Tilastotiedot";
+    Text[ ca ] = "Estadística";
+    Text[ it ] = "Statistiche";
+    Text[ sk ] = "Štatistika";
+    Text[ da ] = "Statistik";
+    Text[ sv ] = "Statistik";
+    Text[ pl ] = "Statystyka";
+    Text[ pt-BR ] = "Estatísticas";
+    Text[ th ] = "สถิติ";
+    Text[ ja ] = "統計";
+    Text[ ko ] = "통계";
+    Text[ zh-CN ] = "统计";
+    Text[ zh-TW ] = "統計";
+    Text[ tr ] = "İstatistik";
+    Text[ hi-IN ] = "अँकड़े";
+    Text[ ar ] = "إحصائيات";
+    Text[ he ] = "סטטיסטיקות";
+};
+String STR_AUTHORFLD
+{
+    Text [ de ] = "Benutzer" ;
+    Text [ en-US ] = "Author" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Autor";
+    Text[ ru ] = "Автор";
+    Text[ el ] = "Χρήστης";
+    Text[ nl ] = "Gebruiker";
+    Text[ fr ] = "Utilisateur";
+    Text[ es ] = "Autor";
+    Text[ fi ] = "Tekijä";
+    Text[ ca ] = "Autor";
+    Text[ it ] = "Autore";
+    Text[ sk ] = "Autor";
+    Text[ da ] = "Bruger";
+    Text[ sv ] = "Användare";
+    Text[ pl ] = "Autor";
+    Text[ pt-BR ] = "Autor";
+    Text[ th ] = "ผู้เขียน";
+    Text[ ja ] = "ユーザー";
+    Text[ ko ] = "작성자";
+    Text[ zh-CN ] = "使用者";
+    Text[ zh-TW ] = "使用者";
+    Text[ tr ] = "Yazan";
+    Text[ hi-IN ] = "लेखक";
+    Text[ ar ] = "المستخدم";
+    Text[ he ] = "‮מחבר‬";
+};
+String STR_TEMPLNAMEFLD
+{
+    Text [ de ] = "Dokumentvorlage" ;
+    Text [ en-US ] = "Templates" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Modelo de documento";
+    Text[ ru ] = "Шаблоны";
+    Text[ el ] = "Πρότυπο εγγράφου";
+    Text[ nl ] = "Sjabloon";
+    Text[ fr ] = "Modèle de document";
+    Text[ es ] = "Plantillas";
+    Text[ fi ] = "Mallit";
+    Text[ ca ] = "Plantilles";
+    Text[ it ] = "Modello";
+    Text[ sk ] = "Šablóny";
+    Text[ da ] = "Dokumentskabelon";
+    Text[ sv ] = "Dokumentmall";
+    Text[ pl ] = "Szablony";
+    Text[ pt-BR ] = "Modelos";
+    Text[ th ] = "แม่แบบ";
+    Text[ ja ] = "ドキュメントテンプレート";
+    Text[ ko ] = "서식 파일";
+    Text[ zh-CN ] = "文档样式";
+    Text[ zh-TW ] = "文件樣式";
+    Text[ tr ] = "Belge şablonu";
+    Text[ hi-IN ] = "नमूनें";
+    Text[ ar ] = "قالب مستند";
+    Text[ he ] = "‮תבניות‬";
+};
+String STR_EXTUSERFLD
+{
+    Text [ de ] = "Absender" ;
+    Text [ en-US ] = "Sender" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Remetente";
+    Text[ ru ] = "Отправитель";
+    Text[ el ] = "Αποστολέας";
+    Text[ nl ] = "Afzender";
+    Text[ fr ] = "Expéditeur";
+    Text[ es ] = "Remitente";
+    Text[ fi ] = "Lähettäjä";
+    Text[ ca ] = "Remitent";
+    Text[ it ] = "Mittente";
+    Text[ sk ] = "Odosielateľ";
+    Text[ da ] = "Afsender";
+    Text[ sv ] = "Avsändare";
+    Text[ pl ] = "Nadawca";
+    Text[ pt-BR ] = "Remetente";
+    Text[ th ] = "ผู้ส่ง";
+    Text[ ja ] = "差出人";
+    Text[ ko ] = "보낸 사람";
+    Text[ zh-CN ] = "发件人";
+    Text[ zh-TW ] = "寄件者";
+    Text[ tr ] = "Gönderen";
+    Text[ hi-IN ] = "भेजनेवाला";
+    Text[ ar ] = "المرسل";
+    Text[ he ] = "Absender";
+};
+ //
+ // Bereich Funktionen
+ //
+String STR_SETFLD
+{
+    Text [ de ] = "Variable setzen" ;
+    Text [ en-US ] = "Set variable" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Definir variável";
+    Text[ ru ] = "Установить переменную";
+    Text[ el ] = "Καθορισμός μεταβλητής";
+    Text[ nl ] = "Variabele definiëren";
+    Text[ fr ] = "Définir une variable";
+    Text[ es ] = "Establecer variable";
+    Text[ fi ] = "Määritä muuttuja";
+    Text[ ca ] = "Defineix la variable";
+    Text[ it ] = "Imposta variabile";
+    Text[ sk ] = "Nastaviť premennú";
+    Text[ da ] = "Definer variabel";
+    Text[ sv ] = "Sätt variabel";
+    Text[ pl ] = "Ustaw zmienną";
+    Text[ pt-BR ] = "Definir variável";
+    Text[ th ] = "กำหนดตัวแปร";
+    Text[ ja ] = "変数の設定";
+    Text[ ko ] = "변수 설정";
+    Text[ zh-CN ] = "设定变量";
+    Text[ zh-TW ] = "設定變數";
+    Text[ tr ] = "Değişken tanımla";
+    Text[ hi-IN ] = "वेरिऐबल सेट्ट करो";
+    Text[ ar ] = "تعيين متغيرة";
+    Text[ he ] = "Variable setzen";
+};
+String STR_GETFLD
+{
+    Text [ de ] = "Variable anzeigen" ;
+    Text [ en-US ] = "Show variable" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Mostrar variável";
+    Text[ ru ] = "Показать переменную";
+    Text[ el ] = "Εμφάνιση μεταβλητής";
+    Text[ nl ] = "Variabele weergeven";
+    Text[ fr ] = "Afficher la variable";
+    Text[ es ] = "Mostrar variable";
+    Text[ fi ] = "Näytä muuttuja";
+    Text[ ca ] = "Mostra la variable";
+    Text[ it ] = "Mostra variabile";
+    Text[ sk ] = "Zobraziť premennú";
+    Text[ da ] = "Vis variabel";
+    Text[ sv ] = "Visa variabel";
+    Text[ pl ] = "Pokaż zmienną";
+    Text[ pt-BR ] = "Mostrar variável";
+    Text[ th ] = "แสดงตัวแปร";
+    Text[ ja ] = "変数の表示";
+    Text[ ko ] = "변수 표시";
+    Text[ zh-CN ] = "显示变量";
+    Text[ zh-TW ] = "顯示變數";
+    Text[ tr ] = "Değişken görüntüle";
+    Text[ hi-IN ] = "वेरिऐबल दिखाओ";
+    Text[ ar ] = "إظهار متغيرة";
+    Text[ he ] = "Variable anzeigen";
+};
+String STR_FORMELFLD
+{
+    Text [ de ] = "Formel einfügen" ;
+    Text [ en-US ] = "Insert Formula" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Inserir fórmula";
+    Text[ ru ] = "Вставить формулу";
+    Text[ el ] = "Εισαγωγή τύπου";
+    Text[ nl ] = "Formule invoegen";
+    Text[ fr ] = "Insérer une formule";
+    Text[ es ] = "Insertar una fórmula";
+    Text[ fi ] = "Lisää kaava";
+    Text[ ca ] = "Insereix fórmula";
+    Text[ it ] = "Inserisci formula";
+    Text[ sk ] = "Vložiť vzorec";
+    Text[ da ] = "Indsæt formel";
+    Text[ sv ] = "Infoga formel";
+    Text[ pl ] = "Wstaw formułę";
+    Text[ pt-BR ] = "Inserir Fórmula";
+    Text[ th ] = "แทรกสูตรคำนวณ";
+    Text[ ja ] = "数式の挿入";
+    Text[ ko ] = "수식 삽입";
+    Text[ zh-CN ] = "插入公式";
+    Text[ zh-TW ] = "插入公式";
+    Text[ tr ] = "Formül ekle";
+    Text[ hi-IN ] = "सूत्र जोड़ो";
+    Text[ ar ] = "إدراج صيغة";
+    Text[ he ] = "Formel einfügen";
+};
+String STR_INPUTFLD
+{
+    Text [ de ] = "Eingabefeld" ;
+    Text [ en-US ] = "Input field" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Campo de entrada";
+    Text[ ru ] = "Поле ввода";
+    Text[ el ] = "Πεδίο εισαγωγής";
+    Text[ nl ] = "Invoerveld";
+    Text[ fr ] = "Champ de saisie";
+    Text[ es ] = "Campo de entrada";
+    Text[ fi ] = "Syöttökenttä";
+    Text[ ca ] = "Camp d'entrada";
+    Text[ it ] = "Campo di inserimento";
+    Text[ sk ] = "Vstupné pole";
+    Text[ da ] = "Inputfelt";
+    Text[ sv ] = "Inmatningsfält";
+    Text[ pl ] = "Pole wprowadzania";
+    Text[ pt-BR ] = "Campo de entrada";
+    Text[ th ] = "ใส่เขตข้อมูล";
+    Text[ ja ] = "入力フィールド";
+    Text[ ko ] = "입력 필드";
+    Text[ zh-CN ] = "输入字段";
+    Text[ zh-TW ] = "輸入欄位";
+    Text[ tr ] = "Giriş alanı";
+    Text[ hi-IN ] = "इनपुट् क्षेत्र";
+    Text[ ar ] = "حقل إدخال";
+    Text[ he ] = "Eingabefeld";
+};
+String STR_SETINPUTFLD
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
+    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
+    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
+    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
+    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
+    Text [ de ] = "Eingabefeld (Variable)" ;
+    Text [ en-US ] = "Input field (variable)" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Campo de entrada (variável)";
+    Text[ ru ] = "Поле ввода (изменяемое)";
+    Text[ el ] = "Πεδίο εισαγωγής (Μεταβλητή)";
+    Text[ nl ] = "Invoerveld (variabele)";
+    Text[ fr ] = "Champ de saisie (pour variables)";
+    Text[ es ] = "Campo de entrada (variable)";
+    Text[ fi ] = "Syöttökenttä (muuttuja)";
+    Text[ ca ] = "Camp d'entrada (variable)";
+    Text[ it ] = "Campo di inserimento (variabile)";
+    Text[ sk ] = "Vstupné pole (premenné)";
+    Text[ da ] = "Inputfelt (variabel)";
+    Text[ sv ] = "Inmatningsfält (variabel)";
+    Text[ pl ] = "Pole wprowadzania (Zmienna)";
+    Text[ pt-BR ] = "Campo de entrada (variável)";
+    Text[ th ] = "ใส่เขตข้อมูล (ตัวแปร)";
+    Text[ ja ] = "入力フィールド (変数)";
+    Text[ ko ] = "입력 필드(변수)";
+    Text[ zh-CN ] = "输入字段(可变)";
+    Text[ zh-TW ] = "輸入欄位(可變)";
+    Text[ tr ] = "Giriş alanı (değişken)";
+    Text[ hi-IN ] = "इनपुट् क्षेत्र (वेरिऐबल)";
+    Text[ ar ] = "حقل إدخال (متغيرة)";
+    Text[ he ] = "Eingabefeld (Variable)";
+};
+String STR_USRINPUTFLD
+{
+    Text [ de ] = "Eingabefeld (Benutzer)" ;
+    Text [ en-US ] = "Input field (user)" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Campo de entrada (utilizador)";
+    Text[ ru ] = "Поле ввода (пользовательское)";
+    Text[ el ] = "Πεδίο εισαγωγής (Χρήστης)";
+    Text[ nl ] = "Invoerveld (gebruiker)";
+    Text[ fr ] = "Champ de saisie (utilisateur)";
+    Text[ es ] = "Campo de entrada (Usuario)";
+    Text[ fi ] = "Syöttökenttä (käyttäjä)";
+    Text[ ca ] = "Camp d'entrada (usuari)";
+    Text[ it ] = "Campo di inserimento (utente)";
+    Text[ sk ] = "Vstupné pole (užívateľ)";
+    Text[ da ] = "Inputfelt (bruger)";
+    Text[ sv ] = "Inmatningsfält (användare)";
+    Text[ pl ] = "Pole wprowadzania (Użytkownik)";
+    Text[ pt-BR ] = "Campo de entrada (usuário)";
+    Text[ th ] = "ใส่เขตข้อมูล (ผู้ใช้)";
+    Text[ ja ] = "入力フィールド (ユーザー)";
+    Text[ ko ] = "입력 필드(사용자)";
+    Text[ zh-CN ] = "输入字段(使用者)";
+    Text[ zh-TW ] = "輸入欄位(使用者)";
+    Text[ tr ] = "Giriş alanı (Kullanıcı)";
+    Text[ hi-IN ] = "इनपुट् क्षेत्र (उपभोक्ता)";
+    Text[ ar ] = "حقل إدخال (المستخدم)";
+    Text[ he ] = "Eingabefeld (Benutzer)";
+};
+String STR_CONDTXTFLD
+{
+    Text [ de ] = "Bedingter Text" ;
+    Text [ en-US ] = "Conditional text" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Texto condicional";
+    Text[ ru ] = "Текст с условием";
+    Text[ el ] = "Κείμενο υπό συνθήκες";
+    Text[ nl ] = "Conditionele tekst";
+    Text[ fr ] = "Texte conditionnel";
+    Text[ es ] = "Texto condicional";
+    Text[ fi ] = "Ehdollinen teksti";
+    Text[ ca ] = "Text condicional";
+    Text[ it ] = "Testo condizionale";
+    Text[ sk ] = "Podmienený text";
+    Text[ da ] = "Betinget tekst";
+    Text[ sv ] = "Villkorlig text";
+    Text[ pl ] = "Tekst warunkowy";
+    Text[ pt-BR ] = "Texto condicional";
+    Text[ th ] = "ข้อความเงื่อนไข";
+    Text[ ja ] = "条件付きテキスト";
+    Text[ ko ] = "조건부 텍스트";
+    Text[ zh-CN ] = "有条件的文字";
+    Text[ zh-TW ] = "有條件的文字";
+    Text[ tr ] = "Koşullu metin";
+    Text[ hi-IN ] = "शर्त के अन्तर्गत टेक्स्ट्";
+    Text[ ar ] = "نص مشروط";
+    Text[ he ] = "Bedingter Text";
+};
+String STR_DDEFLD
+{
+    Text [ de ] = "DDE-Feld" ;
+    Text [ en-US ] = "DDE field" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Campo DDE";
+    Text[ ru ] = "Поле DDE";
+    Text[ el ] = "Πεδίο DDE";
+    Text[ nl ] = "DDE-koppeling";
+    Text[ fr ] = "Champ DDE";
+    Text[ es ] = "Campo DDE";
+    Text[ fi ] = "DDE-kenttä";
+    Text[ ca ] = "Camp DDE";
+    Text[ it ] = "Campo DDE";
+    Text[ sk ] = "Pole DDE";
+    Text[ da ] = "DDE-felt";
+    Text[ sv ] = "DDE-fält";
+    Text[ pl ] = "Pole DDE";
+    Text[ pt-BR ] = "Campo DDE";
+    Text[ th ] = "เขตข้อมูล DDE ";
+    Text[ ja ] = "DDEフィールド";
+    Text[ ko ] = "DDE 필드";
+    Text[ zh-CN ] = "DDE-区域";
+    Text[ zh-TW ] = "DDE-區域";
+    Text[ tr ] = "DDE alanı";
+    Text[ hi-IN ] = "DDE क्षेत्र";
+    Text[ ar ] = "حقل DDE";
+    Text[ he ] = "DDE-Feld";
+};
+String STR_MACROFLD
+{
+    Text [ de ] = "Makro ausführen" ;
+    Text [ en-US ] = "Execute macro" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Executar macro";
+    Text[ ru ] = "Выполнить макрос";
+    Text[ el ] = "Εκτέλεση μακροεντολής";
+    Text[ nl ] = "Macro uitvoeren";
+    Text[ fr ] = "Exécuter la macro";
+    Text[ es ] = "Ejecutar macro";
+    Text[ fi ] = "Suorita makro";
+    Text[ ca ] = "Executa la macro";
+    Text[ it ] = "Esegui macro";
+    Text[ sk ] = "Spustiť makro";
+    Text[ da ] = "Udfør makro";
+    Text[ sv ] = "Utför makro";
+    Text[ pl ] = "Wykonaj makro";
+    Text[ pt-BR ] = "Executar macro";
+    Text[ th ] = "กระทำมาโคร";
+    Text[ ja ] = "マクロの実行";
+    Text[ ko ] = "매크로 실행";
+    Text[ zh-CN ] = "执行宏";
+    Text[ zh-TW ] = "執行巨集";
+    Text[ tr ] = "Makroyu çalıştır";
+    Text[ hi-IN ] = "मॉक्रो चलाओ";
+    Text[ ar ] = "تنفيذ ماكرو";
+    Text[ he ] = "Makro ausführen";
+};
+String STR_SEQFLD
+{
+    Text [ de ] = "Nummernkreis" ;
+    Text [ en-US ] = "Number range" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Sequência";
+    Text[ ru ] = "Диапазон нумерации";
+    Text[ el ] = "Επίπεδα αρίθμησης";
+    Text[ nl ] = "Nummerreeks";
+    Text[ fr ] = "Séquence";
+    Text[ es ] = "Secuencia";
+    Text[ fi ] = "Numeroalue";
+    Text[ ca ] = "Seqüència";
+    Text[ it ] = "Sequenza";
+    Text[ sk ] = "Interval číslovania";
+    Text[ da ] = "Sekvensnummererering";
+    Text[ sv ] = "Nummersekvens";
+    Text[ pl ] = "Sekwencja";
+    Text[ pt-BR ] = "Intervalo numérico";
+    Text[ th ] = "ช่วงหน้า";
+    Text[ ja ] = "連番";
+    Text[ ko ] = "번호 범위";
+    Text[ zh-CN ] = "编号顺序";
+    Text[ zh-TW ] = "編號順序";
+    Text[ tr ] = "Numara aralığı";
+    Text[ hi-IN ] = "संख्या फैलाव";
+    Text[ ar ] = "ترقيم متسلسل";
+    Text[ he ] = "Nummernkreis";
+};
+String STR_SETREFPAGEFLD
+{
+    Text [ de ] = "Seitenvariable setzen" ;
+    Text [ en-US ] = "Set page variable" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Definir variável de página";
+    Text[ ru ] = "Установить переменную";
+    Text[ el ] = "Καθορισμός μεταβλητής σελίδας";
+    Text[ nl ] = "Paginavariabele definiëren";
+    Text[ fr ] = "Variable de page";
+    Text[ es ] = "Determinar variable de página";
+    Text[ fi ] = "Määritä sivumuuttuja";
+    Text[ ca ] = "Determina variable de pàgina";
+    Text[ it ] = "Imposta variabile di pagina";
+    Text[ sk ] = "Nastaviť premennú stránky";
+    Text[ da ] = "Definer sidevariabel";
+    Text[ sv ] = "Sätt sidvariabel";
+    Text[ pl ] = "Ustaw zmienną strony";
+    Text[ pt-BR ] = "Definir variável de página";
+    Text[ th ] = "กำหนดตัวแปรหน้า";
+    Text[ ja ] = "ページ変数の設定";
+    Text[ ko ] = "페이지 변수 설정";
+    Text[ zh-CN ] = "设定页面变数";
+    Text[ zh-TW ] = "設定頁面變數";
+    Text[ tr ] = "Sayfa değişkeni tanımla";
+    Text[ hi-IN ] = "पृष्ठ वेरिऐबल को सेट्ट करो ";
+    Text[ ar ] = "تعيين متغيرة صفحة";
+    Text[ he ] = "Seitenvariable setzen";
+};
+String STR_GETREFPAGEFLD
+{
+    Text [ de ] = "Seitenvariable anzeigen" ;
+    Text [ en-US ] = "Show page variable" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Mostrar variável de página";
+    Text[ ru ] = "Показать переменные страницы";
+    Text[ el ] = "Εμφάνιση μεταβλητής σελίδας";
+    Text[ nl ] = "Paginavariabele weergeven";
+    Text[ fr ] = "Affichage de variable de page";
+    Text[ es ] = "Mostrar variable de página";
+    Text[ fi ] = "Näytä sivumuuttuja";
+    Text[ ca ] = "Mostra variable de pàgina";
+    Text[ it ] = "Mostra variabile di pagina";
+    Text[ sk ] = "Zobraziť premennú stránky";
+    Text[ da ] = "Vis sidevariabel";
+    Text[ sv ] = "Visa sidvariabel";
+    Text[ pl ] = "Pokaż zmienną strony";
+    Text[ pt-BR ] = "Mostrar variável de página";
+    Text[ th ] = "แสดงตัวแปรหน้า";
+    Text[ ja ] = "ページ変数の表示";
+    Text[ ko ] = "페이지 변수 표시";
+    Text[ zh-CN ] = "显示页面变数";
+    Text[ zh-TW ] = "顯示頁面變數";
+    Text[ tr ] = "Sayfa değişkenini görüntüle";
+    Text[ hi-IN ] = "पृष्ठ वेरिऐबल को दिखाओ";
+    Text[ ar ] = "إظهار متغيرة صفحة";
+    Text[ he ] = "Seitenvariable anzeigen";
+};
+String STR_INTERNETFLD
+{
+    Text [ de ] = "URL laden" ;
+    Text [ en-US ] = "Load URL" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Carregar URL";
+    Text[ ru ] = "Адрес URL";
+    Text[ el ] = "Φόρτωση URL";
+    Text[ nl ] = "URL laden";
+    Text[ fr ] = "Charger l'URL";
+    Text[ es ] = "Cargar URL";
+    Text[ fi ] = "Lataa URL-osoite";
+    Text[ ca ] = "Carrega l'URL";
+    Text[ it ] = "Carica URL";
+    Text[ sk ] = "Načítať URL";
+    Text[ da ] = "Indlæs URL";
+    Text[ sv ] = "Ladda URL";
+    Text[ pl ] = "Ładuj URL";
+    Text[ pt-BR ] = "Carregar URL";
+    Text[ th ] = "โหลด URL";
+    Text[ ja ] = "URLの読み込み";
+    Text[ ko ] = "URL 로드";
+    Text[ zh-CN ] = "装入 URL";
+    Text[ zh-TW ] = "載入 URL";
+    Text[ tr ] = "URL'yi yükle";
+    Text[ hi-IN ] = "URL लोड़ करो";
+    Text[ ar ] = "تحميل URL";
+    Text[ he ] = "URL ‮טען‬";
+};
+String STR_JUMPEDITFLD
+{
+    Text [ de ] = "Plat~zhalter" ;
+    Text [ en-US ] = "Placeholder" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Marcador de ~posição";
+    Text[ ru ] = "Поле подстановки";
+    Text[ el ] = "Πλαίσιο δείκτης τοποθέτησης";
+    Text[ nl ] = "~Plaatsaanwijzer";
+    Text[ fr ] = "~Substituant";
+    Text[ es ] = "~Comodín";
+    Text[ fi ] = "Paikkamerkki";
+    Text[ ca ] = "Marcador";
+    Text[ it ] = "Segnaposto";
+    Text[ sk ] = "Zástupný znak";
+    Text[ da ] = "Pladsholdere";
+    Text[ sv ] = "~Platshållare";
+    Text[ pl ] = "Znak-wypełniacz";
+    Text[ pt-BR ] = "Marcador de posição";
+    Text[ th ] = "ตัวยึดตำแหน่ง";
+    Text[ ja ] = "プレースホルダ";
+    Text[ ko ] = "플레이스홀더";
+    Text[ zh-CN ] = "通配符";
+    Text[ zh-TW ] = "萬用字元";
+    Text[ tr ] = "Genel arama  karakteri";
+    Text[ hi-IN ] = "स्थानधारक";
+    Text[ ar ] = "عنصر نائب";
+    Text[ he ] = "Plat~zhalter";
+};
+String STR_COMBINED_CHARS
+{
+    Text [ de ] = "Zeichen kombinieren" ;
+    Text [ en-US ] = "Combine characters";
+    Text[ pt ] = "Combinar caracteres";
+    Text[ ru ] = "Объединить символы";
+    Text[ el ] = "Συνδυασμός χαρακτήρων";
+    Text[ nl ] = "Tekens combineren";
+    Text[ fr ] = "Combiner les caractères";
+    Text[ es ] = "Combinar caracteres";
+    Text[ fi ] = "Yhdistä merkit";
+    Text[ ca ] = "Combina caràcters";
+    Text[ it ] = "Combina caratteri";
+    Text[ sk ] = "Zrovnať znaky";
+    Text[ da ] = "Kombiner tegn";
+    Text[ sv ] = "Kombinera tecken";
+    Text[ pl ] = "Połącz znaki";
+    Text[ pt-BR ] = "Combinar caracteres";
+    Text[ th ] = "เชื่อมตัวอักขระ";
+    Text[ ja ] = "組み文字";
+    Text[ ko ] = "문자 결합";
+    Text[ zh-CN ] = "字符组合";
+    Text[ zh-TW ] = "字元組合";
+    Text[ tr ] = "Karakterleri birleştir";
+    Text[ hi-IN ] = "अक्षरों को मिलाओ";
+    Text[ ar ] = "ضم الأحرف";
+    Text[ he ] = "Zeichen kombinieren";
+};
+String STR_DROPDOWN
+{
+    Text [ de ] = "Eingabeliste" ;
+    Text [ en-US ] = "Input list" ;
+    Text[ pt ] = "Input list";
+    Text[ ru ] = "Input list";
+    Text[ el ] = "Input list";
+    Text[ nl ] = "Input list";
+    Text[ fr ] = "Liste de saisie";
+    Text[ es ] = "Lista de entrada";
+    Text[ fi ] = "Input list";
+    Text[ ca ] = "Input list";
+    Text[ it ] = "Elenco digitazioni";
+    Text[ sk ] = "Vstupný zoznam";
+    Text[ da ] = "Input list";
+    Text[ sv ] = "Inmatningslista";
+    Text[ pl ] = "Input list";
+    Text[ pt-BR ] = "Input list";
+    Text[ th ] = "Input list";
+    Text[ ja ] = "入力項目";
+    Text[ ko ] = "입력 목록";
+    Text[ zh-CN ] = "输入列单";
+    Text[ zh-TW ] = "輸入清單";
+    Text[ tr ] = "Input list";
+    Text[ hi-IN ] = "Input list";
+    Text[ ar ] = "Input list";
+    Text[ he ] = "Input list";
+};
+ //
+ // Bereich Referenzen
+ //
+String STR_SETREFFLD
+{
+    Text [ de ] = "Referenz setzen" ;
+    Text [ en-US ] = "Set Reference" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Definir referência";
+    Text[ ru ] = "Установить ссылку";
+    Text[ el ] = "Ορισμός παραπομπής";
+    Text[ nl ] = "Verwijzing definiëren";
+    Text[ fr ] = "Définir une référence";
+    Text[ es ] = "Establecer referencia";
+    Text[ fi ] = "Määritä viite";
+    Text[ ca ] = "Estableix referència";
+    Text[ it ] = "Imposta riferimento";
+    Text[ sk ] = "Nastaviť odkaz";
+    Text[ da ] = "Definer reference";
+    Text[ sv ] = "Sätt referens";
+    Text[ pl ] = "Określ odwołanie";
+    Text[ pt-BR ] = "Definir Referência";
+    Text[ th ] = "กำหนดการอ้างอิง";
+    Text[ ja ] = "参照の設定";
+    Text[ ko ] = "참조 설정";
+    Text[ zh-CN ] = "设定引用";
+    Text[ zh-TW ] = "設定參照";
+    Text[ tr ] = "Referans tanımla";
+    Text[ hi-IN ] = "रेफरेन्स सेट्ट करो";
+    Text[ ar ] = "تعيين مرجع";
+    Text[ he ] = "Referenz setzen";
+};
+String STR_GETREFFLD
+{
+    Text [ de ] = "Referenz einfügen" ;
+    Text [ en-US ] = "Insert Reference" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Inserir referência";
+    Text[ ru ] = "Вставить ссылку";
+    Text[ el ] = "Εισαγωγή παραπομπής";
+    Text[ nl ] = "Verwijzing invoegen";
+    Text[ fr ] = "Insérer une référence";
+    Text[ es ] = "Insertar referencia";
+    Text[ fi ] = "Lisää viite";
+    Text[ ca ] = "Insereix referència";
+    Text[ it ] = "Inserisci riferimento";
+    Text[ sk ] = "Vložiť referenciu";
+    Text[ da ] = "Indsæt reference";
+    Text[ sv ] = "Infoga referens";
+    Text[ pl ] = "Wstaw odwołanie";
+    Text[ pt-BR ] = "Inserir Referência";
+    Text[ th ] = "แทรกการอ้างอิง";
+    Text[ ja ] = "参照の挿入";
+    Text[ ko ] = "참조 삽입";
+    Text[ zh-CN ] = "插入引用";
+    Text[ zh-TW ] = "插入參照";
+    Text[ tr ] = "Referans ekle";
+    Text[ hi-IN ] = "रेफरेन्स जोड़ो";
+    Text[ ar ] = "إدراج مرجع";
+    Text[ he ] = "Referenz einfügen";
+};
+ //
+ //  Bereich Datenbank
+ //
+String STR_DBFLD
+{
+    Text [ de ] = "Seriendruck-Feld" ;
+    Text [ en-US ] = "Mail merge fields" ;
+    Text [ x-comment ] = "EM April 2003: German should be \"Seriendruck-Felder\"";
+    Text[ pt ] = "Campo para cartas em série";
+    Text[ ru ] = "Поля баз данных";
+    Text[ el ] = "Πεδίο εγκυκλίου επιστολής";
+    Text[ nl ] = "Standaardbriefveld";
+    Text[ fr ] = "Champs de mailing";
+    Text[ es ] = "Campos de la impresión en serie";
+    Text[ fi ] = "Joukkokirjeen kenttä";
+    Text[ ca ] = "Camp de carta formulari";
+    Text[ it ] = "Campo stampa in serie";
+    Text[ sk ] = "Pole formulárového listu";
+    Text[ da ] = "Brevfletningsfelt";
+    Text[ sv ] = "Standardbrevfält";
+    Text[ pl ] = "Pole listu seryjnego";
+    Text[ pt-BR ] = "Campo da mala direta";
+    Text[ th ] = "เขตข้อมูลแบบจดหมาย";
+    Text[ ja ] = "差し込み印刷フィールド";
+    Text[ ko ] = "편지 병합 필드";
+    Text[ zh-CN ] = "邮件合并字段";
+    Text[ zh-TW ] = "合併列印欄位";
+    Text[ tr ] = "Posta alanlarını birleştir";
+    Text[ hi-IN ] = "फ़ॉर्म पत्र की क्षेत्र";
+    Text[ ar ] = "حقل خطاب مسلسل";
+    Text[ he ] = "Serienbrieffeld";
+};
+String STR_DBNEXTSETFLD
+{
+    Text [ de ] = "Nächster Datensatz" ;
+    Text [ en-US ] = "Next record" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Registo seguinte";
+    Text[ ru ] = "Следующая запись";
+    Text[ el ] = "Επόμενη εγγραφή";
+    Text[ nl ] = "Volgende record";
+    Text[ fr ] = "Enregistrement suivant";
+    Text[ es ] = "Registro siguiente";
+    Text[ fi ] = "Seuraava tietue";
+    Text[ ca ] = "Registre següent";
+    Text[ it ] = "Record dati successivo";
+    Text[ sk ] = "Ďalší záznam";
+    Text[ da ] = "Næste datapost";
+    Text[ sv ] = "Nästa datapost";
+    Text[ pl ] = "Następny rekord";
+    Text[ pt-BR ] = "Próximo registro";
+    Text[ th ] = "ระเบียนถัดไป";
+    Text[ ja ] = "次のレコード";
+    Text[ ko ] = "다음 레코드";
+    Text[ zh-CN ] = "下一个数据条目";
+    Text[ zh-TW ] = "下一個資料條目";
+    Text[ tr ] = "Sonraki veri kümesi";
+    Text[ hi-IN ] = "अगला अभिलेख";
+    Text[ ar ] = "السجل التالي";
+    Text[ he ] = "Nächster Datensatz";
+};
+String STR_DBNUMSETFLD
+{
+    Text [ de ] = "Beliebiger Datensatz" ;
+    Text [ en-US ] = "Any record" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Qualquer registo";
+    Text[ ru ] = "Любая запись";
+    Text[ el ] = "Οποιαδήποτε εγγραφή";
+    Text[ nl ] = "Willekeurige record";
+    Text[ fr ] = "Enregistrement aléatoire";
+    Text[ es ] = "Cualquier registro";
+    Text[ fi ] = "Mikä tahansa tietue";
+    Text[ ca ] = "Qualsevol registre";
+    Text[ it ] = "Qualsiasi record di dati";
+    Text[ sk ] = "Akýkoľvek záznam";
+    Text[ da ] = "Vilkårlig datapost";
+    Text[ sv ] = "Slumpvis datapost";
+    Text[ pl ] = "Dowolny rekord";
+    Text[ pt-BR ] = "Qualquer registro";
+    Text[ th ] = "ระเบียนใด ๆ";
+    Text[ ja ] = "任意のレコード";
+    Text[ ko ] = "임의의 레코드";
+    Text[ zh-CN ] = "任何一个数据条目";
+    Text[ zh-TW ] = "任何一個資料條目";
+    Text[ tr ] = "Herhangi bir veri kümesi";
+    Text[ hi-IN ] = "किसी अभिलेख";
+    Text[ ar ] = "أي سجل";
+    Text[ he ] = "Beliebiger Datensatz";
+};
+String STR_DBSETNUMBERFLD
+{
+    Text [ de ] = "Datensatznummer" ;
+    Text [ en-US ] = "Record number" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Número do registo";
+    Text[ ru ] = "Номер записи";
+    Text[ el ] = "Αριθμός εγγραφής";
+    Text[ nl ] = "Recordnummer";
+    Text[ fr ] = "Numéro d'enregistrement";
+    Text[ es ] = "Número de registro";
+    Text[ fi ] = "Tietueen numero";
+    Text[ ca ] = "Número de registre";
+    Text[ it ] = "Numero record dati";
+    Text[ sk ] = "Číslo záznamu";
+    Text[ da ] = "Datapostnummer";
+    Text[ sv ] = "Datapostnummer";
+    Text[ pl ] = "Numer rekordu";
+    Text[ pt-BR ] = "Número do registro";
+    Text[ th ] = "เลขระเบียน";
+    Text[ ja ] = "レコード番号";
+    Text[ ko ] = "레코드 번호";
+    Text[ zh-CN ] = "数据条目编号";
+    Text[ zh-TW ] = "資料條目編號";
+    Text[ tr ] = "Veri kümesi numarası";
+    Text[ hi-IN ] = "अभिलेख संख्या";
+    Text[ ar ] = "رقم السجل";
+    Text[ he ] = "Datensatznummer";
+};
+String STR_PREVPAGEFLD
+{
+    Text [ de ] = "Vorherige Seite" ;
+    Text [ en-US ] = "Previous page" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Página anterior";
+    Text[ ru ] = "Предыдущая страница";
+    Text[ el ] = "Προηγούμενη σελίδα";
+    Text[ nl ] = "Vorige pagina";
+    Text[ fr ] = "Page précédente";
+    Text[ es ] = "Página anterior";
+    Text[ fi ] = "Edellinen sivu";
+    Text[ ca ] = "Pàgina anterior";
+    Text[ it ] = "Pagina precedente";
+    Text[ sk ] = "Predchádzajúca stránka";
+    Text[ da ] = "Forrige side";
+    Text[ sv ] = "Föregående sida";
+    Text[ pl ] = "Poprzednia strona";
+    Text[ pt-BR ] = "Página anterior";
+    Text[ th ] = "หน้าก่อน";
+    Text[ ja ] = "前のページ";
+    Text[ ko ] = "이전 페이지";
+    Text[ zh-CN ] = "上一页";
+    Text[ zh-TW ] = "上一頁";
+    Text[ tr ] = "Önceki sayfa";
+    Text[ hi-IN ] = "पिछला पृष्ठ";
+    Text[ ar ] = "الصفحة السابقة";
+    Text[ he ] = "Vorherige Seite";
+};
+String STR_NEXTPAGEFLD
+{
+    Text [ de ] = "Nächste Seite" ;
+    Text [ en-US ] = "Next page" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Página seguinte";
+    Text[ ru ] = "Следующая страница";
+    Text[ el ] = "Επόμενη σελίδα";
+    Text[ nl ] = "Volgende pagina";
+    Text[ fr ] = "Page suivante";
+    Text[ es ] = "Página siguiente";
+    Text[ fi ] = "Seuraava sivu";
+    Text[ ca ] = "Pàgina següent";
+    Text[ it ] = "Pagina successiva";
+    Text[ sk ] = "Ďalšia stránka";
+    Text[ da ] = "Næste side";
+    Text[ sv ] = "Nästa sida";
+    Text[ pl ] = "Następna strona";
+    Text[ pt-BR ] = "Próxima página";
+    Text[ th ] = "หน้าถัดไป";
+    Text[ ja ] = "次のページ";
+    Text[ ko ] = "다음 페이지";
+    Text[ zh-CN ] = "下一页";
+    Text[ zh-TW ] = "下一頁";
+    Text[ tr ] = "Sonraki sayfa";
+    Text[ hi-IN ] = "अगला पृष्ठ";
+    Text[ ar ] = "الصفحة التالية";
+    Text[ he ] = "Nächste Seite";
+};
+String STR_HIDDENTXTFLD
+{
+    Text [ de ] = "Versteckter Text" ;
+    Text [ en-US ] = "Hidden text" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Texto oculto";
+    Text[ ru ] = "Скрытый текст";
+    Text[ el ] = "Κρυφό κείμενο";
+    Text[ nl ] = "Verborgen tekst";
+    Text[ fr ] = "Texte masqué";
+    Text[ es ] = "Texto oculto";
+    Text[ fi ] = "Piiloteksti";
+    Text[ ca ] = "Text ocult";
+    Text[ it ] = "Testo nascosto";
+    Text[ sk ] = "Skrytý text";
+    Text[ da ] = "Skjult tekst";
+    Text[ sv ] = "Dold text";
+    Text[ pl ] = "Ukryty tekst";
+    Text[ pt-BR ] = "Texto oculto";
+    Text[ th ] = "ข้อความที่ซ่อนไว้";
+    Text[ ja ] = "隠しテキスト";
+    Text[ ko ] = "숨겨진 텍스트";
+    Text[ zh-CN ] = "隐入的文字";
+    Text[ zh-TW ] = "隱入的文字";
+    Text[ tr ] = "Gizli";
+    Text[ hi-IN ] = "छिपा हुआ टेक्सट्";
+    Text[ ar ] = "نص مخفي";
+    Text[ he ] = "Versteckter Text";
+};
+ //
+ //  Bereich Benutzerfelder
+ //
+String STR_USERFLD
+{
+    Text [ de ] = "Benutzerfeld" ;
+    Text [ en-US ] = "User Field" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Campo do utilizador";
+    Text[ ru ] = "Поле пользователя";
+    Text[ el ] = "Πεδίο χρήστη";
+    Text[ nl ] = "Gebruikersveld";
+    Text[ fr ] = "Champ d'utilisateur";
+    Text[ es ] = "Campo del usuario";
+    Text[ fi ] = "Käyttäjäkenttä";
+    Text[ ca ] = "Camp de l'usuari";
+    Text[ it ] = "Campo utente";
+    Text[ sk ] = "Pole užívateľa";
+    Text[ da ] = "Brugerdefineret felt";
+    Text[ sv ] = "Användarfält";
+    Text[ pl ] = "Pole użytkownika";
+    Text[ pt-BR ] = "Campo do usuário";
+    Text[ th ] = "เขตข้อมูลผู้ใช้";
+    Text[ ja ] = "ユーザー欄";
+    Text[ ko ] = "사용자 필드";
+    Text[ zh-CN ] = "使用者栏位";
+    Text[ zh-TW ] = "自訂欄位";
+    Text[ tr ] = "Kullanıcı alanı";
+    Text[ hi-IN ] = "उपभोक्ता क्षेत्र";
+    Text[ ar ] = "حقل المستخدم";
+    Text[ he ] = "Benutzerfeld";
+};
+String STR_POSTITFLD
+{
+    Text [ de ] = "Notiz" ;
+    Text [ en-US ] = "Note" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Anotação";
+    Text[ ru ] = "Примечание";
+    Text[ el ] = "Σημείωση";
+    Text[ nl ] = "Aantekening";
+    Text[ fr ] = "Note";
+    Text[ es ] = "Nota";
+    Text[ fi ] = "Huomautus";
+    Text[ ca ] = "Nota";
+    Text[ it ] = "Nota";
+    Text[ sk ] = "Poznámka";
+    Text[ da ] = "Note";
+    Text[ sv ] = "Anteckning";
+    Text[ pl ] = "Notatka";
+    Text[ pt-BR ] = "Anotação";
+    Text[ th ] = "บันทึกย่อ";
+    Text[ ja ] = "コメント";
+    Text[ ko ] = "메모";
+    Text[ zh-CN ] = "备注";
+    Text[ zh-TW ] = "備註";
+    Text[ tr ] = "Not";
+    Text[ hi-IN ] = "सूचना";
+    Text[ ar ] = "ملاحظة";
+    Text[ he ] = "‮הערה‬";
+};
+String STR_SCRIPTFLD
+{
+    Text [ de ] = "Script" ;
+    Text [ en-US ] = "Script" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Script";
+    Text[ ru ] = "Скрипт";
+    Text[ el ] = "Δέσμη ενεργειών";
+    Text[ nl ] = "Script";
+    Text[ fr ] = "Script";
+    Text[ es ] = "Script";
+    Text[ fi ] = "Komentosarja";
+    Text[ ca ] = "Script";
+    Text[ it ] = "Script";
+    Text[ sk ] = "Skript";
+    Text[ da ] = "Script";
+    Text[ sv ] = "Skript";
+    Text[ pl ] = "Skrypt";
+    Text[ pt-BR ] = "Script";
+    Text[ th ] = "สคริปต์";
+    Text[ ja ] = "スクリプト";
+    Text[ ko ] = "스크립트";
+    Text[ zh-CN ] = "脚本";
+    Text[ zh-TW ] = "程式檔";
+    Text[ tr ] = "Betik";
+    Text[ hi-IN ] = "स्क्रिप्ट्";
+    Text[ ar ] = "نص برمجي";
+    Text[ he ] = "‮קוד לביצוה‬";
+};
+String STR_AUTHORITY
+{
+    Text [ de ] = "Eintrag Literaturverzeichnis" ;
+    Text [ en-US ] = "Bibliography entry";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Entrada bibliográfica";
+    Text[ ru ] = "Библиографическая ссылка";
+    Text[ el ] = "Καταχώριση βιβλιογραφίας";
+    Text[ nl ] = "Item voor literatuurlijst";
+    Text[ fr ] = "Entrée de bibliographie";
+    Text[ es ] = "Entrada bibliográfica";
+    Text[ fi ] = "Lähdeluettelomerkintä";
+    Text[ ca ] = "Entrada bibliografia";
+    Text[ it ] = "Voce bibliografia";
+    Text[ sk ] = "Položka v zozname použitej literatúry";
+    Text[ da ] = "Element litteraturliste";
+    Text[ sv ] = "Post litteraturförteckning";
+    Text[ pl ] = "Pozycja bibliograficzna";
+    Text[ pt-BR ] = "Entrada bibliográfica";
+    Text[ th ] = "รายการบรรณานุกรม";
+    Text[ ja ] = "項目 参考文献表";
+    Text[ ko ] = "참고 문헌 항목";
+    Text[ zh-CN ] = "文献目录条目";
+    Text[ zh-TW ] = "條目 參考文獻目錄";
+    Text[ tr ] = "Kaynakça girişi";
+    Text[ hi-IN ] = "ग्रन्थ-सूची प्रविष्टी";
+    Text[ ar ] = "إدخال في فهرس المراجع";
+    Text[ he ] = "‮שורת בבליוגרפיה‬";
+};
+String STR_HIDDENPARAFLD
+{
+    Text [ de ] = "Versteckter Absatz" ;
+    Text [ en-US ] = "Hidden Paragraph" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Parágrafo oculto";
+    Text[ ru ] = "Скрытый абзац";
+    Text[ el ] = "Κρυφή παράγραφος";
+    Text[ nl ] = "Verborgen alinea";
+    Text[ fr ] = "Paragraphe masqué";
+    Text[ es ] = "Párrafo oculto";
+    Text[ fi ] = "Piilotettu kappale";
+    Text[ ca ] = "Paràgraf ocult";
+    Text[ it ] = "Paragrafo vuoto";
+    Text[ sk ] = "Skrytý odstavec";
+    Text[ da ] = "Skjult afsnit";
+    Text[ sv ] = "Dolt stycke";
+    Text[ pl ] = "Ukryty akapit";
+    Text[ pt-BR ] = "Parágrafo oculto";
+    Text[ th ] = "ย่อหน้าที่ซ่อนไว้";
+    Text[ ja ] = "隠し段落";
+    Text[ ko ] = "숨겨진 단락";
+    Text[ zh-CN ] = "隐入的段落";
+    Text[ zh-TW ] = "隱入的段落";
+    Text[ tr ] = "Gizli paragraf";
+    Text[ hi-IN ] = "छिपा हुआ परिच्छेद";
+    Text[ ar ] = "فقرة مخفية";
+    Text[ he ] = "!";
+};
+ //
+ // Bereich DokumentInfo
+ //
+String STR_DOCINFOFLD
+{
+    Text [ de ] = "Dokumentinfo" ;
+    Text [ en-US ] = "DocInformation" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Info. sobre documento";
+    Text[ ru ] = "Сведения о документе";
+    Text[ el ] = "Πληροφορίες εγγράφου";
+    Text[ nl ] = "Documentinfo";
+    Text[ fr ] = "Info document";
+    Text[ es ] = "Información del documento";
+    Text[ fi ] = "Asiakirjatiedot";
+    Text[ ca ] = "Informació del document";
+    Text[ it ] = "Info documento";
+    Text[ sk ] = "Informácie o dokumente";
+    Text[ da ] = "Dokumentinfo";
+    Text[ sv ] = "Dokumentinformation";
+    Text[ pl ] = "Informacje o dokumencie";
+    Text[ pt-BR ] = "Info. do Doc.";
+    Text[ th ] = "ข้อมูลเอกสาร";
+    Text[ ja ] = "ドキュメント情報";
+    Text[ ko ] = "문서 정보";
+    Text[ zh-CN ] = "文档信息";
+    Text[ zh-TW ] = "文件資訊";
+    Text[ tr ] = "Belge bilgileri";
+    Text[ hi-IN ] = "DocInformation";
+    Text[ ar ] = "معلومات المستند";
+    Text[ he ] = "Dokumentinfo";
+};
+/*--------------------------------------------------------------------
+    Beschreibung: SubCmd-Strings
+ --------------------------------------------------------------------*/
+String FLD_DATE_STD
+{
+    Text [ de ] = "Datum" ;
+    Text [ en-US ] = "Date";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Data";
+    Text[ ru ] = "Дата";
+    Text[ el ] = "Ημερομηνία";
+    Text[ nl ] = "Datum";
+    Text[ fr ] = "Date";
+    Text[ es ] = "Fecha";
+    Text[ fi ] = "Päivämäärä";
+    Text[ ca ] = "Data";
+    Text[ it ] = "Data";
+    Text[ sk ] = "Dátum";
+    Text[ da ] = "Dato";
+    Text[ sv ] = "Datum";
+    Text[ pl ] = "Data";
+    Text[ pt-BR ] = "Data";
+    Text[ th ] = "วันที่";
+    Text[ ja ] = "日付";
+    Text[ ko ] = "날짜";
+    Text[ zh-CN ] = "日期";
+    Text[ zh-TW ] = "日期";
+    Text[ tr ] = "Tarih";
+    Text[ hi-IN ] = "दिनांक";
+    Text[ ar ] = "التاريخ";
+    Text[ he ] = "‮תאריך‬";
+};
+String FLD_DATE_FIX
+{
+    Text [ de ] = "Datum (fix)" ;
+    Text [ en-US ] = "Date (fixed)" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Data (fixa)";
+    Text[ ru ] = "Дата (фикс.)";
+    Text[ el ] = "Ημερομηνία (Σταθερά)";
+    Text[ nl ] = "Datum (vast)";
+    Text[ fr ] = "Date (fixe)";
+    Text[ es ] = "Fecha (fija)";
+    Text[ fi ] = "Kiinteä päivämäärä";
+    Text[ ca ] = "Data (fixa)";
+    Text[ it ] = "Data (fissa)";
+    Text[ sk ] = "Dátum (nemenné)";
+    Text[ da ] = "Dato (fast)";
+    Text[ sv ] = "Datum (fast)";
+    Text[ pl ] = "Data (stała)";
+    Text[ pt-BR ] = "Data (fixa)";
+    Text[ th ] = "วันที่ (คงที่)";
+    Text[ ja ] = "日付(固定)";
+    Text[ ko ] = "날짜(고정적)";
+    Text[ zh-CN ] = "日期(固定)";
+    Text[ zh-TW ] = "日期(固定)";
+    Text[ tr ] = "Tarih (sabit)";
+    Text[ hi-IN ] = "दिनांक (स्थिर)";
+    Text[ ar ] = "تاريخ (ثابت)";
+    Text[ he ] = "Datum (fix)";
+};
+String FLD_TIME_STD
+{
+    Text [ de ] = "Uhrzeit" ;
+    Text [ en-US ] = "Time";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Hora";
+    Text[ ru ] = "Время";
+    Text[ el ] = "Ώρα";
+    Text[ nl ] = "Tijd";
+    Text[ fr ] = "Heure";
+    Text[ es ] = "Hora";
+    Text[ fi ] = "Aika";
+    Text[ ca ] = "Hora";
+    Text[ it ] = "Orario";
+    Text[ sk ] = "Čas";
+    Text[ da ] = "Klokkeslæt";
+    Text[ sv ] = "Klockslag";
+    Text[ pl ] = "Godzina";
+    Text[ pt-BR ] = "Hora";
+    Text[ th ] = "เวลา";
+    Text[ ja ] = "時刻";
+    Text[ ko ] = "시간";
+    Text[ zh-CN ] = "时间";
+    Text[ zh-TW ] = "時間";
+    Text[ tr ] = "Saat";
+    Text[ hi-IN ] = "समय";
+    Text[ ar ] = "الوقت";
+    Text[ he ] = "‮שעה‬";
+};
+String FLD_TIME_FIX
+{
+    Text [ de ] = "Uhrzeit (fix)" ;
+    Text [ en-US ] = "Time (fixed)" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Hora (fixa)";
+    Text[ ru ] = "Время (фикс.)";
+    Text[ el ] = "Ώρα (σταθερά)";
+    Text[ nl ] = "Tijd (vast)";
+    Text[ fr ] = "Heure (fixe)";
+    Text[ es ] = "Hora (fija)";
+    Text[ fi ] = "Kiinteä kellonaika";
+    Text[ ca ] = "Hora (fixa)";
+    Text[ it ] = "Orario (fisso)";
+    Text[ sk ] = "Čas (nemenný)";
+    Text[ da ] = "Klokkeslæt (fast)";
+    Text[ sv ] = "Klockslag (fast)";
+    Text[ pl ] = "Godzina (stała)";
+    Text[ pt-BR ] = "Hora (fixa)";
+    Text[ th ] = "เวลา (คงที่)";
+    Text[ ja ] = "時刻(固定)";
+    Text[ ko ] = "시간 (고정됨)";
+    Text[ zh-CN ] = "时间(固定)";
+    Text[ zh-TW ] = "時間(固定)";
+    Text[ tr ] = "Saat (sabit)";
+    Text[ hi-IN ] = "समय (स्थिर)";
+    Text[ ar ] = "الوقت (ثابت)";
+    Text[ he ] = "Uhrzeit (fix)";
+};
+ //
+ //  SubCmd Statistik
+ //
+String FLD_STAT_TABLE
+{
+    Text [ de ] = "Tabellen" ;
+    Text [ en-US ] = "Tables" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Tabelas";
+    Text[ ru ] = "Таблицы";
+    Text[ el ] = "Πίνακες";
+    Text[ nl ] = "Tabellen";
+    Text[ fr ] = "Tableaux";
+    Text[ es ] = "Tablas";
+    Text[ fi ] = "Taulukot";
+    Text[ ca ] = "Taules";
+    Text[ it ] = "Tabella";
+    Text[ sk ] = "Tabuľky";
+    Text[ da ] = "Tabeller";
+    Text[ sv ] = "Tabeller";
+    Text[ pl ] = "Tabele";
+    Text[ pt-BR ] = "Tabelas";
+    Text[ th ] = "ตาราง";
+    Text[ ja ] = "表";
+    Text[ ko ] = "표";
+    Text[ zh-CN ] = "表格";
+    Text[ zh-TW ] = "表格";
+    Text[ tr ] = "Tablolar";
+    Text[ hi-IN ] = "सारणियाँ";
+    Text[ ar ] = "جداول";
+    Text[ he ] = "‮טבלאות‬";
+};
+
+ //  SubCmd DDETypen
+ //
+
+
+/*--------------------------------------------------------------------
+    Beschreibung: SubType Extuser
+ --------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------
+    Beschreibung: Pfadname
+ --------------------------------------------------------------------*/
+ // Formate FileName
+
+/*--------------------------------------------------------------------
+    Beschreibung: Format Kapitel
+ --------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------
+    Beschreibung: Formate
+ --------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------
+    Beschreibung: Author
+ --------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------
+    Beschreibung:   Varibale setzen
+ --------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------
+    Beschreibung: Ablagefelder
+ --------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------
+    Beschreibung: Formate Referenzen
+ --------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------
+    Beschreibung: Platzhalter
+ --------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------
+    Beschreibung: Nur-Text
+ --------------------------------------------------------------------*/
+String FMT_TEXT
+{
+    Text = "Text" ;
+};
+/*--------------------------------------------------------------------
+    Beschreibung: globale String-Ressourcen
+ --------------------------------------------------------------------*/
+String STR_ALL
+{
+    Text [ de ] = "Alle" ;
+    Text [ en-US ] = "All" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Todos";
+    Text[ ru ] = "Все";
+    Text[ el ] = "Όλα";
+    Text[ nl ] = "Alles";
+    Text[ fr ] = "Tout";
+    Text[ es ] = "Todo";
+    Text[ fi ] = "Kaikki";
+    Text[ ca ] = "Tot";
+    Text[ it ] = "Tutto";
+    Text[ sk ] = "Všetko";
+    Text[ da ] = "Alle";
+    Text[ sv ] = "Alla";
+    Text[ pl ] = "Wszystko";
+    Text[ pt-BR ] = "Tudo";
+    Text[ th ] = "ทั้งหมด";
+    Text[ ja ] = "すべて";
+    Text[ ko ] = "모두";
+    Text[ zh-CN ] = "全部";
+    Text[ zh-TW ] = "全部";
+    Text[ tr ] = "Tümü";
+    Text[ hi-IN ] = "सब";
+    Text[ ar ] = "الكل";
+    Text[ he ] = "‮הכל‬";
+};
+String STR_INSERT
+{
+    Text [ de ] = "Einfügen" ;
+    Text [ en-US ] = "Insert" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Inserir";
+    Text[ ru ] = "Вставить";
+    Text[ el ] = "Εισαγωγή";
+    Text[ nl ] = "Invoegen";
+    Text[ fr ] = "Insérer";
+    Text[ es ] = "Insertar";
+    Text[ fi ] = "Lisää";
+    Text[ ca ] = "Insereix";
+    Text[ it ] = "Inserisci";
+    Text[ sk ] = "Vložiť";
+    Text[ da ] = "Indsæt";
+    Text[ sv ] = "Infoga";
+    Text[ pl ] = "Wstaw";
+    Text[ pt-BR ] = "Inserir";
+    Text[ th ] = "แทรก";
+    Text[ ja ] = "挿入";
+    Text[ ko ] = "삽입";
+    Text[ zh-CN ] = "插入";
+    Text[ zh-TW ] = "插入";
+    Text[ tr ] = "Ekle";
+    Text[ hi-IN ] = "जोड़ो";
+    Text[ ar ] = "إدراج";
+    Text[ he ] = "‮הוספה‬";
+};
+/*--------------------------------------------------------------------
+    Beschreibung:   AustauschStrings fuer Edit/NameFT
+ --------------------------------------------------------------------*/
+String STR_COND
+{
+    Text [ de ] = "Bedin~gung" ;
+    Text [ en-US ] = "~Condition" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "~Condição";
+    Text[ ru ] = "Условие";
+    Text[ el ] = "Όρος";
+    Text[ nl ] = "~Voorwaarde";
+    Text[ fr ] = "~Condition";
+    Text[ es ] = "Condición";
+    Text[ fi ] = "~Ehto";
+    Text[ ca ] = "~Condició";
+    Text[ it ] = "Condizione";
+    Text[ sk ] = "Pod~mienka";
+    Text[ da ] = "Betingelse";
+    Text[ sv ] = "Vill~kor";
+    Text[ pl ] = "~Warunek";
+    Text[ pt-BR ] = "~Condição";
+    Text[ th ] = "เ~งื่อนไข";
+    Text[ ja ] = "条件(~C)";
+    Text[ ko ] = "조건(~C)";
+    Text[ zh-CN ] = "条件(~C)";
+    Text[ zh-TW ] = "條件(~C)";
+    Text[ tr ] = "Koşul";
+    Text[ hi-IN ] = "~शर्त";
+    Text[ ar ] = "شرط";
+    Text[ he ] = "Bedin~gung";
+};
+String STR_TEXT
+{
+    Text [ de ] = "Dann, Sonst" ;
+    Text [ en-US ] = "Then, Else" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Então, Senão";
+    Text[ ru ] = "Затем, Иначе";
+    Text[ el ] = "Τότε, Αλλιώς";
+    Text[ nl ] = "Dan, Anders";
+    Text[ fr ] = "Alors, sinon";
+    Text[ es ] = "Entonces, si no";
+    Text[ fi ] = "Sitten, Muuten";
+    Text[ ca ] = "Aleshores, si no";
+    Text[ it ] = "Poi, altrimenti";
+    Text[ sk ] = "Potom, Ináč";
+    Text[ da ] = "Så, Ellers";
+    Text[ sv ] = "Sedan, annars";
+    Text[ pl ] = "Następnie, W przeciwnym razie";
+    Text[ pt-BR ] = "Então, Senão";
+    Text[ th ] = "จากนั้น, อย่างอื่น";
+    Text[ ja ] = "条件を満たす時、満たさない時";
+    Text[ ko ] = "조건을 충족할 경우, 그렇지 않을 경우";
+    Text[ zh-CN ] = "那么就，否则";
+    Text[ zh-TW ] = "那麼就，否則";
+    Text[ tr ] = "O halde, Yoksa";
+    Text[ hi-IN ] = "Then, Else";
+    Text[ ar ] = "ثم، غير ذلك";
+    Text[ he ] = "Dann, Sonst";
+};
+
+
+
+
+

@@ -53,10 +53,10 @@
  *
  *
  ************************************************************************/
-#ifndef     _XFSTYLEFAMILY_HXX
-#define     _XFSTYLEFAMILY_HXX
+#ifndef		_XFSTYLEFAMILY_HXX
+#define		_XFSTYLEFAMILY_HXX
 
-enum    enumXFStyleFamily
+enum	enumXFStyleFamily
 {
     enumXFStyleUnknown,
     enumXFStyleText,

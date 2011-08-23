@@ -1,0 +1,175 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include <bf_svx/svxids.hrc>
+#include "pview.hrc"
+#include "helpid.h"
+#include "cmdid.h"
+String RID_PVIEW_TOOLBOX
+{
+    Text [ de ] = "Seitenansicht" ;
+    Text [ en-US ] = "Page Preview" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Ver página";
+    Text[ ru ] = "Предварительный просмотр";
+    Text[ el ] = "Προεπισκόπηση εκτύπωσης";
+    Text[ nl ] = "Afdrukvoorbeeld";
+    Text[ fr ] = "Aperçu";
+    Text[ es ] = "Vista preliminar";
+    Text[ fi ] = "Esikatselu";
+    Text[ ca ] = "Visualització prèvia de la pàgina";
+    Text[ it ] = "Anteprima stampa";
+    Text[ sk ] = "Náhľad stránky";
+    Text[ da ] = "Sidevisning";
+    Text[ sv ] = "Förhandsgranskning";
+    Text[ pl ] = "Podgląd wydruku";
+    Text[ pt-BR ] = "Visualizar Página";
+    Text[ th ] = "แสดงตัวอย่างหน้า";
+    Text[ ja ] = "印刷プレビュー";
+    Text[ ko ] = "인쇄 미리 보기";
+    Text[ zh-CN ] = "页面视图";
+    Text[ zh-TW ] = "頁面檢視";
+    Text[ tr ] = "Sayfa önizleme";
+    Text[ hi-IN ] = "पृष्ठ का पूर्वदृश्य";
+    Text[ ar ] = "معاينة الصفحة";
+    Text[ he ] = "‮מבט כללי‬";
+};
+ToolBox RID_PVIEW_TOOLBOX
+{
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Customize = TRUE ;
+    HelpID = HID_PVIEW_TOOLBOX ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = FN_PAGEUP ;
+            HelpID = FN_PAGEUP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_PAGEDOWN ;
+            HelpID = FN_PAGEDOWN ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_START_OF_DOCUMENT ;
+            HelpID = FN_START_OF_DOCUMENT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_END_OF_DOCUMENT ;
+            HelpID = FN_END_OF_DOCUMENT ;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            Identifier = FN_SHOW_TWO_PAGES ;
+            HelpID = FN_SHOW_TWO_PAGES ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_SHOW_MULTIPLE_PAGES ;
+            HelpID = FN_SHOW_MULTIPLE_PAGES ;
+            DropDown = TRUE;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            Identifier = SID_ZOOM_OUT;
+            HelpID = SID_ZOOM_OUT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ZOOM_IN;
+            HelpID = SID_ZOOM_IN ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_PREVIEW_ZOOM;
+            HelpID = HID_PREVIEW_ZOOM ;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            Identifier = SID_WIN_FULLSCREEN ;
+            HelpID = SID_WIN_FULLSCREEN ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_PRINT_PAGEPREVIEW ;
+            HelpID = FN_PRINT_PAGEPREVIEW ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_PREVIEW_PRINT_OPTIONS ;
+            HelpID = FN_PREVIEW_PRINT_OPTIONS ;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            Identifier = FN_CLOSE_PAGEPREVIEW;
+            HelpID = SID_PRINTPREVIEW;
+        };
+    };
+    Scroll = TRUE ;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

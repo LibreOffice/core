@@ -1,0 +1,729 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+#include "bf_sc.hrc"
+
+
+
+#define PART1 \
+    MenuItem\
+    {\
+        Identifier = FID_CELL_FORMAT ; \
+        HelpId = FID_CELL_FORMAT ; \
+        Text [ de ] = "~Zellen formatieren..." ; \
+        Text [ en-US ] = "~Format Cells..." ; \
+        Text [ x-comment ] = " ";\
+        Text[ pt ] = "Formatar células...";\
+        Text[ ru ] = "Формат ячеек...";\
+        Text[ el ] = "Μορφο~ποίηση κελιών...";\
+        Text[ nl ] = "~Cellen opmaken...";\
+        Text[ fr ] = "Formater les ~cellules...";\
+        Text[ es ] = "~Formatear celdas...";\
+        Text[ fi ] = "~Muotoile solut...";\
+        Text[ ca ] = "~Formata les cel.les...";\
+        Text[ it ] = "Formatta celle...";\
+        Text[ da ] = "Formater celler...";\
+        Text[ sv ] = "Formatera ~celler...";\
+        Text[ pl ] = "~Formatuj komórki...";\
+        Text[ pt-BR ] = "~Formatar Células...";\
+        Text[ th ] = "~รูปแบบเซลล์...";\
+        Text[ ja ] = "セルの書式設定(~F)...";\
+        Text[ ko ] = "셀 서식 설정(~F)...";\
+        Text[ zh-CN ] = "单元格格式化(~F)...";\
+        Text[ zh-TW ] = "儲存格格式化(~F)...";\
+        Text[ tr ] = "Hücreleri formatla...";\
+        Text[ hi-IN ] = "कोष्ठों का ~रचना करो...";\
+        Text[ ar ] = "...تنسيق الخلايا";\
+        Text[ he ] = "~Zellen formatieren...";\
+    };
+
+
+#define PART2 \
+    MenuItem\
+    {\
+        Identifier = SID_CUT ; \
+        HelpId = SID_CUT ; \
+        Text [ de ] = "Auss~chneiden" ; \
+        Text [ en-US ] = "Cu~t" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Die Selektion in die Zwischenablage kopieren und l�schen : Die Selektion in die Zwischenablage kopieren und l�schen */\
+        Text [ x-comment ] = " ";\
+        Text[ pt ] = "Cortar";\
+        Text[ ru ] = "Вырезать";\
+        Text[ el ] = "Α~ποκοπή";\
+        Text[ nl ] = "K~nippen";\
+        Text[ fr ] = "Couper";\
+        Text[ es ] = "Co~rtar";\
+        Text[ fi ] = "~Leikkaa";\
+        Text[ ca ] = "Retal~la";\
+        Text[ it ] = "Taglia";\
+        Text[ da ] = "Klip";\
+        Text[ sv ] = "Klipp ~ut";\
+        Text[ pl ] = "Wy~tnij";\
+        Text[ pt-BR ] = "Cor~tar";\
+        Text[ th ] = "ตั~ด";\
+        Text[ ja ] = "切り取り(~T)";\
+        Text[ ko ] = "잘라내기(~T)";\
+        Text[ zh-CN ] = "剪切(~T)";\
+        Text[ zh-TW ] = "剪下(~T)";\
+        Text[ tr ] = "Ke~s";\
+        Text[ hi-IN ] = "का~टो";\
+        Text[ ar ] = "قص";\
+        Text[ he ] = "‮גזירה‬";\
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_COPY ; \
+        HelpId = SID_COPY ; \
+        Text [ de ] = "Kopie~ren" ; \
+        Text [ en-US ] = "~Copy" ; \
+        Text [ x-comment ] = " ";\
+        Text[ pt ] = "Copiar";\
+        Text[ ru ] = "Копировать";\
+        Text[ el ] = "Αντι~γραφή";\
+        Text[ nl ] = "~Kopiëren";\
+        Text[ fr ] = "Copier";\
+        Text[ es ] = "Co~piar";\
+        Text[ fi ] = "K~opioi";\
+        Text[ ca ] = "~Copia";\
+        Text[ it ] = "Copia";\
+        Text[ da ] = "Kopier";\
+        Text[ sv ] = "Kopie~ra";\
+        Text[ pl ] = "~Kopiuj";\
+        Text[ pt-BR ] = "~Copiar";\
+        Text[ th ] = "~คัดลอก";\
+        Text[ ja ] = "コピー(~C)";\
+        Text[ ko ] = "복사(~C)";\
+        Text[ zh-CN ] = "复制(~C)";\
+        Text[ zh-TW ] = "複製(~C)";\
+        Text[ tr ] = "~Kopyala";\
+        Text[ hi-IN ] = "~प्रतिलिपि";\
+        Text[ ar ] = "نسخ";\
+        Text[ he ] = "‮העתקה‬";\
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_PASTE ; \
+        HelpId = SID_PASTE ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Einf�gen : Einf�gen */\
+        Text [ de ] = "E~infügen" ; \
+        Text [ en-US ] = "~Paste" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Den Inhalt der Zwischenablage einf�gen : Den Inhalt der Zwischenablage einf�gen */\
+        Text [ x-comment ] = " ";\
+        Text[ pt ] = "Colar";\
+        Text[ ru ] = "Вст~авить";\
+        Text[ el ] = "Επ~ικόλληση";\
+        Text[ nl ] = "~Plakken";\
+        Text[ fr ] = "~Insérer";\
+        Text[ es ] = "P~egar";\
+        Text[ fi ] = "Lii~tä";\
+        Text[ ca ] = "~Enganxa";\
+        Text[ it ] = "~Incolla";\
+        Text[ da ] = "Sæt i~nd";\
+        Text[ sv ] = "Klistra ~in";\
+        Text[ pl ] = "Wkle~j";\
+        Text[ pt-BR ] = "Co~lar";\
+        Text[ th ] = "~วาง";\
+        Text[ ja ] = "貼り付け(~P)";\
+        Text[ ko ] = "붙여넣기(~P)";\
+        Text[ zh-CN ] = "粘贴(~P)";\
+        Text[ zh-TW ] = "貼上(~P)";\
+        Text[ tr ] = "~Yapıştır";\
+        Text[ hi-IN ] = "~छिपकाओ";\
+        Text[ ar ] = "لصق~";\
+        Text[ he ] = "‮הדבקה‬";\
+    };
+
+ //-------------------------------------------------------------------------------
+
+Menu RID_POPUP_ROWHEADER
+{
+    ItemList =
+    {
+        PART1
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_ROW_HEIGHT ;
+            HelpId = FID_ROW_HEIGHT ;
+            /* ### ACHTUNG: Neuer Text in Resource? Zeilenh�he... : Zeilenh�he... */
+            Text [ de ] = "Zeile~nhöhe..." ;
+            Text [ en-US ] = "Hei~ght..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Zeilenh�he �ndern : Zeilenh�he �ndern */
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Altu~ra da linha...";
+            Text[ ru ] = "Высота строки...";
+            Text[ el ] = "Ύψος γρα~μμής...";
+            Text[ nl ] = "~Rijhoogte...";
+            Text[ fr ] = "Hauteur ~de ligne...";
+            Text[ es ] = "~Altura de fila...";
+            Text[ fi ] = "~Korkeus...";
+            Text[ ca ] = "~Alçada...";
+            Text[ it ] = "Altezza riga...";
+            Text[ da ] = "Rækkehøjde...";
+            Text[ sv ] = "R~adhöjd...";
+            Text[ pl ] = "Wyso~kość...";
+            Text[ pt-BR ] = "Al~tura...";
+            Text[ th ] = "~ความสูง...";
+            Text[ ja ] = "行の高さ(~G)...";
+            Text[ ko ] = "행 높이(~G)...";
+            Text[ zh-CN ] = "行高(~G)...";
+            Text[ zh-TW ] = "列高(~G)...";
+            Text[ tr ] = "Yüksek~lik...";
+            Text[ hi-IN ] = "ऊँ~चाई...";
+            Text[ ar ] = "ارتفاع الصف...";
+            Text[ he ] = "‮גובה...‬";
+        };
+        MenuItem
+        {
+            Identifier = FID_ROW_OPT_HEIGHT ;
+            HelpId = FID_ROW_OPT_HEIGHT ;
+            /* ### ACHTUNG: Neuer Text in Resource? Optimale Zeilenh�he... : Optimale Zeilenh�he... */
+            Text [ de ] = "~Optimale Zeilenhöhe..." ;
+            Text [ en-US ] = "Optimal ~Row Height..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Optimale Zeilenh�he einstellen : Optimale Zeilenh�he einstellen */
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Optimizar altura da linha...";
+            Text[ ru ] = "Оптимальная высота строки...";
+            Text[ el ] = "Βέλτιστ~ο ύψος γραμμής...";
+            Text[ nl ] = "~Optimale rijhoogte...";
+            Text[ fr ] = "Hauteur de ligne ~optimale...";
+            Text[ es ] = "~Optimar altura de fila...";
+            Text[ fi ] = "~Optimaalinen rivikorkeus...";
+            Text[ ca ] = "Alçada òptima de la ~fila...";
+            Text[ it ] = "Altezza ottimale righe...";
+            Text[ da ] = "Optimal rækkehøjde...";
+            Text[ sv ] = "~Optimal radhöjd...";
+            Text[ pl ] = "Optymalna wysokość ~wierszy...";
+            Text[ pt-BR ] = "~Otimizar Altura da Linha...";
+            Text[ th ] = "ความยาวแ~ถวที่เหมาะที่สุด...";
+            Text[ ja ] = "最適な行の高さ(~R)...";
+            Text[ ko ] = "최적 행 높이(~R)...";
+            Text[ zh-CN ] = "最佳高度(~R)...";
+            Text[ zh-TW ] = "最適列高(~R)...";
+            Text[ tr ] = "Optimum ~satır yüksekliği...";
+            Text[ hi-IN ] = "योग्य ~पंक्ति की ऊँचाई...";
+            Text[ ar ] = "...الارتفاع الأمثل للصف";
+            Text[ he ] = "~Optimale Zeilenhöhe...";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_INS_ROW ;
+            HelpId = FID_INS_ROW ;
+            /* ### ACHTUNG: Neuer Text in Resource? Zeilen einf�gen : Zeilen einf�gen */
+            Text [ de ] = "Zeilen ~einfügen" ;
+            Text [ en-US ] = "~Insert Rows" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ganze Zeilen einf�gen : Ganze Zeilen einf�gen */
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Inserir linhas";
+            Text[ ru ] = "Вставить строки";
+            Text[ el ] = "~Εισαγωγή γραμμών";
+            Text[ nl ] = "Rijen ~invoegen";
+            Text[ fr ] = "I~nsérer des lignes";
+            Text[ es ] = "~Insertar filas";
+            Text[ fi ] = "~Lisää rivit";
+            Text[ ca ] = "~Insereix files";
+            Text[ it ] = "Inserisci righe";
+            Text[ da ] = "Indsæt rækker";
+            Text[ sv ] = "Infoga rad~er";
+            Text[ pl ] = "W~staw wiersze";
+            Text[ pt-BR ] = "~Inserir Linhas";
+            Text[ th ] = "แ~ทรกแถว";
+            Text[ ja ] = "行の挿入(~I)";
+            Text[ ko ] = "행 삽입(~I)";
+            Text[ zh-CN ] = "插入行(~I)";
+            Text[ zh-TW ] = "插入列(~I)";
+            Text[ tr ] = "~Satır ekle";
+            Text[ hi-IN ] = "पंक्तियों को ~जोड़ो";
+            Text[ ar ] = "إدراج أسطر";
+            Text[ he ] = "Zeilen ~einfügen";
+        };
+        MenuItem
+        {
+            Identifier = SID_DEL_ROWS ;
+            HelpId = SID_DEL_ROWS ;
+            /* ### ACHTUNG: Neuer Text in Resource? Zeilen l�schen : Zeilen l�schen */
+            Text [ de ] = "Zeilen ~löschen" ;
+            Text [ en-US ] = "~Delete Rows" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ganze Zeilen l�schen : Ganze Zeilen l�schen */
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "E~liminar linhas";
+            Text[ ru ] = "Удалить строки";
+            Text[ el ] = "Διαγραφή γραμμών";
+            Text[ nl ] = "Rijen ~wissen";
+            Text[ fr ] = "~Supprimer des lignes";
+            Text[ es ] = "~Borrar filas";
+            Text[ fi ] = "~Poista rivit";
+            Text[ ca ] = "~Suprimeix les files";
+            Text[ it ] = "Elimina righe";
+            Text[ da ] = "Slet rækker";
+            Text[ sv ] = "Radera ra~der";
+            Text[ pl ] = "~Usuń wiersze";
+            Text[ pt-BR ] = "~Excluir Linhas";
+            Text[ th ] = "~ลบแถว";
+            Text[ ja ] = "行の削除(~D)";
+            Text[ ko ] = "행 삭제(~D)";
+            Text[ zh-CN ] = "删除行(~D)";
+            Text[ zh-TW ] = "刪除列(~D)";
+            Text[ tr ] = "~Satır sil";
+            Text[ hi-IN ] = "पंक्तियों को ~मिटाओ";
+            Text[ ar ] = "حذف أسطر";
+            Text[ he ] = "Zeilen ~löschen";
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE ;
+            HelpId = SID_DELETE ;
+            /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~�schen... : Inhalte l~�schen... */
+            Text [ de ] = "Inhalte l~öschen..." ;
+            Text [ en-US ] = "De~lete Contents..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ausgew�hlte Inhalte l�schen (Formeln, Formate etc.) : Ausgew�hlte Inhalte l�schen (Formeln, Formate etc.) */
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Eli~minar conteúdos...";
+            Text[ ru ] = "Удалить содержимое...";
+            Text[ el ] = "Διαγρα~φή περιεχομένων...";
+            Text[ nl ] = "~Inhoud wissen...";
+            Text[ fr ] = "S~upprimer du contenu...";
+            Text[ es ] = "~Borrar contenido...";
+            Text[ fi ] = "~Poista sisältö...";
+            Text[ ca ] = "Su~primeix el contingut...";
+            Text[ it ] = "Canc~ella contenuti...";
+            Text[ da ] = "Slet indhold...";
+            Text[ sv ] = "Radera innehå~ll...";
+            Text[ pl ] = "~Usuń zawartość...";
+            Text[ pt-BR ] = "E~xcluir Conteúdo";
+            Text[ th ] = "ล~บเนื้อหา...";
+            Text[ ja ] = "内容の削除(~L)...";
+            Text[ ko ] = "내용 삭제(~L)...";
+            Text[ zh-CN ] = "删除内容(~L)...";
+            Text[ zh-TW ] = "刪除內容(~L)...";
+            Text[ tr ] = "İçerik~leri sil...";
+            Text[ hi-IN ] = "विषयों को मि~टाओ...";
+            Text[ ar ] = "...حذف محتويات";
+            Text[ he ] = "Inhalte l~öschen...";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_ROW_HIDE ;
+            HelpId = FID_ROW_HIDE ;
+            Text [ de ] = "~Ausblenden" ;
+            Text [ en-US ] = "~Hide" ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "O~cultar";
+            Text[ ru ] = "Скрыть";
+            Text[ el ] = "~Απόκρυψη";
+            Text[ nl ] = "~Verbergen";
+            Text[ fr ] = "M~asquer";
+            Text[ es ] = "Ocultar";
+            Text[ fi ] = "~Piilota";
+            Text[ ca ] = "~Oculta";
+            Text[ it ] = "Nascondi";
+            Text[ da ] = "Skjul";
+            Text[ sv ] = "~Dölj";
+            Text[ pl ] = "~Ukryj";
+            Text[ pt-BR ] = "O~cultar";
+            Text[ th ] = "~ซ่อน";
+            Text[ ja ] = "表示しない(~H)";
+            Text[ ko ] = "숨기기(~H)";
+            Text[ zh-CN ] = "隐入(~H)";
+            Text[ zh-TW ] = "隱入(~H)";
+            Text[ tr ] = "~Gizle";
+            Text[ hi-IN ] = "~छिपाओ";
+            Text[ ar ] = "إخفاء";
+            Text[ he ] = "~Ausblenden";
+        };
+        MenuItem
+        {
+            Identifier = FID_ROW_SHOW ;
+            HelpId = FID_ROW_SHOW ;
+            Text [ de ] = "Ein~blenden" ;
+            Text [ en-US ] = "~Show" ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Mostrar";
+            Text[ ru ] = "Показать";
+            Text[ el ] = "Εμ~φάνιση";
+            Text[ nl ] = "~Weergeven";
+            Text[ fr ] = "~Afficher";
+            Text[ es ] = "~Mostrar";
+            Text[ fi ] = "~Näytä";
+            Text[ ca ] = "~Mostra";
+            Text[ it ] = "Mostra";
+            Text[ da ] = "Vis";
+            Text[ sv ] = "~Visa";
+            Text[ pl ] = "~Pokaż";
+            Text[ pt-BR ] = "~Mostrar";
+            Text[ th ] = "แ~สดง";
+            Text[ ja ] = "表示する(~S)";
+            Text[ ko ] = "표시(~S)";
+            Text[ zh-CN ] = "显示(~S)";
+            Text[ zh-TW ] = "顯示(~S)";
+            Text[ tr ] = "~Göster";
+            Text[ hi-IN ] = "~दिखाओ";
+            Text[ ar ] = "إظهار";
+            Text[ he ] = "Ein~blenden";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        PART2
+        MenuItem
+        {
+            Identifier = FID_PASTE_CONTENTS ;
+            HelpId = FID_PASTE_CONTENTS ;
+            Text [ de ] = "In~halte einfügen..." ;
+            Text [ en-US ] = "P~aste Special..." ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Colar e~special...";
+            Text[ ru ] = "Вставить как...";
+            Text[ el ] = "Ειδική επικόλλ~ηση...";
+            Text[ nl ] = "Plakken ~speciaal...";
+            Text[ fr ] = "Colla~ge spécial...";
+            Text[ es ] = "Peg~ado especial...";
+            Text[ fi ] = "Liitä ~määräten...";
+            Text[ ca ] = "Enganxament ~especial...";
+            Text[ it ] = "Incolla ~speciale...";
+            Text[ da ] = "Indsæt ind~hold...";
+            Text[ sv ] = "Klistra in inne~håll...";
+            Text[ pl ] = "Wklej specj~alnie...";
+            Text[ pt-BR ] = "Colar ~Especial...";
+            Text[ th ] = "วาง~พิเศษ...";
+            Text[ ja ] = "形式を選択して貼り付け(~A)...";
+            Text[ ko ] = "선택하여 붙여넣기(~A)...";
+            Text[ zh-CN ] = "粘贴内容(~A)...";
+            Text[ zh-TW ] = "貼上內容(~A)...";
+            Text[ tr ] = "Ö~zel yapıştır...";
+            Text[ hi-IN ] = "विशेष को छि~पकाओ...";
+            Text[ ar ] = "لصق خاص...";
+            Text[ he ] = "‮הדבקה מיוחדת‬";
+        };
+    };
+};
+
+ //-------------------------------------------------------------------
+
+Menu RID_POPUP_COLHEADER
+{
+    ItemList =
+    {
+        PART1
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_COL_WIDTH ;
+            HelpId = FID_COL_WIDTH ;
+            Text [ de ] = "Spalte~nbreite..." ;
+            Text [ en-US ] = "Col~umn Width..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Spaltenbreite �ndern : Spaltenbreite �ndern */
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Largura da coluna...";
+            Text[ ru ] = "Ширина столбцов...";
+            Text[ el ] = "Πλάτος σ~τήλης...";
+            Text[ nl ] = "~Kolombreedte...";
+            Text[ fr ] = "L~argeur de colonne...";
+            Text[ es ] = "~Ancho de columna...";
+            Text[ fi ] = "~Sarakkeen leveys...";
+            Text[ ca ] = "Amplada de la col~umna...";
+            Text[ it ] = "Larghezza colonna...";
+            Text[ da ] = "Kolonnebredde...";
+            Text[ sv ] = "Kolum~nbredd...";
+            Text[ pl ] = "Szerokość kol~umny...";
+            Text[ pt-BR ] = "Larg~ura da Coluna...";
+            Text[ th ] = "ความกว้างคอลัม~น์...";
+            Text[ ja ] = "列幅(~U)...";
+            Text[ ko ] = "열 너비(~U)...";
+            Text[ zh-CN ] = "列宽(~U)...";
+            Text[ zh-TW ] = "欄寬(~U)...";
+            Text[ tr ] = "Sü~tun genişliği...";
+            Text[ hi-IN ] = "स्तं~भ चौड़ाई...";
+            Text[ ar ] = "عرض الأعمدة...";
+            Text[ he ] = "Spalte~nbreite...";
+        };
+        MenuItem
+        {
+            Identifier = FID_COL_OPT_WIDTH ;
+            HelpId = FID_COL_OPT_WIDTH ;
+            Text [ de ] = "~Optimale Spaltenbreite..." ;
+            Text [ en-US ] = "O~ptimal Column Width..." ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Optimizar largura da coluna...";
+            Text[ ru ] = "Оптимальная ширина столбца...";
+            Text[ el ] = "Βέλτιστ~ο πλάτος στήλης...";
+            Text[ nl ] = "~Optimale kolombreedte...";
+            Text[ fr ] = "Largeur de colonne optimale...";
+            Text[ es ] = "~Optimar ancho de columna...";
+            Text[ fi ] = "~Optimaalinen sarakkeen leveys...";
+            Text[ ca ] = "Amplada ò~ptima de la columna...";
+            Text[ it ] = "Larghezza ottimale colonna...";
+            Text[ da ] = "Optimal kolonnebredde...";
+            Text[ sv ] = "~Optimal kolumnbredd...";
+            Text[ pl ] = "O~ptymalna szerokość kolumny...";
+            Text[ pt-BR ] = "Otimizar Largura da Col~una...";
+            Text[ th ] = "ความกว้างคอลัมน์~ที่เหมาะที่สุด...";
+            Text[ ja ] = "最適な列幅(~P)...";
+            Text[ ko ] = "최적 열 너비(~P)...";
+            Text[ zh-CN ] = "最佳列宽(~P)...";
+            Text[ zh-TW ] = "最適欄寬(~P)...";
+            Text[ tr ] = "O~ptimum sütun genişliği...";
+            Text[ hi-IN ] = "O~ptimal Column Width...";
+            Text[ ar ] = "العرض الأمثل للعمود...";
+            Text[ he ] = "~Optimale Spaltenbreite...";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_INS_COLUMN ;
+            HelpId = FID_INS_COLUMN ;
+            /* ### ACHTUNG: Neuer Text in Resource? Spalten einf�gen : Spalten einf�gen */
+            Text [ de ] = "Spalten ~einfügen" ;
+            Text [ en-US ] = "~Insert Columns" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ganze Spalten einf�gen : Ganze Spalten einf�gen */
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Inserir colunas";
+            Text[ ru ] = "Вставить столбцы";
+            Text[ el ] = "~Εισαγωγή στηλών";
+            Text[ nl ] = "~Kolommen invoegen";
+            Text[ fr ] = "I~nsérer des colonnes";
+            Text[ es ] = "~Insertar columnas";
+            Text[ fi ] = "~Lisää sarakkeet";
+            Text[ ca ] = "~Insereix columnes";
+            Text[ it ] = "Inserisci colonne";
+            Text[ da ] = "Indsæt kolonner";
+            Text[ sv ] = "Infoga ~kolumner";
+            Text[ pl ] = "W~staw kolumny";
+            Text[ pt-BR ] = "~Inserir Colunas";
+            Text[ th ] = "แ~ทรกคอลัมน์";
+            Text[ ja ] = "列の挿入(~I)";
+            Text[ ko ] = "열 삽입(~I)";
+            Text[ zh-CN ] = "插入列(~I)";
+            Text[ zh-TW ] = "插入欄(~I)";
+            Text[ tr ] = "~Sütun ekle";
+            Text[ hi-IN ] = "स्तंभ ~जोड़ो";
+            Text[ ar ] = "إدراج أعمدة";
+            Text[ he ] = "Spalten ~einfügen";
+        };
+        MenuItem
+        {
+            Identifier = SID_DEL_COLS ;
+            HelpId = SID_DEL_COLS ;
+            /* ### ACHTUNG: Neuer Text in Resource? Spalten l�schen : Spalten l�schen */
+            Text [ de ] = "Spalten ~löschen" ;
+            Text [ en-US ] = "~Delete Columns" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ganze Spalten l�schen : Ganze Spalten l�schen */
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Eliminar ~colunas";
+            Text[ ru ] = "Удалить столбцы";
+            Text[ el ] = "Διαγραφή στη~λών";
+            Text[ nl ] = "K~olommen wissen";
+            Text[ fr ] = "S~upprimer des colonnes";
+            Text[ es ] = "~Borrar columnas";
+            Text[ fi ] = "~Poista sarakkeet";
+            Text[ ca ] = "~Suprimeix les columnes";
+            Text[ it ] = "Elimina colonne";
+            Text[ da ] = "Slet kolonner";
+            Text[ sv ] = "Radera ko~lumner";
+            Text[ pl ] = "~Usuń kolumny";
+            Text[ pt-BR ] = "Exclui~r Colunas";
+            Text[ th ] = "~ลบคอลัมน์";
+            Text[ ja ] = "列の削除(~D)";
+            Text[ ko ] = "열 삭제(~D)";
+            Text[ zh-CN ] = "删除列(~D)";
+            Text[ zh-TW ] = "刪除欄(~D)";
+            Text[ tr ] = "~Sütun sil";
+            Text[ hi-IN ] = "स्तंभ ~मिटाओ";
+            Text[ ar ] = "حذف أعمدة";
+            Text[ he ] = "Spalten ~löschen";
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE ;
+            HelpId = SID_DELETE ;
+            /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~�schen... : Inhalte l~�schen... */
+            Text [ de ] = "Inhalte l~öschen..." ;
+            Text [ en-US ] = "D~elete Contents..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ausgew�hlte Inhalte l�schen (Formeln, Formate etc.) : Ausgew�hlte Inhalte l�schen (Formeln, Formate etc.) */
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Eliminar co~nteúdos...";
+            Text[ ru ] = "Удалить содержимое...";
+            Text[ el ] = "Διαγρα~φή περιεχομένων...";
+            Text[ nl ] = "In~houd wissen...";
+            Text[ fr ] = "~Supprimer du contenu...";
+            Text[ es ] = "~Borrar contenido...";
+            Text[ fi ] = "Pois~ta sisältö...";
+            Text[ ca ] = "S~uprimeix el contingut...";
+            Text[ it ] = "Can~cella contenuti...";
+            Text[ da ] = "Slet indhold...";
+            Text[ sv ] = "Radera ~innehåll...";
+            Text[ pl ] = "~Usuń zawartość...";
+            Text[ pt-BR ] = "Excluir Co~nteúdo...";
+            Text[ th ] = "ล~บเนื้อหา...";
+            Text[ ja ] = "内容の削除(~E)...";
+            Text[ ko ] = "내용 삭제(~E)...";
+            Text[ zh-CN ] = "删除内容(~E)...";
+            Text[ zh-TW ] = "刪除內容(~E)...";
+            Text[ tr ] = "İ~çerikleri sil...";
+            Text[ hi-IN ] = "विषयों को मि~टाओ...";
+            Text[ ar ] = "حذف محتويات...";
+            Text[ he ] = "Inhalte l~öschen...";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_COL_HIDE ;
+            HelpId = FID_COL_HIDE ;
+            Text [ de ] = "~Ausblenden" ;
+            Text [ en-US ] = "~Hide" ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "O~cultar";
+            Text[ ru ] = "Скрыть";
+            Text[ el ] = "~Απόκρυψη";
+            Text[ nl ] = "~Verbergen";
+            Text[ fr ] = "~Masquer";
+            Text[ es ] = "Ocultar";
+            Text[ fi ] = "~Piilota";
+            Text[ ca ] = "~Oculta";
+            Text[ it ] = "Nascondi";
+            Text[ da ] = "Skjul";
+            Text[ sv ] = "~Dölj";
+            Text[ pl ] = "~Ukryj";
+            Text[ pt-BR ] = "Ocult~ar";
+            Text[ th ] = "~ซ่อน";
+            Text[ ja ] = "表示しない(~H)";
+            Text[ ko ] = "숨기기(~H)";
+            Text[ zh-CN ] = "隐入(~H)";
+            Text[ zh-TW ] = "隱入(~H)";
+            Text[ tr ] = "~Gizle";
+            Text[ hi-IN ] = "~छिपाओ";
+            Text[ ar ] = "إخفاء";
+            Text[ he ] = "~Ausblenden";
+        };
+        MenuItem
+        {
+            Identifier = FID_COL_SHOW ;
+            HelpId = FID_COL_SHOW ;
+            Text [ de ] = "Ein~blenden" ;
+            Text [ en-US ] = "~Show" ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Mostrar";
+            Text[ ru ] = "Показать";
+            Text[ el ] = "Εμ~φάνιση";
+            Text[ nl ] = "~Weergeven";
+            Text[ fr ] = "A~fficher";
+            Text[ es ] = "~Mostrar";
+            Text[ fi ] = "~Näytä";
+            Text[ ca ] = "~Mostra";
+            Text[ it ] = "Mostra";
+            Text[ da ] = "Vis";
+            Text[ sv ] = "~Visa";
+            Text[ pl ] = "~Pokaż";
+            Text[ pt-BR ] = "Mo~strar";
+            Text[ th ] = "แ~สดง";
+            Text[ ja ] = "表示する(~S)";
+            Text[ ko ] = "표시(~S)";
+            Text[ zh-CN ] = "显示(~S)";
+            Text[ zh-TW ] = "顯示(~S)";
+            Text[ tr ] = "~Göster";
+            Text[ hi-IN ] = "~दिखाओ";
+            Text[ ar ] = "إظهار";
+            Text[ he ] = "Ein~blenden";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        PART2
+        MenuItem
+        {
+            Identifier = FID_PASTE_CONTENTS ;
+            HelpId = FID_PASTE_CONTENTS ;
+            Text [ de ] = "In~halte einfügen..." ;
+            Text [ en-US ] = "Paste ~Special..." ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Colar e~special...";
+            Text[ ru ] = "Вставить как...";
+            Text[ el ] = "Ειδική επικόλλ~ηση...";
+            Text[ nl ] = "Plakken ~speciaal...";
+            Text[ fr ] = "Colla~ge spécial...";
+            Text[ es ] = "Peg~ado especial...";
+            Text[ fi ] = "Liitä ~määräten...";
+            Text[ ca ] = "Enganxament ~especial...";
+            Text[ it ] = "Incolla ~speciale...";
+            Text[ da ] = "Indsæt ind~hold...";
+            Text[ sv ] = "Klistra in inne~håll...";
+            Text[ pl ] = "Wklej ~specjalnie...";
+            Text[ pt-BR ] = "Colar ~Especial...";
+            Text[ th ] = "วาง~พิเศษ...";
+            Text[ ja ] = "形式を選択して貼り付け(~S)...";
+            Text[ ko ] = "선택하여 붙여넣기(~S)...";
+            Text[ zh-CN ] = "粘贴内容(~S)...";
+            Text[ zh-TW ] = "貼上內容(~S)...";
+            Text[ tr ] = "~Özel yapıştır...";
+            Text[ hi-IN ] = "~विशेष को छिपकाओ...";
+            Text[ ar ] = "لصق خاص...";
+            Text[ he ] = "‮הדבקה מיוחדת...‬";
+        };
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

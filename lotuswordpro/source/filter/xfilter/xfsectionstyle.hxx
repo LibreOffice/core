@@ -59,20 +59,20 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- * 2005-01-10   create this file.
+ * 2005-01-10	create this file.
  ************************************************************************/
-#ifndef     _XFSECTIONSTYLE_HXX
-#define     _XFSECTIONSTYLE_HXX
+#ifndef		_XFSECTIONSTYLE_HXX
+#define		_XFSECTIONSTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    "xfbgimage.hxx"
-#include    "xfcolor.hxx"
+#include	"xfglobal.hxx"
+#include	"xfstyle.hxx"
+#include	"xfbgimage.hxx"
+#include	"xfcolor.hxx"
 
 class XFColumns;
 /*
- *  @descr
- *  Section style, include background color,background image, columns and margins.
+ *	@descr
+ *	Section style, include background color,background image, columns and margins.
  */
 class XFSectionStyle : public XFStyle
 {
@@ -82,26 +82,26 @@ public:
     virtual ~XFSectionStyle();
 
 public:
-    void    SetMarginLeft(double left);
+    void	SetMarginLeft(double left);
 
-    void    SetMarginRight(double right);
+    void	SetMarginRight(double right);
 
-    void    SetBackColor(const XFColor& color);
+    void	SetBackColor(const XFColor& color);
 
-    void    SetColumns(XFColumns *pColumns);
+    void	SetColumns(XFColumns *pColumns);
 
-    void    SetBackImage(XFBGImage *image);
+    void	SetBackImage(XFBGImage *image);
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle	GetStyleFamily();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    double      m_fMarginLeft;
-    double      m_fMarginRight;
-    XFColor     m_aBackColor;
-    XFColumns   *m_pColumns;
-    XFBGImage   *m_pBackImage;
+    double		m_fMarginLeft;
+    double		m_fMarginRight;
+    XFColor		m_aBackColor;
+    XFColumns	*m_pColumns;
+    XFBGImage	*m_pBackImage;
 };
 
 #endif

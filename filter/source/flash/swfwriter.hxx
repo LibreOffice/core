@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ inline sal_uInt16 _uInt16( sal_Int32 nValue )
 {
     OSL_ENSURE( (nValue >= 0) && ((sal_uInt32)nValue <= 0xffff), "overflow while converting sal_Int32 to sal_uInt16" );
     return (sal_uInt16)nValue;
-}
+} 
 
 inline sal_Int16 _Int16( sal_Int32 nValue )
 {
@@ -80,39 +80,39 @@ class VirtualDevice;
 
 namespace swf {
 
-const sal_uInt8 TAG_END             = 0;
-const sal_uInt8 TAG_SHOWFRAME       = 1;
+const sal_uInt8 TAG_END				= 0;
+const sal_uInt8	TAG_SHOWFRAME		= 1;
 
-const sal_uInt8 TAG_DEFINEBUTTON    = 7;
+const sal_uInt8 TAG_DEFINEBUTTON	= 7;
 
 const sal_uInt8 TAG_BACKGROUNDCOLOR = 9;
 
-const sal_uInt8 TAG_DOACTION        = 12;
-const sal_uInt8 TAG_STARTSOUND      = 15;
+const sal_uInt8 TAG_DOACTION		= 12;
+const sal_uInt8 TAG_STARTSOUND		= 15;
 
 const sal_uInt8 TAG_SOUNDSTREAMBLOCK = 19;
 const sal_uInt8 TAG_SOUNDSTREAMHEAD = 18;
 const sal_uInt8 TAG_SOUNDSTREAMHEAD2 = 45;
 
-const sal_uInt8 TAG_JPEGTABLES      = 8;
-const sal_uInt8 TAG_DEFINEBITS      = 6;
+const sal_uInt8 TAG_JPEGTABLES		= 8;
+const sal_uInt8 TAG_DEFINEBITS		= 6;
 const sal_uInt8 TAG_DEFINEBITSLOSSLESS = 20;
 const sal_uInt8 TAG_DEFINEBITSJPEG2 = 21;
 const sal_uInt8 TAG_DEFINEBITSJPEG3 = 35;
 const sal_uInt8 TAG_DEFINEBITSLOSSLESS2 = 36;
 const sal_uInt8 TAG_DEFINEEDITTEXT= 37;
-const sal_uInt8 TAG_PLACEOBJECT     = 4;
-const sal_uInt8 TAG_PLACEOBJECT2    = 26;
-const sal_uInt8 TAG_REMOVEOBJECT2   = 28;
+const sal_uInt8 TAG_PLACEOBJECT		= 4;
+const sal_uInt8 TAG_PLACEOBJECT2	= 26;
+const sal_uInt8 TAG_REMOVEOBJECT2	= 28;
 
-const sal_uInt8 TAG_DEFINEFONT      = 10;
-const sal_uInt8 TAG_DEFINETEXT      = 11;
-const sal_uInt8 TAG_DEFINESHAPE3    = 32;
-const sal_uInt8 TAG_DEFINESPRITE    = 39;
+const sal_uInt8 TAG_DEFINEFONT		= 10;
+const sal_uInt8 TAG_DEFINETEXT		= 11;
+const sal_uInt8 TAG_DEFINESHAPE3	= 32;
+const sal_uInt8 TAG_DEFINESPRITE	= 39;
 
-const sal_uInt8 TAG_FRAMELABEL      = 43;
+const sal_uInt8 TAG_FRAMELABEL		= 43;
 
-const sal_uInt8 TAG_HEADER          = 0xff;
+const sal_uInt8 TAG_HEADER			= 0xff;
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -174,7 +174,7 @@ public:
     const Font& getFont() { return maFont; }
 
 private:
-    const Font  maFont;
+    const Font	maFont;
     std::map<sal_uInt16, sal_uInt16, ltuint16> maGlyphIndex;
     sal_uInt16 mnNextIndex;
     sal_uInt16 mnId;
@@ -234,8 +234,8 @@ public:
 
 private:
     std::vector< Tag* > maTags;
-    sal_uInt16  mnId;
-    sal_uInt32  mnFrames;
+    sal_uInt16	mnId;
+    sal_uInt32	mnFrames;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -260,12 +260,12 @@ public:
 private:
     void Impl_addGradient( Tag* pTag ) const;
 
-    FillStyleType   meType;
-    ::basegfx::B2DHomMatrix     maMatrix; // #i73264#
-    sal_uInt16      mnBitmapId;
-    Color           maColor;
-    Gradient        maGradient;
-    Rectangle       maBoundRect;
+    FillStyleType	meType;
+    ::basegfx::B2DHomMatrix		maMatrix; // #i73264#
+    sal_uInt16		mnBitmapId;
+    Color			maColor;
+    Gradient		maGradient;
+    Rectangle		maBoundRect;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -350,13 +350,13 @@ public:
 #ifdef AUGUSTUS
     /** stream out a sound.  Should make it more intelligent so it interleaves with other items.*/
     sal_Bool streamSound( const char * filename );
-#endif
+#endif 
 
 private:
-    Point                   map( const Point& rPoint ) const;
-    Size                    map( const Size& rSize ) const;
-    void                    map( PolyPolygon& rPolyPolygon ) const;
-    sal_Int32               mapRelative( sal_Int32 n100thMM ) const;
+    Point					map( const Point& rPoint ) const;
+    Size					map( const Size& rSize ) const;
+    void					map( PolyPolygon& rPolyPolygon ) const;
+    sal_Int32				mapRelative( sal_Int32 n100thMM ) const;
 
     void startTag( sal_uInt8 nTagId );
     void endTag();
@@ -383,7 +383,7 @@ private:
     FlashFont& Impl_getFont( const Font& rFont );
 
     static void Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, sal_Bool bFilled );
-
+    
     static void Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int16 dy, sal_Bool bFilled );
     static void Impl_addStraightEdgeRecord( BitStream& rBits, sal_Int16 dx, sal_Int16 dy );
     static void Impl_addCurvedEdgeRecord( BitStream& rBits, sal_Int16 control_dx, sal_Int16 control_dy, sal_Int16 anchor_dx, sal_Int16 anchor_dy );
@@ -409,7 +409,7 @@ private:
 private:
     com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > mxBreakIterator;
 
-    FontMap                 maFonts;
+    FontMap					maFonts;
 
     sal_Int32 mnDocWidth;
     sal_Int32 mnDocHeight;
@@ -421,7 +421,7 @@ private:
     sal_uInt16 mnWhiteBackgroundShapeId;
     sal_uInt16 mnPageButtonId;
 
-    VirtualDevice*  mpVDev;
+    VirtualDevice*	mpVDev;
 
     const PolyPolygon* mpClipPolyPolygon;
 
@@ -429,17 +429,17 @@ private:
         while executing defineShape
     */
     typedef std::vector<sal_uInt16> CharacterIdVector;
-    CharacterIdVector       maShapeIds;
+    CharacterIdVector		maShapeIds;
 
     Tag* mpTag;
-    Sprite* mpSprite;
+    Sprite*	mpSprite;
     std::stack<Sprite*> mvSpriteStack;
     ChecksumCache mBitmapCache;
 
     sal_uInt16 mnNextId;
-    sal_uInt32  mnFrames;
+    sal_uInt32	mnFrames;
 
-//  com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > mxOutStream;
+//	com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > mxOutStream;
     oslFileHandle mxOutStream;
 
     utl::TempFile maMovieTempFile;

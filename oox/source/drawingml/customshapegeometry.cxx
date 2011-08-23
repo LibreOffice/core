@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,28 +70,28 @@ enum FormularCommand
 };
 struct FormularCommandNameTable
 {
-    const char*     pS;
-    FormularCommand pE;
+    const char*		pS;
+    FormularCommand	pE;
 };
 static FormularCommandNameTable pFormularCommandNameTable[] =
 {
-    { "*/",     FC_MULDIV },
-    { "+-",     FC_PLUSMINUS },
-    { "+/",     FC_PLUSDIV },
-    { "ifelse", FC_IFELSE },
-    { "abs",    FC_ABS },
-    { "at2",    FC_AT2 },
-    { "cat2",   FC_CAT2 },
-    { "cos",    FC_COS },
-    { "max",    FC_MAX },
-    { "min",    FC_MIN },
-    { "mod",    FC_MOD },
-    { "pin",    FC_PIN },
-    { "sat2",   FC_SAT2 },
-    { "sin",    FC_SIN },
-    { "sqrt",   FC_SQRT },
-    { "tan",    FC_TAN },
-    { "val",    FC_VAL }
+    { "*/",		FC_MULDIV },
+    { "+-",		FC_PLUSMINUS },
+    { "+/",		FC_PLUSDIV },
+    { "ifelse",	FC_IFELSE },
+    { "abs",	FC_ABS },
+    { "at2",	FC_AT2 },
+    { "cat2",	FC_CAT2 },
+    { "cos",	FC_COS },
+    { "max",	FC_MAX },
+    { "min",	FC_MIN },
+    { "mod",	FC_MOD },
+    { "pin",	FC_PIN },
+    { "sat2",	FC_SAT2 },
+    { "sin",	FC_SIN },
+    { "sqrt",	FC_SQRT },
+    { "tan",	FC_TAN },
+    { "val",	FC_VAL }
 
 };
 typedef std::hash_map< rtl::OUString, FormularCommand, comphelper::UStringHash, comphelper::UStringEqual > FormulaCommandHMap;
@@ -239,22 +239,22 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
     com::sun::star::drawing::EnhancedCustomShapeParameter aRet;
     if ( rValue.getLength() )
     {
-        sal_Bool    bConstant = sal_True;
-        sal_Int32   nConstant = 0;
-        sal_Char    nVal = 0;
+        sal_Bool	bConstant = sal_True;
+        sal_Int32	nConstant = 0;
+        sal_Char	nVal = 0;
 
         // first check if its a constant value
         switch( StaticTokenMap::get().getTokenFromUnicode( rValue ) )
         {
-            case XML_3cd4 : nConstant = 270 * 60000; break;
-            case XML_3cd8 : nConstant = 135 * 60000; break;
+            case XML_3cd4 :	nConstant = 270 * 60000; break;
+            case XML_3cd8 :	nConstant = 135 * 60000; break;
             case XML_5cd8 : nConstant = 225 * 60000; break;
             case XML_7cd8 : nConstant = 315 * 60000; break;
             case XML_cd2  : nConstant = 180 * 60000; break;
             case XML_cd4  : nConstant =  90 * 60000; break;
             case XML_cd8  : nConstant =  45 * 60000; break;
 
-            case XML_b :    // variable height of the shape defined in spPr
+            case XML_b :	// variable height of the shape defined in spPr
             case XML_h :
             {
                 if ( bNoSymbols )
@@ -267,21 +267,21 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                     aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                 }
                 else
-                    aRet.Type = EnhancedCustomShapeParameterType::HEIGHT;   // TODO: HEIGHT needs to be implemented
+                    aRet.Type = EnhancedCustomShapeParameterType::HEIGHT;	// TODO: HEIGHT needs to be implemented
             }
             break;
 
 
-            case XML_hd8 :  // !!PASSTHROUGH INTENDED
-                nVal += 2;  // */ h 1.0 8.0
-            case XML_hd6 :  // */ h 1.0 6.0
+            case XML_hd8 :	// !!PASSTHROUGH INTENDED
+                nVal += 2;	// */ h 1.0 8.0
+            case XML_hd6 :	// */ h 1.0 6.0
                 nVal++;
-            case XML_hd5 :  // */ h 1.0 5.0
+            case XML_hd5 :	// */ h 1.0 5.0
                 nVal++;
-            case XML_hd4 :  // */ h 1.0 4.0
+            case XML_hd4 :	// */ h 1.0 4.0
                 nVal += 2;
-            case XML_hd2 :  // */ h 1.0 2.0
-            case XML_vc :   // */ h 1.0 2.0
+            case XML_hd2 :	// */ h 1.0 2.0
+            case XML_vc :	// */ h 1.0 2.0
             {
                 nVal += '2';
 
@@ -291,7 +291,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
-            }
+            }		
             break;
 
             case XML_t :
@@ -302,7 +302,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             }
             break;
 
-            case XML_ls :   // longest side: max w h
+            case XML_ls :	// longest side: max w h
             {
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
@@ -312,7 +312,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
             }
             break;
-            case XML_ss :   // shortest side: min w h
+            case XML_ss :	// shortest side: min w h
             {
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
@@ -322,13 +322,13 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
             }
             break;
-            case XML_ssd8 : // */ ss 1.0 8.0
+            case XML_ssd8 : // */ ss 1.0 8.0			
                 nVal += 2;
             case XML_ssd6 : // */ ss 1.0 6.0
                 nVal += 2;
-            case XML_ssd4 : // */ ss 1.0 4.0
+            case XML_ssd4 :	// */ ss 1.0 4.0
                 nVal += 2;
-            case XML_ssd2 : // */ ss 1.0 2.0
+            case XML_ssd2 :	// */ ss 1.0 2.0
             {
                 nVal += '2';
 
@@ -341,7 +341,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             }
             break;
 
-            case XML_r :    // variable width of the shape defined in spPr
+            case XML_r :	// variable width of the shape defined in spPr
             case XML_w :
             {
                 if ( bNoSymbols )
@@ -358,18 +358,18 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             }
             break;
 
-            case XML_wd10 : // */ w 1.0 10.0
+            case XML_wd10 :	// */ w 1.0 10.0
                 nVal += 2;
-            case XML_wd8 :  // */ w 1.0 8.0
+            case XML_wd8 :	// */ w 1.0 8.0
                 nVal += 2;
-            case XML_wd6 :  // */ w 1.0 6.0
+            case XML_wd6 :	// */ w 1.0 6.0
                 nVal++;
-            case XML_wd5 :  // */ w 1.0 5.0
+            case XML_wd5 :	// */ w 1.0 5.0
                 nVal++;
-            case XML_wd4 :  // */ w 1.0 4.0
+            case XML_wd4 :	// */ w 1.0 4.0
                 nVal += 2;
-            case XML_hc :   // */ w 1.0 2.0
-            case XML_wd2 :  // */ w 1.0 2.0
+            case XML_hc :	// */ w 1.0 2.0
+            case XML_wd2 :	// */ w 1.0 2.0
             {
                 nVal += '2';
 
@@ -403,7 +403,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                     n = rValue[ 1 ];
             }
             if ( ( n >= '0' ) && ( n <= '9' ) )
-            {   // seems to be a ST_Coordinate
+            {	// seems to be a ST_Coordinate
                 aRet.Value = Any( (sal_Int32)(rValue.toInt32() / 5) );
                 aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
             }
@@ -454,8 +454,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    std::vector< CustomShapeGuide >&    mrGuideList;
-    CustomShapeProperties&              mrCustomShapeProperties;
+    std::vector< CustomShapeGuide >&	mrGuideList;
+    CustomShapeProperties&				mrCustomShapeProperties;
 };
 
 GeomGuideListContext::GeomGuideListContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< CustomShapeGuide >& rGuideList )
@@ -582,7 +582,7 @@ static rtl::OUString convertToOOEquation( CustomShapeProperties& rCustomShapePro
                 break;
                 case FC_PIN :
                 {
-                    if ( nParameters == 3 ) // if(x-y,x,if(y-z,z,y))
+                    if ( nParameters == 3 )	// if(x-y,x,if(y-z,z,y))
                         aEquation = CREATE_OUSTRING( "if(" ) + sParameters[ 0 ] + CREATE_OUSTRING( "-" ) + sParameters[ 1 ]
                             + CREATE_OUSTRING( "," ) + sParameters[ 0 ] + CREATE_OUSTRING( ",if(" ) + sParameters[ 2 ]
                             + CREATE_OUSTRING( "-" ) + sParameters[ 1 ] + CREATE_OUSTRING( "," ) + sParameters[ 1 ]
@@ -632,7 +632,7 @@ static rtl::OUString convertToOOEquation( CustomShapeProperties& rCustomShapePro
 
 Reference< XFastContextHandler > GeomGuideListContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
-    if ( aElementToken == ( NMSP_DRAWINGML | XML_gd ) ) // CT_GeomGuide
+    if ( aElementToken == ( NMSP_DRAWINGML | XML_gd ) )	// CT_GeomGuide
     {
         CustomShapeGuide aGuide;
         aGuide.maName = xAttribs->getOptionalValue( XML_name );
@@ -714,7 +714,7 @@ Reference< XFastContextHandler > XYAdjustHandleContext::createFastChildContext( 
 {
     Reference< XFastContextHandler > xContext;
     if ( aElementToken == ( NMSP_DRAWINGML | XML_pos ) )
-        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
+        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );	// CT_AdjPoint2D
     return xContext;
 }
 
@@ -768,7 +768,7 @@ Reference< XFastContextHandler > PolarAdjustHandleContext::createFastChildContex
 {
     Reference< XFastContextHandler > xContext;
     if ( aElementToken == ( NMSP_DRAWINGML | XML_pos ) )
-        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
+        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );	// CT_AdjPoint2D
     return xContext;
 }
 
@@ -795,13 +795,13 @@ AdjustHandleListContext::AdjustHandleListContext( ContextHandler& rParent, Custo
 Reference< XFastContextHandler > AdjustHandleListContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xContext;
-    if ( aElementToken == ( NMSP_DRAWINGML | XML_ahXY ) )           // CT_XYAdjustHandle
+    if ( aElementToken == ( NMSP_DRAWINGML | XML_ahXY ) )			// CT_XYAdjustHandle
     {
         AdjustHandle aAdjustHandle( sal_False );
         mrAdjustHandleList.push_back( aAdjustHandle );
         xContext = new XYAdjustHandleContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandleList.back() );
     }
-    else if ( aElementToken == ( NMSP_DRAWINGML | XML_ahPolar ) )   // CT_PolarAdjustHandle
+    else if ( aElementToken == ( NMSP_DRAWINGML | XML_ahPolar ) )	// CT_PolarAdjustHandle
     {
         AdjustHandle aAdjustHandle( sal_True );
         mrAdjustHandleList.push_back( aAdjustHandle );
@@ -835,7 +835,7 @@ Reference< XFastContextHandler > ConnectionSiteContext::createFastChildContext( 
 {
     Reference< XFastContextHandler > xContext;
     if ( aElementToken == ( NMSP_DRAWINGML | XML_pos ) )
-        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrConnectionSite.pos ); // CT_AdjPoint2D
+        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrConnectionSite.pos );	// CT_AdjPoint2D
     return xContext;
 }
 
@@ -863,7 +863,7 @@ Reference< XFastContextHandler > Path2DMoveToContext::createFastChildContext( sa
 {
     Reference< XFastContextHandler > xContext;
     if ( aElementToken == ( NMSP_DRAWINGML | XML_pt ) )
-        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
+        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjPoint2D );		// CT_AdjPoint2D
     return xContext;
 }
 
@@ -891,7 +891,7 @@ Reference< XFastContextHandler > Path2DLineToContext::createFastChildContext( sa
 {
     Reference< XFastContextHandler > xContext;
     if ( aElementToken == ( NMSP_DRAWINGML | XML_pt ) )
-        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
+        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjPoint2D );		// CT_AdjPoint2D
     return xContext;
 }
 
@@ -926,7 +926,7 @@ Reference< XFastContextHandler > Path2DQuadBezierToContext::createFastChildConte
 {
     Reference< XFastContextHandler > xContext;
     if ( aElementToken == ( NMSP_DRAWINGML | XML_pt ) )
-        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, nCount++ ? mrPt2 : mrPt1 ); // CT_AdjPoint2D
+        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, nCount++ ? mrPt2 : mrPt1 );	// CT_AdjPoint2D
     return xContext;
 }
 
@@ -949,7 +949,7 @@ protected:
 
 Path2DCubicBezierToContext::Path2DCubicBezierToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties,
     EnhancedCustomShapeParameterPair& rControlPt1,
-        EnhancedCustomShapeParameterPair& rControlPt2,
+        EnhancedCustomShapeParameterPair& rControlPt2, 
             EnhancedCustomShapeParameterPair& rEndPt )
 : ContextHandler( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
@@ -965,7 +965,7 @@ Reference< XFastContextHandler > Path2DCubicBezierToContext::createFastChildCont
     Reference< XFastContextHandler > xContext;
     if ( aElementToken == ( NMSP_DRAWINGML | XML_pt ) )
         xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties,
-            nCount++ ? nCount == 2 ? mrControlPt2 : mrEndPt : mrControlPt1 );   // CT_AdjPoint2D
+            nCount++ ? nCount == 2 ? mrControlPt2 : mrEndPt : mrControlPt1 );	// CT_AdjPoint2D
     return xContext;
 }
 
@@ -1059,7 +1059,7 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             xContext = new Path2DLineToContext( *this, mrCustomShapeProperties, mrPath2D.parameter.back() );
         }
         break;
-        case NMSP_DRAWINGML | XML_arcTo :   // CT_Path2DArcTo
+        case NMSP_DRAWINGML | XML_arcTo :	// CT_Path2DArcTo
         {
             if ( !mrSegments.empty() && ( mrSegments.back().Command == EnhancedCustomShapeSegmentCommand::ARCTO ) )
                 mrSegments.back().Count++;
@@ -1075,8 +1075,8 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             EnhancedCustomShapeParameter aStartAngle = GetAdjAngle( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_stAng ) );
             EnhancedCustomShapeParameter swAngle = GetAdjAngle( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_swAng ) );
 
-            EnhancedCustomShapeParameterPair aPt1;  // TODO: conversion from (wr hr stAng swAng)
-            EnhancedCustomShapeParameterPair aPt2;  // to (x1 y1 x2 y2 x3 y3 x y) needed
+            EnhancedCustomShapeParameterPair aPt1;	// TODO: conversion from (wr hr stAng swAng)
+            EnhancedCustomShapeParameterPair aPt2;	// to (x1 y1 x2 y2 x3 y3 x y) needed
             EnhancedCustomShapeParameterPair aPt3;
             EnhancedCustomShapeParameterPair aPt;
             mrPath2D.parameter.push_back( aPt1 );
@@ -1139,7 +1139,7 @@ class Path2DListContext : public ContextHandler
 public:
     Path2DListContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< EnhancedCustomShapeSegment >& rSegments,
         std::vector< Path2D >& rPath2DList );
-
+    
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
@@ -1177,7 +1177,7 @@ OUString GetShapeType( sal_Int32 nType )
     OUString sType;
      switch( nType )
     {
-        case XML_lineInv:   // TODO
+        case XML_lineInv:	// TODO
         case XML_line: {
             static const OUString sLine = CREATE_OUSTRING( "mso-spt20" );
             sType = sLine;
@@ -1202,7 +1202,7 @@ OUString GetShapeType( sal_Int32 nType )
             static const OUString sParallelogram = CREATE_OUSTRING( "parallelogram" );
             sType = sParallelogram;
             } break;
-        case XML_nonIsoscelesTrapezoid:     // TODO
+        case XML_nonIsoscelesTrapezoid:		// TODO
         case XML_trapezoid: {
             static const OUString sTrapezoid = CREATE_OUSTRING( "trapezoid" );
             sType = sTrapezoid;
@@ -1211,13 +1211,13 @@ OUString GetShapeType( sal_Int32 nType )
             static const OUString sPentagon = CREATE_OUSTRING( "pentagon" );
             sType = sPentagon;
             } break;
-        case XML_heptagon:                  // TODO
+        case XML_heptagon:					// TODO
         case XML_hexagon: {
             static const OUString sHexagon = CREATE_OUSTRING( "hexagon" );
             sType = sHexagon;
             } break;
-        case XML_decagon:                   // TODO
-        case XML_dodecagon:                 // TODO
+        case XML_decagon:					// TODO
+        case XML_dodecagon:					// TODO
         case XML_octagon: {
             static const OUString sOctagon = CREATE_OUSTRING( "octagon" );
             sType = sOctagon;
@@ -1226,31 +1226,31 @@ OUString GetShapeType( sal_Int32 nType )
             static const OUString sStar4 = CREATE_OUSTRING( "star4" );
             sType = sStar4;
             } break;
-        case XML_star6:                     // TODO
-        case XML_star7:                     // TODO
+        case XML_star6:						// TODO
+        case XML_star7:						// TODO
         case XML_star5: {
             static const OUString sStar5 = CREATE_OUSTRING( "star5" );
             sType = sStar5;
             } break;
-        case XML_star10:                    // TODO
-        case XML_star12:                    // TODO
-        case XML_star16:                    // TODO
+        case XML_star10:					// TODO
+        case XML_star12:					// TODO
+        case XML_star16:					// TODO
         case XML_star8: {
             static const OUString sStar8 = CREATE_OUSTRING( "star8" );
             sType = sStar8;
             } break;
-        case XML_star32:                    // TODO
+        case XML_star32:					// TODO
         case XML_star24: {
             static const OUString sStar24 = CREATE_OUSTRING( "star24" );
             sType = sStar24;
             } break;
-        case XML_round1Rect:                // TODO
-        case XML_round2SameRect:            // TODO
-        case XML_round2DiagRect:            // TODO
-        case XML_snipRoundRect:             // TODO
-        case XML_snip1Rect:                 // TODO
-        case XML_snip2SameRect:             // TODO
-        case XML_snip2DiagRect:             // TODO
+        case XML_round1Rect:				// TODO
+        case XML_round2SameRect:			// TODO
+        case XML_round2DiagRect:			// TODO
+        case XML_snipRoundRect:				// TODO
+        case XML_snip1Rect:					// TODO
+        case XML_snip2SameRect:				// TODO
+        case XML_snip2DiagRect:				// TODO
         case XML_roundRect: {
             static const OUString sRoundRect = CREATE_OUSTRING( "round-rectangle" );
             sType = sRoundRect;
@@ -1259,7 +1259,7 @@ OUString GetShapeType( sal_Int32 nType )
             static const OUString sPlaque = CREATE_OUSTRING( "mso-spt21" );
             sType = sPlaque;
             } break;
-        case XML_teardrop:                  // TODO
+        case XML_teardrop:					// TODO
         case XML_ellipse: {
             static const OUString sEllipse = CREATE_OUSTRING( "ellipse" );
             sType = sEllipse;
@@ -1272,8 +1272,8 @@ OUString GetShapeType( sal_Int32 nType )
             static const OUString sChevron = CREATE_OUSTRING( "chevron" );
             sType = sChevron;
             } break;
-        case XML_pieWedge:                  // TODO
-        case XML_pie:                       // TODO
+        case XML_pieWedge:					// TODO
+        case XML_pie:						// TODO
         case XML_blockArc: {
             static const OUString sBlockArc = CREATE_OUSTRING( "block-arc" );
             sType = sBlockArc;
@@ -1370,8 +1370,8 @@ OUString GetShapeType( sal_Int32 nType )
             static const OUString sUTurnArrow = CREATE_OUSTRING( "mso-spt101" );
             sType = sUTurnArrow;
             } break;
-        case XML_leftCircularArrow:         // TODO
-        case XML_leftRightCircularArrow:    // TODO
+        case XML_leftCircularArrow:			// TODO
+        case XML_leftRightCircularArrow:	// TODO
         case XML_circularArrow: {
             static const OUString sCircularArrow = CREATE_OUSTRING( "circular-arrow" );
             sType = sCircularArrow;
@@ -1388,7 +1388,7 @@ OUString GetShapeType( sal_Int32 nType )
             static const OUString sCurvedUpArrow = CREATE_OUSTRING( "mso-spt104" );
             sType = sCurvedUpArrow;
             } break;
-        case XML_swooshArrow:               // TODO
+        case XML_swooshArrow:				// TODO
         case XML_curvedDownArrow: {
             static const OUString sCurvedDownArrow = CREATE_OUSTRING( "mso-spt105" );
             sType = sCurvedDownArrow;
@@ -1437,10 +1437,10 @@ OUString GetShapeType( sal_Int32 nType )
             static const OUString sBevel = CREATE_OUSTRING( "quad-bevel" );
             sType = sBevel;
             } break;
-        case XML_halfFrame:                 // TODO
-        case XML_corner:                    // TODO
-        case XML_diagStripe:                // TODO
-        case XML_chord:                     // TODO
+        case XML_halfFrame:					// TODO
+        case XML_corner:					// TODO
+        case XML_diagStripe:				// TODO
+        case XML_chord:						// TODO
         case XML_frame: {
             static const OUString sFrame = CREATE_OUSTRING( "mso-spt75" );
             sType = sFrame;
@@ -1569,7 +1569,7 @@ OUString GetShapeType( sal_Int32 nType )
             static const OUString sWedgeEllipseCallout = CREATE_OUSTRING( "round-callout" );
             sType = sWedgeEllipseCallout;
             } break;
-        case XML_cloud:                     // TODO
+        case XML_cloud:						// TODO
         case XML_cloudCallout: {
             static const OUString sCloudCallout = CREATE_OUSTRING( "cloud-callout" );
             sType = sCloudCallout;
@@ -1586,7 +1586,7 @@ OUString GetShapeType( sal_Int32 nType )
             static const OUString sEllipseRibbon = CREATE_OUSTRING( "mso-spt107" );
             sType = sEllipseRibbon;
             } break;
-        case XML_leftRightRibbon:           // TODO
+        case XML_leftRightRibbon:			// TODO
         case XML_ellipseRibbon2: {
             static const OUString sEllipseRibbon2 = CREATE_OUSTRING( "mso-spt108" );
             sType = sEllipseRibbon2;
@@ -1775,21 +1775,21 @@ OUString GetShapeType( sal_Int32 nType )
             static const OUString sActionButtonMovie = CREATE_OUSTRING( "mso-spt200" );
             sType = sActionButtonMovie;
             } break;
-        case XML_gear6:                     // TODO
-        case XML_gear9:                     // TODO
-        case XML_funnel:                    // TODO
-        case XML_mathPlus:                  // TODO
-        case XML_mathMinus:                 // TODO
-        case XML_mathMultiply:              // TODO
-        case XML_mathDivide:                // TODO
-        case XML_mathEqual:                 // TODO
-        case XML_mathNotEqual:              // TODO
-        case XML_cornerTabs:                // TODO
-        case XML_squareTabs:                // TODO
-        case XML_plaqueTabs:                // TODO
-        case XML_chartX:                    // TODO
-        case XML_chartStar:                 // TODO
-        case XML_chartPlus: {               // TODO
+        case XML_gear6:						// TODO
+        case XML_gear9:						// TODO
+        case XML_funnel:					// TODO
+        case XML_mathPlus:					// TODO
+        case XML_mathMinus:					// TODO
+        case XML_mathMultiply:				// TODO
+        case XML_mathDivide:				// TODO
+        case XML_mathEqual:					// TODO
+        case XML_mathNotEqual:				// TODO
+        case XML_cornerTabs:				// TODO
+        case XML_squareTabs:				// TODO
+        case XML_plaqueTabs:				// TODO
+        case XML_chartX:					// TODO
+        case XML_chartStar:					// TODO
+        case XML_chartPlus: {				// TODO
             static const OUString sRectangle = CREATE_OUSTRING( "rectangle" );
             sType = sRectangle;
             } break;
@@ -1804,7 +1804,7 @@ static OUString GetTextShapeType( sal_Int32 nType )
     OUString sType;
     switch( nType )
     {
-        case XML_textNoShape:               // TODO
+        case XML_textNoShape:				// TODO
         case XML_textPlain: {
             static const OUString sTextPlain = CREATE_OUSTRING( "fontwork-plain-text" );
             sType = sTextPlain;
@@ -1984,19 +1984,19 @@ Reference< XFastContextHandler > CustomShapeGeometryContext::createFastChildCont
     Reference< XFastContextHandler > xContext;
     switch( aElementToken )
     {
-        case NMSP_DRAWINGML|XML_avLst:          // CT_GeomGuideList adjust value list
+        case NMSP_DRAWINGML|XML_avLst:			// CT_GeomGuideList adjust value list
             xContext = new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustmentGuideList() );
         break;
-        case NMSP_DRAWINGML|XML_gdLst:          // CT_GeomGuideList guide list
+        case NMSP_DRAWINGML|XML_gdLst:			// CT_GeomGuideList guide list
             xContext = new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getGuideList() );
         break;
-        case NMSP_DRAWINGML|XML_ahLst:          // CT_AdjustHandleList adjust handle list
+        case NMSP_DRAWINGML|XML_ahLst:			// CT_AdjustHandleList adjust handle list
             xContext = new AdjustHandleListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustHandleList() );
         break;
-        case NMSP_DRAWINGML|XML_cxnLst:         // CT_ConnectionSiteList connection site list
+        case NMSP_DRAWINGML|XML_cxnLst:			// CT_ConnectionSiteList connection site list
             xContext = this;
         break;
-        case NMSP_DRAWINGML|XML_rect:           // CT_GeomRectList geometry rect list
+        case NMSP_DRAWINGML|XML_rect:			// CT_GeomRectList geometry rect list
         {
             GeomRect aGeomRect;
             aGeomRect.l = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_l ), sal_True );
@@ -2006,12 +2006,12 @@ Reference< XFastContextHandler > CustomShapeGeometryContext::createFastChildCont
             mrCustomShapeProperties.getTextRect() = aGeomRect;
         }
         break;
-        case NMSP_DRAWINGML|XML_pathLst:        // CT_Path2DList 2d path list
+        case NMSP_DRAWINGML|XML_pathLst:		// CT_Path2DList 2d path list
             xContext = new Path2DListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getSegments(), mrCustomShapeProperties.getPath2DList() );
         break;
 
         // from cxnLst:
-        case NMSP_DRAWINGML|XML_cxn:                // CT_ConnectionSite
+        case NMSP_DRAWINGML|XML_cxn:				// CT_ConnectionSite 
         {
             ConnectionSite aConnectionSite;
             mrCustomShapeProperties.getConnectionSiteList().push_back( aConnectionSite );

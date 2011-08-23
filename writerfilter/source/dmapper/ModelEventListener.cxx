@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,24 +58,24 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
         try
         {
             uno::Reference< text::XDocumentIndexesSupplier> xIndexesSupplier( rEvent.Source, uno::UNO_QUERY );
-            //remove listener
+            //remove listener 
             uno::Reference<document::XEventBroadcaster>(rEvent.Source, uno::UNO_QUERY )->removeEventListener(
             uno::Reference<document::XEventListener>(this));
-
+            
             uno::Reference< container::XIndexAccess > xIndexes = xIndexesSupplier->getDocumentIndexes();
-
+    
             sal_Int32 nIndexes = xIndexes->getCount();
             for( sal_Int32 nIndex = 0; nIndex < nIndexes; ++nIndex)
             {
                 uno::Reference< text::XDocumentIndex> xIndex( xIndexes->getByIndex( nIndex ), uno::UNO_QUERY );
                 xIndex->update();
-            }
+            }    
         }
         catch( const uno::Exception& rEx )
         {
             (void)rEx;
             OSL_ENSURE( false, "exception while updating indexes" );
-        }
+        }    
     }
 }
 /*-- 22.11.2007 08:40:22---------------------------------------------------
@@ -90,7 +90,7 @@ void ModelEventListener::disposing( const lang::EventObject& rEvent ) throw (uno
     }
     catch( const uno::Exception& )
     {
-    }
+    }    
 }
 
 } //namespace dmapper

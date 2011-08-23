@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,81 +55,81 @@ class TIFFReader
 
 private:
 
-    BOOL                bStatus;                    // Ob bisher kein Fehler auftrat
-    Animation           aAnimation;
-    ULONG               nLastPercent;
+    BOOL				bStatus;                    // Ob bisher kein Fehler auftrat
+    Animation			aAnimation;
+    ULONG				nLastPercent;
 
-    SvStream*           pTIFF;                      // Die einzulesende TIFF-Datei
-    Bitmap              aBitmap;
-    BitmapWriteAccess*  pAcc;
+    SvStream*			pTIFF;						// Die einzulesende TIFF-Datei
+    Bitmap				aBitmap;
+    BitmapWriteAccess*	pAcc;
     AlphaMask*          pAlphaMask;
     BitmapWriteAccess*  pMaskAcc;
-    USHORT              nDstBitsPerPixel;
+    USHORT				nDstBitsPerPixel;
 
-    ULONG               nOrigPos;                   // Anfaengliche Position in pTIFF
-    UINT16              nOrigNumberFormat;          // Anfaengliches Nummern-Format von pTIFF
+    ULONG				nOrigPos;					// Anfaengliche Position in pTIFF
+    UINT16				nOrigNumberFormat;			// Anfaengliches Nummern-Format von pTIFF
 
 
-    UINT16              nDataType;
+    UINT16				nDataType;
     // Daten, die aus dem TIFF-Tags entnommen werden:
-    BOOL                bByteSwap;                  // TRUE wenn bits 0..7 -> 7..0 invertiert werden sollen ( FILLORDER = 2 );
-    BYTE                nByte1;                     // 'I', wenn Format LittleEndian
+    BOOL				bByteSwap;					// TRUE wenn bits 0..7 -> 7..0 invertiert werden sollen ( FILLORDER = 2 );
+    BYTE				nByte1;						// 'I', wenn Format LittleEndian
 
-    ULONG               nNewSubFile;                //
-    ULONG               nSubFile;                   //
-    ULONG               nImageWidth;                // Bildbreite in Pixel
-    ULONG               nImageLength;               // Bildhoehe in Pixel
-    ULONG               nBitsPerSample;             // Bits pro Pixel pro Ebene
-    ULONG               nCompression;               // Art der Kompriemierung
-    ULONG               nPhotometricInterpretation; //
-    ULONG               nThresholding;              //
-    ULONG               nCellWidth;                 //
-    ULONG               nCellLength;                //
-    ULONG               nFillOrder;                 //
-    ULONG*              pStripOffsets;              // Feld von Offsets zu den Bitmap-Daten-"Strips"
-    ULONG               nNumStripOffsets;           // Groesse obigen Feldes
-    ULONG               nOrientation;               //
-    ULONG               nSamplesPerPixel;           // Anzahl der Ebenen
-    ULONG               nRowsPerStrip;              // Wenn nicht komprimiert: Zahl der Zeilen pro Strip
-    ULONG*              pStripByteCounts;           // Wenn komprimiert (bestimmte Art): Groesse der Strips
-    ULONG               nNumStripByteCounts;        // Anzahl der Eintraege in obiges Feld
-    ULONG               nMinSampleValue;            //
-    ULONG               nMaxSampleValue;            //
-    double              fXResolution;               // X-Aufloesung oder 0.0
-    double              fYResolution;               // Y-Aufloesung oder 0.0
-    ULONG               nPlanarConfiguration;       //
-    ULONG               nGroup3Options;             //
-    ULONG               nGroup4Options;             //
-    ULONG               nResolutionUnit;            // Einheit von fX/YResolution: 1=unbekannt, 2(default)=Zoll, 3=cm
-    ULONG               nPredictor;                 //
-    ULONG*              pColorMap;                  // Farb-Palette
-    ULONG               nNumColors;                 // Anzahl Farben in der Farbpalette
+    ULONG				nNewSubFile;				//
+    ULONG				nSubFile;					//
+    ULONG				nImageWidth;				// Bildbreite in Pixel
+    ULONG				nImageLength;				// Bildhoehe in Pixel
+    ULONG				nBitsPerSample;				// Bits pro Pixel pro Ebene
+    ULONG				nCompression;				// Art der Kompriemierung
+    ULONG				nPhotometricInterpretation;	//
+    ULONG				nThresholding;				//
+    ULONG				nCellWidth;					//
+    ULONG				nCellLength;				//
+    ULONG				nFillOrder;					//
+    ULONG*				pStripOffsets;				// Feld von Offsets zu den Bitmap-Daten-"Strips"
+    ULONG				nNumStripOffsets;			// Groesse obigen Feldes
+    ULONG				nOrientation;				//
+    ULONG				nSamplesPerPixel;			// Anzahl der Ebenen
+    ULONG				nRowsPerStrip;				// Wenn nicht komprimiert: Zahl der Zeilen pro Strip
+    ULONG*				pStripByteCounts;			// Wenn komprimiert (bestimmte Art): Groesse der Strips
+    ULONG				nNumStripByteCounts;		// Anzahl der Eintraege in obiges Feld
+    ULONG				nMinSampleValue;			//
+    ULONG				nMaxSampleValue;			//
+    double				fXResolution;				// X-Aufloesung oder 0.0
+    double				fYResolution;				// Y-Aufloesung oder 0.0
+    ULONG				nPlanarConfiguration;		//
+    ULONG				nGroup3Options;				//
+    ULONG				nGroup4Options;				//
+    ULONG				nResolutionUnit;			// Einheit von fX/YResolution: 1=unbekannt, 2(default)=Zoll, 3=cm
+    ULONG				nPredictor;					//
+    ULONG*				pColorMap;					// Farb-Palette
+    ULONG				nNumColors;					// Anzahl Farben in der Farbpalette
 
-    ULONG               nPlanes;                    // Anzahl der Ebenen in der Tiff-Datei
-    ULONG               nStripsPerPlane;            // Anzahl der Strips pro Ebene
-    ULONG               nBytesPerRow;               // Bytes pro Zeile pro Ebene in der Tiff-Datei ( unkomprimiert )
-    BYTE*               pMap[ 4 ];                  // Temporaere Scanline
+    ULONG				nPlanes;					// Anzahl der Ebenen in der Tiff-Datei
+    ULONG				nStripsPerPlane;			// Anzahl der Strips pro Ebene
+    ULONG				nBytesPerRow;				// Bytes pro Zeile pro Ebene in der Tiff-Datei ( unkomprimiert )
+    BYTE*				pMap[ 4 ];					// Temporaere Scanline
 
 
-    void    MayCallback( ULONG nPercent );
+    void	MayCallback( ULONG nPercent );
 
-    ULONG   DataTypeSize();
-    ULONG   ReadIntData();
-    double  ReadDoubleData();
+    ULONG	DataTypeSize();
+    ULONG	ReadIntData();
+    double	ReadDoubleData();
 
-    void    ReadHeader();
-    void    ReadTagData( USHORT nTagType, sal_uInt32 nDataLen );
+    void	ReadHeader();
+    void	ReadTagData( USHORT nTagType, sal_uInt32 nDataLen );
 
-    BOOL    ReadMap( ULONG nMinPercent, ULONG nMaxPercent );
+    BOOL	ReadMap( ULONG nMinPercent, ULONG nMaxPercent );
         // Liesst/dekomprimert die Bitmap-Daten, und fuellt pMap
 
-    ULONG   GetBits( const BYTE * pSrc, ULONG nBitsPos, ULONG nBitsCount );
+    ULONG	GetBits( const BYTE * pSrc, ULONG nBitsPos, ULONG nBitsCount );
         // Holt nBitsCount Bits aus pSrc[..] an der Bit-Position nBitsPos
 
-    void    MakePalCol( void );
+    void	MakePalCol( void );
         // Erzeugt die Bitmap aus der temporaeren Bitmap pMap
         // und loescht dabei pMap teilweise
-    BOOL    ConvertScanline( ULONG nY );
+    BOOL	ConvertScanline( ULONG nY );
         // Konvertiert eine Scanline in das Windows-BMP-Format
 
     bool HasAlphaChannel() const;
@@ -168,24 +168,24 @@ ULONG TIFFReader::DataTypeSize()
     ULONG nSize;
     switch ( nDataType )
     {
-        case 1 :            // BYTE
-        case 2 :            // ACSII
-        case 6 :            // SIGNED Byte
-        case 7 :            // UNDEFINED
+        case 1 : 			// BYTE
+        case 2 : 			// ACSII
+        case 6 :			// SIGNED Byte
+        case 7 :			// UNDEFINED
             nSize = 1;
             break;
-        case 3 :            // UINT16
-        case 8 :            // INT16
+        case 3 : 			// UINT16
+        case 8 :			// INT16
             nSize = 2;
             break;
-        case 4 :            // UINT32
-        case 9 :            // INT32
-        case 11 :           // FLOAT
+        case 4 : 			// UINT32
+        case 9 :			// INT32
+        case 11 :			// FLOAT
             nSize = 4;
             break;
-        case 5 :            // RATIONAL
-        case 10 :           // SIGNED RATINAL
-        case 12 :           // DOUBLE
+        case 5 : 			// RATIONAL
+        case 10 :			// SIGNED RATINAL
+        case 12 :			// DOUBLE
             nSize = 8;
             break;
         default:
@@ -199,18 +199,18 @@ ULONG TIFFReader::DataTypeSize()
 
 ULONG TIFFReader::ReadIntData()
 {
-    double  nDOUBLE;
-    float   nFLOAT;
-    UINT32  nUINT32a, nUINT32b;
-    INT32   nINT32;
-    UINT16  nUINT16;
-    INT16   nINT16;
-    BYTE    nBYTE;
-    char    nCHAR;
+    double	nDOUBLE;
+    float	nFLOAT;
+    UINT32	nUINT32a, nUINT32b;
+    INT32	nINT32;
+    UINT16	nUINT16;
+    INT16	nINT16;
+    BYTE	nBYTE;
+    char	nCHAR;
 
     switch( nDataType )
     {
-        case 0 :    //??
+        case 0 :	//??
         case 1 :
         case 2 :
         case 7 :
@@ -263,7 +263,7 @@ ULONG TIFFReader::ReadIntData()
 double TIFFReader::ReadDoubleData()
 {
     sal_uInt32 nulong;
-    double  nd;
+    double	nd;
 
     if ( nDataType == 5 )
     {
@@ -396,7 +396,7 @@ void TIFFReader::ReadTagData( USHORT nTagType, sal_uInt32 nDataLen)
             nOldNumSBC = nNumStripByteCounts;
             nDataLen += nOldNumSBC;
             if ( ( nDataLen > nOldNumSBC ) && ( nDataLen < SAL_MAX_UINT32 / sizeof( sal_uInt32 ) ) )
-            {
+            {		
                 nNumStripByteCounts = nDataLen;
                 try
                 {
@@ -551,7 +551,7 @@ BOOL TIFFReader::ReadMap( ULONG nMinPercent, ULONG nMaxPercent )
                 return FALSE;
         }
         else
-        {   // nCompression==4
+        {	// nCompression==4
             nOptions = CCI_OPTION_2D;
             if ( nGroup4Options & 0xffffffff )
                 return FALSE;
@@ -661,8 +661,8 @@ BOOL TIFFReader::ReadMap( ULONG nMinPercent, ULONG nMaxPercent )
                         {
                             nRecCount = nRowBytesLeft;
 
-//                          bStatus = FALSE;
-//                          return;
+//							bStatus = FALSE;
+//							return;
 
                         }
                         *pTIFF >> nRecData;
@@ -744,15 +744,15 @@ ULONG TIFFReader::GetBits( const BYTE * pSrc, ULONG nBitsPos, ULONG nBitsCount )
 
 BOOL TIFFReader::ConvertScanline( ULONG nY )
 {
-    UINT32  nRed, nGreen, nBlue, ns, nx, nVal, nByteCount;
-    BYTE    nByteVal;
+    UINT32	nRed, nGreen, nBlue, ns, nx, nVal, nByteCount;
+    BYTE	nByteVal;
 
     if ( nDstBitsPerPixel == 24 )
     {
         if ( nBitsPerSample == 8 && nSamplesPerPixel >= 3 &&
              nPlanes == 1 && nPhotometricInterpretation == 2 )
         {
-            BYTE*   pt = pMap[ 0 ];
+            BYTE*	pt = pMap[ 0 ];
 
             // sind die Werte als Differenz abgelegt?
             if ( 2 == nPredictor )
@@ -832,9 +832,9 @@ BOOL TIFFReader::ConvertScanline( ULONG nY )
         }
         else if( nPhotometricInterpretation == 5 && nSamplesPerPixel == 4 )
         {
-            BYTE    nSamp[ 4 ];
-            BYTE    nSampLast[ 4 ] = { 0, 0, 0, 0 };
-            long    nBlack;
+            BYTE	nSamp[ 4 ];
+            BYTE	nSampLast[ 4 ] = { 0, 0, 0, 0 };
+            long	nBlack;
 
             for( nx = 0; nx < nImageWidth; nx++ )
             {
@@ -1019,10 +1019,10 @@ BOOL TIFFReader::ConvertScanline( ULONG nY )
         }
     }
     else if ( ( nSamplesPerPixel == 2 ) && ( nBitsPerSample == 8 ) &&
-        ( nPlanarConfiguration == 1 ) && ( pColorMap == 0 ) )               // grayscale
+        ( nPlanarConfiguration == 1 ) && ( pColorMap == 0 ) )				// grayscale
     {
         ULONG nMinMax = ( ( 1 << 8 /*nDstBitsPerPixel*/ ) - 1 ) / ( nMaxSampleValue - nMinSampleValue );
-        BYTE*   pt = pMap[ 0 ];
+        BYTE*	pt = pMap[ 0 ];
         if ( nByte1 == 'I' )
             pt++;
         for ( nx = 0; nx < nImageWidth; nx++, pt += 2 )
@@ -1120,9 +1120,9 @@ bool TIFFReader::HasAlphaChannel() const
 
 BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 {
-    USHORT  i, nNumTags, nTagType;
-    ULONG   nMaxPos;
-    ULONG   nPos;
+    USHORT	i, nNumTags, nTagType;
+    ULONG	nMaxPos;
+    ULONG	nPos;
     sal_uInt32 nFirstIfd, nDataLen;
 
     bStatus = TRUE;
@@ -1139,7 +1139,7 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
     // Ersten IFD einlesen:
     *pTIFF >> nFirstIfd;
-
+    
     if( !nFirstIfd || pTIFF->GetError() )
         bStatus = FALSE;
 
@@ -1189,26 +1189,26 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 nSubFile = 0;
                 nImageWidth = 0;
                 nImageLength = 0;
-                nBitsPerSample = 1;                         // Defaultwert laut Doku
+                nBitsPerSample = 1;							// Defaultwert laut Doku
                 nCompression = 1;
                 nPhotometricInterpretation = 0;
-                nThresholding = 1;                          // Defaultwert laut Doku
+                nThresholding = 1;							// Defaultwert laut Doku
                 nCellWidth = 1;
                 nCellLength = 1;
-                nFillOrder = 1;                             // Defaultwert laut Doku
+                nFillOrder = 1;								// Defaultwert laut Doku
                 nNumStripOffsets = 0;
                 nOrientation = 1;
-                nSamplesPerPixel = 1;                       // Defaultwert laut Doku
-                nRowsPerStrip = 0xffffffff;                 // Defaultwert laut Doku
+                nSamplesPerPixel = 1;						// Defaultwert laut Doku
+                nRowsPerStrip = 0xffffffff;					// Defaultwert laut Doku
                 nNumStripByteCounts = 0;
-                nMinSampleValue = 0;                        // Defaultwert laut Doku
+                nMinSampleValue = 0;						// Defaultwert laut Doku
                 nMaxSampleValue = 0;
                 fXResolution = 0.0;
                 fYResolution = 0.0;
                 nPlanarConfiguration = 1;
-                nGroup3Options = 0;                         // Defaultwert laut Doku
-                nGroup4Options = 0;                         // Defaultwert laut Doku
-                nResolutionUnit = 2;                        // Defaultwert laut Doku
+                nGroup3Options = 0;							// Defaultwert laut Doku
+                nGroup4Options = 0;							// Defaultwert laut Doku
+                nResolutionUnit = 2;						// Defaultwert laut Doku
                 nPredictor = 1;
                 nNumColors = 0;
 
@@ -1271,7 +1271,7 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     else
                         nPlanes = nSamplesPerPixel;
 
-                    if ( ( nFillOrder == 2 ) && ( nCompression != 5 ) )     // im LZW Mode werden die bits schon invertiert
+                    if ( ( nFillOrder == 2 ) && ( nCompression != 5 ) )		// im LZW Mode werden die bits schon invertiert
                         bByteSwap = TRUE;
 
                     nStripsPerPlane = ( nImageLength - 1 ) / nRowsPerStrip + 1;
@@ -1326,7 +1326,7 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                             else
                                 aImage = aBitmap;
 
-                            AnimationBitmap aAnimationBitmap( aImage, Point( 0, 0 ), aBitmap.GetSizePixel(),
+                            AnimationBitmap	aAnimationBitmap( aImage, Point( 0, 0 ), aBitmap.GetSizePixel(),
                                                               ANIMATION_TIMEOUT_ON_CLICK, DISPOSE_BACK );
 
                             aAnimation.Insert( aAnimationBitmap );
@@ -1353,7 +1353,7 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
         if ( aAnimation.Count() == 1 )
             rGraphic = aAnimation.GetBitmapEx();
         else
-            rGraphic = aAnimation;  //aBitmap;
+            rGraphic = aAnimation;	//aBitmap;
 
         return TRUE;
     }

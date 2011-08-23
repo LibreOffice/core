@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,11 +36,11 @@
 #include <doctokLoggers.hxx>
 
 namespace writerfilter {
-namespace doctok
+namespace doctok 
 {
 using namespace ::com::sun::star;
 
-#ifdef DEBUG
+#ifdef DEBUG    
 TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
 #endif
 
@@ -48,7 +48,7 @@ WW8Stream::~WW8Stream()
 {
 }
 
-WW8StreamImpl::WW8StreamImpl(uno::Reference<uno::XComponentContext> rContext,
+WW8StreamImpl::WW8StreamImpl(uno::Reference<uno::XComponentContext> rContext, 
               uno::Reference<io::XInputStream> rStream)
 : mrComponentContext(rContext), mrStream(rStream)
 {
@@ -57,21 +57,21 @@ WW8StreamImpl::WW8StreamImpl(uno::Reference<uno::XComponentContext> rContext,
 
     uno::Sequence<uno::Any> aArgs( 1 );
     aArgs[0] <<= mrStream;
-
+        
     xOLESimpleStorage = uno::Reference<container::XNameContainer>
         (xFactory->createInstanceWithArgumentsAndContext
          (::rtl::OUString::createFromAscii
           ("com.sun.star.embed.OLESimpleStorage"),
           aArgs, mrComponentContext ),
          uno::UNO_QUERY );
-
+    
 }
 
 WW8StreamImpl::~WW8StreamImpl()
 {
 }
 
-WW8Stream::Sequence WW8StreamImpl::get(sal_uInt32 nOffset,
+WW8Stream::Sequence WW8StreamImpl::get(sal_uInt32 nOffset, 
                                        sal_uInt32 nCount) const
 {
     uno::Sequence<sal_Int8> aSequence;
@@ -79,11 +79,11 @@ WW8Stream::Sequence WW8StreamImpl::get(sal_uInt32 nOffset,
     if (nCount > 0)
     {
         uno::Reference< io::XSeekable > xSeek( mrStream, uno::UNO_QUERY_THROW );
-
+            
         xSeek->seek(nOffset);
-
-        sal_Int32 nRead = mrStream->readBytes(aSequence, nCount);
-
+            
+        sal_Int32 nRead = mrStream->readBytes(aSequence, nCount);    
+ 
         Sequence aReturnSequence(const_cast<const sal_uInt8 *>
                                  (reinterpret_cast<sal_uInt8 *>
                                   (&(aSequence[0]))), nRead);
@@ -97,7 +97,7 @@ WW8Stream::Sequence WW8StreamImpl::get(sal_uInt32 nOffset,
 WW8Stream::Pointer_t WW8StreamImpl::getSubStream(const ::rtl::OUString & sId)
 {
     WW8Stream::Pointer_t pResult;
-
+        
     try
     {
         if (xOLESimpleStorage.is())
@@ -109,13 +109,13 @@ WW8Stream::Pointer_t WW8StreamImpl::getSubStream(const ::rtl::OUString & sId)
                     uno::Any aValue = xOLESimpleStorage->getByName(sId);
                     aValue >>= xNewStream;
                 }
-
+                
                 if (xNewStream.is())
                 {
-                    WW8Stream::Pointer_t
-                        pNew(new WW8StreamImpl(mrComponentContext,
+                    WW8Stream::Pointer_t 
+                        pNew(new WW8StreamImpl(mrComponentContext, 
                                                xNewStream->getInputStream()));
-
+                    
                     pResult = pNew;
                 }
             }
@@ -139,7 +139,7 @@ string WW8StreamImpl::getSubStreamNames() const
     {
         uno::Sequence<rtl::OUString> aSeq = xOLESimpleStorage->getElementNames();
 
-        for (sal_uInt32 n = 0;
+        for (sal_uInt32 n = 0; 
              n < sal::static_int_cast<sal_uInt32>(aSeq.getLength()); ++n)
         {
             rtl::OUString aOUStr = aSeq[n];
@@ -149,14 +149,14 @@ string WW8StreamImpl::getSubStreamNames() const
 
 #if 0
             rtl::OString aOStr;
-            aOUStr.convertToString(&aOStr, RTL_TEXTENCODING_ASCII_US,
+            aOUStr.convertToString(&aOStr, RTL_TEXTENCODING_ASCII_US, 
                                     OUSTRING_TO_OSTRING_CVTFLAGS);
 
 
             sResult += aOStr.getStr();
 #endif
             char sBuffer[256];
-            for (sal_uInt32 j = 0;
+            for (sal_uInt32 j = 0; 
                  j < sal::static_int_cast<sal_uInt32>(aOUStr.getLength()); ++j)
             {
                 if (isprint(aOUStr[j]))
@@ -197,7 +197,7 @@ void WW8StreamImpl::dump(OutputWithDepth<string> & o) const
     {
         aSeq = get(nOffset, nStep);
         dumpLine(o, aSeq, nOffset, nStep);
-
+        
         nOffset += nStep;
     }
     while (aSeq.getCount() == nStep);

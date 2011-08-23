@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Mar 2005           Created
+ Mar 2005		 	Created
  ************************************************************************/
 #ifndef _LWP_FNLAYOUT_HXX
 #define _LWP_FNLAYOUT_HXX
@@ -67,7 +67,7 @@
 #include "lwptablelayout.hxx"
 
 /**
- * @brief   VO_FOOTNOTELAYOUT object
+ * @brief	VO_FOOTNOTELAYOUT object
  *
 */
 class LwpFootnoteLayout : public LwpTableLayout
@@ -83,7 +83,7 @@ protected:
 };
 
 /**
- * @brief   VO_FNROWLAYOUT object
+ * @brief	VO_FNROWLAYOUT object
  *
 */
 class LwpFnRowLayout : public LwpRowLayout
@@ -99,7 +99,7 @@ protected:
 };
 
 /**
- * @brief   VO_FNCELLLAYOUT object
+ * @brief	VO_FNCELLLAYOUT object
  *
 */
 class LwpFnCellLayout : public LwpCellLayout
@@ -115,7 +115,7 @@ protected:
 };
 
 /**
- * @brief   VO_ENDNOTELAYOUT object
+ * @brief	VO_ENDNOTELAYOUT object
  *
 */
 class LwpEndnoteLayout : public LwpTableLayout
@@ -131,7 +131,7 @@ protected:
 };
 
 /**
- * @brief   VO_ENSUPERTABLELAYOUT object
+ * @brief	VO_ENSUPERTABLELAYOUT object
  *
 */
 class LwpEnSuperTableLayout : public LwpSuperTableLayout
@@ -148,7 +148,7 @@ protected:
 };
 
 /**
- * @brief   VO_FNSUPERTABLELAYOUT object
+ * @brief	VO_FNSUPERTABLELAYOUT object
  *
 */
 class LwpFnSuperTableLayout : public LwpEnSuperTableLayout
@@ -165,7 +165,7 @@ protected:
 };
 
 /**
- * @brief   VO_CONTFROMLAYOUT object
+ * @brief	VO_CONTFROMLAYOUT object
  *
 */
 class LwpContFromLayout : public LwpPlacableLayout
@@ -180,7 +180,7 @@ protected:
 };
 
 /**
- * @brief   VO_CONTONLAYOUT object
+ * @brief	VO_CONTONLAYOUT object
  *
 */
 class LwpContOnLayout : public LwpPlacableLayout

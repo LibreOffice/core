@@ -56,9 +56,9 @@
 #ifndef FIRST_HXX
 #define FIRST_HXX
 
-#include "bento.hxx"        // Public header
+#include "bento.hxx"		// Public header
 
-//#define ASSERT(cond) UT_ASSERT(cond)      // Deleted by  2004-06-16
+//#define ASSERT(cond) UT_ASSERT(cond) 		// Deleted by  2004-06-16
 namespace OpenStormBento
 {
 // String constants

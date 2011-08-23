@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 #include "lwpfrib.hxx"
 #include "lwpcharsetmgr.hxx"
@@ -121,8 +121,8 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
     sal_uInt8 fribtype = fribtag&~FRIB_TAG_TYPEMASK;
     switch(fribtype)
     {
-        case FRIB_TAG_INVALID:  //fall through
-        case FRIB_TAG_EOP:      //fall through
+        case FRIB_TAG_INVALID:	//fall through
+        case FRIB_TAG_EOP:		//fall through
         default:
             newFrib = new LwpFrib(pPara);
             break;
@@ -169,7 +169,7 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
         case FRIB_TAG_NOTE:
             newFrib = new  LwpFribNote(pPara);
             break;
-/*      case FRIB_TAG_KANJI:
+/*		case FRIB_TAG_KANJI:
             #ifdef KANJI
             newFrib = new CFribHelperKanji;
             #else
@@ -189,7 +189,7 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
         case FRIB_TAG_SECTION:
             newFrib = new LwpFribSection(pPara);
             break;
-/*      case FRIB_TAG_TOMBSTONE:
+/*		case FRIB_TAG_TOMBSTONE:
             newFrib = new CFribHelperTombstone;
             break;
         case FRIB_TAG_SPECIALTAB:
@@ -198,7 +198,7 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
         case FRIB_TAG_PAGENUMBER:
             newFrib = new CFribHelperPageNumber;
             break;
-*/      case FRIB_TAG_PAGENUMBER:
+*/		case FRIB_TAG_PAGENUMBER:
             newFrib = new LwpFribPageNumber(pPara);
             break;
         case FRIB_TAG_DOCVAR:
@@ -207,19 +207,19 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
         case FRIB_TAG_BOOKMARK:
             newFrib = new LwpFribBookMark(pPara);
             break;
-/*      case FRIB_TAG_DOCVAR:
+/*		case FRIB_TAG_DOCVAR:
             newFrib = new CFribHelperBookmark;
             break;
         case FRIB_TAG_DDE:
             newFrib = new CFribHelperDDE;
             break;
-*/      case FRIB_TAG_FIELD:
+*/		case FRIB_TAG_FIELD:
             newFrib = new LwpFribField(pPara);
             break;
         case FRIB_TAG_CHBLOCK:
             newFrib = new LwpFribCHBlock(pPara);
             break;
-/*      case FRIB_TAG_FLOWBREAK:
+/*		case FRIB_TAG_FLOWBREAK:
             newFrib = new CFribHelperFlowBreak;
             break;
 #ifdef RUBY*/
@@ -339,7 +339,7 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
 {
     sal_uInt8 Modifier;
     sal_uInt8 len;
-//  sal_Bool ModifyFlag = sal_False;
+//	sal_Bool ModifyFlag = sal_False;
 
     for(;;)
     {
@@ -385,7 +385,7 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
                 break;
         }
         // TODO: read the modifier data
-    //  pObjStrm->SeekRel(len);
+    //	pObjStrm->SeekRel(len);
 
     }
 

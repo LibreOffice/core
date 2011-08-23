@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,33 +50,33 @@ class Window;
 class ImpSWFDialog : public ModalDialog
 {
 private:
-    FixedInfo           maFiDescr;
-    NumericField        maNumFldQuality;
-    FixedInfo           maFiExportAllDescr;
-    CheckBox            maCheckExportAll;
-    FixedInfo           maFiExportBackgroundsDescr;
-    CheckBox            maCheckExportBackgrounds;
-    FixedInfo           maFiExportBackgroundObjectsDescr;
-    CheckBox            maCheckExportBackgroundObjects;
-    FixedInfo           maFiExportSlideContentsDescr;
-    CheckBox            maCheckExportSlideContents;
-    FixedInfo           maFiExportSoundDescr;
-    CheckBox            maCheckExportSound;
-    FixedInfo           maFiExportOLEAsJPEGDescr;
-    CheckBox            maCheckExportOLEAsJPEG;
-    FixedInfo           maFiExportMultipleFilesDescr;
-    CheckBox            maCheckExportMultipleFiles;
+    FixedInfo			maFiDescr;
+    NumericField		maNumFldQuality;
+    FixedInfo			maFiExportAllDescr;
+    CheckBox			maCheckExportAll;
+    FixedInfo			maFiExportBackgroundsDescr;
+    CheckBox			maCheckExportBackgrounds;
+    FixedInfo			maFiExportBackgroundObjectsDescr;
+    CheckBox			maCheckExportBackgroundObjects;
+    FixedInfo			maFiExportSlideContentsDescr;
+    CheckBox			maCheckExportSlideContents;
+    FixedInfo			maFiExportSoundDescr;
+    CheckBox			maCheckExportSound;
+    FixedInfo			maFiExportOLEAsJPEGDescr;
+    CheckBox			maCheckExportOLEAsJPEG;
+    FixedInfo			maFiExportMultipleFilesDescr;
+    CheckBox			maCheckExportMultipleFiles;
 
-    OKButton            maBtnOK;
-    CancelButton        maBtnCancel;
-    HelpButton          maBtnHelp;
+    OKButton			maBtnOK;
+    CancelButton		maBtnCancel;
+    HelpButton			maBtnHelp;
 
-    FilterConfigItem    maConfigItem;
+    FilterConfigItem	maConfigItem;
 
     DECL_LINK( OnToggleCheckbox, CheckBox* );
 
 public:
-    ImpSWFDialog( Window* pParent, ResMgr& rResMgr,
+    ImpSWFDialog( Window* pParent, ResMgr& rResMgr, 
                   com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rFilterData );
     ~ImpSWFDialog();
 

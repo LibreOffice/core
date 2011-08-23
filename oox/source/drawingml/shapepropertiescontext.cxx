@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,12 +74,12 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
         break;
 
     // GeometryGroup
-    case NMSP_DRAWINGML|XML_custGeom:   // custom geometry "CT_CustomGeometry2D"
+    case NMSP_DRAWINGML|XML_custGeom:	// custom geometry "CT_CustomGeometry2D"
         xRet.set( new CustomShapeGeometryContext( *this, xAttribs, *(mrShape.getCustomShapeProperties()) ) );
         break;
 
 
-    case NMSP_DRAWINGML|XML_prstGeom:   // preset geometry "CT_PresetGeometry2D"
+    case NMSP_DRAWINGML|XML_prstGeom:	// preset geometry "CT_PresetGeometry2D"
         {
             sal_Int32 nToken = xAttribs->getOptionalValueToken( XML_prst, 0 );
             if ( nToken == XML_line )
@@ -102,13 +102,13 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
 
     // EffectPropertiesGroup
     // todo not supported by core
-    case NMSP_DRAWINGML|XML_effectLst:  // CT_EffectList
-    case NMSP_DRAWINGML|XML_effectDag:  // CT_EffectContainer
+    case NMSP_DRAWINGML|XML_effectLst:	// CT_EffectList
+    case NMSP_DRAWINGML|XML_effectDag:	// CT_EffectContainer
         break;
 
     // todo
-    case NMSP_DRAWINGML|XML_scene3d:    // CT_Scene3D
-    case NMSP_DRAWINGML|XML_sp3d:       // CT_Shape3D
+    case NMSP_DRAWINGML|XML_scene3d:	// CT_Scene3D
+    case NMSP_DRAWINGML|XML_sp3d:		// CT_Shape3D
         break;
     }
 

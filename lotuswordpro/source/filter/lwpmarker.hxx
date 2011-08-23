@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Mar 2005           Created
+ Mar 2005			Created
  ************************************************************************/
 
 
@@ -187,7 +187,7 @@ public:
     OUString GetName();
     sal_Bool IsRightName(OUString sName);
 private:
-    enum {  BKMK_NOTESFX = 0x0001,
+    enum {	BKMK_NOTESFX = 0x0001,
         BKMK_OLDNOTESFX = 0x0002
         };
     LwpObjectID m_objMarker;
@@ -203,7 +203,7 @@ public:
     void Read();
     void ParseIndex(OUString& sKey1,OUString& sKey2);
     void ParseTOC(OUString& sLevel,OUString& sText);
-//  sal_uInt8 ParseCrossRef(OUString& sMarkName);
+//	sal_uInt8 ParseCrossRef(OUString& sMarkName);
     sal_uInt16 GetFieldType(){return m_nFieldType;}
     sal_Bool IsFormulaInsert();
     sal_Bool IsDateTimeField(sal_uInt8& type,OUString& formula);

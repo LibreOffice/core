@@ -1,0 +1,160 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _APP_HRC
+#define _APP_HRC
+
+#include "rcid.hrc"
+
+// Default Bitmap fuer ToolBox
+
+// Document-Icon
+#define RC_DOC_ICON 				(RC_APP_BEGIN + 2)
+
+//Soll das Clipboard fuer andere Applikationen...
+
+
+// Messages
+
+//Fuer das Interface, weil der RID_APP_BEGIN jetzt Desktop ist.
+#define RID_SW_NAME					( RC_APP_BEGIN + 8)
+
+
+#define STR_UNBENANNT				(RC_APP_BEGIN + 13)
+#define STR_VERSION 				(RC_APP_BEGIN + 14)
+#define STR_PRINT_MERGE_MACRO		(RC_APP_BEGIN + 15)
+#define STR_PAGE_COUNT_MACRO		(RC_APP_BEGIN + 16)
+
+// Bitmap fuer die NumerierungsVorlagen im Organizer
+
+// Strings fuer Bereiche in der Konfiguration
+#define STR_GRP_FILE				(RC_APP_BEGIN + 56)
+#define STR_GRP_EDIT				(RC_APP_BEGIN + 57)
+#define STR_GRP_TRAVELLING			(RC_APP_BEGIN + 58)
+#define STR_GRP_VIEW				(RC_APP_BEGIN + 59)
+#define STR_GRP_INSERT				(RC_APP_BEGIN + 60)
+#define STR_GRP_FORMAT				(RC_APP_BEGIN + 61)
+#define STR_GRP_STYLE				(RC_APP_BEGIN + 62)
+#define STR_GRP_TEXT				(RC_APP_BEGIN + 63)
+#define STR_GRP_FRAME				(RC_APP_BEGIN + 64)
+#define STR_GRP_GRAPHIC 			(RC_APP_BEGIN + 65)
+#define STR_GRP_TABLE				(RC_APP_BEGIN + 66)
+#define STR_GRP_TOOLS				(RC_APP_BEGIN + 67)
+#define STR_GRP_NUMBERING			(RC_APP_BEGIN + 68)
+#define STR_GRP_WINDOW				(RC_APP_BEGIN + 69)
+#define STR_GRP_MISC				(RC_APP_BEGIN + 70)
+#define STR_GRP_MACRO				(RC_APP_BEGIN + 71)
+#define RES_EXT_HELP_STRING 		(RC_APP_BEGIN + 72)
+#define RES_STD_HELP_STRING 		(RC_APP_BEGIN + 73)
+#define STR_PAGEBREAK				(RC_APP_BEGIN + 75)
+//#define MSG_INS_MERGE_FIELDS        (RC_APP_BEGIN + 79)
+#define SID_TOGGLETOOLBOX			(RC_APP_BEGIN + 89)
+
+#define STR_LAB_TITLE				(RC_APP_BEGIN + 92)
+
+#define STR_HUMAN_SWDOC_NAME 		(RC_APP_BEGIN + 93)
+
+#define RID_SW_ERRHDL               (RC_APP_BEGIN + 95)
+
+#define STR_FDLG_TEMPLATE_BUTTON	(RC_APP_BEGIN + 1)
+#define STR_FDLG_TEMPLATE_NAME		(RC_APP_BEGIN + 2)
+
+
+// Ids fuer die einzelnen PopUpMenues
+#define MN_WIZARD					(RC_APP_BEGIN + 9)
+#define MN_INDEX					(RC_APP_BEGIN + 10)
+#define MN_FILE 					(RC_APP_BEGIN + 11)
+#define MN_EDIT 					(RC_APP_BEGIN + 12)
+#define MN_VIEW 					(RC_APP_BEGIN + 13)
+#define MN_INS						(RC_APP_BEGIN + 14)
+#define MN_TEXT 					(RC_APP_BEGIN + 15)
+#define MN_FORMAT					(RC_APP_BEGIN + 16)
+#define MN_FORMAT_STYLE 			(RC_APP_BEGIN + 17)
+#define MN_FORMAT_ALGN				(RC_APP_BEGIN + 18)
+#define MN_FORMAT_LINESPACE 		(RC_APP_BEGIN + 19)
+#define MN_EXTRA					(RC_APP_BEGIN + 20)
+#define MN_WIN						(RC_APP_BEGIN + 21)
+#define MN_HELP 					(RC_APP_BEGIN + 22)
+#define MN_FORMAT_FRM_HORZ			(RC_APP_BEGIN + 23)
+#define MN_FORMAT_FRM_VERT		  	(RC_APP_BEGIN + 24)
+#define MN_PICKLIST 				(RC_APP_BEGIN + 25)
+#define MN_WINLIST					(RC_APP_BEGIN + 26)
+#define MN_MACRO					(RC_APP_BEGIN + 27)
+#define MN_FORMAT_HIERARCHY 		(RC_APP_BEGIN + 28)
+#define MN_CELL 					(RC_APP_BEGIN + 29)
+#define MN_HELP_TIP 	 			(RC_APP_BEGIN + 30)
+#define MN_HELP_SEARCH	 			(RC_APP_BEGIN + 31)
+#define MN_HELP_ACTIVE	 			(RC_APP_BEGIN + 32)
+#define MN_HELP_INDEX	 			(RC_APP_BEGIN + 33)
+#define MN_OBJECT	 				(RC_APP_BEGIN + 34)
+#define MN_DATABASE	 				(RC_APP_BEGIN + 35)
+#define MN_DIRSUBMENU               (RC_APP_BEGIN + 36)
+#define MN_MAIL						(RC_APP_BEGIN + 37)
+#define MN_WRAP						(RC_APP_BEGIN + 38)
+#define MN_SUB_TBLROW               (RC_APP_BEGIN + 39)
+#define MN_SUB_TBLCOL               (RC_APP_BEGIN + 40)
+#define MN_SUB_AUTOFORMAT           (RC_APP_BEGIN + 41)
+#define MN_SUB_TOOLBAR              (RC_APP_BEGIN + 42)
+#define MN_SUB_FIELD                (RC_APP_BEGIN + 43)
+#define MN_SUB_GRAPHIC              (RC_APP_BEGIN + 44)
+#define MN_SUB_TEMPLATES            (RC_APP_BEGIN + 45)
+#define MN_SUB_ARRANGE              (RC_APP_BEGIN + 46)
+#define MN_SUB_SPELLING             (RC_APP_BEGIN + 47)
+#define MN_SUB_UPDATE               (RC_APP_BEGIN + 48)
+#define MN_SUB_MIRROR	            (RC_APP_BEGIN + 49)
+#define MN_SUB_ALIGN                (RC_APP_BEGIN + 50)
+#define MN_SUB_OPTIONS              (RC_APP_BEGIN + 51)
+#define MN_SUB_SENDTO				(RC_APP_BEGIN + 52)
+#define MN_SUB_REVISE				(RC_APP_BEGIN + 53)
+#define MN_TEMPLATES			    (RC_APP_BEGIN + 54)
+#define MN_FILE_PORT  				(RC_APP_BEGIN + 55)
+#define MN_EDIT_PORT  				(RC_APP_BEGIN + 56)
+#define MN_VIEW_PORT  				(RC_APP_BEGIN + 57)
+#define MN_INS_PORT	  				(RC_APP_BEGIN + 58)
+#define MN_FORMAT_PORT				(RC_APP_BEGIN + 59)
+#define MN_EXTRA_PORT				(RC_APP_BEGIN + 60)
+#define MN_WIN_PORT 				(RC_APP_BEGIN + 61)
+#define MN_HELP_PORT				(RC_APP_BEGIN + 62)
+#define MN_SUB_TRANSLITERATE        (RC_APP_BEGIN + 63)
+#define MN_SUB_MACRO                (RC_APP_BEGIN + 64)
+
+#define RC_INTRO_BEGIN				(RC_APP_BEGIN + 90)
+#define RC_INTRO_END				(RC_APP_BEGIN + 96)
+
+#define STR_WRITER_DOCUMENT_FULLTYPE_31 	(RC_APP_BEGIN + 97)
+#define STR_WRITER_DOCUMENT_FULLTYPE_40 	(RC_APP_BEGIN + 98)
+#define STR_WRITER_DOCUMENT_FULLTYPE_50	(RC_APP_BEGIN + 101)
+#define STR_WRITER_DOCUMENT_FULLTYPE 	(RC_APP_BEGIN + 100)
+
+
+#define APP_ACT_END 				STR_WRITER_DOCUMENT_FULLTYPE_50
+
+#if APP_ACT_END > RC_APP_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif

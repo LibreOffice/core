@@ -59,13 +59,13 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-   2005-02-02   create and implemente.
+   2005-02-02	create and implemente.
  ************************************************************************/
-#ifndef     _XFTEXTCONTENT_HXX
-#define     _XFTEXTCONTENT_HXX
+#ifndef		_XFTEXTCONTENT_HXX
+#define		_XFTEXTCONTENT_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
+#include	"xfglobal.hxx"
+#include	"xfcontent.hxx"
 
 class IXFStream;
 
@@ -84,22 +84,22 @@ public:
 
 public:
     /**
-     * @descr   Set the text.
+     * @descr	Set the text.
      */
-    void                SetText(const rtl::OUString& text);
+    void				SetText(const rtl::OUString& text);
 
     /**
-     * @descr   return the content.
-     * @return  text content.
+     * @descr	return the content.
+     * @return	text content.
      */
-    rtl::OUString       GetText();
+    rtl::OUString		GetText();
 
     virtual enumXFContent GetContentType();
 
-    virtual void        ToXml(IXFStream *pStrm);
+    virtual void		ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString       m_strText;
+    rtl::OUString		m_strText;
 };
 
 #endif

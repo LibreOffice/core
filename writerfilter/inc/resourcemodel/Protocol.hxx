@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class StreamProtocol : public Stream
 
 public:
     typedef boost::shared_ptr<StreamProtocol> Pointer_t;
-
+    
     StreamProtocol(Stream * pStream, TagLogger::Pointer_t pTagLogger);
     virtual ~StreamProtocol();
 
@@ -59,9 +59,9 @@ public:
     virtual void text(const sal_uInt8 * data, size_t len);
     virtual void utext(const sal_uInt8 * data, size_t len);
     virtual void props(writerfilter::Reference<Properties>::Pointer_t ref);
-    virtual void table(Id name,
+    virtual void table(Id name, 
                        writerfilter::Reference<Table>::Pointer_t ref);
-    virtual void substream(Id name,
+    virtual void substream(Id name, 
                            writerfilter::Reference<Stream>::Pointer_t ref);
     virtual void info(const string & rInfo);
     virtual void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
@@ -75,7 +75,7 @@ class PropertiesProtocol : public Properties
 
 public:
     typedef boost::shared_ptr<PropertiesProtocol> Pointer_t;
-
+    
     PropertiesProtocol(Properties * pProperties, TagLogger::Pointer_t pTagLogger);
     virtual ~PropertiesProtocol();
 
@@ -90,7 +90,7 @@ class TableProtocol : public Table
 
 public:
     typedef boost::shared_ptr<TableProtocol> Pointer_t;
-
+    
     TableProtocol(Table * pTable, TagLogger::Pointer_t pTagLogger);
     virtual ~TableProtocol();
 

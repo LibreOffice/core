@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -638,7 +638,7 @@ public:
     {
         try
         {
-            Property::Pointer_t tp = createTwipsProperty(NS_style::LN_position, "   cm");
+            Property::Pointer_t tp = createTwipsProperty(NS_style::LN_position, "	cm");
         }
         catch(std::invalid_argument& )
         {

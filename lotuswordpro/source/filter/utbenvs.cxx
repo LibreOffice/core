@@ -59,7 +59,7 @@ namespace OpenStormBento
 {
 /*
  * useless in SODC
-void    LtcUtBenValueStream::GetAmountLeft(ULONG * pAmtLeft)
+void	LtcUtBenValueStream::GetAmountLeft(ULONG * pAmtLeft)
 {
     if (cCurrentPosition >= m_ulValueLength)
     {
@@ -72,13 +72,13 @@ void    LtcUtBenValueStream::GetAmountLeft(ULONG * pAmtLeft)
 }
 */
 /**
-*   Value stream read function
-*   @date   07/05/2004
-*   @param  data pointer of bytes read
-*   @param  number of bytes to be read
-*   @return number of bytes read
+*	Value stream read function
+*	@date	07/05/2004
+*	@param	data pointer of bytes read
+*	@param	number of bytes to be read
+*	@return	number of bytes read
 */
-ULONG   LtcUtBenValueStream::GetData( void* pData, ULONG nSize )
+ULONG	LtcUtBenValueStream::GetData( void* pData, ULONG nSize )
 {
     //unsigned long AmtLeft;
     ULONG AmtRead;
@@ -92,13 +92,13 @@ ULONG   LtcUtBenValueStream::GetData( void* pData, ULONG nSize )
     return AmtRead;
 }
  /**
-*   Value stream write function, not suppoted now
-*   @date   07/05/2004
-*   @param  pointer of saved buffer
-*   @param  size of buffer to be written
-*   @return number of bytes written into value stream
+*	Value stream write function, not suppoted now
+*	@date	07/05/2004
+*	@param	pointer of saved buffer
+*	@param	size of buffer to be written
+*	@return	number of bytes written into value stream
 */
-ULONG   LtcUtBenValueStream::PutData( const void* /*pData*/, ULONG nSize )
+ULONG	LtcUtBenValueStream::PutData( const void* /*pData*/, ULONG nSize )
 {
     /* Because we only support IMPORT filter, PutData implementation is ignored
         It won't bring negative influence to read-only stream object */
@@ -106,12 +106,12 @@ ULONG   LtcUtBenValueStream::PutData( const void* /*pData*/, ULONG nSize )
     return nSize;
 }
 /**
-*   Seek function of value stream
-*   @date   07/05/2004
-*   @param  position in value stream
-*   @return current position in value stream
+*	Seek function of value stream
+*	@date	07/05/2004
+*	@param	position in value stream
+*	@return	current position in value stream
 */
- ULONG  LtcUtBenValueStream::SeekPos( ULONG nPos )
+ ULONG	LtcUtBenValueStream::SeekPos( ULONG nPos )
 {
     if (nPos <= m_ulValueLength)
         cCurrentPosition = nPos;
@@ -120,12 +120,12 @@ ULONG   LtcUtBenValueStream::PutData( const void* /*pData*/, ULONG nSize )
     return cCurrentPosition;
 }
 /**
-*   Set buffer size function
-*   @date   07/05/2004
-*   @param  size of buffer
-*   @return
+*	Set buffer size function
+*	@date	07/05/2004
+*	@param 	size of buffer
+*	@return
 */
- void   LtcUtBenValueStream::SetSize( ULONG /*nSize*/ )
+ void	LtcUtBenValueStream::SetSize( ULONG /*nSize*/ )
 {
     //pLtcBenContainer pContainer = cpValue->GetContainer();
     //pContainer->GetStream()->SetStreamSize(nSize);
@@ -133,12 +133,12 @@ ULONG   LtcUtBenValueStream::PutData( const void* /*pData*/, ULONG nSize )
     return;
 }
 /**
-*   Flush data funciton, not supported now
-*   @date   07/05/2004
-*   @param
-*   @return
+*	Flush data funciton, not supported now
+*	@date	07/05/2004
+*	@param
+*	@return
 */
-void    LtcUtBenValueStream::FlushData()
+void	LtcUtBenValueStream::FlushData()
 {
     /* Because we only support IMPORT filter, FlushData implementation is ignored
         It won't bring negative influence to read-only stream object
@@ -148,10 +148,10 @@ void    LtcUtBenValueStream::FlushData()
     return;
 }
 /**
-*   Construction
-*   @date   07/05/2004
-*   @param  pointer to CBenValue object
-*   @return
+*	Construction
+*	@date	07/05/2004
+*	@param	pointer to CBenValue object
+*	@return
 */
 LtcUtBenValueStream::LtcUtBenValueStream(pCBenValue pValue)
 {

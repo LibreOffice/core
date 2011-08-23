@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwpfoundry.hxx"
@@ -267,7 +267,7 @@ sal_Bool LwpFoundry::FindBookMarkByName(OUString sName)
 }
 
 /**
-* @descr:   Get next content
+* @descr: 	Get next content
 *
 */
 LwpContent* LwpFoundry::EnumContents(LwpContent * pContent)
@@ -276,7 +276,7 @@ LwpContent* LwpFoundry::EnumContents(LwpContent * pContent)
 }
 
 /**
-* @descr:   Get next section
+* @descr: 	Get next section
 *
 */
 LwpSection* LwpFoundry::EnumSections(LwpSection * pSection)
@@ -285,7 +285,7 @@ LwpSection* LwpFoundry::EnumSections(LwpSection * pSection)
 }
 
 /**
-* @descr:   Get default text style id
+* @descr: 	Get default text style id
 *
 */
 LwpObjectID * LwpFoundry::GetDefaultTextStyle()
@@ -298,7 +298,7 @@ LwpObjectID * LwpFoundry::GetDefaultTextStyle()
 }
 
 /**
-* @descr:   Get paragraph style object id according to its style name
+* @descr: 	Get paragraph style object id according to its style name
 *
 */
 LwpObjectID * LwpFoundry::FindParaStyleByName(OUString name)
@@ -321,7 +321,7 @@ LwpObjectID * LwpFoundry::FindParaStyleByName(OUString name)
 }
 
 /**
-* @descr:   Get style name registed according the original style name
+* @descr: 	Get style name registed according the original style name
 *
 */
 OUString LwpFoundry::FindActuralStyleName(OUString name)
@@ -424,7 +424,7 @@ void LwpContentManager::Read(LwpObjectStream *pStrm)
 }
 
 /**
-* @descr:   Get next content
+* @descr: 	Get next content
 *
 */
 LwpContent* LwpContentManager::EnumContents(LwpContent* pContent)
@@ -476,7 +476,7 @@ void LwpOrderedObjectManager::Read(LwpObjectStream *pStrm)
 }
 
 /**
-* @descr:   Get next orderedobject, copy from lwp source code
+* @descr: 	Get next orderedobject, copy from lwp source code
 *
 */
 LwpOrderedObject* LwpOrderedObjectManager::Enumerate(LwpOrderedObject * pLast)
@@ -508,7 +508,7 @@ LwpOrderedObject* LwpOrderedObjectManager::Enumerate(LwpOrderedObject * pLast)
 }
 
 /**
-* @descr:   Get next listlist object, copy from lwp source code
+* @descr: 	Get next listlist object, copy from lwp source code
 *
 */
 LwpListList* LwpOrderedObjectManager::GetNextActiveListList(LwpListList * pLast)

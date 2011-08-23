@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,19 +103,19 @@ class lineHeight extends conversionAlgorithm {
  */
 class alignment extends conversionAlgorithm {
     int I(String value) {
-        if (value.equals("end"))
+        if (value.equals("end"))   
             return ParaStyle.ALIGN_RIGHT;
-        if (value.equals("right"))
+        if (value.equals("right")) 
             return ParaStyle.ALIGN_RIGHT;
-        if (value.equals("center"))
+        if (value.equals("center")) 
             return ParaStyle.ALIGN_CENTER;
-        if (value.equals("justify"))
+        if (value.equals("justify")) 
             return ParaStyle.ALIGN_JUST;
-        if (value.equals("justified"))
+        if (value.equals("justified")) 
             return ParaStyle.ALIGN_JUST;
-        if (value.equals("start"))
+        if (value.equals("start")) 
             return ParaStyle.ALIGN_LEFT;
-        if (value.equals("left"))
+        if (value.equals("left")) 
             return ParaStyle.ALIGN_LEFT;
         Debug.log(Debug.ERROR, "Unknown string ("
         + value + ") in alignment.I()");
@@ -140,7 +140,7 @@ class alignment extends conversionAlgorithm {
  *  </td></tr><tr><td>
  *  TEXT_INDENT      </td><td>mm * 100 (first line indent)
  *  </td></tr><tr><td>
- *  LINE_HEIGHT      </td><td>mm * 100, unless or'ed with LH_PCT, in which
+ *  LINE_HEIGHT      </td><td>mm * 100, unless or'ed with LH_PCT, in which 
  *                   case it is a percentage (e.g. 200% for double spacing)
  *                   Can also be or'ed with LH_ATLEAST.  Value is stored
  *                   in bits indicated by LH_VALUEMASK.
@@ -151,7 +151,7 @@ class alignment extends conversionAlgorithm {
  *   @author   David Proulx
  */
 public class ParaStyle extends Style implements Cloneable {
-
+    
     /**  The left margin property. */
     public static final int MARGIN_LEFT      = 0;
     /**  The right margin property. */
@@ -168,8 +168,8 @@ public class ParaStyle extends Style implements Cloneable {
     public static final int TEXT_ALIGN       = 6;
     // This must always be one more than highest property
     /**  Total number of properties. */
-    protected static final int NR_PROPERTIES    = 7;
-
+    protected static final int NR_PROPERTIES    = 7;  
+    
     /**
      *  Array of flags indicating which attributes are set for this
      *  paragraph <code>Style</code>.
@@ -187,7 +187,7 @@ public class ParaStyle extends Style implements Cloneable {
         "fo:line-height",
         "fo:text-align"
     };
-
+    
     /**  Array of attribute structures for this paragraph <code>Style</code>. */
     protected Class algor[] = {
         horizSize.class,
@@ -198,7 +198,7 @@ public class ParaStyle extends Style implements Cloneable {
         lineHeight.class,
         alignment.class
     };
-
+    
     /**  Align right. */
     public static final int ALIGN_RIGHT   = 1;
     /**  Align center. */
@@ -207,14 +207,14 @@ public class ParaStyle extends Style implements Cloneable {
     public static final int ALIGN_JUST    = 3;
     /**  Align left. */
     public static final int ALIGN_LEFT    = 4;
-
+    
     /**  Line height percentage.  */
     public static final int LH_PCT        = 0x40000000;
     /**  Line height minimum value.  */
     public static final int LH_ATLEAST    = 0x20000000;
     /**  Line height mask.  */
     public static final int LH_VALUEMASK  = 0x00FFFFFF;
-
+    
     /**  Ignored tags. */
     private static String[] ignored = {
         "style:font-name", "fo:font-size", "fo:font-weight", "fo:color",
@@ -226,7 +226,7 @@ public class ParaStyle extends Style implements Cloneable {
         "style:line-break", "fo:keep-with-next", "fo:font-style",
         "text:number-lines", "text:line-number"
     };
-
+    
 
     /**
      *  Constructor for use when going from DOM to client device format.
@@ -238,9 +238,9 @@ public class ParaStyle extends Style implements Cloneable {
      *                looking up ancestor <code>Style</code> objects.
      */
     public ParaStyle(Node node, StyleCatalog sc) {
-
+        
         super(node, sc);
-
+        
         // Look for children.  Only ones we care about are "style:properties"
         // nodes.  If any are found, recursively traverse them, passing
         // along the style element to add properties to.
@@ -264,8 +264,8 @@ public class ParaStyle extends Style implements Cloneable {
             }
         }
     }
-
-
+    
+    
     /**
      *  Constructor for use when going from client device format to DOM.
      *
@@ -287,9 +287,9 @@ public class ParaStyle extends Style implements Cloneable {
                 setAttribute(attribs[i], values[i]);
     }
 
-
+    
     /**
-     *  Alternate constructor for use when going from client device
+     *  Alternate constructor for use when going from client device 
      *  format to DOM.
      *
      *  @param  name     Name of the <code>Style</code>.  Can be null.
@@ -309,8 +309,8 @@ public class ParaStyle extends Style implements Cloneable {
             for (int i = 0; i < attribs.length; i++)
                 setAttribute(attribs[i], values[i]);
     }
-
-
+    
+    
     /**
      *  This code checks whether an attribute is one that we
      *  intentionally ignore.
@@ -321,16 +321,16 @@ public class ParaStyle extends Style implements Cloneable {
      */
     private boolean isIgnored(String attribute) {
         for (int i = 0; i < ignored.length; i++) {
-            if (ignored[i].equals(attribute))
+            if (ignored[i].equals(attribute)) 
                 return true;
         }
         return false;
     }
 
-
+    
     /**
      *  Set an attribute for this paragraph <code>Style</code>.
-     *
+     * 
      *  @param  attr   The attribute to set.
      *  @param  value  The attribute value to set.
      */
@@ -345,10 +345,10 @@ public class ParaStyle extends Style implements Cloneable {
             Debug.log(Debug.INFO, "ParaStyle Unhandled: " + attr + "=" + value);
     }
 
-
+    
     /**
      *  Check whether an attribute is set in this <code>Style</code>.
-     *
+     * 
      *  @param  attrIndex  The attribute index to check.
      *
      *  @return  true if the attribute at specified index is set,
@@ -357,8 +357,8 @@ public class ParaStyle extends Style implements Cloneable {
     public boolean isAttributeSet(int attrIndex) {
         return isSet[attrIndex];
     }
-
-
+    
+    
     /**
      *  Get the value of an integer attribute.
      *
@@ -367,12 +367,12 @@ public class ParaStyle extends Style implements Cloneable {
      *  @return  Value of the attribute, 0 if not set.
      */
     public int getAttribute(int attrIndex) {
-        if (isSet[attrIndex])
+        if (isSet[attrIndex]) 
             return  value[attrIndex];
         else return 0;
     }
-
-
+    
+    
     /**
      *  Set an attribute for this paragraph <code>Style</code>.
      *
@@ -387,7 +387,7 @@ public class ParaStyle extends Style implements Cloneable {
             Debug.log(Debug.ERROR, "Instantiation error", e);
         }
     }
-
+    
 
     /**
      *  Return the <code>Style</code> in use.
@@ -405,14 +405,14 @@ public class ParaStyle extends Style implements Cloneable {
         // Look up the parent style.  (If there is no style catalog
         // specified, we can't do any lookups).
         ParaStyle parentStyle = null;
-        if (sc != null) {
+        if (sc != null) {        
             if (parent != null) {
                 parentStyle = (ParaStyle)sc.lookup(parent, family, null,
                               this.getClass());
                 if (parentStyle == null)
-                    Debug.log(Debug.ERROR, "parent style lookup of "
+                    Debug.log(Debug.ERROR, "parent style lookup of " 
                               + parent + " failed!");
-                else
+                else 
                     parentStyle = (ParaStyle)parentStyle.getResolved();
             } else if (!name.equals("DEFAULT_STYLE")) {
                 parentStyle = (ParaStyle)sc.lookup("DEFAULT_STYLE", null, null,
@@ -434,7 +434,7 @@ public class ParaStyle extends Style implements Cloneable {
         return resolved;
     }
 
-
+    
     /**
      *  Private function to return the value as an element in
      *  a Comma Separated Value (CSV) format.
@@ -449,8 +449,8 @@ public class ParaStyle extends Style implements Cloneable {
         else
             return "\"\",";
     }
-
-
+    
+    
     /**
      *  Private function to return the value as a last element in
      *  a Comma Separated Value (CSV) format.
@@ -466,7 +466,7 @@ public class ParaStyle extends Style implements Cloneable {
             return "\"\"";
     }
 
-
+    
     /**
      *  Print a Comma Separated Value (CSV) header line for the
      *  spreadsheet dump.
@@ -478,7 +478,7 @@ public class ParaStyle extends Style implements Cloneable {
         + toCSV("line height") + toLastCSV("txt align"));
     }
 
-
+    
     /**
      *  Dump this <code>Style</code> as a Comma Separated Value (CSV)
      *  line.
@@ -489,14 +489,14 @@ public class ParaStyle extends Style implements Cloneable {
             if (isSet[index]) {
                 attributes += toCSV("" + value[index]);
             }
-            else
+            else 
                 attributes += toCSV(null);  // unspecified
         }
         System.out.println(toCSV(name) + toCSV(family) + toCSV(parent)
         + attributes + toLastCSV(null));
     }
-
-
+    
+    
     /**
      *  Create the <code>Node</code> with the specified elements.
      *
@@ -511,11 +511,11 @@ public class ParaStyle extends Style implements Cloneable {
         writeAttributes(node);
         return node;
     }
-
+    
 
     /**
      *  Return true if <code>style</code> is a subset of the
-     *  <code>Style</code>.
+     *  <code>Style</code>.  
      *
      *  @param  style  <code>Style</code> to check.
      *
@@ -523,40 +523,40 @@ public class ParaStyle extends Style implements Cloneable {
      *           otherwise.
      */
     public boolean isSubset(Style style) {
-
-        if (!super.isSubset(style))
+        
+        if (!super.isSubset(style)) 
             return false;
-        if (!this.getClass().isAssignableFrom(style.getClass()))
+        if (!this.getClass().isAssignableFrom(style.getClass())) 
             return false;
         ParaStyle ps = (ParaStyle)style;
-
+        
         for (int i = 0; i < NR_PROPERTIES; i++) {
             if (ps.isSet[i]) {
                 //                if (!isSet[i]) return false;
-
+                
                 if (i < NR_PROPERTIES - 1) {
-                    // Compare the actual values.  We allow a margin of error
+                    // Compare the actual values.  We allow a margin of error 
                     // here because the conversion loses precision.
                     int diff;
-                    if (value[i] > ps.value[i])
+                    if (value[i] > ps.value[i]) 
                         diff = value[i] - ps.value[i];
-                    else
+                    else 
                         diff = ps.value[i] - value[i];
-                    if (diff > 32)
+                    if (diff > 32) 
                         return false;
                 } else {
                     if (i == TEXT_ALIGN)
-                        if ((value[i] == 0) && (ps.value[i] == 4))
+                        if ((value[i] == 0) && (ps.value[i] == 4)) 
                             continue;
-                    if (value[i] != ps.value[i])
+                    if (value[i] != ps.value[i]) 
                         return false;
                 }
             }
         }
         return true;
     }
-
-
+    
+    
     /**
      *  Add <code>Style</code> attributes to the given
      *  <code>Node</code>.  This may involve writing child
@@ -584,7 +584,7 @@ public class ParaStyle extends Style implements Cloneable {
             }
             node.setAttribute(attrName[LINE_HEIGHT], stringVal);
         }
-
+        
         if (isSet[TEXT_ALIGN]) {
             String val;
             switch (value[TEXT_ALIGN]) {

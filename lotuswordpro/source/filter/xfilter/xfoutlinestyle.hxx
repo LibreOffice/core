@@ -61,11 +61,11 @@
  * Change History
  * 2005-02-2 create and implements.
  ************************************************************************/
-#ifndef     _XFOUTLINESTYLE_HXX
-#define     _XFOUTLINESTYLE_HXX
+#ifndef		_XFOUTLINESTYLE_HXX
+#define		_XFOUTLINESTYLE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfnumfmt.hxx"
+#include	"xfstyle.hxx"
+#include	"xfnumfmt.hxx"
 
 class XFNumFmt;
 class XFOutlineLevelStyle : public XFStyle
@@ -76,26 +76,26 @@ public:
     virtual ~XFOutlineLevelStyle();
 
 public:
-    void    SetNumFmt(XFNumFmt& fmt);
+    void	SetNumFmt(XFNumFmt& fmt);
 
-    void    SetLevel(sal_Int16 level);
+    void	SetLevel(sal_Int16 level);
 
-    void    SetIndent(double indent);
+    void	SetIndent(double indent);
 
-    void    SetMinLabelWidth(double labelWidth);
+    void	SetMinLabelWidth(double labelWidth);
 
-    void    SetMinLabelDistance(double distance);
+    void	SetMinLabelDistance(double distance);
 
-    void    SetTextAlign(enumXFAlignType align);
+    void	SetTextAlign(enumXFAlignType align);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 private:
-    XFNumFmt    *m_pNumFmt;
-    sal_Int16   m_nLevel;
-    double      m_fIndent;
-    double      m_fMinLabelWidth;
-    double      m_fMinLabelDistance;
-    enumXFAlignType m_eAlign;
+    XFNumFmt	*m_pNumFmt;
+    sal_Int16	m_nLevel;
+    double		m_fIndent;
+    double		m_fMinLabelWidth;
+    double		m_fMinLabelDistance;
+    enumXFAlignType	m_eAlign;
 };
 
 class XFOutlineStyle : public XFStyle
@@ -104,22 +104,22 @@ public:
     XFOutlineStyle();
 
 public:
-    void    SetNumFmt(sal_Int32 level, XFNumFmt& fmt);
+    void	SetNumFmt(sal_Int32 level, XFNumFmt& fmt);
 
-    void    SetIndent(sal_Int32 level, double indent);
+    void	SetIndent(sal_Int32 level, double indent);
 
-    void    SetMinLabelWidth(sal_Int32 level, double labelWidth);
+    void	SetMinLabelWidth(sal_Int32 level, double labelWidth);
 
-    void    SetMinLabelDistance(sal_Int32 level, double distance);
+    void	SetMinLabelDistance(sal_Int32 level, double distance);
 
-    void    SetTextAlign(sal_Int32 level, enumXFAlignType align);
+    void	SetTextAlign(sal_Int32 level, enumXFAlignType align);
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle	GetStyleFamily();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    XFOutlineLevelStyle m_aLevels[10];
+    XFOutlineLevelStyle	m_aLevels[10];
 };
 
 

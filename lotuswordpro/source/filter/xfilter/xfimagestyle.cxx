@@ -59,11 +59,11 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-   2005-02-22   create and implemente.
+   2005-02-22	create and implemente.
  ************************************************************************/
-#include    "xfimagestyle.hxx"
-#include    "xfborders.hxx"
-#include    "xfshadow.hxx"
+#include	"xfimagestyle.hxx"
+#include	"xfborders.hxx"
+#include	"xfshadow.hxx"
 
 XFImageStyle::XFImageStyle()
 {

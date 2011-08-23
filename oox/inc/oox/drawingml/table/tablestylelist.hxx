@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ public:
     TableStyleList();
     ~TableStyleList();
 
-    rtl::OUString&              getDefaultStyleId() { return maDefaultStyleId; };
-    std::vector< TableStyle >&  getTableStyles(){ return maTableStyles; };
+    rtl::OUString&				getDefaultStyleId() { return maDefaultStyleId; };
+    std::vector< TableStyle >&	getTableStyles(){ return maTableStyles; };
 
 private:
 
-    rtl::OUString               maDefaultStyleId;
-    std::vector< TableStyle >   maTableStyles;
+    rtl::OUString				maDefaultStyleId;
+    std::vector< TableStyle >	maTableStyles;
 
 };
 

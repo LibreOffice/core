@@ -1,0 +1,185 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include "svxids.hrc"
+#include "fmresids.hrc"
+Menu RID_FM_FILTER_MENU
+{
+    ItemList  =
+    {
+        MenuItem
+        {
+            Identifier = SID_FM_DELETE ;
+            HelpID = SID_FM_DELETE ;
+            Text [ de ] = "~Löschen" ;
+            Text [ en-US ] = "~Delete" ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "E~liminar";
+            Text[ ru ] = "Удалить";
+            Text[ el ] = "Διαγρα~φή";
+            Text[ nl ] = "Wi~ssen";
+            Text[ fr ] = "~Supprimer";
+            Text[ es ] = "~Borrar";
+            Text[ fi ] = "~Poista";
+            Text[ ca ] = "~Suprimeix";
+            Text[ it ] = "~Elimina";
+            Text[ sk ] = "~Zmazať";
+            Text[ da ] = "Slet";
+            Text[ sv ] = "~Radera";
+            Text[ pl ] = "~Usuń";
+            Text[ pt-BR ] = "E~xcluir";
+            Text[ th ] = "~ลบ";
+            Text[ ja ] = "削除(~D)";
+            Text[ ko ] = "삭제(~D)";
+            Text[ zh-CN ] = "删除(~D)";
+            Text[ zh-TW ] = "刪除(~D)";
+            Text[ tr ] = "Sil";
+            Text[ hi-IN ] = "~मिटाओ";
+            Text[ ar ] = "حذف";
+            Text[ he ] = "‮מחיקה‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_FILTER_EDIT ;
+            HelpID = SID_FM_FILTER_EDIT ;
+            Text [ de ] = "~Bearbeiten" ;
+            Text [ en-US ] = "~Edit" ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Editar";
+            Text[ ru ] = "~Правка";
+            Text[ el ] = "~Επεξεργασία";
+            Text[ nl ] = "B~ewerken";
+            Text[ fr ] = "~Éditer";
+            Text[ es ] = "~Editar";
+            Text[ fi ] = "~Muokkaa";
+            Text[ ca ] = "~Edita";
+            Text[ it ] = "~Modifica";
+            Text[ sk ] = "~Upraviť";
+            Text[ da ] = "~Rediger";
+            Text[ sv ] = "~Redigera";
+            Text[ pl ] = "~Edytuj";
+            Text[ pt-BR ] = "~Editar";
+            Text[ th ] = "แ~ก้ไข";
+            Text[ ja ] = "編集(~E)";
+            Text[ ko ] = "편집(~E)";
+            Text[ zh-CN ] = "编辑(~E)";
+            Text[ zh-TW ] = "編輯(~E)";
+            Text[ tr ] = "Düzenle";
+            Text[ hi-IN ] = "~संपादन";
+            Text[ ar ] = "~تحرير";
+            Text[ he ] = "‮עריכה‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_FILTER_IS_NULL ;
+            HelpID = SID_FM_FILTER_IS_NULL ;
+            Text [ de ] = "~Ist Leer" ;
+            Text [ en-US ] = "~Is Null" ;
+            Text[ pt ] = "~Vazio";
+            Text[ ru ] = "~Пусто";
+            Text[ el ] = "Είνα~ι μηδενικός χαρακτήρας";
+            Text[ nl ] = "~Is leeg";
+            Text[ fr ] = "~Est vide";
+            Text[ es ] = "~Vacío";
+            Text[ fi ] = "~Ei päde";
+            Text[ ca ] = "~Buit";
+            Text[ it ] = "È ~vuoto";
+            Text[ sk ] = "~Je Null";
+            Text[ da ] = "Er tom";
+            Text[ sv ] = "~Är tom";
+            Text[ pl ] = "~Jest pusty";
+            Text[ pt-BR ] = "~É Vazio";
+            Text[ th ] = "เ~ป็น Null";
+            Text[ ja ] = "空白(~I)";
+            Text[ ko ] = "비어 있음(~I)";
+            Text[ zh-CN ] = "是空缺(~I)";
+            Text[ zh-TW ] = "是空缺(~I)";
+            Text[ tr ] = "Boş";
+            Text[ hi-IN ] = "Null है ~क्या";
+            Text[ ar ] = "خالي";
+            Text[ he ] = "‮ריק‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_FILTER_IS_NOT_NULL ;
+            HelpID = SID_FM_FILTER_IS_NOT_NULL ;
+            Text [ de ] = "~Ist nicht leer" ;
+            Text [ en-US ] = "I~s not Null" ;
+            Text[ pt ] = "~Não vazio";
+            Text[ ru ] = "~Не пусто";
+            Text[ el ] = "Δεν είνα~ι μηδενικός χαρακτήρας";
+            Text[ nl ] = "~Is niet leeg";
+            Text[ fr ] = "~N'est pas vide";
+            Text[ es ] = "~No Vacío";
+            Text[ fi ] = "~Pätee";
+            Text[ ca ] = "~No buit";
+            Text[ it ] = "~Non è vuoto";
+            Text[ sk ] = "~Nie je null";
+            Text[ da ] = "Er ikke tom";
+            Text[ sv ] = "~Är inte tom";
+            Text[ pl ] = "~Nie jest pusty";
+            Text[ pt-BR ] = "~Não é Vazio";
+            Text[ th ] = "ไ~ม่เป็น  Null";
+            Text[ ja ] = "空白でない(~S)";
+            Text[ ko ] = "비어 있지 않음(~S)";
+            Text[ zh-CN ] = "不是空缺(~S)";
+            Text[ zh-TW ] = "不是空缺(~S)";
+            Text[ tr ] = "Boş değil";
+            Text[ hi-IN ] = "Null ~नहीं है क्या";
+            Text[ ar ] = "غير خالي";
+            Text[ he ] = "‮לא ריק‬";
+        };
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

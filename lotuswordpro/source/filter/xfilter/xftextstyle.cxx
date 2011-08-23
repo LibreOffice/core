@@ -62,11 +62,11 @@
  * Change History
  * 2004-12-26 create this file.
  ************************************************************************/
-#include    "xftextstyle.hxx"
-#include    "ixfattrlist.hxx"
-#include    "ixfstream.hxx"
-#include    "xffont.hxx"
-#include    "xfutil.hxx"
+#include	"xftextstyle.hxx"
+#include	"ixfattrlist.hxx"
+#include	"ixfstream.hxx"
+#include	"xffont.hxx"
+#include	"xfutil.hxx"
 
 XFTextStyle::XFTextStyle()
 {
@@ -77,19 +77,19 @@ XFTextStyle::~XFTextStyle()
 {
 }
 
-void    XFTextStyle::SetFont(XFFont *font)
+void	XFTextStyle::SetFont(XFFont *font)
 {
     m_pFont = font;
 }
 
-sal_Bool    XFTextStyle::Equal(IXFStyle *pStyle)
+sal_Bool	XFTextStyle::Equal(IXFStyle *pStyle)
 {
     if( !pStyle || pStyle->GetStyleFamily() != enumXFStyleText )
     {
         return sal_False;
     }
 
-    XFTextStyle *pOther = (XFTextStyle*)pStyle;
+    XFTextStyle	*pOther = (XFTextStyle*)pStyle;
     if( !pOther )
     {
         return sal_False;
@@ -108,14 +108,14 @@ sal_Bool    XFTextStyle::Equal(IXFStyle *pStyle)
     return sal_True;
 }
 
-enumXFStyle XFTextStyle::GetStyleFamily()
+enumXFStyle	XFTextStyle::GetStyleFamily()
 {
     return enumXFStyleText;
 }
 
-void    XFTextStyle::ToXml(IXFStream *strm)
+void	XFTextStyle::ToXml(IXFStream *strm)
 {
-    IXFAttrList *pAttrList = strm->GetAttrList();
+    IXFAttrList	*pAttrList = strm->GetAttrList();
     rtl::OUString style = GetStyleName();
 
     pAttrList->Clear();

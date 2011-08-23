@@ -1,0 +1,810 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include <bf_sfx2/sfx.hrc>
+#include <bf_svx/globlmn.hrc>
+#include "starmath.hrc"
+
+#define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
+#define IMAGE_STDBTN_COLOR_HC IMAGE_STDBTN_COLOR
+
+#define MN_SUB_TOOLBAR 32
+#define WORKARROUND_1 1
+#define WORKARROUND_3 3
+#define WORKARROUND_10 10
+
+
+WarningBox RID_NOMATHTYPEFACEWARNING
+{
+    Message [ de ] = "Der \"StarMath\" Font ist nicht installiert !\nOhne diesen Font kann StarMath nicht korrekt arbeiten...\nInstallieren Sie den Font und starten Sie StarMath erneut." ;
+    Message [ en-US ] = "The \"StarMath\" font has not been installed.\nWithout this font %PRODUCTNAME Math cannot function correctly.\nPlease install this font and restart %PRODUCTNAME Math." ;
+    Message [ x-comment ] = " ";
+    Message[ pt ] = "O tipo de letra \"StarMath\" não está instalado!\nSem este tipo de letra o %PRODUCTNAME Math não operará correctamente.\nInstale o tipo de letra e reinicie a aplicação.";
+    Message[ ru ] = "Не установлен шрифт \"StarMath\".\nБез этого шрифта %PRODUCTNAME Math не может корректно работать...\nУстановите шрифт и перезапустите %PRODUCTNAME Math.";
+    Message[ el ] = "Η γραμματοσειρά \"StarMath\" δεν έχει εγκατασταθεί.\nΔεν είναι δυνατή η σωστή λειτουργία του %PRODUCTNAME Math χωρίς τη συγκεκριμένη γραμματοσειρά.\nΕγκαταστήστε τη γραμματοσειρά και επανεκκινήστε το %PRODUCTNAME Math.";
+    Message[ nl ] = "Het lettertype 'StarMath' is niet geïnstalleerd!\nZonder dit lettertype werkt %PRODUCTNAME Math niet correct.\nInstalleer dit lettertype en start %PRODUCTNAME Math opnieuw.";
+    Message[ fr ] = "La police \"StarMath\" n'est pas installée !\nSans cette police, %PRODUCTNAME Math ne fonctionne pas correctement...\nInstallez la police et redémarrez %PRODUCTNAME Math.";
+    Message[ es ] = "¡La fuente \"StarMath\" no está instalada!\nSin esta fuente StarMath no funcionará correctamente...\nInstale la fuente y reinicie StarMath.";
+    Message[ fi ] = "Fonttia StarMath ei ole asennettu.\nIlman tätä fonttia %PRODUCTNAME Math ei toimi kunnolla.\nAsenna fontti ja käynnistä %PRODUCTNAME Math uudelleen.";
+    Message[ ca ] = "El tipus de lletra \"StarMath\" no està instal.lat!\nSense aquesta StarMath no funcionarà correctament...\nInstal.leu el tipus de lletra i reinicieu StarMath.";
+    Message[ it ] = "Il carattere \"StarMath\" non è installato.\nSenza questo carattere %PRODUCTNAME Math non funzionerà in modo corretto.\nInstallate questo carattere e riavviate %PRODUCTNAME Math.";
+    Message[ sk ] = "Písmo \"StarMath\" nebolo nainštalované.\nBez tohto písma %PRODUCTNAME Math nedokáže korektne pracovať.\nProsím nainštalujte toto písmo a znovu spustte %PRODUCTNAME Math.";
+    Message[ da ] = "Skrifttypen \"StarMath\" er ikke installeret!\nUden denne skrifttype kan %PRODUCTNAME Math ikke arbejde korrekt...\nInstaller venligst skrifttypen og genstart %PRODUCTNAME Math.";
+    Message[ sv ] = "Teckensnittet \"StarMath\" är inte installerat!\nUtan detta teckensnitt kan %PRODUCTNAME Math inte arbeta korrekt....\nInstallera teckensnittet och starta om %PRODUCTNAME Math.";
+    Message[ pl ] = "Czcionka \"StarMath\" nie jest zainstalowana.\nBez tej czcionki %PRODUCTNAME Math nie może poprawnie pracować.\nZainstaluj tę czcionkę i ponownie uruchom %PRODUCTNAME Math.";
+    Message[ pt-BR ] = "A Fonte '%PRODUCTNAME Math' não está instalada!\nSem esta Fonte o %PRODUCTNAME Math não funciona corretamente...\nPor favor, instale esta fonte e reinicie o %PRODUCTNAME Math.";
+    Message[ th ] = "ยังไม่ได้ติดตั้งตัวอักษร \"StarMath\" \nไม่มีตัวอักษรคณิตศาสตร์ %PRODUCTNAME นี้  ไม่สามารถทำหน้าที่ได้ถูกต้อง.\nกรุณาติดตั้งตัวอักษรนี้และเริ่มคณิตศาสตร์ %PRODUCTNAME อีกครั้ง";
+    Message[ ja ] = "\"StarMath\" フォントがインストールされていません｡\nこのフォントなしでは %PRODUCTNAME Math がうまく機能しません...\nまずフォントをインストールして %PRODUCTNAME Math を再起動してください。";
+    Message[ ko ] = "\"StarMath\" 글꼴이 설치되어 있지 않습니다!\n이 글꼴이 없으면%PRODUCTNAME Math가 제대로 작업을 할 수 없습니다...\n글꼴을 설치한 다음, %PRODUCTNAME Math를 다시 시작하십시오.";
+    Message[ zh-CN ] = "没有安装 StarMath 字体！\n没有这个 StarMath字体程序会无法正常运作。\n请在安装这个字体后重新启动 StarMath 。";
+    Message[ zh-TW ] = "沒有安裝 StarMath 字型\n而無法正常運行！\n請安裝 StarMath 字型，然后再重新開啟 StaMath。";
+    Message[ tr ] = "\"StarMath\" yazıtipi yüklenmedi!\nBu yazıtipi olmadan StarMath programı doğru bir biçimde çalışmaz...\nYazıtipini yükleyin ve %PRODUCTNAME Math programını yeniden başlatın.";
+    Message[ hi-IN ] = "StarMath अक्षर को प्रतिष्ठापित नहीं किया है ।\nइस अक्षर के बिना %PRODUCTNAME गणित ठीक तरह से कार्य पूरा नहीं कर सकता है ।\nकृपया इस अक्षर को प्रतिष्ठापित कीजिए और %PRODUCTNAME गणित को पुनः प्रारंभ कीजिए ।";
+    Message[ ar ] = "الخط \"StarMath\" غير مُثبَّت!\nبدون هذا الخط لا يستطيع %PRODUCTNAME Math العمل بشكل صحيح...\nالرجاء تثبيت هذا الخط، ثم بدء %PRODUCTNAME Math مجدداً.";
+    Message[ he ] = "‮גופן ה \"StarMath\" אינו מותקן.\nללא גופן זה, %PRODUCTNAME Math לא יפעל באופן תקין.\nנא להתקין את הגופן ולאתחל את %PRODUCTNAME Math.‬";
+};
+
+
+
+String RID_APPLICATION
+{
+    Text  = "StarMath" ;
+};
+
+String RID_VIEWNAME
+{
+    Text  = "StarMath" ;
+};
+
+#define CMDBOXWINDOW_TEXT           \
+    Text [ de ] = "Kommandos" ;                            \
+    Text [ en-US ] = "Commands" ;              \
+    Text [ x-comment ] = " ";                   \
+    Text[ pt ] = "Comandos";\
+    Text[ ru ] = "Команды";\
+    Text[ el ] = "Εντολές";\
+    Text[ nl ] = "Commando´s";\
+    Text[ fr ] = "Commandes";\
+    Text[ es ] = "Órdenes";\
+    Text[ fi ] = "Komennot";\
+    Text[ ca ] = "Commands";\
+    Text[ it ] = "Comandi";\
+    Text[ sk ] = "Príkazy";\
+    Text[ da ] = "Kommandoer";\
+    Text[ sv ] = "Kommandon";\
+    Text[ pl ] = "Polecenia";\
+    Text[ pt-BR ] = "Comandos";\
+    Text[ th ] = "คำสั่ง";\
+    Text[ ja ] = "コマンド";\
+    Text[ ko ] = "명령";\
+    Text[ zh-CN ] = "命令";\
+    Text[ zh-TW ] = "指令";\
+    Text[ tr ] = "Komutlar";\
+    Text[ hi-IN ] = "Commands";\
+    Text[ ar ] = "أوامر";\
+    Text[ he ] = "‮פקודות‬";\
+
+DockingWindow RID_CMDBOXWINDOW\
+{
+    HelpId = HID_SMA_COMMAND_WIN ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Sizeable = TRUE ;
+    OutputSize = TRUE ;
+    HideWhenDeactivate = FALSE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 292 , 94 ) ;
+    Dockable = TRUE ;
+    CMDBOXWINDOW_TEXT
+};
+
+#define _ID_LIST \
+    IdList =\
+    {\
+        SID_NEXTERR ;\
+        SID_PREVERR ;\
+        SID_VIEW050 ;\
+        SID_VIEW100 ;\
+        SID_VIEW200 ;\
+        SID_ZOOMIN ;\
+        SID_ZOOMOUT ;\
+        SID_ADJUST ;\
+        SID_DRAW ;\
+        SID_TOOLBOX ;\
+        SID_FONT ;\
+        SID_FONTSIZE ;\
+        SID_DISTANCE ;\
+        SID_ALIGN ;\
+        SID_FORMULACURSOR ;\
+        SID_SYMBOLS_CATALOGUE ;\
+    };\
+    IdCount =    {        16;    };
+
+String RID_DOCUMENTSTR
+{
+    Text [ de ] = "Formel" ;
+    Text [ en-US ] = "Formula" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Fórmula";
+    Text[ ru ] = "Формула";
+    Text[ el ] = "Τύπος";
+    Text[ nl ] = "Formule";
+    Text[ fr ] = "Formule";
+    Text[ es ] = "Fórmula";
+    Text[ fi ] = "Kaava";
+    Text[ ca ] = "Fórmula";
+    Text[ it ] = "Formula";
+    Text[ sk ] = "Vzorec";
+    Text[ da ] = "Formel";
+    Text[ sv ] = "Formel";
+    Text[ pl ] = "Formuła";
+    Text[ pt-BR ] = "Fórmula";
+    Text[ th ] = "สูตรคำนวณ";
+    Text[ ja ] = "数式";
+    Text[ ko ] = "수식";
+    Text[ zh-CN ] = "公式";
+    Text[ zh-TW ] = "公式";
+    Text[ tr ] = "Formül";
+    Text[ hi-IN ] = "सूत्र";
+    Text[ ar ] = "صيغة";
+    Text[ he ] = "‮נוסחה‬";
+};
+
+String STR_STATSTR_READING
+{
+    Text [ de ] = "Dokument wird geladen..." ;
+    Text [ en-US ] = "Loading document..." ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "A carregar documento...";
+    Text[ ru ] = "Загрузка документа...";
+    Text[ el ] = "Το έγγραφο φορτώνεται...";
+    Text[ nl ] = "Document wordt geladen...";
+    Text[ fr ] = "Chargement du document...";
+    Text[ es ] = "Cargando el documento...";
+    Text[ fi ] = "Avataan asiakirjaa...";
+    Text[ ca ] = "S'està carregant el document...";
+    Text[ it ] = "Il documento viene caricato...";
+    Text[ sk ] = "Načítavam dokument...";
+    Text[ da ] = "Dokumentet indlæses...";
+    Text[ sv ] = "Dokument laddas...";
+    Text[ pl ] = "Ładowanie dokumentu...";
+    Text[ pt-BR ] = "Carregando documento...";
+    Text[ th ] = "กำลังโหลดเอกสาร...";
+    Text[ ja ] = "ドキュメントを読み込んでいます...";
+    Text[ ko ] = "문서를 로드하는 중...";
+    Text[ zh-CN ] = "正在装入文档...";
+    Text[ zh-TW ] = "正在載入文件...";
+    Text[ tr ] = "Döküman yükleniyor...";
+    Text[ hi-IN ] = "लेखपत्र लोड हो रहा है...";
+    Text[ ar ] = "جاري تحميل المستند...";
+    Text[ he ] = "‮טעינת המסמך...‬";
+};
+
+String STR_STATSTR_WRITING
+{
+    Text [ de ] = "Dokument wird gespeichert..." ;
+    Text [ en-US ] = "Saving document..." ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "A guardar documento...";
+    Text[ ru ] = "Сохранение документа...";
+    Text[ el ] = "Αποθήκευση εγγράφου...";
+    Text[ nl ] = "Document wordt opgeslagen...";
+    Text[ fr ] = "Enregistrement du document...";
+    Text[ es ] = "Guardando el documento...";
+    Text[ fi ] = "Tallennetaan asiakirjaa...";
+    Text[ ca ] = "S'està desant el document...";
+    Text[ it ] = "Il documento viene salvato...";
+    Text[ sk ] = "Ukladanie dokumentu...";
+    Text[ da ] = "Dokumentet gemmes...";
+    Text[ sv ] = "Dokument sparas...";
+    Text[ pl ] = "Zapisywanie dokumentu...";
+    Text[ pt-BR ] = "Salvando documento...";
+    Text[ th ] = "กำลังบันทึกเอกสาร...";
+    Text[ ja ] = "ドキュメントを保存しています...";
+    Text[ ko ] = "문서 저장하는 중...";
+    Text[ zh-CN ] = "正在存盘文档...";
+    Text[ zh-TW ] = "正在儲存文件...";
+    Text[ tr ] = "Belgeyi kaydet...";
+    Text[ hi-IN ] = "लेखपत्र बचाना...";
+    Text[ ar ] = "جاري حفظ المستند...";
+    Text[ he ] = "‮שמירת המסמך...‬";
+};
+
+
+String STR_MATH_DOCUMENT_FULLTYPE_60
+{
+    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION Formel" ;
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Formula";
+    Text[ pt ] = "StarOffice 6.0 Fórmula";
+    Text[ ru ] = "Формула в %PRODUCTNAME 6.0";
+    Text[ el ] = "%PRODUCTNAME 6.0 Τύπος";
+    Text[ nl ] = "%PRODUCTNAME 6.0 Formule";
+    Text[ fr ] = "%PRODUCTNAME %PRODUCTVERSION Formule";
+    Text[ es ] = "Fórmula %PRODUCTNAME %PRODUCTVERSION ";
+    Text[ fi ] = "%PRODUCTNAME 6.0 -kaava";
+    Text[ ca ] = "%PRODUCTNAME 6.0 Fórmula";
+    Text[ it ] = "%PRODUCTNAME %PRODUCTVERSION Formula";
+    Text[ sk ] = "%PRODUCTNAME %PRODUCTVERSION vzorec";
+    Text[ da ] = "%PRODUCTNAME 6.0-formel";
+    Text[ sv ] = "%PRODUCTNAME %PRODUCTVERSION-formel";
+    Text[ pl ] = "%PRODUCTNAME 6.0 Formula";
+    Text[ pt-BR ] = "Fórmula do %PRODUCTNAME 6.0 ";
+    Text[ th ] = "สูตรคำนวณ %PRODUCTNAME 6.0 ";
+    Text[ ja ] = "%PRODUCTNAME %PRODUCTVERSION 数式";
+    Text[ ko ] = "%PRODUCTNAME %PRODUCTVERSION 수식";
+    Text[ zh-CN ] = "%PRODUCTNAME %PRODUCTVERSION 公式";
+    Text[ zh-TW ] = "%PRODUCTNAME %PRODUCTVERSION 公式";
+    Text[ tr ] = "%PRODUCTNAME 6.0 Formül ";
+    Text[ hi-IN ] = "%PRODUCTNAME 6.0 सूत्र";
+    Text[ ar ] = "%PRODUCTNAME 6.0 صيغة";
+    Text[ he ] = "‮נוסחת %PRODUCTNAME 6.0‬";
+};
+String STR_MATH_DOCUMENT_FULLTYPE_50
+{
+    Text [ de ] = "%PRODUCTNAME 5.0 Formel" ;
+    Text [ en-US ] = "%PRODUCTNAME 5.0 Formula" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Fórmula %PRODUCTNAME 5.0";
+    Text[ ru ] = "Формула %PRODUCTNAME 5.0";
+    Text[ el ] = "Τύπος (%PRODUCTNAME 5.0)";
+    Text[ nl ] = "%PRODUCTNAME 5.0 Formule";
+    Text[ fr ] = "%PRODUCTNAME 5.0 Formule";
+    Text[ es ] = "%PRODUCTNAME 5.0 - Fórmula";
+    Text[ fi ] = "%PRODUCTNAME 5.0 -kaava";
+    Text[ ca ] = "%PRODUCTNAME 5.0 Fórmula";
+    Text[ it ] = "Formula %PRODUCTNAME 5.0";
+    Text[ sk ] = "%PRODUCTNAME 5.0 Vzorec";
+    Text[ da ] = "%PRODUCTNAME 5.0 formel";
+    Text[ sv ] = "%PRODUCTNAME 5.0 formel";
+    Text[ pl ] = "%PRODUCTNAME 5.0 Formula";
+    Text[ pt-BR ] = "Fórmula do %PRODUCTNAME 5.0 ";
+    Text[ th ] = "สูตรคำนวณ %PRODUCTNAME 5.0 ";
+    Text[ ja ] = "%PRODUCTNAME 5.0 数式";
+    Text[ ko ] = "%PRODUCTNAME 5.0 수식";
+    Text[ zh-CN ] = "%PRODUCTNAME 5.0 公式";
+    Text[ zh-TW ] = "%PRODUCTNAME 5.0 公式";
+    Text[ tr ] = "%PRODUCTNAME 5.0 - Formül";
+    Text[ hi-IN ] = "%PRODUCTNAME 5.0 सूत्र";
+    Text[ ar ] = "%PRODUCTNAME 5.0 صيغة";
+    Text[ he ] = "‮נוסחת %PRODUCTNAME 5.0‬";
+};
+
+String STR_MATH_DOCUMENT_FULLTYPE_40
+{
+    Text [ de ] = "%PRODUCTNAME 4.0 Formel" ;
+    Text [ en-US ] = "%PRODUCTNAME 4.0 Formula" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Fórmula %PRODUCTNAME 4.0";
+    Text[ ru ] = "Формула %PRODUCTNAME 4.0";
+    Text[ el ] = "Τύπος (%PRODUCTNAME 4.0)";
+    Text[ nl ] = "%PRODUCTNAME 4.0 Formule";
+    Text[ fr ] = "%PRODUCTNAME 4.0 Formule";
+    Text[ es ] = "%PRODUCTNAME 4.0 - Fórmula";
+    Text[ fi ] = "%PRODUCTNAME 4.0 -kaava";
+    Text[ ca ] = "%PRODUCTNAME 4.0 Fórmula";
+    Text[ it ] = "Formula %PRODUCTNAME 4.0";
+    Text[ sk ] = "%PRODUCTNAME 4.0 vzorec";
+    Text[ da ] = "%PRODUCTNAME 4.0 formel";
+    Text[ sv ] = "%PRODUCTNAME 4.0 formel";
+    Text[ pl ] = "%PRODUCTNAME 4.0 Formula";
+    Text[ pt-BR ] = "Fórmula do %PRODUCTNAME 4.0 ";
+    Text[ th ] = "สูตรคำนวณ %PRODUCTNAME 4.0 ";
+    Text[ ja ] = "%PRODUCTNAME 4.0 数式";
+    Text[ ko ] = "%PRODUCTNAME 4.0 수식";
+    Text[ zh-CN ] = "%PRODUCTNAME 4.0 公式";
+    Text[ zh-TW ] = "%PRODUCTNAME 4.0 公式";
+    Text[ tr ] = "%PRODUCTNAME 4.0 - Formül";
+    Text[ hi-IN ] = "%PRODUCTNAME 4.0 सूत्र";
+    Text[ ar ] = "%PRODUCTNAME 4.0 صيغة";
+    Text[ he ] = "‮נוסחת %PRODUCTNAME 4.0‬";
+};
+
+String STR_MATH_DOCUMENT_FULLTYPE_31
+{
+    Text [ de ] = "%PRODUCTNAME 3.0 Formel" ;
+    Text [ en-US ] = "%PRODUCTNAME 3.0 Formula" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Fórmula %PRODUCTNAME 3.0";
+    Text[ ru ] = "Формула %PRODUCTNAME 3.0";
+    Text[ el ] = "%PRODUCTNAME 3.0 - Τύπος";
+    Text[ nl ] = "%PRODUCTNAME 3.0 Formule";
+    Text[ fr ] = "%PRODUCTNAME 3.0 Formule";
+    Text[ es ] = "%PRODUCTNAME 3.0 - Fórmula";
+    Text[ fi ] = "%PRODUCTNAME 3.0 -kaava";
+    Text[ ca ] = "%PRODUCTNAME 3.0 Fórmula";
+    Text[ it ] = "Formula %PRODUCTNAME 3.0";
+    Text[ sk ] = "%PRODUCTNAME 3.0 vzorec";
+    Text[ da ] = "%PRODUCTNAME 3.0 formel";
+    Text[ sv ] = "%PRODUCTNAME 3.0 formel";
+    Text[ pl ] = "%PRODUCTNAME 3.0 Formula";
+    Text[ pt-BR ] = "Fórmula do %PRODUCTNAME 3.0 ";
+    Text[ th ] = "สูตรคำนวณ %PRODUCTNAME 3.0 ";
+    Text[ ja ] = "%PRODUCTNAME 3.0 数式";
+    Text[ ko ] = "%PRODUCTNAME 3.0 수식";
+    Text[ zh-CN ] = "%PRODUCTNAME 3.0 公式";
+    Text[ zh-TW ] = "%PRODUCTNAME 3.0 公式";
+    Text[ tr ] = "%PRODUCTNAME 3.0 - Formül";
+    Text[ hi-IN ] = "%PRODUCTNAME 3.0 सूत्र";
+    Text[ ar ] = "%PRODUCTNAME 3.0 صيغة";
+    Text[ he ] = "‮נוסחת %PRODUCTNAME 3.0‬";
+};
+
+
+
+String RID_ERR_IDENT
+{
+    Text [ de ] = "FEHLER : " ;
+    Text [ en-US ] = "ERROR : " ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "ERRO : ";
+    Text[ ru ] = "ОШИБКА :  ";
+    Text[ el ] = "ΣΦΑΛΜΑ : ";
+    Text[ nl ] = "FOUT:";
+    Text[ fr ] = "ERREUR : ";
+    Text[ es ] = "ERROR :  ";
+    Text[ fi ] = "VIRHE: ";
+    Text[ ca ] = "ERROR : ";
+    Text[ it ] = "ERRORE: ";
+    Text[ sk ] = "CHYBA : ";
+    Text[ da ] = "FEJL : ";
+    Text[ sv ] = "FEL :  ";
+    Text[ pl ] = "BŁĄD:";
+    Text[ pt-BR ] = "ERRO : ";
+    Text[ th ] = "ผิดพลาด : ";
+    Text[ ja ] = "ERROR:";
+    Text[ ko ] = "오류: ";
+    Text[ zh-CN ] = "错误： ";
+    Text[ zh-TW ] = "錯誤： ";
+    Text[ tr ] = "HATA : ";
+    Text[ hi-IN ] = "ERROR :";
+    Text[ ar ] = ": خطأ";
+    Text[ he ] = "‮שגיאה: ‬";
+};
+
+String RID_ERR_UNKOWN
+{
+    Text [ de ] = "Ein unbekannter Fehler ist aufgetreten" ;
+    Text [ en-US ] = "Unknown error occurred" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Surgiu um erro desconhecido.";
+    Text[ ru ] = "Неизвестная ошибка";
+    Text[ el ] = "Παρουσιάστηκε άγνωστο σφάλμα";
+    Text[ nl ] = "Er is een onbekende fout opgetreden";
+    Text[ fr ] = "Une erreur inconnue est survenue.";
+    Text[ es ] = "Se ha producido un error desconocido";
+    Text[ fi ] = "Ilmeni tuntematon virhe";
+    Text[ ca ] = "S'ha produït un error desconegut";
+    Text[ it ] = "Si è avuto un errore sconosciuto";
+    Text[ sk ] = "Neznáma chyba";
+    Text[ da ] = "Der er optået en ukendt fejl";
+    Text[ sv ] = "Ett okänt fel har uppstått";
+    Text[ pl ] = "Wystąpił nieznany błąd";
+    Text[ pt-BR ] = "Ocorreu um erro desconhecido";
+    Text[ th ] = "ไม่รู้จักข้อผิดพลาดที่เกิดขึ้น";
+    Text[ ja ] = "不明なエラーが発生";
+    Text[ ko ] = "알 수 없는 오류가 발생했습니다";
+    Text[ zh-CN ] = "发生一个不明的错误。";
+    Text[ zh-TW ] = "發生一個不明的錯誤。";
+    Text[ tr ] = "Bilinmeyen bir hata oluştu";
+    Text[ hi-IN ] = "अज्ञात गलती घटित हुआ";
+    Text[ ar ] = "حدث خطأ غير معروف";
+    Text[ he ] = "‮ארעה שגיאה לא מוכרת‬";
+};
+
+String RID_ERR_UNEXPECTEDCHARACTER
+{
+    Text [ de ] = "Unerwartetes Zeichen" ;
+    Text [ en-US ] = "Unexpected character" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Caracter imprevisto";
+    Text[ ru ] = "Неожиданный символ";
+    Text[ el ] = "Μη αναμενόμενος χαρακτήρας";
+    Text[ nl ] = "Onverwacht teken";
+    Text[ fr ] = "Caractère imprévu";
+    Text[ es ] = "Carácter no esperado";
+    Text[ fi ] = "Odottamaton merkki";
+    Text[ ca ] = "Caràcter no esperat";
+    Text[ it ] = "Carattere inatteso";
+    Text[ sk ] = "Neočakávaný znak";
+    Text[ da ] = "Uventet tegn";
+    Text[ sv ] = "Oväntat tecken";
+    Text[ pl ] = "Nieoczekiwany znak";
+    Text[ pt-BR ] = "Caracter inesperado";
+    Text[ th ] = "ตัวอักขระที่ไม่คาดคิด";
+    Text[ ja ] = "不適当な文字";
+    Text[ ko ] = "예상치 않은 문자";
+    Text[ zh-CN ] = "意外的字符";
+    Text[ zh-TW ] = "意外的字元";
+    Text[ tr ] = "Beklenmeyen karakter";
+    Text[ hi-IN ] = "आकस्मिक अक्षर";
+    Text[ ar ] = "حرف غير متوقع";
+    Text[ he ] = "‮תו לא צפוי‬";
+};
+
+
+String RID_ERR_LGROUPEXPECTED
+{
+    Text [ de ] = "'{' erwartet" ;
+    Text [ en-US ] = "'{' expected" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Necessário '{'";
+    Text[ ru ] = "'{' ожидается";
+    Text[ el ] = "'{' αναμένεται";
+    Text[ nl ] = "'{' verwacht";
+    Text[ fr ] = "'{' requis";
+    Text[ es ] = "Se requiere '{'";
+    Text[ fi ] = "Tähän tarvitaan '{'";
+    Text[ ca ] = "Es necessita '{'";
+    Text[ it ] = "Atteso '{'";
+    Text[ sk ] = "Očakávaná '{'";
+    Text[ da ] = "'{' forventes";
+    Text[ sv ] = "'{' förväntad";
+    Text[ pl ] = "Oczekiwano znaku '{'";
+    Text[ pt-BR ] = "É necessário '{'";
+    Text[ th ] = "'{' คาดคิด";
+    Text[ ja ] = "'{'が必要です";
+    Text[ ko ] = "'{' 필요함";
+    Text[ zh-CN ] = "期待 '{'";
+    Text[ zh-TW ] = "期待<{>";
+    Text[ tr ] = "'{' gerekli";
+    Text[ hi-IN ] = "'{' की प्रतीक्षा";
+    Text[ ar ] = "مطلوب '{'";
+    Text[ he ] = "‮צפויה '{'‬";
+};
+
+String RID_ERR_RGROUPEXPECTED
+{
+    Text [ de ] = "'}' erwartet" ;
+    Text [ en-US ] = "'}' expected" ;
+    Text[ pt ] = "'}' necessária";
+    Text[ ru ] = "'}' ожидается";
+    Text[ el ] = "'}' αναμένεται";
+    Text[ nl ] = "'}' verwacht";
+    Text[ fr ] = "'}' requis";
+    Text[ es ] = "Se requiere '}'";
+    Text[ fi ] = "Tähän tarvitaan '}'";
+    Text[ ca ] = "Es necessita '}'";
+    Text[ it ] = "'}' atteso";
+    Text[ sk ] = "Očakávaná '}'";
+    Text[ da ] = "'}' forventes";
+    Text[ sv ] = "'}' förväntad";
+    Text[ pl ] = "Oczekiwano znaku '}'";
+    Text[ pt-BR ] = "É necessário '}'";
+    Text[ th ] = "'}' คาดคิด";
+    Text[ ja ] = "'}'が必要です";
+    Text[ ko ] = "'}' 가 필요함";
+    Text[ zh-CN ] = "期待 '}'";
+    Text[ zh-TW ] = "期待<}>";
+    Text[ tr ] = "'}' gerekli";
+    Text[ ar ] = "متوقع '}'";
+    Text[ he ] = "‮צפויה '}'‬";
+};
+
+String RID_ERR_LBRACEEXPECTED
+{
+    Text [ de ] = "'(' erwartet" ;
+    Text [ en-US ] = "'(' expected" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Necessário '('";
+    Text[ ru ] = "'(' ожидается";
+    Text[ el ] = "'(' αναμένεται";
+    Text[ nl ] = "'(' verwacht";
+    Text[ fr ] = "'(' requis";
+    Text[ es ] = "Se requiere '(' ";
+    Text[ fi ] = "Tähän tarvitaan '('";
+    Text[ ca ] = "Es necessita '(' ";
+    Text[ it ] = "Atteso '('";
+    Text[ sk ] = "Očakávaná '('";
+    Text[ da ] = "'(' forventes";
+    Text[ sv ] = "'(' förväntad";
+    Text[ pl ] = "Oczekiwano znaku '('";
+    Text[ pt-BR ] = "É necessário \"(\"";
+    Text[ th ] = "'(' คาดคิด";
+    Text[ ja ] = "'('が必要です";
+    Text[ ko ] = "'(' 필요함";
+    Text[ zh-CN ] = "期待 '('";
+    Text[ zh-TW ] = "期待<(>";
+    Text[ tr ] = "'(' gerekli";
+    Text[ hi-IN ] = "'(' की प्रतीक्षा";
+    Text[ ar ] = "مطلوب'('";
+    Text[ he ] = "‮צפויה '('‬";
+};
+
+String RID_ERR_RBRACEEXPECTED
+{
+    Text [ de ] = "')' erwartet" ;
+    Text [ en-US ] = "')' expected" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Necessário ')'";
+    Text[ ru ] = "')' ожидается";
+    Text[ el ] = "')' αναμένεται";
+    Text[ nl ] = "')' verwacht";
+    Text[ fr ] = "')' requis";
+    Text[ es ] = "Se requiere ')'";
+    Text[ fi ] = "Tähän tarvitaan ')'";
+    Text[ ca ] = "Es necessita ')'";
+    Text[ it ] = "Atteso ')'";
+    Text[ sk ] = "Očakávaná ')'";
+    Text[ da ] = "')' forventes";
+    Text[ sv ] = "')' förväntad";
+    Text[ pl ] = "Oczekiwano znaku ')'";
+    Text[ pt-BR ] = "É necessário \")\"";
+    Text[ th ] = "')' คาดคิด";
+    Text[ ja ] = "')'が必要です";
+    Text[ ko ] = "')' 필요함";
+    Text[ zh-CN ] = "期待 ')'";
+    Text[ zh-TW ] = "期待<)>";
+    Text[ tr ] = "')' gerekli";
+    Text[ hi-IN ] = "')' की प्रतीक्षा";
+    Text[ ar ] = "مطلوب ')'";
+    Text[ he ] = "‮צפויה ')'‬";
+};
+
+String RID_ERR_FUNCEXPECTED
+{
+    Text [ de ] = "Funktion erwartet" ;
+    Text [ en-US ] = "Function expected" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Necessário função";
+    Text[ ru ] = "Ожидается функция";
+    Text[ el ] = "Αναμένεται συνάρτηση";
+    Text[ nl ] = "Functie verwacht";
+    Text[ fr ] = "Fonction requise";
+    Text[ es ] = "Se requiere una función";
+    Text[ fi ] = "Tähän tarvitaan funktio";
+    Text[ ca ] = "Es necessita una funció";
+    Text[ it ] = "Attesa funzione";
+    Text[ sk ] = "Očakávaná funkcia";
+    Text[ da ] = "Funktion forventes";
+    Text[ sv ] = "Funktion förväntad";
+    Text[ pl ] = "Oczekiwano funkcji";
+    Text[ pt-BR ] = "É esperada uma função";
+    Text[ th ] = "ฟังก์ชั่นที่คาดคิด";
+    Text[ ja ] = "関数が必要です";
+    Text[ ko ] = "함수 필요함";
+    Text[ zh-CN ] = "期待函数";
+    Text[ zh-TW ] = "期待函數";
+    Text[ tr ] = "İşlev gerekli";
+    Text[ hi-IN ] = "फंक्शन् की प्रतीक्षा";
+    Text[ ar ] = "مطلوب دالة";
+    Text[ he ] = "‮צפויה פונקציה‬";
+};
+
+String RID_ERR_UNOPEREXPECTED
+{
+    /* ### ACHTUNG: Neuer Text in Resource? 	Un�rer Operator erwartet : Un�rer Operator erwartet */
+    Text [ de ] = "Unärer Operator erwartet" ;
+    Text [ en-US ] = "Unary operator expected" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Necessário operador unário";
+    Text[ ru ] = "Ожидается унарный оператор";
+    Text[ el ] = "Αναμένεται εναδικός τελεστής";
+    Text[ nl ] = "Monade verwacht";
+    Text[ fr ] = "Opérateur unaire requis";
+    Text[ es ] = "Se espera un operador unario";
+    Text[ fi ] = "Tähän tarvitaan yksipaikkainen operattori";
+    Text[ ca ] = "S'esperava un operador unari";
+    Text[ it ] = "Atteso operatore unario";
+    Text[ sk ] = "Očakávaný unárny operátor";
+    Text[ da ] = "Monadisk operator forventes";
+    Text[ sv ] = "Unär operator förväntad";
+    Text[ pl ] = "W tym miejscu oczekiwano operatora jednoargumentowego";
+    Text[ pt-BR ] = "É esperado um operador unário";
+    Text[ th ] = "ตัวปฏิบัติการ Unary ที่คาดคิด";
+    Text[ ja ] = "単項演算子が必要です";
+    Text[ ko ] = "단항 연산자 필요함";
+    Text[ zh-CN ] = "期待运算符。";
+    Text[ zh-TW ] = "期待運算符。";
+    Text[ tr ] = "Birli işleç gerekli";
+    Text[ hi-IN ] = "यूनारि प्रवर्तक की प्रतीक्षा";
+    Text[ ar ] = "متوقع عامل تشغيل أحادي";
+    Text[ he ] = "‮צפוי אופרטור אונרי‬";
+};
+
+String RID_ERR_BINOPEREXPECTED
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Bin�rer Operator erwartet : Bin�rer Operator erwartet */
+    Text [ de ] = "Binärer Operator erwartet" ;
+    Text [ en-US ] = "Binary operator expected" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Necessário operador binário";
+    Text[ ru ] = "Ожидается бинарный оператор";
+    Text[ el ] = "Αναμένεται δυαδικός τελεστής";
+    Text[ nl ] = "Binaire operator verwacht";
+    Text[ fr ] = "Opérateur binaire requis";
+    Text[ es ] = "Se espera un operador binario";
+    Text[ fi ] = "Tähän tarvitaan kaksipaikkainen operaattori";
+    Text[ ca ] = "S'esperava un operador binari";
+    Text[ it ] = "Operatore binario atteso";
+    Text[ sk ] = "Očakávaný binárny operátor";
+    Text[ da ] = "Binær operator forventes";
+    Text[ sv ] = "Binär operator förväntad";
+    Text[ pl ] = "Oczekiwano operatora dwuargumentowego";
+    Text[ pt-BR ] = "É esperado um operador binário";
+    Text[ th ] = "ตัวปฏิบัติการ Binary ที่คาดคิด";
+    Text[ ja ] = "二項演算子が必要です";
+    Text[ ko ] = "이항 연산자 필요함";
+    Text[ zh-CN ] = "期待二元运算符";
+    Text[ zh-TW ] = "期待二元運算符";
+    Text[ tr ] = "İkili işleç gerekli";
+    Text[ hi-IN ] = "बैनरी प्रवर्तक की प्रतीक्षा";
+    Text[ ar ] = "متوقع عامل تشغيل ثنائي";
+    Text[ he ] = "‮צפוי אופרטור בינרי‬";
+};
+
+String RID_ERR_SYMBOLEXPECTED
+{
+    Text [ de ] = "Symbol erwartet" ;
+    Text [ en-US ] = "Symbol expected" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Necessário símbolo";
+    Text[ ru ] = "Ожидается символ";
+    Text[ el ] = "Αναμένεται σύμβολο";
+    Text[ nl ] = "Symbool verwacht";
+    Text[ fr ] = "Symbole requis";
+    Text[ es ] = "Se necesita un símbolo";
+    Text[ fi ] = "Tähän tarvitaan symboli";
+    Text[ ca ] = "Es necessita un símbol";
+    Text[ it ] = "Atteso simbolo";
+    Text[ sk ] = "Očakávaný symbol";
+    Text[ da ] = "Symbol forventes";
+    Text[ sv ] = "Symbol förväntad";
+    Text[ pl ] = "Oczekiwano symbolu";
+    Text[ pt-BR ] = "É esperado um símbolo";
+    Text[ th ] = "สัญลักษณ์ที่คาดคิด";
+    Text[ ja ] = "記号が必要です";
+    Text[ ko ] = "기호 필요함";
+    Text[ zh-CN ] = "期待图标";
+    Text[ zh-TW ] = "期待圖示";
+    Text[ tr ] = "Simge gerekli";
+    Text[ hi-IN ] = "संकेत प्रतीक्षा";
+    Text[ ar ] = "مطلوب رمز";
+    Text[ he ] = "‮צפוע סמל‬";
+};
+
+String RID_ERR_IDENTEXPECTED
+{
+    Text [ de ] = "Identifier erwartet" ;
+    Text [ en-US ] = "Identifier expected" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Necessário identificador";
+    Text[ ru ] = "Ожидается идентификатор";
+    Text[ el ] = "Αναμένεται αναγνωριστικό";
+    Text[ nl ] = "Identifier verwacht";
+    Text[ fr ] = "Identificateur requis";
+    Text[ es ] = "Se requiere un identificador";
+    Text[ fi ] = "Tähän tarvitaan tunniste";
+    Text[ ca ] = "S'esperava un identificador";
+    Text[ it ] = "Atteso identifier";
+    Text[ sk ] = "Očakávaný identifikátor";
+    Text[ da ] = "Identifikator forventes";
+    Text[ sv ] = "Identifierare förväntad";
+    Text[ pl ] = "Oczekiwano identyfikatora";
+    Text[ pt-BR ] = "É esperado um identificador";
+    Text[ th ] = "ตัวบ่งชี้ที่คาดคิด";
+    Text[ ja ] = "識別子が必要です";
+    Text[ ko ] = "확인자 필요함";
+    Text[ zh-CN ] = "期待识别符";
+    Text[ zh-TW ] = "期待識別符";
+    Text[ tr ] = "Tanıtıcı bekleniyor";
+    Text[ hi-IN ] = "अइडेन्टिफयर की प्रतीक्षा";
+    Text[ ar ] = "مطلوب معرّف";
+    Text[ he ] = "‮צפוי מזהה‬";
+};
+
+String RID_ERR_POUNDEXPECTED
+{
+    Text [ de ] = "'#' erwartet" ;
+    Text [ en-US ] = "'#' expected" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Necessário '#'";
+    Text[ ru ] = "'#' ожидается";
+    Text[ el ] = "'#' αναμένεται";
+    Text[ nl ] = "'#' verwacht";
+    Text[ fr ] = "'#' requis";
+    Text[ es ] = "Se requiere '#'";
+    Text[ fi ] = "Tähän tarvitaan '#'";
+    Text[ ca ] = "Es necessita '#'";
+    Text[ it ] = "Atteso '#'";
+    Text[ sk ] = "Očakávaný '#'";
+    Text[ da ] = "'#' forventes";
+    Text[ sv ] = "'#' förväntad";
+    Text[ pl ] = "Oczekiwano znaku '#'";
+    Text[ pt-BR ] = "#";
+    Text[ th ] = "'#'คาดคิด";
+    Text[ ja ] = "'#'が必要です";
+    Text[ ko ] = "'#' 필요함";
+    Text[ zh-CN ] = "期待 '#'";
+    Text[ zh-TW ] = "期待<#>";
+    Text[ tr ] = "'#' gerekli";
+    Text[ hi-IN ] = "'#' की प्रतीक्षा";
+    Text[ ar ] = "مطلوب '#'";
+    Text[ he ] = "‮צפויה '#'‬";
+};
+
+String RID_ERR_COLOREXPECTED
+{
+    Text [ de ] = "Farbe erwartet" ;
+    Text [ en-US ] = "Color required" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Necessário cor";
+    Text[ ru ] = "Требуется цвет";
+    Text[ el ] = "Απαιτείται χρώμα";
+    Text[ nl ] = "Kleur verwacht";
+    Text[ fr ] = "Couleur requise";
+    Text[ es ] = "Se requiere un color";
+    Text[ fi ] = "Tarvitaan väri";
+    Text[ ca ] = "Es necessita un color";
+    Text[ it ] = "Atteso colore";
+    Text[ sk ] = "Vyžaduje sa farba";
+    Text[ da ] = "Farve forventes";
+    Text[ sv ] = "Färg förväntad";
+    Text[ pl ] = "Wymagany jest kolor";
+    Text[ pt-BR ] = "Cor requerida";
+    Text[ th ] = "สีที่ต้องการ";
+    Text[ ja ] = "色が必要です";
+    Text[ ko ] = "색상이 필요합니다.";
+    Text[ zh-CN ] = "期待颜色";
+    Text[ zh-TW ] = "期待顏色";
+    Text[ tr ] = "Renk gerekli";
+    Text[ hi-IN ] = "रंग की आवश्यकता";
+    Text[ ar ] = "مطلوب لون";
+    Text[ he ] = "‮נדרש צבע‬";
+};
+
+
+
+String RID_ERR_RIGHTEXPECTED
+{
+    Text [ de ] = "'RIGHT' erwartet" ;
+    Text [ en-US ] = "'RIGHT' expected" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Necessário 'RIGHT'";
+    Text[ ru ] = "Ожидается 'Вправо'";
+    Text[ el ] = "Αναμένεται 'RIGHT'";
+    Text[ nl ] = "'RIGHT' verwacht";
+    Text[ fr ] = "'RIGHT' requis";
+    Text[ es ] = "Se requiere 'RIGHT'";
+    Text[ fi ] = "Tähän tarvitaan 'RIGHT'";
+    Text[ ca ] = "S'esperava 'RIGHT'";
+    Text[ it ] = "Atteso 'RIGHT'";
+    Text[ sk ] = "Očakávané 'RIGHT'";
+    Text[ da ] = "'RIGHT' forventes";
+    Text[ sv ] = "'RIGHT' förväntat";
+    Text[ pl ] = "Oczekiwano 'RIGHT'";
+    Text[ pt-BR ] = "RIGHT";
+    Text[ th ] = "'RIGHT' ที่คาดคิด";
+    Text[ ja ] = "'RIGHT'が必要です";
+    Text[ ko ] = "'RIGHT' 필요함";
+    Text[ zh-CN ] = "期待 'RIGHT'";
+    Text[ zh-TW ] = "期待<RIGHT>";
+    Text[ tr ] = "'RIGHT' gerekli";
+    Text[ hi-IN ] = "'RIGHT' की प्रतीक्षा";
+    Text[ ar ] = "'RIGHT' مطلوب";
+    Text[ he ] = "‮צפוי 'RIGHT'‬";
+};

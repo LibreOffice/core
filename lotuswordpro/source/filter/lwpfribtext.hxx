@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 #ifndef _LWPFRIBTEXT_HXX_
 #define _LWPFRIBTEXT_HXX_
@@ -146,7 +146,7 @@ public:
 
     void XFConvert(XFContentContainer* pXFPara);//add by ,05/5/27
 
-//  inline sal_uInt16 GetType() const;
+//	inline sal_uInt16 GetType() const;
 
     enum {
         FILENAME = 0x02,
@@ -188,7 +188,7 @@ private:
 };
 //inline sal_uInt16 LwpFribDocVar::GetType() const
 //{
-//  return m_nType;
+//	return m_nType;
 //}
 
 class LwpFribTab : public LwpFrib

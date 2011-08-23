@@ -1,0 +1,841 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include "globals.hrc"
+#include "utlui.hrc"
+#include "helpid.h"
+#include "comcore.hrc"
+
+
+
+/*---------------------------------------------------------------------
+    Diverses
+ ---------------------------------------------------------------------*/
+
+String STR_CONTENT_TYPE_OUTLINE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? �berschriften : �berschriften */
+    Text [ de ] = "Überschriften" ;
+    Text [ en-US ] = "Headings" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Títulos";
+    Text[ ru ] = "Заголовки";
+    Text[ el ] = "Επικεφαλίδες";
+    Text[ nl ] = "Koppen";
+    Text[ fr ] = "Titres";
+    Text[ es ] = "Encabezados";
+    Text[ fi ] = "Otsikot";
+    Text[ ca ] = "Encapçalaments";
+    Text[ it ] = "Intestazioni";
+    Text[ sk ] = "Nadpisy";
+    Text[ da ] = "Overskrifter";
+    Text[ sv ] = "Överskrifter";
+    Text[ pl ] = "Nagłówek";
+    Text[ pt-BR ] = "Títulos";
+    Text[ th ] = "หัวข้อ";
+    Text[ ja ] = "見出し";
+    Text[ ko ] = "제목";
+    Text[ zh-CN ] = "标题";
+    Text[ zh-TW ] = "標頭";
+    Text[ tr ] = "Başlık";
+    Text[ hi-IN ] = "शीर्षकें";
+    Text[ ar ] = "عناوين";
+    Text[ he ] = "Überschriften";
+};
+String STR_CONTENT_TYPE_TABLE
+{
+    Text [ de ] = "Tabellen" ;
+    Text [ en-US ] = "Tables" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Tabelas";
+    Text[ ru ] = "Таблицы";
+    Text[ el ] = "Πίνακες";
+    Text[ nl ] = "Tabellen";
+    Text[ fr ] = "Tableaux";
+    Text[ es ] = "Tablas";
+    Text[ fi ] = "Taulukot";
+    Text[ ca ] = "Taules";
+    Text[ it ] = "Tabelle";
+    Text[ sk ] = "Tabuľky";
+    Text[ da ] = "Tabeller";
+    Text[ sv ] = "Tabeller";
+    Text[ pl ] = "Tabele";
+    Text[ pt-BR ] = "Tabelas";
+    Text[ th ] = "ตาราง";
+    Text[ ja ] = "表";
+    Text[ ko ] = "표";
+    Text[ zh-CN ] = "表格";
+    Text[ zh-TW ] = "表格";
+    Text[ tr ] = "Tablo";
+    Text[ hi-IN ] = "सारणी";
+    Text[ ar ] = "جداول";
+    Text[ he ] = "‮טבלאות‬";
+};
+String STR_CONTENT_TYPE_FRAME
+{
+    Text [ de ] = "Textrahmen" ;
+    Text [ en-US ] = "Text frame" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Molduras de texto";
+    Text[ ru ] = "Врезка";
+    Text[ el ] = "Πλαίσιο κειμένου";
+    Text[ nl ] = "Tekstkader";
+    Text[ fr ] = "Cadres texte";
+    Text[ es ] = "Marco de texto";
+    Text[ fi ] = "Tekstikehys";
+    Text[ ca ] = "Marc de text";
+    Text[ it ] = "Cornice";
+    Text[ sk ] = "Ohraničenie textu";
+    Text[ da ] = "Tekstbokse";
+    Text[ sv ] = "Textram";
+    Text[ pl ] = "Ramka tekstowa";
+    Text[ pt-BR ] = "Moldura de texto";
+    Text[ th ] = "กรอบข้อความ";
+    Text[ ja ] = "テキスト枠";
+    Text[ ko ] = "텍스트 프레임";
+    Text[ zh-CN ] = "文本框";
+    Text[ zh-TW ] = "文字方塊";
+    Text[ tr ] = "Metin kutusu";
+    Text[ hi-IN ] = "टेक्स्ट् फ्रेम";
+    Text[ ar ] = "كوادر نص";
+    Text[ he ] = "Textrahmen";
+};
+String STR_CONTENT_TYPE_GRAPHIC
+{
+    Text [ de ] = "Grafiken" ;
+    Text [ en-US ] = "Graphics" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Imagens";
+    Text[ ru ] = "Графические объекты";
+    Text[ el ] = "Γραφικά";
+    Text[ nl ] = "Afbeeldingen";
+    Text[ fr ] = "Images";
+    Text[ es ] = "Imágenes";
+    Text[ fi ] = "Grafiikka";
+    Text[ ca ] = "Gràfics";
+    Text[ it ] = "Immagini";
+    Text[ sk ] = "Obrázky";
+    Text[ da ] = "Grafik";
+    Text[ sv ] = "Grafik";
+    Text[ pl ] = "Grafika";
+    Text[ pt-BR ] = "Figura";
+    Text[ th ] = "กราฟิค";
+    Text[ ja ] = "図";
+    Text[ ko ] = "그림";
+    Text[ zh-CN ] = "图形";
+    Text[ zh-TW ] = "圖形";
+    Text[ tr ] = "Grafik";
+    Text[ hi-IN ] = "सुचित्र";
+    Text[ ar ] = "صور";
+    Text[ he ] = "‮גרפיקה‬";
+};
+String STR_CONTENT_TYPE_OLE
+{
+    Text [ de ] = "OLE-Objekte" ;
+    Text [ en-US ] = "OLE objects" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Objectos OLE";
+    Text[ ru ] = "OLE объекты";
+    Text[ el ] = "Αντικείμενα OLE";
+    Text[ nl ] = "OLE-objecten";
+    Text[ fr ] = "Objets OLE";
+    Text[ es ] = "Objetos OLE";
+    Text[ fi ] = "OLE-objektit";
+    Text[ ca ] = "Objectes OLE";
+    Text[ it ] = "Oggetti OLE";
+    Text[ sk ] = "Objekty OLE";
+    Text[ da ] = "OLE-objekter";
+    Text[ sv ] = "OLE-objekt";
+    Text[ pl ] = "Obiekty OLE";
+    Text[ pt-BR ] = "Objetos OLE";
+    Text[ th ] = "วัตถุ OLE ";
+    Text[ ja ] = "OLE オブジェクト";
+    Text[ ko ] = "OLE 개체";
+    Text[ zh-CN ] = "OLE-对象";
+    Text[ zh-TW ] = "OLE 物件";
+    Text[ tr ] = "OLE nesnesi";
+    Text[ hi-IN ] = "OLE वस्तु";
+    Text[ ar ] = "كائنات OLE";
+    Text[ he ] = "OLE-Objekte";
+};
+String STR_CONTENT_TYPE_BOOKMARK
+{
+    Text [ de ] = "Textmarken" ;
+    Text [ en-US ] = "Bookmarks" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Marcadores de texto";
+    Text[ ru ] = "Закладки";
+    Text[ el ] = "Σημάδια κειμένου";
+    Text[ nl ] = "Tekstmarkeringen";
+    Text[ fr ] = "Repères de texte";
+    Text[ es ] = "Marcas de texto";
+    Text[ fi ] = "Kirjanmerkit";
+    Text[ ca ] = "Adreces d'interès";
+    Text[ it ] = "Segnalibri";
+    Text[ sk ] = "Záložky";
+    Text[ da ] = "Tekstmarkeringer";
+    Text[ sv ] = "Bokmärken";
+    Text[ pl ] = "Zakładki";
+    Text[ pt-BR ] = "Marcadores";
+    Text[ th ] = "ที่คั่น";
+    Text[ ja ] = "テキストマーク";
+    Text[ ko ] = "책갈피";
+    Text[ zh-CN ] = "书签";
+    Text[ zh-TW ] = "內文標籤";
+    Text[ tr ] = "Metin işareti";
+    Text[ hi-IN ] = "पृष्ठसंकेतें";
+    Text[ ar ] = "إشارات مرجعية";
+    Text[ he ] = "Textmarken";
+};
+String STR_CONTENT_TYPE_REGION
+{
+    Text [ de ] = "Bereiche" ;
+    Text [ en-US ] = "Sections" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Categorias";
+    Text[ ru ] = "Разделы";
+    Text[ el ] = "Ενότητες";
+    Text[ nl ] = "Bereiken";
+    Text[ fr ] = "Sections";
+    Text[ es ] = "Secciones";
+    Text[ fi ] = "Osat";
+    Text[ ca ] = "Seccions";
+    Text[ it ] = "Sezioni";
+    Text[ sk ] = "Sekcie";
+    Text[ da ] = "Områder";
+    Text[ sv ] = "Områden";
+    Text[ pl ] = "Sekcje";
+    Text[ pt-BR ] = "Seções";
+    Text[ th ] = "ส่วน";
+    Text[ ja ] = "範囲";
+    Text[ ko ] = "구역";
+    Text[ zh-CN ] = "区域";
+    Text[ zh-TW ] = "區域";
+    Text[ tr ] = "Bölüm";
+    Text[ hi-IN ] = "विभाग";
+    Text[ ar ] = "نطاقات";
+    Text[ he ] = "‮חלקי מסמך‬";
+};
+String STR_CONTENT_TYPE_URLFIELD
+{
+    Text [ de ] = "Hyperlinks" ;
+    Text [ en-US ] = "Hyperlinks" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Hiperligações";
+    Text[ ru ] = "Гиперссылки";
+    Text[ el ] = "Υπερ-συνδέσεις";
+    Text[ nl ] = "Hyperlinks";
+    Text[ fr ] = "Hyperliens";
+    Text[ es ] = "Hiperenlaces";
+    Text[ fi ] = "Hyperlinkit";
+    Text[ ca ] = "Hiperenllaços";
+    Text[ it ] = "Hyperlink";
+    Text[ sk ] = "Hypertextové odkazy";
+    Text[ da ] = "Hyperlinks";
+    Text[ sv ] = "Hyperlänkar";
+    Text[ pl ] = "Hiperłącza";
+    Text[ pt-BR ] = "Hiperlinks";
+    Text[ th ] = "เชื่อมโยงหลายมิติ";
+    Text[ ja ] = "ハイパーリンク";
+    Text[ ko ] = "하이퍼링크";
+    Text[ zh-CN ] = "超链接";
+    Text[ zh-TW ] = "超連結";
+    Text[ tr ] = "Hiperlink";
+    Text[ hi-IN ] = "हाइपरलिंक";
+    Text[ ar ] = "ارتباطات تشعبية";
+    Text[ he ] = "Hyperlinks";
+};
+String STR_CONTENT_TYPE_REFERENCE
+{
+    Text [ de ] = "Referenzen" ;
+    Text [ en-US ] = "References" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Referências";
+    Text[ ru ] = "Ссылки";
+    Text[ el ] = "Παραπομπές";
+    Text[ nl ] = "Verwijzingen";
+    Text[ fr ] = "Références";
+    Text[ es ] = "Referencias";
+    Text[ fi ] = "Viitteet";
+    Text[ ca ] = "Referències";
+    Text[ it ] = "Riferimenti";
+    Text[ sk ] = "Odkazy";
+    Text[ da ] = "Referencer";
+    Text[ sv ] = "Referenser";
+    Text[ pl ] = "Odwołania";
+    Text[ pt-BR ] = "Referências";
+    Text[ th ] = "อ้างอิง";
+    Text[ ja ] = "参照";
+    Text[ ko ] = "참조";
+    Text[ zh-CN ] = "引用";
+    Text[ zh-TW ] = "參照";
+    Text[ tr ] = "Referanslar";
+    Text[ hi-IN ] = "रेफरेन्स ";
+    Text[ ar ] = "مراجع";
+    Text[ he ] = "Referenzen";
+};
+String STR_CONTENT_TYPE_INDEX
+{
+    Text [ de ] = "Verzeichnisse" ;
+    Text [ en-US ] = "Indexes" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Indices";
+    Text[ ru ] = "Указатели";
+    Text[ el ] = "Ευρετήρια";
+    Text[ nl ] = "Indices";
+    Text[ fr ] = "Index";
+    Text[ es ] = "Índices";
+    Text[ fi ] = "Hakemistot";
+    Text[ ca ] = "Índexs";
+    Text[ it ] = "Indici";
+    Text[ sk ] = "Obsahy";
+    Text[ da ] = "Indeks";
+    Text[ sv ] = "Förteckningar";
+    Text[ pl ] = "Indeksy";
+    Text[ pt-BR ] = "Índices";
+    Text[ th ] = "ดัชนี";
+    Text[ ja ] = "目次と索引";
+    Text[ ko ] = "색인";
+    Text[ zh-CN ] = "目录";
+    Text[ zh-TW ] = "目錄";
+    Text[ tr ] = "Dizin";
+    Text[ hi-IN ] = "अनुक्रमणिका";
+    Text[ ar ] = "فهارس";
+    Text[ he ] = "Verzeichnisse";
+};
+String STR_CONTENT_TYPE_DRAWOBJECT
+{
+    Text [ de ] = "Zeichenobjekte" ;
+    Text [ en-US ] = "Draw objects" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Objectos de desenho";
+    Text[ ru ] = "Графические объекты";
+    Text[ el ] = "Αντικείμενα σχεδίασης";
+    Text[ nl ] = "Tekenobjecten";
+    Text[ fr ] = "Objets de dessin";
+    Text[ es ] = "Objetos de dibujo";
+    Text[ fi ] = "Piirrosobjektit";
+    Text[ ca ] = "Objectes de dibuix";
+    Text[ it ] = "Oggetti di disegno";
+    Text[ sk ] = "Kresby";
+    Text[ da ] = "Tegneobjekter";
+    Text[ sv ] = "Ritobjekt";
+    Text[ pl ] = "Obiekty rysunkowe";
+    Text[ pt-BR ] = "Objetos de desenho";
+    Text[ th ] = "วาดวัตถุ";
+    Text[ ja ] = "図形描画オブジェクト";
+    Text[ ko ] = "그리기 개체";
+    Text[ zh-CN ] = "绘图对象";
+    Text[ zh-TW ] = "繪圖物件";
+    Text[ tr ] = "Çizim nesnesi";
+    Text[ hi-IN ] = "वस्तुओं को खींचना";
+    Text[ ar ] = "كائنات رسومية";
+    Text[ he ] = "Zeichenobjekte";
+};
+String STR_CONTENT_TYPE_POSTIT
+{
+    Text [ de ] = "Notizen" ;
+    Text [ en-US ] = "Notes" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Anotações";
+    Text[ ru ] = "Примечания";
+    Text[ el ] = "Σημειώσεις";
+    Text[ nl ] = "Aantekeningen";
+    Text[ fr ] = "Notes";
+    Text[ es ] = "Notas";
+    Text[ fi ] = "Huomautukset";
+    Text[ ca ] = "Notes";
+    Text[ it ] = "Note";
+    Text[ sk ] = "Poznámky";
+    Text[ da ] = "Noter";
+    Text[ sv ] = "Anteckningar";
+    Text[ pl ] = "Notatki";
+    Text[ pt-BR ] = "Anotações";
+    Text[ th ] = "บันทึกย่อ";
+    Text[ ja ] = "コメント";
+    Text[ ko ] = "메모";
+    Text[ zh-CN ] = "备注";
+    Text[ zh-TW ] = "備註";
+    Text[ tr ] = "Notlar";
+    Text[ hi-IN ] = "सूचना";
+    Text[ ar ] = "ملاحظات";
+    Text[ he ] = "‮הערות‬";
+};
+String STR_CONTENT_TYPE_SINGLE_OUTLINE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? �berschrift : �berschrift */
+    Text [ de ] = "Überschrift" ;
+    Text [ en-US ] = "Heading" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Título";
+    Text[ ru ] = "Заголовок";
+    Text[ el ] = "Επικεφαλίδα";
+    Text[ nl ] = "Kop";
+    Text[ fr ] = "Titre";
+    Text[ es ] = "Encabezado";
+    Text[ fi ] = "Otsikko";
+    Text[ ca ] = "Encapçalament";
+    Text[ it ] = "Intestazione";
+    Text[ sk ] = "Nadpis";
+    Text[ da ] = "Overskrift";
+    Text[ sv ] = "Överskrift";
+    Text[ pl ] = "Nagłówek";
+    Text[ pt-BR ] = "Título";
+    Text[ th ] = "หัวข้อ";
+    Text[ ja ] = "見出し";
+    Text[ ko ] = "제목";
+    Text[ zh-CN ] = "标题";
+    Text[ zh-TW ] = "標頭";
+    Text[ tr ] = "Başlık";
+    Text[ hi-IN ] = "शीर्षक";
+    Text[ ar ] = "عنوان";
+    Text[ he ] = "Überschrift";
+};
+String STR_CONTENT_TYPE_SINGLE_TABLE
+{
+    Text [ de ] = "Tabelle" ;
+    Text [ en-US ] = "Table" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Tabela";
+    Text[ ru ] = "Таблица";
+    Text[ el ] = "Πίνακας";
+    Text[ nl ] = "Tabel";
+    Text[ fr ] = "Tableau";
+    Text[ es ] = "Tabla";
+    Text[ fi ] = "Taulukko";
+    Text[ ca ] = "Taula";
+    Text[ it ] = "Tabella";
+    Text[ sk ] = "Tabuľka";
+    Text[ da ] = "Tabel";
+    Text[ sv ] = "Tabell";
+    Text[ pl ] = "Tabela";
+    Text[ pt-BR ] = "Tabela";
+    Text[ th ] = "ตาราง";
+    Text[ ja ] = "表";
+    Text[ ko ] = "표";
+    Text[ zh-CN ] = "表格";
+    Text[ zh-TW ] = "表格";
+    Text[ tr ] = "Tablo";
+    Text[ hi-IN ] = "सारणी";
+    Text[ ar ] = "جدول";
+    Text[ he ] = "‮טבלה‬";
+};
+String STR_CONTENT_TYPE_SINGLE_FRAME
+{
+    Text [ de ] = "Textrahmen" ;
+    Text [ en-US ] = "Text frame" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Moldura de texto";
+    Text[ ru ] = "Врезка";
+    Text[ el ] = "Πλαίσιο κειμένου";
+    Text[ nl ] = "Tekstkader";
+    Text[ fr ] = "Cadre texte";
+    Text[ es ] = "Marco de texto";
+    Text[ fi ] = "Tekstikehys";
+    Text[ ca ] = "Marc de text";
+    Text[ it ] = "Cornice";
+    Text[ sk ] = "Ohraničenie textu";
+    Text[ da ] = "Tekstboks";
+    Text[ sv ] = "Textram";
+    Text[ pl ] = "Ramka tekstowa";
+    Text[ pt-BR ] = "Moldura de texto";
+    Text[ th ] = "กรอบข้อความ";
+    Text[ ja ] = "テキスト枠";
+    Text[ ko ] = "텍스트 프레임";
+    Text[ zh-CN ] = "文本框";
+    Text[ zh-TW ] = "文字方塊";
+    Text[ tr ] = "Metin kutusu";
+    Text[ hi-IN ] = "टेक्स्ट् फ्रेम";
+    Text[ ar ] = "كادر نص";
+    Text[ he ] = "Textrahmen";
+};
+String STR_CONTENT_TYPE_SINGLE_GRAPHIC
+{
+    Text [ de ] = "Grafik" ;
+    Text [ en-US ] = "Graphics" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Imagem";
+    Text[ ru ] = "Графический объект";
+    Text[ el ] = "Γραφικό";
+    Text[ nl ] = "Afbeelding";
+    Text[ fr ] = "Image";
+    Text[ es ] = "Imagen";
+    Text[ fi ] = "Grafiikka";
+    Text[ ca ] = "Gràfics";
+    Text[ it ] = "Immagine";
+    Text[ sk ] = "Obrázky";
+    Text[ da ] = "Grafik";
+    Text[ sv ] = "Grafik";
+    Text[ pl ] = "Grafika";
+    Text[ pt-BR ] = "Figura";
+    Text[ th ] = "กราฟิค";
+    Text[ ja ] = "図";
+    Text[ ko ] = "그림";
+    Text[ zh-CN ] = "图形";
+    Text[ zh-TW ] = "圖形";
+    Text[ tr ] = "Grafik";
+    Text[ hi-IN ] = "सुचित्र ";
+    Text[ ar ] = "صورة";
+    Text[ he ] = "‮גרפיקה‬";
+};
+String STR_CONTENT_TYPE_SINGLE_OLE
+{
+    Text [ de ] = "OLE-Objekt" ;
+    Text [ en-US ] = "OLE object" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Objecto OLE";
+    Text[ ru ] = "OLE объект";
+    Text[ el ] = "Αντικείμενο OLE";
+    Text[ nl ] = "OLE-object";
+    Text[ fr ] = "Objet OLE";
+    Text[ es ] = "Objeto OLE";
+    Text[ fi ] = "OLE-objekti";
+    Text[ ca ] = "Objecte OLE";
+    Text[ it ] = "Oggetto OLE";
+    Text[ sk ] = "Objekt OLE";
+    Text[ da ] = "OLE-objekt";
+    Text[ sv ] = "OLE-objekt";
+    Text[ pl ] = "Obiekt OLE";
+    Text[ pt-BR ] = "Objeto OLE";
+    Text[ th ] = "วัตถุ OLE ";
+    Text[ ja ] = "OLE オブジェクト";
+    Text[ ko ] = "OLE 개체";
+    Text[ zh-CN ] = "OLE-对象";
+    Text[ zh-TW ] = "OLE 物件";
+    Text[ tr ] = "OLE nesnesi";
+    Text[ hi-IN ] = "OLE वस्तु";
+    Text[ ar ] = "كائن OLE";
+    Text[ he ] = "OLE‮אוביקט ‬";
+};
+String STR_CONTENT_TYPE_SINGLE_BOOKMARK
+{
+    Text [ de ] = "Textmarke" ;
+    Text [ en-US ] = "Bookmark" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Marcador de texto";
+    Text[ ru ] = "Закладка";
+    Text[ el ] = "Σημάδι κειμένου";
+    Text[ nl ] = "Tekstmarkering";
+    Text[ fr ] = "Repère de texte";
+    Text[ es ] = "Marca de texto";
+    Text[ fi ] = "Kirjanmerkki";
+    Text[ ca ] = "Adreça d'interès";
+    Text[ it ] = "Segnalibro";
+    Text[ sk ] = "Záložka";
+    Text[ da ] = "Tekstmarkering";
+    Text[ sv ] = "Bokmärke";
+    Text[ pl ] = "Zakładka";
+    Text[ pt-BR ] = "Marcador";
+    Text[ th ] = "ที่คั่น";
+    Text[ ja ] = "テキストマーク";
+    Text[ ko ] = "책갈피";
+    Text[ zh-CN ] = "书签";
+    Text[ zh-TW ] = "內文標籤";
+    Text[ tr ] = "Metin işareti";
+    Text[ hi-IN ] = "पृष्ठसंकेत ";
+    Text[ ar ] = "إشارة مرجعية";
+    Text[ he ] = "‮סימניה‬";
+};
+String STR_CONTENT_TYPE_SINGLE_REGION
+{
+    Text [ de ] = "Bereich" ;
+    Text [ en-US ] = "Section" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Área";
+    Text[ ru ] = "Раздел";
+    Text[ el ] = "Ενότητα";
+    Text[ nl ] = "Bereik";
+    Text[ fr ] = "Section";
+    Text[ es ] = "Sección";
+    Text[ fi ] = "Osa";
+    Text[ ca ] = "Secció";
+    Text[ it ] = "Area";
+    Text[ sk ] = "Sekcia";
+    Text[ da ] = "Område";
+    Text[ sv ] = "Kategori";
+    Text[ pl ] = "Sekcja";
+    Text[ pt-BR ] = "Seção";
+    Text[ th ] = "ส่วน";
+    Text[ ja ] = "範囲";
+    Text[ ko ] = "구역";
+    Text[ zh-CN ] = "区域";
+    Text[ zh-TW ] = "區域";
+    Text[ tr ] = "Bölüm";
+    Text[ hi-IN ] = "विभाग";
+    Text[ ar ] = "نطاق";
+    Text[ he ] = "‮מיקטע‬";
+};
+String STR_CONTENT_TYPE_SINGLE_URLFIELD
+{
+    Text [ de ] = "Hyperlink" ;
+    Text [ en-US ] = "Hyperlink" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Hiperligação";
+    Text[ ru ] = "Гиперссылка";
+    Text[ el ] = "Υπερ-σύνδεση";
+    Text[ nl ] = "Hyperlink";
+    Text[ fr ] = "Hyperlien";
+    Text[ es ] = "Hiperenlace";
+    Text[ fi ] = "Hyperlinkki";
+    Text[ ca ] = "Hiperenllaç";
+    Text[ it ] = "Hyperlink";
+    Text[ sk ] = "Hypertextový odkaz";
+    Text[ da ] = "Hyperlink";
+    Text[ sv ] = "Hyperlänk";
+    Text[ pl ] = "Hiperłącze";
+    Text[ pt-BR ] = "Hiperlink";
+    Text[ th ] = "เชื่อมโยงหลายมิติ";
+    Text[ ja ] = "ハイパーリンク";
+    Text[ ko ] = "하이퍼링크";
+    Text[ zh-CN ] = "超链接";
+    Text[ zh-TW ] = "超連結";
+    Text[ tr ] = "Hiperlink";
+    Text[ hi-IN ] = "हाइपरलिंक ";
+    Text[ ar ] = "ارتباط تشعبي";
+    Text[ he ] = "‮היפר לינק‬";
+};
+String STR_CONTENT_TYPE_SINGLE_REFERENCE
+{
+    Text [ de ] = "Referenz" ;
+    Text [ en-US ] = "Reference" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Referência";
+    Text[ ru ] = "Ссылка";
+    Text[ el ] = "Παραπομπή";
+    Text[ nl ] = "Verwijzing";
+    Text[ fr ] = "Référence";
+    Text[ es ] = "Referencia";
+    Text[ fi ] = "Viite";
+    Text[ ca ] = "Referència";
+    Text[ it ] = "Riferimento";
+    Text[ sk ] = "Odkaz";
+    Text[ da ] = "Reference";
+    Text[ sv ] = "Referens";
+    Text[ pl ] = "Odwołanie";
+    Text[ pt-BR ] = "Referência";
+    Text[ th ] = "อ้างอิง";
+    Text[ ja ] = "参照";
+    Text[ ko ] = "참조";
+    Text[ zh-CN ] = "引用";
+    Text[ zh-TW ] = "參照";
+    Text[ tr ] = "Referans";
+    Text[ hi-IN ] = "रेफरेन्स";
+    Text[ ar ] = "مرجع";
+    Text[ he ] = "‮הפניה‬";
+};
+String STR_CONTENT_TYPE_SINGLE_INDEX
+{
+    Text [ de ] = "Verzeichnis" ;
+    Text [ en-US ] = "Index" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Índice";
+    Text[ ru ] = "Указатель";
+    Text[ el ] = "Ευρετήριο";
+    Text[ nl ] = "Index";
+    Text[ fr ] = "Index";
+    Text[ es ] = "Índice";
+    Text[ fi ] = "Hakemisto";
+    Text[ ca ] = "Índex";
+    Text[ it ] = "Indice";
+    Text[ sk ] = "Obsah";
+    Text[ da ] = "Indeks";
+    Text[ sv ] = "Förteckning";
+    Text[ pl ] = "Indeks";
+    Text[ pt-BR ] = "Índice";
+    Text[ th ] = "ดัชนี";
+    Text[ ja ] = "索引";
+    Text[ ko ] = "색인";
+    Text[ zh-CN ] = "目录";
+    Text[ zh-TW ] = "目錄";
+    Text[ tr ] = "Dizin";
+    Text[ hi-IN ] = "अनुक्रमणिका";
+    Text[ ar ] = "فهرس";
+    Text[ he ] = "‮אינדקס‬";
+};
+String STR_CONTENT_TYPE_SINGLE_POSTIT
+{
+    Text [ de ] = "Notiz" ;
+    Text [ en-US ] = "Note" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Anotação";
+    Text[ ru ] = "Примечание";
+    Text[ el ] = "Σημείωση";
+    Text[ nl ] = "Aantekening";
+    Text[ fr ] = "Note";
+    Text[ es ] = "Nota";
+    Text[ fi ] = "Huomautus";
+    Text[ ca ] = "Nota";
+    Text[ it ] = "Nota";
+    Text[ sk ] = "Poznámka";
+    Text[ da ] = "Note";
+    Text[ sv ] = "Anteckning";
+    Text[ pl ] = "Notatka";
+    Text[ pt-BR ] = "Anotações";
+    Text[ th ] = "บันทึกย่อ";
+    Text[ ja ] = "メモ";
+    Text[ ko ] = "메모";
+    Text[ zh-CN ] = "备注";
+    Text[ zh-TW ] = "備註";
+    Text[ tr ] = "Not";
+    Text[ hi-IN ] = "टिप्पणी ";
+    Text[ ar ] = "ملاحظة";
+    Text[ he ] = "‮הערה‬";
+};
+String STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
+{
+    Text [ de ] = "Zeichenobjekt" ;
+    Text [ en-US ] = "Draw object" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Objecto de desenho";
+    Text[ ru ] = "Графический объект";
+    Text[ el ] = "Aντικείμενο σχεδίασης";
+    Text[ nl ] = "Tekenobject";
+    Text[ fr ] = "Objet de dessin";
+    Text[ es ] = "Objeto de dibujo";
+    Text[ fi ] = "Piirrosobjekti";
+    Text[ ca ] = "Objecte de dibuix";
+    Text[ it ] = "Oggetto di disegno";
+    Text[ sk ] = "Kresba ";
+    Text[ da ] = "Tegneobjekt";
+    Text[ sv ] = "Ritobjekt";
+    Text[ pl ] = "Obiekt rysunkowy";
+    Text[ pt-BR ] = "Objeto de desenho";
+    Text[ th ] = "วาดวัตถุ";
+    Text[ ja ] = "図形描画オブジェクト";
+    Text[ ko ] = "그리기 개체";
+    Text[ zh-CN ] = "绘图对象";
+    Text[ zh-TW ] = "繪圖物件";
+    Text[ tr ] = "Çizim nesnesi";
+    Text[ hi-IN ] = "वस्तु खींचो";
+    Text[ ar ] = "كائن رسومي";
+    Text[ he ] = "‮אוביקט ‪Draw‬";
+};
+String STR_DEFINE_NUMBERFORMAT
+{
+    Text [ de ] = "Weitere Formate..." ;
+    Text [ en-US ] = "Additional formats..." ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Outros formatos...";
+    Text[ ru ] = "Дополнительные форматы...";
+    Text[ el ] = "Επιπρόσθετες μορφές...";
+    Text[ nl ] = "Andere formaten...";
+    Text[ fr ] = "Autres formats...";
+    Text[ es ] = "Otros formatos...";
+    Text[ fi ] = "Lisämuotoilut...";
+    Text[ ca ] = "Formats addicionals...";
+    Text[ it ] = "Ulteriori formati...";
+    Text[ sk ] = "Ďalšie formáty...";
+    Text[ da ] = "Yderligere formater...";
+    Text[ sv ] = "Ytterligare format...";
+    Text[ pl ] = "Dodatkowe formaty...";
+    Text[ pt-BR ] = "Formatos Adicionais...";
+    Text[ th ] = "รูปแบบเพิ่มเติม...";
+    Text[ ja ] = "その他の書式...";
+    Text[ ko ] = "추가 서식...";
+    Text[ zh-CN ] = "其它的格式...";
+    Text[ zh-TW ] = "其它格式...";
+    Text[ tr ] = "Diğer formatlar...";
+    Text[ hi-IN ] = "अधिकतरा रचना...";
+    Text[ ar ] = "...تنسيقات إضافية";
+    Text[ he ] = "Weitere Formate...";
+};
+
+#define IMGLIST_IDS\
+    IdList = \
+    { \
+        IMG_COLLAPSE;\
+        IMG_EXPAND  ;\
+        IMG_DB      ;\
+        IMG_DBTABLE ;\
+        IMG_DBQUERY ;\
+    }; \
+    IdCount = 5
+
+
+
+
+
+
+
+String STR_HYPERCTRL_SEL
+{
+    Text [ de ] = "SEL" ;
+    Text [ en-US ] = "SEL";
+    Text[ pt ] = "SEL";
+    Text[ ru ] = "SEL";
+    Text[ el ] = "SEL";
+    Text[ nl ] = "SEL";
+    Text[ fr ] = "SEL";
+    Text[ es ] = "SEL";
+    Text[ fi ] = "SEL";
+    Text[ ca ] = "SEL";
+    Text[ it ] = "SEL";
+    Text[ sk ] = "SEL";
+    Text[ da ] = "SEL";
+    Text[ sv ] = "SEL";
+    Text[ pl ] = "SEL";
+    Text[ pt-BR ] = "SEL";
+    Text[ th ] = "SEL";
+    Text[ ja ] = "SEL";
+    Text[ ko ] = "SEL";
+    Text[ zh-CN ] = "SEL";
+    Text[ zh-TW ] = "SEL";
+    Text[ tr ] = "SEL";
+    Text[ hi-IN ] = "SEL";
+    Text[ ar ] = "SEL";
+    Text[ he ] = "SEL";
+};
+
+String STR_HYPERCTRL_HYP
+{
+    Text [ de ] = "HYP" ;
+    Text [ en-US ] = "HYP";
+    Text[ pt ] = "HYP";
+    Text[ ru ] = "HYP";
+    Text[ el ] = "HYP";
+    Text[ nl ] = "HYP";
+    Text[ fr ] = "HYP";
+    Text[ es ] = "HYP";
+    Text[ fi ] = "HYP";
+    Text[ ca ] = "HYP";
+    Text[ it ] = "HYP";
+    Text[ sk ] = "HYP";
+    Text[ da ] = "HYP";
+    Text[ sv ] = "HYP";
+    Text[ pl ] = "HYP";
+    Text[ pt-BR ] = "HYP";
+    Text[ th ] = "HYP";
+    Text[ ja ] = "HYP";
+    Text[ ko ] = "HYP";
+    Text[ zh-CN ] = "HYP";
+    Text[ zh-TW ] = "HYP";
+    Text[ tr ] = "HYP";
+    Text[ hi-IN ] = "HYP";
+    Text[ ar ] = "HYP";
+    Text[ he ] = "HYP";
+};

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>sch</module-name>
+    <component-description>
+        <author>Bjoern Milcke</author>
+        <name>com.sun.star.comp.office.ChXDiagram</name>
+        <description>
+    This component provides access to the plotting area of the chart,
+    i.e. the object where the chart data is represented graphically.
+</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.chart.Diagram</supported-service>
+        <supported-service>com.sun.star.chart.LineDiagram</supported-service>
+        <supported-service>com.sun.star.chart.ChartAxisXSupplier</supported-service>
+        <supported-service>com.sun.star.chart.ChartAxisYSupplier</supported-service>
+        <supported-service>com.sun.star.chart.ChartTwoAxisXSupplier</supported-service>
+        <supported-service>com.sun.star.chart.ChartTwoAxisYSupplier</supported-service>
+        <supported-service>com.sun.star.chart.StackableDiagram</supported-service>
+        <supported-service>com.sun.star.chart.Dim3DDiagram</supported-service>
+        <supported-service>com.sun.star.chart.AreaDiagram</supported-service>
+        <supported-service>com.sun.star.chart.BarDiagram</supported-service>
+        <supported-service>com.sun.star.chart.PieDiagram</supported-service>
+        <supported-service>com.sun.star.chart.DonutDiagram</supported-service>
+        <supported-service>com.sun.star.chart.XYDiagram</supported-service>
+        <supported-service>com.sun.star.chart.NetDiagram</supported-service>
+        <supported-service>com.sun.star.chart.StockDiagram</supported-service>
+        <supported-service>com.sun.star.xml.UserDefinedAttributeSupplier</supported-service>
+    </component-description>
+</module-description>

@@ -61,7 +61,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 #include "lwpglobalmgr.hxx"
 #include "lwpstory.hxx"
@@ -156,7 +156,7 @@ void LwpStory::Parse(IXFStream* pOutputStream)
     }*/
 
     //Don't process the next story
-/*  LwpObject* pNextStory = GetNextStory()->obj();
+/*	LwpObject* pNextStory = GetNextStory()->obj();
     if(pNextStory)
     {
         pNextStory->SetFoundry(m_pFoundry);
@@ -507,7 +507,7 @@ OUString LwpStory::GetContentText(sal_Bool bAllText)
             pPara->SetFoundry(m_pFoundry);
             return pPara->GetContentText();
         }
-        return  A2OUSTR("");
+        return 	A2OUSTR("");
     }
 
 }

@@ -33,20 +33,20 @@ import java.awt.Color;
  *  This class specifies the format for a given spreadsheet cell.
  *
  *  @author  Mark Murnane
- *  @author  Martin Maher (Extended Style Support)
+ *  @author	 Martin Maher (Extended Style Support)
  */
 public class Format implements Cloneable {
 
     /**  Horizontal Alignment Constants. */
-    final public static int RIGHT_ALIGN     = 0x01;
-    final public static int CENTER_ALIGN    = 0x02;
-    final public static int LEFT_ALIGN      = 0x03;
-    final public static int JUST_ALIGN      = 0x04;
+    final public static int RIGHT_ALIGN		= 0x01;
+    final public static int CENTER_ALIGN	= 0x02;
+    final public static int LEFT_ALIGN		= 0x03;
+    final public static int JUST_ALIGN		= 0x04;
 
     /**  Vertical Alignment Constants. */
-    final public static int TOP_ALIGN       = 0x01;
-    final public static int MIDDLE_ALIGN    = 0x02;
-    final public static int BOTTOM_ALIGN    = 0x03;
+    final public static int TOP_ALIGN		= 0x01;
+    final public static int MIDDLE_ALIGN	= 0x02;
+    final public static int BOTTOM_ALIGN	= 0x03;
 
     /** Indicates <i>bold</i> text. */
     final public static int BOLD        = 0x01;
@@ -61,12 +61,12 @@ public class Format implements Cloneable {
     /** Indicates <i>subscripted</i> text. */
     final public static int SUBSCRIPT   = 0x20;
 
-    final public static int LEFT_BORDER     = 0x40;
-    final public static int RIGHT_BORDER    = 0x80;
-    final public static int TOP_BORDER      = 0x100;
+    final public static int LEFT_BORDER		= 0x40;
+    final public static int RIGHT_BORDER	= 0x80;
+    final public static int TOP_BORDER   	= 0x100;
     final public static int BOTTOM_BORDER   = 0x200;
 
-    final public static int WORD_WRAP       = 0x400;
+    final public static int WORD_WRAP		= 0x400;
 
     private int align;
     private int vertAlign;
