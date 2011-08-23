@@ -1,0 +1,12 @@
+LICENSES :
+"Classic & Reform 1990" spelling dictionary : LGPL, GPL, MPL
+Hyphenation dictionary : LGPL
+Thesaurus : LGPL
+
+IMPORTANT :
+The spelling dictionary recognizes as correct both the classic and new spelling of the reform of 1990. Examples of the new spelling: relai, cout, évènement, connaitre, assoir, contrindiquer, bassefosse, révolver, règlementaire, j'amoncèle, aigüe, etc.
+
+About the french spelling reform of 1990 :
+http://en.wikipedia.org/wiki/Reforms_of_French_orthography
+http://www.renouvo.org/introduction.php
+http://www.orthographe-recommandee.info/index.htm

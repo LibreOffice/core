@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <identifier value="romanian.contemporary.dictionaries.by.lucian" />
+
+    <version value="1.3" />
+
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+    </dependencies>
+
+    <publisher>
+      <name lang="ro" xlink:href="http://rospell.sourceforge.net">rospell</name>
+      <name lang="en" xlink:href="http://rospell.sourceforge.net">rospell</name>
+    </publisher>
+
+   <!-- using i18n.ro for release notes -->
+    <release-notes>
+      <src xlink:href="http://rospell.sourceforge.net/dictionary_ro.html" lang="ro" />
+      <src xlink:href="http://rospell.sourceforge.net/dictionary_ro.html" lang="en" />
+    </release-notes>
+
+    <display-name>
+      <name lang="ro">Dicționare Românești</name>
+      <name lang="en">Romanian Dictionaries</name>
+    </display-name>
+
+    <platform value="all" />
+
+</description>

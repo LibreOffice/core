@@ -1,0 +1,2 @@
+Questa estensione contiene il dizionario ortografico, il dizionario dei sinonimi e le regole di sillabazione per la lingua italiana, realizzati con il contributo dei volontari e distribuiti dal PLIO http://www.plio.it
+

@@ -1,0 +1,4 @@
+﻿Llicència:
+ Diccionari de sinònims sota llicència GPL/LGPL
+
+Copyright (C) 2009 Joan Montané <joan@montane.cat> --- Softcatalà

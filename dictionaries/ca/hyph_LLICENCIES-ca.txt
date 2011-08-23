@@ -1,0 +1,12 @@
+Diccionari català de partició de mots per a l'Openoffice.org.
+
+Basat en els patrons de TeX, d'en Gonçal Badenes (g.badenes@ieee.org).
+Adaptats per en Ricard Roca (ricardroca@gmail.com)
+
+IMPORTANT:
+
+Aquest diccionari parteix correctament les eles geminades, però la partició s'ha d'activar des de la pestanya ‘Flux de text’ de la finestra de format del paràgraf. Si feu servir l'altre mètode, l'entrada del menú ‘Eines/Llengua/Partició de mots’, les eles geminades no queden ben partides. Això és un defecte de l’OpenOffice.org, no del diccionari, i els programadors ja n’han estat informats.
+
+LLICÈNCIA:
+
+GNU GPL V3

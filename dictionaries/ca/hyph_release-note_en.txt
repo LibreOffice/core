@@ -1,0 +1,8 @@
+Release 0.9.2 (4/12/2009)
+ Added remote update information.
+Release 0.9.1 (4/5/2009)
+ Added info to avoid problems with 'ela geminada' (l·l).
+Release 0.9 (4/3/2009)
+ Es millora el tractament de la ela geminada.
+Release 0.1 (30/10/2008)
+ Initial version. Based on TeX patterns made by Gonçal Badenes

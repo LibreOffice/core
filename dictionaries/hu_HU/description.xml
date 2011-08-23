@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="2010.10.19" />
+    <identifier value="org.openoffice.hu.hunspell.dictionaries" />
+    <display-name>
+        <name lang="en">Hungarian spelling dictionary, hyphenation patterns, and thesaurus</name>
+        <name lang="hu">Magyar helyesírás-ellenőrző szótár, elválasztási minták és szókincstár</name>
+    </display-name>
+    <publisher>
+        <name lang="en" xlink:href="http://www.fsf.hu/">FSF.hu Foundation</name>
+        <name lang="hu" xlink:href="http://www.fsf.hu/">FSF.hu Alapítvány</name>
+    </publisher>
+    <platform value="all" />
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.2" d:name="OpenOffice.org 3.2" />
+    </dependencies>
+</description>
+

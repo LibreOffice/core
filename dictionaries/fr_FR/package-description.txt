@@ -1,0 +1,11 @@
+Orthographe «Moderne» 3.8 • Synonymes 2.2.2 • Césures 2.0  
+
+Pour signaler une erreur, ajouter ou supprimer des mots, cliquez sur le lien.  
+
+Quatre dictionnaires français existent:  
+— «Moderne» : le français avec les mots réformés passés dans l’usage. [recommandé]  
+— «Classique» : le français d’avant la réforme de l’orthographe.  
+— «Réforme 1990» : le français selon la réforme de l’orthographe.  
+— «Classique & Réforme 1990» : toutes les graphies sont reconnues.  
+
+http://extensions.services.openoffice.org/dictionary

@@ -1,0 +1,209 @@
+# af_ZA.aff - Afrikaans (af) affix file for use in myspell
+#
+# Copyright (C) 2003 Dwayne Bailey
+# Created from the Afrikaans ispell affix file by Reinier de Vos
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+SET ISO8859-1
+
+TRY ersiaontlgkdumpbvhfwyjëc-êï'BDAHzGKMEéSCöxIqFôLPèJVOTRüäûóNWáUíúòàX
+
+# We don't want suggestions of seperate words. Because the checker
+# can't handle Afrikaans' compositions, we rather don't want to have
+# the seperate words suggested.
+#
+# Ons wil nie aparte woorde as voorstelle hê nie. Dis belangrik dat 
+# die tekortkoming van die speltoetser i.v.m. samestellings die
+# gebruiker eerder met soortgelyke woorde moet help as met die aparte
+# woorde. 
+#
+# Gebreek sedert OpenOffice 2.0, maar werk wel in hunspell (en dus OO.o 2.0.2)
+NOSPLITSUGS
+
+# We want to explain to the checker that certain characters should be
+# considered "close" to others even though they are far removed in the
+# character set.
+#
+# Ons wil aan die toetser verduidelik dat sekere karakters as "naby"
+# geag moet word aan ander, ten spyte van die feit dat hulle ver 
+# verwyderd is in die karakterstel.
+
+MAP 6
+MAP aâäáà
+MAP eêëéè
+MAP iîïíì
+MAP oôöóò
+MAP uûüúù
+MAP yÿý
+
+PFX A Y 1
+PFX A 0 aan .
+
+PFX B Y 1
+PFX B 0 be .
+
+PFX C Y 1
+PFX C 0 in .
+
+PFX F Y 1
+PFX F 0 af .
+
+PFX G Y 1
+PFX G 0 ge .
+
+PFX K Y 1
+PFX K 0 op .
+
+PFX O Y 1
+PFX O 0 on .
+
+PFX U Y 1
+PFX U 0 uit .
+
+PFX V Y 1
+PFX V 0 ver .
+
+PFX M Y 1
+PFX M 0 oor .
+
+SFX J N 15
+SFX J   0  tjie   [aeiou][aeiou]
+SFX J   0  tjies  [aeiou][aeiou]
+SFX J   0  'tjies [^aeiou]a
+SFX J   0  'tjie  [^aeiou]i
+SFX J   0  'tjies [^aeiou]i
+SFX J   0  'tjie  [^aeiou]o
+SFX J   0  'tjies [^aeiou]o
+SFX J   0  'tjie  [^aeiou]u
+SFX J   0  'tjies [^aeiou]u
+SFX J   0  tjie   [aeiou][lnr]
+SFX J   0  tjies  [aeiou][lnr]
+SFX J   0  pie    [aeiou]m
+SFX J   0  pies   [aeiou]m
+SFX J   0  jie    [aeiou]nd
+SFX J   0  jies   [aeiou]nd
+
+SFX S N 2
+SFX S   0 s  [^saiou]
+SFX S   0 's [^aeiou][aiou]
+
+SFX E N 2
+SFX E   0 e  [^aeiou]
+SFX E   0 'e [ghc]e
+
+SFX R N 1
+SFX R   0 r [e]
+
+SFX T N 1
+SFX T   0 ste .
+
+SFX H N 1
+SFX H   0 heid .
+
+SFX I N 1
+SFX I   0 ing .
+
+SFX N N 1
+SFX N   0 de .
+
+SFX L N 1
+SFX L   0 te .
+
+SFX Z N 8
+SFX Z   af we aaf
+SFX Z   f  we eef
+SFX Z   f  we ief
+SFX Z   f  we oef
+SFX Z   of we oof
+SFX Z   f  we uif
+SFX Z   f  we yf
+SFX Z   id de heid
+
+SFX P N 31
+SFX P   ad de aad
+SFX P   ag e aag
+SFX P   ak ke aak
+SFX P   al le aal
+SFX P   am me aam
+SFX P   an ne aan
+SFX P   ap pe aap
+SFX P   ar re aar
+SFX P   as se aas
+SFX P   at te aat
+SFX P   ed de eed
+SFX P   eg ge eeg
+SFX P   ek ke eek
+SFX P   el le eel
+SFX P   em me eem
+SFX P   en ne een
+SFX P   ep pe eep
+SFX P   er re eer
+SFX P   es se ees
+SFX P   et te eet
+SFX P   od de ood
+SFX P   og ë  oog
+SFX P   ok ke ook
+SFX P   ol le ool
+SFX P   om me oom
+SFX P   on ne oon
+SFX P   op pe oop
+SFX P   or re oor
+SFX P   ot te oot
+SFX P   un ne uun
+SFX P   ur re uur
+
+# We want to suggest certain replacements to the checker with our 
+# knowledge of what can easily be mixed up.
+#
+# Ons wil sekere plaasvervangings voorstel aan die toetser met ons
+# kennis van wat maklik verwar word.
+#
+# Byvoorbeeld: 
+#   g<->ch, vir foute soos gemikus of nongalant
+#   y<->ui<->ei, uu<->ie, vir oorronding en ontronding, en y/ei-verwarring
+#   ij -> y, lijk -> lik, vir foutiewe Nederlandse spellings
+#   kuste -> ci, kuste -> kusse, vir politikuste -> politici/politikusse
+#   ui oeï, vir foute soos Hinduisme -> Hindoeïsme
+#   ch->tj, sh -> sj, vir foute soos chips (tjips) en shoe (sjoe)
+REP 27
+REP g ch
+REP ei y
+REP y ei
+REP y ui
+REP ui y
+REP ei ui
+REP ui ei
+REP ij y
+REP lijk lik
+REP uu ie
+REP ie uu
+REP f v
+REP v f
+REP d t
+REP t d
+REP kuste ci
+REP kuste kusse
+REP x ks
+REP u oe
+REP oe u
+REP ui oeï
+REP ch tj
+REP sh sj
+REP kie djie
+REP kie tjie
+REP ntjie nkie
+REP aaitjie aadjie
+

@@ -1,0 +1,12 @@
+LICENCES :
+Dictionnaire orthographique "Classique & Réforme 1990" : LGPL, GPL, MPL
+Dictionnaire des césures : LGPL
+Dictionnaire des synonymes : LGPL
+
+IMPORTANT :
+Le dictionnaire orthographique reconnaît comme correctes les nouvelles et les anciennes graphies des mots rectifiés par la réforme de l'orthographe de 1990, enseignée depuis 2007 dans les écoles françaises.
+Si vous considérez que le français devrait évoluer vers une orthographe simplifiée et que maitre, relai, cout, évènement, connaitre, assoir, contrindiquer, bassefosse, révolver, règlementaire, j'amoncèle, aigüe, etc. ne sont pas des fautes d'orthographe, c'est probablement le dictionnaire qui vous conviendra. Vous pouvez écrire selon l'orthographe classique ou la nouvelle.
+
+A propos de la réforme de l'orthographe de 1990:
+http://www.renouvo.org/introduction.php
+http://www.orthographe-recommandee.info/index.htm

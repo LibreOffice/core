@@ -1,0 +1,3 @@
+Nederlandstalige spellingcontrole 2.00g voor OpenOffice.org vanaf versie 3.2. 
+Hanteert de officiële standaard van de Taalunie.
+Gemaakt door OpenTaal (www.opentaal.org)

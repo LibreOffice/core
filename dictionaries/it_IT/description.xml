@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <version value="2010.09.21" />
+
+    <identifier value="org.openoffice.it.hunspell.dictionaries" />
+
+    <platform value="all" />
+
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+    </dependencies>
+
+    <publisher>
+        <name xlink:href="http://www.plio.it/" lang="en">PLIO (Progetto Linguistico Italiano OpenOffice.org)</name>
+<!--		<name xlink:href="http://www.plio.it/" lang="it">PLIO (Progetto Linguistico Italiano OpenOffice.org)</name>-->
+    </publisher>
+
+    <display-name>
+        <name lang="en">Italian spelling and hyphenation dictionaries and thesaurus</name>
+        <name lang="it">Dizionario ortografico, dei sinonimi e di sillabazione per la lingua italiana</name>
+    </display-name>
+
+    <icon>
+        <default xlink:href="ico.png" />
+    </icon>
+
+    <extension-description>
+        <src xlink:href="desc_en.txt" lang="en" />
+        <src xlink:href="desc_it.txt" lang="it" />
+    </extension-description>
+
+</description>

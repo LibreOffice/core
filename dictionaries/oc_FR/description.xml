@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="2011.01.29" />
+    <identifier value="org.openoffice.oc.hunspell.dictionaries" />
+    <display-name>
+        <name lang="en">Spelling dictionary for occitan-languedocian</name>
+        <name lang="fr">Dictionnaire orthographique occitan-languedocien</name>
+    </display-name>
+    <publisher>
+        <name xlink:href="http://dico.savant.free.fr/index.php" lang="fr">Dicollecte</name>
+    </publisher>
+    <platform value="all" />
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+    </dependencies>
+</description>

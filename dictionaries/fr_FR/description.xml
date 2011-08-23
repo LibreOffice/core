@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- http://wiki.services.openoffice.org/wiki/Extension_Dictionaries -->
+    <!--<registration>
+        <simple-license accept-by="admin" suppress-on-update="false" >
+            <license-text xlink:href="dictionaries/README_fr.txt" lang="fr" />
+        </simple-license>
+    </registration>-->
+    
+    <version value="3.8" />
+    
+    <identifier value="french.modern-dictionary.from.Dicollecte.by.OlivierR" />
+    
+    <display-name>
+        <name lang="fr">Français: Dictionnaire «Moderne», Synonymes et Césures.</name>
+    </display-name>
+    
+    <platform value="all" />
+    
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+    </dependencies>
+    
+    <icon>
+        <default xlink:href="drapeau_tricolore.png" />
+    </icon>
+    
+    <publisher>
+        <name xlink:href="http://www.dicollecte.org/home.php?prj=fr" lang="fr">Dicollecte</name>
+    </publisher>
+</description>
