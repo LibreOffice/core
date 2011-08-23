@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,10 +57,10 @@ public:
         */
         virtual void FillingDone (void) = 0;
     };
-
+    
     MasterPageContainerFiller (ContainerAdapter& rContainerAdapter);
     virtual ~MasterPageContainerFiller (void);
-
+    
     /** Run the next step of the task.  After HasNextStep() returns false
         this method should ignore further calls.
     */
@@ -85,7 +85,7 @@ private:
     ::std::auto_ptr<TemplateScanner> mpScannerTask;
     const TemplateEntry* mpLastAddedEntry;
     int mnIndex;
-
+    
     State ScanTemplate (void);
     State AddTemplate (void);
 };

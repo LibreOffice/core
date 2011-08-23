@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ namespace sd { namespace slidesorter {
 
 /** Show previews for all the slides in a document and allow the user to
     insert or delete slides and modify the order of the slides.
-
+    
     This class is a facade for the model, view, and controller classes.
     It is a hub that allows access to the various parts of a slide sorter.
 
@@ -87,7 +87,7 @@ public:
         shutdown (when that can be detected).
     */
     bool IsValid (void) const;
-
+    
     /** Create a new slide sorter that is strongly coupled to the given view
         shell.  Use this function for a slide sorter in the left pane.
         @param rViewShell
@@ -171,7 +171,7 @@ public:
     ViewShellBase* GetViewShellBase (void) const;
 
     void Paint (const Rectangle& rRepaintArea);
-
+    
     /** Place and size the controls and windows.  You may want to call this
         method when something has changed that for instance affects the
         visibility state of the scroll bars.
@@ -186,7 +186,7 @@ public:
     /** Set the current function at the view shell or, when it is not
         present, set it at the content window.  This method supports the use
         of functions even when there is no SlideSorterViewShell.
-    */
+    */       
     void SetCurrentFunction (const FunctionReference& rpFunction);
 
 protected:

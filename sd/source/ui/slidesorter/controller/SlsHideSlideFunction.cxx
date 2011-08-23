@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ void HideSlideFunction::DoExecute (SfxRequest& rRequest)
 
     model::PageEnumeration aSelectedPages (
         model::PageEnumerationProvider::CreateSelectedPagesEnumeration(mrSlideSorter.GetModel()));
-
+    
     ExclusionState eState (UNDEFINED);
 
     switch (rRequest.GetSlot())
@@ -143,14 +143,14 @@ HideSlideFunction::ExclusionState HideSlideFunction::GetExclusionState (
                 break;
 
             case EXCLUDED:
-                // The pages before where all not part of the show,
+                // The pages before where all not part of the show, 
                 // this one is.
                 if ( ! bState)
                     eState = MIXED;
                 break;
 
             case INCLUDED:
-                // The pages before where all part of the show,
+                // The pages before where all part of the show, 
                 // this one is not.
                 if (bState)
                     eState = MIXED;

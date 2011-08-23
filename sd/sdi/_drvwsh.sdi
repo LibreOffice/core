@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -722,7 +722,7 @@ interface DrawView
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
     ]
-
+    
     SID_OBJECT_CROP // ole : no, status : play rec
     [
         ExecMethod = FuPermanent ;
@@ -2235,13 +2235,13 @@ interface DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
-
+    
     SID_FORMATPAINTBRUSH //
     [
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
     ]
-
+ 
     SID_HEADER_AND_FOOTER // ole : no, status : ?
     [
         ExecMethod = ExecCtrl ;
@@ -2259,13 +2259,13 @@ interface DrawView
         ExecMethod = ExecCtrl ;
         StateMethod = GetMenuState ;
     ]
-
+    
     SID_MASTER_LAYOUTS
     [
         ExecMethod = ExecCtrl ;
         StateMethod = GetMenuState ;
     ]
-
+    
     SID_OPT_LOCALE_CHANGED // ole : no, status : ?
     [
         ExecMethod = ExecCtrl ;
@@ -2316,7 +2316,7 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
-    ]
+    ]   
     SID_EXTRUSION_DIRECTION_FLOATER
     [
         ExecMethod = FuTemporary ;
@@ -2416,17 +2416,17 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
-    ]
+    ]   
     SID_DRAW_FONTWORK
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
-    ]
+    ]    
     SID_DRAW_FONTWORK_VERTICAL
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
-    ]
+    ]    
     SID_DRAWTBX_CS_BASIC
     [
         ExecMethod = FuPermanent ;
@@ -2461,7 +2461,7 @@ interface DrawView
     [
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
-    ]
+    ]   
     SID_AVMEDIA_PLAYER // ole : yes, status : ?
     [
         ExecMethod = FuTemporary ;

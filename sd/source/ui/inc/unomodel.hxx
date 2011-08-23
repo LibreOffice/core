@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,11 +119,11 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxMarkerTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDrawingPool;
 
-    const SvxItemPropertySet*   mpPropSet;
+    const SvxItemPropertySet*	mpPropSet;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
 
-    rtl::OUString   maBuildId;
+    rtl::OUString	maBuildId;
 
     void initializeDocument();
 public:
@@ -134,8 +134,8 @@ public:
     static rtl::Reference< SdXImpressDocument > GetModel( SdDrawDocument* pDoc );
 
     // intern
-    virtual int operator==( const SdXImpressDocument& rModel ) const { return mpDoc == rModel.mpDoc; }
-    virtual int operator!=( const SdXImpressDocument& rModel ) const { return mpDoc != rModel.mpDoc; }
+    virtual int	operator==( const SdXImpressDocument& rModel ) const { return mpDoc == rModel.mpDoc; }
+    virtual int	operator!=( const SdXImpressDocument& rModel ) const { return mpDoc != rModel.mpDoc; }
 
     ::sd::DrawDocShell* GetDocShell() const { return mpDocShell; }
     SdDrawDocument* GetDoc() const { return mpDoc; }
@@ -146,7 +146,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XForbiddenCharacters > getForbiddenCharsTable();
 
     // SfxListener
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     UNO3_GETIMPLEMENTATION_DECL(SdXImpressDocument)
 
@@ -243,7 +243,7 @@ private:
     SdXImpressDocument* mpModel;
 
 public:
-    SdDrawPagesAccess( SdXImpressDocument&  rMyModel ) throw();
+    SdDrawPagesAccess( SdXImpressDocument&	rMyModel ) throw();
     virtual ~SdDrawPagesAccess() throw();
 
     // XDrawPages
@@ -283,7 +283,7 @@ public:
 class SdMasterPagesAccess : public ::cppu::WeakImplHelper3< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo, ::com::sun::star::lang::XComponent >
 {
 private:
-    SdXImpressDocument* mpModel;
+    SdXImpressDocument*	mpModel;
 
 public:
     SdMasterPagesAccess( SdXImpressDocument& rMyModel ) throw();
@@ -320,10 +320,10 @@ class SdDocLinkTargets : public ::cppu::WeakImplHelper3< ::com::sun::star::conta
                                                          ::com::sun::star::lang::XServiceInfo , ::com::sun::star::lang::XComponent >
 {
 private:
-    SdXImpressDocument* mpModel;
+    SdXImpressDocument*	mpModel;
 
 public:
-    SdDocLinkTargets( SdXImpressDocument&   rMyModel ) throw();
+    SdDocLinkTargets( SdXImpressDocument&	rMyModel ) throw();
     virtual ~SdDocLinkTargets() throw();
 
     // XNameAccess

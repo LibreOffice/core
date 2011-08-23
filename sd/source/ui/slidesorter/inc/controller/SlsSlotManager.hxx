@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class Command;
 /** This manager takes over the work of handling slot calls from the
     controller of the slide sorter.
 */
-class SlotManager
+class SlotManager 
 {
 public:
     /** Create a new slot manager that handles slot calls for the controller

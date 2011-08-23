@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ CacheConfiguration::CacheConfiguration (void)
     const ::rtl::OUString sPathToNode(
         RTL_CONSTASCII_USTRINGPARAM(
             "MultiPaneGUI/SlideSorter/PreviewCache"));
-
+    
     try
     {
         do
@@ -105,17 +105,17 @@ CacheConfiguration::CacheConfiguration (void)
             aCreationArguments[0] = makeAny(beans::PropertyValue(
                 ::rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("nodepath")),
-                0,
+                0, 
                 makeAny(sPathToImpressConfigurationRoot),
                 beans::PropertyState_DIRECT_VALUE));
             aCreationArguments[1] = makeAny(beans::PropertyValue(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")),
-                0,
+                0, 
                 makeAny((sal_Int32)-1),
                 beans::PropertyState_DIRECT_VALUE));
             aCreationArguments[2] = makeAny(beans::PropertyValue(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite")),
-                0,
+                0, 
                 makeAny(true),
                 beans::PropertyState_DIRECT_VALUE));
             ::rtl::OUString sAccessService (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -151,7 +151,7 @@ CacheConfiguration::CacheConfiguration (void)
 Any CacheConfiguration::GetValue (const ::rtl::OUString& rName)
 {
     Any aResult;
-
+    
     if (mxCacheNode != NULL)
     {
         try

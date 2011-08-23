@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
 
@@ -357,7 +357,7 @@ void AccessiblePageShape::dispose (void)
     catch (beans::UnknownPropertyException&)
     {
     }
-
+    
     return CreateAccessibleBaseName()+A2S(": ")+sCurrentSlideName;
 }
 

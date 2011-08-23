@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -160,13 +160,13 @@ bool ReadOnlyModeObserver::ConnectToDispatch (void)
             }
         }
     }
-
+    
     return mxDispatch.is();
 }
 
 
 
-
+ 
 void ReadOnlyModeObserver::statusChanged (const frame::FeatureStateEvent& rEvent)
     throw (RuntimeException)
 {
@@ -191,7 +191,7 @@ void SAL_CALL ReadOnlyModeObserver::disposing (
         mxConfigurationController = NULL;
     else if (rEvent.Source == mxDispatch)
         mxDispatch = NULL;
-
+        
     dispose();
 }
 

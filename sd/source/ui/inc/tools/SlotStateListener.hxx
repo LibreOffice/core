@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 namespace sd { namespace tools {
 
 
-typedef cppu::WeakComponentImplHelper1<
+typedef cppu::WeakComponentImplHelper1< 
     ::com::sun::star::frame::XStatusListener
     > SlotStateListenerInterfaceBase;
 
@@ -97,7 +97,7 @@ public:
         @throws DisposedException
     */
     void ObserveSlot (const ::rtl::OUString& rSlotName);
-
+    
     //=====  frame::XStatusListener  ==========================================
 
     /** Called by slot state change broadcasters.  In turn the callback is
@@ -112,7 +112,7 @@ public:
     //=====  lang::XEventListener  ============================================
 
     virtual void SAL_CALL
-        disposing(const com::sun::star::lang::EventObject& rEvent)
+        disposing(const com::sun::star::lang::EventObject& rEvent) 
         throw(com::sun::star::uno::RuntimeException);
 
 protected:
@@ -150,7 +150,7 @@ private:
 
     /** Return an XDispatch object for the given URL.
     */
-    ::com::sun::star::uno::Reference<com::sun::star::frame::XDispatch>
+    ::com::sun::star::uno::Reference<com::sun::star::frame::XDispatch> 
         GetDispatch (
             const ::com::sun::star::util::URL& rURL) const;
 };

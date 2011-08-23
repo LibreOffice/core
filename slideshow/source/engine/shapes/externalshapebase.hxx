@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,13 +64,13 @@ namespace slideshow
                 Externally-determined shape priority (used e.g. for
                 paint ordering). This number _must be_ unique!
              */
-            ExternalShapeBase( const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::drawing::XShape >&   xShape,
-                               double                                       nPrio,
+            ExternalShapeBase( const ::com::sun::star::uno::Reference< 
+                                     ::com::sun::star::drawing::XShape >&	xShape,
+                               double										nPrio,
                                const SlideShowContext&                      rContext ); // throw ShapeLoadFailedException;
             virtual ~ExternalShapeBase();
 
-            virtual ::com::sun::star::uno::Reference<
+            virtual ::com::sun::star::uno::Reference< 
                 ::com::sun::star::drawing::XShape > getXShape() const;
 
             // animation methods
@@ -92,7 +92,7 @@ namespace slideshow
 
             // Shape attributes
             //------------------------------------------------------------------
-
+                        
             virtual ::basegfx::B2DRectangle getBounds() const;
             virtual ::basegfx::B2DRectangle getDomBounds() const;
             virtual ::basegfx::B2DRectangle getUpdateArea() const;
@@ -101,7 +101,7 @@ namespace slideshow
             virtual bool   isBackgroundDetached() const;
 
         protected:
-            const ::com::sun::star::uno::Reference<
+            const ::com::sun::star::uno::Reference< 
                 ::com::sun::star::uno::XComponentContext>  mxComponentContext;
 
         private:
@@ -128,7 +128,7 @@ namespace slideshow
 
 
             /// The associated XShape
-            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mxShape;
+            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > 	mxShape;
 
             boost::shared_ptr<ExternalShapeBaseListener>                            mpListener;
 
@@ -136,8 +136,8 @@ namespace slideshow
             EventMultiplexer&                                                       mrEventMultiplexer;
 
             // The attributes of this Shape
-            const double                                                            mnPriority;
-            ::basegfx::B2DRectangle                                                 maBounds;
+            const double															mnPriority;
+            ::basegfx::B2DRectangle													maBounds;
         };
     }
 }

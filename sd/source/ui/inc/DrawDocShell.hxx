@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,11 +85,11 @@ public:
     virtual ~DrawDocShell();
 
     void                    UpdateRefDevice();
-    virtual void            Activate( BOOL bMDI );
-    virtual void            Deactivate( BOOL bMDI );
+    virtual void	        Activate( BOOL bMDI );
+    virtual void	        Deactivate( BOOL bMDI );
     virtual BOOL            InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    virtual BOOL            ConvertFrom( SfxMedium &rMedium );
-    virtual BOOL            Save();
+    virtual BOOL	        ConvertFrom( SfxMedium &rMedium );
+    virtual BOOL	        Save();
     virtual BOOL            SaveAsOwnFormat( SfxMedium& rMedium );
     virtual BOOL            ConvertTo( SfxMedium &rMedium );
     virtual BOOL            SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
@@ -99,13 +99,13 @@ public:
     virtual sal_Bool        SaveAs( SfxMedium &rMedium  );
 
     virtual Rectangle       GetVisArea(USHORT nAspect) const;
-    virtual void            Draw(OutputDevice*, const JobSetup& rSetup, USHORT nAspect = ASPECT_CONTENT);
+    virtual void        	Draw(OutputDevice*, const JobSetup& rSetup, USHORT nAspect = ASPECT_CONTENT);
     virtual SfxUndoManager* GetUndoManager();
     virtual Printer*        GetDocumentPrinter();
     virtual void            OnDocumentPrinterChanged(Printer* pNewPrinter);
     virtual SfxStyleSheetBasePool* GetStyleSheetPool();
-    virtual void            SetOrganizerSearchMask(SfxStyleSheetBasePool* pBasePool) const;
-    virtual Size            GetFirstPageSize();
+    virtual void	        SetOrganizerSearchMask(SfxStyleSheetBasePool* pBasePool) const;
+    virtual Size	        GetFirstPageSize();
     virtual void            FillClass(SvGlobalName* pClassName, sal_uInt32*  pFormat, String* pAppName, String* pFullTypeName, String* pShortTypeName, sal_Int32 nFileFormat, sal_Bool bTemplate = sal_False ) const;
     virtual void            SetModified( BOOL = TRUE );
 
@@ -115,28 +115,28 @@ public:
 
     sd::ViewShell* GetViewShell() { return mpViewShell; }
     ::sd::FrameView* GetFrameView();
-    ::sd::FunctionReference GetDocShellFunction() const { return mxDocShellFunction; }
+    ::sd::FunctionReference	GetDocShellFunction() const { return mxDocShellFunction; }
     void SetDocShellFunction( const ::sd::FunctionReference& xFunction );
 
     SdDrawDocument*         GetDoc();
     DocumentType            GetDocumentType() const { return meDocType; }
 
     SfxPrinter*             GetPrinter(BOOL bCreate);
-    void                    SetPrinter(SfxPrinter *pNewPrinter);
-    void                    UpdateFontList();
+    void			        SetPrinter(SfxPrinter *pNewPrinter);
+    void			        UpdateFontList();
 
     BOOL                    IsInDestruction() const { return mbInDestruction; }
 
-    void                    CancelSearching();
+    void			        CancelSearching();
 
-    void                    Execute( SfxRequest& rReq );
-    void                    GetState(SfxItemSet&);
+    void			        Execute( SfxRequest& rReq );
+    void			        GetState(SfxItemSet&);
 
-    void                    Connect(sd::ViewShell* pViewSh);
-    void                    Disconnect(sd::ViewShell* pViewSh);
-    void                    UpdateTablePointers();
+    void			        Connect(sd::ViewShell* pViewSh);
+    void			        Disconnect(sd::ViewShell* pViewSh);
+    void			        UpdateTablePointers();
 
-    BOOL                    GotoBookmark(const String& rBookmark);
+    BOOL			        GotoBookmark(const String& rBookmark);
 
     Bitmap                  GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel);
 
@@ -155,17 +155,17 @@ public:
                 a default name of a not-yet-existing slide (e.g. 'Slide 17'),
                 TRUE is returned, but rName is set to an empty string.
      */
-    BOOL                    CheckPageName(::Window* pWin, String& rName );
+    BOOL	                CheckPageName(::Window* pWin, String& rName );
 
     void                    SetSlotFilter(BOOL bEnable = FALSE, USHORT nCount = 0, const USHORT* pSIDs = NULL) { mbFilterEnable = bEnable; mnFilterCount = nCount; mpFilterSIDs = pSIDs; }
     void                    ApplySlotFilter() const;
 
-    UINT16                  GetStyleFamily() const { return mnStyleFamily; }
-    void                    SetStyleFamily( UINT16 nSF ) { mnStyleFamily = nSF; }
+    UINT16	                GetStyleFamily() const { return mnStyleFamily; }
+    void	                SetStyleFamily( UINT16 nSF ) { mnStyleFamily = nSF; }
 
     /** executes the SID_OPENDOC slot to let the framework open a document
         with the given URL and this document as a referer */
-    void                    OpenBookmark( const String& rBookmarkURL );
+    void					OpenBookmark( const String& rBookmarkURL );
 
     /** checks, if the given name is a valid new name for a slide
 
@@ -204,28 +204,28 @@ public:
                             // #91457# ExecuteSpellPopup now handled by DrawDocShell
                             DECL_LINK( OnlineSpellCallback, SpellCallbackInfo* );
 
-    void                    ClearUndoBuffer();
+    void					ClearUndoBuffer();
 
 protected:
 
-    SdDrawDocument*         mpDoc;
-    SfxUndoManager*         mpUndoManager;
-    SfxPrinter*             mpPrinter;
-    ::sd::ViewShell*        mpViewShell;
-    FontList*               mpFontList;
-    ::sd::FunctionReference mxDocShellFunction;
+    SdDrawDocument* 		mpDoc;
+    SfxUndoManager* 		mpUndoManager;
+    SfxPrinter* 			mpPrinter;
+    ::sd::ViewShell*		mpViewShell;
+    FontList*				mpFontList;
+    ::sd::FunctionReference	mxDocShellFunction;
     DocumentType            meDocType;
-    UINT16                  mnStyleFamily;
+    UINT16					mnStyleFamily;
     const USHORT*           mpFilterSIDs;
     USHORT                  mnFilterCount;
     BOOL                    mbFilterEnable;
-    BOOL                    mbSdDataObj;
+    BOOL					mbSdDataObj;
     BOOL                    mbInDestruction;
-    BOOL                    mbOwnPrinter;
+    BOOL 					mbOwnPrinter;
     BOOL                    mbNewDocument;
 
-    bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
-    void                    Construct(bool bClipboard);
+    bool					mbOwnDocument;			// if true, we own mpDoc and will delete it in our d'tor
+    void					Construct(bool bClipboard);
     virtual void            InPlaceActivate( BOOL bActive );
 };
 

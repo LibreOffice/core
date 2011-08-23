@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ const SvxItemPropertySet* ImplGetPageBackgroundPropertySet();
 class SdDrawDocument;
 class SfxItemSet;
 
-class SdUnoPageBackground : public ::cppu::WeakImplHelper4<
+class SdUnoPageBackground : public ::cppu::WeakImplHelper4< 
                                     ::com::sun::star::beans::XPropertySet,
                                     ::com::sun::star::lang::XServiceInfo,
                                     ::com::sun::star::beans::XPropertyState,
@@ -52,8 +52,8 @@ class SdUnoPageBackground : public ::cppu::WeakImplHelper4<
 {
 protected:
     const SvxItemPropertySet*  mpPropSet;
-    SfxItemSet*         mpSet;
-    SdrModel*           mpDoc;
+    SfxItemSet*			mpSet;
+    SdrModel*			mpDoc;
 
     const SfxItemPropertySimpleEntry* getPropertyMapEntry( const ::rtl::OUString& rPropertyName ) const throw();
 public:

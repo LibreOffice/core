@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -294,7 +294,7 @@ sal_Int16 SAL_CALL
     throw (RuntimeException)
 {
     sal_Int16 nResult (0);
-
+    
     if ( ! rxResourceId.is())
     {
         // The empty reference is interpreted as empty resource id object.
@@ -381,7 +381,7 @@ sal_Int16 ResourceId::CompareToExternalImplementation (const Reference<XResource
     const Sequence<OUString> aAnchorURLs (rxId->getAnchorURLs());
     const sal_uInt32 nLocalURLCount (maResourceURLs.size());
     const sal_uInt32 nURLCount(1+aAnchorURLs.getLength());
-
+    
     // Start comparison with the top most anchors.
     sal_Int32 nLocalResult (0);
     for (sal_Int32 nIndex=nURLCount-1,nLocalIndex=nLocalURLCount-1;
@@ -449,7 +449,7 @@ sal_Bool SAL_CALL
         return IsBoundToAnchor(&sResourceURL, &aAnchorURLs, eMode);
     }
 }
-
+    
 
 
 
@@ -609,7 +609,7 @@ void ResourceId::ParseResourceURL (void)
         SdGlobalResourceContainer::Instance().AddResource(
             Reference<XInterface>(xURLTransformer,UNO_QUERY));
     }
-
+    
     if (xURLTransformer.is() && maResourceURLs.size() > 0)
     {
         mpURL.reset(new util::URL);

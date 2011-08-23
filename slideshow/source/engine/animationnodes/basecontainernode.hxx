@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@ class BaseContainerNode : public BaseNode
 {
 public:
     BaseContainerNode(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        ::com::sun::star::uno::Reference< 
+        ::com::sun::star::animations::XAnimationNode> const& xNode, 
         ::boost::shared_ptr<BaseContainerNode> const& pParent,
         NodeContext const& rContext );
-
+    
     /** Add given child node to this container
      */
     void appendChildNode( AnimationNodeSharedPtr const& pNode );
-
+    
 #if defined(VERBOSE) && defined(DBG_UTIL)
     virtual void showState() const;
     virtual const char* getDescription() const { return "BaseContainerNode"; }
@@ -56,7 +56,7 @@ public:
 protected:
     // overrides from BaseNode
     virtual void dispose();
-
+    
 private:
     virtual bool init_st();
     virtual void deactivate_st( NodeState eDestState );
@@ -65,15 +65,15 @@ private:
     virtual void activate_st() = 0;
     virtual void notifyDeactivating(
         AnimationNodeSharedPtr const& rNotifier ) = 0;
-
+    
 protected:
     bool isDurationIndefinite() const { return mbDurationIndefinite; }
-
+    
     bool isChildNode( AnimationNodeSharedPtr const& pNode ) const;
-
+    
     /// @return true: if all children have been deactivated
     bool notifyDeactivatedChild( AnimationNodeSharedPtr const& pChildNode );
-
+    
     template <typename FuncT>
     inline void forEachChildNode( FuncT const& func,
                                   int nodeStateMask = -1 ) const
@@ -87,11 +87,11 @@ protected:
             func(pNode);
         }
     }
-
+    
     typedef ::std::vector<AnimationNodeSharedPtr> VectorOfNodes;
     VectorOfNodes       maChildren;
     ::std::size_t       mnFinishedChildren;
-
+    
 private:
     const bool          mbDurationIndefinite;
 };

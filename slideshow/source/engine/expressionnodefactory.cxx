@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ namespace slideshow
                 }
 
             private:
-                double  maValue;
+                double	maValue;
             };
 
             class TValueExpression : public ExpressionNode
@@ -82,7 +82,7 @@ namespace slideshow
                 {
                     return t;
                 }
-
+                    
                 virtual bool isConstant() const
                 {
                     return false;
@@ -98,8 +98,8 @@ namespace slideshow
             class BinaryExpressionBase : public ExpressionNode
             {
             public:
-                BinaryExpressionBase( const ExpressionNodeSharedPtr&    rFirstArg,
-                                      const ExpressionNodeSharedPtr&    rSecondArg ) :
+                BinaryExpressionBase( const ExpressionNodeSharedPtr&	rFirstArg,
+                                      const ExpressionNodeSharedPtr&	rSecondArg ) :
                     mpFirstArg( rFirstArg ),
                     mpSecondArg( rSecondArg )
                 {
@@ -107,21 +107,21 @@ namespace slideshow
 
                 virtual bool isConstant() const
                 {
-                    return
-                        mpFirstArg->isConstant() &&
+                    return 
+                        mpFirstArg->isConstant() && 
                         mpSecondArg->isConstant();
                 }
 
             protected:
-                ExpressionNodeSharedPtr mpFirstArg;
+                ExpressionNodeSharedPtr	mpFirstArg;
                 ExpressionNodeSharedPtr mpSecondArg;
             };
 
             class PlusExpression : public BinaryExpressionBase
             {
             public:
-                PlusExpression( const ExpressionNodeSharedPtr&  rFirstArg,
-                                const ExpressionNodeSharedPtr&  rSecondArg ) :
+                PlusExpression( const ExpressionNodeSharedPtr&	rFirstArg,
+                                const ExpressionNodeSharedPtr&	rSecondArg ) :
                     BinaryExpressionBase( rFirstArg, rSecondArg )
                 {
                 }
@@ -135,8 +135,8 @@ namespace slideshow
             class MinusExpression : public BinaryExpressionBase
             {
             public:
-                MinusExpression( const ExpressionNodeSharedPtr& rFirstArg,
-                                 const ExpressionNodeSharedPtr& rSecondArg ) :
+                MinusExpression( const ExpressionNodeSharedPtr&	rFirstArg,
+                                 const ExpressionNodeSharedPtr&	rSecondArg ) :
                     BinaryExpressionBase( rFirstArg, rSecondArg )
                 {
                 }
@@ -150,8 +150,8 @@ namespace slideshow
             class MultipliesExpression : public BinaryExpressionBase
             {
             public:
-                MultipliesExpression( const ExpressionNodeSharedPtr&    rFirstArg,
-                                      const ExpressionNodeSharedPtr&    rSecondArg ) :
+                MultipliesExpression( const ExpressionNodeSharedPtr&	rFirstArg,
+                                      const ExpressionNodeSharedPtr&	rSecondArg ) :
                     BinaryExpressionBase( rFirstArg, rSecondArg )
                 {
                 }
@@ -159,14 +159,14 @@ namespace slideshow
                 virtual double operator()( double t ) const
                 {
                     return (*mpFirstArg)(t) * (*mpSecondArg)(t);
-                }
+                }                    
             };
 
             class DividesExpression : public BinaryExpressionBase
             {
             public:
-                DividesExpression( const ExpressionNodeSharedPtr&   rFirstArg,
-                                   const ExpressionNodeSharedPtr&   rSecondArg ) :
+                DividesExpression( const ExpressionNodeSharedPtr&	rFirstArg,
+                                   const ExpressionNodeSharedPtr&	rSecondArg ) :
                     BinaryExpressionBase( rFirstArg, rSecondArg )
                 {
                 }
@@ -174,14 +174,14 @@ namespace slideshow
                 virtual double operator()( double t ) const
                 {
                     return (*mpFirstArg)(t) / (*mpSecondArg)(t);
-                }
+                }                    
             };
 
             class ComposedExpression : public BinaryExpressionBase
             {
             public:
-                ComposedExpression( const ExpressionNodeSharedPtr&  rFirstArg,
-                                    const ExpressionNodeSharedPtr&  rSecondArg ) :
+                ComposedExpression( const ExpressionNodeSharedPtr&	rFirstArg,
+                                    const ExpressionNodeSharedPtr&	rSecondArg ) :
                     BinaryExpressionBase( rFirstArg, rSecondArg )
                 {
                 }
@@ -195,8 +195,8 @@ namespace slideshow
             class MinExpression : public BinaryExpressionBase
             {
             public:
-                MinExpression( const ExpressionNodeSharedPtr&   rFirstArg,
-                               const ExpressionNodeSharedPtr&   rSecondArg ) :
+                MinExpression( const ExpressionNodeSharedPtr&	rFirstArg,
+                               const ExpressionNodeSharedPtr&	rSecondArg ) :
                     BinaryExpressionBase( rFirstArg, rSecondArg )
                 {
                 }
@@ -210,8 +210,8 @@ namespace slideshow
             class MaxExpression : public BinaryExpressionBase
             {
             public:
-                MaxExpression( const ExpressionNodeSharedPtr&   rFirstArg,
-                               const ExpressionNodeSharedPtr&   rSecondArg ) :
+                MaxExpression( const ExpressionNodeSharedPtr&	rFirstArg,
+                               const ExpressionNodeSharedPtr&	rSecondArg ) :
                     BinaryExpressionBase( rFirstArg, rSecondArg )
                 {
                 }
@@ -227,53 +227,53 @@ namespace slideshow
         {
             return ExpressionNodeSharedPtr( new ConstantValueExpression(rConstantValue) );
         }
-
+        
         ExpressionNodeSharedPtr ExpressionNodeFactory::createValueTExpression()
         {
             return ExpressionNodeSharedPtr( new TValueExpression() );
         }
 
-        ExpressionNodeSharedPtr ExpressionNodeFactory::createPlusExpression( const ExpressionNodeSharedPtr& rLHS,
-                                                                             const ExpressionNodeSharedPtr& rRHS )
+        ExpressionNodeSharedPtr ExpressionNodeFactory::createPlusExpression( const ExpressionNodeSharedPtr&	rLHS,
+                                                                             const ExpressionNodeSharedPtr&	rRHS )
         {
             return ExpressionNodeSharedPtr( new PlusExpression(rLHS, rRHS) );
         }
 
-        ExpressionNodeSharedPtr ExpressionNodeFactory::createMinusExpression( const ExpressionNodeSharedPtr&    rLHS,
-                                                                              const ExpressionNodeSharedPtr&    rRHS )
+        ExpressionNodeSharedPtr ExpressionNodeFactory::createMinusExpression( const ExpressionNodeSharedPtr&	rLHS,
+                                                                              const ExpressionNodeSharedPtr&	rRHS )
         {
             return ExpressionNodeSharedPtr( new MinusExpression(rLHS, rRHS) );
         }
 
-        ExpressionNodeSharedPtr ExpressionNodeFactory::createMultipliesExpression( const ExpressionNodeSharedPtr&   rLHS,
-                                                                                   const ExpressionNodeSharedPtr&   rRHS )
+        ExpressionNodeSharedPtr ExpressionNodeFactory::createMultipliesExpression( const ExpressionNodeSharedPtr&	rLHS,
+                                                                                   const ExpressionNodeSharedPtr&	rRHS )
         {
             return ExpressionNodeSharedPtr( new MultipliesExpression(rLHS, rRHS) );
         }
 
-        ExpressionNodeSharedPtr ExpressionNodeFactory::createDividesExpression( const ExpressionNodeSharedPtr&  rLHS,
-                                                                                const ExpressionNodeSharedPtr&  rRHS )
+        ExpressionNodeSharedPtr ExpressionNodeFactory::createDividesExpression( const ExpressionNodeSharedPtr&	rLHS,
+                                                                                const ExpressionNodeSharedPtr&	rRHS )
         {
             return ExpressionNodeSharedPtr( new DividesExpression(rLHS, rRHS) );
         }
 
-        ExpressionNodeSharedPtr ExpressionNodeFactory::createComposedExpression  ( const ExpressionNodeSharedPtr&   rOuterFunction,
-                                                                                   const ExpressionNodeSharedPtr&   rInnerFunction )
+        ExpressionNodeSharedPtr ExpressionNodeFactory::createComposedExpression	 ( const ExpressionNodeSharedPtr&	rOuterFunction,
+                                                                                   const ExpressionNodeSharedPtr&	rInnerFunction )
         {
             return ExpressionNodeSharedPtr( new ComposedExpression(rOuterFunction, rInnerFunction) );
         }
 
-        ExpressionNodeSharedPtr ExpressionNodeFactory::createMinExpression   ( const ExpressionNodeSharedPtr&   rOuterFunction,
-                                                                               const ExpressionNodeSharedPtr&   rInnerFunction )
+        ExpressionNodeSharedPtr ExpressionNodeFactory::createMinExpression	 ( const ExpressionNodeSharedPtr&	rOuterFunction,
+                                                                               const ExpressionNodeSharedPtr&	rInnerFunction )
         {
             return ExpressionNodeSharedPtr( new MinExpression(rOuterFunction, rInnerFunction) );
         }
 
-        ExpressionNodeSharedPtr ExpressionNodeFactory::createMaxExpression   ( const ExpressionNodeSharedPtr&   rOuterFunction,
-                                                                               const ExpressionNodeSharedPtr&   rInnerFunction )
+        ExpressionNodeSharedPtr ExpressionNodeFactory::createMaxExpression	 ( const ExpressionNodeSharedPtr&	rOuterFunction,
+                                                                               const ExpressionNodeSharedPtr&	rInnerFunction )
         {
             return ExpressionNodeSharedPtr( new MaxExpression(rOuterFunction, rInnerFunction) );
         }
-
+        
     }
 }

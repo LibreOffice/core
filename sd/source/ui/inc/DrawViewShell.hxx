@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ public:
     virtual void Init (bool bIsMainViewShell);
 
     virtual void Shutdown (void);
-
+    
     void PrePaint();
     virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin);
 
@@ -121,7 +121,7 @@ public:
         @param rSize
             The new size in pixel.
     */
-    //  virtual void    AdjustPosSizePixel(const Point &rPos, const Size &rSize);
+    //	virtual void	AdjustPosSizePixel(const Point &rPos, const Size &rSize);
 
     /** Arrange and resize the GUI elements like rulers, sliders, and
         buttons as well as the actual document view according to the size of
@@ -130,7 +130,7 @@ public:
     */
     virtual void ArrangeGUIElements (void);
 
-    void            HidePage();
+    void 	        HidePage();
 
     virtual BOOL    KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void    MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin);
@@ -150,77 +150,77 @@ public:
     virtual void    SetZoom( long nZoom );
     virtual void    SetZoomRect( const Rectangle& rZoomRect );
 
-    void            InsertURLField(const String& rURL, const String& rText, const String& rTarget,
+    void	        InsertURLField(const String& rURL, const String& rText, const String& rTarget,
                                    const Point* pPos);
-    void            InsertURLButton(const String& rURL, const String& rText, const String& rTarget,
+    void	        InsertURLButton(const String& rURL, const String& rText, const String& rTarget,
                                     const Point* pPos);
 
     virtual void    SetUIUnit(FieldUnit eUnit);
 
-    void            SelectionHasChanged();
-    void            ModelHasChanged();
+    void		    SelectionHasChanged();
+    void		    ModelHasChanged();
     virtual void    Activate(BOOL bIsMDIActivate);
     virtual void    Deactivate(BOOL IsMDIActivate);
     virtual void    UIActivating( SfxInPlaceClient* );
     virtual void    UIDeactivated( SfxInPlaceClient* );
-    virtual String  GetSelectionText( BOOL bCompleteWords = FALSE );
+    virtual String	GetSelectionText( BOOL bCompleteWords = FALSE );
     virtual BOOL    HasSelection( BOOL bText = TRUE ) const;
 
-    void            ExecCtrl(SfxRequest& rReq);
-    void            GetCtrlState(SfxItemSet& rSet);
-    void            GetMenuState(SfxItemSet& rSet);
-    void            GetTableMenuState(SfxItemSet& rSet);
+    void	        ExecCtrl(SfxRequest& rReq);
+    void	        GetCtrlState(SfxItemSet& rSet);
+    void	        GetMenuState(SfxItemSet& rSet);
+    void	        GetTableMenuState(SfxItemSet& rSet);
     /** Set the items of the given item set that are related to
         switching the editing mode to the correct values.
         <p>This function also sets the states of the mode buttons
         (those at the upper right corner) accordingly.</p>
     */
     void GetModeSwitchingMenuState (SfxItemSet &rSet);
-    void            GetAttrState(SfxItemSet& rSet);
-    void            GetSnapItemState(SfxItemSet& rSet);
+    void	        GetAttrState(SfxItemSet& rSet);
+    void	        GetSnapItemState(SfxItemSet& rSet);
 
-    void            GetState (SfxItemSet& rSet);
+    void	        GetState (SfxItemSet& rSet);
     void            Execute (SfxRequest& rReq);
 
-    void            ExecStatusBar(SfxRequest& rReq);
-    void            GetStatusBarState(SfxItemSet& rSet);
+    void	        ExecStatusBar(SfxRequest& rReq);
+    void	        GetStatusBarState(SfxItemSet& rSet);
 
-    void            ExecOptionsBar(SfxRequest& rReq);
-    void            GetOptionsBarState(SfxItemSet& rSet);
+    void	        ExecOptionsBar(SfxRequest& rReq);
+    void	        GetOptionsBarState(SfxItemSet& rSet);
 
-    void            ExecRuler(SfxRequest& rReq);
-    void            GetRulerState(SfxItemSet& rSet);
+    void	        ExecRuler(SfxRequest& rReq);
+    void	        GetRulerState(SfxItemSet& rSet);
 
-    void            ExecFormText(SfxRequest& rReq);
-    void            GetFormTextState(SfxItemSet& rSet);
+    void	        ExecFormText(SfxRequest& rReq);
+    void	        GetFormTextState(SfxItemSet& rSet);
 
-    void            ExecAnimationWin(SfxRequest& rReq);
-    void            GetAnimationWinState(SfxItemSet& rSet);
+    void	        ExecAnimationWin(SfxRequest& rReq);
+    void	        GetAnimationWinState(SfxItemSet& rSet);
 
-    void            ExecNavigatorWin(SfxRequest& rReq);
-    void            GetNavigatorWinState(SfxItemSet& rSet);
+    void	        ExecNavigatorWin(SfxRequest& rReq);
+    void	        GetNavigatorWinState(SfxItemSet& rSet);
 
-    void            ExecEffectWin(SfxRequest& rReq);
+    void	        ExecEffectWin(SfxRequest& rReq);
 
-    void            Update3DWindow();
-    void            AssignFrom3DWindow();
+    void	        Update3DWindow();
+    void	        AssignFrom3DWindow();
 
-    void            ExecGallery(SfxRequest& rReq);
-    void            GetGalleryState(SfxItemSet& rSet);
+    void	        ExecGallery(SfxRequest& rReq);
+    void	        GetGalleryState(SfxItemSet& rSet);
 
-    void            ExecBmpMask( SfxRequest& rReq );
-    void            GetBmpMaskState( SfxItemSet& rSet );
+    void	        ExecBmpMask( SfxRequest& rReq );
+    void	        GetBmpMaskState( SfxItemSet& rSet );
 
-    void            ExecIMap( SfxRequest& rReq );
-    void            GetIMapState( SfxItemSet& rSet );
+    void	        ExecIMap( SfxRequest& rReq );
+    void	        GetIMapState( SfxItemSet& rSet );
 
-    void            FuTemporary(SfxRequest& rReq);
-    void            FuPermanent(SfxRequest& rReq);
-    void            FuSupport(SfxRequest& rReq);
-    void            FuTable(SfxRequest& rReq);
+    void	        FuTemporary(SfxRequest& rReq);
+    void	        FuPermanent(SfxRequest& rReq);
+    void	        FuSupport(SfxRequest& rReq);
+    void	        FuTable(SfxRequest& rReq);
 
-    void            AttrExec (SfxRequest& rReq);
-    void            AttrState (SfxItemSet& rSet);
+    void	        AttrExec (SfxRequest& rReq);
+    void	        AttrState (SfxItemSet& rSet);
 
     void            ExecuteAnnotation (SfxRequest& rRequest);
     void            GetAnnotationState (SfxItemSet& rItemSet);
@@ -231,24 +231,24 @@ public:
 
     virtual USHORT  PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
 
-    PageKind        GetPageKind() { return mePageKind; }
+    PageKind	    GetPageKind() { return mePageKind; }
 
-    Point           GetMousePos() { return maMousePos; }
-    BOOL            IsMousePosFreezed() { return mbMousePosFreezed; }
-    void            SetMousePosFreezed( BOOL bIn ) { mbMousePosFreezed = bIn; }
+    Point		    GetMousePos() { return maMousePos; }
+    BOOL 		    IsMousePosFreezed() { return mbMousePosFreezed; }
+    void 		    SetMousePosFreezed( BOOL bIn ) { mbMousePosFreezed = bIn; }
 
-    EditMode        GetEditMode() const { return meEditMode; }
-    virtual SdPage* GetActualPage() { return mpActualPage; }
+    EditMode	    GetEditMode() const { return meEditMode; }
+    virtual SdPage*	GetActualPage() { return mpActualPage; }
 
     /// inherited from sd::ViewShell
     virtual SdPage* getCurrentPage() const;
 
-    void            ResetActualPage();
-    void            ResetActualLayer();
-    BOOL            SwitchPage(USHORT nPage);
-    BOOL            IsSwitchPageAllowed() const;
+    void		    ResetActualPage();
+    void		    ResetActualLayer();
+    BOOL		    SwitchPage(USHORT nPage);
+    BOOL		    IsSwitchPageAllowed() const;
 
-    BOOL            GotoBookmark(const String& rBookmark);
+    BOOL		    GotoBookmark(const String& rBookmark);
     void            MakeVisible(const Rectangle& rRect, ::Window& rWin);
 
     virtual void    ReadFrameViewData(FrameView* pView);
@@ -257,22 +257,22 @@ public:
     virtual ErrCode DoVerb(long nVerb);
     virtual BOOL    ActivateObject(SdrOle2Obj* pObj, long nVerb);
 
-    void            SetZoomOnPage( BOOL bZoom = TRUE ) { mbZoomOnPage = bZoom; }
-    BOOL            IsZoomOnPage() { return mbZoomOnPage; }
-    void            CheckLineTo (SfxRequest& rReq);
-    void            FuTemp01(SfxRequest& rReq);
-    void            FuTemp02(SfxRequest& rReq);
-    void            FuTemp03(SfxRequest& rReq);
-    void            FuTemp04(SfxRequest& rReq);
-    void            SetChildWindowState( SfxItemSet& rSet );
+    void		    SetZoomOnPage( BOOL bZoom = TRUE ) { mbZoomOnPage = bZoom; }
+    BOOL		    IsZoomOnPage() { return mbZoomOnPage; }
+    void		    CheckLineTo (SfxRequest& rReq);
+    void		    FuTemp01(SfxRequest& rReq);
+    void		    FuTemp02(SfxRequest& rReq);
+    void		    FuTemp03(SfxRequest& rReq);
+    void		    FuTemp04(SfxRequest& rReq);
+    void		    SetChildWindowState( SfxItemSet& rSet );
 
-    void            UpdateIMapDlg( SdrObject* pObj );
+    void		    UpdateIMapDlg( SdrObject* pObj );
 
-    void            LockInput();
-    void            UnlockInput();
-    BOOL            IsInputLocked() const { return mnLockCount > 0UL; }
+    void		    LockInput();
+    void		    UnlockInput();
+    BOOL		    IsInputLocked() const { return mnLockCount > 0UL; }
 
-    USHORT          GetCurPageId() { return( maTabControl.GetCurPageId() ); }
+    USHORT		    GetCurPageId() { return( maTabControl.GetCurPageId() ); }
 
     /** Show controls of the UI or hide them, depending on the given flag.
         Do not call this method directly.  Call the method at ViewShellBase
@@ -280,11 +280,11 @@ public:
     */
     virtual void ShowUIControls (bool bVisible = true);
 
-    void            ScannerEvent( const ::com::sun::star::lang::EventObject& rEventObject );
+    void		    ScannerEvent( const ::com::sun::star::lang::EventObject& rEventObject );
 
     bool IsLayerModeActive (void) const;
 
-    USHORT*         GetSlotArray() const { return mpSlotArray; }
+    USHORT*	    	GetSlotArray() const { return mpSlotArray; }
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                                     ::sd::Window* pTargetWindow, USHORT nPage, USHORT nLayer );
@@ -359,8 +359,8 @@ public:
     void ModifyLayer( SdrLayer* pLayer, const String& rLayerName, const String& rLayerTitle, const String& rLayerDesc, bool bIsVisible, bool bIsLocked, bool bIsPrintable );
 
     virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void);
-
-    DrawView*   GetDrawView() const { return mpDrawView; }
+    
+    DrawView*	GetDrawView() const { return mpDrawView; }
 
     /** Relocation to a new parent window is not supported for DrawViewShell
         objects so this method always returns <FALSE/>.
@@ -368,22 +368,22 @@ public:
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
 
 protected:
-    DrawView*       mpDrawView;
-    SdPage*         mpActualPage;
-    Rectangle       maMarkRect;
-    Point           maMousePos;
-    BOOL            mbMousePosFreezed;
-    TabControl      maTabControl;
-    EditMode        meEditMode;
-    PageKind        mePageKind;
-    BOOL            mbZoomOnPage;
-    BOOL            mbIsRulerDrag;
-    ULONG           mnLockCount;
-    Timer           maCloseTimer;
-    BOOL            mbReadOnly;
-    USHORT*         mpSlotArray;
+    DrawView*		mpDrawView;
+    SdPage* 		mpActualPage;
+    Rectangle		maMarkRect;
+    Point			maMousePos;
+    BOOL			mbMousePosFreezed;
+    TabControl		maTabControl;
+    EditMode		meEditMode;
+    PageKind		mePageKind;
+    BOOL			mbZoomOnPage;
+    BOOL			mbIsRulerDrag;
+    ULONG			mnLockCount;
+    Timer			maCloseTimer;
+    BOOL 			mbReadOnly;
+    USHORT*			mpSlotArray;
 
-    static BOOL     mbPipette;
+    static BOOL 	mbPipette;
 
                     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
                     DECL_LINK( CloseHdl, Timer* pTimer );
@@ -391,8 +391,8 @@ protected:
                     DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
                     DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog* );
 
-    void            DeleteActualPage();
-    void            DeleteActualLayer();
+    void	        DeleteActualPage();
+    void	        DeleteActualLayer();
 
     virtual SvxRuler* CreateHRuler(::sd::Window* pWin, BOOL bIsFirst);
     virtual SvxRuler* CreateVRuler(::sd::Window* pWin);
@@ -405,13 +405,13 @@ protected:
     void            SetupPage( Size &rSize, long nLeft, long nRight, long nUpper, long nLower,
                                BOOL bSize, BOOL bMargin, BOOL bScaleAll );
 
-    USHORT          GetIdBySubId( USHORT nSId );
-    void            MapSlot( USHORT nSId );
-    void            UpdateToolboxImages( SfxItemSet &rSet, BOOL bPermanent = TRUE );
-    USHORT          GetMappedSlot( USHORT nSId );
-    USHORT          GetArrayId( USHORT nSId );
+    USHORT	        GetIdBySubId( USHORT nSId );
+    void	        MapSlot( USHORT nSId );
+    void	        UpdateToolboxImages( SfxItemSet &rSet, BOOL bPermanent = TRUE );
+    USHORT	        GetMappedSlot( USHORT nSId );
+    USHORT	        GetArrayId( USHORT nSId );
 
-    void            GetMenuStateSel(SfxItemSet& rSet);
+    void	        GetMenuStateSel(SfxItemSet& rSet);
 
 private:
     /** This flag controls whether the layer mode is active, i.e. the layer
@@ -445,10 +445,10 @@ private:
         PageKind ePageKind,
         SdPage* pPage);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager >  mxScannerManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      mxScannerListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager >	mxScannerManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >		mxScannerListener;
     TransferableClipboardListener*                                                  mpClipEvtLstnr;
-    BOOL                                                                            mbPastePossible;
+    BOOL			                                                                mbPastePossible;
 
     virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint);
 
@@ -487,7 +487,7 @@ private:
         const Point& rMouseLocation);
 
     using ViewShell::Notify;
-
+    
     ::std::auto_ptr< AnnotationManager > mpAnnotationManager;
     ::std::auto_ptr< ViewOverlayManager > mpViewOverlayManager;
 };

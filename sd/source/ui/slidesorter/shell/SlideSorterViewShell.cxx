@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 
-using namespace ::sd::slidesorter;
+using namespace ::sd::slidesorter;  
 #define SlideSorterViewShell
 #include "sdslots.hxx"
 
@@ -94,7 +94,7 @@ TYPEINIT1(SlideSorterViewShell, ViewShell);
 
 
 ::boost::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
-    SfxViewFrame* pFrame,
+    SfxViewFrame* pFrame, 
     ViewShellBase& rViewShellBase,
     ::Window* pParentWindow,
     FrameView* pFrameViewArgument)
@@ -119,7 +119,7 @@ TYPEINIT1(SlideSorterViewShell, ViewShell);
 
 
 SlideSorterViewShell::SlideSorterViewShell (
-    SfxViewFrame* pFrame,
+    SfxViewFrame* pFrame, 
     ViewShellBase& rViewShellBase,
     ::Window* pParentWindow,
     FrameView* pFrameViewArgument)
@@ -215,7 +215,7 @@ void SlideSorterViewShell::Init (bool bIsMainViewShell)
 SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase)
 {
     SlideSorterViewShell* pViewShell = NULL;
-
+    
     // Test the center, left, and then the right pane for showing a slide sorter.
     ::rtl::OUString aPaneURLs[] = {
         FrameworkHelper::msCenterPaneURL,
@@ -256,7 +256,7 @@ Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController
                 *mpSlideSorter,
                 *GetView()));
     }
-
+    
     return xSubController;
 }
 
@@ -356,10 +356,10 @@ SdPage* SlideSorterViewShell::getCurrentPage(void) const
 
 
 
-SdPage* SlideSorterViewShell::GetActualPage (void)
+SdPage*	SlideSorterViewShell::GetActualPage (void)
 {
     SdPage* pCurrentPage = NULL;
-
+    
     // 1. Try to get the current page from the view shell in the center pane
     // (if we are that not ourself).
     if ( ! IsMainViewShell())
@@ -368,7 +368,7 @@ SdPage* SlideSorterViewShell::GetActualPage (void)
         if (pMainViewShell.get() != NULL)
             pCurrentPage = pMainViewShell->GetActualPage();
     }
-
+    
     if (pCurrentPage == NULL)
     {
         model::SharedPageDescriptor pDescriptor (
@@ -376,7 +376,7 @@ SdPage* SlideSorterViewShell::GetActualPage (void)
         if (pDescriptor.get() != NULL)
             pCurrentPage = pDescriptor->GetPage();
     }
-
+     
     return pCurrentPage;
 }
 
@@ -507,7 +507,7 @@ void SlideSorterViewShell::PrePaint()
 
 
 void SlideSorterViewShell::Paint (
-    const Rectangle& rBBox,
+    const Rectangle& rBBox, 
     ::sd::Window* pWindow)
 {
     SetActiveWindow (pWindow);
@@ -540,7 +540,7 @@ SvBorder SlideSorterViewShell::GetBorder (bool )
 
 
 void SlideSorterViewShell::Command (
-    const CommandEvent& rEvent,
+    const CommandEvent& rEvent, 
     ::sd::Window* pWindow)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
@@ -570,7 +570,7 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
         else
             rView.GetLayouter().SetColumnCount(nSlidesPerRow,nSlidesPerRow);
         mpSlideSorter->GetController().Rearrange(true);
-
+        
         // DrawMode for 'main' window
         if (GetActiveWindow()->GetDrawMode() != pFrameView->GetDrawMode() )
             GetActiveWindow()->SetDrawMode( pFrameView->GetDrawMode() );
@@ -681,7 +681,7 @@ void SlideSorterViewShell::StartDrag (
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().GetClipboard().StartDrag (
-        rDragPt,
+        rDragPt, 
         pWindow);
 }
 
@@ -700,14 +700,14 @@ void SlideSorterViewShell::DragFinished (
 
 sal_Int8 SlideSorterViewShell::AcceptDrop (
     const AcceptDropEvent& rEvt,
-    DropTargetHelper& rTargetHelper,
-    ::sd::Window* pTargetWindow,
-    USHORT nPage,
+    DropTargetHelper& rTargetHelper, 
+    ::sd::Window* pTargetWindow, 
+    USHORT nPage, 
     USHORT nLayer)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     return mpSlideSorter->GetController().GetClipboard().AcceptDrop (
-        rEvt,
+        rEvt, 
         rTargetHelper,
         pTargetWindow,
         nPage,
@@ -718,15 +718,15 @@ sal_Int8 SlideSorterViewShell::AcceptDrop (
 
 
 sal_Int8 SlideSorterViewShell::ExecuteDrop (
-    const ExecuteDropEvent& rEvt,
+    const ExecuteDropEvent& rEvt, 
     DropTargetHelper& rTargetHelper,
-    ::sd::Window* pTargetWindow,
-    USHORT nPage,
+    ::sd::Window* pTargetWindow, 
+    USHORT nPage, 
     USHORT nLayer)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     return mpSlideSorter->GetController().GetClipboard().ExecuteDrop (
-        rEvt,
+        rEvt, 
         rTargetHelper,
         pTargetWindow,
         nPage,

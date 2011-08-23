@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,15 +45,15 @@ class SdView;
 class SdDrawViewShell;
 class SdCustomShow;
 
-class SdXCustomPresentation :   public ::cppu::WeakImplHelper5< ::com::sun::star::container::XIndexContainer,
+class SdXCustomPresentation :	public ::cppu::WeakImplHelper5< ::com::sun::star::container::XIndexContainer,
                                                                 ::com::sun::star::container::XNamed,
                                                                 ::com::sun::star::lang::XUnoTunnel,
                                                                 ::com::sun::star::lang::XComponent,
                                                                 ::com::sun::star::lang::XServiceInfo >
 {
 private:
-    SdCustomShow*       mpSdCustomShow;
-    SdXImpressDocument* mpModel;
+    SdCustomShow* 		mpSdCustomShow;
+    SdXImpressDocument*	mpModel;
 
     // for xComponent
     ::osl::Mutex aDisposeContainerMutex;
@@ -115,7 +115,7 @@ public:
 
 class List;
 
-class SdXCustomPresentationAccess : public ::cppu::WeakImplHelper3< ::com::sun::star::container::XNameContainer,
+class SdXCustomPresentationAccess : public ::cppu::WeakImplHelper3<	::com::sun::star::container::XNameContainer,
                                                                     ::com::sun::star::lang::XSingleServiceFactory,
                                                                     ::com::sun::star::lang::XServiceInfo >
 {

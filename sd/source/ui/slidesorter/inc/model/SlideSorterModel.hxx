@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -125,7 +125,7 @@ public:
     */
     sal_Int32 GetIndex (
         const ::com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage>& rxSlide) const;
-
+  
     /** Call this method after the document has changed its structure.  This
         will get the model in sync with the SdDrawDocument.  This method
         tries not to throw away to much information already gathered.  This

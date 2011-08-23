@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@ namespace slideshow {
 namespace internal {
 
 /** Container for objects that can be notified.
-
+    
     This templatized container holds listener objects, than can get
     notified (by calling certain methods on them).
-
+    
     @tpl Listener
     Type for the listener objects to be held
 
@@ -91,8 +91,8 @@ public:
         Guard aGuard(*this);
 
         const typename container_type::const_iterator aEnd( maListeners.end() );
-        if( std::find( maListeners.begin(),
-                       aEnd,
+        if( std::find( maListeners.begin(), 
+                       aEnd, 
                        rListener ) != aEnd )
         {
             return true; // already added
@@ -154,7 +154,7 @@ public:
         if( maListeners.size() > 1 )
         {
             std::inplace_merge(
-                maListeners.begin(),
+                maListeners.begin(), 
                 boost::prior(maListeners.end()),
                 maListeners.end() );
         }
@@ -180,24 +180,24 @@ public:
 
         const typename container_type::iterator aEnd( maListeners.end() );
         typename container_type::iterator       aIter;
-        if( (aIter=std::remove(maListeners.begin(),
-                               aEnd,
+        if( (aIter=std::remove(maListeners.begin(), 
+                               aEnd, 
                                rListener)) == aEnd )
         {
             return false; // listener not found
         }
-
+ 
         maListeners.erase( aIter, aEnd );
 
         return true;
     }
 
     /// Removes all listeners in one go
-    void clear()
+    void clear() 
     {
         Guard aGuard(*this);
-
-        maListeners.clear();
+        
+        maListeners.clear(); 
     }
 
     /** Apply functor to one listener
@@ -223,7 +223,7 @@ public:
 
         const bool bRet(
             ListenerOperations<ListenerT>::notifySingleListener(
-                local,
+                local, 
                 func ));
 
         {
@@ -259,7 +259,7 @@ public:
 
         const bool bRet(
             ListenerOperations<ListenerT>::notifyAllListeners(
-                local,
+                local, 
                 func ));
 
         {
@@ -286,7 +286,7 @@ private:
     listeners.
  */
 template< typename ListenerT,
-          typename ContainerT=std::vector<ListenerT> >
+          typename ContainerT=std::vector<ListenerT> > 
 class ThreadSafeListenerContainer : public ListenerContainerBase<ListenerT,
                                                                  MutexBase,
                                                                  ContainerT>
@@ -301,7 +301,7 @@ class ThreadSafeListenerContainer : public ListenerContainerBase<ListenerT,
     multi-threaded scenario, but has less overhead.
  */
 template< typename ListenerT,
-          typename ContainerT=std::vector<ListenerT> >
+          typename ContainerT=std::vector<ListenerT> > 
 class ThreadUnsafeListenerContainer : public ListenerContainerBase<ListenerT,
                                                                    EmptyBase,
                                                                    ContainerT>

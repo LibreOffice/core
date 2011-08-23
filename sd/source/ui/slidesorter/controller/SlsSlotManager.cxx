@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -292,7 +292,7 @@ void SlotManager::FuPermanent (SfxRequest& rRequest)
     }
 
     //! das ist nur bis das ENUM-Slots sind
-    //  Invalidate( SID_OBJECT_SELECT );
+    //	Invalidate( SID_OBJECT_SELECT );
 }
 
 void SlotManager::FuSupport (SfxRequest& rRequest)
@@ -614,7 +614,7 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
                 break;
         }
     }
-
+    
     PageKind ePageKind = mrSlideSorter.GetModel().GetPageType();
     if( (eEditMode == EM_MASTERPAGE) && (ePageKind != PK_HANDOUT ) )
     {
@@ -759,10 +759,10 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_PAGE ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_LAYOUT ) )
     */
-    SdPage* pPage      = NULL;
+    SdPage* pPage	   = NULL;
     SdPage* pFirstPage = NULL;
-    USHORT  nFirstPage;
-    USHORT  nSelectedPages = (USHORT)mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
+    USHORT	nFirstPage;
+    USHORT	nSelectedPages = (USHORT)mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
     String aPageStr;
     String aLayoutStr;
 
@@ -1024,7 +1024,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
             = mrSlideSorter.GetController().GetSelectionManager()->GetInsertionPosition() - 1;
         rSelector.SelectPage(nInsertionIndex);
     }
-
+    
     // Select the last page when there is at least one page.
     else if (rSelector.GetPageCount() > 0)
     {

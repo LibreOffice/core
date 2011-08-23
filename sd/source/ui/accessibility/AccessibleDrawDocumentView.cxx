@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star::accessibility;
 
 class SfxViewFrame;
 
@@ -137,7 +137,7 @@ void AccessibleDrawDocumentView::Init (void)
 
 
 
-void AccessibleDrawDocumentView::ViewForwarderChanged (ChangeType aChangeType,
+void AccessibleDrawDocumentView::ViewForwarderChanged (ChangeType aChangeType, 
     const IAccessibleViewForwarder* pViewForwarder)
 {
     AccessibleDocumentViewBase::ViewForwarderChanged (aChangeType, pViewForwarder);
@@ -247,7 +247,7 @@ uno::Reference<XAccessible> SAL_CALL
             nIndex -= nCount;
     }
 
-    // Create a copy of the pointer to the children manager and release the
+    // Create a copy of the pointer to the children manager and release the 
     // mutex before calling any of its methods.
     ChildrenManager* pChildrenManager = mpChildrenManager;
     aGuard.clear();
@@ -305,7 +305,7 @@ void SAL_CALL
 
         // Update the accessible name to reflect the current slide.
         UpdateAccessibleName();
-
+        
         // The current page changed.  Update the children manager accordingly.
         uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
         if (xView.is() && mpChildrenManager!=NULL)
@@ -339,7 +339,7 @@ void SAL_CALL
         OSL_TRACE ("    visible area changed");
         if (mpChildrenManager != NULL)
             mpChildrenManager->ViewForwarderChanged (
-                IAccessibleViewForwarderListener::VISIBLE_AREA,
+                IAccessibleViewForwarderListener::VISIBLE_AREA, 
                 &maViewForwarder);
     }
     else
@@ -352,8 +352,8 @@ void SAL_CALL
 
 
 //=====  XServiceInfo  ========================================================
-
-::rtl::OUString SAL_CALL
+    
+::rtl::OUString SAL_CALL 
     AccessibleDrawDocumentView::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -370,7 +370,7 @@ void SAL_CALL
 {
     ThrowIfDisposed();
     // Get list of supported service names from base class...
-    uno::Sequence<OUString> aServiceNames =
+    uno::Sequence<OUString> aServiceNames = 
         AccessibleDocumentViewBase::getSupportedServiceNames();
     sal_Int32 nCount (aServiceNames.getLength());
 
@@ -384,9 +384,9 @@ void SAL_CALL
 }
 
 
+        
 
-
-/// Create a name for this view.
+///	Create a name for this view.
 ::rtl::OUString
     AccessibleDrawDocumentView::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -410,7 +410,7 @@ void SAL_CALL
             else
             {
                 ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
+                
                 sName = String( SdResId(SID_SD_A11Y_D_DRAWVIEW_N) );
             }
         }
@@ -426,7 +426,7 @@ void SAL_CALL
 
             sName = String( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_N) );
         }
-        else
+        else 
         {
             sName = sFirstService;
         }
@@ -467,7 +467,7 @@ void SAL_CALL
             else
             {
                 ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
+                
                 sDescription = String( SdResId(SID_SD_A11Y_D_DRAWVIEW_D) );
             }
         }
@@ -483,7 +483,7 @@ void SAL_CALL
 
             sDescription = String( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_D) );
         }
-        else
+        else 
         {
             sDescription = sFirstService;
         }
@@ -500,8 +500,8 @@ void SAL_CALL
 
 /** Return selection state of specified child
 */
-sal_Bool
-    AccessibleDrawDocumentView::implIsSelected( sal_Int32 nAccessibleChildIndex )
+sal_Bool 
+    AccessibleDrawDocumentView::implIsSelected( sal_Int32 nAccessibleChildIndex ) 
     throw (uno::RuntimeException)
 {
     const vos::OGuard                           aSolarGuard( Application::GetSolarMutex() );
@@ -546,7 +546,7 @@ sal_Bool
     the XSelectionSupplier of the controller.
 */
 void
-    AccessibleDrawDocumentView::implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
+    AccessibleDrawDocumentView::implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect ) 
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     const vos::OGuard                           aSolarGuard( Application::GetSolarMutex() );
@@ -593,7 +593,7 @@ void
             AccessibleShape* pAcc = AccessibleShape::getImplementation(
                 getAccessibleChild( nAccessibleChildIndex ));
             pAccessibleChild = pAcc;
-
+            
             // Add or remove the shape that is made accessible from the
             // selection of the controller.
             if( pAcc )
@@ -604,7 +604,7 @@ void
                 {
                     uno::Reference< drawing::XShapes >  xShapes;
                     sal_Bool                            bFound = sal_False;
-
+                    
                     aAny = xSel->getSelection();
                     aAny >>= xShapes;
 
@@ -732,7 +732,7 @@ void AccessibleDrawDocumentView::UpdateAccessibleName (void)
             sNewName += OUString::valueOf(xPages->getCount());
         }
     }
-
+    
     SetAccessibleName (sNewName, AutomaticallyCreated);
 }
 

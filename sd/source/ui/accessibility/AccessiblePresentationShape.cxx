@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star::accessibility;
 
 namespace accessibility {
 
@@ -60,8 +60,8 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
 
 
 //=====  XServiceInfo  ========================================================
-
-::rtl::OUString SAL_CALL
+    
+::rtl::OUString SAL_CALL 
     AccessiblePresentationShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -71,7 +71,7 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
 
 
 
-/// Set this object's name if is different to the current name.
+///	Set this object's name if is different to the current name.
 ::rtl::OUString
     AccessiblePresentationShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -177,4 +177,4 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
     return aDG();
 }
 
-} // end of namespace accessibility
+} // end of namespace accessibility	

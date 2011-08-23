@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -151,7 +151,7 @@ private:
         determine the correct size ratio.
     */
     bool mbFirstPageObjectSeen;
-
+    
     // The widths for the previews contain two pixels for the border that is
     // painted arround the preview.
     static const int SMALL_PREVIEW_WIDTH = 72 + 2;
@@ -209,7 +209,7 @@ static const MasterPageContainer::Token NIL_TOKEN (-1);
     MasterPageContainer::Implementation::Instance (void)
 {
     ::boost::shared_ptr<MasterPageContainer::Implementation> pInstance;
-
+    
     if (Implementation::mpInstance.expired())
     {
         ::osl::GetGlobalMutex aMutexFunctor;
@@ -702,7 +702,7 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel (void)
     // The default aspect ratio is 4:3
     int nWidth (4);
     int nHeight (3);
-
+    
     // Search for the first entry with an existing master page.
     MasterPageContainerType::const_iterator iDescriptor;
     MasterPageContainerType::const_iterator iContainerEnd(maContainer.end());
@@ -790,7 +790,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
         {
             if (mbContainerCleaningPending)
                 CleanContainer();
-
+            
             aResult = maContainer.size();
             rpDescriptor->SetToken(aResult);
 
@@ -807,10 +807,10 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
                 default:
                     break;
             }
-
+            
             maContainer.push_back(rpDescriptor);
             aEntry = maContainer.end()-1;
-
+            
             FireContainerChange(MasterPageContainerChangeEvent::CHILD_ADDED,aResult);
         }
     }
@@ -825,7 +825,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
             // One or more aspects of the descriptor have changed.  Send
             // appropriate events to the listeners.
             UpdateDescriptor(*aEntry,false,false, true);
-
+            
             std::vector<MasterPageContainerChangeEvent::EventType>::const_iterator iEventType;
             for (iEventType=pEventTypes->begin(); iEventType!=pEventTypes->end(); ++iEventType)
             {
@@ -902,7 +902,7 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
     PreviewState ePreviewState (GetPreviewState(aToken));
 
     SharedMasterPageDescriptor pDescriptor = GetDescriptor(aToken);
-
+    
     // When the preview is missing but inexpensively creatable then do that
     // now.
     if (pDescriptor.get()!=NULL)
@@ -941,7 +941,7 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
                 break;
         }
     }
-
+    
     return aPreview;
 }
 
@@ -1002,7 +1002,7 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel (void)
             RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"));
         uno::Reference<frame::XComponentLoader> xDesktop (
             ::comphelper::getProcessServiceFactory()->createInstance(
-                sDesktopServiceName),
+                sDesktopServiceName), 
             uno::UNO_QUERY);
 
         // Create a new model.
@@ -1068,7 +1068,7 @@ Image MasterPageContainer::Implementation::GetPreviewSubstitution (
     const ::osl::MutexGuard aGuard (maMutex);
 
     Image aPreview;
-
+    
     switch (nId)
     {
         case STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION:

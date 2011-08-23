@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ private:
 };
 
 
-SFX_IMPL_INTERFACE(LayoutMenu, SfxShell,
+SFX_IMPL_INTERFACE(LayoutMenu, SfxShell, 
     SdResId(STR_TASKPANELAYOUTMENU))
 {
     SFX_POPUPMENU_REGISTRATION(SdResId(RID_TASKPANE_LAYOUTMENU_POPUP));
@@ -156,15 +156,15 @@ static snewfoil_value_info standard[] =
 {
     {BMP_LAYOUT_EMPTY, BMP_LAYOUT_EMPTY_H, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,        AUTOLAYOUT_NONE},
     {BMP_LAYOUT_HEAD03, BMP_LAYOUT_HEAD03_H, STR_AUTOLAYOUT_TITLE, WritingMode_LR_TB,       AUTOLAYOUT_TITLE},
-    {BMP_LAYOUT_HEAD02, BMP_LAYOUT_HEAD02_H, STR_AUTOLAYOUT_CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_ENUM},
+    {BMP_LAYOUT_HEAD02, BMP_LAYOUT_HEAD02_H, STR_AUTOLAYOUT_CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_ENUM},   
     {BMP_LAYOUT_HEAD02A, BMP_LAYOUT_HEAD02A_H, STR_AUTOLAYOUT_2CONTENT, WritingMode_LR_TB,       AUTOLAYOUT_2TEXT},
-    {BMP_LAYOUT_HEAD01, BMP_LAYOUT_HEAD01_H, STR_AUTOLAYOUT_ONLY_TITLE, WritingMode_LR_TB,  AUTOLAYOUT_ONLY_TITLE},
+    {BMP_LAYOUT_HEAD01, BMP_LAYOUT_HEAD01_H, STR_AUTOLAYOUT_ONLY_TITLE, WritingMode_LR_TB,  AUTOLAYOUT_ONLY_TITLE},    
     {BMP_LAYOUT_TEXTONLY, BMP_LAYOUT_TEXTONLY_H, STR_AUTOLAYOUT_ONLY_TEXT, WritingMode_LR_TB,   AUTOLAYOUT_ONLY_TEXT},
     {BMP_LAYOUT_HEAD03B, BMP_LAYOUT_HEAD03B_H, STR_AUTOLAYOUT_2CONTENT_CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_2OBJTEXT},
     {BMP_LAYOUT_HEAD03C, BMP_LAYOUT_HEAD03C_H, STR_AUTOLAYOUT_CONTENT_2CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_TEXT2OBJ},
-    {BMP_LAYOUT_HEAD03A, BMP_LAYOUT_HEAD03A_H, STR_AUTOLAYOUT_2CONTENT_OVER_CONTENT,WritingMode_LR_TB, AUTOLAYOUT_2OBJOVERTEXT},
+    {BMP_LAYOUT_HEAD03A, BMP_LAYOUT_HEAD03A_H, STR_AUTOLAYOUT_2CONTENT_OVER_CONTENT,WritingMode_LR_TB, AUTOLAYOUT_2OBJOVERTEXT},    
     {BMP_LAYOUT_HEAD02B, BMP_LAYOUT_HEAD02B_H, STR_AUTOLAYOUT_CONTENT_OVER_CONTENT, WritingMode_LR_TB, AUTOLAYOUT_OBJOVERTEXT},
-    {BMP_LAYOUT_HEAD04, BMP_LAYOUT_HEAD04_H, STR_AUTOLAYOUT_4CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_4OBJ},
+    {BMP_LAYOUT_HEAD04, BMP_LAYOUT_HEAD04_H, STR_AUTOLAYOUT_4CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_4OBJ},   
     {BMP_LAYOUT_HEAD06, BMP_LAYOUT_HEAD06_H, STR_AUTOLAYOUT_6CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_6CLIPART},
 
     // vertical
@@ -223,7 +223,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
 
     SetSmartHelpId(SmartId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS));
     SetAccessibleName(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
-
+    
     Link aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
     mxListener = new ::sd::tools::SlotStateListener(
         aStateChangeLink,
@@ -241,7 +241,7 @@ LayoutMenu::~LayoutMenu (void)
     // Tell the shell factory that this object is no longer available.
     if (GetShellManager() != NULL)
         GetShellManager()->RemoveSubShell(this);
-
+    
     Reference<lang::XComponent> xComponent (mxListener, UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
@@ -266,7 +266,7 @@ LayoutMenu::~LayoutMenu (void)
 AutoLayout LayoutMenu::GetSelectedAutoLayout (void)
 {
     AutoLayout aResult = AUTOLAYOUT_NONE;
-
+    
     if ( ! IsNoSelection() && GetSelectItemId()!=0)
     {
         AutoLayout* pLayout = static_cast<AutoLayout*>(GetItemData(GetSelectItemId()));
@@ -287,7 +287,7 @@ Size LayoutMenu::GetPreferredSize (void)
 {
     Size aItemSize = CalcItemSizePixel (Size());
     Size aPreferredWindowSize = CalcWindowSizePixel (
-        aItemSize,
+        aItemSize, 
          (USHORT)mnPreferredColumnCount,
         (USHORT)CalculateRowCount (aItemSize,mnPreferredColumnCount));
     return aPreferredWindowSize;
@@ -388,7 +388,7 @@ void LayoutMenu::UpdateEnabledState (const MasterMode eMode)
                 // expanded.
                 bIsEnabled = true;
                 break;
-
+                
             case ViewShell::ST_DRAW:
             case ViewShell::ST_IMPRESS:
             {
@@ -481,7 +481,7 @@ void LayoutMenu::Resize (void)
                 nColumnCount = 4;
 
             int nRowCount = CalculateRowCount (aItemSize, nColumnCount);
-
+            
             SetColCount ((USHORT)nColumnCount);
             SetLineCount ((USHORT)nRowCount);
         }
@@ -504,7 +504,7 @@ void LayoutMenu::MouseButtonDown (const MouseEvent& rEvent)
         if (nIndex > 0)
             SelectItem(nIndex);
     }
-
+    
     ValueSet::MouseButtonDown (rEvent);
 }
 
@@ -697,7 +697,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
             pPageSelection.reset(new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
             pPageSelection->push_back(pMainViewShell->GetActualPage());
         }
-
+            
 
         if (pPageSelection->empty())
             break;
@@ -742,7 +742,7 @@ SfxRequest LayoutMenu::CreateRequest (
             break;
 
         SetOfByte aVisibleLayers (pPage->TRG_GetMasterPageVisibleLayers());
-
+    
         aRequest.AppendItem(
             SfxStringItem (ID_VAL_PAGENAME, String()));//pPage->GetName()));
         aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
@@ -767,7 +767,7 @@ void LayoutMenu::Fill (void)
     SvtLanguageOptions aLanguageOptions;
     sal_Bool bVertical = aLanguageOptions.IsVerticalTextEnabled();
     SdDrawDocument* pDocument = mrBase.GetDocument();
-    sal_Bool bRightToLeft = (pDocument!=NULL
+    sal_Bool bRightToLeft = (pDocument!=NULL 
         && pDocument->GetDefaultWritingMode() == WritingMode_RL_TB);
 
     // Get URL of the view in the center pane.
@@ -785,7 +785,7 @@ void LayoutMenu::Fill (void)
     }
     catch (RuntimeException&)
     {}
-
+    
     snewfoil_value_info* pInfo = NULL;
     if (sCenterPaneViewName.equals(framework::FrameworkHelper::msNotesViewURL))
     {
@@ -811,10 +811,10 @@ void LayoutMenu::Fill (void)
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
         {
-            BitmapEx aBmp (SdResId (bHighContrast
-                             ? pInfo->mnHCBmpResId
+            BitmapEx aBmp (SdResId (bHighContrast 
+                             ? pInfo->mnHCBmpResId 
                              : pInfo->mnBmpResId));
-
+        
             if (bRightToLeft && (WritingMode_TB_RL != pInfo->meWritingMode))
                 aBmp.Mirror (BMP_MIRROR_HORZ);
 
@@ -925,7 +925,7 @@ void LayoutMenu::UpdateSelection (void)
         ViewShell* pViewShell = mrBase.GetMainViewShell().get();
         if (pViewShell == NULL)
             break;
-
+        
         SdPage* pCurrentPage = pViewShell->getCurrentPage();
         if (pCurrentPage == NULL)
             break;

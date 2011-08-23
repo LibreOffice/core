@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,13 +46,13 @@ class AnnotationManager
 public:
     AnnotationManager( ViewShellBase& rViewShellBase );
     ~AnnotationManager();
-
+    
     void ExecuteAnnotation (SfxRequest& rRequest);
     void GetAnnotationState (SfxItemSet& rItemSet);
 
 private:
     ::rtl::Reference< AnnotationManagerImpl > mxImpl;
-};
+};  
 
 }
 

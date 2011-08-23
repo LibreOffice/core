@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,14 +71,14 @@ SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
                                 SdrModel* pModel,
                                 SdrView* pView ) :
         SfxStyleDialog      ( pParent, SdResId( TAB_TEMPLATE ), rStyleBase, FALSE ),
-        rDocShell           ( *pDocShell ),
-        pSdrView            ( pView ),
-        pColorTab           ( pModel->GetColorTable() ),
-        pGradientList       ( pModel->GetGradientList() ),
-        pHatchingList       ( pModel->GetHatchList() ),
-        pBitmapList         ( pModel->GetBitmapList() ),
-        pDashList           ( pModel->GetDashList() ),
-        pLineEndList        ( pModel->GetLineEndList() )
+        rDocShell			( *pDocShell ),
+        pSdrView			( pView ),
+        pColorTab			( pModel->GetColorTable() ),
+        pGradientList		( pModel->GetGradientList() ),
+        pHatchingList		( pModel->GetHatchList() ),
+        pBitmapList 		( pModel->GetBitmapList() ),
+        pDashList			( pModel->GetDashList() ),
+        pLineEndList		( pModel->GetLineEndList() )
 {
     FreeResource();
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,34 +56,34 @@ typedef std::vector< std::pair< SdrObject*, Ppt97AnimationPtr > > tAnimationVect
 
 class ImplSdPPTImport : public SdrPowerPointImport
 {
-    SfxMedium&      mrMed;
-    SvStorage&      mrStorage;
-//  SvStream*       mpPicStream;
-    DffRecordHeader maDocHd;
-    List            maSlideNameList;
-    BOOL            mbDocumentFound;
-    sal_uInt32      mnFilterOptions;
-    SdDrawDocument* mpDoc;
-    PresChange      mePresChange;
-    SdrLayerID      mnBackgroundLayerID;
-    SdrLayerID      mnBackgroundObjectsLayerID;
+    SfxMedium&		mrMed;
+    SvStorage&		mrStorage;
+//	SvStream*		mpPicStream;
+    DffRecordHeader	maDocHd;
+    List			maSlideNameList;
+    BOOL			mbDocumentFound;
+    sal_uInt32		mnFilterOptions;
+    SdDrawDocument*	mpDoc;
+    PresChange		mePresChange;
+    SdrLayerID		mnBackgroundLayerID;
+    SdrLayerID		mnBackgroundObjectsLayerID;
 
     tAnimationMap   maAnimations;
 
-    void            SetHeaderFooterPageSettings( SdPage* pPage, const PptSlidePersistEntry* pMasterPersist );
-    void            ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimationsUsed );
+    void			SetHeaderFooterPageSettings( SdPage* pPage, const PptSlidePersistEntry* pMasterPersist );
+    void		    ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimationsUsed );
 
     void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, String aMacroName );
 
-    virtual         SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj );
-    virtual         SdrObject* ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pText, SdPage* pPage,
+    virtual		    SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj );
+    virtual		    SdrObject* ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pText, SdPage* pPage,
                                             SfxStyleSheet*, SfxStyleSheet** ) const;
 
 public:
 
-    String          ReadSound( sal_uInt32 nSoundRef ) const;
-    String          ReadMedia( sal_uInt32 nMediaRef ) const;
-
+    String	        ReadSound( sal_uInt32 nSoundRef ) const;
+    String			ReadMedia( sal_uInt32 nMediaRef ) const;
+ 
     ImplSdPPTImport( SdDrawDocument* pDoc, SvStorage& rStorage, SfxMedium& rMed, PowerPointImportParam& );
     ~ImplSdPPTImport();
 

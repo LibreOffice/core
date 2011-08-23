@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,8 +131,8 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
     {
         FrameView* pFrameView = mpViewShell->GetFrameView();
 
-//        BOOL bOrtho = mpView->IsOrthoDesired() || pFrameView->IsOrtho();
-//        bOrtho = bOrtho != rMEvt.IsShift();
+//		  BOOL bOrtho = mpView->IsOrthoDesired() || pFrameView->IsOrtho();
+//		  bOrtho = bOrtho != rMEvt.IsShift();
         BOOL bOrtho = FALSE;
 
         BOOL bRestricted = TRUE;
@@ -253,8 +253,8 @@ BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
     FrameView* pFrameView = mpViewShell->GetFrameView();
     Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
-//    BOOL bOrtho = mpView->IsOrthoDesired() || pFrameView->IsOrtho();
-//    bOrtho = bOrtho != rMEvt.IsShift();
+//	  BOOL bOrtho = mpView->IsOrthoDesired() || pFrameView->IsOrtho();
+//	  bOrtho = bOrtho != rMEvt.IsShift();
     BOOL bOrtho = FALSE;
 
     BOOL bRestricted = TRUE;
@@ -689,8 +689,8 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             {
                 UINT16 nSdrObjKind = aVEvt.pObj->GetObjIdentifier();
 
-                if ( nSdrObjKind != OBJ_TEXT        &&
-                     nSdrObjKind != OBJ_TITLETEXT   &&
+                if ( nSdrObjKind != OBJ_TEXT		&&
+                     nSdrObjKind != OBJ_TITLETEXT	&&
                      nSdrObjKind != OBJ_OUTLINETEXT &&
                      aVEvt.pObj->IsEmptyPresObj() )
                 {
@@ -786,8 +786,8 @@ BOOL FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                                                                     ||
                     (mpView->ISA(DrawView) &&
                         SlideShow::IsRunning( mpViewShell->GetViewShellBase() )   &&
-                         (pInfo->meClickAction == presentation::ClickAction_VANISH            ||
-                          pInfo->meClickAction == presentation::ClickAction_INVISIBLE         ||
+                         (pInfo->meClickAction == presentation::ClickAction_VANISH    		  ||
+                          pInfo->meClickAction == presentation::ClickAction_INVISIBLE 		  ||
                           pInfo->meClickAction == presentation::ClickAction_STOPPRESENTATION ||
                          (pInfo->mbActive &&
                           ( pInfo->meEffect != presentation::AnimationEffect_NONE ||

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@ class SdDrawDocument;
 
 class SdMoveStyleSheetsUndoAction : public SdUndoAction
 {
-    SdStyleSheetVector                  maStyles;
-    std::vector< SdStyleSheetVector >   maListOfChildLists;
-    bool                                mbMySheets;
+    SdStyleSheetVector					maStyles;
+    std::vector< SdStyleSheetVector >	maListOfChildLists;
+    bool								mbMySheets;
 
 public:
     SdMoveStyleSheetsUndoAction(SdDrawDocument* pTheDoc, SdStyleSheetVector& rTheStyles, bool bInserted);

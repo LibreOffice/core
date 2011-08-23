@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,16 +84,16 @@ public:
 
     sal_Int8 AcceptDrop (
         const AcceptDropEvent& rEvt,
-        DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
-        USHORT nPage = SDRPAGE_NOTFOUND,
+        DropTargetHelper& rTargetHelper, 
+        ::sd::Window* pTargetWindow = NULL, 
+        USHORT nPage = SDRPAGE_NOTFOUND, 
         USHORT nLayer = SDRPAGE_NOTFOUND );
 
     sal_Int8 ExecuteDrop (
-        const ExecuteDropEvent& rEvt,
+        const ExecuteDropEvent& rEvt, 
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
-        USHORT nPage = SDRPAGE_NOTFOUND,
+        ::sd::Window* pTargetWindow = NULL, 
+        USHORT nPage = SDRPAGE_NOTFOUND, 
         USHORT nLayer = SDRPAGE_NOTFOUND);
 
 protected:
@@ -128,7 +128,7 @@ private:
     bool mbUpdateSelectionPending;
 
     void CreateSlideTransferable (
-        ::Window* pWindow,
+        ::Window* pWindow, 
         bool bDrag);
 
     /** Select the pages stored in the maPagesToSelect member.  The list in

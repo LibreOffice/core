@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ public:
             SdTpOptionsSnap( Window* pParent, const SfxItemSet& rInAttrs  );
             ~SdTpOptionsSnap();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
+    static	SfxTabPage* Create( Window*, const SfxItemSet& );
     virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
@@ -76,16 +76,16 @@ class SdTpOptionsContents : public SfxTabPage
 private:
     FixedLine    aGrpDisplay;
     CheckBox    aCbxRuler;
-    CheckBox    aCbxDragStripes;
-    CheckBox    aCbxHandlesBezier;
-    CheckBox    aCbxMoveOutline;
+    CheckBox	aCbxDragStripes;
+    CheckBox	aCbxHandlesBezier;
+    CheckBox	aCbxMoveOutline;
 
 
 public:
             SdTpOptionsContents( Window* pParent, const SfxItemSet& rInAttrs  );
             ~SdTpOptionsContents();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
+    static	SfxTabPage* Create( Window*, const SfxItemSet& );
     virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 };
@@ -118,7 +118,7 @@ private:
     FixedText   aTxtMetric;
     ListBox     aLbMetric;
     FixedText   aTxtTabstop;
-    MetricField aMtrFldTabstop;
+    MetricField	aMtrFldTabstop;
 
     CheckBox    aCbxStartWithActualPage;
     FixedLine   aGrpStartWithActualPage;
@@ -135,25 +135,25 @@ private:
     FixedText       aFtEquivalent;
 
     FixedText       aFtPageWidth;
-    FixedInfo       aFiInfo1;
+    FixedInfo		aFiInfo1;
     MetricField     aMtrFldOriginalWidth;
 
     FixedText       aFtPageHeight;
-    FixedInfo       aFiInfo2;
+    FixedInfo		aFiInfo2;
     MetricField     aMtrFldOriginalHeight;
 
     MetricField     aMtrFldInfo1;
-    MetricField     aMtrFldInfo2;
+    MetricField 	aMtrFldInfo2;
 
     UINT32          nWidth;
-    UINT32          nHeight;
-    String          aInfo1;
-    String          aInfo2;
+    UINT32			nHeight;
+    String			aInfo1;
+    String			aInfo2;
 
-    SfxMapUnit          ePoolUnit;
+    SfxMapUnit			ePoolUnit;
 
-    String          GetScale( INT32 nX, INT32 nY );
-    BOOL            SetScale( const String& aScale, INT32& rX, INT32& rY );
+    String			GetScale( INT32 nX, INT32 nY );
+    BOOL			SetScale( const String& aScale, INT32& rX, INT32& rY );
 
     DECL_LINK( ModifyScaleHdl, void * );
     DECL_LINK( ModifyOriginalScaleHdl, void * );
@@ -167,13 +167,13 @@ private:
 
 protected:
     virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int DeactivatePage( SfxItemSet* pSet );
+    virtual int	DeactivatePage( SfxItemSet* pSet );
 
 public:
             SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  );
             ~SdTpOptionsMisc();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
+    static	SfxTabPage* Create( Window*, const SfxItemSet& );
     virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
@@ -188,7 +188,7 @@ public:
         <member>SetDrawMode()</member> method more than once.
     */
     void SetImpressMode (void);
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void		PageCreated (SfxAllItemSet aSet);
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;

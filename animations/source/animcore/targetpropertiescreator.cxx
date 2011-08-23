@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,7 +103,7 @@ namespace animcore
     {
         return TargetPropertiesCreator::createInstance( rSMgr );
     }
-
+    
     ::rtl::OUString getImplementationName_TargetPropertiesCreator()
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
@@ -122,7 +122,7 @@ namespace animcore
     {
         // Vector containing all properties for a given shape
         typedef ::std::vector< beans::NamedValue > VectorOfNamedValues;
-
+        
         /** The hash map key
 
             This key contains both XShape reference and a paragraph
@@ -132,14 +132,14 @@ namespace animcore
         struct ShapeHashKey
         {
             /// Shape target
-            uno::Reference< drawing::XShape >   mxRef;
+            uno::Reference< drawing::XShape >	mxRef;
 
             /** Paragraph index.
 
                 If this is a pure shape target, mnParagraphIndex is
                 set to -1.
              */
-            sal_Int16                           mnParagraphIndex;
+            sal_Int16							mnParagraphIndex;
 
             /// Comparison needed for hash_map
             bool operator==( const ShapeHashKey& rRHS ) const
@@ -164,7 +164,7 @@ namespace animcore
             // x = (x & 0x00F000F0) << 4) | (x >> 4) & 0x00F000F0 | x & 0xF00FF00F;
             // x = (x & 0x0C0C0C0C) << 2) | (x >> 2) & 0x0C0C0C0C | x & 0xC3C3C3C3;
             // x = (x & 0x22222222) << 1) | (x >> 1) & 0x22222222 | x & 0x99999999;
-            //
+            // 
             // Costs about 17 cycles on a RISC machine with infinite
             // instruction level parallelism (~42 basic
             // instructions). Thus I truly doubt this pays off...
@@ -182,9 +182,9 @@ namespace animcore
             {
             }
 
-            NodeFunctor( XShapeHash&                                rShapeHash,
-                         const uno::Reference< drawing::XShape >&   rTargetShape,
-                         sal_Int16                                  nParagraphIndex ) :
+            NodeFunctor( XShapeHash& 								rShapeHash,
+                         const uno::Reference< drawing::XShape >& 	rTargetShape,
+                         sal_Int16									nParagraphIndex ) :
                 mrShapeHash( rShapeHash ),
                 mxTargetShape( rTargetShape ),
                 mnParagraphIndex( nParagraphIndex )
@@ -201,7 +201,7 @@ namespace animcore
                 }
 
                 uno::Reference< drawing::XShape > xTargetShape( mxTargetShape );
-                sal_Int16                         nParagraphIndex( mnParagraphIndex );
+                sal_Int16						  nParagraphIndex( mnParagraphIndex );
 
                 switch( xNode->getType() )
                 {
@@ -221,12 +221,12 @@ namespace animcore
                                         "animcore: NodeFunctor::operator(): no target on ITERATE node" );
                             return;
                         }
-
+                
                         xTargetShape.set( xIterNode->getTarget(),
                                           uno::UNO_QUERY );
 
                         if( !xTargetShape.is() )
-                        {
+                        {                            
                             ::com::sun::star::presentation::ParagraphTarget aTarget;
 
                             // no shape provided. Maybe a ParagraphTarget?
@@ -237,7 +237,7 @@ namespace animcore
                                             "target information" );
                                 return;
                             }
-
+                        
                             xTargetShape = aTarget.Shape;
                             nParagraphIndex = aTarget.Paragraph;
 
@@ -257,10 +257,10 @@ namespace animcore
                         NodeFunctor aFunctor( mrShapeHash,
                                               xTargetShape,
                                               nParagraphIndex );
-                        if( !::anim::for_each_childNode( xNode,
+                        if( !::anim::for_each_childNode( xNode, 
                                                          aFunctor ) )
                         {
-                            OSL_ENSURE( false,
+                            OSL_ENSURE( false, 
                                         "AnimCore: NodeFunctor::operator(): child node iteration failed, "
                                         "or extraneous container nodes encountered" );
                         }
@@ -288,9 +288,9 @@ namespace animcore
                     case animations::AnimationNodeType::SET:
                     {
                         // evaluate set node content
-                        uno::Reference< animations::XAnimate > xAnimateNode( xNode,
+                        uno::Reference< animations::XAnimate > xAnimateNode( xNode, 
                                                                              uno::UNO_QUERY );
-
+                        
                         if( !xAnimateNode.is() )
                             break; // invalid node
 
@@ -317,26 +317,26 @@ namespace animcore
                                 // not a pure shape target - maybe a
                                 // ParagraphTarget?
                                 presentation::ParagraphTarget aUnoTarget;
-
+                                
                                 if( !(xAnimateNode->getTarget() >>= aUnoTarget) )
                                 {
                                     OSL_ENSURE( false,
                                                 "AnimCore: NodeFunctor::operator(): unknown target type encountered" );
                                     break;
                                 }
-
+                                
                                 aTarget.mxRef = aUnoTarget.Shape;
                                 aTarget.mnParagraphIndex = aUnoTarget.Paragraph;
                             }
                         }
-
+                        
                         if( !aTarget.mxRef.is() )
                         {
                             OSL_ENSURE( false,
                                         "AnimCore: NodeFunctor::operator(): Found target, but XShape is NULL" );
                             break; // invalid target XShape
                         }
-
+                            
                         // check whether we already have an entry for
                         // this target (we only take the first set
                         // effect for every shape)
@@ -361,7 +361,7 @@ namespace animcore
                                 ::rtl::OUString aString;
                                 if( (aAny >>= aString) )
                                 {
-                                    // we also take the strings "true" and "false",
+                                    // we also take the strings "true" and "false", 
                                     // as well as "on" and "off" here
                                     if( aString.equalsIgnoreAsciiCaseAscii("true") ||
                                         aString.equalsIgnoreAsciiCaseAscii("on") )
@@ -382,10 +382,10 @@ namespace animcore
                                 // first relevant effect. Thus, target
                                 // must be initially _hidden_, for the
                                 // effect to have visible impact.
-                                mrShapeHash.insert(
-                                    XShapeHash::value_type(
+                                mrShapeHash.insert( 
+                                    XShapeHash::value_type( 
                                         aTarget,
-                                        VectorOfNamedValues(
+                                        VectorOfNamedValues( 
                                             1,
                                             beans::NamedValue(
                                                 xAnimateNode->getAttributeName(),
@@ -398,9 +398,9 @@ namespace animcore
             }
 
         private:
-            XShapeHash&                         mrShapeHash;
-            uno::Reference< drawing::XShape >   mxTargetShape;
-            sal_Int16                           mnParagraphIndex;
+            XShapeHash& 						mrShapeHash;
+            uno::Reference< drawing::XShape > 	mxTargetShape;
+            sal_Int16							mnParagraphIndex;
         };
     }
 
@@ -422,17 +422,17 @@ namespace animcore
 
     // XTargetPropertiesCreator
     uno::Sequence< animations::TargetProperties > SAL_CALL TargetPropertiesCreator::createInitialTargetProperties
-        (
-            const uno::Reference< animations::XAnimationNode >& xRootNode
+        ( 
+            const uno::Reference< animations::XAnimationNode >& xRootNode 
         ) throw (uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         // scan all nodes for visibility changes, and record first
         // 'visibility=true' for each shape
-        XShapeHash aShapeHash( 101,
+        XShapeHash aShapeHash( 101, 
                                &refhasher );
-
+ 
         NodeFunctor aFunctor( aShapeHash );
 
         // TODO(F1): Maybe limit functor application to main sequence
@@ -449,25 +449,25 @@ namespace animcore
 
         uno::Sequence< animations::TargetProperties > aRes( aShapeHash.size() );
 
-        ::std::size_t                       nCurrIndex(0);
-        XShapeHash::const_iterator          aCurr( aShapeHash.begin() );
-        const XShapeHash::const_iterator    aEnd ( aShapeHash.end()   );
+        ::std::size_t						nCurrIndex(0);
+        XShapeHash::const_iterator 			aCurr( aShapeHash.begin() );
+        const XShapeHash::const_iterator	aEnd ( aShapeHash.end()   );
         while( aCurr != aEnd )
         {
             animations::TargetProperties& rCurrProps( aRes[ nCurrIndex++ ] );
 
-            if( aCurr->first.mnParagraphIndex == -1 )
-            {
+            if( aCurr->first.mnParagraphIndex == -1 )    
+            {            
                 rCurrProps.Target = uno::makeAny( aCurr->first.mxRef );
             }
             else
             {
-                rCurrProps.Target = uno::makeAny(
+                rCurrProps.Target = uno::makeAny( 
                     presentation::ParagraphTarget(
                         aCurr->first.mxRef,
                         aCurr->first.mnParagraphIndex ) );
             }
-
+                
             rCurrProps.Properties = ::comphelper::containerToSequence( aCurr->second );
 
             ++aCurr;
@@ -491,7 +491,7 @@ namespace animcore
     {
         uno::Sequence< ::rtl::OUString > aRet(1);
         aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
-
+        
         return aRet;
     }
 

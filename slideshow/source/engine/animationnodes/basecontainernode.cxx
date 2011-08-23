@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace slideshow {
 namespace internal {
 
 BaseContainerNode::BaseContainerNode(
-    const uno::Reference< animations::XAnimationNode >&     xNode,
+    const uno::Reference< animations::XAnimationNode >&     xNode, 
     const BaseContainerNodeSharedPtr&                       rParent,
     const NodeContext&                                      rContext )
     : BaseNode( xNode, rParent, rContext ),
@@ -90,7 +90,7 @@ void BaseContainerNode::deactivate_st( NodeState eDestState )
 bool BaseContainerNode::hasPendingAnimation() const
 {
     // does any of our children returns "true" on
-    // AnimationNode::hasPendingAnimation()?
+    // AnimationNode::hasPendingAnimation()? 
     // If yes, we, too, return true
     VectorOfNodes::const_iterator const iEnd( maChildren.end() );
     return (std::find_if(
@@ -102,9 +102,9 @@ void BaseContainerNode::appendChildNode( AnimationNodeSharedPtr const& pNode )
 {
     if (! checkValidNode())
         return;
-
+    
     // register derived classes as end listeners at all children.
-    // this is necessary to control the children animation
+    // this is necessary to control the children animation 
     // sequence, and to determine our own end event
     if (pNode->registerDeactivatingListener( getSelf() )) {
         maChildren.push_back( pNode );
@@ -135,12 +135,12 @@ bool BaseContainerNode::notifyDeactivatedChild(
         OSL_ENSURE( false, "unknown notifier!" );
         return false;
     }
-
+    
     std::size_t const nSize = maChildren.size();
     OSL_ASSERT( mnFinishedChildren < nSize );
     ++mnFinishedChildren;
     bool const bFinished = (mnFinishedChildren >= nSize);
-
+    
     // all children finished, and we've got indefinite duration?
     // think of ParallelTimeContainer::notifyDeactivating()
     // if duration given, we will be deactivated by some end event
@@ -148,7 +148,7 @@ bool BaseContainerNode::notifyDeactivatedChild(
     if (bFinished && isDurationIndefinite()) {
         deactivate();
     }
-
+    
     return bFinished;
 }
 
@@ -160,12 +160,12 @@ void BaseContainerNode::showState() const
         BaseNodeSharedPtr pNode =
             boost::shared_dynamic_cast<BaseNode>(maChildren[i]);
         VERBOSE_TRACE(
-            "Node connection: n0x%X -> n0x%X",
-            (const char*)this+debugGetCurrentOffset(),
+            "Node connection: n0x%X -> n0x%X", 
+            (const char*)this+debugGetCurrentOffset(), 
             (const char*)pNode.get()+debugGetCurrentOffset() );
         pNode->showState();
     }
-
+    
     BaseNode::showState();
 }
 #endif

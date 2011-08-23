@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
         if (aToken != MasterPageContainer::NIL_TOKEN)
         {
             String sStyleName (mpContainer->GetStyleNameForToken(aToken));
-            if (sStyleName.Len()==0
+            if (sStyleName.Len()==0 
                 || aCurrentNames.find(sStyleName) == aCurrentNames.end())
             {
                 rItemList.push_back(aToken);
@@ -130,7 +130,7 @@ void RecentMasterPagesSelector::AssignMasterPageToPageList (
     const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList)
 {
     USHORT nSelectedItemId = mpPageSet->GetSelectItemId();
-
+    
     MasterPagesSelector::AssignMasterPageToPageList(pMasterPage, rpPageList);
 
     // Restore the selection.

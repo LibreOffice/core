@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,9 +35,9 @@
 #include <sfx2/dispatch.hxx>
 
 namespace sd{
-
+    
 SFX_IMPL_CHILDWINDOW(SpellDialogChildWindow, SID_SPELL_DIALOG)
-}
+}        
 
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
@@ -50,9 +50,9 @@ SFX_IMPL_CHILDWINDOW(SpellDialogChildWindow, SID_SPELL_DIALOG)
 namespace sd {
 
 SpellDialogChildWindow::SpellDialogChildWindow (
-    ::Window* _pParent,
+    ::Window* _pParent, 
     USHORT nId,
-    SfxBindings* pBindings,
+    SfxBindings* pBindings, 
     SfxChildWinInfo* pInfo)
     : ::svx::SpellDialogChildWindow (_pParent, nId, pBindings, pInfo),
       mpSdOutliner (NULL),

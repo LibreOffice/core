@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ struct UndoAnimationImpl
     SdPage*         mpPage;
     Reference< XAnimationNode > mxOldNode;
     Reference< XAnimationNode > mxNewNode;
-    bool            mbNewNodeSet;
+    bool			mbNewNodeSet;
 };
 
 UndoAnimation::UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage )
@@ -86,7 +86,7 @@ void UndoAnimation::Undo()
         if( !mpImpl->mbNewNodeSet )
         {
             if( mpImpl->mpPage->mxAnimationNode.is() )
-                mpImpl->mxNewNode.set( ::sd::Clone( mpImpl->mpPage->mxAnimationNode ) );
+                mpImpl->mxNewNode.set( ::sd::Clone( mpImpl->mpPage->mxAnimationNode ) ); 
             mpImpl->mbNewNodeSet = true;
         }
 
@@ -127,7 +127,7 @@ String UndoAnimation::GetComment() const
 struct UndoAnimationPathImpl
 {
     SdPage*         mpPage;
-    sal_Int32       mnEffectOffset;
+    sal_Int32		mnEffectOffset;
     ::rtl::OUString msUndoPath;
     ::rtl::OUString msRedoPath;
 

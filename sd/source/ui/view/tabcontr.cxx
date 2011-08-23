@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@
 
 namespace sd {
 
-#define SWITCH_TIMEOUT  20
+#define SWITCH_TIMEOUT	20
 
 // -----------------------------------------
 // - SdTabControl::SdPageObjsTransferable -
@@ -133,8 +133,8 @@ void TabControl::Select()
 void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if (rMEvt.IsLeft()
-        && !rMEvt.IsMod1()
-        && !rMEvt.IsMod2()
+        && !rMEvt.IsMod1() 
+        && !rMEvt.IsMod2() 
         && !rMEvt.IsShift())
     {
         Point aPos = PixelToLogic( rMEvt.GetPosPixel() );
@@ -231,7 +231,7 @@ sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
     if( !pDrViewSh->GetDocSh()->IsReadOnly() )
     {
         SdDrawDocument* pDoc = pDrViewSh->GetDoc();
-        Point           aPos( rEvt.maPosPixel );
+        Point			aPos( rEvt.maPosPixel );
 
         if( bInternalMove )
         {
@@ -269,8 +269,8 @@ sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     SdDrawDocument* pDoc = pDrViewSh->GetDoc();
-    Point           aPos( rEvt.maPosPixel );
-    sal_Int8        nRet = DND_ACTION_NONE;
+    Point			aPos( rEvt.maPosPixel );
+    sal_Int8		nRet = DND_ACTION_NONE;
 
     if( bInternalMove )
     {
@@ -285,7 +285,7 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
                     pDispatcher->Execute(SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                 }
                 break;
-
+                
             case DND_ACTION_COPY:
             {
                 // Copying the selected page to the place that rEvt points

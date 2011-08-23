@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,11 +113,11 @@ FontProvider::SharedFontPointer FontProvider::GetFont (const OutputDevice& rDevi
         maFont.reset(new Font (Application::GetSettings().GetStyleSettings().GetAppFont()));
         maFont->SetTransparent(TRUE);
         maFont->SetWeight(WEIGHT_NORMAL);
-
+         
         // Transform the point size to pixel size.
         MapMode aFontMapMode (MAP_POINT);
         Size aFontSize (rDevice.LogicToPixel(maFont->GetSize(), aFontMapMode));
-
+        
         // Transform the font size to the logical coordinates of the device.
         maFont->SetSize (rDevice.PixelToLogic(aFontSize));
 
@@ -125,7 +125,7 @@ FontProvider::SharedFontPointer FontProvider::GetFont (const OutputDevice& rDevi
         // devices or modified zoom scales on future calls.
         maMapMode = rDevice.GetMapMode();
     }
-
+    
     return maFont;
 }
 

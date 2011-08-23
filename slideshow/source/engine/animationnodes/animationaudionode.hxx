@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ namespace slideshow {
 namespace internal {
 
 /** Audio node.
-
+    
     This animation node contains an audio effect. Duration and
     start/stop behaviour is affected by the referenced audio
     file.
@@ -46,27 +46,27 @@ class AnimationAudioNode : public BaseNode, public AnimationEventHandler
 public:
     AnimationAudioNode(
         ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        ::com::sun::star::animations::XAnimationNode> const& xNode, 
         ::boost::shared_ptr<BaseContainerNode> const& pParent,
         NodeContext const& rContext );
-
+    
 protected:
     virtual void dispose();
-
+    
 private:
     virtual void activate_st();
     virtual void deactivate_st( NodeState eDestState );
     virtual bool hasPendingAnimation() const;
-
+    
     /// overriden, because we need to deal with STOPAUDIO commands
     virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode );
-
+    
 private:
-    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference< 
         ::com::sun::star::animations::XAudio >  mxAudioNode;
     ::rtl::OUString                             maSoundURL;
     mutable SoundPlayerSharedPtr                mpPlayer;
-
+    
     void createPlayer() const;
     void resetPlayer() const;
 };

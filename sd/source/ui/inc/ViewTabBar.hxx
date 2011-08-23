@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ namespace sd {
 
 /** Tab control for switching between views in the center pane.
 */
-class ViewTabBar
+class ViewTabBar 
     : private sd::MutexOwner,
       public ViewTabBarInterfaceBase
 {
@@ -91,12 +91,12 @@ public:
 
     //----- drawing::framework::XConfigurationChangeListener ------------------
 
-    virtual void SAL_CALL
+    virtual void SAL_CALL 
         notifyConfigurationChange (
             const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
         throw (::com::sun::star::uno::RuntimeException);
 
-
+    
     //----- XEventListener ----------------------------------------------------
 
     virtual void SAL_CALL disposing(
@@ -121,17 +121,17 @@ public:
         SAL_CALL removeTabBarButton (
             const ::com::sun::star::drawing::framework::TabBarButton& rButton)
         throw (::com::sun::star::uno::RuntimeException);
-
+    
     virtual sal_Bool
         SAL_CALL hasTabBarButton (
             const ::com::sun::star::drawing::framework::TabBarButton& rButton)
         throw (::com::sun::star::uno::RuntimeException);
-
+    
     virtual ::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
         SAL_CALL getTabBarButtons (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-
+    
     //----- XResource ---------------------------------------------------------
 
     virtual ::com::sun::star::uno::Reference<
@@ -171,7 +171,7 @@ public:
         const ::com::sun::star::drawing::framework::TabBarButton& rButton);
     ::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
         GetTabBarButtons (void);
-
+    
 private:
     ::boost::shared_ptr< ::TabControl> mpTabControl;
     ::com::sun::star::uno::Reference<

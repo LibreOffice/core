@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ namespace slideshow
                 adjusting and holding global presentation time.
              */
             ActivitiesQueue(
-                const ::boost::shared_ptr< ::canvas::tools::ElapsedTime >&  pPresTimer );
+                const ::boost::shared_ptr< ::canvas::tools::ElapsedTime >&	pPresTimer );
             ~ActivitiesQueue();
 
             /** Add the given activity to the queue.
@@ -97,22 +97,22 @@ namespace slideshow
             /** returns number of all activities, waiting, reinserted and dequeued
              */
             std::size_t size() const
-            {
+            { 
                 return maCurrentActivitiesWaiting.size() + maCurrentActivitiesReinsert.size() + maDequeuedActivities.size();
             }
-
+            
         private:
             ::boost::shared_ptr< ::canvas::tools::ElapsedTime > mpTimer;
-
+            
             typedef ::std::deque< ActivitySharedPtr > ActivityQueue;
 
-            ActivityQueue           maCurrentActivitiesWaiting;  // currently running
-                                                                 // activities, that still
+            ActivityQueue 			maCurrentActivitiesWaiting;  // currently running        
+                                                                 // activities, that still   
                                                                  // await processing for this
                                                                  // round
 
-            ActivityQueue           maCurrentActivitiesReinsert;    // currently running
-                                                                      // activities, that are
+            ActivityQueue 			maCurrentActivitiesReinsert; 	// currently running    
+                                                                      // activities, that are 
                                                                       // already processed for
                                                                       // this round, and wants
                                                                     // to be reinserted next

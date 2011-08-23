@@ -78,45 +78,45 @@
 #define PPT_TRANSITION_TYPE_SPLIT          13
 
 // effects, new in xp
-#define PPT_TRANSITION_TYPE_DIAMOND         17
-#define PPT_TRANSITION_TYPE_PLUS            18
-#define PPT_TRANSITION_TYPE_WEDGE           19
-#define PPT_TRANSITION_TYPE_PUSH            20
-#define PPT_TRANSITION_TYPE_COMB            21
-#define PPT_TRANSITION_TYPE_NEWSFLASH       22
-#define PPT_TRANSITION_TYPE_SMOOTHFADE      23
-#define PPT_TRANSITION_TYPE_WHEEL           26
-#define PPT_TRANSITION_TYPE_CIRCLE          27
+#define PPT_TRANSITION_TYPE_DIAMOND			17
+#define PPT_TRANSITION_TYPE_PLUS			18
+#define PPT_TRANSITION_TYPE_WEDGE			19
+#define PPT_TRANSITION_TYPE_PUSH			20
+#define PPT_TRANSITION_TYPE_COMB			21
+#define PPT_TRANSITION_TYPE_NEWSFLASH		22
+#define PPT_TRANSITION_TYPE_SMOOTHFADE		23
+#define PPT_TRANSITION_TYPE_WHEEL			26
+#define PPT_TRANSITION_TYPE_CIRCLE			27
 
 using namespace com::sun::star;
 
 static PHLayout pPHLayout[] =
 {
-    { EPP_LAYOUT_TITLESLIDE,            { 0x0d, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x10, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, TRUE, TRUE, TRUE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_BLANCSLIDE,            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, FALSE, FALSE, FALSE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x16, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x0e, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x14, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x15, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x15, 0x0d, 0x0e, TRUE, FALSE, FALSE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x16, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x0e, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, FALSE, FALSE },
-    { EPP_LAYOUT_RIGHTCOLUMN2ROWS,      { 0x0d, 0x0e, 0x13, 0x13, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_2ROWSANDTITLE,         { 0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_LEFTCOLUMN2ROWS,       { 0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_TOPROW2COLUMN,         { 0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_2ROWSANDTITLE,         { 0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_4OBJECTS,              { 0x0d, 0x13, 0x13, 0x13, 0x13, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, FALSE, FALSE },
-    { EPP_LAYOUT_ONLYTITLE,             { 0x0d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, TRUE, FALSE, FALSE },
-    { EPP_LAYOUT_BLANCSLIDE,            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, FALSE, FALSE, FALSE },
+    { EPP_LAYOUT_TITLESLIDE,			{ 0x0d, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x10, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,		{ 0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,		{ 0x0d, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,		{ 0x0d, 0x0e, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, TRUE, TRUE, TRUE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,		{ 0x0d, 0x0e, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_BLANCSLIDE,			{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, FALSE, FALSE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,		{ 0x0d, 0x0e, 0x16, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,		{ 0x0d, 0x14, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,		{ 0x0d, 0x15, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x15, 0x0d, 0x0e, TRUE, FALSE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,		{ 0x0d, 0x16, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,		{ 0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,		{ 0x0d, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, FALSE, FALSE },
+    { EPP_LAYOUT_RIGHTCOLUMN2ROWS,		{ 0x0d, 0x0e, 0x13, 0x13, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,		{ 0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2ROWSANDTITLE,			{ 0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_LEFTCOLUMN2ROWS,		{ 0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TOPROW2COLUMN,			{ 0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2ROWSANDTITLE,			{ 0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_4OBJECTS,				{ 0x0d, 0x13, 0x13, 0x13, 0x13, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, FALSE, FALSE },
+    { EPP_LAYOUT_ONLYTITLE,				{ 0x0d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, TRUE, FALSE, FALSE },
+    { EPP_LAYOUT_BLANCSLIDE,			{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, FALSE, FALSE, FALSE },
     { EPP_LAYOUT_TITLERIGHT2BODIESLEFT, { 0x11, 0x12, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x11, 0x12, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_TITLERIGHTBODYLEFT,    { 0x11, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x11, 0x12, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x12, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x16, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x12, TRUE, TRUE, FALSE }
+    { EPP_LAYOUT_TITLERIGHTBODYLEFT,	{ 0x11, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x11, 0x12, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,		{ 0x0d, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x12, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,		{ 0x0d, 0x16, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x12, TRUE, TRUE, FALSE }
 };
 
 //============================ PPTWriter ==================================
@@ -126,7 +126,7 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
             ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags ) :
     mbStatus                ( sal_False ),
-    mbUseNewAnimations      ( sal_True ),
+    mbUseNewAnimations		( sal_True ),
     mnLatestStatValue       ( 0 ),
     maFraction              ( 1, 576 ),
     maMapModeSrc            ( MAP_100TH_MM ),
@@ -539,13 +539,13 @@ sal_Bool PPTWriter::ImplCreateDocument()
 
     mpPptEscherEx->PtInsert( EPP_Persist_Document, mpStrm->Tell() );
 
-    mpPptEscherEx->OpenContainer( EPP_HeadersFooters, 3 );  //Master footer (default)
+    mpPptEscherEx->OpenContainer( EPP_HeadersFooters, 3 );	//Master footer	(default)
     mpPptEscherEx->AddAtom( 4, EPP_HeadersFootersAtom );
     *mpStrm << (sal_uInt32)0x25000d;
     if ( ImplGetPageByIndex( 0, MASTER ) )
         ImplCreateHeaderFooterStrings( *mpStrm, mXPagePropSet );
     mpPptEscherEx->CloseContainer();
-    mpPptEscherEx->OpenContainer( EPP_HeadersFooters, 4 );  //NotesMaster footer (default)
+    mpPptEscherEx->OpenContainer( EPP_HeadersFooters, 4 );	//NotesMaster footer (default)
     mpPptEscherEx->AddAtom( 4, EPP_HeadersFootersAtom );
     *mpStrm << (sal_uInt32)0x3d000d;
     if ( ImplGetPageByIndex( 0, NOTICE ) )
@@ -558,7 +558,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
     {
         mpPptEscherEx->AddAtom( 20, EPP_SlidePersistAtom );
         mpPptEscherEx->InsertPersistOffset( EPP_MAINSLIDE_PERSIST_KEY | i, mpStrm->Tell() );
-        *mpStrm << (sal_uInt32)0                                // psrReference - logical reference to the slide persist object ( EPP_MAINSLIDE_PERSIST_KEY )
+        *mpStrm << (sal_uInt32)0								// psrReference - logical reference to the slide persist object ( EPP_MAINSLIDE_PERSIST_KEY )
                 << (sal_uInt32)4                                // flags - only bit 3 used, if set then slide contains shapes other than placeholders
                 << (INT32)0                                     // numberTexts - number of placeholder texts stored with the persist object.  Allows to display outline view without loading the slide persist objects
                 << (INT32)i + 0x100                             // slideId - Unique slide identifier, used for OLE link monikers for example
@@ -946,7 +946,7 @@ sal_Bool PPTWriter::ImplCreateMaster( sal_uInt32 nPageNum )
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
     *mpStrm << (INT32)EPP_LAYOUT_TITLEANDBODYSLIDE  // slide layout -> title and body slide
             << (sal_uInt8)1 << (sal_uInt8)2 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0     // placeholderID
-            << (sal_uInt32)0        // master ID ( ist gleich null bei einer masterpage )
+            << (sal_uInt32)0		// master ID ( ist gleich null bei einer masterpage )
             << (sal_uInt32)0        // notes ID ( ist gleich null wenn keine notizen vorhanden )
             << (sal_uInt16)0        // Bit 1: Follow master objects, Bit 2: Follow master scheme, Bit 3: Follow master background
             << (sal_uInt16)0;       // padword
@@ -1073,14 +1073,14 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
     mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );
     EscherPropertyContainer aPropOpt;
-    aPropOpt.AddOpt( ESCHER_Prop_fillColor, 0xffffff );                             // stock valued fill color
+    aPropOpt.AddOpt( ESCHER_Prop_fillColor, 0xffffff );								// stock valued fill color
     aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
     aPropOpt.AddOpt( ESCHER_Prop_fillRectRight, 0x68bdde );
     aPropOpt.AddOpt( ESCHER_Prop_fillRectBottom, 0x8b9f8e );
     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x120012 );
     aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0 );
     aPropOpt.AddOpt( ESCHER_Prop_bWMode, ESCHER_wDontShow );
-    aPropOpt.AddOpt( ESCHER_Prop_fBackground, 0x10001 );                            // if true, this is the background shape
+    aPropOpt.AddOpt( ESCHER_Prop_fBackground, 0x10001 );							// if true, this is the background shape
     aPropOpt.Commit( *mpStrm );
     mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
 
@@ -1114,7 +1114,7 @@ static rtl::OUString getInitials( const rtl::OUString& rName )
         // take letter
         if( nLength )
         {
-            sInitials += rtl::OUString( *pStr );
+            sInitials += rtl::OUString( *pStr ); 
             nLength--; pStr++;
         }
 
@@ -1139,7 +1139,7 @@ void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStr
 
         while( xAnnotationEnumeration->hasMoreElements() )
         {
-            EscherExContainer aComment10( rBinaryTagData10Atom, EPP_Comment10 );
+            EscherExContainer aComment10( rBinaryTagData10Atom, EPP_Comment10 );	
             {
                 uno::Reference< office::XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement() );
 
@@ -1165,7 +1165,7 @@ void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStr
                 rBinaryTagData10Atom << nIndex++
                                      << aDateTime.Year
                                      << aDateTime.Month
-                                     << aDateTime.Day   // todo: day of week
+                                     << aDateTime.Day	// todo: day of week 
                                      << aDateTime.Day
                                      << aDateTime.Hours
                                      << aDateTime.Minutes
@@ -1258,8 +1258,8 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
 
     sal_uInt32  nSoundRef = 0;
     sal_Bool    bIsSound = sal_False;
-    sal_Bool    bStopSound = sal_False;
-    sal_Bool    bLoopSound = sal_False;
+    sal_Bool	bStopSound = sal_False;
+    sal_Bool	bLoopSound = sal_False;
 
     if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ) ) )
     {
@@ -1571,7 +1571,7 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
     }
     if ( aBinaryTagData10Atom.Tell() )
     {
-        EscherExContainer aProgTags     ( *mpStrm, EPP_ProgTags );
+        EscherExContainer aProgTags		( *mpStrm, EPP_ProgTags );
         EscherExContainer aProgBinaryTag( *mpStrm, EPP_ProgBinaryTag );
         {
             EscherExAtom aCString( *mpStrm, EPP_CString );
@@ -1595,7 +1595,7 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
         sal_uInt32 nmsofbtAnimGroupSize = amsofbtAnimGroup.Tell();
         if ( nmsofbtAnimGroupSize )
         {
-            EscherExContainer aProgTags     ( *mpStrm, EPP_ProgTags );
+            EscherExContainer aProgTags		( *mpStrm, EPP_ProgTags );
             EscherExContainer aProgBinaryTag( *mpStrm, EPP_ProgBinaryTag );
             {
                 EscherExAtom aCString( *mpStrm, EPP_CString );
@@ -1726,7 +1726,7 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
                 nFillColor = mpPptEscherEx->GetColor( *((sal_uInt32*)mAny.getValue()) );
                 nFillBackColor = nFillColor ^ 0xffffff;
             }
-        }   // PASSTHROUGH INTENDED
+        }	// PASSTHROUGH INTENDED
         case ::com::sun::star::drawing::FillStyle_NONE :
         default:
             aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x120012 );
@@ -1794,14 +1794,14 @@ void PPTWriter::ImplWriteOLE( sal_uInt32 nCnvrtFlags )
                         // SJ: #99809# create a dummy content stream, the dummy content is necessary for ppt, but not for
                         // doc files, so we can't share code.
                         SotStorageStreamRef xStm = xCleanStorage->OpenSotStream( aPersistStream, STREAM_STD_READWRITE );
-                        *xStm   << (sal_uInt32)0        // no ClipboardId
-                                << (sal_uInt32)4        // no target device
-                                << (sal_uInt32)1        // aspect ratio
-                                << (sal_Int32)-1        // L-Index
-                                << (sal_uInt32)0        // Advanced Flags
-                                << (sal_uInt32)0        // compression
-                                << (sal_uInt32)0        // Size
-                                << (sal_uInt32)0        //  "
+                        *xStm	<< (sal_uInt32)0		// no ClipboardId
+                                << (sal_uInt32)4		// no target device
+                                << (sal_uInt32)1		// aspect ratio
+                                << (sal_Int32)-1		// L-Index
+                                << (sal_uInt32)0		// Advanced Flags
+                                << (sal_uInt32)0		// compression
+                                << (sal_uInt32)0		// Size
+                                << (sal_uInt32)0		//  "
                                 << (sal_uInt32)0;
                         pStrm = xCleanStorage->CreateMemoryStream();
                     }
@@ -1827,7 +1827,7 @@ void PPTWriter::ImplWriteOLE( sal_uInt32 nCnvrtFlags )
             mpPptEscherEx->BeginAtom();
             pStrm->Seek( STREAM_SEEK_TO_END );
             sal_uInt32 npStrmSize = pStrm->Tell();
-            *mpStrm << npStrmSize;                  // uncompressed size
+            *mpStrm << npStrmSize;					// uncompressed size
 
 #ifdef DBG_EXTRACTOLEOBJECTS
             SvFileStream aOut( String::CreateFromAscii( "D:\\OUT.OLE" ), STREAM_TRUNC | STREAM_WRITE );

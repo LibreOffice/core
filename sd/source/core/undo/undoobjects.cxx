@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -252,10 +252,10 @@ void UndoObjectSetText::Redo()
 // Undo for SdrObject::SetUserCall()
 
 UndoObjectUserCall::UndoObjectUserCall(SdrObject& rObject)
-:   SdrUndoObj(rObject)
-,   mpOldUserCall((SdPage*)rObject.GetUserCall())
-,   mpNewUserCall(0)
-,   mxSdrObject( &rObject )
+:	SdrUndoObj(rObject)
+,	mpOldUserCall((SdPage*)rObject.GetUserCall())
+,	mpNewUserCall(0)
+,	mxSdrObject( &rObject )
 {
 }
 
@@ -286,11 +286,11 @@ void UndoObjectUserCall::Redo()
 // Undo for SdPage::InsertPresObj() and SdPage::RemovePresObj()
 
 UndoObjectPresentationKind::UndoObjectPresentationKind(SdrObject& rObject)
-:   SdrUndoObj(rObject)
-,   meOldKind(PRESOBJ_NONE)
-,   meNewKind(PRESOBJ_NONE)
-,   mxPage( rObject.GetPage() )
-,   mxSdrObject( &rObject )
+:	SdrUndoObj(rObject)
+,	meOldKind(PRESOBJ_NONE)
+,	meNewKind(PRESOBJ_NONE)
+,	mxPage( rObject.GetPage() )
+,	mxSdrObject( &rObject )
 {
     DBG_ASSERT( mxPage.is(), "sd::UndoObjectPresentationKind::UndoObjectPresentationKind(), does not work for shapes without a slide!" );
 

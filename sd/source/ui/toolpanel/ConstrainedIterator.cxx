@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace sd { namespace toolpanel {
 
 
 template <class Container>
-ConstrainedIterator<Container>::value_type&
+ConstrainedIterator<Container>::value_type& 
     ConstrainedIterator<Container>::operator* (void)
 {
     return *maIterator;
@@ -49,7 +49,7 @@ ConstrainedIterator<Container>::value_type&
 
 
 template <class Container>
-const ConstrainedIterator<Container>::value_type&
+const ConstrainedIterator<Container>::value_type& 
     ConstrainedIterator<Container>::operator* (void)
     const
 {
@@ -60,7 +60,7 @@ const ConstrainedIterator<Container>::value_type&
 
 
 template <class Container>
-ConstrainedIterator<Container>::value_type&
+ConstrainedIterator<Container>::value_type& 
     ConstrainedIterator<Container>::operator-> (void)
 {
     return *maIterator;
@@ -70,7 +70,7 @@ ConstrainedIterator<Container>::value_type&
 
 
 template <class Container>
-const ConstrainedIterator<Container>::value_type&
+const ConstrainedIterator<Container>::value_type& 
     ConstrainedIterator<Container>::operator-> (void)
     const
 {

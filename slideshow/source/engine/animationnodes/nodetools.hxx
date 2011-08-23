@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,22 +55,22 @@ namespace slideshow
         //=========================================================================
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
-        int& debugGetCurrentOffset();
+        int& debugGetCurrentOffset();        
         void debugNodesShowTree( const BaseNode* );
         void debugNodesShowTreeWithin( const BaseNode* );
-#endif
+#endif        
 
         /** Look up an AttributableShape from ShapeManager.
 
             This method retrieves an AttributableShape pointer, given
-            an XShape and a LayerManager.
+            an XShape and a LayerManager. 
 
             Throws a runtime exception if there's no such shape, or if
             it does not implement the AttributableShape interface.
          */
-        AttributableShapeSharedPtr lookupAttributableShape( const ShapeManagerSharedPtr&                rShapeManager,
-                                                            const ::com::sun::star::uno::Reference<
-                                                                ::com::sun::star::drawing::XShape >&    xShape          );
+        AttributableShapeSharedPtr lookupAttributableShape( const ShapeManagerSharedPtr& 				rShapeManager,
+                                                            const ::com::sun::star::uno::Reference< 
+                                                                ::com::sun::star::drawing::XShape >& 	xShape 			);
 
         /** Predicate whether a Begin, Duration or End timing is
             indefinite, i.e. either contains no value, or the
@@ -79,8 +79,8 @@ namespace slideshow
         bool isIndefiniteTiming( const ::com::sun::star::uno::Any& rAny );
 
         /// Extract the node type from the user data
-        bool getNodeType( sal_Int16&                                 o_rNodeType,
-                          const ::com::sun::star::uno::Sequence<
+        bool getNodeType( sal_Int16& 								 o_rNodeType,
+                          const ::com::sun::star::uno::Sequence< 
                               ::com::sun::star::beans::NamedValue >& rValues );
     }
 }

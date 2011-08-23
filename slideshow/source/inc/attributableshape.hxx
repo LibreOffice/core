@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ namespace slideshow
                 @return the topmost layer
              */
             virtual ShapeAttributeLayerSharedPtr getTopmostAttributeLayer() const = 0;
-
+            
 
             /** Change default shape visibility
 
@@ -129,8 +129,8 @@ namespace slideshow
                 When true, shape will be visible, when false,
                 invisible (modulo attribute layer overrides).
              */
-            virtual void setVisibility( bool bVisible ) = 0;
-
+            virtual void setVisibility( bool bVisible ) = 0;            
+            
             // Sub-item handling
             //------------------------------------------------------------------
 
@@ -141,7 +141,7 @@ namespace slideshow
                 to request specific tree nodes for this shape.
              */
             virtual const DocTreeNodeSupplier& getTreeNodeSupplier() const = 0;
-            virtual DocTreeNodeSupplier&       getTreeNodeSupplier() = 0;
+            virtual DocTreeNodeSupplier& 	   getTreeNodeSupplier() = 0;
 
             /** Query the subset this shape displays.
 
@@ -191,7 +191,7 @@ namespace slideshow
 
                 @attention To maintain view integrity, this method
                 should only be called from the LayerManager
-
+                
                 @param o_rSubset
                 The requested Shape
 
@@ -202,8 +202,8 @@ namespace slideshow
                 @return true, if the shape was newly created, and
                 false, if an already existing subset is returned.
             */
-            virtual bool createSubset( AttributableShapeSharedPtr&  o_rSubset,
-                                       const DocTreeNode&           rTreeNode ) = 0;
+            virtual bool createSubset( AttributableShapeSharedPtr& 	o_rSubset, 
+                                       const DocTreeNode& 			rTreeNode ) = 0;
 
             /** Revoke a previously generated shape subset.
 

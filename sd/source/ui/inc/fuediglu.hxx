@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,12 @@ namespace sd {
 |*
 \************************************************************************/
 
-class FuEditGluePoints
+class FuEditGluePoints 
     : public FuDraw
 {
 public:
     TYPEINFO();
-
+                        
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );
     virtual void DoExecute( SfxRequest& rReq );
 
@@ -55,15 +55,15 @@ public:
     virtual BOOL Command(const CommandEvent& rCEvt);
     virtual void ReceiveRequest(SfxRequest& rReq);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 
 protected:
     FuEditGluePoints (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
+        ViewShell* pViewSh, 
+        ::sd::Window* pWin, 
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument* pDoc, 
         SfxRequest& rReq);
     virtual ~FuEditGluePoints (void);
 };

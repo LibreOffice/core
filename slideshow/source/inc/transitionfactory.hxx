@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,11 +73,11 @@ namespace slideshow
                 transition effect
              */
             static AnimationActivitySharedPtr createShapeTransition(
-                const ActivitiesFactory::CommonParameters&              rParms,
-                const AnimatableShapeSharedPtr&                         rShape,
-                const ShapeManagerSharedPtr&                            rShapeManager,
+                const ActivitiesFactory::CommonParameters& 				rParms,
+                const AnimatableShapeSharedPtr& 						rShape,
+                const ShapeManagerSharedPtr& 							rShapeManager,
                 const ::basegfx::B2DVector&                             rSlideSize,
-                ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::Reference< 
                     ::com::sun::star::animations::XTransitionFilter > const&  xTransition );
 
 
@@ -115,29 +115,29 @@ namespace slideshow
                 ScreenUpdater&                                 rScreenUpdater,
                 EventMultiplexer&                              rEventMultiplexer,
                 const com::sun::star::uno::Reference<
-                      com::sun::star::presentation::XTransitionFactory>&
+                      com::sun::star::presentation::XTransitionFactory>& 
                                                                xOptionalFactory,
                 sal_Int16                                      nTransitionType,
                 sal_Int16                                      nTransitionSubType,
                 bool                                           bTransitionDirection,
                 const RGBColor&                                rTransitionFadeColor,
                 const SoundPlayerSharedPtr&                    rSoundPlayer );
-
+            
         private:
             static const TransitionInfo* getTransitionInfo(
                 sal_Int16 nTransitionType, sal_Int16 nTransitionSubType );
             static const TransitionInfo* getRandomTransitionInfo();
 
             static AnimationActivitySharedPtr createShapeTransition(
-                const ActivitiesFactory::CommonParameters&              rParms,
-                const AnimatableShapeSharedPtr&                         rShape,
-                const ShapeManagerSharedPtr&                            rShapeManager,
+                const ActivitiesFactory::CommonParameters& 				rParms,
+                const AnimatableShapeSharedPtr& 						rShape,
+                const ShapeManagerSharedPtr& 							rShapeManager,
                 const ::basegfx::B2DVector&                             rSlideSize,
-                ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::Reference< 
                     ::com::sun::star::animations::XTransitionFilter > const& xTransition,
-                sal_Int16                                               nTransitionType,
-                sal_Int16                                               nTransitionSubType );
-
+                sal_Int16               								nTransitionType,
+                sal_Int16               								nTransitionSubType );            
+            
             // static factory
             TransitionFactory();
             ~TransitionFactory();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class View;
 class ViewShell;
 class Window;
 
-class FuPresentationLayout
+class FuPresentationLayout 
     : public FuPoor
 {
 public:
@@ -51,10 +51,10 @@ public:
 
 private:
     FuPresentationLayout (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
+        ViewShell* pViewSh, 
+        ::sd::Window* pWin, 
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument* pDoc, 
         SfxRequest& rReq);
 };
 

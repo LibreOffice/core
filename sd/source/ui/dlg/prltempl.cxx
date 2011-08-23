@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,12 +74,12 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
                                 SfxStyleSheetBase& rStyleBase,
                                 PresentationObjects _ePO,
                                 SfxStyleSheetBasePool* pSSPool ) :
-        SfxTabDialog        ( pParent, DlgId ),
-        mpDocShell          ( pDocSh ),
-        ePO                 ( _ePO ),
-        aInputSet           ( *rStyleBase.GetItemSet().GetPool(), SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL ),
-        pOutSet             ( NULL ),
-        pOrgSet             ( &rStyleBase.GetItemSet() )
+        SfxTabDialog		( pParent, DlgId ),
+        mpDocShell			( pDocSh ),
+        ePO 				( _ePO ),
+        aInputSet			( *rStyleBase.GetItemSet().GetPool(), SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL ),
+        pOutSet				( NULL ),
+        pOrgSet				( &rStyleBase.GetItemSet() )
 {
     if( IS_OUTLINE(ePO))
     {
@@ -171,7 +171,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
             AddTabPage( RID_SVXPAGE_PICK_BULLET );
             AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
             AddTabPage( RID_SVXPAGE_PICK_BMP );
-            AddTabPage( RID_SVXPAGE_NUM_OPTIONS );
+            AddTabPage( RID_SVXPAGE_NUM_OPTIONS );	
             AddTabPage( RID_SVXPAGE_TABULATOR );
         }
         break;
@@ -256,7 +256,7 @@ SdPresLayoutTemplateDlg::~SdPresLayoutTemplateDlg()
 // -----------------------------------------------------------------------
 
 void SdPresLayoutTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
-{   SfxAllItemSet aSet(*(aInputSet.GetPool()));
+{	SfxAllItemSet aSet(*(aInputSet.GetPool()));
     switch( nId )
     {
         case RID_SVXPAGE_LINE:

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,16 +97,16 @@ public:
 
     virtual void        MouseButtonUp( const MouseEvent& rMEvt );
 
-    USHORT          InsertCategory( const XubString& rStr, USHORT nPos = LISTBOX_APPEND );
+    USHORT			InsertCategory( const XubString& rStr, USHORT nPos = LISTBOX_APPEND );
 
-    void            SetDoubleClickLink( const Link& rDoubleClickHdl ) { maDoubleClickHdl = rDoubleClickHdl; }
+    void			SetDoubleClickLink( const Link& rDoubleClickHdl ) { maDoubleClickHdl = rDoubleClickHdl; }
 
     DECL_LINK( implDoubleClickHdl, Control* );
 
 private:
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void	UserDraw( const UserDrawEvent& rUDEvt );
 
-    Link            maDoubleClickHdl;
+    Link			maDoubleClickHdl;
 };
 
 CategoryListBox::CategoryListBox( Window* pParent, const ResId& rResId )
@@ -212,12 +212,12 @@ private:
     void clearEffects();
 
 private:
-    CategoryListBox*    mpLBEffects;
-    FixedText*  mpFTSpeed;
-    ComboBox*   mpCBSpeed;
-    CheckBox*   mpCBXPReview;
+    CategoryListBox*	mpLBEffects;
+    FixedText*	mpFTSpeed;
+    ComboBox*	mpCBSpeed;
+    CheckBox*	mpCBXPReview;
 
-    CustomAnimationCreateDialog*        mpParent;
+    CustomAnimationCreateDialog*		mpParent;
 
     USHORT mnCurvePathPos;
     USHORT mnPolygonPathPos;
@@ -518,10 +518,10 @@ bool CustomAnimationCreateTabPage::select( const OUString& rsPresetId )
 // --------------------------------------------------------------------
 
 CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const ::rtl::OUString& rsPresetId, double fDuration  )
-:   TabDialog( pParent, SdResId( DLG_CUSTOMANIMATION_CREATE ) )
-,   mpPane( pPane )
-,   mrTargets( rTargets )
-,   mfDuration( fDuration )
+:	TabDialog( pParent, SdResId( DLG_CUSTOMANIMATION_CREATE ) )
+,	mpPane( pPane )
+,	mrTargets( rTargets )
+,	mfDuration( fDuration )
 {
     mpTabControl = new TabControl( this, SdResId( 1 ) );
     mpOKButton = new OKButton(this, SdResId( 1 ) ) ;
@@ -595,9 +595,9 @@ CustomAnimationCreateTabPage* CustomAnimationCreateDialog::getCurrentPage() cons
 {
     switch( mpTabControl->GetCurPageId() )
     {
-    case RID_TP_CUSTOMANIMATION_ENTRANCE:   return mpTabPages[ENTRANCE];
-    case RID_TP_CUSTOMANIMATION_EMPHASIS:   return mpTabPages[EMPHASIS];
-    case RID_TP_CUSTOMANIMATION_EXIT:       return mpTabPages[EXIT];
+    case RID_TP_CUSTOMANIMATION_ENTRANCE:	return mpTabPages[ENTRANCE];
+    case RID_TP_CUSTOMANIMATION_EMPHASIS:	return mpTabPages[EMPHASIS];
+    case RID_TP_CUSTOMANIMATION_EXIT:		return mpTabPages[EXIT];
     case RID_TP_CUSTOMANIMATION_MISCEFFECTS:return mpTabPages[MISCEFFECTS];
     //case RID_TP_CUSTOMANIMATION_MOTIONPATH:
     default:

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 
-// Makes parser a static resource,
+// Makes parser a static resource, 
 // we're synchronized externally.
 // But watch out, the parser might have
 // state not visible to this code!
@@ -71,7 +71,7 @@ namespace slideshow
     {
         namespace
         {
-            typedef const sal_Char*                   StringIteratorT;
+            typedef const sal_Char*					  StringIteratorT;
 
             struct ParserContext
             {
@@ -82,14 +82,14 @@ namespace slideshow
                 // arguments from. If all arguments to an operator are constant,
                 // the operator pushes a precalculated result on the stack, and
                 // a composite ExpressionNode otherwise.
-                OperandStack                maOperandStack;
+                OperandStack				maOperandStack;
 
                 // bounds of the shape this expression is associated with
-                ::basegfx::B2DRectangle     maShapeBounds;
+                ::basegfx::B2DRectangle		maShapeBounds;
 
-                // when true, enable usage of time-dependent variable '$'
+                // when true, enable usage of time-dependent variable '$' 
                 // in expressions
-                bool                        mbParseAnimationFunction;
+                bool						mbParseAnimationFunction;
             };
 
             typedef ::boost::shared_ptr< ParserContext > ParserContextSharedPtr;
@@ -98,8 +98,8 @@ namespace slideshow
             template< typename Generator > class ShapeBoundsFunctor
             {
             public:
-                ShapeBoundsFunctor( Generator                       aGenerator,
-                                    const ParserContextSharedPtr&   rContext ) :
+                ShapeBoundsFunctor( Generator 						aGenerator,
+                                    const ParserContextSharedPtr& 	rContext ) :
                     maGenerator( aGenerator ),
                     mpContext( rContext )
                 {
@@ -109,19 +109,19 @@ namespace slideshow
 
                 void operator()( StringIteratorT, StringIteratorT ) const
                 {
-                    mpContext->maOperandStack.push(
-                        ExpressionNodeFactory::createConstantValueExpression(
+                    mpContext->maOperandStack.push( 
+                        ExpressionNodeFactory::createConstantValueExpression( 
                             maGenerator( mpContext->maShapeBounds ) ) );
                 }
 
             private:
-                Generator               maGenerator;
-                ParserContextSharedPtr  mpContext;
+                Generator				maGenerator;
+                ParserContextSharedPtr	mpContext;
             };
 
-            template< typename Generator > ShapeBoundsFunctor< Generator >
-                makeShapeBoundsFunctor( const Generator&                rGenerator,
-                                        const ParserContextSharedPtr&   rContext )
+            template< typename Generator > ShapeBoundsFunctor< Generator > 
+                makeShapeBoundsFunctor( const Generator& 				rGenerator,
+                                        const ParserContextSharedPtr&	rContext )
             {
                 return ShapeBoundsFunctor<Generator>(rGenerator, rContext);
             }
@@ -131,8 +131,8 @@ namespace slideshow
             class ConstantFunctor
             {
             public:
-                ConstantFunctor( double                         rValue,
-                                 const ParserContextSharedPtr&  rContext ) :
+                ConstantFunctor( double 						rValue,
+                                 const ParserContextSharedPtr&	rContext ) :
                     mnValue( rValue ),
                     mpContext( rContext )
                 {
@@ -142,13 +142,13 @@ namespace slideshow
 
                 void operator()( StringIteratorT, StringIteratorT ) const
                 {
-                    mpContext->maOperandStack.push(
+                    mpContext->maOperandStack.push( 
                         ExpressionNodeFactory::createConstantValueExpression( mnValue ) );
                 }
 
             private:
-                const double            mnValue;
-                ParserContextSharedPtr  mpContext;
+                const double			mnValue;
+                ParserContextSharedPtr	mpContext;
             };
 
             /** Generate parse-dependent-but-then-constant value
@@ -166,12 +166,12 @@ namespace slideshow
                 void operator()( double n ) const
                 {
                     // push constant value expression to the stack
-                    mpContext->maOperandStack.push(
+                    mpContext->maOperandStack.push( 
                         ExpressionNodeFactory::createConstantValueExpression( n ) );
                 }
 
             private:
-                ParserContextSharedPtr  mpContext;
+                ParserContextSharedPtr	mpContext;
             };
 
             /** Generate special t value expression node
@@ -196,12 +196,12 @@ namespace slideshow
                     }
 
                     // push special t value expression to the stack
-                    mpContext->maOperandStack.push(
+                    mpContext->maOperandStack.push( 
                         ExpressionNodeFactory::createValueTExpression() );
                 }
 
             private:
-                ParserContextSharedPtr  mpContext;
+                ParserContextSharedPtr	mpContext;
             };
 
             template< typename Functor > class UnaryFunctionFunctor
@@ -213,8 +213,8 @@ namespace slideshow
                 class UnaryFunctionExpression : public ExpressionNode
                 {
                 public:
-                    UnaryFunctionExpression( const Functor&                 rFunctor,
-                                             const ExpressionNodeSharedPtr& rArg ) :
+                    UnaryFunctionExpression( const Functor&					rFunctor,
+                                             const ExpressionNodeSharedPtr&	rArg ) :
                         maFunctor( rFunctor ),
                         mpArg( rArg )
                     {
@@ -224,20 +224,20 @@ namespace slideshow
                     {
                         return maFunctor( (*mpArg)(t) );
                     }
-
+                    
                     virtual bool isConstant() const
                     {
                         return mpArg->isConstant();
                     }
 
                 private:
-                    Functor                 maFunctor;
-                    ExpressionNodeSharedPtr mpArg;
+                    Functor					maFunctor;
+                    ExpressionNodeSharedPtr	mpArg;
                 };
 
             public:
-                UnaryFunctionFunctor( const Functor&                rFunctor,
-                                      const ParserContextSharedPtr& rContext ) :
+                UnaryFunctionFunctor( const Functor& 				rFunctor,
+                                      const ParserContextSharedPtr&	rContext ) :
                     maFunctor( rFunctor ),
                     mpContext( rContext )
                 {
@@ -259,24 +259,24 @@ namespace slideshow
                     // check for constness
                     if( pArg->isConstant() )
                     {
-                        rNodeStack.push(
+                        rNodeStack.push( 
                             ExpressionNodeFactory::createConstantValueExpression(
                                 maFunctor( (*pArg)(0.0) ) ) );
                     }
                     else
                     {
                         // push complex node, that calcs the value on demand
-                        rNodeStack.push(
+                        rNodeStack.push( 
                             ExpressionNodeSharedPtr(
-                                new UnaryFunctionExpression(
+                                new UnaryFunctionExpression( 
                                     maFunctor,
                                     pArg ) ) );
                     }
                 }
 
             private:
-                Functor                 maFunctor;
-                ParserContextSharedPtr  mpContext;
+                Functor					maFunctor;
+                ParserContextSharedPtr	mpContext;
             };
 
             // TODO(Q2): Refactor makeUnaryFunctionFunctor,
@@ -284,19 +284,19 @@ namespace slideshow
             // ExpressionNodeFactory, to use a generic
             // makeFunctionFunctor template, which is overloaded for
             // unary, binary, ternary, etc. function pointers.
-            template< typename Functor > UnaryFunctionFunctor<Functor>
-                makeUnaryFunctionFunctor( const Functor&                rFunctor,
-                                          const ParserContextSharedPtr& rContext )
+            template< typename Functor > UnaryFunctionFunctor<Functor> 
+                makeUnaryFunctionFunctor( const Functor& 				rFunctor,
+                                          const ParserContextSharedPtr&	rContext )
             {
                 return UnaryFunctionFunctor<Functor>( rFunctor, rContext );
             }
 
-            // MSVC has problems instantiating above template function with plain function
+            // MSVC has problems instantiating above template function with plain function 
             // pointers (doesn't like the const reference there). Thus, provide it with
             // a dedicated overload here.
-            UnaryFunctionFunctor< double (*)(double) >
+            UnaryFunctionFunctor< double (*)(double) > 
                 makeUnaryFunctionFunctor( double (*pFunc)(double),
-                                          const ParserContextSharedPtr& rContext )
+                                          const ParserContextSharedPtr&	rContext )
             {
                 return UnaryFunctionFunctor< double (*)(double) >( pFunc, rContext );
             }
@@ -306,13 +306,13 @@ namespace slideshow
                 @tpl Generator
                 Generator functor, to generate an ExpressionNode of
                 appropriate type
-
+                
              */
             template< class Generator > class BinaryFunctionFunctor
             {
             public:
-                BinaryFunctionFunctor( const Generator&                 rGenerator,
-                                       const ParserContextSharedPtr&    rContext ) :
+                BinaryFunctionFunctor( const Generator& 				rGenerator,
+                                       const ParserContextSharedPtr&	rContext ) :
                     maGenerator( rGenerator ),
                     mpContext( rContext )
                 {
@@ -342,7 +342,7 @@ namespace slideshow
                     {
                         // call the operator() at pNode, store result
                         // in constant value ExpressionNode.
-                        rNodeStack.push(
+                        rNodeStack.push( 
                             ExpressionNodeFactory::createConstantValueExpression(
                                 (*pNode)( 0.0 ) ) );
                     }
@@ -354,13 +354,13 @@ namespace slideshow
                 }
 
             private:
-                Generator               maGenerator;
-                ParserContextSharedPtr  mpContext;
+                Generator				maGenerator;
+                ParserContextSharedPtr	mpContext;
             };
 
-            template< typename Generator > BinaryFunctionFunctor<Generator>
-                makeBinaryFunctionFunctor( const Generator&                 rGenerator,
-                                           const ParserContextSharedPtr&    rContext )
+            template< typename Generator > BinaryFunctionFunctor<Generator> 
+                makeBinaryFunctionFunctor( const Generator&					rGenerator,
+                                           const ParserContextSharedPtr&	rContext )
             {
                 return BinaryFunctionFunctor<Generator>( rGenerator, rContext );
             }
@@ -368,13 +368,13 @@ namespace slideshow
 
             // Workaround for MSVC compiler anomaly (stack trashing)
             //
-            // The default ureal_parser_policies implementation of parse_exp
-            // triggers a really weird error in MSVC7 (Version 13.00.9466), in
-            // that the real_parser_impl::parse_main() call of parse_exp()
+            // The default ureal_parser_policies implementation of parse_exp 
+            // triggers a really weird error in MSVC7 (Version 13.00.9466), in 
+            // that the real_parser_impl::parse_main() call of parse_exp() 
             // overwrites the frame pointer _on the stack_ (EBP of the calling
-            // function gets overwritten while lying on the stack).
+            // function gets overwritten while lying on the stack). 
             //
-            // For the time being, our parser thus can only read the 1.0E10
+            // For the time being, our parser thus can only read the 1.0E10 
             // notation, not the 1.0e10 one.
             //
             // TODO(F1): Also handle the 1.0e10 case here.
@@ -383,9 +383,9 @@ namespace slideshow
                 template< typename ScannerT >
                     static typename ::boost::spirit::parser_result< ::boost::spirit::chlit<>, ScannerT >::type
                 parse_exp(ScannerT& scan)
-                {
+                { 
                     // as_lower_d somehow breaks MSVC7
-                    return ::boost::spirit::ch_p('E').parse(scan);
+                    return ::boost::spirit::ch_p('E').parse(scan); 
                 }
             };
 
@@ -393,27 +393,27 @@ namespace slideshow
                less literally written down below, only slightly
                obfuscated by the parser actions):
 
-               identifier = '$'|'pi'|'e'|'X'|'Y'|'Width'|'Height'
-
+               identifier = '$'|'pi'|'e'|'X'|'Y'|'Width'|'Height'                                                   
+                                                                                                                    
                function = 'abs'|'sqrt'|'sin'|'cos'|'tan'|'atan'|'acos'|'asin'|'exp'|'log'
 
-               basic_expression =
-                                number |
-                                identifier |
-                                function '(' additive_expression ')' |
-                                '(' additive_expression ')'
-
-               unary_expression =
+               basic_expression =                                                                                   
+                                number |                                                                            
+                                identifier |                                                                        
+                                function '(' additive_expression ')' |                                              
+                                '(' additive_expression ')'                                                         
+                                                                                                                    
+               unary_expression = 
                                    '-' basic_expression |
                                 basic_expression
-
-               multiplicative_expression =
-                                   unary_expression ( ( '*' unary_expression )* |
+                                                                                                                    
+               multiplicative_expression =                                                                          
+                                   unary_expression ( ( '*' unary_expression )* |                           
                                                    ( '/' unary_expression )* )
-
-               additive_expression =
-                                   multiplicative_expression ( ( '+' multiplicative_expression )* |
-                                                               ( '-' multiplicative_expression )* )
+                                                                                                                    
+               additive_expression =                                                                                
+                                   multiplicative_expression ( ( '+' multiplicative_expression )* |                              
+                                                               ( '-' multiplicative_expression )* ) 
 
              */
             class ExpressionGrammar : public ::boost::spirit::grammar< ExpressionGrammar >
@@ -439,54 +439,54 @@ namespace slideshow
                         using ::boost::spirit::real_parser;
 
                         identifier =
-                                    str_p( "$"      )[ ValueTFunctor(                                                              self.getContext()) ]
-                              |     str_p( "pi"     )[ ConstantFunctor(M_PI,                                                       self.getContext()) ]
-                              |     str_p( "e"      )[ ConstantFunctor(M_E,                                                        self.getContext()) ]
-                              |     str_p( "x"      )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getCenterX),self.getContext()) ]
-                              |     str_p( "y"      )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getCenterY),self.getContext()) ]
-                              |     str_p( "width"  )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getWidth),  self.getContext()) ]
-                              |     str_p( "height" )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getHeight), self.getContext()) ]
+                                    str_p( "$" 	 	)[ ValueTFunctor(															   self.getContext()) ]
+                              |		str_p( "pi"     )[ ConstantFunctor(M_PI, 					  	  	  						   self.getContext()) ]
+                              |		str_p( "e"      )[ ConstantFunctor(M_E, 					  	  	  						   self.getContext()) ]
+                              |		str_p( "x"      )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getCenterX),self.getContext()) ]
+                              |		str_p( "y"      )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getCenterY),self.getContext()) ]
+                              |   	str_p( "width"  )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getWidth),  self.getContext()) ]
+                              |		str_p( "height" )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getHeight), self.getContext()) ]
                               ;
-
-                        unaryFunction =
+                        
+                        unaryFunction = 
                                 (str_p( "abs"  ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&fabs, self.getContext()) ]
-                            |   (str_p( "sqrt" ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&sqrt, self.getContext()) ]
-                            |   (str_p( "sin"  ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&sin,  self.getContext()) ]
-                            |   (str_p( "cos"  ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&cos,  self.getContext()) ]
-                            |   (str_p( "tan"  ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&tan,  self.getContext()) ]
-                            |   (str_p( "atan" ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&atan, self.getContext()) ]
-                            |   (str_p( "acos" ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&acos, self.getContext()) ]
-                            |   (str_p( "asin" ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&asin, self.getContext()) ]
-                            |   (str_p( "exp"  ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&exp,  self.getContext()) ]
-                            |   (str_p( "log"  ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&log,  self.getContext()) ]
+                            |	(str_p( "sqrt" ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&sqrt, self.getContext()) ]
+                            |	(str_p( "sin"  ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&sin,  self.getContext()) ]
+                            |	(str_p( "cos"  ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&cos,  self.getContext()) ]
+                            |	(str_p( "tan"  ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&tan,  self.getContext()) ]
+                            |	(str_p( "atan" ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&atan, self.getContext()) ]
+                            |	(str_p( "acos" ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&acos, self.getContext()) ]
+                            |	(str_p( "asin" ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&asin, self.getContext()) ]
+                            |	(str_p( "exp"  ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&exp,  self.getContext()) ]
+                            |	(str_p( "log"  ) >> '(' >> additiveExpression >> ')' )[ makeUnaryFunctionFunctor(&log,  self.getContext()) ]
                             ;
 
-                        binaryFunction =
+                        binaryFunction = 
                                 (str_p( "min"  ) >> '(' >> additiveExpression >> ',' >> additiveExpression >> ')' )[ makeBinaryFunctionFunctor(&ExpressionNodeFactory::createMinExpression, self.getContext()) ]
-                            |   (str_p( "max"  ) >> '(' >> additiveExpression >> ',' >> additiveExpression >> ')' )[ makeBinaryFunctionFunctor(&ExpressionNodeFactory::createMaxExpression, self.getContext()) ]
+                            |	(str_p( "max"  ) >> '(' >> additiveExpression >> ',' >> additiveExpression >> ')' )[ makeBinaryFunctionFunctor(&ExpressionNodeFactory::createMaxExpression, self.getContext()) ]
                             ;
 
-                        basicExpression =
+                        basicExpression = 
                                 real_parser<double, custom_real_parser_policies<double> >()[ DoubleConstantFunctor(self.getContext()) ]
-                            |   identifier
-                            |   unaryFunction
-                            |   binaryFunction
-                            |   '(' >> additiveExpression >> ')'
+                            |	identifier
+                            |	unaryFunction
+                            |	binaryFunction
+                            |	'(' >> additiveExpression >> ')'
                             ;
-
-                        unaryExpression =
+                            
+                        unaryExpression = 
                                 ('-' >> basicExpression)[ makeUnaryFunctionFunctor(::std::negate<double>(), self.getContext()) ]
-                            |   basicExpression
+                            |	basicExpression
                             ;
 
-                        multiplicativeExpression =
+                        multiplicativeExpression = 
                                 unaryExpression
                             >> *( ('*' >> unaryExpression)[ makeBinaryFunctionFunctor(&ExpressionNodeFactory::createMultipliesExpression, self.getContext()) ]
                                 | ('/' >> unaryExpression)[ makeBinaryFunctionFunctor(&ExpressionNodeFactory::createDividesExpression,    self.getContext()) ]
                                 )
                             ;
 
-                        additiveExpression =
+                        additiveExpression = 
                                 multiplicativeExpression
                             >> *( ('+' >> multiplicativeExpression)[ makeBinaryFunctionFunctor(&ExpressionNodeFactory::createPlusExpression,  self.getContext()) ]
                                 | ('-' >> multiplicativeExpression)[ makeBinaryFunctionFunctor(&ExpressionNodeFactory::createMinusExpression, self.getContext()) ]
@@ -506,18 +506,18 @@ namespace slideshow
                     {
                         return additiveExpression;
                     }
-
+                    
                 private:
-                    // the constituents of the Spirit arithmetic expression grammar.
+                    // the constituents of the Spirit arithmetic expression grammar. 
                     // For the sake of readability, without 'ma' prefix.
-                    ::boost::spirit::rule< ScannerT >   additiveExpression;
-                    ::boost::spirit::rule< ScannerT >   multiplicativeExpression;
-                    ::boost::spirit::rule< ScannerT >   unaryExpression;
-                    ::boost::spirit::rule< ScannerT >   basicExpression;
-                    ::boost::spirit::rule< ScannerT >   unaryFunction;
-                    ::boost::spirit::rule< ScannerT >   binaryFunction;
-                    ::boost::spirit::rule< ScannerT >   identifier;
-                };
+                    ::boost::spirit::rule< ScannerT >	additiveExpression;
+                    ::boost::spirit::rule< ScannerT >	multiplicativeExpression;
+                    ::boost::spirit::rule< ScannerT >	unaryExpression;
+                    ::boost::spirit::rule< ScannerT >	basicExpression;
+                    ::boost::spirit::rule< ScannerT >	unaryFunction;
+                    ::boost::spirit::rule< ScannerT >	binaryFunction;
+                    ::boost::spirit::rule< ScannerT >	identifier;
+                };                
 
                 const ParserContextSharedPtr& getContext() const
                 {
@@ -525,15 +525,15 @@ namespace slideshow
                 }
 
             private:
-                ParserContextSharedPtr  mpParserContext; // might get modified during parsing
+                ParserContextSharedPtr	mpParserContext; // might get modified during parsing
             };
-
+            
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
             const ParserContextSharedPtr& getParserContext()
             {
                 static ParserContextSharedPtr lcl_parserContext( new ParserContext() );
 
-                // clear node stack (since we reuse the static object, that's
+                // clear node stack (since we reuse the static object, that's 
                 // the whole point here)
                 while( !lcl_parserContext->maOperandStack.empty() )
                     lcl_parserContext->maOperandStack.pop();
@@ -543,13 +543,13 @@ namespace slideshow
 #endif
         }
 
-        ExpressionNodeSharedPtr SmilFunctionParser::parseSmilValue( const ::rtl::OUString&          rSmilValue,
-                                                                    const ::basegfx::B2DRectangle&  rRelativeShapeBounds )
+        ExpressionNodeSharedPtr SmilFunctionParser::parseSmilValue( const ::rtl::OUString& 			rSmilValue,
+                                                                    const ::basegfx::B2DRectangle&	rRelativeShapeBounds )
         {
-            // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
-            // gives better conversion robustness here (we might want to map space
+            // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_* 
+            // gives better conversion robustness here (we might want to map space 
             // etc. to ASCII space here)
-            const ::rtl::OString& rAsciiSmilValue(
+            const ::rtl::OString& rAsciiSmilValue( 
                 rtl::OUStringToOString( rSmilValue, RTL_TEXTENCODING_ASCII_US ) );
 
             StringIteratorT aStart( rAsciiSmilValue.getStr() );
@@ -570,7 +570,7 @@ namespace slideshow
 
 
             ExpressionGrammar aExpressionGrammer( pContext );
-            const ::boost::spirit::parse_info<StringIteratorT> aParseInfo(
+            const ::boost::spirit::parse_info<StringIteratorT> aParseInfo( 
                   ::boost::spirit::parse( aStart,
                                           aEnd,
                                           aExpressionGrammer,
@@ -581,7 +581,7 @@ namespace slideshow
             if( !aParseInfo.full )
                 throw ParseError( "SmilFunctionParser::parseSmilValue(): string not fully parseable" );
 
-            // parser's state stack now must contain exactly _one_ ExpressionNode,
+            // parser's state stack now must contain exactly _one_ ExpressionNode, 
             // which represents our formula.
             if( pContext->maOperandStack.size() != 1 )
                 throw ParseError( "SmilFunctionParser::parseSmilValue(): incomplete or empty expression" );
@@ -589,13 +589,13 @@ namespace slideshow
             return pContext->maOperandStack.top();
         }
 
-        ExpressionNodeSharedPtr SmilFunctionParser::parseSmilFunction( const ::rtl::OUString&           rSmilFunction,
-                                                                       const ::basegfx::B2DRectangle&   rRelativeShapeBounds )
+        ExpressionNodeSharedPtr SmilFunctionParser::parseSmilFunction( const ::rtl::OUString& 			rSmilFunction,
+                                                                       const ::basegfx::B2DRectangle&	rRelativeShapeBounds )
         {
-            // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
-            // gives better conversion robustness here (we might want to map space
+            // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_* 
+            // gives better conversion robustness here (we might want to map space 
             // etc. to ASCII space here)
-            const ::rtl::OString& rAsciiSmilFunction(
+            const ::rtl::OString& rAsciiSmilFunction( 
                 rtl::OUStringToOString( rSmilFunction, RTL_TEXTENCODING_ASCII_US ) );
 
             StringIteratorT aStart( rAsciiSmilFunction.getStr() );
@@ -616,7 +616,7 @@ namespace slideshow
 
 
             ExpressionGrammar aExpressionGrammer( pContext );
-            const ::boost::spirit::parse_info<StringIteratorT> aParseInfo(
+            const ::boost::spirit::parse_info<StringIteratorT> aParseInfo( 
                   ::boost::spirit::parse( aStart,
                                           aEnd,
                                           aExpressionGrammer >> ::boost::spirit::end_p,
@@ -627,7 +627,7 @@ namespace slideshow
             if( !aParseInfo.full )
                 throw ParseError( "SmilFunctionParser::parseSmilFunction(): string not fully parseable" );
 
-            // parser's state stack now must contain exactly _one_ ExpressionNode,
+            // parser's state stack now must contain exactly _one_ ExpressionNode, 
             // which represents our formula.
             if( pContext->maOperandStack.size() != 1 )
                 throw ParseError( "SmilFunctionParser::parseSmilFunction(): incomplete or empty expression" );

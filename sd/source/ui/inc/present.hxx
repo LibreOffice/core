@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,50 +56,50 @@ class SdStartPresentationDlg : public ModalDialog
 {
 private:
 
-    FixedLine           aGrpRange;
-    RadioButton         aRbtAll;
-    RadioButton         aRbtAtDia;
-    RadioButton         aRbtCustomshow;
-    ListBox             aLbDias;
-    ListBox             aLbCustomshow;
+    FixedLine			aGrpRange;
+    RadioButton			aRbtAll;
+    RadioButton			aRbtAtDia;
+    RadioButton			aRbtCustomshow;
+    ListBox				aLbDias;
+    ListBox				aLbCustomshow;
 
-    FixedLine           aGrpKind;
-    RadioButton         aRbtStandard;
-    RadioButton         aRbtWindow;
-    RadioButton         aRbtAuto;
-    TimeField           aTmfPause;
-    CheckBox            aCbxAutoLogo;
+    FixedLine			aGrpKind;
+    RadioButton			aRbtStandard;
+    RadioButton			aRbtWindow;
+    RadioButton			aRbtAuto;
+    TimeField			aTmfPause;
+    CheckBox			aCbxAutoLogo;
 
-    FixedLine           aGrpOptions;
-    CheckBox            aCbxManuel;
-    CheckBox            aCbxMousepointer;
-    CheckBox            aCbxPen;
-    CheckBox            aCbxNavigator;
+    FixedLine			aGrpOptions;
+    CheckBox			aCbxManuel;
+    CheckBox			aCbxMousepointer;
+    CheckBox			aCbxPen;
+    CheckBox			aCbxNavigator;
     CheckBox            aCbxAnimationAllowed;
     CheckBox            aCbxChangePage;
-    CheckBox            aCbxAlwaysOnTop;
+    CheckBox			aCbxAlwaysOnTop;
 
-    FixedLine           maGrpMonitor;
-    FixedText           maFtMonitor;
-    ListBox             maLBMonitor;
+    FixedLine			maGrpMonitor;
+    FixedText			maFtMonitor;
+    ListBox				maLBMonitor;
 
-    OKButton            aBtnOK;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
+    OKButton			aBtnOK;
+    CancelButton		aBtnCancel;
+    HelpButton			aBtnHelp;
 
-    List*               pCustomShowList;
-    const SfxItemSet&   rOutAttrs;
-    sal_Int32           mnMonitors;
+    List*				pCustomShowList;
+    const SfxItemSet&	rOutAttrs;
+    sal_Int32			mnMonitors;
 
-    String              msPrimaryMonitor;
-    String              msMonitor;
-    String              msAllMonitors;
+    String				msPrimaryMonitor;
+    String				msMonitor;
+    String				msAllMonitors;
 
                         DECL_LINK( ChangeRangeHdl, void * );
                         DECL_LINK( ClickWindowPresentationHdl, void * );
                         DECL_LINK( ChangePauseHdl, void * );
 
-    void                InitMonitorSettings();
+    void				InitMonitorSettings();
 
 public:
                         SdStartPresentationDlg( Window* pWindow,
@@ -107,7 +107,7 @@ public:
                                 List& rPageNames,
                                 List* pCSList );
 
-    void                GetAttr( SfxItemSet& rOutAttrs );
+    void				GetAttr( SfxItemSet& rOutAttrs );
 };
 
 #endif // _SD_PRESENT_HXX_

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ namespace slideshow
 
                 @param rMtf
                 Metafile to retrieve subset info from (must have been
-                generated with verbose text comments switched on).
+                generated with verbose text comments switched on).                
              */
             DrawShapeSubsetting();
 
@@ -66,7 +66,7 @@ namespace slideshow
 
                 @param rMtf
                 Metafile to retrieve subset info from (must have been
-                generated with verbose text comments switched on).
+                generated with verbose text comments switched on).                
              */
             explicit DrawShapeSubsetting( const ::boost::shared_ptr< GDIMetaFile >& rMtf );
 
@@ -78,10 +78,10 @@ namespace slideshow
 
                 @param rMtf
                 Metafile to retrieve subset info from (must have been
-                generated with verbose text comments switched on).
+                generated with verbose text comments switched on).                
              */
-            DrawShapeSubsetting( const DocTreeNode&                         rShapeSubset,
-                                 const ::boost::shared_ptr< GDIMetaFile >&  rMtf );
+            DrawShapeSubsetting( const DocTreeNode&			 				rShapeSubset,
+                                 const ::boost::shared_ptr< GDIMetaFile >&	rMtf );
 
             /** Reset metafile.
 
@@ -92,7 +92,7 @@ namespace slideshow
 
                 @param rMtf
                 Metafile to retrieve subset info from (must have been
-                generated with verbose text comments switched on).
+                generated with verbose text comments switched on).                
              */
             void reset( const ::boost::shared_ptr< GDIMetaFile >&   rMtf );
 
@@ -109,7 +109,7 @@ namespace slideshow
 
                 @param rMtf
                 Metafile to retrieve subset info from (must have been
-                generated with verbose text comments switched on).
+                generated with verbose text comments switched on).                
              */
             void reset( const DocTreeNode&                          rShapeSubset,
                         const ::boost::shared_ptr< GDIMetaFile >&   rMtf );
@@ -119,16 +119,16 @@ namespace slideshow
             // ========================================================
 
             /// Return subset node for this shape
-            DocTreeNode                 getSubsetNode       () const;
+            DocTreeNode 				getSubsetNode		() const;
 
             /// Return true, if any child subset shapes exist
-            bool                        hasSubsetShapes     () const;
+            bool		 				hasSubsetShapes		() const;
 
             /// Get subset shape for given node, if any
-            AttributableShapeSharedPtr  getSubsetShape      ( const DocTreeNode& rTreeNode ) const;
+            AttributableShapeSharedPtr 	getSubsetShape		( const DocTreeNode& rTreeNode ) const;
 
             /// Add child subset shape (or increase use count, if already existent)
-            void                        addSubsetShape      ( const AttributableShapeSharedPtr& rShape );
+            void 						addSubsetShape		( const AttributableShapeSharedPtr& rShape );
 
             /** Revoke subset shape
 
@@ -146,33 +146,33 @@ namespace slideshow
                 decremented, or there was no such subset found, in the
                 first place).
              */
-            bool                        revokeSubsetShape   ( const AttributableShapeSharedPtr& rShape );
+            bool 						revokeSubsetShape	( const AttributableShapeSharedPtr& rShape );
 
 
             // Doc tree methods
             // ========================================================
 
             /// Return overall number of nodes for given type
-            sal_Int32   getNumberOfTreeNodes        ( DocTreeNode::NodeType eNodeType ) const;
+            sal_Int32 	getNumberOfTreeNodes		( DocTreeNode::NodeType eNodeType ) const;
 
             /// Return tree node of given index and given type
-            DocTreeNode getTreeNode                 ( sal_Int32             nNodeIndex,
-                                                      DocTreeNode::NodeType eNodeType ) const;
+            DocTreeNode getTreeNode					( sal_Int32				nNodeIndex,
+                                                      DocTreeNode::NodeType	eNodeType ) const;
 
             /// Return number of nodes of given type, below parent node
-            sal_Int32   getNumberOfSubsetTreeNodes  ( const DocTreeNode&    rParentNode,
+            sal_Int32 	getNumberOfSubsetTreeNodes	( const DocTreeNode& 	rParentNode,
                                                       DocTreeNode::NodeType eNodeType ) const;
 
             /// Return tree node of given index and given type, relative to parent node
-            DocTreeNode getSubsetTreeNode           ( const DocTreeNode&    rParentNode,
-                                                      sal_Int32             nNodeIndex,
-                                                      DocTreeNode::NodeType eNodeType ) const;
-
+            DocTreeNode getSubsetTreeNode			( const DocTreeNode& 	rParentNode,
+                                                      sal_Int32				nNodeIndex,
+                                                      DocTreeNode::NodeType	eNodeType ) const;
+            
             // Helper
             // ========================================================
 
             /** Return a vector of currently active subsets.
-
+                
                 Needed when rendering a shape, this method provides a
                 vector of subsets currently visible (the range as
                 returned by getEffectiveSubset(), minus the parts that
@@ -213,12 +213,12 @@ namespace slideshow
              */
             struct SubsetEntry
             {
-                AttributableShapeSharedPtr  mpShape;
-                sal_Int32                   mnStartActionIndex;
-                sal_Int32                   mnEndActionIndex;
+                AttributableShapeSharedPtr	mpShape;
+                sal_Int32					mnStartActionIndex;
+                sal_Int32					mnEndActionIndex;
 
                 /// Number of times this subset was queried, and not yet revoked
-                int                         mnSubsetQueriedCount;
+                int							mnSubsetQueriedCount;
 
                 sal_Int32 getHashValue() const
                 {
@@ -234,10 +234,10 @@ namespace slideshow
                 {
                     return getHashValue() < rOther.getHashValue();
                 }
-
+                
             };
 
-            typedef ::std::set< SubsetEntry >       ShapeSet;
+            typedef ::std::set< SubsetEntry > 		ShapeSet;
 
             void ensureInitializedNodeTree() const;
             void updateSubsetBounds( const SubsetEntry& rSubsetEntry );
@@ -245,30 +245,30 @@ namespace slideshow
             void initCurrentSubsets();
             void reset();
 
-            sal_Int32   implGetNumberOfTreeNodes( const IndexClassificatorVector::const_iterator&   rBegin,
-                                                  const IndexClassificatorVector::const_iterator&   rEnd,
-                                                  DocTreeNode::NodeType                             eNodeType ) const;
-            DocTreeNode implGetTreeNode( const IndexClassificatorVector::const_iterator&    rBegin,
-                                         const IndexClassificatorVector::const_iterator&    rEnd,
-                                         sal_Int32                                          nNodeIndex,
-                                         DocTreeNode::NodeType                              eNodeType ) const;
+            sal_Int32 	implGetNumberOfTreeNodes( const IndexClassificatorVector::const_iterator&	rBegin,
+                                                  const IndexClassificatorVector::const_iterator&	rEnd,
+                                                  DocTreeNode::NodeType 							eNodeType ) const;
+            DocTreeNode implGetTreeNode( const IndexClassificatorVector::const_iterator&	rBegin,
+                                         const IndexClassificatorVector::const_iterator&	rEnd,
+                                         sal_Int32			 								nNodeIndex,
+                                         DocTreeNode::NodeType								eNodeType ) const;
 
-            mutable IndexClassificatorVector    maActionClassVector;
+            mutable IndexClassificatorVector	maActionClassVector;
 
             /// Metafile to retrieve subset info from
-            ::boost::shared_ptr< GDIMetaFile >  mpMtf;
+            ::boost::shared_ptr< GDIMetaFile >	mpMtf;	
 
             /// Subset of the metafile represented by this object
             DocTreeNode                         maSubset;
 
-            /// the list of subset shapes spawned from this one.
-            ShapeSet                            maSubsetShapes;
+            /// the list of subset shapes spawned from this one. 
+            ShapeSet							maSubsetShapes;
 
             /// caches minimal subset index from maSubsetShapes
-            sal_Int32                           mnMinSubsetActionIndex;
+            sal_Int32							mnMinSubsetActionIndex;
 
             /// caches maximal subset index from maSubsetShapes
-            sal_Int32                           mnMaxSubsetActionIndex;
+            sal_Int32							mnMaxSubsetActionIndex;
 
             /** Current number of subsets to render (calculated from
                 maSubset and mnMin/MaxSubsetActionIndex).
@@ -276,10 +276,10 @@ namespace slideshow
                 Note that this is generally _not_ equivalent to
                 maSubset, as it excludes all active subset children!
              */
-            mutable VectorOfDocTreeNodes        maCurrentSubsets;
-
+            mutable VectorOfDocTreeNodes		maCurrentSubsets;
+            
             /// Whether the shape's doc tree has been initialized successfully, or not
-            mutable bool                        mbNodeTreeInitialized;
+            mutable bool						mbNodeTreeInitialized;
         };
 
     }

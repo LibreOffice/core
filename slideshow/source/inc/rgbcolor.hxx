@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,11 +35,11 @@
 
 namespace slideshow
 {
-    namespace internal
+    namespace internal    
     {
         class HSLColor;
 
-        /** RGB color space class.
+        /** RGB color space class.        
          */
         class RGBColor
         {
@@ -50,19 +50,19 @@ namespace slideshow
             explicit RGBColor( const HSLColor& rColor );
 
             /** Hue of the color.
-
+                
                 @return hue, is in the range [0,360]
              */
             double getHue() const;
 
             /** Saturation of the color.
-
+                
                 @return saturation, is in the range [0,1]
              */
             double getSaturation() const;
 
             /** Luminance of the color.
-
+                
                 @return luminance, is in the range [0,1]
              */
             double getLuminance() const;
@@ -86,9 +86,9 @@ namespace slideshow
             /** Create an integer sRGBA color.
              */
             ::cppcanvas::Color::IntSRGBA getIntegerColor() const;
-
+ 
             RGBColor(const RGBColor& rLHS);
-            RGBColor& operator=( const RGBColor& rLHS);
+            RGBColor& operator=( const RGBColor& rLHS); 
 
             struct RGBTriple
             {
@@ -102,19 +102,19 @@ namespace slideshow
 
         private:
             // default copy/assignment are okay
-            // RGBColor(const RGBColor&);
+            // RGBColor(const RGBColor&);            
             // RGBColor& operator=( const RGBColor& );
 
-            RGBTriple   maRGBTriple;
-        };
+            RGBTriple	maRGBTriple;
+        };        
 
         RGBColor operator+( const RGBColor& rLHS, const RGBColor& rRHS );
         RGBColor operator*( const RGBColor& rLHS, const RGBColor& rRHS );
         RGBColor operator*( double nFactor, const RGBColor& rRHS );
-
+        
 
         /** RGB color linear interpolator.
-
+            
             @param t
             As usual, t must be in the [0,1] range
         */

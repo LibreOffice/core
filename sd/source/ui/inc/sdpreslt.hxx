@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ class ViewShell;
 
 
 
-class SdPresLayoutDlg
+class SdPresLayoutDlg 
     : public ModalDialog
 {
 public:
     SdPresLayoutDlg(
-        ::sd::DrawDocShell* pDocShell,
-        ::sd::ViewShell* pViewShell,
+        ::sd::DrawDocShell* pDocShell, 
+        ::sd::ViewShell* pViewShell, 
         ::Window* pWindow,
         const SfxItemSet& rInAttrs);
 
@@ -63,26 +63,26 @@ public:
 
 private:
     ::sd::DrawDocShell* mpDocSh;
-    ::sd::ViewShell*    mpViewSh;
-    FixedText           maFtLayout;
+    ::sd::ViewShell*	mpViewSh;
+    FixedText			maFtLayout;
     ValueSet            maVS;
-    OKButton            maBtnOK;
-    CancelButton        maBtnCancel;
-    HelpButton          maBtnHelp;
-    CheckBox            maCbxMasterPage;
-    CheckBox            maCbxCheckMasters;
+    OKButton			maBtnOK;
+    CancelButton		maBtnCancel;
+    HelpButton			maBtnHelp;
+    CheckBox			maCbxMasterPage;
+    CheckBox			maCbxCheckMasters;
     PushButton          maBtnLoad;
 
-    const SfxItemSet&   mrOutAttrs;
+    const SfxItemSet&	mrOutAttrs;
 
     List*               mpLayoutNames;
 
     String              maName;          // Layoutname oder Dateiname
-    long                mnLayoutCount;  // Anzahl, der im Dokument vorhandenen MasterPages
-    const String        maStrNone;
+    long				mnLayoutCount;	// Anzahl, der im Dokument vorhandenen MasterPages
+    const String		maStrNone;
 
     void                FillValueSet();
-    void                Reset();
+    void				Reset();
 };
 
 #endif

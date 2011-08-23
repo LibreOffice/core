@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,10 @@ class SdrOutliner;
 class SdrView;
 class Window;
 
-namespace accessibility
+namespace accessibility 
 {
-    /** Implementation of the SvxEditSource interface in the SdOutlineView
-
+    /**	Implementation of the SvxEditSource interface in the SdOutlineView
+        
         This class connects the SdOutlineView and its EditEngine
         outliner with the AccessibleTextHelper, which provides all
         necessary functionality to make the outliner text accessible
@@ -53,33 +53,33 @@ namespace accessibility
         @see SvxEditSource
         @see SvxViewForwarder
     */
-    class AccessibleOutlineEditSource : public SvxEditSource, public SvxViewForwarder, public SfxBroadcaster, public SfxListener
+    class AccessibleOutlineEditSource :	public SvxEditSource, public SvxViewForwarder, public SfxBroadcaster, public SfxListener
     {
     public:
         /// Create an SvxEditSource interface for the given Outliner
-        AccessibleOutlineEditSource(
-            SdrOutliner& rOutliner,
-            SdrView& rView,
-            OutlinerView& rOutlView,
+        AccessibleOutlineEditSource( 
+            SdrOutliner& rOutliner, 
+            SdrView& rView, 
+            OutlinerView& rOutlView, 
             const ::Window& rViewWindow );
         virtual ~AccessibleOutlineEditSource();
 
         /// This method is disabled and always returns NULL
-        virtual SvxEditSource*          Clone() const;
-        virtual SvxTextForwarder*       GetTextForwarder();
-        virtual SvxViewForwarder*       GetViewForwarder();
-        virtual SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool bCreate = sal_False );
-        virtual void                    UpdateData();
-        virtual SfxBroadcaster&         GetBroadcaster() const;
+        virtual SvxEditSource* 			Clone() const;
+        virtual SvxTextForwarder* 		GetTextForwarder();
+        virtual SvxViewForwarder* 		GetViewForwarder();
+        virtual SvxEditViewForwarder*  	GetEditViewForwarder( sal_Bool bCreate = sal_False );
+        virtual void					UpdateData();
+        virtual SfxBroadcaster&			GetBroadcaster() const;
 
-        // the view forwarder
-        virtual BOOL        IsValid() const;
-        virtual Rectangle   GetVisArea() const;
-        virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
-        virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+        // the view forwarder 
+        virtual BOOL		IsValid() const;
+        virtual Rectangle	GetVisArea() const;
+        virtual Point		LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
+        virtual Point		PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
 
         // SfxListener
-        virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+        virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     private:
 
@@ -89,13 +89,13 @@ namespace accessibility
 
         DECL_LINK( NotifyHdl, EENotify* );
 
-        SdrView&                        mrView;
+        SdrView&						mrView;
         const ::Window& mrWindow;
-        SdrOutliner*                    mpOutliner;
+        SdrOutliner*					mpOutliner;
         OutlinerView* mpOutlinerView;
 
-        SvxOutlinerForwarder            mTextForwarder;
-        SvxDrawOutlinerViewForwarder    mViewForwarder;
+        SvxOutlinerForwarder			mTextForwarder;
+        SvxDrawOutlinerViewForwarder	mViewForwarder;
 
     };
 

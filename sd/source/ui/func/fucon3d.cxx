@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,11 +71,11 @@ TYPEINIT1( FuConstruct3dObject, FuConstruct );
 \************************************************************************/
 
 FuConstruct3dObject::FuConstruct3dObject (
-    ViewShell*  pViewSh,
-    ::sd::Window*       pWin,
-    ::sd::View*         pView,
-    SdDrawDocument* pDoc,
-    SfxRequest&     rReq)
+    ViewShell* 	pViewSh,
+    ::sd::Window*		pWin,
+    ::sd::View*			pView,
+    SdDrawDocument*	pDoc,
+    SfxRequest&		rReq) 
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 {
 }
@@ -288,7 +288,7 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
 
         case SID_3D_SPHERE:
         {
-//              pScene->RotateX(DEG2RAD(60));
+//				pScene->RotateX(DEG2RAD(60));
         }
         break;
 
@@ -303,13 +303,13 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
         case SID_3D_CONE:
         case SID_3D_PYRAMID:
         {
-//              pScene->RotateX(DEG2RAD(25));
+//				pScene->RotateX(DEG2RAD(25));
         }
         break;
 
         case SID_3D_TORUS:
         {
-//              pScene->RotateX(DEG2RAD(15));
+//				pScene->RotateX(DEG2RAD(15));
             aTransformation.rotate(DEG2RAD(90), 0.0, 0.0);
         }
         break;
@@ -454,7 +454,7 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
 
     E3dCompoundObject* p3DObj = ImpCreateBasic3DShape();
 
-    // E3dView::SetCurrent3DObj part
+    // E3dView::SetCurrent3DObj part		
     // get transformed BoundVolume of the object
     basegfx::B3DRange aObjVol(p3DObj->GetBoundVolume());
     aObjVol.transform(p3DObj->GetTransform());
@@ -477,18 +477,18 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     aCam.SetFocalLength(mpView->GetDefaultCamFocal());
     aCam.SetDefaults(::basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt, mpView->GetDefaultCamFocal());
     pScene->SetCamera(aCam);
-
+    
     pScene->Insert3DObj(p3DObj);
     pScene->NbcSetSnapRect(a3DRect);
     pScene->SetModel(mpDoc);
-
+        
     ImpPrepareBasic3DShape(p3DObj, pScene);
-
+        
     SfxItemSet aAttr(mpDoc->GetPool());
     SetStyleSheet(aAttr, p3DObj);
     aAttr.Put(XLineStyleItem (XLINE_NONE));
     p3DObj->SetMergedItemSet(aAttr);
-
+    
     // make object interactive at once
     pScene->SetRectsDirty();
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,8 +58,8 @@ class Wrapper
 {
 public:
     Wrapper (
-        TreeNode* pParent,
-        Size aPreferredSize,
+        TreeNode* pParent, 
+        Size aPreferredSize, 
         ::Window* pWrappedControl,
         bool bIsResizable)
         : TreeNode (pParent),
@@ -69,7 +69,7 @@ public:
     {
         mpWrappedControl->Show();
     }
-    virtual ~Wrapper (void)
+    virtual ~Wrapper (void) 
     {
         delete mpWrappedControl;
     }

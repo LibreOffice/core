@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ PreviewRenderer::~PreviewRenderer (void)
 
 
 Image PreviewRenderer::RenderPage (
-    const SdPage* pPage,
+    const SdPage* pPage, 
     const sal_Int32 nWidth,
     const String& rSubstitutionText,
     const bool bObeyHighContrastMode)
@@ -105,7 +105,7 @@ Image PreviewRenderer::RenderPage (
 
 
 Image PreviewRenderer::RenderPage (
-    const SdPage* pPage,
+    const SdPage* pPage, 
     Size aPixelSize,
     const String& rSubstitutionText,
     const bool bObeyHighContrastMode)
@@ -121,7 +121,7 @@ Image PreviewRenderer::RenderPage (
                 PaintPage (pPage);
                 PaintSubstitutionText (rSubstitutionText);
                 PaintFrame();
-
+        
                 Size aSize (mpPreviewDevice->GetOutputSizePixel());
                 aPreview = mpPreviewDevice->GetBitmap (
                     mpPreviewDevice->PixelToLogic(Point(0,0)),
@@ -156,8 +156,8 @@ Image PreviewRenderer::RenderSubstitution (
         // Adjust contrast mode.
         bool bUseContrast = Application::GetSettings().GetStyleSettings().
             GetHighContrastMode();
-        mpPreviewDevice->SetDrawMode (bUseContrast
-            ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
+        mpPreviewDevice->SetDrawMode (bUseContrast 
+            ? ViewShell::OUTPUT_DRAWMODE_CONTRAST 
             : ViewShell::OUTPUT_DRAWMODE_COLOR);
 
         // Set a map mode makes a typical substitution text completely
@@ -171,7 +171,7 @@ Image PreviewRenderer::RenderSubstitution (
         aMapMode.SetOrigin(mpPreviewDevice->PixelToLogic(
             Point(nFrameWidth,nFrameWidth),aMapMode));
         mpPreviewDevice->SetMapMode (aMapMode);
-
+    
         // Clear the background.
         Rectangle aPaintRectangle (
             Point(0,0),
@@ -186,7 +186,7 @@ Image PreviewRenderer::RenderSubstitution (
         // Paint substitution text and a frame around it.
         PaintSubstitutionText (rSubstitutionText);
         PaintFrame();
-
+        
         Size aSize (mpPreviewDevice->GetOutputSizePixel());
         aPreview = mpPreviewDevice->GetBitmap (
             mpPreviewDevice->PixelToLogic(Point(0,0)),
@@ -220,7 +220,7 @@ bool PreviewRenderer::Initialize (
 
         SetupOutputSize(*pPage, rPixelSize);
 
-        SdDrawDocument* pDocument
+        SdDrawDocument* pDocument 
             = static_cast<SdDrawDocument*>(pPage->GetModel());
         DrawDocShell* pDocShell = pDocument->GetDocSh();
 
@@ -232,8 +232,8 @@ bool PreviewRenderer::Initialize (
         // Adjust contrast mode.
         bool bUseContrast (bObeyHighContrastMode
             && Application::GetSettings().GetStyleSettings().GetHighContrastMode());
-        mpPreviewDevice->SetDrawMode (bUseContrast
-            ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
+        mpPreviewDevice->SetDrawMode (bUseContrast 
+            ? ViewShell::OUTPUT_DRAWMODE_CONTRAST 
             : ViewShell::OUTPUT_DRAWMODE_COLOR);
         mpPreviewDevice->SetSettings(Application::GetSettings());
 
@@ -296,7 +296,7 @@ void PreviewRenderer::PaintPage (const SdPage* pPage)
         pOutliner->SetControlWord(
             (nOriginalControlWord & ~EE_CNTRL_ONLINESPELLING));
     }
-
+ 
     try
     {
         mpView->CompleteRedraw (mpPreviewDevice.get(), aRegion);
@@ -327,13 +327,13 @@ void PreviewRenderer::PaintSubstitutionText (const String& rSubstitutionText)
 
         // Paint the substitution text.
         Rectangle aTextBox (
-            Point(0,0),
+            Point(0,0), 
             mpPreviewDevice->PixelToLogic(
                 mpPreviewDevice->GetOutputSizePixel()));
-        USHORT nTextStyle =
+        USHORT nTextStyle = 
             TEXT_DRAW_CENTER
             | TEXT_DRAW_VCENTER
-            | TEXT_DRAW_MULTILINE
+            | TEXT_DRAW_MULTILINE 
             | TEXT_DRAW_WORDBREAK;
         mpPreviewDevice->DrawText (aTextBox, rSubstitutionText, nTextStyle);
 
@@ -365,7 +365,7 @@ void PreviewRenderer::PaintFrame (void)
 
 
 void PreviewRenderer::SetupOutputSize (
-    const SdPage& rPage,
+    const SdPage& rPage, 
     const Size& rFramePixelSize)
 {
     // First set the map mode to some arbitrary scale that is numerically
@@ -381,7 +381,7 @@ void PreviewRenderer::SetupOutputSize (
     const Size aPageModelSize (rPage.GetSize());
     const Size aOutputSize = mpPreviewDevice->LogicToPixel(rPage.GetSize(), aMapMode);
     const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
-    const double nFinalScale (nInitialScale * (rFramePixelSize.Width()-2*nFrameWidth)
+    const double nFinalScale (nInitialScale * (rFramePixelSize.Width()-2*nFrameWidth) 
         / aOutputSize.Width());
     aMapMode.SetScaleX (nFinalScale);
     aMapMode.SetScaleY (nFinalScale);
@@ -434,8 +434,8 @@ Image PreviewRenderer::ScaleBitmap (
         // Adjust contrast mode.
         bool bUseContrast = Application::GetSettings().GetStyleSettings().
             GetHighContrastMode();
-        mpPreviewDevice->SetDrawMode (bUseContrast
-            ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
+        mpPreviewDevice->SetDrawMode (bUseContrast 
+            ? ViewShell::OUTPUT_DRAWMODE_CONTRAST 
             : ViewShell::OUTPUT_DRAWMODE_COLOR);
 
         // Set output size.
@@ -443,7 +443,7 @@ Image PreviewRenderer::ScaleBitmap (
         if (aSize.Width() <= 0)
             break;
         Size aFrameSize (
-            nWidth,
+            nWidth, 
             (long)((nWidth*1.0 * aSize.Height()) / aSize.Width() + 0.5));
         Size aPreviewSize (aFrameSize.Width()-2,aFrameSize.Height()-2);
         MapMode aMapMode (mpPreviewDevice->GetMapMode());
@@ -463,7 +463,7 @@ Image PreviewRenderer::ScaleBitmap (
         BitmapEx aScaledBitmap (rBitmapEx.GetBitmap());
         aScaledBitmap.Scale (aPreviewSize, BMP_SCALE_INTERPOLATE);
         mpPreviewDevice->DrawBitmap (
-            Point(1,1),
+            Point(1,1), 
             aPreviewSize,
             aScaledBitmap.GetBitmap());
 

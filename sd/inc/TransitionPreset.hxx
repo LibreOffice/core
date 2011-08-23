@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include <list>
 #include <hash_map>
 
-namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star { 
     namespace animations { class XAnimationNode; }
     namespace uno { template<class X> class Reference; }
 } } }

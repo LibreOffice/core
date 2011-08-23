@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,18 +149,18 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, USHORT nAspect)
 //
 //  if( pMtf )
 //  {
-//      String aURLStr;
+//		String aURLStr;
 //
-//      if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( String( RTL_CONSTASCII_USTRINGPARAM( "d:\\gdi.mtf" ) ), aURLStr ) )
-//      {
-//          SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_WRITE | STREAM_TRUNC );
+//		if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( String( RTL_CONSTASCII_USTRINGPARAM( "d:\\gdi.mtf" ) ), aURLStr ) )
+//		{
+//			SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_WRITE | STREAM_TRUNC );
 //
-//          if( pOStm )
-//          {
-//              *pOStm << *pMtf;
-//              delete pOStm;
-//          }
-//      }
+//			if( pOStm )
+//			{
+//				*pOStm << *pMtf;
+//				delete pOStm;
+//			}
+//		}
 //  }
 }
 
@@ -265,16 +265,16 @@ Size DrawDocShell::GetFirstPageSize()
 
 Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
 {
-    MapMode         aMapMode( MAP_100TH_MM );
-    const Size      aSize( pPage->GetSize() );
-    const Point     aNullPt;
-    VirtualDevice   aVDev( *Application::GetDefaultDevice() );
+    MapMode			aMapMode( MAP_100TH_MM );
+    const Size		aSize( pPage->GetSize() );
+    const Point		aNullPt;
+    VirtualDevice	aVDev( *Application::GetDefaultDevice() );
 
     aVDev.SetMapMode( aMapMode );
 
-    const Size  aPixSize( aVDev.LogicToPixel( aSize ) );
-    const ULONG nMaxEdgePix = Max( aPixSize.Width(), aPixSize.Height() );
-    Fraction    aFrac( nMaxEdgePixel, nMaxEdgePix );
+    const Size	aPixSize( aVDev.LogicToPixel( aSize ) );
+    const ULONG	nMaxEdgePix = Max( aPixSize.Width(), aPixSize.Height() );
+    Fraction	aFrac( nMaxEdgePixel, nMaxEdgePix );
 
     aMapMode.SetScaleX( aFrac );
     aMapMode.SetScaleY( aFrac );
@@ -287,8 +287,8 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
     aMapMode.SetScaleY( aFrac );
     aVDev.SetMapMode( aMapMode );
 
-    ClientView* pView = new ClientView( this, &aVDev, NULL );
-    FrameView*      pFrameView = GetFrameView();
+    ClientView*	pView = new ClientView( this, &aVDev, NULL );
+    FrameView*		pFrameView = GetFrameView();
     pView->ShowSdrPage( pPage );
 
     if ( GetFrameView() )
@@ -331,7 +331,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
             if ( pPageView->GetLockedLayers() != pFrameView->GetLockedLayers() )
                 pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
 
-    //                if ( pPageView->GetHelpLines() != pFrameView->GetHelpLines() )
+    //				  if ( pPageView->GetHelpLines() != pFrameView->GetHelpLines() )
                 pPageView->SetHelpLines( pFrameView->GetStandardHelpLines() );
         }
 

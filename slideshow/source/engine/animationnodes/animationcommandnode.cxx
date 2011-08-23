@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,10 @@ namespace slideshow {
 namespace internal {
 
 namespace EffectCommands = com::sun::star::presentation::EffectCommands;
-
-AnimationCommandNode::AnimationCommandNode( uno::Reference<animations::XAnimationNode> const& xNode,
+    
+AnimationCommandNode::AnimationCommandNode( uno::Reference<animations::XAnimationNode> const& xNode, 
                                              ::boost::shared_ptr<BaseContainerNode> const& pParent,
-                                             NodeContext const& rContext ) :
+                                             NodeContext const& rContext ) : 
     BaseNode( xNode, pParent, rContext ),
     mpShape(),
     mxCommandNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW )
@@ -77,12 +77,12 @@ void AnimationCommandNode::activate_st()
         // the command is an ole verb.
     case EffectCommands::VERB: break;
         // the command starts playing on a media object
-    case EffectCommands::PLAY:
+    case EffectCommands::PLAY: 
     {
         double fMediaTime=0.0;
         beans::PropertyValue aMediaTime;
         if( (mxCommandNode->getParameter() >>= aMediaTime) &&
-            aMediaTime.Name.equalsAsciiL(
+            aMediaTime.Name.equalsAsciiL( 
                 RTL_CONSTASCII_STRINGPARAM("MediaTime") ))
         {
             aMediaTime.Value >>= fMediaTime;
@@ -118,7 +118,7 @@ void AnimationCommandNode::activate_st()
         getContext().mrEventMultiplexer.notifyCommandStopAudio( getSelf() );
         break;
     }
-
+    
     // deactivate ASAP:
     scheduleDeactivationEvent(
         makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ),

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
         String aLayoutName( maLayoutName );
         const sal_uInt16 nLen = aLayoutName.Search(String( RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR)))+4;
         aLayoutName.Erase( nLen );
-
+        
         if( (maStyleSheets.size() == 0) || !((*maStyleSheets.begin()).second->GetName().Equals( aLayoutName, 0, nLen )) )
         {
             maStyleSheets.clear();
@@ -130,7 +130,7 @@ SdStyleFamily::~SdStyleFamily()
 
 // ----------------------------------------------------------
 
-void SdStyleFamily::throwIfDisposed() const throw(RuntimeException)
+void SdStyleFamily::throwIfDisposed() const throw(RuntimeException) 
 {
     if( !mxPool.is() )
         throw DisposedException();
@@ -179,7 +179,7 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuc
     }
     if( pRet )
         return pRet;
-
+    
     throw NoSuchElementException();
 }
 
@@ -279,7 +279,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeExce
             }
         }
 
-//              *pNames++ = (*iter++).second->GetApiName();
+//				*pNames++ = (*iter++).second->GetApiName();
         return aNames;
     }
     else
@@ -298,7 +298,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeExce
 
 // ----------------------------------------------------------
 
-sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(RuntimeException)
+sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName )	throw(RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
     throwIfDisposed();
@@ -454,7 +454,7 @@ void SAL_CALL SdStyleFamily::removeByName( const OUString& rName ) throw(NoSuchE
 {
     OGuard aGuard( Application::GetSolarMutex() );
     throwIfDisposed();
-
+    
     SdStyleSheet* pStyle = GetSheetByName( rName );
 
     if( !pStyle->IsUserDefined() )
@@ -560,10 +560,10 @@ Any SdStyleFamily::getPropertyValue( const OUString& PropertyName ) throw (Unkno
         OUString sDisplayName;
         switch( mnFamily )
         {
-            case SD_STYLE_FAMILY_MASTERPAGE:    sDisplayName = getName(); break;
-            case SD_STYLE_FAMILY_CELL:          sDisplayName = String( SdResId(STR_CELL_STYLE_FAMILY) ); break;
-//          case SD_STYLE_FAMILY_GRAPHICS:
-            default:                            sDisplayName = String( SdResId(STR_GRAPHICS_STYLE_FAMILY) ); break;
+            case SD_STYLE_FAMILY_MASTERPAGE:	sDisplayName = getName(); break;
+            case SD_STYLE_FAMILY_CELL:			sDisplayName = String( SdResId(STR_CELL_STYLE_FAMILY) ); break;
+//			case SD_STYLE_FAMILY_GRAPHICS:
+            default:							sDisplayName = String( SdResId(STR_GRAPHICS_STYLE_FAMILY) ); break;
         }
         return Any( sDisplayName );
     }

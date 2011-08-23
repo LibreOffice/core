@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ class View;
 /** This class implements the SlideSorter specific part of the
     controller.
  */
-class SdUnoSlideView
+class SdUnoSlideView 
     : private cppu::BaseMutex,
       public DrawSubControllerInterfaceBase
 {
@@ -68,25 +68,25 @@ public:
     virtual sal_Bool SAL_CALL select (const ::com::sun::star::uno::Any& aSelection)
         throw(::com::sun::star::lang::IllegalArgumentException,
             ::com::sun::star::uno::RuntimeException);
-
+    
     virtual ::com::sun::star::uno::Any SAL_CALL getSelection (void)
         throw(::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL addSelectionChangeListener (
         const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
         throw(css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL removeSelectionChangeListener (
         const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
         throw(css::uno::RuntimeException);
 
-
+    
     // XDrawView
-
+    
     virtual void SAL_CALL setCurrentPage (
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage)
         throw(::com::sun::star::uno::RuntimeException);
-
+    
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SAL_CALL
         getCurrentPage (void)
         throw(::com::sun::star::uno::RuntimeException);
@@ -102,7 +102,7 @@ public:
             css::lang::IllegalArgumentException,
             css::lang::WrappedTargetException,
             css::uno::RuntimeException);
-
+    
     virtual css::uno::Any SAL_CALL getFastPropertyValue (
         sal_Int32 nHandle)
         throw(css::beans::UnknownPropertyException,

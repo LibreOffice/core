@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,11 +53,11 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaPages,  SfxUInt16Item )
 // SdPagesField
 //========================================================================
 
-SdPagesField::SdPagesField( Window* pParent,
-                            const uno::Reference< frame::XFrame >& rFrame,
+SdPagesField::SdPagesField( Window* pParent, 
+                            const uno::Reference< frame::XFrame >& rFrame, 
                             WinBits nBits ) :
-    SvxMetricField  ( pParent, rFrame, nBits ),
-    m_xFrame        ( rFrame )
+    SvxMetricField	( pParent, rFrame, nBits ),
+    m_xFrame		( rFrame )
 {
     String aStr( SdResId( STR_SLIDE_PLURAL ) );
     SetCustomUnitText( aStr );
@@ -118,7 +118,7 @@ void SdPagesField::Modify()
                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PagesPerRow" )),
                                  aArgs );
 /*
-    rBindings.GetDispatcher()->Execute(
+    rBindings.GetDispatcher()->Execute( 
         SID_PAGES_PER_ROW, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L, 0L );
 */
 }
@@ -163,7 +163,7 @@ void SdTbxCtlDiaPages::StateChanged( USHORT,
             pItem = dynamic_cast< const SfxUInt16Item* >( pState );
             DBG_ASSERT( pItem, "sd::SdTbxCtlDiaPages::StateChanged(), wrong item type!" );
         }
-
+        
         pFld->UpdatePagesField( pItem );
     }
 }

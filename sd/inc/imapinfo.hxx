@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 class SdIMapInfo : public SdrObjUserData, public SfxListener
 {
 
-    ImageMap        aImageMap;
+    ImageMap		aImageMap;
 
 public:
                     SdIMapInfo() :
@@ -58,14 +58,14 @@ public:
                         SfxListener(),
                         aImageMap( rIMapInfo.aImageMap ) {};
 
-    virtual         ~SdIMapInfo() {};
+    virtual 		~SdIMapInfo() {};
 
     virtual SdrObjUserData* Clone( SdrObject* ) const { return new SdIMapInfo( *this ); }
 
-    void            SetImageMap( const ImageMap& rIMap ) { aImageMap = rIMap; }
+    void			SetImageMap( const ImageMap& rIMap ) { aImageMap = rIMap; }
     const ImageMap& GetImageMap() const { return aImageMap; }
 };
 
-#endif      // _SD_IMAPINFO_HXX
+#endif		// _SD_IMAPINFO_HXX
 
 
