@@ -283,7 +283,7 @@ sal_Bool SfxStyleSheetBase::SetParent( const XubString& rName )
         if( aName.Len() )
             while(pIter)
             {
-                if(pIter->GetName() == aName && aName != rName)
+                if(pIter->GetName() == aName)
                     return sal_False;
                 pIter = rPool.Find(pIter->GetParent(), nFamily);
             }
